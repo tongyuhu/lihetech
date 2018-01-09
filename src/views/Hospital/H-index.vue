@@ -14,8 +14,8 @@
                     <el-main>
                         <router-view></router-view>
                     </el-main>
-                    <el-footer>
-                        Footer
+                    <el-footer class="footer">
+                        @lihetech
                     </el-footer>
                 </el-container>
             </el-container>
@@ -42,5 +42,9 @@
     .el-header {
         /* background-color: #444; */
         border-bottom: 1px solid #ebeef5;
+    }
+    .footer{
+      text-align: center;
+      margin-right: 180px;
     }
 </style>

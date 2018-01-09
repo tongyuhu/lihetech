@@ -5,7 +5,7 @@
               <el-card :body-style="{ padding: '0px' }" class='header'>
                   <span slot='header' class='header'>
                       <p>
-                          高血压（{{ bloodheightotal }}人）
+                          糖尿病 {{ bloodheightotal }}人）
                       </p>
                   </span>
                   <el-row>

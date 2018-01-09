@@ -3,7 +3,7 @@
       <el-row>
           <el-col :span="20">
             <HAddsick></HAddsick>
-            <HBloodheightotal></HBloodheightotal>
+            <HSugerheightotal></HSugerheightotal>
             <HWork></HWork>
             <HSicklist></HSicklist>
           </el-col>
@@ -13,14 +13,14 @@
 
 <script>
 import HAddsick from './H-addsick'
-import HBloodheightotal from './H-bloodheightotal'
+import HSugerheightotal from './H-sugerheightotal'
 import HWork from './H-work'
 import HSicklist from './H-sicklist'
 export default {
   name: 'H-bloodheigh',
   components: {
     HAddsick,
-    HBloodheightotal,
+    HSugerheightotal,
     HWork,
     HSicklist
   }

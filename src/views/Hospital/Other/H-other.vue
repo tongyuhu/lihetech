@@ -1,11 +1,11 @@
 <template>
-    <div class='tatalsick'>
+    <div class='other'>
       <el-row>
           <el-col>
               <el-card :body-style="{ padding: '0px' }" class='header'>
                   <span slot='header' class='header'>
                       <p>
-                          高血压（{{ bloodheightotal }}人）
+                          共（{{ bloodheightotal }}人）
                       </p>
                   </span>
                   <el-row>
@@ -13,10 +13,18 @@
                         <el-card>
                             <span slot='header'>
                                 <p>
-                                    患者分布
+                                    整体分布
                                 </p>
                             </span>
-                            <div id='HBfenbu'  :style="{width:'450px',height:'250px'}"></div>
+                            <div id='HBfenbu'  :style="{width:'450px',height:'250px'}">
+                              
+                            </div>
+                            <div class="total-rbtn">
+                              <!-- <el-button size="medium" icon="el-icon-arrow-right" type="text"></el-button> -->
+                              <button class="total-btn">
+                                <i class="el-icon-arrow-right"></i>
+                              </button>
+                            </div>
                         </el-card>
                       </el-col>
                       <el-col :span='12'>
@@ -27,19 +35,32 @@
                                 </p>
                             </span>
                             <div id='HBzoushi' :style="{width:'450px',height:'250px'}"></div>
+                            <div class="total-rbtn">
+                              <!-- <el-button size="medium" icon="el-icon-arrow-right" type="text"></el-button> -->
+                              <button class="total-btn">
+                                <i class="el-icon-arrow-right"></i>
+                              </button>
+                            </div>
                         </el-card>
                       </el-col>
                   </el-row>
               </el-card>
           </el-col>
       </el-row> 
+      <div>
+        <HOthertype></HOthertype>
+      </div>
     </div>
 </template>
 
 <script>
 import echarts from 'echarts'
+import HOthertype from './H-othertype.vue'
 export default {
   name: 'H-bloodheighttotal',
+  components: {
+    HOthertype
+  },
   data () {
     return {
       bloodheightotal: '1236',
@@ -129,7 +150,7 @@ export default {
         right: 'center',
         bottom: '3%',
         width: '400',
-        height: '220',
+        height: '180',
         containLabel: true
       },
       toolbox: { // 工具栏
@@ -141,18 +162,21 @@ export default {
       legend: { // 图例组件
         // orient: 'vertical',
         // left: 'left',
+        right: 'right',
         // top: 'center',
-        data: ['控压走势']
+        selectedMode: false,
+        data: ['控压走势', '控糖走势']
         // selectedMode: false
       },
       xAxis: { // 直角坐标系grid的x轴
         type: 'category',
+
         boundaryGap: false,
         data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
       },
       yAxis: { // 直角坐标系grid的y轴
         type: 'value',
-        axisLine: {onZero: false},
+        // axisLine: {onZero: false},
         axisLabel: {
           formatter: '{value}%'
         },
@@ -161,7 +185,7 @@ export default {
       },
       series: [
         {
-          name: '患者走势',
+          name: '控压走势',
           type: 'line',
           lineStyle: {
             normal: {
@@ -171,14 +195,27 @@ export default {
               shadowOffsetY: 5
             }
           },
-          data: [1, 11, 15, 13, 12, 13, 10]
+          data: [5, 10, 15, 25, 30, 35, 40]
+        },
+        {
+          name: '控糖走势',
+          type: 'line',
+          lineStyle: {
+            normal: {
+              width: 3,
+              shadowColor: 'rgba(0,0,0,0.4)',
+              shadowBlur: 5,
+              shadowOffsetY: 5
+            }
+          },
+          data: [1, 32, 45, 15, 15, 18, 19]
         }
       ]
     })
   }
 }
 </script>
-<style scoped>
+<style >
 .header .el-card__header {
   padding: 10px !important;
   border-bottom: 1px solid #ebeef5;
@@ -189,10 +226,41 @@ export default {
 }
 </style>
 <style scoped>
-p {
-  margin: 5px;
-}
-.tatalsick {
-  margin-top: 20px;
-}
+  p {
+    margin: 5px;
+  }
+  .other {
+    margin-top: 20px;
+    margin-right:30px;
+    /* position: relative; */
+  }
+  .total-btn{
+    background-color: #ffffff;
+    border: none;
+    pandding: 0;
+    margin: 0;
+    cursor: pointer;
+  }
+  .total-rbtn{
+    float: right;
+    margin-top: -30px;
+    margin-right: -20px;
+    z-index: 99;
+  }
+  .total-btn:focus{
+    border: none;
+  }
+  .total-rbtn i{
+    font-size: 30px;
+  }
+  .total-rbtn i :focus{
+    font-size: 30px;
+    border:none;
+  }
+  .total-rbtn :focus{
+    border: none;
+  }
+  /* .total-rbtn el-button--text{
+    font-size: 28px;
+  } */
 </style>

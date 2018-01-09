@@ -3,10 +3,10 @@
     <el-card :body-style="{padding: '0px', paddingTop: '15px'}">
       <!-- 工作台 start -->
       <div class="workhead">
-        <el-badge :value="12" :max="99" class="item">
+        <!-- <el-badge :value="12" :max="99" class="item">
           <el-button class="share-button" icon="el-icon-message" type="primary"></el-button>
-        </el-badge>
-        <span>工作台</span>
+        </el-badge> -->
+        <span>患者分类</span>
       </div>
       <!-- 工作台 end -->
 
@@ -14,7 +14,7 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>患者最新问诊</span>
+            <span>呼吸道</span>
           </div>
           <el-table 
               :data='newaskData'
@@ -56,7 +56,7 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>严重患者（45%）</span>
+            <span>癌症</span>
           </div>
           <el-table 
               :data='badsickData'
@@ -108,7 +108,7 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>未遵医嘱患者（45%）</span>
+            <span>传染病</span>
           </div>
           <el-table 
               :data='noListenDoctorData'
@@ -160,7 +160,7 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>建档不完整患者（45%）</span>
+            <span>肿瘤</span>
           </div>
           <el-table 
               :data='unperfectMsgData'
@@ -314,7 +314,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .work {
   margin-top: 30px;
 }

@@ -6,6 +6,7 @@ import router from './router'
 import Vuex from 'vuex'
 
 // 按需引入element-ui
+import 'element-ui/lib/theme-chalk/index.css'
 import {
   Container,
   Header,
@@ -19,15 +20,17 @@ import {
   FormItem,
   Button,
   Select,
+  Option,
   Menu,
   MenuItem,
   Submenu,
   Popover,
   Badge,
   Table,
-  TableColumn
+  TableColumn,
+  Carousel,
+  CarouselItem
 } from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
 
 Vue.config.productionTip = false
 
@@ -45,6 +48,7 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Button)
 Vue.use(Select)
+Vue.use(Option)
 Vue.use(Menu)
 Vue.use(MenuItem)
 Vue.use(Submenu)
@@ -52,6 +56,8 @@ Vue.use(Popover)
 Vue.use(Badge)
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(Carousel)
+Vue.use(CarouselItem)
 
 /* eslint-disable no-new */
 new Vue({
