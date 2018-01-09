@@ -15,7 +15,7 @@
                   placement="top"
                   width="145"
                   trigger="click">
-                    <el-row :gutter="8" type="flex" justify="center" align="center">
+                    <el-row :gutter="8" type="flex" justify="center" align="center">    
                       <el-col :span="10">
                         <img src="./../../icons/admin.jpg" alt="" width="50px">
                       </el-col>

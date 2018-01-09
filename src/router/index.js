@@ -6,6 +6,7 @@ import sugerheigh from '@/views/Hospital/SugerHeigh/H-sugerheigh.vue'
 import other from '@/views/Hospital/Other/H-other.vue'
 import cases from '@/views/Hospital/Case/H-cases.vue'
 import bloodheighSick from '@/components/bloodheighSick.vue'
+import card from '@/components/card.vue'
 
 Vue.use(Router)
 
@@ -45,6 +46,11 @@ export default new Router({
           path: 'hospital/bloodheighSick',
           name: 'bloodheighSick',
           component: bloodheighSick
+        },
+        {
+          path: 'hospital/card',
+          name: 'card',
+          component: card
         }
 
       ]
