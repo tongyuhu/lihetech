@@ -3,7 +3,18 @@
   <table cellpadding='0' cellspacing="0">
     <tr>
       <th>用户自述</th>
-      <td> <span>最近总是恶心、呕吐、浑身无力、四肢无力</span> </td>
+      <td> 
+        <!-- <span>
+          最近总是恶心、呕吐、浑身无力、四肢无力
+        </span>  -->
+        <el-row>
+          <el-col :span="20">最近总是恶心、呕吐、浑身无力、四肢无力</el-col>
+          <el-col :span="4">
+            <el-button size="mini" icon="el-icon-phone-outline">
+            </el-button>
+          </el-col>
+        </el-row>
+      </td>
     </tr>
     <tr>
       <th>系统分析</th>
@@ -16,11 +27,25 @@
     <tr>
       <th>医生诊断</th>
       <td>
-        <span>
+        <!-- <span>
 
           您属于二型糖尿病、请按照下面的药品进行服用
         </span>
-        <button>qq</button>
+        <button>qq</button> -->
+        <el-row>
+          <el-col :span="18">
+            您属于二型糖尿病、请按照下面的药品进行服用
+          </el-col>
+          <el-col :span="4">
+            <el-button type="primary" size="mini">
+              发送语音
+            </el-button>
+          </el-col>
+          <el-col :span="2">
+            <el-button icon="el-icon-phone-outline" size="mini">
+            </el-button>
+          </el-col>
+        </el-row>
       </td>
       <!-- <td>
       </td> -->
@@ -53,16 +78,46 @@
         <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
           <tr>
             <td class="only-bottom-border">
-              <span>
+              <!-- <span>
                 药品1   药品2 
-              </span>
+              </span> -->
+              <el-row>
+                <el-col :span="18">
+                  药品1   药品2 
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini">
+                    删除
+                  </el-button>
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini">
+                    添加
+                  </el-button>
+                </el-col>
+              </el-row>
             </td>
           </tr>
           <tr>
             <td class="only-bottom-border">
-              <span>
+              <!-- <span>
                 血压偏高，不宜大幅度运动、请选择每天步行30min
-              </span>
+              </span> -->
+              <el-row>
+                <el-col :span="18">
+                  血压偏高，不宜大幅度运动、请选择每天步行30min
+                </el-col>
+                <el-col :span="3">
+                  <el-button type="primary" size="mini">
+                    删除
+                  </el-button>
+                </el-col>
+                <el-col :span="3">
+                  <el-button size="mini" type="primary">
+                    添加
+                  </el-button>
+                </el-col>
+              </el-row>
             </td>
           </tr>
           <tr>
@@ -78,11 +133,11 @@
 
     <tr>
       <th>
-        饮食
+        医生信息
       </th>
       <td>
         <span>
-          饮食清淡为主、不要多吃肉
+          李那那        上海张江高科诊所   糖尿病慢性病家庭医生
         </span>
       </td>
     </tr>
@@ -112,6 +167,7 @@ export default {
 		td{
 			border:1px solid #5555;
       height: 40px;
+      text-align: center
 		}
 		.border-collapse{
 			border-collapse: collapse;
@@ -140,7 +196,7 @@ export default {
       text-align:center;  
     }
     table span{
-      padding-left: 20px;
+      /* padding-left: 20px; */
     }
 </style>
 

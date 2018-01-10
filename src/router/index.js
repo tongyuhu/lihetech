@@ -5,8 +5,8 @@ import booldheigh from '@/views/Hospital/BloodHeigh/H-bloodheigh.vue'
 import sugerheigh from '@/views/Hospital/SugerHeigh/H-sugerheigh.vue'
 import other from '@/views/Hospital/Other/H-other.vue'
 import cases from '@/views/Hospital/Case/H-cases.vue'
-import bloodheighSick from '@/components/bloodheighSick.vue'
-import card from '@/components/card.vue'
+import bloodheighSick from '@/components/BloodheighSickcard/bloodheighSick.vue'
+import card from '@/components/BloodheighSickcard/card.vue'
 
 Vue.use(Router)
 

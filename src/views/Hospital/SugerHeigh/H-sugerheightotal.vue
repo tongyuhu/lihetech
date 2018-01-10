@@ -26,7 +26,7 @@
                                     患者走势
                                 </p>
                             </span>
-                            <div id='HBzoushi' :style="{width:'450px',height:'250px'}"></div>
+                            <div id='HBzoushi' :style="{width:'355px',height:'250px'}"></div>
                         </el-card>
                       </el-col>
                   </el-row>
@@ -128,7 +128,7 @@ export default {
         left: 'center',
         right: 'center',
         bottom: '3%',
-        width: '400',
+        width: '350',
         height: '220',
         containLabel: true
       },

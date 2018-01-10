@@ -18,7 +18,7 @@
                 <el-button type="plain" size="small">半年未做检查者</el-button>
               </el-col>
               <el-col :span="4">
-                <el-select v-model="bloodheighType" style="width:160px" placeholder="请选择糖尿病类型" size="mini">
+                <el-select v-model="bloodheighType"  placeholder="糖尿病类型" size="mini">
                     <!-- <el-option v-for="item in cityList" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-option> -->
                     <el-option value="舒张期高血压" label="舒张期高血压">舒期高血压</el-option>
                     <el-option value="舒张高血压" label="舒高血压">舒期压</el-option>
@@ -30,7 +30,7 @@
                 <el-select
                     v-model="sugerheighType"
                     remote
-                    placeholder="请选择高血压类型"
+                    placeholder="高血压类型"
                     size="mini">
                     <el-option value="舒张期" label="舒张期"></el-option>
                     <el-option value="舒张期高" label="舒张期高血压"></el-option>
@@ -46,7 +46,7 @@
                 <el-select
                     v-model="value9"
                     remote
-                    placeholder="请选择治疗效果"
+                    placeholder="治疗效果"
                     size="mini">
                     <!-- <el-el-option
                     v-for="item in el-options4"
@@ -65,7 +65,7 @@
                 filterable
                 remote
                 reserve-keyword
-                placeholder="请输入患者姓名"
+                placeholder="患者姓名"
                 :remote-method="remoteMethod"
                 :loading="loading"
                 size="mini">

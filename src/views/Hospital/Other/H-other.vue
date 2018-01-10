@@ -34,7 +34,7 @@
                                     患者走势
                                 </p>
                             </span>
-                            <div id='HBzoushi' :style="{width:'450px',height:'250px'}"></div>
+                            <div id='HBhanzhezoushi' :style="{width:'360px',height:'250px'}"></div>
                             <div class="total-rbtn">
                               <!-- <el-button size="medium" icon="el-icon-arrow-right" type="text"></el-button> -->
                               <button class="total-btn">
@@ -72,7 +72,7 @@ export default {
   },
   mounted () {
     var HBfenbu = echarts.init(document.getElementById('HBfenbu'))
-    var HBzoushi = echarts.init(document.getElementById('HBzoushi'))
+    var HBhanzhezoushi = echarts.init(document.getElementById('HBhanzhezoushi'))
 
     HBfenbu.setOption({
       title: {
@@ -135,7 +135,7 @@ export default {
         }
       }
     })
-    HBzoushi.setOption({
+    HBhanzhezoushi.setOption({
       title: {
         // text: '糖尿病',
         // subtext: '副标题',
@@ -146,10 +146,10 @@ export default {
         formatter: '{b} : {c}'
       },
       grid: { // 直角坐标系内绘图网格
-        left: 'center',
+        left: 'left',
         right: 'center',
         bottom: '3%',
-        width: '400',
+        width: '350',
         height: '180',
         containLabel: true
       },

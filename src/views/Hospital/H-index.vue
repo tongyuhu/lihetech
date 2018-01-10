@@ -7,7 +7,7 @@
                 <H-Head></H-Head>
             </el-header>
             <el-container>
-                    <el-aside width="200px">
+                    <el-aside width="150px">
                         <H-Sider></H-Sider>
                     </el-aside>
                 <el-container>

@@ -125,10 +125,10 @@ export default {
         formatter: '{b} : {c}'
       },
       grid: { // 直角坐标系内绘图网格
-        left: 'center',
+        left: 'left',
         right: 'center',
         bottom: '3%',
-        width: '400',
+        width: '350',
         height: '220',
         containLabel: true
       },

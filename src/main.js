@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import Vuex from 'vuex'
+import echarts from 'echarts'
 
 // 按需引入element-ui
 import 'element-ui/lib/theme-chalk/index.css'
@@ -18,6 +19,7 @@ import {
   Card,
   Form,
   FormItem,
+  Input,
   Button,
   Select,
   Option,
@@ -29,7 +31,11 @@ import {
   Table,
   TableColumn,
   Carousel,
-  CarouselItem
+  CarouselItem,
+  Tag,
+  RadioGroup,
+  RadioButton,
+  Radio
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -46,6 +52,7 @@ Vue.use(Col)
 Vue.use(Card)
 Vue.use(Form)
 Vue.use(FormItem)
+Vue.use(Input)
 Vue.use(Button)
 Vue.use(Select)
 Vue.use(Option)
@@ -58,7 +65,12 @@ Vue.use(Table)
 Vue.use(TableColumn)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
+Vue.use(Tag)
+Vue.use(RadioGroup)
+Vue.use(RadioButton)
+Vue.use(Radio)
 
+Vue.use(echarts)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

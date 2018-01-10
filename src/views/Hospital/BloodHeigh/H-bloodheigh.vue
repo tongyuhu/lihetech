@@ -1,7 +1,7 @@
 <template>
   <div>
       <el-row>
-          <el-col :span="20">
+          <el-col :span="24">
             <HAddsick></HAddsick>
             <HBloodheightotal></HBloodheightotal>
             <HWork></HWork>
