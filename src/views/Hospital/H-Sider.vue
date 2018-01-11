@@ -23,12 +23,12 @@
       </el-menu-item>
       <el-menu-item index="5">
             <span slot="title">
-              <router-link :to="{ name: 'bloodheighSick'}" tag="div">测试</router-link>
+              <router-link :to="{ name: 'bloodheighSick'}" tag="div">高血压病人病历</router-link>
             </span>
       </el-menu-item>
       <el-menu-item index="6">
             <span slot="title">
-              <router-link :to="{ name: 'card'}" tag="div">测试</router-link>
+              <router-link :to="{ name: 'sugerheighSick'}" tag="div">糖尿病病人病历</router-link>
             </span>
       </el-menu-item>
     </el-menu>

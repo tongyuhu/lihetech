@@ -4,10 +4,10 @@
       <div slot="header">
         <span>心血管评估</span>
       </div>
-      <el-row>
+      <el-row type="flex" align-items="stretch">
         <!-- 基础项 -->
-        <el-col :xs="24" :lg="12">
-          <el-card>
+        <el-col :xs="24" :lg="11">
+          <el-card >
             <div slot="header">
               基础项                
             </div>
@@ -62,46 +62,68 @@
         </el-col>
         <!-- 基础项 end -->
         <!-- 双臂血压计KSG图 -->
-        <el-card>
-          <div slot="header">
-            双臂血压计KSG图
-          </div>
-          <el-table
-          :data="KSG"
-          border
-          style="width:100%">
-            <el-table-column
-            prop="KSGname"
-            label="名称">
-            </el-table-column>
-            <el-table-column
-            prop="tiane"
-            label="天鹅型">
-            </el-table-column>
-            <el-table-column
-            prop="pingtan"
-            label="平坦型">
-            </el-table-column>
-            <el-table-column
-            prop="shuangfeng"
-            label="双峰型">
-            </el-table-column>
-            <el-table-column
-            prop="buzheng"
-            label="不整型">
-            </el-table-column>
-            <el-table-column
-            prop="quexue"
-            label="缺血型">
-            </el-table-column>
-          </el-table>
-          <div>
-            您当前血压KSG图：双峰型
-          </div>
-          <div>
-            病情预估：心脏疾病  、 年轻型高血压    、肾性高血压   、本态性        高血压
-          </div>  
-        </el-card>
+        <el-col :xs="24" :lg="13">
+          <el-card>
+            <div slot="header">
+              双臂血压计KSG图
+            </div>
+            <el-table
+            :data="KSG"
+            border
+            style="width:100%">
+              <el-table-column
+              prop="KSGname"
+              label="名称">
+              </el-table-column>
+              <el-table-column
+              prop="tiane"
+              label="天鹅型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.isText">{{scope.row.tiane}}</span>
+                  <img v-else :src= 'scope.row.tiane'  width="50px">
+                </template>
+              </el-table-column>
+              <el-table-column
+              prop="pingtan"
+              label="平坦型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.isText">{{scope.row.pingtan}}</span>
+                  <img v-else :src= 'scope.row.pingtan'  width="50px">
+                </template>
+              </el-table-column>
+              <el-table-column
+              prop="shuangfeng"
+              label="双峰型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.isText">{{scope.row.shuangfeng}}</span>
+                  <img v-else :src= 'scope.row.shuangfeng'  width="50px">
+                </template>
+              </el-table-column>
+              <el-table-column
+              prop="buzheng"
+              label="不整型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.isText">{{scope.row.buzheng}}</span>
+                  <img v-else :src= 'scope.row.buzheng'  width="50px">
+                </template>
+              </el-table-column>
+              <el-table-column
+              prop="quexue"
+              label="缺血型">
+                <template slot-scope="scope">
+                  <span v-if="scope.row.isText">{{scope.row.quexue}}</span>
+                  <img v-else :src= 'scope.row.quexue'  width="50px">
+                </template>
+              </el-table-column>
+            </el-table>
+            <div>
+              您当前血压KSG图：双峰型
+            </div>
+            <div>
+              病情预估：心脏疾病  、 年轻型高血压    、肾性高血压   、本态性        高血压
+            </div>  
+          </el-card>
+        </el-col>
         <!-- 双臂血压计KSG图 end -->
       </el-row>
     </el-card>
@@ -113,6 +135,7 @@ export default {
   name: 'risk',
   data () {
     return {
+      // height: '100%',
       risk: {
         labelPosition: 'left',
         sex: '',
@@ -127,19 +150,21 @@ export default {
       KSG: [
         {
           KSGname: '图形',
-          tiane: '三角',
-          pingtan: '0',
-          shuangfeng: '1',
-          buzheng: '3',
-          quexue: '4'
+          tiane: '/static/KSG/tuxing/tiane.jpg',
+          pingtan: '/static/KSG/tuxing/pingtan.png',
+          shuangfeng: '/static/KSG/tuxing/shuangfeng.png',
+          buzheng: '/static/KSG/tuxing/buzheng.png',
+          quexue: '/static/KSG/tuxing/quexue.png',
+          isText: false
         },
         {
           KSGname: '实际图形',
-          tiane: '三角',
-          pingtan: '0',
-          shuangfeng: '1',
-          buzheng: '3',
-          quexue: '4'
+          tiane: '/static/KSG/shijituxing/tiane.png',
+          pingtan: '/static/KSG/shijituxing/pingtan.png',
+          shuangfeng: '/static/KSG/shijituxing/shuangfeng.png',
+          buzheng: '/static/KSG/shijituxing/buzheng.png',
+          quexue: '/static/KSG/shijituxing/quexue.png',
+          isText: false
         },
         {
           KSGname: '症状',
@@ -147,7 +172,8 @@ export default {
           pingtan: '老人 肥胖 动脉硬化 缺血 测量时肢下垂',
           shuangfeng: '心脏疾病 年轻型高血压 肾性高血压 本态性高血压',
           buzheng: '心脏疾病 测量时说话 体动',
-          quexue: '贫血 低血压 受打击的精神状态 自律神经失调 肥胖 血栓闭塞性脉管炎'
+          quexue: '贫血 低血压 受打击的精神状态 自律神经失调 肥胖 血栓闭塞性脉管炎',
+          isText: true
         }
       ]
     }
@@ -158,5 +184,8 @@ export default {
 <style scoped>
   .text-center{
     text-align: center;
+  }
+  .el-card{
+    height: 100% !important;
   }
 </style>

@@ -35,7 +35,10 @@ import {
   Tag,
   RadioGroup,
   RadioButton,
-  Radio
+  Radio,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -69,6 +72,9 @@ Vue.use(Tag)
 Vue.use(RadioGroup)
 Vue.use(RadioButton)
 Vue.use(Radio)
+Vue.use(Dropdown)
+Vue.use(DropdownMenu)
+Vue.use(DropdownItem)
 
 Vue.use(echarts)
 /* eslint-disable no-new */

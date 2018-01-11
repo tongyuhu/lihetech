@@ -357,16 +357,19 @@
     <!-- 心血管风险评估 -->
     <risk></risk>
     <!-- 心血管风险评估 end -->
+    <bloodtable></bloodtable>
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
 import risk from './risk'
+import bloodtable from './bloodtable.vue'
 export default {
   name: 'chart',
   components: {
-    risk
+    risk,
+    bloodtable
   },
   data () {
     return {
