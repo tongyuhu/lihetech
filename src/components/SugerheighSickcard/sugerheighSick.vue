@@ -151,7 +151,8 @@
         <!-- 病历卡 end-->
 
         <Schart></Schart>
-
+        <Saddfile></Saddfile>
+        <SoldData></SoldData>
       </el-col>
 <!-- 病历主体 -->
       <!-- 侧边导航 -->
@@ -187,12 +188,15 @@
 <script>
 import Scard from './Scard'
 import Schart from './Schart'
-
+import Saddfile from './Saddfile'
+import SoldData from './SoldData'
 // import chart from './chart'
 export default {
   components: {
     Scard,
-    Schart
+    Schart,
+    Saddfile,
+    SoldData
     // chart
   },
   data () {

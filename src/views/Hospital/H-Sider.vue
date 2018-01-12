@@ -31,6 +31,11 @@
               <router-link :to="{ name: 'sugerheighSick'}" tag="div">糖尿病病人病历</router-link>
             </span>
       </el-menu-item>
+      <el-menu-item index="6">
+            <span slot="title">
+              <router-link :to="{ name: 'addDoctor'}" tag="div">addDoctor</router-link>
+            </span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

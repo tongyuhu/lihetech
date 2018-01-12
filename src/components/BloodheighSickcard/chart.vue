@@ -160,13 +160,13 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
-                <div></div>
+              <!-- <el-col :span="12"> -->
+                <!-- <div></div> -->
                 <div id='xueyafenbu'  :style="{width:'450px',height:'250px'}"></div>
-              </el-col>
-              <el-col :span="12">
+              <!-- </el-col> -->
+              <!-- <el-col :span="12">
                 <div></div>
-              </el-col>
+              </el-col> -->
             </el-row>
           </el-card>
         </el-col>
@@ -426,6 +426,7 @@ export default {
       },
       yAxis: { // 直角坐标系grid的y轴
         type: 'value',
+        // name: ''
         // axisLine: {onZero: false},
         axisLabel: {
           formatter: '{value}%'

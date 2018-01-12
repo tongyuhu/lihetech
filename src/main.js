@@ -38,7 +38,8 @@ import {
   Radio,
   Dropdown,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
+  Upload
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -75,8 +76,11 @@ Vue.use(Radio)
 Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
+Vue.use(Upload)
 
-Vue.use(echarts)
+// Vue.use(echarts)
+Vue.prototype.$echarts = echarts
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
