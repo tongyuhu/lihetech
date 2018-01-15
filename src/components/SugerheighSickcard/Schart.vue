@@ -449,27 +449,21 @@ export default {
     }
   },
   methods: {
-    // resizeCharts (box, chart) {
-    //   // let guifantulichart = document.getElementById('guifantuli')
-    //   // let chartBox = document.getElementsByClassName('charts')[0]
-    //   chart.style.width = box.style.width + 'px'
-    //   // console.log(chart.style.width)
-    //   console.log(box.style.width)
-    // },
-    changeCharts (chart, fa, ch) {
-      window.addEventListener('resize', () => {
-        setTimeout(() => {
-          ch.style.width = fa.style.width + 'px'
-          console.log(fa.style.width)
-          console.log(ch.style.width)
-          chart.resize()
-        }, 500)
-        // ch.style.width = fa.style.width + 'px'
-        // console.log(fa.style.width)
-        // console.log(ch.style.width)
-        // chart.resize()
-      })
+    resizeCharts (box, echarts, HtoW) {
+      let boxWith = box.clientWidth
+      let boxHeight = box.clientWidth * HtoW
+
+      echarts.style.width = boxWith + 'px'
+      echarts.firstChild.style.width = boxWith + 'px'
+      echarts.firstChild.firstChild.style.width = boxWith + 'px'
+      echarts.clientWidth = boxWith + 'px'
+
+      echarts.style.height = boxHeight + 'px'
+      echarts.firstChild.style.height = boxHeight + 'px'
+      echarts.firstChild.firstChild.style.height = boxHeight + 'px'
     }
+  },
+  computed: {
   },
   mounted () {
     var guifantuliID = this.$echarts.init(document.getElementById('guifantuli'))
@@ -479,14 +473,11 @@ export default {
     const sugeraverage = this.$echarts.init(document.getElementById('sugeraverage'))
     const movesuger = this.$echarts.init(document.getElementById('movesuger'))
     const HbA1C = this.$echarts.init(document.getElementById('HbA1C'))
-    // let guifantulichart = document.getElementById('guifantuli')
-    // let chartBox = document.getElementById('chartsbox')
-    // this.resizeCharts
-    // this.changeCharts(guifantuliID, chartBox, guifantulichart)
-    // this.resizeCharts(chartBox, guifantulichart)
-    // window.onresize () = >  {
-    //   guifantuliID.resize()
-    // }
+    let guifantulichart = document.getElementById('guifantuli')
+    let chartBox = document.getElementById('chartsbox')
+    window.onload = window.onresize = () => {
+      this.resizeCharts(chartBox, guifantulichart, 0.25)
+    }
     guifantuliID.setOption({
       tooltip: {
         trigger: 'axis',
@@ -925,6 +916,17 @@ export default {
         }
       ]
     })
+    window.onresize = () => {
+      this.resizeCharts(chartBox, guifantulichart, 0.4)
+    }
+  },
+  created () {
+
+    // window.onresize = () => {
+    //   let guifantulichart = document.getElementById('guifantuli')
+    //   let chartBox = document.getElementById('chartsbox')
+    //   this.resizeCharts(chartBox, guifantulichart, 0.4)
+    // }
   }
 }
 </script>

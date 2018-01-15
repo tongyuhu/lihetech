@@ -8,6 +8,9 @@ import cases from '@/views/Hospital/Case/H-cases.vue'
 import bloodheighSick from '@/components/BloodheighSickcard/bloodheighSick.vue'
 import sugerheighSick from '@/components/SugerheighSickcard/sugerheighSick.vue'
 import addDoctor from '@/components/addDoctor.vue'
+import healthForm from '@/components/healthForm.vue'
+import accountSetting from '@/components/accountSetting.vue'
+
 // import card from '@/components/BloodheighSickcard/card.vue'
 // import card from '@/components/BloodheighSickcard/card.vue'
 
@@ -59,6 +62,18 @@ export default new Router({
           path: 'hospital/addDoctor',
           name: 'addDoctor',
           component: addDoctor
+        },
+        {
+          path: 'hospital/healthForm',
+          name: 'healthForm',
+          component: healthForm
+
+        },
+        {
+          path: 'hospital/accountSetting',
+          name: 'accountSetting',
+          component: accountSetting
+
         }
 
       ]
