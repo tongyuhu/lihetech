@@ -2,13 +2,13 @@
   <div>
       <el-row type="flex" justify="space-between">
           <el-col :span="8">
-              <p>{{ hospital }}</p>
-              <el-button size="small" type="primary">添加病人</el-button>
+              <p>{{ hospitalName }}</p>
+              <el-button size="small" type="primary" @click="addSick">添加病人</el-button>
           </el-col>
           <el-col :span="16">
             <div class='add-sick-right'>
-              <p>2017-12-8</p>
-              <p>诊所位于{{ hospitalAddress }},{{ hospitalDoctor }}名医生,{{hospitalNana}}名护士</p>
+              <p>{{date}}</p>
+              <p>诊所位于{{ hospitalAddress }},{{ hospitalDoctorNum }}名医生,{{hospitalNanaNum}}名护士</p>
             </div>
           </el-col>
       </el-row>
@@ -20,11 +20,26 @@ export default {
   name: 'H-addsick',
   data () {
     return {
-      hospital: '张江高科诊所',
-      date: '2017-12-8',
+      hospitalName: '张江高科诊所',
       hospitalAddress: '诊所位于祖冲之路887弄72-73号',
-      hospitalDoctor: '4',
-      hospitalNana: 3
+      hospitalDoctorNum: 4,
+      hospitalNanaNum: 3
+    }
+  },
+  computed: {
+    date: function () {
+      let today = new Date()
+      var year = today.getFullYear()
+      var mounth = today.getMonth() + 1
+      var day = today.getDate()
+      var nowtime = year + '年' + mounth + '月' + day + '日'
+      console.log(nowtime)
+      return nowtime
+    }
+  },
+  methods: {
+    addSick () {
+
     }
   }
 }

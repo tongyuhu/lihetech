@@ -3,11 +3,18 @@
       <el-row>
           <el-col>
               <el-card :body-style="{ padding: '0px' }" class='header'>
-                  <span slot='header' class='header'>
+                  <div slot='header' class='header'>
                       <p>
-                          糖尿病 {{ bloodheightotal }}人）
+                          高血压患者（{{ heightbloodTotal }}人）
                       </p>
-                  </span>
+
+                  <el-row type="flex" justify="end">
+                    <el-button type="primary" size="medium" @click="updateYear">年</el-button>
+                    <el-button type="primary" size="medium" @click="updateWeek">周</el-button>
+                    <el-button type="primary" size="medium" @click="updateMounth">月</el-button>
+                    <el-button type="primary" size="medium" @click="updateDay">日</el-button>
+                  </el-row>
+                  </div>
                   <el-row>
                       <el-col :span='12' >
                         <el-card>
@@ -26,7 +33,7 @@
                                     患者走势
                                 </p>
                             </span>
-                            <div id='HBzoushi' :style="{width:'355px',height:'250px'}"></div>
+                            <div id='HBzoushi' :style="{width:'450px',height:'250px'}"></div>
                         </el-card>
                       </el-col>
                   </el-row>
@@ -42,42 +49,68 @@ export default {
   name: 'H-bloodheighttotal',
   data () {
     return {
-      bloodheightotal: '1236',
-      HBfenbu: {
-        'status': ['正常', '偏高', '高', '危险'],
-        'value': [123, 55, 554, 454]
+      heightbloodTotal: 1236,
+      heightbloodPieData: [
+        { value: 332, name: '正常' },
+        { value: 75, name: '偏高' },
+        { value: 555, name: '高' },
+        { value: 44, name: '危险' }
+      ],
+      heightbloodLineData: {
+        labelData: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+        valueData: [1, 11, 15, 13, 12, 13, 10]
       }
     }
   },
-  mounted () {
-    var HBfenbu = echarts.init(document.getElementById('HBfenbu'))
-    var HBzoushi = echarts.init(document.getElementById('HBzoushi'))
+  methods: {
+    updateYear () {
+      console.log(this.heightbloodTotal)
+      this.heightbloodLineData = {
+        labelData: ['0', '2', '4', '6', '8', '10', '12'],
+        valueData: [3, 8, 5, 13, 12, 5, 6]
+      }
+    },
+    updateMounth () {
 
+    },
+    updateWeek () {
+
+    },
+    updateDay () {
+
+    }
+  },
+  watch: {
+
+  },
+  mounted () {
+    let HBfenbu = echarts.init(document.getElementById('HBfenbu'))
+    let HBzoushi = echarts.init(document.getElementById('HBzoushi'))
     HBfenbu.setOption({
-      title: {
-        // text: '患者分布',
-        x: 'center'
-      },
+      // title: {
+      //   // text: '患者分布',
+      //   x: 'center'
+      // },
       tooltip: {
         trigger: 'item',
-        formatter: '{a} <br/>{b} : {c} ({d}%)'
+        formatter: '{a} <br/>{b} : {c}人 <br/> {d}%'
       },
-      color: ['Sienna', 'LightSalmon', 'Coral', 'OrangeRed'],
+      color: ['#008B00', '#4169E1', '#EE6363', '#EE2C2C'],
       legend: {
         orient: 'vertical',
         left: 'left',
         top: 'top',
-        data: this.HBfenbu.status,
-        selectedMode: false,
-        formatter: (name) => {
-          var index = 0
-          this.HBfenbu.status.forEach(function (value, i) {
-            if (value === name) {
-              index = i
-            }
-          })
-          return name + '  共(' + this.HBfenbu.value[index] + '次)'
-        }
+        data: ['正常', '偏高', '高', '危险'],
+        selectedMode: false
+        // formatter: (name) => {
+        //   var index = 0
+        //   this.HBfenbu.status.forEach(function (value, i) {
+        //     if (value === name) {
+        //       index = i
+        //     }
+        //   })
+        //   return name + '  共(' + this.HBfenbu.value[index] + '次)'
+        // }
 
       },
       series: [
@@ -86,12 +119,7 @@ export default {
           type: 'pie',
           radius: '70%',
           center: ['60%', '50%'],
-          data: [
-            { value: 332, name: '正常' },
-            { value: 75, name: '偏高' },
-            { value: 555, name: '高' },
-            { value: 44, name: '危险' }
-          ],
+          data: this.heightbloodPieData,
           label: {
             normal: {
               position: 'inner',
@@ -101,14 +129,14 @@ export default {
           },
           labelLine: {
             normal: {
-              show: false
+              // show: false
             }
           }
         }
       ],
       itemStyle: {
         emphasis: {
-          shadowBlur: 10,
+          shadowBlur: 50,
           shadowOffsetX: 0,
           shadowColor: ''
         }
@@ -116,41 +144,54 @@ export default {
     })
     HBzoushi.setOption({
       title: {
-        // text: '糖尿病',
-        // subtext: '副标题',
-        x: 'center'
+        // text: '控压走势',
+        subtext: '控压走势',
+        subtextStyle: {
+          color: '#111'
+        },
+        // x: 'center'
+        right: '20',
+        top: '-10'
       },
       tooltip: { // 提示框组件
         trigger: 'axis',
-        formatter: '{b} : {c}'
+        axisPointer: {
+          type: 'cross'
+        },
+        snap: true,
+        formatter: '{b} : {c}%'
       },
       grid: { // 直角坐标系内绘图网格
-        left: 'center',
+        left: 'left',
         right: 'center',
+        top: '30px',
         bottom: '3%',
-        width: '350',
+        width: '430',
         height: '220',
         containLabel: true
       },
-      toolbox: { // 工具栏
-        show: true
+      // toolbox: { // 工具栏
+        // show: true
         // feature: {
         //   asveAsImage: {}
         // }
-      },
-      legend: { // 图例组件
+      // },
+      // legend: { // 图例组件
+        // show: true,
         // orient: 'vertical',
         // left: 'left',
         // top: 'center',
-        data: ['控压走势']
+        // data: ['控压走势']
         // selectedMode: false
-      },
+      // },
       xAxis: { // 直角坐标系grid的x轴
         type: 'category',
         boundaryGap: false,
-        data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+        data: this.heightbloodLineData.labelData
       },
       yAxis: { // 直角坐标系grid的y轴
+        name: '控制率',
+        nameLocation: 'end',
         type: 'value',
         axisLine: {onZero: false},
         axisLabel: {
@@ -171,10 +212,11 @@ export default {
               shadowOffsetY: 5
             }
           },
-          data: [1, 11, 15, 13, 12, 13, 10]
+          data: this.heightbloodLineData.valueData
         }
       ]
     })
+    // this.updateYear()
   }
 }
 </script>
@@ -191,8 +233,13 @@ export default {
 <style scoped>
 p {
   margin: 5px;
+  text-align:center;
 }
 .tatalsick {
   margin-top: 20px;
+}
+.btn{
+  float: right;
+  overflow: hidden;
 }
 </style>

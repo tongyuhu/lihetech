@@ -94,6 +94,11 @@
                   label="姓名"
                   class-name="table-col"
                   label-class-name="table-col-label">
+                    <template slot-scope="scope">
+                      <el-button type="text" @click="diagnose(scope.row)">
+                        {{scope.row.name}}
+                      </el-button>
+                    </template>
                   </el-table-column>
                   <el-table-column 
                   prop="sicktype"
@@ -119,11 +124,11 @@
                   prop="action"
                   label=""
                   width="275px">
-                      <template slot-scope="scope">
-                          <el-button>关注</el-button>
-                          <el-button>诊断</el-button>
-                          <el-button>电话</el-button>
-                      </template>
+                    <template slot-scope="scope">
+                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
+                    </template>
                   </el-table-column>
               </el-table>
             </el-row>
@@ -169,6 +174,15 @@ export default {
     }
   },
   methods: {
+    diagnose (row) {
+      console.log(row.name)
+    },
+    care (row) {
+      console.log(row.care)
+    },
+    call (row) {
+      console.log(row.id)
+    },
     handlePersonMsg (row, column, cell, event) {
       // console.log(row, column, cell, event)
       // console.log(row)
@@ -212,13 +226,5 @@ export default {
   }
   .sick-list-filter{
     margin-bottom: 10px;
-  }
-  .table-col{
-    cursor: pointer;
-    color:rgb(29, 52, 155);
-  }
-  .table-col-label{
-    cursor: none;
-    color: rgb(13, 13, 14);
   }
 </style>

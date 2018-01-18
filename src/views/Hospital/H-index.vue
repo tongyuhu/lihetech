@@ -14,9 +14,9 @@
                     <el-main>
                         <router-view></router-view>
                     </el-main>
-                    <el-footer class="footer">
+                    <!-- <el-footer class="footer">
                         @lihetech
-                    </el-footer>
+                    </el-footer> -->
                 </el-container>
             </el-container>
         </el-container>

@@ -452,12 +452,10 @@ export default {
     resizeCharts (box, echarts, HtoW) {
       let boxWith = box.clientWidth
       let boxHeight = box.clientWidth * HtoW
-
       echarts.style.width = boxWith + 'px'
       echarts.firstChild.style.width = boxWith + 'px'
       echarts.firstChild.firstChild.style.width = boxWith + 'px'
-      echarts.clientWidth = boxWith + 'px'
-
+      // echarts.clientWidth = boxWith + 'px'
       echarts.style.height = boxHeight + 'px'
       echarts.firstChild.style.height = boxHeight + 'px'
       echarts.firstChild.firstChild.style.height = boxHeight + 'px'
@@ -959,5 +957,9 @@ export default {
   }
   .margin-bottom{
     margin-bottom: 20px;
+  }
+  #chartsbox{
+    display: flex;
+    justify-content: center;
   }
 </style>

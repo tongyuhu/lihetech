@@ -78,13 +78,15 @@
                         <el-table
                         :data="casesData"
                         border
-                        style="width: 100%"
-                        @cell-click="handlePersonMsg">
+                        style="width: 100%">
                           <el-table-column
                           prop="name"
-                          label="姓名"
-                          class-name="table-col"
-                          label-class-name="table-col-label">
+                          label="姓名">
+                            <template slot-scope="scope">
+                              <el-button type="text" @click="diagnose(scope.row)">
+                                {{scope.row.name}}
+                              </el-button>
+                            </template>
                           </el-table-column>
                           <el-table-column
                           prop="newtime"
@@ -109,7 +111,7 @@
                           align="center"
                           >
                             <template slot-scope="scope">
-                              <el-button size="mini" type="primary">查看</el-button>
+                              <el-button size="mini" type="primary" @click="diagnose(scope.row)">查看</el-button>
                             </template>
                           </el-table-column>
                         </el-table>
@@ -203,13 +205,14 @@ export default {
     }
   },
   methods: {
-    handlePersonMsg (row, column, cell, event) {
-      // console.log(row, column, cell, event)
-      // console.log(row)
-      // console.log(column)
-      // console.log(cell)
-      // console.log(event)
+    diagnose (row) {
       console.log(row.name)
+    },
+    care (row) {
+      console.log(row.care)
+    },
+    call (row) {
+      console.log(row.id)
     }
   }
 }

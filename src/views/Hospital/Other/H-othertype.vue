@@ -19,17 +19,15 @@
           <el-table 
               :data='newaskData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
-                  label="姓名"
-                  class-name="table-col"
-                  label-class-name="table-col-label">
-                  <!-- <template slot-scope="scope">
-                    <a>{{ scope.row.name }}</a>
-                    <a @click="handlePersonMsg">{{ scope.row.name }}</a>
-                  </template> -->
+                  label="姓名">
+                  <template slot-scope="scope">
+                      <el-button type="text" @click="diagnose(scope.row)">
+                        {{scope.row.name}}
+                      </el-button>
+                    </template>
               </el-table-column>
               <el-table-column
                   prop="asktime"
@@ -37,14 +35,14 @@
               </el-table-column>
               <el-table-column
                   prop="asktopic"
-                  label="姓名">
+                  label="咨询主题">
               </el-table-column>
               <el-table-column
                   prop="action"
                   label=""
                   width="90">
                   <template slot-scope="scope">
-                      <el-button>诊断</el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -61,17 +59,15 @@
           <el-table 
               :data='badsickData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
-                  label="姓名"
-                  class-name="table-col"
-                  label-class-name="table-col-label">
-                  <!-- <template slot-scope="scope">
-                    <a>{{ scope.row.name }}</a>
-                    <a @click="handlePersonMsg">{{ scope.row.name }}</a>
-                  </template> -->
+                  label="姓名">
+                  <template slot-scope="scope">
+                      <el-button type="text" @click="diagnose(scope.row)">
+                        {{scope.row.name}}
+                      </el-button>
+                    </template>
               </el-table-column>
               <el-table-column
                   prop="sicktype"
@@ -94,9 +90,9 @@
                   label=""
                   width="275px">
                   <template slot-scope="scope">
-                      <el-button size="mini">关注</el-button>
-                      <el-button size="mini">诊断</el-button>
-                      <el-button size="mini">电话</el-button>
+                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -113,17 +109,15 @@
           <el-table 
               :data='noListenDoctorData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
-                  label="姓名"
-                  class-name="table-col"
-                  label-class-name="table-col-label">
-                  <!-- <template slot-scope="scope">
-                    <a>{{ scope.row.name }}</a>
-                    <a @click="handlePersonMsg">{{ scope.row.name }}</a>
-                  </template> -->
+                  label="姓名">
+                  <template slot-scope="scope">
+                      <el-button type="text" @click="diagnose(scope.row)">
+                        {{scope.row.name}}
+                      </el-button>
+                    </template>
               </el-table-column>
               <el-table-column
                   prop="sicktype"
@@ -146,9 +140,9 @@
                   label=""
                   width="275px">
                   <template slot-scope="scope">
-                      <el-button size="mini">关注</el-button>
-                      <el-button size="mini">诊断</el-button>
-                      <el-button size="mini">电话</el-button>
+                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -165,17 +159,15 @@
           <el-table 
               :data='unperfectMsgData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
-                  label="姓名"
-                  class-name="table-col"
-                  label-class-name="table-col-label">
-                  <!-- <template slot-scope="scope">
-                    <a>{{ scope.row.name }}</a>
-                    <a @click="handlePersonMsg">{{ scope.row.name }}</a>
-                  </template> -->
+                  label="姓名">
+                    <template slot-scope="scope">
+                      <el-button type="text" @click="diagnose(scope.row)">
+                        {{scope.row.name}}
+                      </el-button>
+                    </template>
               </el-table-column>
               <el-table-column
                   prop="sicktype"
@@ -198,9 +190,9 @@
                   label=""
                   width="275px">
                   <template slot-scope="scope">
-                      <el-button size="mini">关注</el-button>
-                      <el-button size="mini">诊断</el-button>
-                      <el-button size="mini">电话</el-button>
+                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
           </el-table>
@@ -302,13 +294,14 @@ export default {
     }
   },
   methods: {
-    handlePersonMsg (row, column, cell, event) {
-      // console.log(row, column, cell, event)
-      // console.log(row)
-      // console.log(column)
-      // console.log(cell)
-      // console.log(event)
+    diagnose (row) {
       console.log(row.name)
+    },
+    care (row) {
+      console.log(row.care)
+    },
+    call (row) {
+      console.log(row.id)
     }
   }
 }

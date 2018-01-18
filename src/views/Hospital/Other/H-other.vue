@@ -5,7 +5,7 @@
               <el-card :body-style="{ padding: '0px' }" class='header'>
                   <span slot='header' class='header'>
                       <p>
-                          共（{{ bloodheightotal }}人）
+                        共{{ otherTotal }}名
                       </p>
                   </span>
                   <el-row>
@@ -63,7 +63,7 @@ export default {
   },
   data () {
     return {
-      bloodheightotal: '1236',
+      otherTotal: 1236,
       HBfenbu: {
         'status': ['正常', '偏高', '高', '危险'],
         'value': [123, 55, 554, 454]
@@ -89,17 +89,7 @@ export default {
         left: 'left',
         top: 'top',
         data: this.HBfenbu.status,
-        selectedMode: false,
-        formatter: (name) => {
-          var index = 0
-          this.HBfenbu.status.forEach(function (value, i) {
-            if (value === name) {
-              index = i
-            }
-          })
-          return name + '  共(' + this.HBfenbu.value[index] + '次)'
-        }
-
+        selectedMode: false
       },
       series: [
         {
