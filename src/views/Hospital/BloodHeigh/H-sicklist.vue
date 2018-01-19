@@ -143,25 +143,26 @@
 export default {
   data () {
     return {
-      sicklistData: [
-        {
-          name: '看看',
-          sicktype: '舒张期高血压',
-          badrate: '23%',
-          badtimes: 5,
-          status: '恶化',
-          addtime: '2017-9-6'
-                    // action:
-        },
-        {
-          name: '看看',
-          sicktype: '舒张期高血压',
-          badrate: '23%',
-          badtimes: 5,
-          status: '恶化',
-          addtime: '2017-9-6'
-        }
-      ],
+      // sicklistData: [
+      //   {
+      //     name: '看看',
+      //     sicktype: '舒张期高血压',
+      //     badrate: '23%',
+      //     badtimes: 5,
+      //     status: '恶化',
+      //     addtime: '2017-9-6'
+      //               // action:
+      //   },
+      //   {
+      //     name: '看看',
+      //     sicktype: '舒张期高血压',
+      //     badrate: '23%',
+      //     badtimes: 5,
+      //     status: '恶化',
+      //     addtime: '2017-9-6'
+      //   }
+      // ],
+      sicklistData: [],
       options4: [],
       value10: [],
       value9: '',
@@ -174,6 +175,7 @@ export default {
     }
   },
   methods: {
+
     diagnose (row) {
       console.log(row.name)
     },
@@ -209,6 +211,17 @@ export default {
   mounted () {
     this.list = this.states.map(item => {
       return { value: item, label: item }
+    })
+    // this.$axios.get('https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sicklistData')
+    this.$axios.post('https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickMsgPost', {
+      name: 'wang'
+    })
+    .then(response => {
+      this.sicklistData = response.data.sickList
+      console.log(response.data.sickList)
+    })
+    .catch(err => {
+      console.log(err)
     })
   }
 }

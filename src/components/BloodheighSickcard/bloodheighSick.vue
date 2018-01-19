@@ -1,5 +1,6 @@
 <template>
   <div>
+    <el-button @click="aa">11111</el-button>
     <el-row>
 <!-- 病历标题 -->
       <div>
@@ -12,7 +13,7 @@
       <el-col :span='20'>
         <!-- 病人简单信息 -->
         <el-row :gutter='20'>
-          <el-col :span="5">姓名：毛健康</el-col>
+          <el-col :span="5">姓名：{{sickInfo.name}}</el-col>
           <el-col :span="5">性别：男</el-col>
           <el-col :span="5">年龄：56岁</el-col>
           <el-col :span="5">确诊为：心脏病</el-col>
@@ -158,7 +159,7 @@
       <!-- 侧边导航 -->
       <el-col :span='4'>
         <div class="fixed">
-          <p>{{ name }}</p>
+          <p>{{ sickInfo.name }}</p>
           <el-card :body-style="{ padding: '10px' }" class="right-nav">
             <div class="right-nav">
               <div>
@@ -196,9 +197,21 @@ export default {
   data () {
     return {
       autoplay: false,
-      name: '芬芳'
+      sickInfo: this.$route.params.sickInfo
+      // name: this.$route.params.sickInfo.name
     }
+  },
+  methods: {
+    aa () {
+      console.log(this.$route.params.sickInfo)
+    }
+
   }
+  // computed: {
+  //   sickInfo () {
+  //     return this.$route.params.sickInfo
+  //   }
+  // }
 }
 </script>
 <style>

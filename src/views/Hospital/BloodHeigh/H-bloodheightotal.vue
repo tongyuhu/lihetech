@@ -9,10 +9,10 @@
                       </p>
 
                   <el-row type="flex" justify="end">
-                    <el-button type="primary" size="medium" @click="updateYear">年</el-button>
-                    <el-button type="primary" size="medium" @click="updateWeek">周</el-button>
-                    <el-button type="primary" size="medium" @click="updateMounth">月</el-button>
-                    <el-button type="primary" size="medium" @click="updateDay">日</el-button>
+                    <el-button :type="checkTime[0]" size="medium" @click="updateYear">年</el-button>
+                    <el-button :type="checkTime[1]" size="medium" @click="updateMounth">月</el-button>
+                    <el-button :type="checkTime[2]" size="medium" @click="updateWeek">周</el-button>
+                    <el-button :type="checkTime[3]" size="medium" @click="updateDay">日</el-button>
                   </el-row>
                   </div>
                   <el-row>
@@ -45,10 +45,12 @@
 
 <script>
 import echarts from 'echarts'
+import {checkDateBtn} from './../../../untils/checkDateBtn'
 export default {
   name: 'H-bloodheighttotal',
   data () {
     return {
+      checkTime: ['success', 'primary', 'primary', 'primary'],
       heightbloodTotal: 1236,
       heightbloodPieData: [
         { value: 332, name: '正常' },
@@ -63,21 +65,31 @@ export default {
     }
   },
   methods: {
+    // checktime: function (btn) {
+    //   let self = this
+    //   if (self.checkTime[btn] === 'primary') {
+    //     for (let i = 0; i < self.checkTime.length; i++) {
+    //       self.checkTime.splice(i, 1, 'primary')
+    //     }
+    //     self.checkTime.splice(btn, 1, 'success')
+    //   }
+    // },
     updateYear () {
-      console.log(this.heightbloodTotal)
+      checkDateBtn(0, this.checkTime, 'primary', 'success')
+      // console.log(this.heightbloodTotal)
       this.heightbloodLineData = {
         labelData: ['0', '2', '4', '6', '8', '10', '12'],
         valueData: [3, 8, 5, 13, 12, 5, 6]
       }
     },
     updateMounth () {
-
+      checkDateBtn(1, this.checkTime, 'primary', 'success')
     },
     updateWeek () {
-
+      checkDateBtn(2, this.checkTime, 'primary', 'success')
     },
     updateDay () {
-
+      checkDateBtn(3, this.checkTime, 'primary', 'success')
     }
   },
   watch: {

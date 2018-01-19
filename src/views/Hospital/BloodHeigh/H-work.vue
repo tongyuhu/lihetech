@@ -195,8 +195,24 @@
                   label=""
                   width="275px">
                   <template slot-scope="scope">
-                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
-                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button 
+                      size="mini" 
+                      type="primary" 
+                      @click.native="care(scope.$index,unperfectMsgData)" 
+                      :key="scope.row.id" :style="{'width':'80px'}"
+                      v-if="scope.row.care">
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button 
+                      v-else
+                      size="mini" 
+                      type="plain" 
+                      @click.native="care(scope.$index,unperfectMsgData)" 
+                      :key="scope.row.id" :style="{'width':'80px'}"
+                      >
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button size="mini" type="primary" @click.native="diagnose(scope.row)" >诊断</el-button>
                       <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
@@ -213,6 +229,8 @@ export default {
   name: 'H-work',
   data () {
     return {
+      btn: 'primary',
+      careState: '关注',
       msgTip: 5,
       badSickRate: '55%',
       noListenDoctorRate: '22%',
@@ -220,22 +238,27 @@ export default {
         {
           name: 'John Brown',
           asktime: '2017/12/01 11:32',
-          asktopic: 'New York No. 1 Lake Park'
+          asktopic: 'New York No. 1 Lake Park',
+          id: 157498
         },
         {
           name: 'Jim Green',
           asktime: '2017/12/01 11:32',
-          asktopic: 'London No. 1 Lake Park'
+          asktopic: 'London No. 1 Lake Park',
+          id: 15398
+
         },
         {
           name: 'Joe Black',
           asktime: '2017/12/01 11:32',
-          asktopic: 'Sydney No. 1 Lake Park'
+          asktopic: 'Sydney No. 1 Lake Park',
+          id: 1537498
         },
         {
           name: 'Jon Snow',
           asktime: '2017/12/01 11:32',
-          asktopic: 'Ottawa No. 2 Lake Park'
+          asktopic: 'Ottawa No. 2 Lake Park',
+          id: 1575498
         }
       ],
       badsickData: [
@@ -246,7 +269,7 @@ export default {
           todaytimes: 2,
           addtime: '2015-8-9',
           care: true,
-          id: 123456
+          id: 1234566
         },
         {
           name: '天天',
@@ -255,7 +278,7 @@ export default {
           todaytimes: 5,
           addtime: '2017-8-9',
           care: false,
-          id: 123456
+          id: 12312456
         }
       ],
       noListenDoctorData: [
@@ -266,7 +289,7 @@ export default {
           noListenDoctor: '21天(共50天)',
           addtime: '2015-8-9',
           care: true,
-          id: 123456
+          id: 123454326
         },
         {
           name: '天天',
@@ -275,7 +298,7 @@ export default {
           noListenDoctor: '21天(共50天)',
           addtime: '2017-8-9',
           care: true,
-          id: 123456
+          id: 1234565
         }
       ],
       unperfectMsgData: [
@@ -286,7 +309,7 @@ export default {
           unperfectMsg: '36%',
           addtime: '2015-8-9',
           care: true,
-          id: 123456
+          id: 234
         },
         {
           name: '天天',
@@ -294,22 +317,45 @@ export default {
           badrate: '40%',
           unperfectMsg: '36%',
           addtime: '2017-8-9',
-          care: true,
-          id: 123456
+          care: false,
+          id: 12345622
         }
       ]
 
     }
   },
   methods: {
+    careText (boolean) {
+      if (boolean) {
+        return '取消关注'
+      } else {
+        return '关注'
+      }
+    },
     msgTipBtn () {
-
+      this.$router.push({
+        name: 'accountSetting'
+      })
     },
     diagnose (row) {
-      console.log(row.name)
+      this.$router.push({name: 'bloodheighSick',
+        params: {
+          sickInfo: row
+          // sickName: row.name,
+          // sickId: row.id
+        }})
+      console.log(row)
     },
-    care (row) {
-      console.log(row.care)
+    care (index, row) {
+      if (row[index].care === true) {
+        this.btn = 'plain'
+        row[index].care = false
+      } else {
+        this.btn = 'primary'
+        row[index].care = true
+      }
+      console.log(index)
+      console.log(row)
     },
     call (row) {
       console.log(row.id)

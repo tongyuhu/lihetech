@@ -24,6 +24,7 @@ export default {
       hospitalAddress: '诊所位于祖冲之路887弄72-73号',
       hospitalDoctorNum: 4,
       hospitalNanaNum: 3
+      // date: ''
     }
   },
   computed: {
@@ -32,23 +33,36 @@ export default {
       var year = today.getFullYear()
       var mounth = today.getMonth() + 1
       var day = today.getDate()
+      // var time = today.toLocaleDateString()
       var nowtime = year + '年' + mounth + '月' + day + '日'
-      console.log(nowtime)
+      // console.log(nowtime)
       return nowtime
+      // return time
     }
   },
   methods: {
+    // date: function (date) {
+    //   let today = new Date()
+    //   date = today.toLocaleString()
+    //   return date
+    // },
     addSick () {
-
+      // console.log(this.$router)
+      this.$router.push({name: 'addSick'})
     }
+  },
+  watch: {
+    // date: function () {
+    //   let today = new Date()
+    //   let date = today.toLocaleString()
+    //   return date
+    // }
+    // '$router': beforeEach(({name: other}, from, next) => {
+    //     // this.$router.push({name: 'other'})
+    //   console.log(1)
+    //   next()
+    // })
   }
-  // watch: {
-  //   date: function (date) {
-  //     let today = new Date()
-  //     date = today.toLocaleString()
-  //     return date
-  //   }
-  // }
 }
 </script>
 

@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import Vuex from 'vuex'
 import echarts from 'echarts'
+import axios from 'axios'
 
 // 按需引入element-ui
 import 'element-ui/lib/theme-chalk/index.css'
@@ -80,11 +81,17 @@ Vue.use(Upload)
 
 // Vue.use(echarts)
 Vue.prototype.$echarts = echarts
-
+Vue.prototype.$axios = axios
 /* eslint-disable no-new */
+// new Vue({
+//   el: '#app',
+//   router,
+//   template: '<App/>',
+//   components: { App }
+// })
 new Vue({
-  el: '#app',
   router,
+  // store,
   template: '<App/>',
   components: { App }
-})
+}).$mount('#app')
