@@ -56,7 +56,7 @@ const routes = [
         component: cases
       },
       {
-        path: 'bloodheighSick/:sickInfo',
+        path: 'bloodheighSick/:sickID',
         name: 'bloodheighSick',
         component: bloodheighSick
       },

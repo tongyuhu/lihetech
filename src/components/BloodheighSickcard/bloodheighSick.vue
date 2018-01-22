@@ -197,13 +197,14 @@ export default {
   data () {
     return {
       autoplay: false,
-      sickInfo: this.$route.params.sickInfo
+      sickInfo: this.$route.params.sickID
+      // sickInfo: this.$route.params.sickInfo
       // name: this.$route.params.sickInfo.name
     }
   },
   methods: {
     aa () {
-      console.log(this.$route.params.sickInfo)
+      console.log(this.$route.params.sickID)
     }
 
   }

@@ -15,10 +15,15 @@
                 <el-button type="primary" size="small">添加病人</el-button>
               </el-col>
               <el-col :span="4" :offset="2">
-                <el-button type="plain" size="small">半年未做检查者</el-button>
+                <el-button type="plain" size="small" @click="halfyearSickList">半年未做检查者</el-button>
               </el-col>
               <el-col :span="4">
-                <el-select v-model="bloodheighType"  placeholder="糖尿病类型" size="mini">
+                <el-select v-model="bloodheighType"  
+                placeholder="糖尿病类型" 
+                size="mini" 
+                clearable 
+                filterable	
+                @change="selectsickType">
                     <!-- <el-option v-for="item in cityList" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-option> -->
                     <el-option value="舒张期高血压" label="舒张期高血压">舒期高血压</el-option>
                     <el-option value="舒张高血压" label="舒高血压">舒期压</el-option>
@@ -30,7 +35,9 @@
                 <el-select
                     v-model="sugerheighType"
                     remote
+                    clearable 
                     placeholder="高血压类型"
+                    @change="selectsickType"
                     size="mini">
                     <el-option value="舒张期" label="舒张期"></el-option>
                     <el-option value="舒张期高" label="舒张期高血压"></el-option>
@@ -44,8 +51,10 @@
               </el-col>
               <el-col :span="4">
                 <el-select
-                    v-model="value9"
+                    v-model="sickstatus"
                     remote
+                    clearable
+                    @change="selectsickType"
                     placeholder="治疗效果"
                     size="mini">
                     <!-- <el-el-option
@@ -59,23 +68,9 @@
                   </el-select>
               </el-col>
               <el-col :span="4">
-                <el-select
-                v-model="value10"
-                multiple
-                filterable
-                remote
-                reserve-keyword
-                placeholder="患者姓名"
-                :remote-method="remoteMethod"
-                :loading="loading"
-                size="mini">
-                  <el-option
-                    v-for="item in options4"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
-                  </el-option>
-                </el-select>
+                <el-input placeholder="请输入姓名" v-model="sicknameSelectData" size="mini">
+                  <el-button slot="append" icon="el-icon-search" @click="sicknameSelect"></el-button>
+                </el-input>
               </el-col>
             </el-row>
           </div>
@@ -87,8 +82,7 @@
               <el-table
               :data="sicklistData"
               border
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
                   <el-table-column 
                   prop="name"
                   label="姓名"
@@ -120,16 +114,33 @@
                   prop="addtime"
                   label="加入时间">
                   </el-table-column>
-                  <el-table-column 
+                  <el-table-column
                   prop="action"
                   label=""
                   width="275px">
-                    <template slot-scope="scope">
-                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
-                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                  <template slot-scope="scope">
+                      <el-button 
+                      size="mini" 
+                      type="primary" 
+                      @click.native="care(scope.$index,sicklistData)" 
+                      :key="scope.row.id" 
+                      :style="{'width':'80px'}"
+                      v-if="scope.row.care">
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button 
+                      v-else
+                      size="mini" 
+                      type="plain" 
+                      @click.native="care(scope.$index,sicklistData)" 
+                      :key="scope.row.id" :style="{'width':'80px'}"
+                      >
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)" >诊断</el-button>
                       <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
-                    </template>
-                  </el-table-column>
+                  </template>
+              </el-table-column>
               </el-table>
             </el-row>
           </div>
@@ -140,85 +151,93 @@
 </template>
 
 <script>
+import {sicklistDataApi, halfyearSickListApi, sicknameSelectApi, sicktypeselect} from './../../../api/views/Hospital/BloodHeigh/H-sicklist'
+import {careText, care} from './../../../untils/untils'
 export default {
   data () {
     return {
-      // sicklistData: [
-      //   {
-      //     name: '看看',
-      //     sicktype: '舒张期高血压',
-      //     badrate: '23%',
-      //     badtimes: 5,
-      //     status: '恶化',
-      //     addtime: '2017-9-6'
-      //               // action:
-      //   },
-      //   {
-      //     name: '看看',
-      //     sicktype: '舒张期高血压',
-      //     badrate: '23%',
-      //     badtimes: 5,
-      //     status: '恶化',
-      //     addtime: '2017-9-6'
-      //   }
-      // ],
       sicklistData: [],
-      options4: [],
-      value10: [],
-      value9: '',
-      list: [],
-      loading: false,
-      states: ['sasd', 'wqeee'],
-      model1: '',
+      sicknameSelectData: '',
+      // list: [],
+      loading: true,
       sugerheighType: '',
-      bloodheighType: ''
+      bloodheighType: '',
+      sickstatus: ''
     }
   },
   methods: {
-
+    careText,
+    care,
     diagnose (row) {
-      console.log(row.name)
+      this.$router.push({name: 'bloodheighSick',
+        params: {
+          sickID: row.id
+          // sickName: row.name,
+          // sickId: row.id
+        }})
     },
-    care (row) {
-      console.log(row.care)
-    },
+    // 未完善
     call (row) {
       console.log(row.id)
     },
-    handlePersonMsg (row, column, cell, event) {
-      // console.log(row, column, cell, event)
-      // console.log(row)
-      // console.log(column)
-      // console.log(cell)
-      // console.log(event)
-      console.log(row.name)
-    },
-    remoteMethod (query) {
-      if (query !== '') {
-        this.loading = true
-        setTimeout(() => {
-          this.loading = false
-          this.options4 = this.list.filter(item => {
-            return item.label.toLowerCase()
-                .indexOf(query.toLowerCase()) > -1
-          })
-        }, 200)
+    // 筛选病人类型
+    selectsickType (sicktype) {
+      // if()
+      if (sicktype.length === 0) {
+
       } else {
-        this.options4 = []
+        // console.log(this.bloodheighType)
+        this.$axios(sicktypeselect(this.sugerheighType))
+        .then(response => {
+          this.sicklistData = response.data.halfyearSickList
+        })
+        .catch(err => {
+          console.log(err)
+        })
       }
+      // console.log(111)
+      // this.sugerheighType = ''
+    },
+    // 半年未检查
+    halfyearSickList () {
+      this.$axios(halfyearSickListApi)
+      .then(response => {
+        this.sicklistData = response.data.halfyearSickList
+        // console.log(response.data.halfyearSickList)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+    // 搜索病人名字
+    sicknameSelect () {
+      this.$axios(sicknameSelectApi(this.sicknameSelectData))
+      .then(response => {
+        this.sicklistData = response.data.sick
+      })
+      .catch(err => {
+        console.log(err)
+      })
     }
   },
   mounted () {
-    this.list = this.states.map(item => {
-      return { value: item, label: item }
-    })
-    // this.$axios.get('https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sicklistData')
-    this.$axios.post('https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickMsgPost', {
-      name: 'wang'
-    })
+    // let self = this
+    // this.list = this.states.map(item => {
+    //   return { value: item, label: item }
+    // })
+    this.$axios(sicklistDataApi)
     .then(response => {
-      this.sicklistData = response.data.sickList
-      console.log(response.data.sickList)
+      if (response.data.status === 200 && response.data.statusText) {
+        this.sicklistData = response.data.sickList
+        // console.log(response.data.sickList)
+        // console.log(response.data)
+        // console.log(response.status)
+        // console.log(response.statusText)
+        // console.log(response.headers)
+        // console.log(response.config)
+      } else {
+        console.log('未请求成功')
+      }
     })
     .catch(err => {
       console.log(err)

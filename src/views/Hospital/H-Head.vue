@@ -42,7 +42,7 @@ export default {
     return {
       adminName: '胡小方',
       adminRoot: '管理员',
-      adminIcon: './static/admin.jpg'
+      adminIcon: './../../../static/admin.jpg'
     }
   },
   methods: {

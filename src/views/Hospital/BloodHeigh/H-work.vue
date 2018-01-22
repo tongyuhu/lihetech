@@ -17,10 +17,9 @@
             <span>患者最新问诊</span>
           </div>
           <el-table 
-              :data='newaskData'
+              :data='newsickaskData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
                   label="姓名">
@@ -55,7 +54,7 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>严重患者（{{ badSickRate }}）</span>
+            <span>严重患者({{ badSickRate }})</span>
           </div>
           <el-table 
               :data='badsickData'
@@ -93,8 +92,25 @@
                   label=""
                   width="275px">
                   <template slot-scope="scope">
-                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
-                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button 
+                      size="mini" 
+                      type="primary" 
+                      @click.native="care(scope.$index,badsickData)" 
+                      :key="scope.row.id" 
+                      :style="{'width':'80px'}"
+                      v-if="scope.row.care">
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button 
+                      v-else
+                      size="mini" 
+                      type="plain" 
+                      @click.native="care(scope.$index,badsickData)" 
+                      :key="scope.row.id" :style="{'width':'80px'}"
+                      >
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)" >诊断</el-button>
                       <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
@@ -107,13 +123,12 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>未遵医嘱患者（{{ noListenDoctorRate }}）</span>
+            <span>未遵医嘱患者({{noListenDoctorRate }})</span>
           </div>
           <el-table 
               :data='noListenDoctorData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
                   label="姓名">
@@ -144,8 +159,25 @@
                   label=""
                   width="275px">
                   <template slot-scope="scope">
-                      <el-button size="mini" type="primary" @click="care(scope.row)">关注</el-button>
-                      <el-button size="mini" type="primary" @click="diagnose(scope.row)">诊断</el-button>
+                      <el-button 
+                      size="mini" 
+                      type="primary" 
+                      @click.native="care(scope.$index,noListenDoctorData)" 
+                      :key="scope.row.id" 
+                      :style="{'width':'80px'}"
+                      v-if="scope.row.care">
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button 
+                      v-else
+                      size="mini" 
+                      type="plain" 
+                      @click.native="care(scope.$index,noListenDoctorData)" 
+                      :key="scope.row.id" :style="{'width':'80px'}"
+                      >
+                        {{careText(scope.row.care)}}
+                      </el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)" >诊断</el-button>
                       <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
@@ -158,13 +190,12 @@
       <div>
         <el-card>
           <div slot="header">
-            <span>建档不完整患者（45%）</span>
+            <span>建档不完整患者({{unperfectMsgRate}})</span>
           </div>
           <el-table 
               :data='unperfectMsgData'
               stripe
-              style="width: 100%"
-              @cell-click="handlePersonMsg">
+              style="width: 100%">
               <el-table-column
                   prop="name"
                   label="姓名">
@@ -199,7 +230,8 @@
                       size="mini" 
                       type="primary" 
                       @click.native="care(scope.$index,unperfectMsgData)" 
-                      :key="scope.row.id" :style="{'width':'80px'}"
+                      :key="scope.row.id" 
+                      :style="{'width':'80px'}"
                       v-if="scope.row.care">
                         {{careText(scope.row.care)}}
                       </el-button>
@@ -212,7 +244,7 @@
                       >
                         {{careText(scope.row.care)}}
                       </el-button>
-                      <el-button size="mini" type="primary" @click.native="diagnose(scope.row)" >诊断</el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)" >诊断</el-button>
                       <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
                   </template>
               </el-table-column>
@@ -225,113 +257,31 @@
 </template>
 
 <script>
+import {careText, care} from './../../../untils/untils'
+import {
+  newsickaskDataApi,
+  badsickDataApi,
+  noListenDoctorDataApi,
+  unperfectMsgDataApi} from './../../../api/views/Hospital/BloodHeigh/H-work'
 export default {
   name: 'H-work',
   data () {
     return {
-      btn: 'primary',
-      careState: '关注',
-      msgTip: 5,
-      badSickRate: '55%',
-      noListenDoctorRate: '22%',
-      newaskData: [
-        {
-          name: 'John Brown',
-          asktime: '2017/12/01 11:32',
-          asktopic: 'New York No. 1 Lake Park',
-          id: 157498
-        },
-        {
-          name: 'Jim Green',
-          asktime: '2017/12/01 11:32',
-          asktopic: 'London No. 1 Lake Park',
-          id: 15398
-
-        },
-        {
-          name: 'Joe Black',
-          asktime: '2017/12/01 11:32',
-          asktopic: 'Sydney No. 1 Lake Park',
-          id: 1537498
-        },
-        {
-          name: 'Jon Snow',
-          asktime: '2017/12/01 11:32',
-          asktopic: 'Ottawa No. 2 Lake Park',
-          id: 1575498
-        }
-      ],
-      badsickData: [
-        {
-          name: '万万',
-          sicktype: '高血压',
-          badrate: '20%',
-          todaytimes: 2,
-          addtime: '2015-8-9',
-          care: true,
-          id: 1234566
-        },
-        {
-          name: '天天',
-          sicktype: '高血压',
-          badrate: '40%',
-          todaytimes: 5,
-          addtime: '2017-8-9',
-          care: false,
-          id: 12312456
-        }
-      ],
-      noListenDoctorData: [
-        {
-          name: '万万',
-          sicktype: '高血压',
-          badrate: '20%',
-          noListenDoctor: '21天(共50天)',
-          addtime: '2015-8-9',
-          care: true,
-          id: 123454326
-        },
-        {
-          name: '天天',
-          sicktype: '高血压',
-          badrate: '40%',
-          noListenDoctor: '21天(共50天)',
-          addtime: '2017-8-9',
-          care: true,
-          id: 1234565
-        }
-      ],
-      unperfectMsgData: [
-        {
-          name: '万万',
-          sicktype: '高血压',
-          badrate: '20%',
-          unperfectMsg: '36%',
-          addtime: '2015-8-9',
-          care: true,
-          id: 234
-        },
-        {
-          name: '天天',
-          sicktype: '高血压',
-          badrate: '40%',
-          unperfectMsg: '36%',
-          addtime: '2017-8-9',
-          care: false,
-          id: 12345622
-        }
-      ]
+      msgTip: '',
+      badSickRate: '',
+      noListenDoctorRate: '',
+      unperfectMsgRate: '',
+      newsickaskData: [],
+      badsickData: [],
+      noListenDoctorData: [],
+      unperfectMsgData: []
 
     }
   },
   methods: {
-    careText (boolean) {
-      if (boolean) {
-        return '取消关注'
-      } else {
-        return '关注'
-      }
-    },
+    careText,
+    care,
+    // diagnose,
     msgTipBtn () {
       this.$router.push({
         name: 'accountSetting'
@@ -340,22 +290,10 @@ export default {
     diagnose (row) {
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickInfo: row
+          sickID: row.id
           // sickName: row.name,
           // sickId: row.id
         }})
-      console.log(row)
-    },
-    care (index, row) {
-      if (row[index].care === true) {
-        this.btn = 'plain'
-        row[index].care = false
-      } else {
-        this.btn = 'primary'
-        row[index].care = true
-      }
-      console.log(index)
-      console.log(row)
     },
     call (row) {
       console.log(row.id)
@@ -367,7 +305,47 @@ export default {
       // console.log(cell)
       // console.log(event)
       // console.log(row.name)
+    },
+    newsickaskDataRUS  () {
+      return this.$axios(newsickaskDataApi)
+    },
+    badsickDataRUS  () {
+      return this.$axios(badsickDataApi)
+    },
+    noListenDoctorDataRUS  () {
+      return this.$axios(noListenDoctorDataApi)
+    },
+    unperfectMsgDataRUS  () {
+      return this.$axios(unperfectMsgDataApi)
     }
+  },
+  mounted () {
+    this.$axios.all([
+      this.newsickaskDataRUS(),
+      this.badsickDataRUS(),
+      this.noListenDoctorDataRUS(),
+      this.unperfectMsgDataRUS()])
+    .then(this.$axios.spread((a, b, c, d) => {
+      this.newsickaskData = a.data.sickList
+
+      this.badSickRate = b.data.badSickRate
+      this.badsickData = b.data.sickList
+
+      this.noListenDoctorRate = c.data.noListenDoctorRate
+      this.noListenDoctorData = c.data.sickList
+
+      this.unperfectMsgRate = d.data.unperfectMsgRate
+      this.unperfectMsgData = d.data.sickList
+
+      console.log(a)
+      console.log(b)
+      console.log(c)
+      console.log(d)
+      // 两个请求现在都执行完成
+    }))
+    .catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>

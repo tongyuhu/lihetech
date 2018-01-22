@@ -5,7 +5,7 @@
               <el-card :body-style="{ padding: '0px' }" class='header'>
                   <div slot='header' class='header'>
                       <p>
-                          高血压患者（{{ heightbloodTotal }}人）
+                          高血压患者({{ heightbloodTotal }}人)
                       </p>
 
                   <el-row type="flex" justify="end">
@@ -45,11 +45,14 @@
 
 <script>
 import echarts from 'echarts'
-import {checkDateBtn} from './../../../untils/checkDateBtn'
+import {checkDateBtn} from './../../../untils/untils'
+import {sickDistributionDataApi, sickTrendDataApi} from './../../../api/views/Hospital/BloodHeigh/H-bloodheightotal'
 export default {
   name: 'H-bloodheighttotal',
   data () {
     return {
+      sickDistributionData: [],
+      sickTrendData: [],
       checkTime: ['success', 'primary', 'primary', 'primary'],
       heightbloodTotal: 1236,
       heightbloodPieData: [
@@ -65,22 +68,14 @@ export default {
     }
   },
   methods: {
-    // checktime: function (btn) {
-    //   let self = this
-    //   if (self.checkTime[btn] === 'primary') {
-    //     for (let i = 0; i < self.checkTime.length; i++) {
-    //       self.checkTime.splice(i, 1, 'primary')
-    //     }
-    //     self.checkTime.splice(btn, 1, 'success')
-    //   }
-    // },
+    sickDistribution () {
+      return this.$axios(sickDistributionDataApi)
+    },
+    sickTrend () {
+      return this.$axios(sickTrendDataApi)
+    },
     updateYear () {
       checkDateBtn(0, this.checkTime, 'primary', 'success')
-      // console.log(this.heightbloodTotal)
-      this.heightbloodLineData = {
-        labelData: ['0', '2', '4', '6', '8', '10', '12'],
-        valueData: [3, 8, 5, 13, 12, 5, 6]
-      }
     },
     updateMounth () {
       checkDateBtn(1, this.checkTime, 'primary', 'success')
@@ -96,6 +91,15 @@ export default {
 
   },
   mounted () {
+    this.$axios.all([this.sickDistribution(), this.sickTrend()])
+    .then(this.$axios.spread((sickDistribution, sickTrend) => {
+      let sickD = sickDistribution.data.sickDistributionData
+
+      // this.sickDistributionData =
+    }))
+    .catch(err => {
+      return err
+    })
     let HBfenbu = echarts.init(document.getElementById('HBfenbu'))
     let HBzoushi = echarts.init(document.getElementById('HBzoushi'))
     HBfenbu.setOption({
