@@ -189,6 +189,7 @@
 <script>
 import card from './card'
 import chart from './chart'
+import {bloodheighSickDataApi} from './../../api/components/BloodheighSickcard/bloodheighSick'
 export default {
   components: {
     card,
@@ -197,7 +198,7 @@ export default {
   data () {
     return {
       autoplay: false,
-      sickInfo: this.$route.params.sickID
+      sickInfo: {}
       // sickInfo: this.$route.params.sickInfo
       // name: this.$route.params.sickInfo.name
     }
@@ -207,12 +208,24 @@ export default {
       console.log(this.$route.params.sickID)
     }
 
+  },
+  computed: {
+    // sickInfo () {
+    //   return this.$route.params.sickInfo
+    // }
+    sickID () {
+      return this.$route.params.sickID
+    }
+  },
+  mounted () {
+    this.$axios(bloodheighSickDataApi(this.sickID))
+    .then((response) => {
+      this.sickInfo = response.data.sickList[0]
+    })
+    .catch(err => {
+      return err
+    })
   }
-  // computed: {
-  //   sickInfo () {
-  //     return this.$route.params.sickInfo
-  //   }
-  // }
 }
 </script>
 <style>

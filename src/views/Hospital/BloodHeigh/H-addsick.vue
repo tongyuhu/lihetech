@@ -22,8 +22,8 @@ export default {
     return {
       hospitalName: '张江高科诊所',
       hospitalAddress: '诊所位于祖冲之路887弄72-73号',
-      hospitalDoctorNum: 4,
-      hospitalNanaNum: 3
+      hospitalDoctorNum: '1',
+      hospitalNanaNum: '1'
       // date: ''
     }
   },

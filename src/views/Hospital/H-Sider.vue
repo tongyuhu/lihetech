@@ -46,6 +46,11 @@
               <router-link :to="{ name: 'accountSetting'}" tag="div">accountSetting</router-link>
             </span>
       </el-menu-item>
+      <el-menu-item index="6">
+            <span slot="title">
+              <router-link :to="{ name: 'cardtest'}" tag="div">cardtest</router-link>
+            </span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

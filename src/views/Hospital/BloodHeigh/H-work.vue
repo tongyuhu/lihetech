@@ -337,10 +337,10 @@ export default {
       this.unperfectMsgRate = d.data.unperfectMsgRate
       this.unperfectMsgData = d.data.sickList
 
-      console.log(a)
-      console.log(b)
-      console.log(c)
-      console.log(d)
+      // console.log(a)
+      // console.log(b)
+      // console.log(c)
+      // console.log(d)
       // 两个请求现在都执行完成
     }))
     .catch(err => {

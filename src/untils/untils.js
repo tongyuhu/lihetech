@@ -1,4 +1,4 @@
-
+import axios from 'axios'
 // 年月周日按钮的选择
 export const checkDateBtn = (btn, btnArr, defaultType, changeType) => {
   if (btnArr[btn] === defaultType) {
@@ -20,12 +20,38 @@ export const careText = (boolean) => {
 export const care = (index, row) => {
   if (row[index].care === false) {
     row[index].care = true
+    axios({
+      method: 'post',
+      url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/badsick',
+      data: {
+        sickID: row[index].id,
+        sickName: row[index].name,
+        isCare: row[index].care
+      }
+    })
+    .then()
+    .catch(err => {
+      return err
+    })
     // 点击关注的动作
     // console.log(row[index].name)
     // console.log(row[index].id)
   } else {
     // 取消关注 do thing
     row[index].care = false
+    axios({
+      method: 'post',
+      url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/badsick',
+      data: {
+        sickID: row[index].id,
+        sickName: row[index].name,
+        isCare: row[index].care
+      }
+    })
+      .then()
+      .catch(err => {
+        return err
+      })
   }
 }
 
