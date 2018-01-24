@@ -21,7 +21,7 @@ const addDoctor = (resolve) => require(['@/components/addDoctor.vue'], resolve)
 const accountSetting = (resolve) => require(['@/components/accountSetting.vue'], resolve)
 const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve)
 const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
-const cardtest = (resolve) => require(['@/components/cardtest.vue'], resolve)
+const cardtest = (resolve) => require(['@/components/sickcard.vue'], resolve)
 const routes = [
   {
     path: '/',
@@ -38,8 +38,6 @@ const routes = [
         path: 'booldheigh',
         name: 'booldheigh',
         component: booldheigh
-        // 懒加载
-        // component: (resolve) => require(['@/views/Hospital/BloodHeigh/H-bloodheigh.vue'], resolve)
       },
       {
         path: 'sugerheigh',

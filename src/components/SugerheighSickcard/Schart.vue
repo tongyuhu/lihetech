@@ -960,6 +960,8 @@ export default {
   }
   #chartsbox{
     display: flex;
+    flex-direction:column;
     justify-content: center;
+    align-items:stretch;
   }
 </style>

@@ -13,142 +13,14 @@
       <el-col :span='20'>
         <!-- 病人简单信息 -->
         <el-row :gutter='20'>
-          <el-col :span="5">姓名：{{sickInfo.name}}</el-col>
-          <el-col :span="5">性别：男</el-col>
+          <el-col :span="5">姓名：{{sickBasics.name}}</el-col>
+          <el-col :span="5">性别：{{sex}}</el-col>
           <el-col :span="5">年龄：56岁</el-col>
           <el-col :span="5">确诊为：心脏病</el-col>
         </el-row>
         <!-- 病人简单信息 end -->
         <!-- 病历卡 -->
-        <el-row>
-          <el-carousel arrow="always" height='500px' autoplay >
-            <el-carousel-item>
-              <!-- 病人表格信息 表头 -->
-              <el-card>
-                <el-row>
-                  <el-col :span='24'>
-                    <el-row>
-                      <el-col :span="5">
-                        <span>身高：191</span>
-                      </el-col>
-                      <el-col :span="5">
-                        <span>体重：123</span>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :span="10">
-                        <span>病史：恶性肿瘤 结核病</span>
-                      </el-col>
-                      <el-col :span="10">
-                        <span>遗传史：恶性肿瘤 结核病</span>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :span="9">
-                        <span>生活习惯：不抽烟 喝酒</span>
-                      </el-col>
-                      <el-col :span="8">
-
-                        <span>并发症：眼病 足柄</span>
-                      </el-col>
-                      <el-col :span="7">
-                        <!-- 1212121 -->
-                        <el-button size="mini">
-                          体检表
-                        </el-button>
-                        <el-button size="mini">
-                          体检单
-                        </el-button>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :span="18">
-
-                        <span>检查项目：心电图、肾脏</span>
-                      </el-col>
-                      <el-col :span="6">
-                        <span>电话：18669874498</span>
-                      </el-col>
-                    </el-row>
-                    <el-row class="sick-card-center">
-                      <el-col :span="6" :offset="6">病历卡1</el-col> 
-                      <el-col :span="6" >2014-8-9 星期5</el-col> 
-                    </el-row>
-                    <!-- 病人表格信息 表头 end -->
-                    <!-- 病历卡表格 -->
-                    <div>
-                      <card></card>
-                    </div>
-                    <!-- 病历卡表格 end -->
-                  </el-col>
-                </el-row>
-              </el-card>
-            </el-carousel-item>
-            <el-carousel-item>
-              <!-- 病人表格信息 表头 -->
-              <el-card>
-                <el-row>
-                  <el-col :span='24'>
-                    <el-row>
-                      <el-col :span="5">
-                        <span>身高：191</span>
-                      </el-col>
-                      <el-col :span="5">
-                        <span>体重：123</span>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :span="10">
-                        <span>病史：恶性肿瘤 结核病</span>
-                      </el-col>
-                      <el-col :span="10">
-                        <span>遗传史：恶性肿瘤 结核病</span>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :span="9">
-                        <span>生活习惯：不抽烟 喝酒</span>
-                      </el-col>
-                      <el-col :span="8">
-
-                        <span>并发症：眼病 足柄</span>
-                      </el-col>
-                      <el-col :span="7">
-                        <!-- 1212121 -->
-                        <el-button size="mini">
-                          体检表
-                        </el-button>
-                        <el-button size="mini">
-                          体检单
-                        </el-button>
-                      </el-col>
-                    </el-row>
-                    <el-row>
-                      <el-col :span="18">
-
-                        <span>检查项目：心电图、肾脏</span>
-                      </el-col>
-                      <el-col :span="6">
-                        <span>电话：18669874498</span>
-                      </el-col>
-                    </el-row>
-                    <el-row class="sick-card-center">
-                      <el-col :span="6" :offset="6">病历卡1</el-col> 
-                      <el-col :span="6" >2014-8-9 星期5</el-col> 
-                    </el-row>
-                    <!-- 病人表格信息 表头 end -->
-                    <!-- 病历卡表格 -->
-                    <div>
-                      <card></card>
-                    </div>
-                    <!-- 病历卡表格 end -->
-                  </el-col>
-                </el-row>
-              </el-card>
-            </el-carousel-item>
-            
-          </el-carousel>
-        </el-row>
+        <sickcard></sickcard>
         <!-- 病历卡 end-->
         <!-- 血压趋势 -->
         <div>
@@ -159,7 +31,7 @@
       <!-- 侧边导航 -->
       <el-col :span='4'>
         <div class="fixed">
-          <p>{{ sickInfo.name }}</p>
+          <p>{{ sickBasics.name }}</p>
           <el-card :body-style="{ padding: '10px' }" class="right-nav">
             <div class="right-nav">
               <div>
@@ -187,18 +59,26 @@
 </template>
 
 <script>
-import card from './card'
+import sickcard from './../sickcard.vue'
 import chart from './chart'
 import {bloodheighSickDataApi} from './../../api/components/BloodheighSickcard/bloodheighSick'
 export default {
   components: {
-    card,
+    sickcard,
     chart
   },
   data () {
     return {
       autoplay: false,
-      sickInfo: {}
+      sickInfo: [],
+      sickBasics: {
+        method: 1,
+        name: '毛健康',
+        sex: 1,
+        age: 56,
+        sick: '原发性高血压'
+      }
+      // sickID: ''
       // sickInfo: this.$route.params.sickInfo
       // name: this.$route.params.sickInfo.name
     }
@@ -210,9 +90,13 @@ export default {
 
   },
   computed: {
-    // sickInfo () {
-    //   return this.$route.params.sickInfo
-    // }
+    sex () {
+      if (this.sickBasics.sex === 0) {
+        return '女'
+      } else {
+        return '男'
+      }
+    },
     sickID () {
       return this.$route.params.sickID
     }
