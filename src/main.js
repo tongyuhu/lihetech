@@ -3,10 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import Vuex from 'vuex'
+// import Vuex from 'vuex'
 import echarts from 'echarts'
 import axios from 'axios'
-
+import {store} from './store/store'
 // 按需引入element-ui
 import 'element-ui/lib/theme-chalk/index.css'
 import {
@@ -40,12 +40,14 @@ import {
   Dropdown,
   DropdownMenu,
   DropdownItem,
-  Upload
+  Upload,
+  MessageBox,
+  Message
 } from 'element-ui'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuex)
+// Vue.use(Vuex)
 // 全局使用element-ui
 Vue.use(Container)
 Vue.use(Header)
@@ -82,6 +84,11 @@ Vue.use(Upload)
 // Vue.use(echarts)
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$prompt = MessageBox.prompt
+Vue.prototype.$message = Message
 /* eslint-disable no-new */
 // new Vue({
 //   el: '#app',
@@ -89,9 +96,14 @@ Vue.prototype.$axios = axios
 //   template: '<App/>',
 //   components: { App }
 // })
+// const store = new Vuex.Store({
+//   state: {
+//     aaa: 555
+//   }
+// })
 new Vue({
   router,
-  // store,
+  store,
   template: '<App/>',
   components: { App }
 }).$mount('#app')

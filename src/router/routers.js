@@ -22,12 +22,14 @@ const accountSetting = (resolve) => require(['@/components/accountSetting.vue'],
 const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve)
 const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
 const cardtest = (resolve) => require(['@/components/sickcard.vue'], resolve)
+const login = (resolve) => require(['@/components/login.vue'], resolve)
 const routes = [
   {
     path: '/',
     // name: 'hospital',
-    component: hospital,
-    redirect: 'hospital/booldheigh'
+    component: login,
+    // redirect: 'hospital/booldheigh'
+    redirect: 'login'
   },
   {
     path: '/hospital/',
@@ -92,6 +94,11 @@ const routes = [
       }
 
     ]
+  },
+  {
+    path: '/login',
+    name: login,
+    component: login
   },
   {
     path: '*',

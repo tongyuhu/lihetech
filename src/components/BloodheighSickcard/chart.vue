@@ -383,7 +383,7 @@ export default {
         'status': ['正常', '偏高', '高', '危险'],
         'value': [123, 55, 554, 454]
       },
-      xueyaqushi: [
+      bloodPressureTrendData: [
         {
           label: '1',
           maxpressure: 163,
@@ -431,7 +431,52 @@ export default {
           { value: 75, name: '偏高' },
           { value: 555, name: '高' },
           { value: 44, name: '危险' }
+      ],
+      bloodPressureAndFoodData: [
+        {
+          label: '周一',
+          maxpressure: 125,
+          minpressure: 55,
+          food: 188
+        },
+        {
+          label: '周二',
+          maxpressure: 125,
+          minpressure: 90,
+          food: 123
+        },
+        {
+          label: '周三',
+          maxpressure: 136,
+          minpressure: 80,
+          food: 133
+        },
+        {
+          label: '周四',
+          maxpressure: 165,
+          minpressure: 60,
+          food: 163
+        },
+        {
+          label: '周五',
+          maxpressure: 175,
+          minpressure: 80,
+          food: 143
+        },
+        {
+          label: '周六',
+          maxpressure: 175,
+          minpressure: 78,
+          food: 198
+        },
+        {
+          label: '周日',
+          maxpressure: 175,
+          minpressure: 88,
+          food: 69
+        }
       ]
+
     }
   },
   methods: {
@@ -487,7 +532,11 @@ export default {
         //   formatter: '{value}%'
         // },
           boundaryGap: false,
-          data: ['0', '120', '140', '160', '180']
+          max: 180,
+          min: 60,
+          maxInterval: 60,
+          minInterval: 20
+          // data: ['0', '120', '140', '160', '180']
         },
         series: [
           {
@@ -617,7 +666,12 @@ export default {
             nameLocation: 'end',
             type: 'value',
             boundaryGap: false,
-            data: [0, 50, 100, 150, 200, 250, 300, 350, 400]
+            max: 400,
+            min: 0,
+            minInterval: 50,
+            maxInterval: 50
+            // splitNumber: 50
+            // data: [0, 50, 100, 150, 200, 250, 300, 350, 400]
           }
         ],
         series: [
@@ -639,6 +693,9 @@ export default {
         },
         tooltip: { // 提示框组件
           trigger: 'axis',
+          axisPointer: {
+            type: 'cross'
+          },
           formatter: '{b} : {c}'
         },
         grid: { // 直角坐标系内绘图网格
@@ -666,16 +723,21 @@ export default {
         xAxis: { // 直角坐标系grid的x轴
           type: 'category',
           boundaryGap: false,
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          data: this.xueyaandfoodData.label
         },
         yAxis: { // 直角坐标系grid的y轴
           type: 'value',
         // axisLine: {onZero: false},
-          axisLabel: {
-            formatter: '{value}'
-          },
-          boundaryGap: false,
-          data: ['0', '120', '140', '180']
+          // axisLabel: {
+            // formatter: '{value}'
+          // },
+          max: 200,
+          min: 0,
+          minInterval: 20,
+          maxInterval: 120,
+          boundaryGap: true
+          // data: ['0', '120', '140', '180']
         },
         series: [
           {
@@ -689,7 +751,7 @@ export default {
                 shadowOffsetY: 5
               }
             },
-            data: [95, 110, 115, 125, 130, 135, 140]
+            data: this.xueyaandfoodData.food
           },
           {
             name: '收缩压',
@@ -702,7 +764,7 @@ export default {
                 shadowOffsetY: 5
               }
             },
-            data: [91, 132, 145, 115, 115, 118, 119]
+            data: this.xueyaandfoodData.max
           },
           {
             name: '舒张压',
@@ -715,7 +777,7 @@ export default {
                 shadowOffsetY: 5
               }
             },
-            data: [111, 232, 145, 151, 115, 181, 119]
+            data: this.xueyaandfoodData.min
           }
         ]
       }
@@ -819,7 +881,7 @@ export default {
       let label = []
       let max = []
       let min = []
-      this.xueyaqushi.forEach(item => {
+      this.bloodPressureTrendData.forEach(item => {
         label.push(item.label)
         max.push(item.maxpressure)
         min.push(item.minpressure)
@@ -830,6 +892,25 @@ export default {
         min: min
       }
       return xueyaqushidata
+    },
+    xueyaandfoodData () {
+      let label = []
+      let max = []
+      let food = []
+      let min = []
+      this.bloodPressureAndFoodData.forEach(item => {
+        label.push(item.label)
+        max.push(item.maxpressure)
+        min.push(item.minpressure)
+        food.push(item.food)
+      })
+      let xueyaandfooddata = {
+        label: label,
+        max: max,
+        min: min,
+        food: food
+      }
+      return xueyaandfooddata
     }
   },
   mounted () {
