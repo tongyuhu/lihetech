@@ -21,7 +21,7 @@
               <router-link :to="{ name: 'cases'}" tag="div">病例库</router-link>
             </span>
       </el-menu-item>
-      <el-menu-item index="5">
+      <!-- <el-menu-item index="5">
             <span slot="title">
               <router-link :to="{ name: 'bloodheighSick'}" tag="div">高血压病人病历</router-link>
             </span>
@@ -50,7 +50,7 @@
             <span slot="title">
               <router-link :to="{ name: 'cardtest'}" tag="div">cardtest</router-link>
             </span>
-      </el-menu-item>
+      </el-menu-item> -->
     </el-menu>
   </div>
 </template>

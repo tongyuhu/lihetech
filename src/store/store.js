@@ -7,7 +7,9 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     num: 12,
-    price: 20
+    price: 20,
+    userAccount: 'admin',
+    password: 'admin'
   },
   getters: {
     // add: state => {
@@ -33,11 +35,17 @@ export const store = new Vuex.Store({
     },
     [REDUCE_PRICE] (state, n) {
       state.price -= n | 1
+    },
+    password (state, pwd) {
+      state.password = pwd
     }
   },
   actions: {
     reduce (context) {
       context.commit('REDUCE_PRICE')
+    },
+    password (context, pwd) {
+      context.commit('password', pwd)
     }
   }
 })
