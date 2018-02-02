@@ -50,7 +50,7 @@
         <div>
           <div class="msg-title">医生列表</div>
           <div class="add-doctor-btn">
-            <el-button type="primary">添加医生</el-button>
+            <el-button type="primary" @click="addDoctor">添加医生</el-button>
           </div>
           <el-table
           border
@@ -105,6 +105,13 @@ export default {
           email: '12456977415@qq.com'
         }
       ]
+    }
+  },
+  methods: {
+    addDoctor () {
+      this.$router.push({
+        name: 'addDoctor'
+      })
     }
   }
 }

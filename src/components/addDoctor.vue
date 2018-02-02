@@ -1,91 +1,63 @@
 <template>
   <div class="add-doctor">
-    <div>
+    <div class="header">
       <h2>添加医生</h2>
     </div>
-    <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" label-width="100px">
-      <el-form-item label="邮箱" prop="email">
-        <el-input type="email" v-model="email"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名" prop="name">
-        <el-input type="email" v-model="name"></el-input>
-      </el-form-item>
-      <el-form-item label="电话" prop="phone">
-        <el-input type="email" v-model="phone"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="pass"></el-input>
-      </el-form-item>
-      <!-- <el-form-item label="密码" prop="pass">
-        <el-input type="password" v-model="ruleForm2.pass" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="年龄" prop="age">
-        <el-input v-model.number="ruleForm2.age"></el-input>
-      </el-form-item> -->
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-        <el-button @click="resetForm('ruleForm2')">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="form">
+      <el-form :model="addDoctorForm" status-icon :rules="rules" ref="ruleForm" label-width="50px" :label-position="labelPosition">
+        <el-form-item label="邮箱" prop="email">
+          <el-input type="email" v-model="addDoctorForm.email" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="name">
+          <el-input type="text" v-model="addDoctorForm.name" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="phone">
+          <el-input type="text" v-model="addDoctorForm.phone" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="addDoctorForm.password" size="small"></el-input>
+        </el-form-item>
+        <el-form-item class="submit-btn">
+          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+          <el-button @click="resetForm('ruleForm')">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   data () {
-    var checkAge = (rule, value, callback) => {
+    var checkEmail = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('年龄不能为空'))
-      }
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error('请输入数字值'))
-        } else {
-          if (value < 18) {
-            callback(new Error('必须年满18岁'))
-          } else {
-            callback()
-          }
-        }
-      }, 1000)
-    }
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请输入密码'))
-      } else {
-        if (this.ruleForm2.checkPass !== '') {
-          this.$refs.ruleForm2.validateField('checkPass')
-        }
-        callback()
-      }
-    }
-    var validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.ruleForm2.pass) {
-        callback(new Error('两次输入密码不一致!'))
-      } else {
-        callback()
+        return callback(new Error('邮箱不能为空'))
       }
     }
     return {
-      ruleForm2: {
-        pass: '',
-        checkPass: '',
-        age: ''
+      labelPosition: 'right',
+      addDoctorForm: {
+        email: '',
+        name: '',
+        phone: null,
+        password: ''
       },
-      rules2: {
-        pass: [
-            { validator: validatePass, trigger: 'blur' }
+      rules: {
+        email: [
+            // { required: true, message: '请输入邮箱', trigger: 'blur' }
+            { validator: checkEmail, trigger: 'blur' }
         ],
-        checkPass: [
-            { validator: validatePass2, trigger: 'blur' }
+        name: [
+            { required: true, message: '请输入姓名', trigger: 'blur' },
+            { min: 2, max: 5, message: '请输入正确的姓名', trigger: 'blur' }
         ],
-        age: [
-            { validator: checkAge, trigger: 'blur' }
+        phone: [
+           { required: true, message: '请输入电话', trigger: 'blur' },
+           {min: 11, message: '请输入正确的电话', trigger: 'blur'}
+        ],
+        password: [
+           { required: true, message: '请输入密码', trigger: 'blur' },
+           {min: 6, max: 9, message: '请输入6-9位密码', trigger: 'blur'}
         ]
       }
     }
@@ -94,9 +66,9 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!')
+          console.log(this.addDoctorForm, 'submit!')
         } else {
-          console.log('error submit!!')
+          // console.log('error submit!!')
           return false
         }
       })
@@ -109,9 +81,22 @@ export default {
 </script>
 
 <style scoped>
-  .add-doctor{
-    display: flex;
-    justify-content: center;
-    width: 40%;
-  }
+.add-doctor{
+  /* display: flex; */
+  /* justify-content: center; */
+  width: 40%;
+  padding-left: 20%;
+  padding-right: 20%;
+}
+.header{
+  text-align: center;
+}
+.form{
+  width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.submit-btn{
+  margin-left: 20px;
+}
 </style>
