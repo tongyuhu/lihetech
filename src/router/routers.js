@@ -18,6 +18,11 @@ const baseroutes = [
 
   },
   {
+    path: '/page',
+    name: 'page',
+    component: (resolve) => require(['../components/cutpage.vue'], resolve)
+  },
+  {
     path: '*',
     redirect: '404'
   }

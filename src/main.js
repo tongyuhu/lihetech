@@ -7,6 +7,7 @@ import router from './router'
 import echarts from 'echarts'
 import axios from './api/axios'
 import {store} from './store/store'
+import session from './untils/session'
 // 按需引入element-ui
 import 'element-ui/lib/theme-chalk/index.css'
 import {
@@ -42,7 +43,8 @@ import {
   DropdownItem,
   Upload,
   MessageBox,
-  Message
+  Message,
+  Pagination
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -80,6 +82,7 @@ Vue.use(Dropdown)
 Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Upload)
+Vue.use(Pagination)
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
@@ -100,6 +103,21 @@ Vue.prototype.$message = Message
 //     aaa: 555
 //   }
 // })
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (session('token')) {
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
 new Vue({
   router,
   store,

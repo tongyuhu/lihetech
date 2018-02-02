@@ -19,6 +19,7 @@ export default[
     name: 'Home',
     meta: {
       name: '主页',
+      requireAuth: true,
       role: ['admin', 'doctor']
     },
     redirect: '/hospital'
@@ -29,6 +30,7 @@ export default[
     component: hospital,
     redirect: 'hospital/booldheigh',
     meta: {
+      requireAuth: true,
       name: '主页',
       role: ['admin', 'doctor']
     },
@@ -38,6 +40,7 @@ export default[
         name: 'booldheigh',
         component: booldheigh,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -47,6 +50,7 @@ export default[
         name: 'sugerheigh',
         component: sugerheigh,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -56,6 +60,7 @@ export default[
         name: 'other',
         component: other,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -65,6 +70,7 @@ export default[
         name: 'cases',
         component: cases,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -74,6 +80,7 @@ export default[
         name: 'bloodheighSick',
         component: bloodheighSick,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -83,6 +90,7 @@ export default[
         name: 'sugerheighSick',
         component: sugerheighSick,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -92,6 +100,7 @@ export default[
         name: 'addDoctor',
         component: addDoctor,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -101,6 +110,7 @@ export default[
         name: 'healthForm',
         component: healthForm,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -110,6 +120,7 @@ export default[
         name: 'addSick',
         component: addSick,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -119,6 +130,7 @@ export default[
         name: 'accountSetting',
         component: accountSetting,
         meta: {
+          requireAuth: true,
           name: '主页',
           role: ['admin', 'doctor']
         }

@@ -127,11 +127,11 @@ export const session = (key, value) => {
   }
 }
 
-export const instance = axios.create({
-  baseURL: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital',
-  timeout: 10000
-})
-instance.defaults.headers.post['Content-Type'] = 'application/json'
+// export const instance = axios.create({
+//   baseURL: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital',
+//   timeout: 10000
+// })
+// instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 // 错误处理
 export const catchError = (error) => {
@@ -168,6 +168,6 @@ export const catchError = (error) => {
   }
   return Promise.reject(error)
 }
-instance.interceptors.response.use(response => {
-  return response
-}, catchError)
+// instance.interceptors.response.use(response => {
+//   return response
+// }, catchError)

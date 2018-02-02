@@ -1,7 +1,7 @@
 export const sendUserMsg = (obj) => {
   return {
     method: 'post',
-    url: '/loginaccount',
+    url: '/login',
     data: obj
   }
 }

@@ -1,7 +1,9 @@
 // 根据返回路由匹配路由
 export const routeMatch = function (route, full) {
   let arr = []
-  if (route.length === 0) {
+  if (Array.isArray(route) && route.length === 0) {
+    return
+  } else if (!Array.isArray(route)) {
     return
   } else {
     for (let i = 0; i < full.length; i++) {
@@ -10,7 +12,6 @@ export const routeMatch = function (route, full) {
           if (route[j].children) {
             full[i].children = routeMatch(route[j].children, full[i].children)
           }
-
           arr.push(full[i])
         }
       }

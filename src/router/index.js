@@ -5,7 +5,7 @@ import baseroutes from './routers'
 Vue.use(Router)
 
 const RouterConfig = {
-  mode: 'history',
+  // mode: 'history',
   routes: baseroutes
 }
 

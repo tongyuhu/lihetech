@@ -56,7 +56,13 @@ export default {
 
     },
     exit () {
-
+      this.$router.push({
+        name: 'login',
+        params: {
+          from: this.$router.currentRoute.path
+        }
+      })
+      sessionStorage.clear()
     },
     adminAccount () {
 

@@ -68,16 +68,17 @@ export default {
         vm.isBtnLoading = false
       } else {
         let loginParams = {
-          account: vm.userAccount,
+          username: vm.userAccount,
           password: vm.password
         }
-
+        // this.$axios.defaults.headers.common = '4550b8ecfbe54b038c260913bb9b3bf3'
+        // this.$axios.defaults.headers.common['X-AUTH-SOURCE'] = 'serrrrrr'
         this.$axios(sendUserMsg(loginParams))
           .then(res => {
-            vm.isBtnLoading = false
-            if (res.data.token) {
+            vm.isBtnLoading = true
+            if (res.data.data.admin_token) {
               // 保存token到本地
-              session('token', res.data.token)
+              session('token', res.data.data.admin_token)
               vm.$emit('login', vm.$router.currentRoute.path)
             } else {
               vm.$message({

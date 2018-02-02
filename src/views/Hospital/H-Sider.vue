@@ -51,6 +51,11 @@
               <router-link :to="{ name: 'cardtest'}" tag="div">cardtest</router-link>
             </span>
       </el-menu-item> -->
+      <el-menu-item index="8">
+            <span slot="title">
+              <router-link :to="{ name: 'page'}" tag="div">123</router-link>
+            </span>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>

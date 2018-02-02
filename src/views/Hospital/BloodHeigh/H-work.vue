@@ -12,12 +12,12 @@
 
       <!-- 患者最新问诊  start -->
       <div>
-        <el-card>
+        <el-card :body-style="{ paddingBottom: '10px' }">
           <div slot="header">
             <span>患者最新问诊</span>
           </div>
           <el-table 
-              :data='newsickaskData'
+              :data='newsickaskData.sickList'
               stripe
               style="width: 100%">
               <el-table-column
@@ -46,6 +46,20 @@
                   </template>
               </el-table-column>
           </el-table>
+          <div class="page">
+            <!-- <span>
+              共{{totalSize}}
+            </span> -->
+            <el-pagination
+              class="el-pagination"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="currentPage"
+              :page-size="newsickaskData.pageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="newsickaskData.totalPage">
+            </el-pagination>
+          </div>
         </el-card>
       </div>
       <!-- 患者最新问诊  end -->
@@ -115,6 +129,9 @@
                   </template>
               </el-table-column>
           </el-table>
+          <div>
+            <mpages :pages="20" @jumpPage="jumppage"></mpages>
+          </div>
         </el-card>
       </div>
       <!-- 严重患者结束 end -->
@@ -263,24 +280,40 @@ import {
   badsickDataApi,
   noListenDoctorDataApi,
   unperfectMsgDataApi} from './../../../api/views/Hospital/BloodHeigh/H-work'
+import mpages from './../../../components/cutpage.vue'
 export default {
   name: 'H-work',
+  components: {
+    mpages
+  },
   data () {
     return {
       msgTip: '',
       badSickRate: '',
       noListenDoctorRate: '',
       unperfectMsgRate: '',
-      newsickaskData: [],
+      newsickaskData: {},
       badsickData: [],
       noListenDoctorData: [],
-      unperfectMsgData: []
-
+      unperfectMsgData: [],
+      currentPage: 1,
+      // page: 'page'
+      totalSize: 15
     }
   },
   methods: {
+    jumppage (page) {
+      console.log(page, 266)
+    },
     careText,
     care,
+    handleSizeChange (val) {
+      console.log(`每页 ${val} 条`)
+    },
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      this.newsickaskDataRUS()
+    },
     // diagnose,
     msgTipBtn () {
       this.$router.push({
@@ -307,7 +340,7 @@ export default {
       // console.log(row.name)
     },
     newsickaskDataRUS  () {
-      return this.$axios(newsickaskDataApi)
+      return this.$axios(newsickaskDataApi(this.currentPage))
     },
     badsickDataRUS  () {
       return this.$axios(badsickDataApi)
@@ -326,7 +359,7 @@ export default {
       this.noListenDoctorDataRUS(),
       this.unperfectMsgDataRUS()])
     .then(this.$axios.spread((a, b, c, d) => {
-      this.newsickaskData = a.data.sickList
+      this.newsickaskData = a.data
 
       this.badSickRate = b.data.badSickRate
       this.badsickData = b.data.sickList
@@ -369,5 +402,16 @@ export default {
 } */
 .item{
   margin-right: 20px;
+}
+.page {
+  margin-top:10px;
+  /* height: 60px; */
+  /* line-height: 60px; */
+  font-size: 16px !important;
+  text-align: right;
+  vertical-align: middle;
+}
+.el-pagination{
+  font-size: 16px;
 }
 </style>

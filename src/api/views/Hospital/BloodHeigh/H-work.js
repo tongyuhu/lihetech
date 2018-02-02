@@ -1,11 +1,14 @@
-export const newsickaskDataApi = {
-  method: 'post',
-  url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickMsgPost',
-  data: {
-    newsickaskData: '最新患者问诊患者列表'
-  },
-  headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-  timeout: 10000
+export const newsickaskDataApi = (page) => {
+  return {
+    method: 'post',
+    url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickMsgPost',
+    data: {
+      newsickaskData: '最新患者问诊患者列表',
+      toPage: page
+    },
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    timeout: 10000
+  }
 }
 export const badsickDataApi = {
   method: 'post',
