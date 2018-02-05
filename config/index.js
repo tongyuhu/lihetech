@@ -10,7 +10,17 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    // proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: 'http://10.7.6.131:80/BPWatch/admin/', //设置你调用的接口域名和端口号 别忘了加http
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/'
+                //用'/api'代替target里面的地址
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -41,6 +51,7 @@ module.exports = {
     cacheBusting: true,
 
     cssSourceMap: true,
+    
   },
 
   build: {

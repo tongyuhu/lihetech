@@ -79,40 +79,185 @@
             prop="action"
             width="150">
               <template slot-scope="scope">
-                <el-button size="mini" type="primary">编辑</el-button>
-                <el-button size="mini" type="danger">删除</el-button>
+                <el-button size="mini" type="primary" @click="editDoctor(scope.row)">编辑</el-button>
+                <el-button size="mini" type="danger" @click="deleteDoctor(scope.$index)">删除</el-button>
               </template>
             </el-table-column>
 
           </el-table>
         </div>
       </el-card>
+      <el-dialog
+        title="修改信息"
+        :visible.sync="editDoctorShow"
+        width="30%"
+        center>
+        <el-form
+        :model="doctorForm" 
+        status-icon 
+        :rules="editDoctorRules" 
+        ref="ruleForm" 
+        label-width="50px" 
+        :label-position="labelPosition"
+        >
+          <el-form-item label="姓名" prop="name">
+            <el-input
+              :autofocus="true"
+              placeholder="修改姓名"
+              v-model="doctorForm.name">
+              <template slot="prepend"><i class="el-icon-info"></i></template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="职责" prop="work">
+            <el-input
+              :autofocus="true"
+              placeholder="修改职责"
+              v-model="doctorForm.work">
+              <template slot="prepend"><i class="el-icon-info"></i></template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="电话" prop="phone">
+            <el-input
+              :autofocus="true"
+              placeholder="修改电话"
+              v-model="doctorForm.phone">
+              <template slot="prepend"><i class="el-icon-info"></i></template>
+            </el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input
+              :autofocus="true"
+              placeholder="修改邮箱"
+              v-model="doctorForm.email">
+              <template slot="prepend"><i class="el-icon-info"></i></template>
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <!-- <span>需要注意的是内容是默认不居中的</span> -->
+        <span slot="footer">
+          <el-button @click="editDoctorShow = false">取 消</el-button>
+          <el-button type="primary" @click="editDoctorShow = false">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
 
   </div>
 </template>
 
 <script>
+// import addDoctor from './addDoctor.vue'
 export default {
   name: 'accountSetting',
+  // components: {
+  //   addDoctor
+  // },
   data () {
+    var checkEmail = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var checkName = (rule, value, callback) => {
+      let namerule = /^.{3,20}$/
+      if (!value) {
+        return callback(new Error('姓名不能为空'))
+      } else if (!namerule.exec(value)) {
+        return callback(new Error('请输入正确的姓名'))
+      } else {
+        callback()
+      }
+    }
+    var checkPhone = (rule, value, callback) => {
+      let phonerule = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
+      if (!value) {
+        return callback(new Error('电话不能为空'))
+      } else if (!phonerule.exec(value)) {
+        return callback(new Error('请输入正确的电话'))
+      } else {
+        callback()
+      }
+    }
+    var checkWork = (rule, value, callback) => {
+      let phonerule = /^.{3,20}$/
+      if (!value) {
+        return callback(new Error('职责不能为空'))
+      } else if (!phonerule.exec(value)) {
+        return callback(new Error('请输入正确的职责'))
+      } else {
+        callback()
+      }
+    }
     return {
+      editDoctorShow: false,
+      labelPosition: 'left',
       doctorListData: [
         {
           name: '张医生',
           work: '糖尿病管理',
           phone: '13526421302',
           email: '12456977415@qq.com'
+        },
+        {
+          name: '张医生',
+          work: '糖尿病管理',
+          phone: '13526421302',
+          email: '12456977415@qq.com'
+        },
+        {
+          name: '张医生',
+          work: '糖尿病管理',
+          phone: '13526421302',
+          email: '12456977415@qq.com'
         }
-      ]
+      ],
+      doctorForm: {
+        name: '',
+        work: '',
+        phone: '',
+        email: ''
+      },
+      editDoctorRules: {
+        email: [
+            { validator: checkEmail, trigger: 'blur' }
+        ],
+        password: [
+          { validator: checkWork, trigger: 'blur' }
+        ],
+        name: [
+          { validator: checkName, trigger: 'blur' }
+        ],
+        phone: [
+          { validator: checkPhone, trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
     addDoctor () {
       this.$router.push({
-        name: 'addDoctor'
+        name: 'addDoctor',
+        params: {
+          from: this.$router.currentRoute.path
+        }
       })
+    },
+    editDoctor (index) {
+      this.doctorForm = index
+      this.editDoctorShow = true
+      console.log(index)
+    },
+    deleteDoctor (index) {
+      // console.log(index)
+      this.doctorListData.splice(index, 1)
     }
+    // editDoctorRules () {
+
+    // }
+  },
+  mounted () {
+    // console.log(this.$router.currentRoute.path, 11)
   }
 }
 </script>

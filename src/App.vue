@@ -9,7 +9,7 @@ import session from './untils/session'
 import {routeMatch, roleMatch} from './untils/routerMatch'
 import fullpath from './router/fullpath'
 import { newsickaskDataApi } from './api/views/Hospital/BloodHeigh/H-work'
-
+// import qs form 'qs'
 export default {
   name: 'app',
   data () {
@@ -30,7 +30,7 @@ export default {
         })
       } else {
         // 设置请求头携带token
-        this.$axios.defaults.headers.common['Authorization'] = localUserMsg
+        this.$axios.defaults.headers.common['token'] = localUserMsg
         // this.$axios.defaults.headers.common['X-AUTH-SOURCE'] = 0
         // this.$router.push({name: 'login'})
         // 添加请求拦截器
@@ -78,9 +78,9 @@ export default {
         // 获取用户信息及权限数据 路由信息
         this.$axios({
           method: 'post',
-          url: '/role',
+          url: '/info',
           data: {
-            token: localUserMsg
+            // token: localUserMsg
           }
         })
         .then(res => {
@@ -90,8 +90,12 @@ export default {
 
         // 获取 路由信息
         // 若无路由信息 限制访问
+          let role = ''
+          if (res.data.data.adminType === 1) {
+            role = 'admin'
+          }
           // let router = routeMatch(res.data.route, fullpath)
-          let router = roleMatch(res.data.role, fullpath)
+          let router = roleMatch(role, fullpath)
         // 动态注入路由 addroute
           this.$router.addRoutes(router)
         // 路由守卫
@@ -109,24 +113,29 @@ export default {
       }
     }
   },
-  created () {
-    this.loginDirect()
-    // this.$axios.defaults.headers.common['Authorization'] = 'dd8dcb2583182ab2f67c0aaab6e314e5'
-    // this.$axios.defaults.headers.common['Authorization'] = '4550b8ecfbe54b038c260913bb9b3bf3'
-    // this.$axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-
-    this.$axios({
+  mounted () {
+    let vm = this
+    // const data = vm.$qs.stringify()
+    // vm.$axios.interceptors.request.use((config) => {
+    //   if (config.method === 'post') {
+    //     config.data = vm.$qs.stringify(config.data)
+    //   }
+    //   return config
+    // })
+    console.log(process.env.API_HOST)
+    vm.$axios({
       method: 'post',
-      // url: 'http://10.7.6.131:80/BPWatch/admin/login',
-      url: 'http://10.7.6.131:80/BPWatch/admin/info',
+      url: '/login',
       headers: {
-        'token': 'dd8dcb2583182ab2f67c0aaab6e314e5'
-        // 'Content-Type': 'application/x-www-form-urlencoded'
+        // 'token': 'dfabac808ccd494d901d2091534409f1',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
+        // 'Content-Type': 'application/x-www-form-urlencoded',
         // 'Access-Control-Allow-Origin': '*'
+        // 'Access-Control-Allow-Methods': 'POST,GET,OPTIONS,PATCH,PUT'
       },
       data: {
-        // username: 'chen',
-        // password: '123456',
+        username: 'chen',
+        password: '123456'
         // email: null,
         // department: null,
         // name: null,
@@ -138,6 +147,9 @@ export default {
       console.log(res.data)
     })
     .catch()
+  },
+  created () {
+    this.loginDirect()
   }
 }
 </script>

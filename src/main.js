@@ -6,6 +6,8 @@ import router from './router'
 // import Vuex from 'vuex'
 import echarts from 'echarts'
 import axios from './api/axios'
+// import axios from 'axios'
+import qs from 'qs'
 import {store} from './store/store'
 import session from './untils/session'
 // 按需引入element-ui
@@ -44,7 +46,8 @@ import {
   Upload,
   MessageBox,
   Message,
-  Pagination
+  Pagination,
+  Dialog
 } from 'element-ui'
 
 Vue.config.productionTip = false
@@ -83,9 +86,11 @@ Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Upload)
 Vue.use(Pagination)
+Vue.use(Dialog)
 
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
+Vue.prototype.$qs = qs
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm
