@@ -9,11 +9,13 @@ import session from './untils/session'
 import {routeMatch, roleMatch} from './untils/routerMatch'
 import fullpath from './router/fullpath'
 import { newsickaskDataApi } from './api/views/Hospital/BloodHeigh/H-work'
+import Bus from './bus'
 // import qs form 'qs'
 export default {
   name: 'app',
   data () {
     return {
+      adminInfo: {}
     }
   },
   methods: {
@@ -80,73 +82,59 @@ export default {
           method: 'post',
           url: '/info',
           data: {
-            // token: localUserMsg
           }
         })
         .then(res => {
         // 获取 用户 权限
 
         // 获取 用户信息
-
+          // vm.$store.state.adminInfo = res.data.data
+          vm.adminInfo = res.data.data
+          vm.$store.commit('SET_ADMIN_INFO', vm.adminInfo)
+          // Bus.$emit('adminInfo', vm.adminInfo)
         // 获取 路由信息
         // 若无路由信息 限制访问
           let role = ''
-          if (res.data.data.adminType === 1) {
-            role = 'admin'
+          if (res.data.data.adminType) {
+            switch (res.data.data.adminType) {
+              case 1:
+                role = 'admin'
+                break
+              case 2:
+                role = 'hospital'
+                break
+              case 3:
+                role = 'doctor'
+                break
+              case 4:
+                role = 'nurse'
+                break
+              default:
+                role = null
+            }
+          } else {
+            this.$router.replace({
+              name: 'login'
+            })
           }
           // let router = routeMatch(res.data.route, fullpath)
           let router = roleMatch(role, fullpath)
-        // 动态注入路由 addroute
+          // 动态注入路由 addroute
+          console.log(router)
           this.$router.addRoutes(router)
-        // 路由守卫
-          // router.beforeEach((to, form, next) => {
-          //   next()
-          // })
-          this.$router.push({
+          this.$router.replace({
             name: 'Home'
           })
         })
         .catch()
         // this.$router.beforeEach(to,from,next){
-
         // }
       }
     }
   },
   mounted () {
     let vm = this
-    // const data = vm.$qs.stringify()
-    // vm.$axios.interceptors.request.use((config) => {
-    //   if (config.method === 'post') {
-    //     config.data = vm.$qs.stringify(config.data)
-    //   }
-    //   return config
-    // })
-    console.log(process.env.API_HOST)
-    vm.$axios({
-      method: 'post',
-      url: '/login',
-      headers: {
-        // 'token': 'dfabac808ccd494d901d2091534409f1',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-        // 'Access-Control-Allow-Origin': '*'
-        // 'Access-Control-Allow-Methods': 'POST,GET,OPTIONS,PATCH,PUT'
-      },
-      data: {
-        username: 'chen',
-        password: '123456'
-        // email: null,
-        // department: null,
-        // name: null,
-        // roleId: null
-        // token: 'dd8dcb2583182ab2f67c0aaab6e314e5'
-      }
-    })
-    .then(res => {
-      console.log(res.data)
-    })
-    .catch()
+    Bus.$emit('adminInfo', vm.adminInfo)
   },
   created () {
     this.loginDirect()

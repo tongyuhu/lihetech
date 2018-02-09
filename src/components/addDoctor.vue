@@ -12,14 +12,17 @@
       ref="ruleForm" 
       label-width="50px" 
       :label-position="labelPosition">
-        <el-form-item label="邮箱" prop="email">
-          <el-input type="email" v-model="addDoctorForm.email" size="small"></el-input>
-        </el-form-item>
         <el-form-item label="姓名" prop="name">
           <el-input type="text" v-model="addDoctorForm.name" size="small"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input type="text" v-model="addDoctorForm.phone" size="small"></el-input>
+        <el-form-item label="职责" prop="adminNote">
+          <el-input type="text" v-model="addDoctorForm.adminNote" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="mobile">
+          <el-input type="text" v-model="addDoctorForm.mobile" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input type="email" v-model="addDoctorForm.email" size="small"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="addDoctorForm.password" size="small"></el-input>
@@ -46,8 +49,8 @@
         <el-form-item label="姓名" prop="name">
           <el-input type="text" v-model="addDoctorForm.name" size="small"></el-input>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input type="text" v-model="addDoctorForm.phone" size="small"></el-input>
+        <el-form-item label="电话" prop="mobile">
+          <el-input type="text" v-model="addDoctorForm.mobile" size="small"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
           <el-input type="password" v-model="addDoctorForm.password" size="small"></el-input>
@@ -68,6 +71,7 @@
 </template>
 
 <script>
+import {addDoctorApi} from './../api/components/addDoctor'
 export default {
   data () {
     var checkEmail = (rule, value, callback) => {
@@ -87,11 +91,21 @@ export default {
         callback()
       }
     }
-    var checkPhone = (rule, value, callback) => {
-      let phonerule = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
+    var checkAdminNote = (rule, value, callback) => {
+      let namerule = /^.{3,20}$/
+      if (!value) {
+        return callback(new Error('职责不能为空'))
+      } else if (!namerule.exec(value)) {
+        return callback(new Error('请输入正确的职责'))
+      } else {
+        callback()
+      }
+    }
+    var checkmobile = (rule, value, callback) => {
+      let mobilerule = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
       if (!value) {
         return callback(new Error('电话不能为空'))
-      } else if (!phonerule.exec(value)) {
+      } else if (!mobilerule.exec(value)) {
         return callback(new Error('请输入正确的电话'))
       } else {
         callback()
@@ -112,25 +126,23 @@ export default {
       addDoctorForm: {
         email: '',
         name: '',
-        phone: null,
-        password: ''
-
+        mobile: null,
+        password: '',
+        adminNote: ''
       },
       dialogFormVisible: false,
       rules: {
         email: [
-            // { required: true, message: '请输入邮箱', trigger: 'blur' }
             { validator: checkEmail, trigger: 'blur' }
         ],
         name: [
           { validator: checkName, trigger: 'blur' }
-            // { required: true, message: '请输入姓名', trigger: 'blur' },
-            // { min: 2, max: 5, message: '请输入正确的姓名', trigger: 'blur' }
         ],
-        phone: [
-          { validator: checkPhone, trigger: 'blur' }
-          //  { required: true, message: '请输入电话', trigger: 'blur' },
-          //  {min: 11, message: '请输入正确的电话', trigger: 'blur'}
+        adminNote: [
+          { validator: checkAdminNote, trigger: 'blur' }
+        ],
+        mobile: [
+          { validator: checkmobile, trigger: 'blur' }
         ],
         password: [
           { validator: checkPass, trigger: 'blur' }
@@ -144,8 +156,23 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          // console.log(this.addDoctorForm, 'submit!')
-
+          console.log(this.addDoctorForm, 'submit!')
+          let doctorMsg = {
+            username: this.addDoctorForm.name,
+            password: this.addDoctorForm.password,
+            email: this.addDoctorForm.email,
+            department: null,
+            name: this.addDoctorForm.name,
+            roleId: null,
+            mobile: this.addDoctorForm.mobile,
+            regionId: 1,                          // 默认未设置
+            adminType: 3,
+            adminNote: this.addDoctorForm.adminNote,
+            address: null
+          }
+          this.$axios(addDoctorApi(doctorMsg))
+          .then()
+          .catch()
           this.$router.replace(this.$route.params.from)
         } else {
           // console.log('error     submit!!')
@@ -170,6 +197,7 @@ export default {
   width: 40%;
   padding-left: 20%;
   padding-right: 20%;
+  /* height: 100%; */
 }
 .header{
   text-align: center;

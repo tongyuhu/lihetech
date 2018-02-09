@@ -7,7 +7,7 @@
                 <H-Head></H-Head>
             </el-header>
             <el-container>
-                    <el-aside width="150px">
+                    <el-aside width="150px" class="sider">
                         <H-Sider></H-Sider>
                     </el-aside>
                 <el-container>
@@ -40,11 +40,16 @@
 
 <style scoped>
     .el-header {
-        /* background-color: #444; */
-        border-bottom: 1px solid #ebeef5;
+        background-color: #95b4cf;
+        border-bottom: 1px solid #95b4cf;
+        color: #fff;
     }
     .footer{
       text-align: center;
       margin-right: 180px;
+    }
+    .sider{
+      background-color: #1991fc;
+      /* height: 100%; */
     }
 </style>

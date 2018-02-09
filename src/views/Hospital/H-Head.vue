@@ -8,8 +8,11 @@
               </div>
           </el-col>
           <el-col :span="12">
-              <div class="head-right">
-                  <p>{{ adminName }}</p>
+            <div class="head-right">
+              <div class="admin-name">
+
+                <p>{{ adminName }}</p>
+              </div>
                   <el-popover
                   ref="H-admin"
                   placement="top"
@@ -23,25 +26,25 @@
                         <p>{{ adminRoot }}</p>
                         <el-button size="mini" @click="lookMsg" class="btn">查看消息</el-button> 
                         <el-button size="mini" @click="editDoc" class="btn">编辑资料</el-button> 
-                        <el-button size="mini" @click="centerDialogVisible = true" class="btn">密码修改</el-button> 
+                        <el-button size="mini" @click="changePasswordDialogHandle" class="btn">密码修改</el-button> 
                         <el-button size="mini" @click="exit" class="btn">退出</el-button>
                       </el-col>
                     </el-row>
                   </el-popover>
-                  <el-button v-popover:H-admin size="mini" @click="adminAccount">账户管理</el-button>
+                <el-button v-popover:H-admin size="mini" @click="adminAccount">账户管理</el-button>
               </div>
           </el-col>
       </el-row>
       <el-dialog
         title="修改密码"
-        :visible.sync="centerDialogVisible"
+        :visible.sync="changePasswordDialog"
         width="30%"
         center>
         <el-form
         :model="changePasswordForm" 
         status-icon 
         :rules="changePasswordRules" 
-        ref="ruleForm" 
+        ref="changpasswordRef" 
         label-width="50px" 
         :label-position="labelPosition"
         >
@@ -72,8 +75,8 @@
         </el-form>
         <!-- <span>需要注意的是内容是默认不居中的</span> -->
         <span slot="footer">
-          <el-button @click="centerDialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+          <el-button @click="changePasswordDialog = false">取 消</el-button>
+          <el-button type="primary" @click="changePasswordDialog = false">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -110,8 +113,8 @@ export default {
       }
     }
     return {
-      adminName: '胡小方',
-      adminRoot: '管理员',
+      // adminName: '胡小方',
+      // adminRoot: '管理员',
       adminIcon: './../../../static/admin.jpg',
       labelPosition: 'center',
       changePasswordForm: {
@@ -119,7 +122,7 @@ export default {
         newPassword1: '',
         newPassword2: ''
       },
-      centerDialogVisible: false,
+      changePasswordDialog: false,
       changePasswordRules: {
         oldPassword: [
             // { required: true, message: '请输入邮箱', trigger: 'blur' }
@@ -138,6 +141,35 @@ export default {
       }
     }
   },
+  computed: {
+    adminName () {
+      if (!this.$store.state.adminInfo.address) {
+        return '暂无用户名'
+      } else {
+        return this.$store.state.adminInfo.address
+      }
+    },
+    adminRoot () {
+      let adminRoot = ''
+      switch (this.$store.state.adminInfo.adminType) {
+        case 1:
+          adminRoot = '超级管理员'
+          break
+        case 2:
+          adminRoot = '医院诊所'
+          break
+        case 3:
+          adminRoot = '医生'
+          break
+        case 4:
+          adminRoot = '护士'
+          break
+        default:
+          adminRoot = this.$store.state.adminInfo.username
+      }
+      return adminRoot
+    }
+  },
   methods: {
     lookMsg () {
       // this.$router.replace({
@@ -151,6 +183,13 @@ export default {
       this.$router.push({
         name: 'accountSetting'
       })
+    },
+    changePasswordDialogHandle () {
+      this.changePasswordDialog = true
+      setTimeout(() => {
+        this.$refs['changpasswordRef'].resetFields()
+      }, 50)
+      // changpasswordRef
     },
     changePassword () {
 
@@ -194,5 +233,10 @@ export default {
      margin: 0;
      margin-top:5px;
      width: 80px;
+   }
+   .admin-name{
+     padding-top:5px;
+     height: 23px;
+     /* height: 26px; */
    }
 </style>

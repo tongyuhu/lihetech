@@ -1,51 +1,26 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { ADD_NUM, REDUCE_NUM, ADD_PRICE, REDUCE_PRICE} from './mutationstypes'
+import { SET_ADMIN_INFO } from './mutationstypes'
 
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    num: 12,
-    price: 20,
-    userAccount: 'admin',
-    password: 'admin'
+    adminInfo: {}
   },
   getters: {
     // add: state => {
     //   return state.a + 1
-    // },
-    // add2: (state, getters) => {
-    //   let a = getters.add
-    //   return a + 1
-    // },
-    // adds: (state) => (id) => {
-    //   return id
     // }
   },
   mutations: {
-    [ADD_NUM] (state, n) {
-      state.num += n | 1
-    },
-    [REDUCE_NUM] (state, n) {
-      state.num -= n | 1
-    },
-    [ADD_PRICE] (state, n) {
-      state.price += n | 1
-    },
-    [REDUCE_PRICE] (state, n) {
-      state.price -= n | 1
-    },
-    password (state, pwd) {
-      state.password = pwd
+    [SET_ADMIN_INFO] (state, info) {
+      state.adminInfo = info
     }
   },
   actions: {
-    reduce (context) {
-      context.commit('REDUCE_PRICE')
-    },
-    password (context, pwd) {
-      context.commit('password', pwd)
+    reqAdminInfo (context) {
+      context.commit('SET_ADMIN_INFO')
     }
   }
 })

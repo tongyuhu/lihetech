@@ -9,8 +9,9 @@ const addDoctor = (resolve) => require(['@/components/addDoctor.vue'], resolve)
 const accountSetting = (resolve) => require(['@/components/accountSetting.vue'], resolve)
 const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve)
 const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
-const cardtest = (resolve) => require(['@/components/sickcard.vue'], resolve)
-const login = (resolve) => require(['@/components/login.vue'], resolve)
+const medicine = (resolve) => require(['@/components/medicine/medicine.vue'], resolve)
+// const cardtest = (resolve) => require(['@/components/sickcard.vue'], resolve)
+// const login = (resolve) => require(['@/components/login.vue'], resolve)
 // const '404' = (resolve) => require(['@/components/404.vue'], resolve)
 // const '401' = (resolve) => require(['@/components/401.vue'], resolve)
 export default[
@@ -22,10 +23,10 @@ export default[
       requireAuth: true,
       role: ['admin', 'doctor']
     },
-    redirect: '/hospital'
+    redirect: '/Hospital'
   },
   {
-    path: '/hospital/',
+    path: '/Hospital/',
     name: 'hospital',
     component: hospital,
     redirect: 'hospital/booldheigh',
@@ -134,12 +135,17 @@ export default[
           name: '主页',
           role: ['admin', 'doctor']
         }
+      },
+      {
+        path: 'medicine',
+        name: 'medicine',
+        component: medicine,
+        meta: {
+          requireAuth: true,
+          name: '44',
+          role: ['admin', 'doctor']
+        }
       }
-      // {
-      //   path: 'cardtest',
-      //   name: 'cardtest',
-      //   component: cardtest
-      // }
     ]
   }
 ]

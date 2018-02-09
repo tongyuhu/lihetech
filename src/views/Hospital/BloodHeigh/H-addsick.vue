@@ -8,7 +8,8 @@
           <el-col :span="16">
             <div class='add-sick-right'>
               <p>{{ date }}</p>
-              <p>诊所位于{{ hospitalAddress }},{{ hospitalDoctorNum }}名医生,{{ hospitalNanaNum }}名护士</p>
+              <p>{{adminInfoAdd.username}}</p>
+              <p>{{ hospitalAddress }} {{ hospitalDoctorNum }}名医生,{{ hospitalNanaNum }}名护士</p>
             </div>
           </el-col>
       </el-row>
@@ -16,52 +17,75 @@
 </template>
 
 <script>
+import {dateFormat} from './../../../untils/date'
+// import HospitalApi from './../../../api/views/Hospital/BloodHeigh/H-addsick'
+import Bus from './../../../bus'
+import { mapState } from 'vuex'
+// import {HospitalApi} from './../../../api/views/Hospital/BloodHeigh/H-addsick'
 export default {
   name: 'H-addsick',
   data () {
     return {
       hospitalName: '张江高科诊所',
-      hospitalAddress: '诊所位于祖冲之路887弄72-73号',
+      // hospitalAddress: '诊所位于祖冲之路887弄72-73号',
       hospitalDoctorNum: '1',
-      hospitalNanaNum: '1'
-      // date: ''
+      hospitalNanaNum: '1',
+      adminInfoAdd: {}
     }
   },
   computed: {
     date: function () {
       let today = new Date()
-      var year = today.getFullYear()
-      var mounth = today.getMonth() + 1
-      var day = today.getDate()
-      // var time = today.toLocaleDateString()
-      var nowtime = year + '年' + mounth + '月' + day + '日'
-      // console.log(nowtime)
-      return nowtime
-      // return time
-    }
+      dateFormat(today, 0, true)
+      return dateFormat(today, 0, true)
+
+      // let today = new Date()
+      // var year = today.getFullYear()
+      // var mounth = today.getMonth() + 1
+      // var day = today.getDate()
+      // var nowtime = year + '年' + mounth + '月' + day + '日'
+      // return nowtime
+    },
+    // hospitalAddress () {
+    //   if (this.$store.state.adminInfo && this.$store.state.adminInfo.address !== null) {
+    //     return '诊所位于' + this.$store.state.adminInfoaddress + ','
+    //   } else {
+    //     return ''
+    //   }
+    // }
+    ...mapState({
+      hospitalAddress: state => {
+        if (state.adminInfo && state.adminInfo.address) {
+          return '诊所位于' + state.adminInfoaddress + ','
+        } else {
+          return ''
+        }
+      }
+    })
   },
   methods: {
-    // date: function (date) {
-    //   let today = new Date()
-    //   date = today.toLocaleString()
-    //   return date
-    // },
+    // HospitalApi,
     addSick () {
-      // console.log(this.$router)
       this.$router.push({name: 'addSick'})
     }
   },
-  watch: {
-    // date: function () {
-    //   let today = new Date()
-    //   let date = today.toLocaleString()
-    //   return date
-    // }
-    // '$router': beforeEach(({name: other}, from, next) => {
-    //     // this.$router.push({name: 'other'})
-    //   console.log(1)
-    //   next()
-    // })
+  // watch: {
+  // },
+  mounted () {
+    let vm = this
+    vm.adminInfoAdd = vm.$store.state.adminInfo
+
+    Bus.$on('adminInfo', value => {
+      console.log(value, 12222211)
+    })
+  },
+  // created () {
+  //   Bus.$on('adminInfo', value => {
+  //     console.log(value, 111111111)
+  //   })
+  // },
+  beforeDestroy () {
+    Bus.$off('adminInfo')
   }
 }
 </script>

@@ -13,7 +13,8 @@ module.exports = {
     // proxyTable: {},
     proxyTable: {
       '/api': {
-        target: 'http://10.7.6.131:80/BPWatch/admin/', //设置你调用的接口域名和端口号 别忘了加http
+        // target: 'http://10.7.6.131:80/BPWatch/admin/', //设置你调用的接口域名和端口号 别忘了加http
+        target: 'http://chengang99.xin:8088/BPWatch/admin/', //设置你调用的接口域名和端口号 别忘了加http
         changeOrigin: true,
         pathRewrite: {
           '^/api': '/'

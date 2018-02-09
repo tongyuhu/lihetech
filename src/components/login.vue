@@ -76,14 +76,17 @@ export default {
         this.$axios(sendUserMsg(loginParams))
           .then(res => {
             vm.isBtnLoading = true
-            if (res.data.data.admin_token) {
-              // 保存token到本地
-              session('token', res.data.data.admin_token)
-              vm.$emit('login', vm.$router.currentRoute.path)
+            if (res.data.result) {
+              if (res.data.data.admin_token && !(res.data.data.admin_token.length === 0)) {
+                // 保存token到本地
+                session('token', res.data.data.admin_token)
+                vm.$emit('login', vm.$router.currentRoute.path)
+              }
             } else {
+              vm.isBtnLoading = false
               vm.$message({
                 showClose: true,
-                message: '请输入正确的账号密码',
+                message: res.data.msg,
                 type: 'error'
               })
             }

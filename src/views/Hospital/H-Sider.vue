@@ -1,6 +1,12 @@
 <template>
   <div>
-    <el-menu default-active="1">
+    <el-menu 
+    class="menu"
+    default-active="1" 
+    background-color="#1991fc"
+    text-color="#fff"
+    active-text-color="#ffd04b"
+    >
       <el-menu-item index="1">
             <span slot="title">
               <router-link :to="{ name: 'booldheigh'}" tag="div">高血压</router-link>
@@ -53,7 +59,7 @@
       </el-menu-item> -->
       <el-menu-item index="8">
             <span slot="title">
-              <router-link :to="{ name: 'page'}" tag="div">123</router-link>
+              <router-link :to="{ name: 'medicine'}" tag="div">medicine</router-link>
             </span>
       </el-menu-item>
     </el-menu>
@@ -67,7 +73,12 @@ export default {
 </script>
 
 <style scoped>
-
+  .siader{
+    background-color: #1991fc;
+  }
+  .menu{
+    border: none;
+  }
 </style>
 
 

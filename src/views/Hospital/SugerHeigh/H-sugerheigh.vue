@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import HAddsick from './H-addsick'
+import HAddsick from './S-addsick'
 import HSugerheightotal from './H-sugerheightotal'
 import HWork from './H-work'
 import HSicklist from './H-sicklist'

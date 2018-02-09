@@ -106,8 +106,21 @@ Vue.prototype.$message = Message
 // const store = new Vuex.Store({
 //   state: {
 //     aaa: 555
+
 //   }
 // })
+// 自定义判断权限指令 为true时显示 false时不显示
+Vue.directive('hasRoot', {
+  bind: function (el, binding) {
+    if (!binding.value) {
+      el.parentNode.removeChild(el)
+    }
+  }
+  // inserted: function () {},
+  // update: function () {},
+  // componentUpdated: function () {},
+  // unbind: function () {}
+})
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
