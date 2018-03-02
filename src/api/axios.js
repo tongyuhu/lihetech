@@ -1,7 +1,7 @@
 import axios from 'axios'
 import qs from 'qs' // formdata序列化
-import { Message, MessageBox, Loading } from 'element-ui'
-import Vue from 'vue'
+// import { Message, MessageBox, Loading } from 'element-ui'
+// import Vue from 'vue'
 // import s from './../../config'
 // import router from './router'
 // axios 配置
@@ -24,7 +24,6 @@ axios.interceptors.request.use((config) => {
 // http://116.62.63.96:8081/arbmanager
 // http://192.168.1.120:8086/arbmanager
 
-// axios.defaults.headers.common['X-AUTH-SOURCE'] = 0
 // axios.interceptors.request.use((config) => {
 //   if (localStorage.getItem('token')) {
 //     config.headers['X-AUTH-TOKEN'] = localStorage.getItem('token')
@@ -38,6 +37,7 @@ axios.interceptors.request.use((config) => {
 //   console.log('请求头错误参数')
 //   return Promise.reject(error)
 // })
+
 // axios.interceptors.response.use((res) => {
 //   // 解密
 //   res.data = JSON.parse(pako.inflate(res.data, { to: 'string' }))

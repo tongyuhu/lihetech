@@ -10,6 +10,10 @@ const accountSetting = (resolve) => require(['@/components/accountSetting.vue'],
 const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve)
 const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
 const medicine = (resolve) => require(['@/components/medicine/medicine.vue'], resolve)
+const menu = (resolve) => require(['@/components/menu.vue'], resolve)
+const testmenu = (resolve) => require(['@/components/testmenu.vue'], resolve)
+const Fmenu = (resolve) => require(['@/components/Fmenu.vue'], resolve)
+const FmenuItem = (resolve) => require(['@/components/FmenuItem.vue'], resolve)
 // const cardtest = (resolve) => require(['@/components/sickcard.vue'], resolve)
 // const login = (resolve) => require(['@/components/login.vue'], resolve)
 // const '404' = (resolve) => require(['@/components/404.vue'], resolve)
@@ -21,6 +25,7 @@ export default[
     meta: {
       name: '主页',
       requireAuth: true,
+      scrollToTop: true,
       role: ['admin', 'doctor']
     },
     redirect: '/Hospital'
@@ -32,6 +37,7 @@ export default[
     redirect: 'hospital/booldheigh',
     meta: {
       requireAuth: true,
+      scrollToTop: true,
       name: '主页',
       role: ['admin', 'doctor']
     },
@@ -42,6 +48,7 @@ export default[
         component: booldheigh,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -52,6 +59,7 @@ export default[
         component: sugerheigh,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -62,6 +70,7 @@ export default[
         component: other,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -72,6 +81,7 @@ export default[
         component: cases,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -82,6 +92,7 @@ export default[
         component: bloodheighSick,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -92,6 +103,7 @@ export default[
         component: sugerheighSick,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -102,6 +114,7 @@ export default[
         component: addDoctor,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -112,6 +125,7 @@ export default[
         component: healthForm,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -122,6 +136,7 @@ export default[
         component: addSick,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -132,6 +147,7 @@ export default[
         component: accountSetting,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '主页',
           role: ['admin', 'doctor']
         }
@@ -142,7 +158,52 @@ export default[
         component: medicine,
         meta: {
           requireAuth: true,
+          scrollToTop: true,
           name: '44',
+          role: ['admin', 'doctor']
+        }
+      },
+      {
+        path: 'menu',
+        name: 'menu',
+        component: menu,
+        meta: {
+          requireAuth: true,
+          scrollToTop: true,
+          name: 'meuu',
+          role: ['admin', 'doctor']
+        }
+      },
+      {
+        path: 'testmenu',
+        name: 'testmenu',
+        component: testmenu,
+        meta: {
+          requireAuth: true,
+          scrollToTop: true,
+          name: 'testmenu',
+          role: ['admin', 'doctor']
+        }
+      },
+      {
+        path: 'Fmenu',
+        name: 'Fmenu',
+        component: Fmenu,
+        meta: {
+          requireAuth: true,
+          scrollToTop: true,
+          name: 'Fmenu',
+          role: ['admin', 'doctor']
+        }
+      },
+      {
+        path: 'FmenuItem',
+        name: 'FmenuItem',
+        component: FmenuItem,
+        meta: {
+          requireAuth: true,
+          scrollToTop: true,
+          name: 'FmenuItem',
           role: ['admin', 'doctor']
         }
       }

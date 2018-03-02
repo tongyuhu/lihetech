@@ -72,9 +72,9 @@ export default {
       if (this.pages > 7) return true
     },
     indexs: function () {
-      let left = 1,
-        right = this.pages,
-        ar = []
+      let left = 1
+      let right = this.pages
+      let ar = []
       if (this.pages >= 7) {
         if (this.current_page > 5 && this.current_page < this.pages - 4) {
           left = Number(this.current_page) - 3

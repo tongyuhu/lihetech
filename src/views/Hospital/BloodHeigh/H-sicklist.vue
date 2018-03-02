@@ -1,26 +1,42 @@
 <template>
-  <div class="sick-list">
-      <el-card>
+  <div class="sick-list" id="anchor">
+      <el-button @click="goanchor('#anchor')">
+        anchor
+      </el-button>
+
+      <div class="sick-list-head">
+        <p>高血压患者列表</p>
+      </div>
+      <el-card :body-style="{ padding: '0px' }">
         <!-- 患者列表标题 start -->
-        <div slot="header">
-            <span>高血压患者列表</span>
-        </div>
         <!-- 患者列表标题 end -->
 
         <div>
           <!-- 添加病人 及筛选 start -->
           <div class="sick-list-filter">
-            <el-row :gutter="10">
-              <el-col :span="2">
+            <el-row :gutter="14">
+              <!-- <el-col :span="2">
                 <el-button type="primary" size="small">添加病人</el-button>
-              </el-col>
-              <el-col :span="4" :offset="2">
-                <el-button type="plain" size="small" @click="halfyearSickList">半年未做检查者</el-button>
+              </el-col> -->
+              <el-col :span="4">
+                <!-- <el-button type="plain" size="small" @click="halfyearSickList">半年未做检查者</el-button> -->
+                <el-select v-model="checkTime"  
+                placeholder="未检查时长" 
+                size="small" 
+                clearable 
+                filterable	
+                @change="selectTimeHandle">
+                  <!-- <el-option v-for="item in cityList" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-option> -->
+                  <el-option value="舒张期高血压" label="舒张期高血压">半年未检查</el-option>
+                  <el-option value="舒张高血压" label="舒高血压">一年未检查</el-option>
+                  <el-option value="高血压" label="舒张期血压">两年未检查</el-option>
+                  <el-option value="舒张期" label="舒期血压">三年未检查</el-option>
+                </el-select>
               </el-col>
               <el-col :span="4">
                 <el-select v-model="bloodheighType"  
                 placeholder="糖尿病类型" 
-                size="mini" 
+                size="small" 
                 clearable 
                 filterable	
                 @change="selectsickType">
@@ -38,7 +54,7 @@
                     clearable 
                     placeholder="高血压类型"
                     @change="selectsickType"
-                    size="mini">
+                    size="small">
                     <el-option value="舒张期" label="舒张期"></el-option>
                     <el-option value="舒张期高" label="舒张期高血压"></el-option>
                     <!-- <el-el-option
@@ -56,7 +72,7 @@
                     clearable
                     @change="selectsickType"
                     placeholder="治疗效果"
-                    size="mini">
+                    size="small">
                     <!-- <el-el-option
                     v-for="item in el-options4"
                     :key="item.value"
@@ -68,8 +84,12 @@
                   </el-select>
               </el-col>
               <el-col :span="4">
-                <el-input placeholder="请输入姓名" v-model="sicknameSelectData" size="mini">
-                  <el-button slot="append" icon="el-icon-search" @click="sicknameSelect"></el-button>
+                <el-input placeholder="请输入患者姓名" v-model="sicknameSelectData" size="small"
+                :style="{'padding':'0'}" 
+                suffix-icon="el-icon-search"
+                @blur="selectName"
+                >
+                  <!-- <el-button slot="suffix" icon="el-icon-search" type="text" @click="sicknameSelect"></el-button> -->
                 </el-input>
               </el-col>
             </el-row>
@@ -79,69 +99,77 @@
           <!-- 患者列表 start -->
           <div>
             <el-row>
-              <el-table
-              :data="sicklistData"
-              border
-              style="width: 100%">
-                  <el-table-column 
-                  prop="name"
-                  label="姓名"
-                  class-name="table-col"
-                  label-class-name="table-col-label">
+              <div class="table">
+                <el-table
+                :data="sicklistData"
+                style="width: 100%">
+                    <el-table-column 
+                    prop="name"
+                    label="姓名"
+                    label-class-name="tableTitle">
+                      <template slot-scope="scope">
+                        <el-button type="text" @click="diagnose(scope.row)"
+                        :style="{'color':'#1991fc'}">
+                          {{scope.row.name}}
+                        </el-button>
+                      </template>
+                    </el-table-column>
+                    <el-table-column 
+                    prop="sicktype"
+                    label="患者类型"
+                    label-class-name="tableTitle">
+                    </el-table-column>
+                    <el-table-column 
+                    prop="badrate"
+                    label="严重比例"
+                    label-class-name="tableTitle">
+                    </el-table-column>
+                    <el-table-column 
+                    prop="badtimes"
+                    label="严重次数"
+                    label-class-name="tableTitle">
+                    </el-table-column>
+                    <el-table-column 
+                    prop="status"
+                    label="病情"
+                    label-class-name="tableTitle">
+                    </el-table-column>
+                    <el-table-column 
+                    prop="addtime"
+                    label="加入时间"
+                    label-class-name="tableTitle">
+                    </el-table-column>
+                    <el-table-column
+                    prop="action"
+                    label=""
+                    width="275px">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row)">
-                        {{scope.row.name}}
-                      </el-button>
+                        <el-button 
+                        size="mini" 
+                        type="primary" 
+                        @click.native="care(scope.$index,sicklistData)" 
+                        :key="scope.row.id" 
+                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
+                        v-if="scope.row.care">
+                          {{careText(scope.row.care)}}
+                        </el-button>
+                        <el-button 
+                        v-else
+                        size="mini" 
+                        type="plain" 
+                        @click.native="care(scope.$index,sicklistData)" 
+                        :key="scope.row.id" :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
+                        >
+                          {{careText(scope.row.care)}}
+                        </el-button>
+                        <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
+                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
+                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+                        <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
-                  </el-table-column>
-                  <el-table-column 
-                  prop="sicktype"
-                  label="患者类型">
-                  </el-table-column>
-                  <el-table-column 
-                  prop="badrate"
-                  label="严重比例">
-                  </el-table-column>
-                  <el-table-column 
-                  prop="badtimes"
-                  label="严重次数">
-                  </el-table-column>
-                  <el-table-column 
-                  prop="status"
-                  label="病情">
-                  </el-table-column>
-                  <el-table-column 
-                  prop="addtime"
-                  label="加入时间">
-                  </el-table-column>
-                  <el-table-column
-                  prop="action"
-                  label=""
-                  width="275px">
-                  <template slot-scope="scope">
-                      <el-button 
-                      size="mini" 
-                      type="primary" 
-                      @click.native="care(scope.$index,sicklistData)" 
-                      :key="scope.row.id" 
-                      :style="{'width':'80px'}"
-                      v-if="scope.row.care">
-                        {{careText(scope.row.care)}}
-                      </el-button>
-                      <el-button 
-                      v-else
-                      size="mini" 
-                      type="plain" 
-                      @click.native="care(scope.$index,sicklistData)" 
-                      :key="scope.row.id" :style="{'width':'80px'}"
-                      >
-                        {{careText(scope.row.care)}}
-                      </el-button>
-                      <el-button size="mini" type="primary" @click="diagnose(scope.row)" >诊断</el-button>
-                      <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button>
-                  </template>
-              </el-table-column>
-              </el-table>
+                </el-table-column>
+                </el-table>
+              </div>
             </el-row>
           </div>
           <!-- 患者列表 end -->
@@ -162,7 +190,8 @@ export default {
       loading: true,
       sugerheighType: '',
       bloodheighType: '',
-      sickstatus: ''
+      sickstatus: '',
+      checkTime: ''
     }
   },
   methods: {
@@ -199,7 +228,7 @@ export default {
       // this.sugerheighType = ''
     },
     // 半年未检查
-    halfyearSickList () {
+    selectTimeHandle () {
       this.$axios(halfyearSickListApi)
       .then(response => {
         this.sicklistData = response.data.halfyearSickList
@@ -209,6 +238,16 @@ export default {
         console.log(err)
       })
     },
+    // halfyearSickList () {
+    //   this.$axios(halfyearSickListApi)
+    //   .then(response => {
+    //     this.sicklistData = response.data.halfyearSickList
+    //     // console.log(response.data.halfyearSickList)
+    //   })
+    //   .catch(err => {
+    //     console.log(err)
+    //   })
+    // },
     // 搜索病人名字
     sicknameSelect () {
       this.$axios(sicknameSelectApi(this.sicknameSelectData))
@@ -218,6 +257,24 @@ export default {
       .catch(err => {
         console.log(err)
       })
+    },
+    selectName () {
+      console.log(this.sicknameSelectData)
+    },
+    goanchor (el) {
+      let anchor = document.getElementById('anchor')
+      console.log(anchor.offsetTop)
+      console.log(this.$el.offsetTop)
+      let scrollrange = 500
+      let i = 0
+      let scroll = setInterval(() => {
+        if (i < scrollrange) {
+          i += 50
+          window.scrollTo(0, i)
+        } else if (i >= scrollrange) {
+          clearInterval(scroll)
+        }
+      }, 50)
     }
   },
   mounted () {
@@ -248,7 +305,7 @@ export default {
 
 <style scoped>
   .sick-list {
-      margin-top: 40px;
+      margin-top: 30px;
   }
   .ivu-table-title {
       height: 48px;
@@ -257,6 +314,36 @@ export default {
       text-align: center;
   }
   .sick-list-filter{
-    margin-bottom: 10px;
+    margin-top:24px;
+    /* margin-bottom: 10px; */
+    margin-left: 20px;
   }
+  .table{
+  margin: 0 0 0 20px;
+  }
+  .telephone-btn{
+  border: none;
+  outline: none;
+  background-color: #fff;
+  height: 28px;
+  padding: 0;
+  margin:0;
+  position: relative;
+  cursor: pointer;
+  margin-left: 10px;
+}
+.telephone-btn-icon::after{
+  position: absolute;
+  content: '';
+  width: 30px;
+  height: 27px;
+  background: url('./../../../../诊所-高血压/hospitalIcon/诊所-icon-23.png') no-repeat;
+}
+.sick-list-head p{
+  font-size: 24px;
+  color: #041421;
+  margin: 0;
+  margin-bottom: 10px;
+  margin-left: 24px;
+}
 </style>

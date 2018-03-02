@@ -2,51 +2,85 @@
   <div>
     <div>
       <el-select 
-        v-model="medicineType" 
-        clearable 
-        placeholder="高血压"
-        @change="medicineTypeHandle"
+      v-model="sickType" 
+      placeholder="患病类型"
+      @change="sickTypeHandle"
       >
+      <!-- clearable  -->
         <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          >
+        v-for="item in sickTypeOptions"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+        >
         </el-option>
       </el-select>
-      <el-select v-model="medicineType2" clearable placeholder="请选择" @change="medicineclassHandle">
+      <el-select v-model="medicineType"  placeholder="药品种类" @change="Handle">
         <el-option
-          v-for="item in medicineclass"
+          v-for="item in medicineTypeOptions"
           :key="item.id"
           :label="item.medicineName" 
           :value="item.id">
         </el-option>
       </el-select>
-      <!-- <el-select v-model="medicineType3" clearable placeholder="请选择">
-        <el-option
-          v-for="item in medicineclass"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select> -->
     </div>
-    <!-- <div>
-      <div v-for="item in medicines" :key="item.createTime">
-        药物类名：{{item.medicineName}}
-
-        <div v-for="i in item.list" :key="i.createTime">
-            二级药物：{{i.medicineName}}
-            
-            <p v-for="me in meds" :key="me.createTime">
-              药物:{{me.medicineName}}
-            </p>
-        </div>
-      </div>
-    </div> -->
     <div>
-      {{medicineclass}}
+      <!-- <div v-if="!(medicineLists.length>0)">暂无数据</div> -->
+      <div 
+     
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      class="medicine-lists"
+      >
+        <div v-if="!(medicineLists.length>0)">暂无数据</div>
+        <el-row
+        >
+          <el-col 
+          :span="4"
+          v-for="item in medicineLists" 
+          :key="item.id" 
+          class="medicine">
+          <div class="medicine-div">
+            <div class="medicine-msg clear">
+              <div></div>
+              <div class="medicine-msg-btn">
+                <el-button size="mini" @click="medicineMsgHandle(item)">详情</el-button>
+              </div>
+            </div>
+            
+            <img :src="'http://139.196.204.123:80/BPWatch'+item.medicineImgUrl" alt="暂无图片" class="medicine-img">
+            
+            <p class="medicine-name">{{item.medicineName}}</p>
+            <p v-if="!item.medicinePrice" class="price">暂无参考价格</p>
+            <p v-else class="price">￥{{item.medicinePrice}}</p>
+          </div>
+          </el-col>
+        </el-row>
+        <el-dialog 
+        title="药品详情" 
+        :visible.sync="showMedicineMsg"
+        :custom-class="dialog"
+        width="70%"  
+        >
+          <div class="dialog-msg clear">
+            <div class="dialog-img">
+                <img :src="'http://139.196.204.123:80/BPWatch'+medicineMsg.medicineImgUrl" alt="暂无图片" class="medicine-img-diolog">
+            </div>
+            <div class="dialog-status">
+              <div>
+                <span class="medicine-name">{{medicineMsg.medicineName}}</span> 
+                <span v-if="!medicineMsg.medicinePrice" class="price">暂无参考价格</span>
+                <span v-else class="price">￥{{medicineMsg.medicinePrice}}</span>
+              </div>
+              <div>
+                <p>{{medicineMsg.makeEnterprise}}</p>
+              </div>
+            </div>
+          </div>
+          <div v-html="medicineMsg.medicineDetails" class="dialog-html"></div>
+        </el-dialog>
+        <!-- {{medicineList}} -->
+      </div>
     </div>
   </div>
 </template>
@@ -55,7 +89,8 @@
 export default {
   data () {
     return {
-      options: [
+      dialog: 'dialog',
+      sickTypeOptions: [
         {
           value: 'heightBlood',
           label: '高血压'
@@ -63,14 +98,6 @@ export default {
           value: 'heightSuger',
           label: '糖尿病'
         }],
-      // medicineclass: [
-      //   {
-      //     value: 'heightBlood',
-      //     label: '高血压'
-      //   }, {
-      //     value: 'heightSuger',
-      //     label: '糖尿病'
-      //   }],
       medicine: [
         {
           value: 'heightBlood',
@@ -79,108 +106,210 @@ export default {
           value: 'heightSuger',
           label: '糖尿病'
         }],
-      medicineType: 'heightBlood',
-      medicineType2: '',
-      medicineType3: '',
-      medicines: [],
-      // medicinelists: [],
-      meds: [],
-      qesarr: []
+      sickType: '',
+      medicineType: '',
+      medicines: [],  // 获取的一级药品列表
+      medicineId: [],  // 药品列表id
+      medicineLists: [], // 获取的药品列表
+      medicineTypeOptions: [], // 药品目录类型
+      showMedicineMsg: false, // 弹出层
+      medicineMsg: {}, // 弹出层内容
+      loading: false
     }
   },
   methods: {
-    medicineTypeHandle (val) {
-      let med = ''
-      if (this.medicineType === 'heightBlood') {
-        med = 1
+    sickTypeHandle (val) {
+      let id = ''
+      if (val === 'heightBlood') {
+        id = 1
       } else {
-        med = 2
+        id = 2
       }
+      this.medicineType = ''
       this.$axios({
         method: 'post',
         url: '/medicine/directory/list',
         data: {
-          medicineType: med
+          medicineType: id
         }
       })
       .then(res => {
-        // let ree = []
         this.medicines = res.data.data
-        // this.medicineclass = this.medicines
-        // let ree = res.data.data
-        // ree.forEach(item => {
-
-        // })
+        this.medicineId = []
+        this.medicineTypeOptions = []
+        this.medicines.forEach(item => {
+          let obj = {}
+          obj.id = item.id
+          obj.medicineName = item.medicineName
+          this.medicineTypeOptions.push(obj)
+          if (item.list) {
+            item.list.forEach(i => {
+              this.medicineId.push(i.id)
+            })
+          }
+        })
       })
       .catch()
     },
-    medicineclassHandle (val) {
-      if (!val) return
-      console.log(val)
-      let arr = this.medicines[val].list
-      let arrid = []
-      arr.forEach(item => {
-        arrid.push(item.id)
-        console.log(arrid)
+    Handle (val) {
+      this.medicineLists = []
+      let url = ''
+      if (this.sickType === 'heightBlood') {
+        url = '/medicine/blood/list'
+      } else {
+        url = '/medicine/urine/list'
+      }
+      let arr = []
+      this.medicines.forEach(item => {
+        if (item.id === val) {
+          arr = item.list
+        }
       })
-      // this.qesarr = arrid
+      for (let i = 0; i < arr.length; i++) {
+        this.loading = true
+        this.$axios({
+          method: 'post',
+          url: url,
+          data: {
+            medicineId: arr[i].id
+          }
+        })
+        .then(res => {
+          this.medicineLists.push(...res.data.data)
+          // this.medicineLists = this.medicineLists.concat(res.data.data)
+          this.medicineLists.sort(function (a, b) {
+            return b.id - a.id
+          })
+          this.loading = false
+        })
+      }
+      console.log(this.medicineLists)
+    },
+    medicineMsgHandle (val) {
+      this.showMedicineMsg = true
+      this.medicineMsg = val
     }
   },
   computed: {
-    medicineclass () {
-      let arr = []
-      this.medicines.forEach(item => {
-        let obj = {}
-        obj.id = item.id
-        obj.medicineName = item.medicineName
-        arr.push(obj)
-      })
-    },
-    medicinelists () {
 
-    }
-    // medicineType2 () {
-
-    // }
-  },
-  mounted () {
-    this.$axios({
-      method: 'post',
-      url: '/medicine/directory/list',
-      data: {
-        medicineType: 1
-      }
-    })
-      .then(res => {
-        // let ree = []
-        this.medicines = res.data.data
-        // this.medicineclass = this.medicines
-        // let ree = res.data.data
-        // ree.forEach(item => {
-
-        // })
-      })
-      .catch()
-    this.$axios({
-      method: 'post',
-      url: '/medicine/blood/list',
-      data: {
-        medicineId: 8
-      }
-    })
-      .then(res => {
-        // let ree = []
-        this.meds = res.data.data
-        // let ree = res.data.data
-        // ree.forEach(item => {
-
-        // })
-      })
-      .catch()
   }
+  // watch: {
+  //   medicineList: function (newval, oldval) {
+  //     if (!this.medicineList) {
+  //       this.medicineList = '暂无数据'
+  //     }
+  //     console.log(newval, oldval)
+  //   }
+  // }
+  // mounted () {
+  //   this.$axios({
+  //     method: 'post',
+  //     url: '/medicine/directory/list',
+  //     data: {
+  //       medicineType: 1
+  //     }
+  //   })
+  //     .then(res => {
+  //       // let ree = []
+  //       this.medicines = res.data.data
+  //       // this.medicineclass = this.medicines
+  //       // let ree = res.data.data
+  //       // ree.forEach(item => {
+
+  //       // })
+  //     })
+  //     .catch()
+  //   this.$axios({
+  //     method: 'post',
+  //     url: '/medicine/blood/list',
+  //     data: {
+  //       medicineId: 8
+  //     }
+  //   })
+  //     .then(res => {
+  //       // let ree = []
+  //       this.meds = res.data.data
+  //       // let ree = res.data.data
+  //       // ree.forEach(item => {
+
+  //       // })
+  //     })
+  //     .catch()
+  // }
 }
 </script>
 
-<style>
+<style scoped>
+  .medicine-lists{
+    height: 600px;
+  }
+  .medicine{
+    /* box-sizing:border-box; */
+  }
+  .medicine-div{
+    height: 250px;
+    margin: 10px;
+    border: 1px solid #dddddd;
 
+  }
+  .medicine p{
+    text-align: center
+  }
+  .medicine-img{
+    /* width: 90px; */
+    height: 90px;
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .medicine-img{
+    width: 90%
+  }
+  .clear::after{
+    display:block;
+    clear:both;
+    content:"";
+    visibility:hidden;
+    height:0
+  }
+  .medicine-msg-btn{
+    float: right;
+    margin: 5px;
+  }
+  .dialog-img{
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+    float: left;
+  }
+  .dialog-msg{
+    position:relative;
+    text-align: center;
+  }
+  .dialog-img img{
+    width: 90%;
+  }
+  .dialog-status{
+    width: 50%;
+    float: left;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%);
+  }
+  .medicine-name{
+    font-weight: bold;
+  }
+  .price{
+    color: #FC5568;
+    font-weight: bold;
+  }
+</style>
+<style>
+  .dialog{
+    box-shadow: 0 1px 0px rgba(245, 231, 231, 0.3) !important;
+  }
+  .dialog-html b{
+    color:blueviolet;
+  }
 </style>

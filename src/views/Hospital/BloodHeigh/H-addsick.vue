@@ -1,18 +1,22 @@
 <template>
   <div>
-      <el-row type="flex" justify="space-between">
-          <el-col :span="8">
-              <p>{{ hospitalName }}</p>
-              <el-button size="small" type="primary" @click="addSick">添加病人</el-button>
-          </el-col>
-          <el-col :span="16">
+      <!-- <el-row type="flex" justify="space-between"> -->
+        <el-button @click="goanchor('#anchor')">
+        anchor
+      </el-button>
+          <el-card :body-style="{ padding: '30px 20px' }">
+              <p class="hospitalName">{{ hospitalName }}</p>
+              <p class="hospital-msg">{{ hospitalAddress }} {{ hospitalDoctorNum }}名医生,{{ hospitalNanaNum }}名护士</p>
+              <!-- <el-button size="small" type="primary" @click="addSick">添加病人</el-button> -->
+          </el-card>
+          <!-- <el-col :span="16">
             <div class='add-sick-right'>
               <p>{{ date }}</p>
               <p>{{adminInfoAdd.username}}</p>
               <p>{{ hospitalAddress }} {{ hospitalDoctorNum }}名医生,{{ hospitalNanaNum }}名护士</p>
             </div>
-          </el-col>
-      </el-row>
+          </el-col> -->
+      <!-- </el-row> -->
   </div>
 </template>
 
@@ -58,7 +62,7 @@ export default {
         if (state.adminInfo && state.adminInfo.address) {
           return '诊所位于' + state.adminInfoaddress + ','
         } else {
-          return ''
+          return '诊所位置信息'
         }
       }
     })
@@ -67,6 +71,21 @@ export default {
     // HospitalApi,
     addSick () {
       this.$router.push({name: 'addSick'})
+    },
+    goanchor (el) {
+      let anchor = document.getElementById('anchor')
+      console.log(anchor.offsetTop)
+      console.log(this.$el.offsetTop)
+      let scrollrange = 500
+      let i = 0
+      let scroll = setInterval(() => {
+        if (i < scrollrange) {
+          i += 50
+          window.scrollTo(0, i)
+        } else if (i >= scrollrange) {
+          clearInterval(scroll)
+        }
+      }, 50)
     }
   },
   // watch: {
@@ -91,7 +110,21 @@ export default {
 </script>
 
 <style scoped>
-  .add-sick-right{
+  /* .add-sick-right{
     text-align: right;
+  } */
+  .hospitalName{
+    margin: 0;
+    padding: 0;
+    font-size: 32px;
+    color:#041421;
+    /* font-weight: bold; */
+  }
+  .hospital-msg{
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    color: #666;
+    margin-top: 10px;
   }
 </style>

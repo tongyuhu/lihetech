@@ -8,7 +8,7 @@
 import session from './untils/session'
 import {routeMatch, roleMatch} from './untils/routerMatch'
 import fullpath from './router/fullpath'
-import { newsickaskDataApi } from './api/views/Hospital/BloodHeigh/H-work'
+// import { newsickaskDataApi } from './api/views/Hospital/BloodHeigh/H-work'
 import Bus from './bus'
 // import qs form 'qs'
 export default {
@@ -46,8 +46,21 @@ export default {
 
         // 设置http response拦截
         this.$axios.interceptors.response.use(
-          response => {
-            return response
+          res => {
+            if (res.code === '1004' || res.code === '1005') {
+              this.$confirm('未登录或登陆超时', '确定登出', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+              }).then(() => {
+                sessionStorage.clear()
+                this.$router.push({path: '/login'})
+                location.reload()
+              })
+              return Promise.reject(res)
+            } else {
+              return res
+            }
           },
           error => {
             if (error.response) {
@@ -60,7 +73,7 @@ export default {
                   })
               }
             }
-            return Promise.reject(error.response.data)
+            return Promise.reject(error.response)
           }
         )
         // this.$router.beforeEach((to, from, next) => {
@@ -95,7 +108,7 @@ export default {
         // 获取 路由信息
         // 若无路由信息 限制访问
           let role = ''
-          if (res.data.data.adminType) {
+          if (res.data && res.data.data && res.data.data.adminType) {
             switch (res.data.data.adminType) {
               case 1:
                 role = 'admin'
@@ -112,19 +125,18 @@ export default {
               default:
                 role = null
             }
+            // let router = routeMatch(res.data.route, fullpath)
+            let router = roleMatch(role, fullpath)
+            // 动态注入路由 addroute
+            this.$router.addRoutes(router)
+            this.$router.replace({
+              name: 'Home'
+            })
           } else {
             this.$router.replace({
               name: 'login'
             })
           }
-          // let router = routeMatch(res.data.route, fullpath)
-          let router = roleMatch(role, fullpath)
-          // 动态注入路由 addroute
-          console.log(router)
-          this.$router.addRoutes(router)
-          this.$router.replace({
-            name: 'Home'
-          })
         })
         .catch()
         // this.$router.beforeEach(to,from,next){

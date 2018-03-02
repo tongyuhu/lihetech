@@ -1,40 +1,32 @@
 <template>
-  <div >
-      <el-row>
-          <el-col :span="12">
-              <div class="head-left">
-                  <p>立阖泰科技</p>
-                  <p>立德济世 阖泰天下</p>
-              </div>
-          </el-col>
-          <el-col :span="12">
-            <div class="head-right">
-              <div class="admin-name">
+  <div class="head clear">
+     
+        <div class="head-logo">
+          <img src="./../../../static/hospitalIcon/诊所-icon-01.png" alt="logo" class="head-logo-img">
+        </div>
+        <div class="head-left">
+            <p>立德济世 阖泰天下</p>
+        </div>
+        
+        <div class="dropdown head-right ma" @click.self="show">
+          <span @click.self="show" class="setting"><i class="el-icon-setting setting"></i>账户设置</span>
+          <div class="shade" v-show="showshade" @click="isshowshade"></div>
+          <div class="dropdown-content" :class="{show:isshow}">
+            <button class="setting-btn" @click="lookMsg">查看消息</button>
+            <button class="setting-btn" @click="editDoc">编辑资料</button>
+            <button class="setting-btn" @click="changePasswordDialogHandle">密码修改</button>
+            <button class="setting-btn" @click="exit">退出</button>
+          </div>
+        </div>
 
-                <p>{{ adminName }}</p>
-              </div>
-                  <el-popover
-                  ref="H-admin"
-                  placement="top"
-                  width="145"
-                  trigger="click">
-                    <el-row :gutter="8" type="flex" justify="center" align="center">    
-                      <el-col :span="10" class="admin-icon">
-                        <img :src="adminIcon" alt="" width="50px">
-                      </el-col>
-                      <el-col :span="14">
-                        <p>{{ adminRoot }}</p>
-                        <el-button size="mini" @click="lookMsg" class="btn">查看消息</el-button> 
-                        <el-button size="mini" @click="editDoc" class="btn">编辑资料</el-button> 
-                        <el-button size="mini" @click="changePasswordDialogHandle" class="btn">密码修改</el-button> 
-                        <el-button size="mini" @click="exit" class="btn">退出</el-button>
-                      </el-col>
-                    </el-row>
-                  </el-popover>
-                <el-button v-popover:H-admin size="mini" @click="adminAccount">账户管理</el-button>
-              </div>
-          </el-col>
-      </el-row>
+        
+        <div class="head-right ma">
+          <span class="head-right">{{ adminName }}</span>
+        </div>
+        <div class="head-right">
+            <img :src="adminIcon" alt="user" class="admin-icon">
+        </div>
+  
       <el-dialog
         title="修改密码"
         :visible.sync="changePasswordDialog"
@@ -115,6 +107,8 @@ export default {
     return {
       // adminName: '胡小方',
       // adminRoot: '管理员',
+      isshow: false,
+      showshade: false,
       adminIcon: './../../../static/admin.jpg',
       labelPosition: 'center',
       changePasswordForm: {
@@ -171,20 +165,31 @@ export default {
     }
   },
   methods: {
+    show () {
+      this.isshow = !this.isshow
+      this.showshade = true
+    },
+    isshowshade () {
+      this.isshow = false
+      this.showshade = false
+    },
     lookMsg () {
       // this.$router.replace({
       //   name: 'accountSetting'
       // })
+      this.isshowshade()
       this.$router.push({
         name: 'accountSetting'
       })
     },
     editDoc () {
+      this.isshowshade()
       this.$router.push({
         name: 'accountSetting'
       })
     },
     changePasswordDialogHandle () {
+      this.isshowshade()
       this.changePasswordDialog = true
       setTimeout(() => {
         this.$refs['changpasswordRef'].resetFields()
@@ -195,6 +200,7 @@ export default {
 
     },
     exit () {
+      this.isshowshade()
       this.$router.push({
         name: 'login',
         params: {
@@ -211,32 +217,152 @@ export default {
 </script>
 
 <style scoped>
+  .ma{
+    margin-right: 30px;
+  }
+  .clear::after{
+    display:block;
+    clear:both;
+    content:"";
+    visibility:hidden;
+    height:0
+  }
+    .head{
+      height: 80px;
+      position:relative;
+    }
+    .head-logo{
+      float: left;
+      width: 250px;
+      background-color: #1991fc;
+      height: 80px;
+      position:relative;
+    }
+    .head-logo-img{
+      display: block;
+      margin-left: 40px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
     p{
         margin: 0;
         text-align: center;
     }
     .head-left{
-        float: left;
+      float: left;
+      vertical-align: middle;
+      margin-left: 24px;
+      position: absolute;
+      top: 50%;
+      left: 250px;
+      transform: translateY(-50%);
+      font-size: 14px;
     }
     .head-right{
-        float: right;
-        text-align: center;
+      font-size: 14px;
+      float: right;
+      text-align: center;
+      color: #666;
+      vertical-align: middle;
+      line-height: 80px;
+      /* position: absolute;
+      top: 50%;
+      right: 250px;
+      transform: translateY(-50%); */
     }
-   .el-col-16{
-     text-align: center;
-   }
    .admin-icon{
-     margin-top:25%;
+     width: 34px;
+     height: 34px;
+     border-radius: 50%;
+     box-shadow: 0 0 0 1px #dedede;
+     display:inline;
+     vertical-align:middle;
+     margin-right: 5px;
    }
-   .btn{
+   /* .btn{
+     color: #fff;
      display: block;
      margin: 0;
      margin-top:5px;
      width: 80px;
+     text-align: center;
+   } */
+   .setting{
+     color: #666;
    }
-   .admin-name{
-     padding-top:5px;
-     height: 23px;
-     /* height: 26px; */
+   .el-dropdown-link{
+     cursor: pointer;
    }
+   .el-dropdown-menu{
+     background-color: 
+       #1991fc;
+     /* color: #1991fc; */
+   }
+   .dropdown {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+    }
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top:70px;
+  right: -20px;
+  background-color: #1991fc;
+  min-width: 100px;
+  line-height: 30px;
+  z-index: 9999;
+}
+.dropdown-content::before{
+    top: -20px;
+    right: 40px;
+    position: absolute;
+    content: '';
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-bottom: 10px solid #1991fc;
+}
+.show{
+  display: block;
+}
+.shade{
+  position: fixed;
+  top:0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  /* background-color: black; */
+  z-index: 998;
+  cursor: default;
+}
+.setting{
+  padding-right: 5px;
+}
+.setting-btn{
+  border:none;
+  background-color: #1991fc;
+  color: #fff;
+  width: 100%;
+  height: 30px;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+  line-height: 30px;
+  margin: 5px 0;
+}
+.setting-btn:hover{
+  border:none;
+  background-color: #1475cc;
+  color: #fff;
+}
+</style>
+<style>
+  .popper__arrow::after {
+    top: 1px;
+    margin-left: -6px;
+    border-top-width: 0;
+    border-bottom-color: #1991fc;
+  }
 </style>

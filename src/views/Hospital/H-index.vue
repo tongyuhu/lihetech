@@ -2,16 +2,16 @@
 
 <template>
     <div>
-        <el-container>
-            <el-header>
+        <el-container >
+            <el-header style="height: 80px;" class="header">
                 <H-Head></H-Head>
             </el-header>
             <el-container>
-                    <el-aside width="150px" class="sider">
+                    <el-aside width="250px" class="sider">
                         <H-Sider></H-Sider>
                     </el-aside>
                 <el-container>
-                    <el-main>
+                    <el-main class="main">
                         <router-view></router-view>
                     </el-main>
                     <!-- <el-footer class="footer">
@@ -40,9 +40,10 @@
 
 <style scoped>
     .el-header {
-        background-color: #95b4cf;
-        border-bottom: 1px solid #95b4cf;
-        color: #fff;
+        background-color: #fff;
+        /* border-bottom: 1px solid #95b4cf; */
+        box-shadow: 0px 4px 4px 0 rgba(66, 53, 53, 0.103);
+        padding: 0px;
     }
     .footer{
       text-align: center;
@@ -50,6 +51,20 @@
     }
     .sider{
       background-color: #1991fc;
-      /* height: 100%; */
+      font-size: 16px;
+      color: #fff;
+      
+    }
+    main{
+      padding: 24px;
+      background-color: #f4f6f9;
+      /* position: fixed;
+      top:80px;
+      left: 250px; */
+    }
+    .header{
+      /* position: absolute; */
+      /* position: fixed; */
+      /* top:0; */
     }
 </style>

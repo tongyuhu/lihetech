@@ -37,8 +37,8 @@ import session from './../untils/session'
 export default {
   data () {
     return {
-      password: '',
-      userAccount: '',
+      password: '123456',
+      userAccount: 'chen',
       isBtnLoading: false
     }
   },
@@ -76,7 +76,7 @@ export default {
         this.$axios(sendUserMsg(loginParams))
           .then(res => {
             vm.isBtnLoading = true
-            if (res.data.result) {
+            if (res.data.data) {
               if (res.data.data.admin_token && !(res.data.data.admin_token.length === 0)) {
                 // 保存token到本地
                 session('token', res.data.data.admin_token)
