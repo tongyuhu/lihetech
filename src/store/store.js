@@ -9,9 +9,6 @@ export const store = new Vuex.Store({
     adminInfo: {}
   },
   getters: {
-    // add: state => {
-    //   return state.a + 1
-    // }
   },
   mutations: {
     [SET_ADMIN_INFO] (state, info) {

@@ -45,7 +45,10 @@ export default {
     pathname: {
       default: 'Home'
     },
-    index: ''
+    index: '',
+    isOpen: {
+      default: false
+    }
     // menuitem: []
   },
   data () {
@@ -53,32 +56,21 @@ export default {
       open: false,
       fmenuactive: false,
       showicon: true,
-      showitemicon: false,
-      menuitem: [
-        {
-          id: 1,
-          title: '整体分布'
-        },
-        {
-          id: 2,
-          title: '最新问诊'
-        },
-        {
-          id: 3,
-          title: '严重患者'
-        }
-      ]
-      // iconName: 'height-blood'
+      showitemicon: false
     }
   },
   methods: {
     toggle (event) {
       event.stopPropagation()
       // this.iconName =
-      this.open = !this.open
-      this.fmenuactive = !this.fmenuactive
-      this.showicon = !this.showicon
+      this.open = true
+      this.fmenuactive = true
+      this.showicon = false
+      // this.open = !this.open
+      // this.fmenuactive = !this.fmenuactive
+      // this.showicon = !this.showicon
       Bus.$emit('resetmenu', this.index)
+      Bus.$emit('resetmenuitem', 'Fmenu')
       // console.log(this.index)
     },
     itemHandle () {
@@ -96,15 +88,25 @@ export default {
     }
   },
   mounted () {
+    if (this.isOpen) {
+      this.open = true
+      this.fmenuactive = true
+      this.showicon = false
+    }
     Bus.$on('resetmenu', (val) => {
       if (this.index === val) {
-
       } else {
         this.open = false
         this.fmenuactive = false
         this.showicon = true
       }
-      // console.log(val)
+    })
+    Bus.$on('closemenu', (val) => {
+      if (this.index === val) {
+        this.open = false
+        this.fmenuactive = true
+        this.showicon = false
+      }
     })
   }
 }

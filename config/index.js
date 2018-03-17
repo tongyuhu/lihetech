@@ -13,7 +13,9 @@ module.exports = {
     // proxyTable: {},
     proxyTable: {
       '/api': {
+        // target: 'http://139.196.204.123:80/BPWatch/admin/', // 线上环境
         target: 'http://139.196.204.123:80/BPWatch/admin/', // 线上环境
+
         // target: 'http://chengang99.xin:8088/BPWatch/admin/', //设置你调用的接口域名和端口号 别忘了加http
         changeOrigin: true,
         pathRewrite: {
@@ -24,7 +26,9 @@ module.exports = {
     },
 
     // Various Dev Server settings
-    host: 'localhost', // can be overwritten by process.env.HOST
+    // host: '180.173.43.179', // can be overwritten by process.env.HOST
+    host: '10.7.6.58', // can be overwritten by process.env.HOST  
+    // host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

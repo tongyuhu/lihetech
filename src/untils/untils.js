@@ -81,7 +81,7 @@ export const buildMenu = (array, ckey) => {
     } else if (Array.isArray(indexKeys)) {
       // 检测ckey有效性
       let parentIndex = indexKeys.findIndex(id => {
-        return id == e[ckey]          /// //////////////////    ???????
+        return id === e[ckey]          /// //////////////////    ???????
       })
       if (parentIndex === -1) {
         menuData.push(e)

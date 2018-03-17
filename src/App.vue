@@ -162,4 +162,12 @@ export default {
   /* text-align: center; */
   color: #2c3e50;
 }
+  .clear::after{
+    display:block;
+    clear:both;
+    content:"";
+    visibility:hidden;
+    height:0;
+    width: 0;
+  }
 </style>

@@ -1,32 +1,42 @@
-export const newsickaskDataApi = (page) => {
+export const newsickaskDataApi = (HospitalId, page, Size) => {
   return {
     method: 'post',
-    url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickMsgPost',
+    url: '/wholePoint/blood/casesCard/list',
     data: {
-      newsickaskData: '最新患者问诊患者列表',
-      toPage: page
+      'adminHospitalId': HospitalId,
+      'pageNum': page,
+      'pageSize': Size
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     timeout: 10000
   }
 }
-export const badsickDataApi = {
-  method: 'post',
-  url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/badsick',
-  data: {
-    badsickData: '严重患者问诊患者列表'
-  },
-  headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-  timeout: 10000
+export const badsickDataApi = (adminHospitalId, pageNum, pageSize) => {
+  return {
+    method: 'post',
+    url: '/wholePoint/blood/serious/list',
+    data: {
+      'adminHospitalId': adminHospitalId,
+      'pageNum': pageNum,
+      'pageSize': pageSize
+    },
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    timeout: 10000
+  }
 }
-export const noListenDoctorDataApi = {
-  method: 'post',
-  url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/noListenDoctorData',
-  data: {
-    noListenDoctorData: '不遵医嘱患者问诊患者列表'
-  },
-  headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-  timeout: 10000
+export const noListenDoctorDataApi = (adminHospitalId, pageNum, pageSize) => {
+  return {
+
+    method: 'post',
+    url: '/wholePoint/blood/notDocus/list',
+    data: {
+      'adminHospitalId': adminHospitalId,
+      'pageNum': pageNum,
+      'pageSize': pageSize
+    },
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    timeout: 10000
+  }
 }
 export const unperfectMsgDataApi = {
   method: 'post',

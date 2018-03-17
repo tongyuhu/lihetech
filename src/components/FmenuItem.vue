@@ -1,6 +1,6 @@
 <template>
   <!-- <ul class="fmenu-item" v-show="open"> -->
-    <li class="fmenu-item-li" @click.stop="itemHandle" :class="{'background':back}">
+    <li class="fmenu-item-li" @click.stop="itemHandle"  :class="{'background':back}">
       <i v-show="showitemicon" class="fmenu-item-icon"></i>
       {{title}}
       <!-- 11111 -->
@@ -16,6 +16,7 @@ export default {
     title: {
       default: '子菜单'
     },
+    id: '',
     index: ''
   },
   data () {
@@ -28,8 +29,9 @@ export default {
   methods: {
     itemHandle (event) {
       event.stopPropagation()
-      this.showitemicon = !this.showitemicon
+      this.showitemicon = true
       this.back = !this.back
+      this.$emit('activeitemmenu', this.id)
       Bus.$emit('resetmenuitem', this.index)
       // console.log(this.index)
     }

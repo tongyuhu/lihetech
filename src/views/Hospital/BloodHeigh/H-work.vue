@@ -17,18 +17,18 @@
     <!-- 工作台 end -->
 
       <!-- 患者最新问诊  start -->
-      <div class="bottom-margin">
+      <div class="bottom-margin" id="bloodnew">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">患者最新问诊</p>
           </div>
           <div class="table">
             <el-table 
-                :data='newsickaskData.sickList'
+                :data='newsickaskData.data'
                 style="width: 100%"
                 row-class-name="table-row">
                 <el-table-column
-                    prop="name"
+                    prop="realName"
                     label="姓名"
                     label-class-name="tableTitle"
                     class-name="table-col"
@@ -36,18 +36,18 @@
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
                       :style="{'color':'#1991fc'}">
-                        {{scope.row.name}}
+                        {{scope.row.realName}}
                       </el-button>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="asktime"
+                    prop="createTime"
                     label="问诊时间"
                     label-class-name="tableTitle"
                     width="200">
                 </el-table-column>
                 <el-table-column
-                    prop="asktopic"
+                    prop="readme"
                     label="咨询主题"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -65,12 +65,12 @@
           <div class="page">
             <el-pagination
               class="el-pagination"
-              @size-change="handleSizeChange"
-              @current-change="newaskChangepage"
-              :current-page.sync="currentPage"
-              :page-size="newsickaskData.pageSize"
+              @size-change="newAskSizeChange"
+              @current-change="newAskCurrentChange"
+              :current-page.sync="newAskCurrentPage"
+              :page-size="newAskPageSize"
               layout="total, prev, pager, next, jumper"
-              :total="newsickaskData.totalPage"
+              :total="newAskTotal"
               prev-text="上一页"
               next-text="下一页">
             </el-pagination>
@@ -80,25 +80,25 @@
       <!-- 患者最新问诊  end -->
 
       <!-- 严重患者 start -->
-      <div class="bottom-margin">
+      <div class="bottom-margin" id="bloodbad">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">严重患者({{ badSickRate }})</p>
+            <p class="title">严重患者({{ badsickData.recordCount }})</p>
           </div>
           <div class="table">
 
             <el-table 
-                :data='badsickData'
+                :data='badsickData.data'
                 style="width: 100%"
                 row-class-name="table-row">
                 <el-table-column
-                    prop="name"
+                    prop="realName"
                     label="姓名"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
                       :style="{'color':'#1991fc'}">
-                        {{scope.row.name}}
+                        {{scope.row.realName}}
                       </el-button>
                     </template>
                 </el-table-column>
@@ -108,17 +108,20 @@
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
-                    prop="badrate"
+                    prop="bastThan"
                     label="严重比例"
                     label-class-name="tableTitle">
+                    <template slot-scope="scope">   
+                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                                        
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="todaytimes"
+                    prop="nowCount"
                     label="今日严重次数"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
-                    prop="addtime"
+                    prop="joinHospitalTime"
                     label="加入时间"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -130,20 +133,12 @@
                         <el-button 
                         size="mini" 
                         type="primary" 
-                        @click.native="care(scope.$index,badsickData)" 
+                        @click.native="isCare(scope.$index,badsickData.data)" 
                         :key="scope.row.id" 
                         :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
-                        v-if="scope.row.care">
-                          {{careText(scope.row.care)}}
-                        </el-button>
-                        <el-button 
-                        v-else
-                        size="mini" 
-                        type="plain" 
-                        @click.native="care(scope.$index,badsickData)" 
-                        :key="scope.row.id" :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
                         >
-                          {{careText(scope.row.care)}}
+                          <span v-if="scope.row.isDocusOn">取消关注</span>
+                          <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
                         :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
@@ -159,12 +154,12 @@
           <div class="page">
             <el-pagination
               class="el-pagination"
-              @size-change="handleSizeChange"
-              @current-change="badsickChangepage"
-              :current-page.sync="currentPage"
-              :page-size="newsickaskData.pageSize"
+              @size-change="badsickSizeChange"
+              @current-change="badsickCurrentChange"
+              :current-page.sync="badsickCurrentPage"
+              :page-size="badsickPageSize"
               layout="total, prev, pager, next, jumper"
-              :total="newsickaskData.totalPage"
+              :total="badsickTotal"
               prev-text="上一页"
               next-text="下一页">
             </el-pagination>
@@ -174,7 +169,7 @@
       <!-- 严重患者结束 end -->
 
       <!-- 未遵医嘱患者 start -->
-      <div class="bottom-margin">
+      <div class="bottom-margin" id="bloodnolisten">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">未遵医嘱患者({{noListenDoctorRate }})</p>
@@ -182,37 +177,43 @@
           <div class="table">
 
             <el-table 
-                :data='noListenDoctorData'
+                :data='noListenDoctorData.data'
                 style="width: 100%"
                 row-class-name="table-row">
                 <el-table-column
-                    prop="name"
+                    prop="realName"
                     label="姓名"
                     label-class-name="tableTitle">
                       <template slot-scope="scope">
                         <el-button type="text" @click="diagnose(scope.row)"
                         :style="{'color':'#1991fc'}">
-                          {{scope.row.name}}
+                          {{scope.row.realName}}
                         </el-button>
                       </template>
                 </el-table-column>
                 <el-table-column
                     prop="sicktype"
-                    label="sicktype"
+                    label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
-                    prop="badrate"
-                    label="严重比例"
+                    prop="bastThan"
+                    label="未遵医嘱比例"
                     label-class-name="tableTitle">
+                    <template slot-scope="scope">   
+                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                                        
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="noListenDoctor"
+                    prop="notCount"
                     label="未遵医嘱"
                     label-class-name="tableTitle">
+                    <template slot-scope="scope">   
+                      <span> {{scope.row.notCount}}天（共{{scope.row.count}}）</span>                                        
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="addtime"
+                    prop="joinHospitalTime"
                     label="加入时间"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -227,20 +228,16 @@
                         @click.native="care(scope.$index,noListenDoctorData)" 
                         :key="scope.row.id" 
                         :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
-                        v-if="scope.row.care">
-                          {{careText(scope.row.care)}}
-                        </el-button>
-                        <el-button 
-                        v-else
-                        size="mini" 
-                        type="primary" 
-                        @click.native="care(scope.$index,noListenDoctorData)" 
-                        :key="scope.row.id" :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
                         >
-                          {{careText(scope.row.care)}}
+                          <span v-if="scope.row.isDocusOn">取消关注</span>
+                          <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
+
+                        <el-button size="mini" type="primary" 
+                        @click="diagnose(scope.row)" 
+                        :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">
+                        诊断
+                        </el-button>
                         <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
@@ -250,12 +247,12 @@
           <div class="page">
             <el-pagination
               class="el-pagination"
-              @size-change="handleSizeChange"
-              @current-change="nolistenChangepage"
-              :current-page.sync="currentPage"
-              :page-size="newsickaskData.pageSize"
+              @size-change="nolistenSizeChange"
+              @current-change="nolistenCurrentchange"
+              :current-page.sync="nolistenCurrentPage"
+              :page-size="nolistenPageSize"
               layout="total, prev, pager, next, jumper"
-              :total="newsickaskData.totalPage"
+              :total="nolistenTotal"
               prev-text="上一页"
               next-text="下一页">
             </el-pagination>
@@ -266,7 +263,7 @@
       <!-- 未遵医嘱患者 end -->
 
       <!-- 建档不完整患者 start -->
-      <div>
+      <div id="bloodunperfect">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">建档不完整患者({{unperfectMsgRate}})</p>
@@ -362,6 +359,7 @@
 
 <script>
 // import from './../../../../诊所-高血压/hospitalIcon/诊所-icon-21.png'
+import { mapState } from 'vuex'
 import {careText, care} from './../../../untils/untils'
 import {
   newsickaskDataApi,
@@ -380,14 +378,34 @@ export default {
       badSickRate: '',
       noListenDoctorRate: '',
       unperfectMsgRate: '',
-      newsickaskData: {},
-      badsickData: [],
-      noListenDoctorData: [],
       unperfectMsgData: [],
       currentPage: 1,
-      // page: 'page'
-      totalSize: 15
+      totalSize: 15,
+      // 整理后数据
+      newsickaskData: {},
+      badsickData: {},
+      noListenDoctorData: {},
+
+      adminHospitalId: '',
+      careState: '',
+
+      newAskCurrentPage: 1,
+      newAskPageSize: 5,
+      newAskTotal: 1,
+
+      badsickCurrentPage: 1,
+      badsickPageSize: 5,
+      badsickTotal: 1,
+
+      nolistenCurrentPage: 1,
+      nolistenPageSize: 5,
+      nolistenTotal: 1
     }
+  },
+  computed: {
+    ...mapState({
+      admin: state => state.adminInfo
+    })
   },
   methods: {
     jumppage (page) {
@@ -395,21 +413,73 @@ export default {
     },
     careText,
     care,
-    handleSizeChange (val) {  // 患者最新问诊
+    isCare (index, val) {
+      val[index].isDocusOn = !val[index].isDocusOn
+      console.log(index, val)
+      // care = !care
+    },
+    newAskRequest (params) {
+      params.hospitalId = params.hospitalId || this.adminHospitalId
+      this.$axios(newsickaskDataApi(
+        params.hospitalId, params.currentPage, params.pageSize
+      )).then(res => {
+        this.newsickaskData = res.data
+        this.newAskTotal = res.data.recordCount
+        this.newAskPageSize = res.data.pageSize
+        console.log(res.data)
+      })
+    },
+    newAskSizeChange (val) {  // 患者最新问诊  每页显示数量变化
       console.log(`每页 ${val} 条`)
     },
-    newaskChangepage (val) {   // 患者最新问诊页数变化
-      console.log(`当前页: ${val}`)
-      this.newsickaskDataRUS()
+    newAskCurrentChange (val) {   // 患者最新问诊页数变化
+      this.newAskRequest({
+        hospitalId: this.adminHospitalId,
+        currentPage: val,
+        pageSize: this.newAskPageSize
+      })
     },
-    badsickChangepage (val) {   // 患者最新问诊页数变化
-      console.log(`当前页: ${val}`)
-      this.newsickaskDataRUS()
+
+    badsickRequest (params) {
+      params.hospitalId = params.hospitalId || this.adminHospitalId
+      this.$axios(badsickDataApi(
+        params.hospitalId, params.currentPage, params.pageSize
+      )).then(res => {
+        this.badsickData = res.data
+        this.badsickTotal = res.data.recordCount
+        this.badsickPageSize = res.data.pageSize
+      })
     },
-    nolistenChangepage (val) {   // 患者最新问诊页数变化
-      console.log(`当前页: ${val}`)
-      this.newsickaskDataRUS()
+
+    badsickSizeChange (val) {},
+    badsickCurrentChange (val) {
+      this.badsickRequest({
+        hospitalId: this.adminHospitalId,
+        currentPage: val,
+        pageSize: this.badsickPageSize
+      })
     },
+
+    nolistenRequest (params) {
+      params.hospitalId = params.hospitalId || this.adminHospitalId
+      this.$axios(noListenDoctorDataApi(
+        params.hospitalId, params.currentPage, params.pageSize
+      )).then(res => {
+        this.noListenDoctorData = res.data
+        this.nolistenTotal = res.data.recordCount
+        this.nolistenPageSize = res.data.pageSize
+      })
+    },
+    nolistenSizeChange (val) {},
+    nolistenCurrentchange (val) {
+      this.nolistenRequest({
+        hospitalId: this.adminHospitalId,
+        currentPage: val,
+        pageSize: this.nolistenPageSize
+      })
+    },
+    handleSizeChange () {},
+
     unperfectChangepage (val) {   // 患者最新问诊页数变化
       console.log(`当前页: ${val}`)
       this.newsickaskDataRUS()
@@ -423,13 +493,12 @@ export default {
     diagnose (row) {
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: row.id
-          // sickName: row.name,
-          // sickId: row.id
+          sickID: row.userId,
+          hospitalId: row.adminHospitalId
         }})
     },
     call (row) {
-      console.log(row.id)
+      console.log(row.mobile)
     },
     handlePersonMsg (row, column, cell, event) {
       // console.log(row, column, cell, event)
@@ -440,7 +509,7 @@ export default {
       // console.log(row.name)
     },
     newsickaskDataRUS  () {
-      return this.$axios(newsickaskDataApi(this.currentPage))
+      // return this.$axios(newsickaskDataApi(this.currentPage))
     },
     badsickDataRUS  () {
       return this.$axios(badsickDataApi)
@@ -453,6 +522,25 @@ export default {
     }
   },
   mounted () {
+    if (this.admin && this.admin.adminHospitalId) {
+      this.adminHospitalId = this.admin.adminHospitalId
+    }
+    this.newAskRequest({
+      hospitalId: this.adminHospitalId,
+      currentPage: this.newAskCurrentPage,
+      pageSize: this.newAskPageSize
+    })
+    this.badsickRequest({
+      hospitalId: this.adminHospitalId,
+      currentPage: this.badsickCurrentPage,
+      pageSize: this.badsickPageSize
+    })
+    this.nolistenRequest({
+      hospitalId: this.adminHospitalId,
+      currentPage: this.nolistenCurrentPage,
+      pageSize: this.nolistenPageSize
+    })
+
     this.$axios.all([
       this.newsickaskDataRUS(),
       this.badsickDataRUS(),
@@ -493,23 +581,11 @@ export default {
   font-size: 24px;
   color: #041421;
 }
-/* .table-col{
-  cursor: pointer;
-  color:rgb(29, 52, 155);
-}
-.table-col-label{
-  cursor: none;
-  color: rgb(13, 13, 14);
-} */
-.item{
-  /* margin-right: 20px; */
-}
+
 .page {
   margin-top:26px;
   margin-bottom: 24px;
   margin-right: 30px;
-  /* height: 60px; */
-  /* line-height: 60px; */
   font-size: 16px !important;
   text-align: right;
   vertical-align: middle;
@@ -571,14 +647,20 @@ export default {
   outline: none;
   background-color: #fff;
   height: 28px;
+  /* width: 30px; */
   padding: 0;
   margin:0;
   position: relative;
   cursor: pointer;
   margin-left: 10px;
 }
+.telephone-btn:hover{
+  background-color: #f5f7fa;
+}
 .telephone-btn-icon::after{
+  cursor: pointer;
   position: absolute;
+  /* top:0px;    */
   content: '';
   width: 30px;
   height: 27px;

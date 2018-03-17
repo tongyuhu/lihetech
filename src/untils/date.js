@@ -79,8 +79,11 @@ export const dateFormat = function (source, monthbefor, ignoreMinute) {
   }
 }
 
-export const daybefor = function (day, ignoreMinute) {
-  let myDate = new Date()
-  let value = myDate.getTime() - day * 86400000
+export const daybefor = function (sourceDay, day, ignoreMinute) {
+  let myDate = dateFormat(sourceDay, 0, 1)
+  let arr = myDate.split('-')
+  let myDate1 = Date(arr[0], arr[1], arr[2])
+  let date = new Date(myDate1)
+  let value = date.getTime() - day * 86400000
   return dateFormat(value, 0, ignoreMinute)
 }

@@ -1,9 +1,9 @@
 <template>
   <div class="head clear">
      
-        <div class="head-logo">
+        <!-- <div class="head-logo">
           <img src="./../../../static/hospitalIcon/诊所-icon-01.png" alt="logo" class="head-logo-img">
-        </div>
+        </div> -->
         <div class="head-left">
             <p>立德济世 阖泰天下</p>
         </div>
@@ -230,6 +230,7 @@ export default {
     .head{
       height: 80px;
       position:relative;
+      box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
     }
     .head-logo{
       float: left;

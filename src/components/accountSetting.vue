@@ -43,7 +43,8 @@
           </div>
           <el-table
           border
-          :data="doctorListData">
+          :data="doctorListData"
+          style="width: 100%">
             <el-table-column 
             label="姓名"
             prop="name">
@@ -414,7 +415,7 @@ export default {
   }
   .unread-tip::after{
     bottom: 0;
-    right: 0px;
+    right: 0;
     position: absolute;
     content: '';
     width: 0;

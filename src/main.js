@@ -13,6 +13,7 @@ import session from './untils/session'
 // 按需引入element-ui
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import Fbutton from './components/Fbutton.vue'
 // import {
 //   Container,
 //   Header,
@@ -90,7 +91,7 @@ Vue.use(ElementUI)
 // Vue.use(Pagination)
 // Vue.use(Dialog)
 // Vue.use(Loading)
-
+Vue.component('f-button', Fbutton)
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs

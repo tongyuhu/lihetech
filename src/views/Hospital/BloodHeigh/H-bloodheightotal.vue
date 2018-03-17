@@ -1,5 +1,5 @@
 <template>
-    <div class='tatalsick'>
+    <div class='tatalsick' id="bloodtotal">
       <!-- <el-row> -->
         <el-row type="flex" justify="start">
           <button v-for="(item,index) in checkDate" 
@@ -18,7 +18,7 @@
                   <div class="card-header">
                     <p class="title">患者分布</p>
                   </div>
-                  <div id='HBfenbu'  :style="{width:'450px',height:'250px'}"></div>
+                  <div id='HBfenbu'  :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
             <el-col :span='12'>
@@ -27,7 +27,7 @@
                   <div class="card-header">
                     <p class="title">患者走势</p>
                   </div>
-                  <div id='HBzoushi' :style="{width:'450px',height:'250px'}"></div>
+                  <div id='HBzoushi' :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
         </el-row>
@@ -69,7 +69,7 @@ export default {
       sickTrendData: [],
       heightbloodTotal: 1236,
       sickTrendDataX: [
-        ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00'],
+        ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
         ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
         [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月' ]
@@ -164,13 +164,14 @@ export default {
         // },
         grid: { // 直角坐标系内绘图网格
           show: false,
-          left: '20px',
-          // right: '60px',
-          top: '40px',
-          bottom: '24px',
-          width: '100%',
-          // height: '220',
-          containLabel: true
+          // left: 'auto',
+          // right: 'auto',
+          // left: '10%',
+          // top: '40px',
+          // bottom: '24px',
+          width: 'auto',
+          height: 'auto'
+          // containLabel: true
         },
       // toolbox: { // 工具栏
         // show: true
@@ -207,12 +208,12 @@ export default {
           boundaryGap: false,
           // minInterval: 1,
           interval: 0,
-          nameTextStyle: {
-            normal: {
-              color: '#666',
-              fontSize: 12
-            }
-          },
+          // nameTextStyle: {
+          //   normal: {
+          //     color: '#666',
+          //     fontSize: 12
+          //   }
+          // },
           splitLine: {
             show: false
           },

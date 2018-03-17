@@ -1,9 +1,5 @@
 <template>
-  <div class="sick-list" id="anchor">
-      <el-button @click="goanchor('#anchor')">
-        anchor
-      </el-button>
-
+  <div class="sick-list" id="bloodcases">
       <div class="sick-list-head">
         <p>高血压患者列表</p>
       </div>
@@ -103,46 +99,46 @@
                 <el-table
                 :data="sicklistData"
                 style="width: 100%">
-                    <el-table-column 
-                    prop="name"
-                    label="姓名"
-                    label-class-name="tableTitle">
-                      <template slot-scope="scope">
-                        <el-button type="text" @click="diagnose(scope.row)"
-                        :style="{'color':'#1991fc'}">
-                          {{scope.row.name}}
-                        </el-button>
-                      </template>
-                    </el-table-column>
-                    <el-table-column 
-                    prop="sicktype"
-                    label="患者类型"
-                    label-class-name="tableTitle">
-                    </el-table-column>
-                    <el-table-column 
-                    prop="badrate"
-                    label="严重比例"
-                    label-class-name="tableTitle">
-                    </el-table-column>
-                    <el-table-column 
-                    prop="badtimes"
-                    label="严重次数"
-                    label-class-name="tableTitle">
-                    </el-table-column>
-                    <el-table-column 
-                    prop="status"
-                    label="病情"
-                    label-class-name="tableTitle">
-                    </el-table-column>
-                    <el-table-column 
-                    prop="addtime"
-                    label="加入时间"
-                    label-class-name="tableTitle">
-                    </el-table-column>
-                    <el-table-column
-                    prop="action"
-                    label=""
-                    width="275px">
+                  <el-table-column 
+                  prop="name"
+                  label="姓名"
+                  label-class-name="tableTitle">
+                    <template slot-scope="scope">
+                      <el-button type="text" @click="diagnose(scope.row)"
+                      :style="{'color':'#1991fc'}">
+                        {{scope.row.name}}
+                      </el-button>
+                    </template>
+                  </el-table-column>
+                  <el-table-column 
+                  prop="sicktype"
+                  label="患者类型"
+                  label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column 
+                  prop="badrate"
+                  label="严重比例"
+                  label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column 
+                  prop="badtimes"
+                  label="严重次数"
+                  label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column 
+                  prop="status"
+                  label="病情"
+                  label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column 
+                  prop="addtime"
+                  label="加入时间"
+                  label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                  prop="action"
+                  label=""
+                  width="275px">
                     <template slot-scope="scope">
                         <el-button 
                         size="mini" 
@@ -167,7 +163,7 @@
                         <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
-                </el-table-column>
+                  </el-table-column>
                 </el-table>
               </div>
             </el-row>
@@ -260,21 +256,6 @@ export default {
     },
     selectName () {
       console.log(this.sicknameSelectData)
-    },
-    goanchor (el) {
-      let anchor = document.getElementById('anchor')
-      console.log(anchor.offsetTop)
-      console.log(this.$el.offsetTop)
-      let scrollrange = 500
-      let i = 0
-      let scroll = setInterval(() => {
-        if (i < scrollrange) {
-          i += 50
-          window.scrollTo(0, i)
-        } else if (i >= scrollrange) {
-          clearInterval(scroll)
-        }
-      }, 50)
     }
   },
   mounted () {

@@ -96,24 +96,31 @@
             </span>
       </el-menu-item>
     </el-menu> -->
-
+    <div class="head-logo">
+      <img src="./../../../static/hospitalIcon/诊所-icon-01.png" alt="logo" class="head-logo-img">
+    </div>
     <div
     v-for="item in menu"
     :key="item.id"
     class="menu"
     >
+    
       <Fmenu 
         :iconName="item.iconName"
         :title="item.title"
         :pathname="item.pathname"
-        :index="item.id">
+        :index="item.id"
+        :isOpen="item.open">
         <!-- <p>111</p> -->
         <!-- <li is="FmenuItem"></li> -->
         <FmenuItem
         v-for="i in item.child"
         :key="i.title"
         :title="i.title"
-        :index="i.index"></FmenuItem>
+        :index="i.index"
+        :id="i.id"
+        
+        @activeitemmenu="goanchor"></FmenuItem>
       </Fmenu>
 
     </div>
@@ -138,18 +145,37 @@ export default {
           iconName: 'heigh-blood',
           title: '高血压',
           pathname: 'booldheigh',
+          open: true,
           child: [
             {
+              id: 'bloodtotal',
               title: '总体趋势',
               index: 1
             },
             {
-              title: '总体',
+              id: 'bloodnew',
+              title: '最新问诊',
               index: 2
             },
             {
-              title: '总体分布',
+              id: 'bloodbad',
+              title: '严重患者',
               index: 3
+            },
+            {
+              id: 'bloodnolisten',
+              title: '未遵医嘱',
+              index: 4
+            },
+            {
+              id: 'bloodunperfect',
+              title: '建档不完善',
+              index: 5
+            },
+            {
+              id: 'bloodcases',
+              title: '患者列表',
+              index: 6
             }
           ]
         },
@@ -199,6 +225,37 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    goanchor (id) {
+      // console.log(id)
+      this.$nextTick(function () {
+        let anchor = document.getElementById(id)
+        let scrollrange = anchor.offsetTop
+        let currentanchor = document.documentElement.scrollTop
+        let i = currentanchor
+        let step = Math.abs((scrollrange - currentanchor) / 50)
+        if (scrollrange > currentanchor) {
+          let scroll = setInterval(() => {
+            i += step
+            window.scrollTo(0, i)
+            if (i >= scrollrange) {
+              clearInterval(scroll)
+            }
+          }, 10)
+        }
+        if (scrollrange < currentanchor) {
+          let scroll = setInterval(() => {
+            i -= step
+            window.scrollTo(0, i)
+            if (i <= scrollrange) {
+              clearInterval(scroll)
+            }
+          }, 10)
+        }
+      })
+      // console.log(step)
+    }
   }
 }
 </script>
@@ -208,9 +265,24 @@ export default {
     /* background-color: #1991fc; */
   }
   .menu{
+    /* position:relative; */
     border: none;
     font-size: 16px;
     color: #fff;
+  }
+  .head-logo{
+    /* float: left; */
+    width: 250px;
+    background-color: #1991fc;
+    height: 80px;
+    position:relative;
+  }
+  .head-logo-img{
+    display: block;
+    margin-left: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
   }
 </style>
 

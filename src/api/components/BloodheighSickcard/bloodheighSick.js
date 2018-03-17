@@ -1,11 +1,13 @@
 // 病人基本信息
-export const bloodheighSickDataApi = (setsickID) => {
+export const bloodheighSickDataApi = (params) => {
   return {
     method: 'post',
-    url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/bloodheighSickDataApi',
+    url: '/highBlood/userInfo',
     data: {
-      sickID: setsickID,
-      baseInfo: '病人基本信息'
+      'userId': params.userId,
+      'adminHospitalId': params.adminHospitalId,
+      'pageNum': params.pageNum,
+      'pageSize': params.pageSize
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     outtime: 10000
