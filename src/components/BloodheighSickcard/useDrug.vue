@@ -12,19 +12,19 @@
         </span>
         <span class="text-center">
           <img src="./../../../诊所-高血压/hospitalIcon/诊所-icon-35.png" alt="">
-          <span>利尿剂</span> 
+          <span>β受体阻滞剂</span> 
         </span>
         <span class="text-center">
           <img src="./../../../诊所-高血压/hospitalIcon/诊所-icon-36.png" alt="">
-          <span>利尿剂</span> 
+          <span>钙通道拮抗剂(CCB)</span> 
         </span>
         <span class="text-center">
           <img src="./../../../诊所-高血压/hospitalIcon/诊所-icon-37.png" alt="">
-          <span>利尿剂</span> 
+          <span>血管紧张素抑制剂(ACEI)</span> 
         </span>
         <span class="text-center">
           <img src="./../../../诊所-高血压/hospitalIcon/诊所-icon-38.png" alt="">
-          <span>利尿剂</span> 
+          <span>血管紧张素二受体阻滞剂(ARB)</span> 
         </span>
       </div>
       <!-- 图表 -->
@@ -39,6 +39,9 @@
 </template>
 
 <script>
+import {useDrugApi} from './../../api/components/BloodheighSickcard/useDrug'
+import {dateFormat} from './../../untils/date'
+// import {deepcopy} from './../../untils/untils'
 import echarts from 'echarts'
 import LI from './../../../诊所-高血压/hospitalIcon/诊所-icon-34.png'
 import B from './../../../诊所-高血压/hospitalIcon/诊所-icon-35.png'
@@ -46,25 +49,239 @@ import CCB from './../../../诊所-高血压/hospitalIcon/诊所-icon-36.png'
 import ACEI from './../../../诊所-高血压/hospitalIcon/诊所-icon-37.png'
 import ARB from './../../../诊所-高血压/hospitalIcon/诊所-icon-38.png'
 export default {
+  props: {
+    sickID: {
+      default: 0
+    },
+    hospitalId: {
+      default: 0
+    }
+  },
   data () {
     return {
+      data: [
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-07 18:46:50'
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-07 12:25:43'
 
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-07 08:25:43'
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-08 18:46:50'
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-09 12:25:43'
+
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-10 18:25:43'
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-08 08:46:50'
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-09 02:25:43'
+
+        },
+        {
+          'sysMedicineName': 'ACEI',
+          'takeMedicineTime': '2018-03-10 18:25:43'
+        }
+      ],
+      optionData: [],
+      xasis: []
     }
   },
   methods: {
-    useDrugOption () {
-      var hours = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+    getData () {
+      let vm = this
+      let params = {
+        'userId': vm.sickID,
+        'adminHospitalId': vm.hospitalId,
+        'bpMeasureTime': vm.bpMeasureTime || ''
+      }
+      this.$axios(useDrugApi(params))
+      .then(res => {
+        // console.log(res.data)
+        if (res.data.data) {
+          res.data.data.forEach((item, index) => {
+            this.$set(this.data, index, item)
+          })
+          this.data = res.data.data
+          this.optionData = this.formatterDate(this.data)
+        }
+        // console.log(this.optionData)
+        // console.log(this.data)
+        let useDrug = echarts.init(document.getElementById('useDrug'))
+        useDrug.setOption(this.useDrugOption())
+      })
+    },
+    formatterDate (date) {
+      let arr = date
+      let xasis = []
+      // let arr = deepcopy(date)
 
-      var days = ['2017/12/06', '2017/12/07', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06']
-      var Icons = {
+      if (arr.length <= 1) return date
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = 0; j < arr.length; j++) {
+        // 获取第一个值和后一个值比较
+          let cur = dateFormat(arr[i].takeMedicineTime, 0)
+          if (cur < dateFormat(arr[j].takeMedicineTime, 0)) {
+        // 因为需要交换值，所以会把后一个值替换，我们要先保存下来
+            let index = arr[j]
+          // 交换值
+            arr[j] = arr[i]
+            arr[i] = index
+          }
+        }
+      }
+      let index = 0
+
+      for (let n = 0; n < arr.length - 1; n++) {
+        if (dateFormat(arr[n].takeMedicineTime, 0, 1) === dateFormat(arr[n + 1].takeMedicineTime, 0, 1)) {
+          arr[n].x = index
+          arr[n + 1].x = index
+          if (xasis.indexOf(dateFormat(arr[n].takeMedicineTime, 0, 1)) === -1) {
+            xasis.push(dateFormat(arr[n].takeMedicineTime, 0, 1))
+          }
+        } else {
+          if (xasis.indexOf(dateFormat(arr[n].takeMedicineTime, 0, 1)) === -1) {
+            xasis.push(dateFormat(arr[n].takeMedicineTime, 0, 1))
+          }
+          index++
+          arr[n + 1].x = index
+        }
+      }
+      for (let m = 0; m < arr.length; m++) {
+        let dateSlice = arr[m].takeMedicineTime.slice(0, 11)
+        let a0 = dateSlice + '00:00'
+        let a2 = dateSlice + '02:00'
+        let a4 = dateSlice + '04:00'
+        let a6 = dateSlice + '06:00'
+        let a8 = dateSlice + '08:00'
+        let a10 = dateSlice + '10:00'
+        let a12 = dateSlice + '12:00'
+        let a14 = dateSlice + '14:00'
+        let a16 = dateSlice + '16:00'
+        let a18 = dateSlice + '18:00'
+        let a20 = dateSlice + '20:00'
+        let a22 = dateSlice + '22:00'
+        let a24 = dateSlice + '24:00'
+        if (!this.sortDate(arr[m].takeMedicineTime, a0)) {
+          arr[m].y = 12
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a2)) {
+          arr[m].y = 0
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a4)) {
+          arr[m].y = 1
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a6)) {
+          arr[m].y = 2
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a8)) {
+          arr[m].y = 3
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a10)) {
+          arr[m].y = 4
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a12)) {
+          arr[m].y = 5
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a14)) {
+          arr[m].y = 6
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a16)) {
+          arr[m].y = 7
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a18)) {
+          arr[m].y = 8
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a20)) {
+          arr[m].y = 9
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a22)) {
+          arr[m].y = 10
+        } else if (!this.sortDate(arr[m].takeMedicineTime, a24)) {
+          arr[m].y = 11
+        }
+      }
+
+      arr = this.seriesItem(arr)
+      this.xasis = xasis
+      return arr
+    },
+    sortDate (date1, date2) {
+      let oDate1 = new Date(date1)
+      let oDate2 = new Date(date2)
+      if (oDate1.getTime() > oDate2.getTime()) {
+        return true
+      } else {
+        return false
+      }
+    },
+    seriesItem (data) {
+      let arr = []
+
+      data.forEach(item => {
+        let befor = ''
+        let after = ''
+        let icon = ''
+        if (item.beforeDiastolic2 && item.beforeSystolic2) {
+          befor = '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']'
+        }
+        if (item.adterSystolic && item.afterDiastolic) {
+          after = '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']'
+        }
+        if (item.sysMedicineId) {
+          if (item.sysMedicineId.split(',').indexOf('1') !== -1) {
+            icon += '{acei|}'
+          }
+          if (item.sysMedicineId.split(',').indexOf('2') !== -1) {
+            icon += '{ccb|}'
+          }
+          if (item.sysMedicineId.split(',').indexOf('3') !== -1) {
+            icon += '{arb|}'
+          }
+          if (item.sysMedicineId.split(',').indexOf('4') !== -1) {
+            icon += '{b|}'
+          }
+          if (item.sysMedicineId.split(',').indexOf('6') !== -1) {
+            icon += '{li|}'
+          }
+        }
+        let obj = {
+          value: [item.x, item.y, befor, after, item.takeMedicineTime],
+          label: {
+            normal: {
+              formatter: [
+                '{bBg|' + befor + '}' + icon + '{liBg|' + after + '}'
+              ].join('\n')
+              // rich: {
+
+              // }
+            }
+          }
+        }
+        arr.push(obj)
+      })
+
+      return arr
+    },
+    useDrugOption () {
+      let hours = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00']
+      // let days = ['2017/12/06', '2017/12/07', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06']
+      let days = this.xasis
+      let Icons = {
         'li': LI,
         'b': B,
         'ccb': CCB,
         'acei': ACEI,
         'arb': ARB
       }
-
       let option = {
+        color: ['#fff'],
         title: {
           text: ''
         },
@@ -75,6 +292,23 @@ export default {
         },
         tooltip: {
         // 提示框组件
+          backgroundColor: 'rgba(50,50,50,0.2)',
+
+          formatter: function (a) {
+            let befor = ''
+            let after = ''
+            let time = ''
+            if (a.data.value[2]) {
+              befor = '用药前两小时' + a.data.value[2]
+            }
+            if (a.data.value[3]) {
+              after = '用药后两小时' + a.data.value[3]
+            }
+            if (a.data.value[4]) {
+              time = a.data.value[4]
+            }
+            return (time + '<br>' + befor + '<br>' + after)
+          }
         },
         grid: {
           left: '2%',
@@ -124,7 +358,7 @@ export default {
           }
         },
         yAxis: {
-        // type: 'category',
+          type: 'category',
           boundaryGap: true,
           data: hours,
           splitLine: {
@@ -148,7 +382,8 @@ export default {
         series: [{
         // name: 'Punch Card',
           type: 'scatter',
-          symbolSize: 1,
+          symbol: 'rect',
+          symbolSize: [60, 15],
           label: {
             normal: {
               show: true,
@@ -245,44 +480,45 @@ export default {
               }
             }
           },
-          data: [
-            {
-              value: [1, 0, '[120/120][120/120]'],
-              label: {
-                normal: {
-                  formatter: [
-                    '{bBg|[120/120]}{li|}{b|}{liBg|[120/120]}'
-                    // '{blackBg|[120/120]}',
-                    // '{hr|}',
-                    // '{li|} {b|}',
-                    // '{hr|}',
-                    // '[120/120]'
-                  ].join('\n'),
-                  rich: {
+          data: this.optionData
+          // data: [
+          //   {
+          //     value: [1, 0, '[120/120][120/120]'],
+          //     label: {
+          //       normal: {
+          //         formatter: [
+          //           '{bBg|[120/120]}{li|}{b|}{liBg|[120/120]}'
+          //           // '{blackBg|[120/120]}',
+          //           // '{hr|}',
+          //           // '{li|} {b|}',
+          //           // '{hr|}',
+          //           // '[120/120]'
+          //         ].join('\n'),
+          //         rich: {
 
-                  }
-                }
-              }
-            },
-            {
-              value: [3, 2, '[120/120][120/120]'],
-              label: {
-                normal: {
-                  formatter: [
-                    // '{ccbBg|[120/120]}{ccb|}{arb|}{arbBg|[120/120]}'
-                    '{ccbBg|[120/120]}',
-                    '{hr|}',
-                    '{ccb|} {arb|}',
-                    '{hr|}',
-                    '{arbBg|[120/120]}'
-                  ].join('\n'),
-                  rich: {
+          //         }
+          //       }
+          //     }
+          //   },
+          //   {
+          //     value: [3, 2, '[120/120][120/120]'],
+          //     label: {
+          //       normal: {
+          //         formatter: [
+          //           // '{ccbBg|[120/120]}{ccb|}{arb|}{arbBg|[120/120]}'
+          //           '{ccbBg|[120/120]}',
+          //           '{hr|}',
+          //           '{ccb|} {arb|}',
+          //           '{hr|}',
+          //           '{arbBg|[120/120]}'
+          //         ].join('\n'),
+          //         rich: {
 
-                  }
-                }
-              }
-            }
-          ]
+          //         }
+          //       }
+          //     }
+          //   }
+          // ]
         }]
       }
       return option
@@ -291,6 +527,8 @@ export default {
   mounted () {
     let useDrug = echarts.init(document.getElementById('useDrug'))
     useDrug.setOption(this.useDrugOption())
+    this.getData()
+    // this.formatterDate(this.data)
   }
 }
 </script>

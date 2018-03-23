@@ -1,10 +1,10 @@
 <template>
   <div>
-    <transition :name="goDirection">
+    <!-- <transition :name="goDirection"> -->
       <div v-show="show" class="carousel">
         <slot></slot>
       </div>
-     </transition>
+     <!-- </transition> -->
   </div>
 </template>
 
@@ -37,18 +37,18 @@ export default {
 </script>
 
 <style scoped>
-.leftarrow-enter,
-.leftarrow-leave-active {
-   transition: opacity .5s;
+/* .leftarrow-enter, */
+/* .leftarrow-leave-active {
+   transition: opacity .5s; */
    
   /* transform: translateY(-50%) translateX(-10px);
   opacity: 0; */
-}
-.rightarrow-enter,
+/* } */
+/* .rightarrow-enter,
 .rightarrow-leave-active {
   transform: translateY(50%) translateX(10px);
   opacity: 0;
-}
+} */
   /* .leftarrow-enter-to {
     transition: all 1.5s ease;
     transform: translateX(0);
@@ -83,8 +83,8 @@ export default {
   /* .rightarrow-leave {
     transform: translateX(0)
   } */
-  .carousel{
+  /* .carousel{
     float: left;
     width: 100%;
-  }
+  } */
 </style>

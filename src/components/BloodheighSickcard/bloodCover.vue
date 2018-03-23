@@ -98,7 +98,7 @@
             <f-button
             :width="86"
             :height="24"
-            :isChecked='item.default'
+            :isChecked="item.default"
             @checked='changeStatus(index)'>{{item.label}}</f-button>
           </span>
         </div>
@@ -129,28 +129,28 @@
         <div>
           <el-row>
             <el-col :span="12">
-              <div id='bloodTrend' :style="{width:'350px',height:'250px'}"></div>
+              <div id='bloodTrend' :style="{width:'auto',height:'250px'}"></div>
             </el-col>
             <el-col :span="12">
               <div class="clear">
                 <div class="blood-trend-item">
-                  <p>23</p>
+                  <p>{{this.bloodTrendState.total}}</p>
                   <p>总测量次数</p>
                 </div>
                 <div class="blood-trend-item">
-                  <p>19</p>
+                  <p>{{this.bloodTrendState.normal}}</p>
                   <p>正常偏高次数</p>
                   <p>121/81~139/89</p>
                 </div>
               </div>
               <div class="clear">
                 <div class="blood-trend-item">
-                  <p>2</p>
+                  <p>{{this.bloodTrendState.heigh}}</p>
                   <p>高血压次数</p>
                   <p>121/81~139/89</p>
                 </div>
                 <div class="blood-trend-item">
-                  <p class="danger-text">19</p>
+                  <p class="danger-text">{{this.bloodTrendState.danger}}</p>
                   <p>危险次数</p>
                   <p>>179/109</p>
                 </div>
@@ -166,12 +166,10 @@
 
 <script>
 import echarts from 'echarts'
-// import {dateFormat, daybefor} from './../../untils/date'
-import {bloodheighSickDataApi, updateBehaviourRateApi} from './../../api/components/BloodheighSickcard/bloodCover'
+import {dateFromWeek} from './../../untils/date'
+import {bloodheighSickDataApi, updateBehaviourRateApi, updatebloodTrendStateApi} from './../../api/components/BloodheighSickcard/bloodCover'
 // import { deepcopy } from './../../untils/untils'
 export default {
-  components: {
-  },
   props: {
     sickID: {
       default: 0
@@ -182,7 +180,9 @@ export default {
   },
   data () {
     return {
-      ischeckAll: false,
+      // 是否全选状态
+      ischeckAll: true,
+      // 血压趋势 状态 按钮数据
       status: [
         {
           label: '日常',
@@ -299,6 +299,7 @@ export default {
           default: true
         }
       ],
+      // 血压趋势 日期选择按钮状态
       bloodTrendDate: [
         {
           date: '最近',
@@ -321,13 +322,15 @@ export default {
           isChecked: false
         }
       ],
-      //
+      // 血压与行为分数 图表数据
       bloodAndBehaviourData: {
         date: [],
+        week: [],
         avgSystolic: [],
         avgDiastolic: [],
         avgBehaveScore: []
       },
+      // 血压与行为分数 选择按钮
       bloodAndBehaviourDate: [
         {
           date: '日',
@@ -345,9 +348,11 @@ export default {
           isChecked: false
         }
       ],
+      // 血压与行为分数 当前选择的日期按钮
       behaviourChecked: null,
-      dataIndex: 0,
-      chartA: {date: ''},
+      dataIndex: 0,  // 初始化行为指数 选择域
+      // chartA: {date: ''},
+      // 行为指数 高血压比例数据
       BehaviourRate: {
         behaveLevel: {
           behaveGood: '',
@@ -362,22 +367,46 @@ export default {
           bpPoor: ''
         }
       },
+      // 血压趋势 当前选择的日期按钮
       bloodTrendChecked: null,
-      statusArr: ''
+      // 当前选择的状态
+      statusArr: '',
+      // 血压趋势 图表数据
+      bloodTrendData: {
+        date: [],
+        week: [],
+        systolic: [],
+        diastolic: []
+      },
+      // 当前选择的图表时间戳
+      bloodTrendIndex: 0,
+      // 血压趋势 表格数据
+      bloodTrendState: {
+        total: '',
+        normal: '',
+        heigh: '',
+        danger: ''
+      }
     }
   },
   methods: {
     checkAllHandle () {
-      // this.ischeckAll = !this.ischeckAll
-      // this.status.forEach(item => {
-        // item.default = true
-        // item.isChecked =
-      // })
+      if (!this.ischeckAll) {
+        this.status.forEach(item => {
+          item.default = true
+        })
+        this.changeStatus('all')
+      } else {
+        this.status.forEach(item => {
+          item.default = false
+        })
+      }
+      this.ischeckAll = !this.ischeckAll
       // this.updatebloodTrendData(this.bloodTrendChecked, this.statusArr)
     },
-
     bloodBehaviourBloodOption () {
       let vm = this
+
       let option = {
         color: ['#8ecefc', 'e6f5fe', '8ecefc'],
         tooltip: {
@@ -385,20 +414,17 @@ export default {
           axisPointer: {
             animation: false
           },
+          // alwaysShowContent: true,
           backgroundColor: 'rgba(50,50,50,0.2)',
           triggerOn: 'click',
           // triggerOn: 'mousemove|click',
           formatter: function (a) {
-            if (a.dataIndex === vm.dataIndex) {
-              // vm.updateBehaviourRateDate(a[0].axisValue)
+            if (a[0].dataIndex === vm.dataIndex) {
             } else {
-              vm.updateBehaviourRateDate(a[0].axisValue)
+              vm.updateBehaviourRateDate(a[0].axisValue, a[0].dataIndex)
             }
-            // vm.dataIndex = a.dataIndex
-            // a[]
-            // let
-            // a[0].dataIndex
-            console.log(a)
+            vm.dataIndex = a[0].dataIndex
+            // console.log(a)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
@@ -504,9 +530,6 @@ export default {
           axisTick: {
             show: false
           },
-            // axisLabel: {
-            //   // formatter: '{value}%'
-            // },
           splitLine: { // y轴网格显示
             show: true
           },
@@ -609,7 +632,6 @@ export default {
             data: vm.bloodAndBehaviourData.avgSystolic
 
           },
-
           {
             xAxisIndex: 1,
             yAxisIndex: 1,
@@ -646,99 +668,12 @@ export default {
       }
       return option
     },
-    bloodBehaviourOption () {
-      return {
-        grid: { // 直角坐标系内绘图网格
-          show: false,
-          top: '30px',
-          width: 'auto',
-          height: 'auto'
-        },
-        xAxis: { // 直角坐标系grid的x轴
-          type: 'category',
-          boundaryGap: false,
-          axisLabel: {
-            interval: 0,  // 显示x轴数据
-            showMinLabel: true,
-            showMaxLabel: true,
-            align: 'left',
-            rotate: 330
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-        },
-        yAxis: { // 直角坐标系grid的y轴
-          name: '行为分数',
-          nameLocation: 'end',
-          type: 'value',
-          axisLine: {
-            onZero: false,
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          splitLine: {  // y轴网格显示
-            show: true
-          },
-          nameTextStyle: { // 坐标轴名样式
-            color: '#666',
-            fontSize: 12,
-            align: 'left'
-          },
-          boundaryGap: true,
-          splitNumber: 3,  // 坐标轴分割段数
-          minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-          // interval: 50, // 强制设置坐标轴分割间隔。
-          data: ['0', '120', '140', '180']
-        },
-        series: [
-          {
-            name: '舒张压',
-            type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
-            lineStyle: {
-              normal: {
-                width: 2,
-                color: '#8ecefc'
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: '#8ecefc'
-              }
-            },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
-            data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
-          }
 
-        ],
-        textStyle: {
-          color: '#666',
-          fontSize: 12
-        }
-      }
-    },
     bloodTrendOption () {
+      let vm = this
       return {
         title: {
-          text: '广场舞30min',
+          // text: '广场舞30min',
           textStyle: {
             color: '#666',
             fontSize: 12,
@@ -747,14 +682,42 @@ export default {
           },
           left: '40%'
         },
-        tooltip: { // 提示框组件
-          trigger: 'item'
-          // trigger: 'axis'
+        // tooltip: { // 提示框组件
+        //   // trigger: 'item'
+        //   // trigger: 'axis'
+        // },
+        // tooltip: {},
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          },
+          // alwaysShowContent: true,
+          backgroundColor: 'rgba(50,50,50,0.2)',
+          triggerOn: 'click',
+          // triggerOn: 'mousemove|click',
+          formatter: function (a) {
+            if (a[0].dataIndex === vm.bloodTrendIndex) {
+              // vm.updateBehaviourRateDate(a[0].axisValue)
+            } else {
+              vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+            }
+            vm.bloodTrendIndex = a.dataIndex
+            console.log(a)
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+                a[0]['seriesName'] + ': ' + a[0]['value']
+            )
+          }
         },
         axisPointer: {
           link: [{
             xAxisIndex: 'all'
           }],
+          triggerTooltip: true,
           lineStyle: {
             color: '#fff',
             width: 0
@@ -764,7 +727,9 @@ export default {
           show: false,
           top: '30px',
           width: 'auto',
-          height: 'auto'
+          height: 'auto',
+          bottom: '90',
+          right: '110'
         },
         xAxis: { // 直角坐标系grid的x轴
           type: 'category',
@@ -774,7 +739,7 @@ export default {
             showMinLabel: true,
             showMaxLabel: true,
             align: 'left',
-            rotate: 330
+            rotate: 320
           },
           axisLine: {
             lineStyle: {
@@ -785,7 +750,8 @@ export default {
             show: false
           },
           // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+          // data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+          data: this.bloodTrendData.date
         },
         yAxis: { // 直角坐标系grid的y轴
           type: 'value',
@@ -817,20 +783,25 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
-            tooltip: { // 提示框组件
-              snap: true,
-              formatter: '{c}',
-              backgroundColor: '#81cefc',
-              textStyle: {
-                color: '#fff',
-                fontSize: 12
-              },
-              position: (point) => {
-                point[0] -= 10
-                point[1] -= 40
-                return point
-              }
-            },
+            // tooltip: { // 提示框组件
+            //   // snap: true,
+            //   formatter: '{c}',
+            //   trigger: 'item',
+            //   // formatter: function (a) {
+            //   //   console.log(a)
+            //   // },
+            //   backgroundColor: '#81cefc',
+            //   textStyle: {
+            //     color: '#fff',
+            //     fontSize: 12
+            //   },
+            //   position: (point) => {
+            //     point[0] -= 10
+            //     point[1] += 25
+            //     return point
+            //   }
+
+            // },
             lineStyle: {
               normal: {
                 width: 2,
@@ -849,27 +820,28 @@ export default {
                 shadowColor: '#e6f5fe'
               }
             },
-            data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
+            data: this.bloodTrendData.diastolic
           },
           {
             name: '收缩压',
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
-            tooltip: { // 提示框组件
-              snap: true,
-              formatter: '{c}',
-              backgroundColor: '#7cedc4',
-              textStyle: {
-                color: '#fff',
-                fontSize: 12
-              },
-              position: (point) => {
-                point[0] -= 10
-                point[1] += 25
-                return point
-              }
-            },
+            // tooltip: { // 提示框组件
+            //   // snap: true,
+            //   trigger: 'item',
+            //   formatter: '{c}',
+            //   backgroundColor: '#7cedc4',
+            //   textStyle: {
+            //     color: '#fff',
+            //     fontSize: 12
+            //   },
+            //   position: (point) => {
+            //     point[0] -= 10
+            //     point[1] -= 40
+            //     return point
+            //   }
+            // },
             lineStyle: {
               normal: {
                 width: 2,
@@ -887,7 +859,8 @@ export default {
                 origin: 'auto'
               }
             },
-            data: [ 34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10 ]
+            // data: [ 34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10 ]
+            data: this.bloodTrendData.systolic
           }
 
         ],
@@ -916,6 +889,7 @@ export default {
         'bpMeasureTime': vm.bpMeasureTime || ''
       }
       this.bloodAndBehaviourData.date = []
+      this.bloodAndBehaviourData.week = []
       this.bloodAndBehaviourData.avgSystolic = []
       this.bloodAndBehaviourData.avgDiastolic = []
       if (index === 0) {
@@ -925,32 +899,35 @@ export default {
             if (!item.description) {
               item.description = 0
             }
-
             this.$set(this.bloodAndBehaviourData.date, inx, item.description)
             this.$set(this.bloodAndBehaviourData.avgSystolic, inx, item.avgSystolic)
             this.$set(this.bloodAndBehaviourData.avgDiastolic, inx, item.avgDiastolic)
-
-            if (inx === 0) {
-              this.$set(this.chartA, 'date', item.description)
-            }
-            // this.bloodAndBehaviourData.date.push(item.description)
-            // this.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
-            // this.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
+            // if (inx === 0) {
+            //   this.$set(this.chartA, 'date', item.description)
+            // }
             if (!item.avgBehaveScore) {
               item.avgBehaveScore = 0
             }
             this.$set(this.bloodAndBehaviourData.avgBehaveScore, inx, item.avgBehaveScore)
-            // this.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updateBehaviourRateDate(res.data.data[0].description)
+            }
+          }
         })
       }
       if (index === 1) {
         this.$axios(bloodheighSickDataApi(params, 7))
         .then(res => {
           res.data.data.forEach(item => {
-            this.bloodAndBehaviourData.date.push(item.description)
+            this.computeYearWeek(item.yearWeek)
+            let week = this.computeYearWeek(item.yearWeek)[0] + '年' + '第' + this.computeYearWeek(item.yearWeek)[1] + '周'
+
+            this.bloodAndBehaviourData.date.push(week)
+            this.bloodAndBehaviourData.week.push(item.yearWeek)
             this.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
             this.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
             if (!item.avgBehaveScore) {
@@ -960,6 +937,7 @@ export default {
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
+          this.updateBehaviourRateDate(res.data.data[0].description)
         })
       }
       if (index === 2) {
@@ -976,12 +954,16 @@ export default {
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
+          this.updateBehaviourRateDate(res.data.data[0].description)
         })
       }
     },
-    updateBehaviourRateDate (date) {
+    updateBehaviourRateDate (date, index) {
+      if (this.behaviourChecked === 1) {
+        let yearweek = this.computeYearWeek(this.bloodAndBehaviourData.week[index])
+        date = dateFromWeek(yearweek[0], yearweek[1])
+      }
       let vm = this
-      // let date = ''
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
@@ -989,7 +971,6 @@ export default {
       }
       this.$axios(updateBehaviourRateApi(params, this.behaviourChecked, date))
       .then(res => {
-        console.log(res)
         this.BehaviourRate = res.data.data
       })
     },
@@ -1001,16 +982,11 @@ export default {
       this.bloodTrendChecked = index
       this.updatebloodTrendData(index, this.statusArr)
     },
-    // updateDate (date, index) {
-    //   this.checkDate.forEach(item => {
-    //     item.isChecked = false
-    //   })
-    //   this.checkDate[index].isChecked = true
-    //   this.updatebloodTrendData(index, this.statusArr)
-    // },
     changeStatus (index) {
+      if (index !== 'all') {
+        this.status[index].default = !this.status[index].default
+      }
       let arr = []
-      this.status[index].default = !this.status[index].default
       this.status.forEach(item => {
         if (item.default) {
           arr.push(item.value)
@@ -1026,36 +1002,156 @@ export default {
         'adminHospitalId': vm.hospitalId,
         'bpMeasureTime': this.statusArr || ''
       }
-      // let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
-      // bloodTrend.setOption(this.bloodTrendOption())
+      let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
       if (index === 0) {
         this.$axios(bloodheighSickDataApi(params, 0))
+        .then(res => {
+          this.bloodTrendData.date = []
+          this.bloodTrendData.systolic = []
+          this.bloodTrendData.diastolic = []
+          res.data.data.forEach((item, index) => {
+            this.$set(this.bloodTrendData.date, index, item.measureTime)
+            this.$set(this.bloodTrendData.systolic, index, item.systolic)
+            this.$set(this.bloodTrendData.diastolic, index, item.diastolic)
+          })
+          bloodTrend.setOption(this.bloodTrendOption())
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updatebloodTrendState(res.data.data[0].measureTime)
+            }
+          }
+        })
       }
       if (index === 1) {
         this.$axios(bloodheighSickDataApi(params, 1))
+        .then(res => {
+          this.bloodTrendData.date = []
+          this.bloodTrendData.systolic = []
+          this.bloodTrendData.diastolic = []
+          res.data.data.forEach((item, index) => {
+            this.$set(this.bloodTrendData.date, index, item.description)
+            this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
+            this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
+          })
+          bloodTrend.setOption(this.bloodTrendOption())
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updatebloodTrendState(res.data.data[0].description)
+            }
+          }
+        })
       }
       if (index === 2) {
         this.$axios(bloodheighSickDataApi(params, 7))
+        .then(res => {
+          this.bloodTrendData.date = []
+          this.bloodTrendData.week = []
+          this.bloodTrendData.systolic = []
+          this.bloodTrendData.diastolic = []
+          res.data.data.forEach((item, index) => {
+            this.computeYearWeek(item.yearWeek)
+            let week = this.computeYearWeek(item.yearWeek)[0] + '年' + '第' + this.computeYearWeek(item.yearWeek)[1] + '周'
+
+            this.bloodTrendData.date.push(week)
+            this.bloodTrendData.week.push(item.yearWeek)
+            // this.$set(this.bloodTrendData.date, index, item.description)
+            this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
+            this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
+          })
+          bloodTrend.setOption(this.bloodTrendOption())
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updatebloodTrendState(res.data.data[0].description)
+            }
+          }
+        })
       }
       if (index === 3) {
         this.$axios(bloodheighSickDataApi(params, 30))
+        .then(res => {
+          this.bloodTrendData.date = []
+          this.bloodTrendData.systolic = []
+          this.bloodTrendData.diastolic = []
+          res.data.data.forEach((item, index) => {
+            this.$set(this.bloodTrendData.date, index, item.description)
+            this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
+            this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
+          })
+          bloodTrend.setOption(this.bloodTrendOption())
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updatebloodTrendState(res.data.data[0].description)
+            }
+          }
+        })
       }
+    },
+    updatebloodTrendState (date, index) {
+      if (this.bloodTrendChecked === 2) {
+        let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
+        date = dateFromWeek(yearweek[0], yearweek[1])
+      }
+      let vm = this
+      let params = {
+        'userId': vm.sickID,
+        'adminHospitalId': vm.hospitalId,
+        'bpMeasureTime': this.statusArr || ''
+      }
+      this.$axios(updatebloodTrendStateApi(params, this.bloodTrendChecked, date))
+      .then(res => {
+        res.data.data.forEach(item => {
+          if (item.id === 1) {
+            this.$set(this.bloodTrendState, 'total', item.highNum)
+          }
+          if (item.id === 2) {
+            this.$set(this.bloodTrendState, 'normal', item.highNum)
+          }
+          if (item.id === 3) {
+            this.$set(this.bloodTrendState, 'heigh', item.highNum)
+          }
+          if (item.id === 4) {
+            this.$set(this.bloodTrendState, 'danger', item.highNum)
+          }
+        })
+      })
+    },
+    computeYearWeek (value) {
+      let time = value
+      let year
+      let week
+      if (!isNaN(time)) {
+        year = parseInt(time.toString().substr(0, 4))
+        week = parseInt(time.toString().substr(4))
+      } else if (isNaN(time)) {
+        year = time.substr(0, 4)
+        week = time.substr(4)
+      }
+      let arr = [year, week]
+      return arr
+    }
+  },
+  watch: {
+    status: {
+      handler (val) {
+        let vm = this
+        let all = true
+        val.forEach(function (item) {
+          if (!item.default) {
+            all = false
+          }
+        })
+        if (all) {
+          vm.ischeckAll = true
+        } else {
+          vm.ischeckAll = false
+        }
+      },
+      deep: true
     }
   },
   mounted () {
     this.updatebloodTrendChecked(0)
     this.dataIndex = 0
-    let vm = this
-    let params = {
-      'userId': vm.sickID,
-      'adminHospitalId': vm.hospitalId,
-      'bpMeasureTime': vm.bpMeasureTime || ''
-    }
-    this.$axios(bloodheighSickDataApi(params, 1))
-    .then(res => {
-      let date = res.data.data[0].description
-      this.updateBehaviourRateDate(date)
-    })
     this.updateBehaviourChecked(0)
     this.updateBehaviourData(0)
     let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))

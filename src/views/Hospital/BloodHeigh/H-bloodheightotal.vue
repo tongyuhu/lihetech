@@ -18,7 +18,7 @@
                   <div class="card-header">
                     <p class="title">患者分布</p>
                   </div>
-                  <div id='HBfenbu'  :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HBcover'  :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
             <el-col :span='12'>
@@ -27,7 +27,7 @@
                   <div class="card-header">
                     <p class="title">患者走势</p>
                   </div>
-                  <div id='HBzoushi' :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HBtrend' :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
         </el-row>
@@ -65,8 +65,40 @@ export default {
           isChecked: false
         }
       ],
-      sickDistributionData: [],
-      sickTrendData: [],
+      sickDistributionData: [
+        {
+          'value': 36,
+          'name': '正常'
+        },
+        {
+          'value': 38,
+          'name': '偏高'
+        },
+        {
+          'value': 3,
+          'name': '高'
+        },
+        {
+          'value': 83,
+          'name': '危险'
+        }
+
+      ],
+      sickTrendData: [
+        92,
+        55,
+        47,
+        47,
+        0,
+        49,
+        98,
+        89,
+        36,
+        78,
+        48,
+        86,
+        1
+      ],
       heightbloodTotal: 1236,
       sickTrendDataX: [
         ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
@@ -78,7 +110,7 @@ export default {
     }
   },
   methods: {
-    HBfenbuOption () {
+    HBcoverOption () {
       return {
         // 提示框 在饼图上显示数据
         // tooltip: {
@@ -142,7 +174,7 @@ export default {
         }
       }
     },
-    HBzoushiOption () {
+    HBtrendOption () {
       return {
         title: {
         // text: '控压走势',
@@ -154,14 +186,12 @@ export default {
           // right: '20',
           // top: '-10'
         },
-        // tooltip: { // 提示框组件
-        //   trigger: 'axis',
-        //   axisPointer: {
-        //     type: 'cross'
-        //   },
-        //   snap: true,
-        //   formatter: '{b} : {c}%'
-        // },
+        tooltip: { // 提示框组件
+          backgroundColor: 'rgba(50,50,50,0.2)',
+          triggerOn: 'click',
+          snap: true,
+          formatter: '{b} : {c}%'
+        },
         grid: { // 直角坐标系内绘图网格
           show: false,
           // left: 'auto',
@@ -173,12 +203,6 @@ export default {
           height: 'auto'
           // containLabel: true
         },
-      // toolbox: { // 工具栏
-        // show: true
-        // feature: {
-        //   asveAsImage: {}
-        // }
-      // },
         legend: { // 图例组件
           show: true,
           type: 'plain',
@@ -196,12 +220,6 @@ export default {
           itemWidth: 20,
           itemHeight: 20
         },
-        // visualMap: [
-        //   {
-        //     type: 'piecewise',
-        //     pieces: [{gt: 'aa'}]
-        //   }
-        // ],
         xAxis: { // 直角坐标系grid的x轴
           type: 'category',
           // type: 'time',
@@ -221,8 +239,8 @@ export default {
             interval: 0
           },
           min: 0,
-          data: this.sickTrendDataX[this.clickTime]
-          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          // data: this.sickTrendDataX[this.clickTime]
+          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         },
         yAxis: { // 直角坐标系grid的y轴
           name: '控制率',
@@ -286,41 +304,18 @@ export default {
         item.isChecked = false
       })
       this.checkDate[index].isChecked = true
-      this.$axios(sickDistributionDataApi(date.value))
-      .then(res => {
-        this.sickDistributionData = res.data.sickDistributionData  // 患者分布数据
-        let HBfenbu = echarts.init(document.getElementById('HBfenbu'))
-        HBfenbu.setOption(this.HBfenbuOption())
-      })
-      .catch()
-
-      this.$axios(sickTrendDataApi(date.value))
-      .then(res => {
-        this.sickTrendData = res.data.sickTrendData  // 患者走势数据
-        let HBzoushi = echarts.init(document.getElementById('HBzoushi'))
-        HBzoushi.setOption(this.HBzoushiOption())
-      })
-      .catch()
+      console.log('更新整体患者分布与走势时间')
     }
   },
 
   mounted () {
+    // 初始化选择时间为日
     this.checkDate[0].isChecked = true
-    this.$axios(sickDistributionDataApi('day'))
-      .then(res => {
-        this.sickDistributionData = res.data.sickDistributionData  // 患者分布数据
-        let HBfenbu = echarts.init(document.getElementById('HBfenbu'))
-        HBfenbu.setOption(this.HBfenbuOption())
-      })
-      .catch()
 
-    this.$axios(sickTrendDataApi('day'))
-      .then(res => {
-        this.sickTrendData = res.data.sickTrendData  // 患者走势数据
-        let HBzoushi = echarts.init(document.getElementById('HBzoushi'))
-        HBzoushi.setOption(this.HBzoushiOption())
-      })
-      .catch()
+    let HBcover = echarts.init(document.getElementById('HBcover'))
+    HBcover.setOption(this.HBcoverOption())
+    let HBtrend = echarts.init(document.getElementById('HBtrend'))
+    HBtrend.setOption(this.HBtrendOption())
   }
 }
 </script>
@@ -381,7 +376,7 @@ p {
   color:#fff;
   border-radius:2px;
 }
-.HBzoushi{
+.HBtrend{
   z-index: 9;
 }
 </style>

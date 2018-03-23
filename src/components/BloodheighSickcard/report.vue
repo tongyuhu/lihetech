@@ -1,8 +1,8 @@
 <template>
   <div>
-    <!-- 血压分布  -->
     <div>
       <el-row>
+        <!-- 血压分布  -->
         <el-col :span="12">
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
@@ -10,18 +10,23 @@
             </div>
             <div class="check-date">
               <el-row type="flex" justify="start">
-                <button v-for="(item,index) in checkDate" 
+                <button v-for="(item,index) in coverChecked.date" 
                 :key="item.date" 
                 class="check-date-btn" 
                 :class="{checked:item.isChecked}" 
-                @click="updateDate(item,index)">
+                @click="iscoverChecked(item,index)">
                   {{item.date}}
                 </button>
               </el-row>
             </div>
-            <div id='bloodCover'  :style="{width:'450px',height:'250px'}"></div>
+            <div
+            id='bloodCover'
+            :style="{width:'auto',height:'250px'}"
+            >
+            </div>
           </el-card>
         </el-col>
+        <!-- 血压直方图 -->
         <el-col :span="12">
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
@@ -29,17 +34,17 @@
             </div>
             <div class="check-date">
               <el-row type="flex" justify="start">
-                <button v-for="(item,index) in checkDate" 
+                <button v-for="(item,index) in histogramChecked.date" 
                 :key="item.date" 
                 class="check-date-btn" 
                 :class="{checked:item.isChecked}" 
-                @click="updateDate(item,index)">
+                @click="isHistogramChecked(item,index)">
                   {{item.date}}
                 </button>
               </el-row>
             </div>
-            <!-- <div id='bloodAverage'  :style="{width:'450px',height:'250px'}"></div> -->
-            <div id='bloodHistogram'  :style="{width:'450px',height:'250px'}"></div>
+            <!-- <div id='bloodAverage'  :style="{width:'auto',height:'250px'}"></div> -->
+            <div id='bloodHistogram'  :style="{width:'auto',height:'250px'}"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -52,40 +57,42 @@
         </div>
         <div class="check-date">
           <el-row type="flex" justify="start">
-            <button v-for="(item,index) in checkDate" 
+            <button v-for="(item,index) in bloodfoodChecked.date" 
             :key="item.date" 
             class="check-date-btn" 
             :class="{checked:item.isChecked}" 
-            @click="updateDate(item,index)">
+            @click="isfoodChecked(item,index)">
               {{item.date}}
             </button>
           </el-row>
         </div>
-        <div class="clear">
-          <div class="float-box">
-            <div id='bloodFoodblood' :style="{width:'350px',height:'250px'}"></div>
-          </div>
-          <div class="float-box">
-            <div id='bloodFood' :style="{width:'350px',height:'250px'}"></div>
-          </div>
-          <div class="float-box">
-            <div class="checked-kaluli">
-              <span class="check-all-span">
-                <button class="check-all-btn" @click="checkAllHandle()">
-                  <span :class="{'check-all-btn-icon':!ischeckAll,'check-all-btn-icon-active':ischeckAll}"></span>
-                  <span>卡路里</span>
-                </button>
-              </span>
-            </div>
-            <div class="checked-score">
-              <span class="check-all-span">
-                <button class="check-all-btn" @click="checkAllHandle()">
-                  <span :class="{'check-all-btn-icon':!ischeckAll,'check-all-btn-icon-active':ischeckAll}"></span>
-                  <span>分数</span>
-                </button>
-              </span>
-            </div>
-          </div>
+        <div>
+          <el-row type="flex">
+            <el-col >
+              <div id='bloodFood' :style="{width:'auto',height:'250px'}"></div>
+            </el-col>
+            <el-col :span="3">
+              <div>
+                <div class="checked-kaluli">
+                  <span class="check-all-span">
+                    <button class="check-all-btn" @click="isFoodKaluliChecked()">
+                      <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
+                      <span>卡路里</span>
+                    </button>
+                  </span>
+                </div>
+                <div class="checked-score">
+                  <span class="check-all-span">
+                    <button class="check-all-btn" @click="isFoodScoreChecked()">
+                      <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
+                      <span>分数</span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+
+            </el-col>
+          </el-row>
         </div>
       </el-card>
     </div>
@@ -97,40 +104,41 @@
         </div>
         <div class="check-date">
           <el-row type="flex" justify="start">
-            <button v-for="(item,index) in checkDate" 
+            <button v-for="(item,index) in bloodsportChecked.date" 
             :key="item.date" 
             class="check-date-btn" 
             :class="{checked:item.isChecked}" 
-            @click="updateDate(item,index)">
+            @click="issportChecked(item,index)">
               {{item.date}}
             </button>
           </el-row>
         </div>
-        <div class="clear">
-          <div class="float-box">
-            <div id='bloodSportblood' :style="{width:'350px',height:'250px'}"></div>
-          </div>
-          <div class="float-box">
-            <div id='bloodSport' :style="{width:'350px',height:'250px'}"></div>
-          </div>
-          <div class="float-box">
-            <div class="checked-kaluli">
-              <span class="check-all-span">
-                <button class="check-all-btn" @click="checkAllHandle()">
-                  <span :class="{'check-all-btn-icon':!ischeckAll,'check-all-btn-icon-active':ischeckAll}"></span>
-                  <span>卡路里</span>
-                </button>
-              </span>
-            </div>
-            <div class="checked-score">
-              <span class="check-all-span">
-                <button class="check-all-btn" @click="checkAllHandle()">
-                  <span :class="{'check-all-btn-icon':!ischeckAll,'check-all-btn-icon-active':ischeckAll}"></span>
-                  <span>分数</span>
-                </button>
-              </span>
-            </div>
-          </div>
+        <div>
+          <el-row type="flex">
+            <el-col>
+              <div id='bloodSport' :style="{width:'auto',height:'250px'}"></div>
+            </el-col>
+            <el-col :span="3">
+              <div>
+                <div class="checked-kaluli">
+                  <span class="check-all-span">
+                    <button class="check-all-btn" @click="issSportKaluliChecked()">
+                      <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
+                      <span>卡路里</span>
+                    </button>
+                  </span>
+                </div>
+                <div class="checked-score">
+                  <span class="check-all-span">
+                    <button class="check-all-btn" @click="isSportScoreChecked()">
+                      <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
+                      <span>分数</span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
         </div>
       </el-card>
     </div>
@@ -139,149 +147,42 @@
 
 <script>
 import echarts from 'echarts'
+import {bloodCoverApi, histogramApi, bloodfoodApi, bloodsportApi} from './../../api/components/BloodheighSickcard/report'
 export default {
+  props: {
+    sickID: {
+      default: 0
+    },
+    hospitalId: {
+      default: 0
+    }
+  },
   data () {
     return {
-      ischeckAll: false,
-      status: [
-        {
-          label: '运动后',
-          value: 'aftrSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSpot',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'aftrSpodrt',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'affgterSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSpourt',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afteroSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSpor5t',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSp7ort',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterS8port',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'after3Sport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afte33rSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSpo356rt',
-          default: true
-        }
-      ],
-      sportsType: [
-        {
-          label: '运动后',
-          value: 'after24Sport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afte42rSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'after7Sport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSpor56t',
-          default: true
-        }
-      ],
-      foodType: [
-        {
-          label: '运动后',
-          value: 'after089Sport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterS890port',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'afterSp0890ort',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'aft879erSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'af534terSport',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: 'after142Sport',
-          default: true
-        }
-      ],
+      isChecked: false,
       checkDate: [
         {
-          date: '最近',
+          date: '一周',
           value: 'lately',
           isChecked: false
         },
         {
-          date: '日',
+          date: '两周',
           value: 'day',
           isChecked: false
         },
         {
-          date: '周',
+          date: '一个月',
           value: 'week',
           isChecked: false
         },
         {
-          date: '月',
+          date: '三个月',
           value: 'month',
           isChecked: false
         },
         {
-          date: '6个月',
+          date: '自定义',
           value: 'year',
           isChecked: false
         }
@@ -291,12 +192,522 @@ export default {
         {value: 310, name: '偏高'},
         {value: 234, name: '高'},
         {value: 135, name: '危险'}
-      ]
+      ],
+      coverChecked: {
+        date: [
+          {
+            date: '一周',
+            value: 'oneweek',
+            isChecked: false
+          },
+          {
+            date: '两周',
+            value: 'twoweek',
+            isChecked: false
+          },
+          {
+            date: '一个月',
+            value: 'onemonth',
+            isChecked: false
+          },
+          {
+            date: '三个月',
+            value: 'threemonth',
+            isChecked: false
+          }
+        ],
+        dateChecked: ''
+      },
+      coverData: [],
+      histogramChecked: {
+        date: [
+          {
+            date: '一周',
+            value: 'oneweek',
+            isChecked: false
+          },
+          {
+            date: '两周',
+            value: 'twoweek',
+            isChecked: false
+          },
+          {
+            date: '一个月',
+            value: 'onemonth',
+            isChecked: false
+          },
+          {
+            date: '三个月',
+            value: 'threemonth',
+            isChecked: false
+          }
+        ],
+        dateChecked: ''
+      },
+      histogramData: [],
+      bloodfoodChecked: {
+        date: [
+          {
+            date: '一周',
+            value: 'oneweek',
+            isChecked: false
+          },
+          {
+            date: '两周',
+            value: 'twoweek',
+            isChecked: false
+          },
+          {
+            date: '一个月',
+            value: 'onemonth',
+            isChecked: false
+          },
+          {
+            date: '三个月',
+            value: 'threemonth',
+            isChecked: false
+          }
+        ],
+        kaluli: false,
+        score: false,
+        dateChecked: ''
+      },
+      bloodfoodData: {
+        x: [],
+        systolic: [],
+        diastolic: [],
+        foodScore: [],
+        calories: []
+      },
+      bloodsportChecked: {
+        date: [
+          {
+            date: '一周',
+            value: 'oneweek',
+            isChecked: false
+          },
+          {
+            date: '两周',
+            value: 'twoweek',
+            isChecked: false
+          },
+          {
+            date: '一个月',
+            value: 'onemonth',
+            isChecked: false
+          },
+          {
+            date: '三个月',
+            value: 'threemonth',
+            isChecked: false
+          }
+        ],
+        kaluli: false,
+        score: false,
+        dateChecked: ''
+      },
+      bloodsportData: {
+        x: [],
+        systolic: [],
+        diastolic: [],
+        movementScore: [],
+        calories: []
+      }
     }
   },
   methods: {
+    iscoverChecked (date, index) {
+      this.coverChecked.date.forEach(item => {
+        item.isChecked = false
+      })
+      this.coverChecked.date[index].isChecked = true
+      this.updateCover(date.value)
+    },
+    // 如果是选择固定时间 date 为按钮的value
+    // 如果是自定义时间段 date 为起始时间 enddate为结束时间
+    updateCover (date, enddate) {
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId
+      }
+      let dateParams = {
+        label: '',
+        value: '',
+        endtime: null
+      }
+      let nowtime = new Date()
+      // let nowtime = '2018-03-01'
+      if (enddate) {
+        dateParams = {
+          label: '',
+          value: date,
+          endtime: enddate
+        }
+      } else {
+        dateParams = {
+          label: date,
+          value: nowtime,
+          endtime: null
+        }
+      }
+      this.$axios(bloodCoverApi(params, dateParams))
+      .then(res => {
+        if (res.data.data) {
+          for (let data in res.data.data) {
+            this.$set(this.coverData, data, res.data.data[data])
+          }
+          // console.log(this.coverData)
+          // console.log(1, res.data.data)
+        }
+        let bloodCover = echarts.init(document.getElementById('bloodCover'))
+        bloodCover.setOption(this.bloodCoverOption())
+      })
+    },
+    /**
+     * @description 整理图表数据
+     * @param obj
+     * @returns Array
+     * */
+    formatCoverData (data) {
+      let arr = []
+      if (data.normal) {
+        arr.push({value: data.normal, name: '正常'})
+      } else {
+        arr.push({value: 0, name: '正常'})
+      }
+      if (data.normalHigh) {
+        arr.push({value: data.normalHigh, name: '正常高值'})
+      } else {
+        arr.push({value: 0, name: '正常高值'})
+      }
+      if (data.mildHigh) {
+        arr.push({value: data.mildHigh, name: '轻度'})
+      } else {
+        arr.push({value: 0, name: '轻度'})
+      }
+      if (data.moderateHigh) {
+        arr.push({value: data.moderateHigh, name: '中度'})
+      } else {
+        arr.push({value: 0, name: '中度'})
+      }
+      if (data.danger) {
+        arr.push({value: data.danger, name: '危险'})
+      } else {
+        arr.push({value: 0, name: '危险'})
+      }
+      // console.log('arr', arr)
+      return arr
+    },
+    isHistogramChecked (date, index) {
+      this.histogramChecked.date.forEach(item => {
+        item.isChecked = false
+      })
+      this.histogramChecked.date[index].isChecked = true
+      this.updateHistogram(date.value)
+    },
+    updateHistogram (date, enddate) {
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId
+      }
+      let dateParams = {
+        label: '',
+        value: '',
+        endtime: null
+      }
+      let nowtime = new Date()
+      // let nowtime = '2018-03-01'
+      if (enddate) {
+        dateParams = {
+          label: '',
+          value: date,
+          endtime: enddate
+        }
+      } else {
+        dateParams = {
+          label: date,
+          value: nowtime,
+          endtime: null
+        }
+      }
+      this.$axios(histogramApi(params, dateParams))
+      .then(res => {
+        if (res.data) {
+          if (res.data.data) {
+            res.data.data.forEach((item, index) => {
+              this.$set(this.histogramData, index, item)
+            })
+          }
+        }
+        let bloodHistogram = echarts.init(document.getElementById('bloodHistogram'))
+        bloodHistogram.setOption(this.bloodHistogramOption())
+      })
+    },
+    formatHistogram (data) {
+      let arr = []
+      if (data.length !== 0) {
+        data.forEach(item => {
+          let arr1 = []
+          arr1.push(item['diastolic'])
+          arr1.push(item['systolic'])
+          arr1.push(item['measureTime'])
+          arr.push(arr1)
+        })
+      }
+      return arr
+    },
+    isfoodChecked (date, index) {
+      this.bloodfoodChecked.date.forEach(item => {
+        item.isChecked = false
+      })
+      this.bloodfoodChecked.date[index].isChecked = true
+      this.updateFood(date.value)
+    },
+    isFoodKaluliChecked () {
+      if (this.bloodfoodChecked.kaluli || !this.bloodfoodChecked.kaluli) {
+        this.bloodfoodChecked.kaluli = true
+        this.bloodfoodChecked.score = false
+      }
+      if (this.bloodfoodChecked.kaluli && !this.bloodfoodChecked.score) {
+        let bloodFood = echarts.init(document.getElementById('bloodFood'))
+        bloodFood.setOption(this.bloodFoodOption('kaluli'))
+        // this.bloodFoodOption()
+      }
+    },
+    isFoodScoreChecked () {
+      if (!this.bloodfoodChecked.kaluli || this.bloodfoodChecked.kaluli) {
+        this.bloodfoodChecked.kaluli = false
+        this.bloodfoodChecked.score = true
+      }
+      if (!this.bloodfoodChecked.kaluli && this.bloodfoodChecked.score) {
+        let bloodFood = echarts.init(document.getElementById('bloodFood'))
+        bloodFood.setOption(this.bloodFoodOption('score'))
+        // this.bloodFoodOption('score')
+      }
+    },
+    updateFood (date, enddate) {
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId
+      }
+      let dateParams = {
+        label: '',
+        value: ''
+        // endtime: null
+      }
+      let nowtime = new Date()
+      // let nowtime = '2018-03-01'
+      if (enddate) {
+        dateParams = {
+          label: '',
+          value: date,
+          endtime: enddate
+        }
+      } else {
+        dateParams = {
+          label: date,
+          value: nowtime,
+          endtime: null
+        }
+      }
+      this.$axios(bloodfoodApi(params, dateParams))
+      .then(res => {
+        // if (res.data) {
+          // if (res.data.data) {
+        let data1 = [
+          {
+            'systolic': 144,
+            'diastolic': 82,
+            'createTime': '2018-03-08',
+            'calories': 0
+          },
+          {
+            'systolic': 122,
+            'diastolic': 76,
+            'createTime': '2018-02-04',
+            'calories': 100,
+            'foodScore': 33
+          },
+          {
+            'systolic': 165,
+            'diastolic': 106,
+            'createTime': '2018-02-03',
+            'calories': 23,
+            'foodScore': 35
+          },
+          {
+            'systolic': 199,
+            'diastolic': 86,
+            'createTime': '2018-02-02',
+            'calories': 50,
+            'foodScore': 20.9
+          },
+          {
+            'systolic': 171,
+            'diastolic': 118,
+            'createTime': '2018-02-01',
+            'calories': 60,
+            'foodScore': 35.5
+          }
+        ]
+        data1.forEach((item, index) => {
+          if (!item.systolic) {
+            item.systolic = 0
+          }
+          if (!item.diastolic) {
+            item.diastolic = 0
+          }
+          if (!item.calories) {
+            item.calories = 0
+          }
+          if (!item.foodScore) {
+            item.foodScore = 0
+          }
+          this.$set(this.bloodfoodData.x, index, item.createTime)
+          this.$set(this.bloodfoodData.systolic, index, item.systolic)
+          this.$set(this.bloodfoodData.diastolic, index, item.diastolic)
+          this.$set(this.bloodfoodData.foodScore, index, item.foodScore)
+          this.$set(this.bloodfoodData.calories, index, item.calories)
+        })
+          // }
+        // }
+        let state = ''
+        if (this.bloodfoodChecked.kaluli) {
+          state = 'kaluli'
+        }
+        if (this.bloodfoodChecked.score) {
+          state = 'score'
+        }
+        let bloodFood = echarts.init(document.getElementById('bloodFood'))
+        bloodFood.setOption(this.bloodFoodOption(state))
+      })
+    },
+    issportChecked (date, index) {
+      this.bloodsportChecked.date.forEach(item => {
+        item.isChecked = false
+      })
+      this.bloodsportChecked.date[index].isChecked = true
+      this.updateSport(date.value)
+    },
+    issSportKaluliChecked () {
+      if (this.bloodsportChecked.kaluli || !this.bloodsportChecked.kaluli) {
+        this.bloodsportChecked.kaluli = true
+        this.bloodsportChecked.score = false
+      }
+      if (this.bloodsportChecked.kaluli && !this.bloodsportChecked.score) {
+        let bloodSport = echarts.init(document.getElementById('bloodSport'))
+        bloodSport.setOption(this.bloodSportOption('kaluli'))
+      }
+    },
+    isSportScoreChecked () {
+      if (!this.bloodsportChecked.kaluli || this.bloodsportChecked.kaluli) {
+        this.bloodsportChecked.kaluli = false
+        this.bloodsportChecked.score = true
+      }
+      if (!this.bloodsportChecked.kaluli && this.bloodsportChecked.score) {
+        let bloodSport = echarts.init(document.getElementById('bloodSport'))
+        bloodSport.setOption(this.bloodSportOption('score'))
+      }
+    },
     checkAllHandle () {
-      this.ischeckAll = !this.ischeckAll
+      this.isChecked = !this.isChecked
+    },
+    updateSport (date, enddate) {
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId
+      }
+      let dateParams = {
+        label: '',
+        value: ''
+        // endtime: null
+      }
+      let nowtime = new Date()
+      // let nowtime = '2018-03-01'
+      if (enddate) {
+        dateParams = {
+          label: '',
+          value: date,
+          endtime: enddate
+        }
+      } else {
+        dateParams = {
+          label: date,
+          value: nowtime,
+          endtime: null
+        }
+      }
+      this.$axios(bloodsportApi(params, dateParams))
+      .then(res => {
+        // if (res.data) {
+          // if (res.data.data) {
+        let data1 = [
+          {
+            'systolic': 144,
+            'diastolic': 82,
+            'createTime': '2018-03-08',
+            'calories': 0
+          },
+          {
+            'systolic': 122,
+            'diastolic': 76,
+            'createTime': '2018-02-04',
+            'calories': 100,
+            'movementScore': 33
+          },
+          {
+            'systolic': 165,
+            'diastolic': 106,
+            'createTime': '2018-02-03',
+            'calories': 23,
+            'movementScore': 35
+          },
+          {
+            'systolic': 199,
+            'diastolic': 86,
+            'createTime': '2018-02-02',
+            'calories': 50,
+            'movementScore': 20.9
+          },
+          {
+            'systolic': 171,
+            'diastolic': 118,
+            'createTime': '2018-02-01',
+            'calories': 60,
+            'movementScore': 35.5
+          }
+        ]
+        data1.forEach((item, index) => {
+          if (!item.systolic) {
+            item.systolic = 0
+          }
+          if (!item.diastolic) {
+            item.diastolic = 0
+          }
+          if (!item.calories) {
+            item.calories = 0
+          }
+          if (!item.movementScore) {
+            item.movementScore = 0
+          }
+          this.$set(this.bloodsportData.x, index, item.createTime)
+          this.$set(this.bloodsportData.systolic, index, item.systolic)
+          this.$set(this.bloodsportData.diastolic, index, item.diastolic)
+          this.$set(this.bloodsportData.movementScore, index, item.movementScore)
+          this.$set(this.bloodsportData.calories, index, item.calories)
+        })
+          // }
+        // }
+        let state = ''
+        if (this.bloodsportChecked.kaluli) {
+          state = 'kaluli'
+        }
+        if (this.bloodsportChecked.score) {
+          state = 'score'
+        }
+        let bloodSport = echarts.init(document.getElementById('bloodSport'))
+        bloodSport.setOption(this.bloodSportOption(state))
+      })
     },
     changeStatus () {
 
@@ -309,29 +720,26 @@ export default {
     },
     bloodCoverOption () {
       return {
-        // 提示框 在饼图上显示数据
-        // tooltip: {
-        //   trigger: 'item',
-        //   formatter: '{a} <br/>{b} : {c}人 <br/> {d}%'
-        // },
-        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f'],
+        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252'],
         legend: {
           orient: 'vertical',
           left: '50%',
           top: 'center',
-          data: ['正常', '偏高', '高', '危险'],
+          data: ['正常', '正常高值', '轻度', '中度', '危险'],
           selectedMode: false,
           formatter: (name) => {
             let i = 0
-            this.Data.forEach(
-              (item, index) => {
+            let num = ''
+            if (this.coverData) {
+              this.formatCoverData(this.coverData).forEach((item, index) => {
                 if (item.name === name) {
                   i = index
                   return i
                 }
-              }
-            )
-            return name + '（共' + this.Data[i].value + '人）'
+              })
+              num = this.formatCoverData(this.coverData)[i].value
+            }
+            return name + '（共' + num + '次）'
           },
           itemGap: 10,
           itemWidth: 20,
@@ -347,12 +755,11 @@ export default {
             type: 'pie',
             radius: '70%',
             center: ['25%', '50%'],
-            data: [
-                {value: 335, name: '正常'},
-                {value: 310, name: '偏高'},
-                {value: 234, name: '高'},
-                {value: 135, name: '危险'}
-            ],
+            // stillShowZeroSum: false,
+            data: this.formatCoverData(this.coverData),
+            // data: [
+            //     {value: 335, name: '正常'},
+            // ],
             label: {
               normal: {
                 position: 'inner',
@@ -369,98 +776,11 @@ export default {
         ],
         itemStyle: {
           emphasis: {
-            shadowBlur: 2,
+            shadowBlur: 1,
             shadowOffsetX: 0,
             shadowColor: ''
           }
         }
-      }
-    },
-    bloodAverageOption () {
-      return {
-        grid: {
-          show: false,
-          top: '30px',
-          width: 'auto',
-          height: 'auto'
-        },
-        xAxis: { // 直角坐标系grid的x轴
-          type: 'category',
-          axisLabel: {
-            interval: 0,  // 显示x轴数据
-            showMinLabel: true,
-            showMaxLabel: true,
-            align: 'left',
-            rotate: 330
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-        },
-        yAxis: { // 直角坐标系grid的y轴
-          type: 'value',
-          axisLine: {
-            onZero: false,
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          splitLine: {  // y轴网格显示
-            show: true
-          },
-          nameTextStyle: { // 坐标轴名样式
-            color: '#666',
-            fontSize: 12,
-            align: 'left'
-          },
-          boundaryGap: true,
-          splitNumber: 3,  // 坐标轴分割段数
-          minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-          // interval: 50, // 强制设置坐标轴分割间隔。
-          data: ['0', '120', '140', '180']
-        },
-        series: [
-          {
-            name: '血压平均分布',
-            type: 'bar',
-            barWidth: '60%',
-            label: {
-              normal: {
-                show: true,
-                position: 'top',
-                distance: 5,
-                formatter: '{c}',
-                color: '#999'
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: function (params) {
-                  var colorList = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
-                  if (params.data > 170) {
-                    return colorList[3]
-                  } else if (params.data > 140) {
-                    return colorList[2]
-                  } else if (params.data > 120) {
-                    return colorList[1]
-                  } else {
-                    return colorList[0]
-                  }
-                }
-              }
-            },
-            data: [144, 165, 174, 86, 70, 85, 92, 156, 75, 84, 66, 150]
-          }
-        ]
       }
     },
     bloodHistogramOption () {
@@ -471,37 +791,39 @@ export default {
         },
         legend: {
           orient: 'vertical',
-          right: '0',
+          right: '20',
           top: 'center',
           selectedMode: false,
           itemWidth: 20,
           itemHeight: 20,
-          data: [{
-            name: '正常',
-            icon: 'roundRect'
-          },
-          {
-            name: '正常高值',
-            icon: 'roundRect'
-          },
-          {
-            name: '轻度',
-            icon: 'roundRect'
-          },
-          {
-            name: '中度',
-            icon: 'roundRect'
-          },
-          {
-            name: '危险',
-            icon: 'roundRect'
-          }
+          data: [
+            {
+              name: '正常',
+              icon: 'roundRect'
+            },
+            {
+              name: '正常高值',
+              icon: 'roundRect'
+            },
+            {
+              name: '轻度',
+              icon: 'roundRect'
+            },
+            {
+              name: '中度',
+              icon: 'roundRect'
+            },
+            {
+              name: '危险',
+              icon: 'roundRect'
+            }
           ]
         },
         grid: {
           left: '5%',
-          right: '100',
+          right: '120',
           bottom: '24',
+          top: '10',
           containLabel: true
         },
         xAxis: [{
@@ -515,21 +837,22 @@ export default {
           axisTick: {
             show: false
           },
-          min: 50
+          min: 60,
+          minInterval: 10
         }],
         yAxis: [
-
           {
             type: 'value',
             name: '高压（收缩压）',
             nameLocation: 'end',
+            minInterval: 10,
             splitLine: {
               show: false
             },
             axisTick: {
               show: false
             },
-            min: 60
+            min: 90
 
           }
         ],
@@ -554,7 +877,6 @@ export default {
                 [0, 130],
                 [85, 130]
           ]
-
         },
         {
           type: 'line',
@@ -654,149 +976,220 @@ export default {
             }
           },
           z: 20,
-          data: [
-                [54, 112],
-                [80, 120],
-                [70, 125],
-                [100, 130],
-                [90, 128],
-                [85, 135],
-                [111, 188],
-                [116, 200]
-          ]
+          tooltip: {
+            show: true,
+            backgroundColor: 'rgba(50,50,50,0.2)',
+            triggerOn: 'click',
+            formatter: function (a) {
+              let low = ''
+              let heigh = ''
+              let time = ''
+              if (a.data) {
+                if (a.data[0]) {
+                  low = '低压' + a.data[0]
+                }
+                if (a.data[1]) {
+                  heigh = '高压' + a.data[1]
+                }
+                if (a.data[2]) {
+                  time = '时间' + a.data[2] + '<br>'
+                }
+              }
+              return (
+                time +
+               low + '<br>' +
+               heigh
+              )
+            }
+          },
+          data: this.formatHistogram(this.histogramData)
+
+          // data: [
+            //   [145, 119, '2018-01-08 18:48:16'],
+            //   [165, 86, '2018-01-08 19:54:16'],
+            //   [138, 67, '2018-01-05 21:54:16'],
+            //   [120, 81, '2018-02-03 16:09:48'],
+            //   [100, 83, '2018-02-03 16:09:48'],
+            //   [100, 83, '2018-02-03 16:09:48'],
+            //   [185, 81, '2018-02-03 16:09:48']
+            // ]
+
         }
         ]
       }
       // return option
     },
-    bloodFoodbloodOption () {
-      return {
-        title: {
-        // text: '控压走势',
-          // subtext: '控压走势',
-          // subtextStyle: {
-          //   color: '#111'
-          // },
-        // x: 'center'
-          // right: '20',
-          // top: '-10'
+    bloodFoodOption (state) {
+      let vm = this
+      let foodSeriesData = []
+      let foodSeriesTitle = ''
+      if (state === 'kaluli') {
+        foodSeriesData = vm.bloodfoodData.calories
+        foodSeriesTitle = '卡路里'
+      } if (state === 'score') {
+        foodSeriesData = vm.bloodfoodData.foodScore
+        foodSeriesTitle = '分数'
+      }
+      let option = {
+        color: ['#8ecefc', 'e6f5fe', '8ecefc'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          },
+          backgroundColor: 'rgba(50,50,50,0.2)',
+          triggerOn: 'click',
+          formatter: function (a) {
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                a[2]['seriesName'] + ': ' + a[2]['value']
+            )
+            // return (
+            //     a[0]['axisValueLabel'] + '<br>' +
+            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+            //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+            //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+            //     a[2]['seriesName'] + ': ' + a[2]['value']
+            // )
+          }
         },
-        // tooltip: { // 提示框组件
-        //   trigger: 'axis',
-        //   axisPointer: {
-        //     type: 'cross'
-        //   },
-        //   snap: true,
-        //   formatter: '{b} : {c}%'
-        // },
-        grid: { // 直角坐标系内绘图网格
-          show: false,
-          // left: '40px',
-          top: '30px',
-          // bottom: '24px',
-          width: 'auto',
-          height: 'auto'
-          // width: '100%',
-          // height: '100%'
-          // containLabel: true
+        axisPointer: {
+          link: [{
+            xAxisIndex: 'all'
+          }],
+          lineStyle: {
+            color: '#fff',
+            width: 0
+          }
         },
-      // toolbox: { // 工具栏
-        // show: true
-        // feature: {
-        //   asveAsImage: {}
-        // }
-      // },
-        // legend: { // 图例组件
-        //   show: true,
-        //   type: 'plain',
-        //   orient: 'vertical',
-        //   right: 15,
-        //   top: 10,
-        //   data: [{
-        //     name: '控压走势',
-        //     icon: 'roundRect',
-        //     textStyle: {
-        //       fontSize: 14
-        //     }
-        //   }],
-        //   selectedMode: false,
-        //   itemWidth: 20,
-        //   itemHeight: 20
-        // },
-        // visualMap: [
-        //   {
-        //     type: 'piecewise',
-        //     pieces: [{gt: 'aa'}]
-        //   }
-        // ],
-        xAxis: { // 直角坐标系grid的x轴
-          type: 'category',
-          // type: 'time',
-          boundaryGap: false,
-          // minInterval: 1,
-          // interval: 0,
-          // nameTextStyle: {
-          //   normal: {
-          //     color: '#666',
-          //     fontSize: 12
-          //   }
-          // },
-          // splitLine: {
-          //   show: false
-          // },
-          axisLabel: {
-            interval: 0,  // 显示x轴数据
-            showMinLabel: true,
-            showMaxLabel: true,
-            align: 'left',
-            rotate: 330
+        grid: [
+          { // 直角坐标系内绘图网格
+            top: '30px',
+            left: '60px',
+            right: '58%',
+            width: 'auto',
+            height: 'auto'
           },
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
+          {
+            top: '30px',
+            left: '50%',
+            width: 'auto',
+            height: 'auto'
+          }
+        ],
+        xAxis: [
+          { // 直角坐标系grid的x轴
+            gridIndex: 0,
+            type: 'category',
+            boundaryGap: false,
+            axisLabel: {
+              interval: 0, // 显示x轴数据
+              showMinLabel: true,
+              showMaxLabel: true,
+              align: 'left',
+              rotate: 330
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            // min: 0,
+            axisTick: {
+              show: false
+            },
+            // 血压横坐标
+            data: vm.bloodfoodData.x
           },
-          // min: 0,
-          axisTick: {
-            show: false
+          { // 直角坐标系grid的x轴
+            type: 'category',
+            gridIndex: 1,
+            boundaryGap: false,
+            axisLabel: {
+              interval: 0, // 显示x轴数据
+              showMinLabel: true,
+              showMaxLabel: true,
+              align: 'left',
+              rotate: 330
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            // 分数横坐标
+            data: vm.bloodfoodData.x
+          }
+        ],
+        yAxis: [
+          { // 直角坐标系grid的y轴
+            name: '血压',
+            gridIndex: 0,
+            nameLocation: 'end',
+            type: 'value',
+            axisLine: {
+              onZero: false,
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: { // y轴网格显示
+              show: true
+            },
+            nameTextStyle: { // 坐标轴名样式
+              color: '#666',
+              fontSize: 12,
+              align: 'left'
+            },
+            boundaryGap: true,
+            splitNumber: 3, // 坐标轴分割段数
+            minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
+            // interval: 50, // 强制设置坐标轴分割间隔。
+            data: ['0', '120', '140', '180']
           },
-          // data: this.sickTrendDataX[this.clickTime]
-          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-        },
-        yAxis: { // 直角坐标系grid的y轴
-          name: '血压',
-          nameLocation: 'end',
-          type: 'value',
-          axisLine: {
-            onZero: false,
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          // axisLabel: {
-          //   // formatter: '{value}%'
-          // },
-          splitLine: {  // y轴网格显示
-            show: true
-          },
-          nameTextStyle: { // 坐标轴名样式
-            color: '#666',
-            fontSize: 12,
-            align: 'left'
-          },
-          boundaryGap: true,
-          splitNumber: 3,  // 坐标轴分割段数
-          minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-          // interval: 50, // 强制设置坐标轴分割间隔。
-          data: ['0', '120', '140', '180']
-        },
+          { // 直角坐标系grid的y轴
+            name: foodSeriesTitle,
+            gridIndex: 1,
+            nameLocation: 'end',
+            type: 'value',
+            axisLine: {
+              onZero: false,
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: { // y轴网格显示
+              show: true
+            },
+            nameTextStyle: { // 坐标轴名样式
+              color: '#666',
+              fontSize: 12,
+              align: 'left'
+            },
+            boundaryGap: true,
+            splitNumber: 3, // 坐标轴分割段数
+            minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
+            // interval: 50, // 强制设置坐标轴分割间隔。
+            data: ['0', '120', '140', '180']
+          }
+        ],
         series: [
           {
+            xAxisIndex: 0,
+            yAxisIndex: 0,
             name: '舒张压',
             type: 'line',
             smooth: true,
@@ -819,9 +1212,11 @@ export default {
                 shadowColor: '#e6f5fe'
               }
             },
-            data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
+            data: vm.bloodfoodData.diastolic
           },
           {
+            xAxisIndex: 0,
+            yAxisIndex: 0,
             name: '收缩压',
             type: 'line',
             smooth: true,
@@ -840,10 +1235,38 @@ export default {
             areaStyle: {
               normal: {
                 color: '#def3f2',
-                origin: 'auto'
+                origin: 'auto',
+                shadowColor: '#def3f2'
               }
             },
-            data: [ 34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10 ]
+            data: vm.bloodfoodData.systolic
+          },
+          {
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            name: foodSeriesTitle,
+            type: 'line',
+            smooth: true,
+            smoothMonotone: 'x',
+            lineStyle: {
+              normal: {
+                width: 2,
+                color: '#8ecefc'
+              }
+            },
+            itemStyle: {
+              normal: {
+                color: '#8ecefc'
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: '#e6f5fe',
+                origin: 'auto',
+                shadowColor: '#e6f5fe'
+              }
+            },
+            data: foodSeriesData
           }
         ],
         textStyle: {
@@ -851,64 +1274,179 @@ export default {
           fontSize: 12
         }
       }
+      return option
     },
-    bloodFoodOption () {
-      return {
-        grid: { // 直角坐标系内绘图网格
-          show: false,
-          top: '30px',
-          width: 'auto',
-          height: 'auto'
+    bloodSportOption (state) {
+      let vm = this
+      let sportSeriesData = []
+      let sportSeriesTitle = ''
+      if (state === 'kaluli') {
+        sportSeriesData = vm.bloodsportData.calories
+        sportSeriesTitle = '卡路里'
+      } if (state === 'score') {
+        sportSeriesData = vm.bloodsportData.movementScore
+        sportSeriesTitle = '分数'
+      }
+      let option = {
+        color: ['#8ecefc', 'e6f5fe', '8ecefc'],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            animation: false
+          },
+          backgroundColor: 'rgba(50,50,50,0.2)',
+          triggerOn: 'click',
+          formatter: function (a) {
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                a[2]['seriesName'] + ': ' + a[2]['value']
+            )
+            // return (
+            //     a[0]['axisValueLabel'] + '<br>' +
+            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+            //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+            //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+            //     a[2]['seriesName'] + ': ' + a[2]['value']
+            // )
+          }
         },
-        xAxis: { // 直角坐标系grid的x轴
-          type: 'category',
-          boundaryGap: false,
-          axisLabel: {
-            interval: 0,  // 显示x轴数据
-            showMinLabel: true,
-            showMaxLabel: true,
-            align: 'left',
-            rotate: 330
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+        axisPointer: {
+          link: [{
+            xAxisIndex: 'all'
+          }],
+          lineStyle: {
+            color: '#fff',
+            width: 0
+          }
         },
-        yAxis: { // 直角坐标系grid的y轴
-          name: '行为分数',
-          nameLocation: 'end',
-          type: 'value',
-          axisLine: {
-            onZero: false,
-            lineStyle: {
-              color: '#999'
-            }
+        grid: [
+          { // 直角坐标系内绘图网格
+            top: '30px',
+            left: '60px',
+            right: '58%',
+            width: 'auto',
+            height: 'auto'
           },
-          axisTick: {
-            show: false
+          {
+            top: '30px',
+            left: '50%',
+            width: 'auto',
+            height: 'auto'
+          }
+        ],
+        xAxis: [
+          { // 直角坐标系grid的x轴
+            gridIndex: 0,
+            type: 'category',
+            boundaryGap: false,
+            axisLabel: {
+              interval: 0, // 显示x轴数据
+              showMinLabel: true,
+              showMaxLabel: true,
+              align: 'left',
+              rotate: 330
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            // min: 0,
+            axisTick: {
+              show: false
+            },
+            // 血压横坐标
+            data: vm.bloodsportData.x
           },
-          splitLine: {  // y轴网格显示
-            show: true
+          { // 直角坐标系grid的x轴
+            type: 'category',
+            gridIndex: 1,
+            boundaryGap: false,
+            axisLabel: {
+              interval: 0, // 显示x轴数据
+              showMinLabel: true,
+              showMaxLabel: true,
+              align: 'left',
+              rotate: 330
+            },
+            axisLine: {
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            // 分数横坐标
+            data: vm.bloodsportData.x
+          }
+        ],
+        yAxis: [
+          { // 直角坐标系grid的y轴
+            name: '血压',
+            gridIndex: 0,
+            nameLocation: 'end',
+            type: 'value',
+            axisLine: {
+              onZero: false,
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: { // y轴网格显示
+              show: true
+            },
+            nameTextStyle: { // 坐标轴名样式
+              color: '#666',
+              fontSize: 12,
+              align: 'left'
+            },
+            boundaryGap: true,
+            splitNumber: 3, // 坐标轴分割段数
+            minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
+            // interval: 50, // 强制设置坐标轴分割间隔。
+            data: ['0', '120', '140', '180']
           },
-          nameTextStyle: { // 坐标轴名样式
-            color: '#666',
-            fontSize: 12,
-            align: 'left'
-          },
-          boundaryGap: true,
-          splitNumber: 3,  // 坐标轴分割段数
-          minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-          // interval: 50, // 强制设置坐标轴分割间隔。
-          data: ['0', '120', '140', '180']
-        },
+          { // 直角坐标系grid的y轴
+            name: sportSeriesTitle,
+            gridIndex: 1,
+            nameLocation: 'end',
+            type: 'value',
+            axisLine: {
+              onZero: false,
+              lineStyle: {
+                color: '#999'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            splitLine: { // y轴网格显示
+              show: true
+            },
+            nameTextStyle: { // 坐标轴名样式
+              color: '#666',
+              fontSize: 12,
+              align: 'left'
+            },
+            boundaryGap: true,
+            splitNumber: 3, // 坐标轴分割段数
+            minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
+            // interval: 50, // 强制设置坐标轴分割间隔。
+            data: ['0', '120', '140', '180']
+          }
+        ],
         series: [
           {
+            xAxisIndex: 0,
+            yAxisIndex: 0,
             name: '舒张压',
             type: 'line',
             smooth: true,
@@ -931,169 +1469,11 @@ export default {
                 shadowColor: '#e6f5fe'
               }
             },
-            data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
-          }
-
-        ],
-        textStyle: {
-          color: '#666',
-          fontSize: 12
-        }
-      }
-    },
-    bloodSportbloodOption () {
-      return {
-        title: {
-        // text: '控压走势',
-          // subtext: '控压走势',
-          // subtextStyle: {
-          //   color: '#111'
-          // },
-        // x: 'center'
-          // right: '20',
-          // top: '-10'
-        },
-        // tooltip: { // 提示框组件
-        //   trigger: 'axis',
-        //   axisPointer: {
-        //     type: 'cross'
-        //   },
-        //   snap: true,
-        //   formatter: '{b} : {c}%'
-        // },
-        grid: { // 直角坐标系内绘图网格
-          show: false,
-          // left: '40px',
-          top: '30px',
-          // bottom: '24px',
-          width: 'auto',
-          height: 'auto'
-          // width: '100%',
-          // height: '100%'
-          // containLabel: true
-        },
-      // toolbox: { // 工具栏
-        // show: true
-        // feature: {
-        //   asveAsImage: {}
-        // }
-      // },
-        // legend: { // 图例组件
-        //   show: true,
-        //   type: 'plain',
-        //   orient: 'vertical',
-        //   right: 15,
-        //   top: 10,
-        //   data: [{
-        //     name: '控压走势',
-        //     icon: 'roundRect',
-        //     textStyle: {
-        //       fontSize: 14
-        //     }
-        //   }],
-        //   selectedMode: false,
-        //   itemWidth: 20,
-        //   itemHeight: 20
-        // },
-        // visualMap: [
-        //   {
-        //     type: 'piecewise',
-        //     pieces: [{gt: 'aa'}]
-        //   }
-        // ],
-        xAxis: { // 直角坐标系grid的x轴
-          type: 'category',
-          // type: 'time',
-          boundaryGap: false,
-          // minInterval: 1,
-          // interval: 0,
-          // nameTextStyle: {
-          //   normal: {
-          //     color: '#666',
-          //     fontSize: 12
-          //   }
-          // },
-          // splitLine: {
-          //   show: false
-          // },
-          axisLabel: {
-            interval: 0,  // 显示x轴数据
-            showMinLabel: true,
-            showMaxLabel: true,
-            align: 'left',
-            rotate: 330
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          // min: 0,
-          axisTick: {
-            show: false
-          },
-          // data: this.sickTrendDataX[this.clickTime]
-          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-        },
-        yAxis: { // 直角坐标系grid的y轴
-          name: '血压',
-          nameLocation: 'end',
-          type: 'value',
-          axisLine: {
-            onZero: false,
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          // axisLabel: {
-          //   // formatter: '{value}%'
-          // },
-          splitLine: {  // y轴网格显示
-            show: true
-          },
-          nameTextStyle: { // 坐标轴名样式
-            color: '#666',
-            fontSize: 12,
-            align: 'left'
-          },
-          boundaryGap: true,
-          splitNumber: 3,  // 坐标轴分割段数
-          minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-          // interval: 50, // 强制设置坐标轴分割间隔。
-          data: ['0', '120', '140', '180']
-        },
-        series: [
-          {
-            name: '舒张压',
-            type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
-            lineStyle: {
-              normal: {
-                width: 2,
-                color: '#8ecefc'
-              }
-            },
-            itemStyle: {
-              normal: {
-                color: '#8ecefc'
-              }
-            },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
-            data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
+            data: vm.bloodsportData.diastolic
           },
           {
+            xAxisIndex: 0,
+            yAxisIndex: 0,
             name: '收缩压',
             type: 'line',
             smooth: true,
@@ -1112,76 +1492,16 @@ export default {
             areaStyle: {
               normal: {
                 color: '#def3f2',
-                origin: 'auto'
+                origin: 'auto',
+                shadowColor: '#def3f2'
               }
             },
-            data: [ 34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10 ]
-          }
-        ],
-        textStyle: {
-          color: '#666',
-          fontSize: 12
-        }
-      }
-    },
-    bloodSportOption () {
-      return {
-        grid: { // 直角坐标系内绘图网格
-          show: false,
-          top: '30px',
-          width: 'auto',
-          height: 'auto'
-        },
-        xAxis: { // 直角坐标系grid的x轴
-          type: 'category',
-          boundaryGap: false,
-          axisLabel: {
-            interval: 0,  // 显示x轴数据
-            showMinLabel: true,
-            showMaxLabel: true,
-            align: 'left',
-            rotate: 330
+            data: vm.bloodsportData.systolic
           },
-          axisLine: {
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-        },
-        yAxis: { // 直角坐标系grid的y轴
-          name: '行为分数',
-          nameLocation: 'end',
-          type: 'value',
-          axisLine: {
-            onZero: false,
-            lineStyle: {
-              color: '#999'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          splitLine: {  // y轴网格显示
-            show: true
-          },
-          nameTextStyle: { // 坐标轴名样式
-            color: '#666',
-            fontSize: 12,
-            align: 'left'
-          },
-          boundaryGap: true,
-          splitNumber: 3,  // 坐标轴分割段数
-          minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-          // interval: 50, // 强制设置坐标轴分割间隔。
-          data: ['0', '120', '140', '180']
-        },
-        series: [
           {
-            name: '舒张压',
+            xAxisIndex: 1,
+            yAxisIndex: 1,
+            name: sportSeriesTitle,
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
@@ -1203,32 +1523,225 @@ export default {
                 shadowColor: '#e6f5fe'
               }
             },
-            data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
+            data: sportSeriesData
           }
-
         ],
         textStyle: {
           color: '#666',
           fontSize: 12
         }
       }
+      return option
     }
+    // bloodSportOption () {
+    //   return {
+    //     title: {
+    //     // text: '控压走势',
+    //       // subtext: '控压走势',
+    //       // subtextStyle: {
+    //       //   color: '#111'
+    //       // },
+    //     // x: 'center'
+    //       // right: '20',
+    //       // top: '-10'
+    //     },
+    //     // tooltip: { // 提示框组件
+    //     //   trigger: 'axis',
+    //     //   axisPointer: {
+    //     //     type: 'cross'
+    //     //   },
+    //     //   snap: true,
+    //     //   formatter: '{b} : {c}%'
+    //     // },
+    //     grid: { // 直角坐标系内绘图网格
+    //       show: false,
+    //       // left: '40px',
+    //       top: '30px',
+    //       // bottom: '24px',
+    //       // width: 'auto',
+    //       // height: 'auto',
+    //       width: '100%',
+    //       height: '100%'
+    //       // containLabel: true
+    //     },
+    //   // toolbox: { // 工具栏
+    //     // show: true
+    //     // feature: {
+    //     //   asveAsImage: {}
+    //     // }
+    //   // },
+    //     // legend: { // 图例组件
+    //     //   show: true,
+    //     //   type: 'plain',
+    //     //   orient: 'vertical',
+    //     //   right: 15,
+    //     //   top: 10,
+    //     //   data: [{
+    //     //     name: '控压走势',
+    //     //     icon: 'roundRect',
+    //     //     textStyle: {
+    //     //       fontSize: 14
+    //     //     }
+    //     //   }],
+    //     //   selectedMode: false,
+    //     //   itemWidth: 20,
+    //     //   itemHeight: 20
+    //     // },
+    //     // visualMap: [
+    //     //   {
+    //     //     type: 'piecewise',
+    //     //     pieces: [{gt: 'aa'}]
+    //     //   }
+    //     // ],
+    //     xAxis: { // 直角坐标系grid的x轴
+    //       type: 'category',
+    //       // type: 'time',
+    //       boundaryGap: false,
+    //       // minInterval: 1,
+    //       // interval: 0,
+    //       // nameTextStyle: {
+    //       //   normal: {
+    //       //     color: '#666',
+    //       //     fontSize: 12
+    //       //   }
+    //       // },
+    //       // splitLine: {
+    //       //   show: false
+    //       // },
+    //       axisLabel: {
+    //         interval: 0,  // 显示x轴数据
+    //         showMinLabel: true,
+    //         showMaxLabel: true,
+    //         align: 'left',
+    //         rotate: 330
+    //       },
+    //       axisLine: {
+    //         lineStyle: {
+    //           color: '#999'
+    //         }
+    //       },
+    //       // min: 0,
+    //       axisTick: {
+    //         show: false
+    //       },
+    //       // data: this.sickTrendDataX[this.clickTime]
+    //       // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    //       // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+    //       data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+    //     },
+    //     yAxis: { // 直角坐标系grid的y轴
+    //       name: '血压',
+    //       nameLocation: 'end',
+    //       type: 'value',
+    //       axisLine: {
+    //         onZero: false,
+    //         lineStyle: {
+    //           color: '#999'
+    //         }
+    //       },
+    //       axisTick: {
+    //         show: false
+    //       },
+    //       // axisLabel: {
+    //       //   // formatter: '{value}%'
+    //       // },
+    //       splitLine: {  // y轴网格显示
+    //         show: true
+    //       },
+    //       nameTextStyle: { // 坐标轴名样式
+    //         color: '#666',
+    //         fontSize: 12,
+    //         align: 'left'
+    //       },
+    //       boundaryGap: true,
+    //       splitNumber: 3,  // 坐标轴分割段数
+    //       minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
+    //       // interval: 50, // 强制设置坐标轴分割间隔。
+    //       data: ['0', '120', '140', '180']
+    //     },
+    //     series: [
+    //       {
+    //         name: '舒张压',
+    //         type: 'line',
+    //         smooth: true,
+    //         smoothMonotone: 'x',
+    //         lineStyle: {
+    //           normal: {
+    //             width: 2,
+    //             color: '#8ecefc'
+    //           }
+    //         },
+    //         itemStyle: {
+    //           normal: {
+    //             color: '#8ecefc'
+    //           }
+    //         },
+    //         areaStyle: {
+    //           normal: {
+    //             color: '#e6f5fe',
+    //             origin: 'auto',
+    //             shadowColor: '#e6f5fe'
+    //           }
+    //         },
+    //         data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
+    //       },
+    //       {
+    //         name: '收缩压',
+    //         type: 'line',
+    //         smooth: true,
+    //         smoothMonotone: 'x',
+    //         lineStyle: {
+    //           normal: {
+    //             width: 2,
+    //             color: '#7cedc4'
+    //           }
+    //         },
+    //         itemStyle: {
+    //           normal: {
+    //             color: '#7cedc4'
+    //           }
+    //         },
+    //         areaStyle: {
+    //           normal: {
+    //             color: '#def3f2',
+    //             origin: 'auto'
+    //           }
+    //         },
+    //         data: [ 34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10 ]
+    //       }
+    //     ],
+    //     textStyle: {
+    //       color: '#666',
+    //       fontSize: 12
+    //     }
+    //   }
+    // }
+  },
+  watch: {
   },
   mounted () {
+    // 初始化血压分布图
+    this.coverChecked.date[0].isChecked = true
+    this.updateCover(this.coverChecked.date[0].date)
     let bloodCover = echarts.init(document.getElementById('bloodCover'))
     bloodCover.setOption(this.bloodCoverOption())
-    // let bloodAverage = echarts.init(document.getElementById('bloodAverage'))
-    // bloodAverage.setOption(this.bloodAverageOption())
+    // 初始化血压直方图
+    this.histogramChecked.date[0].isChecked = true
+    this.updateHistogram(this.histogramChecked.date[0].date)
     let bloodHistogram = echarts.init(document.getElementById('bloodHistogram'))
     bloodHistogram.setOption(this.bloodHistogramOption())
-    let bloodFoodblood = echarts.init(document.getElementById('bloodFoodblood'))
-    bloodFoodblood.setOption(this.bloodFoodbloodOption())
+
+    this.bloodfoodChecked.date[0].isChecked = true
+    this.bloodfoodChecked.kaluli = true
+    this.updateFood(this.bloodfoodChecked.date[0].date)
     let bloodFood = echarts.init(document.getElementById('bloodFood'))
-    bloodFood.setOption(this.bloodFoodOption())
-    let bloodSportblood = echarts.init(document.getElementById('bloodSportblood'))
-    bloodSportblood.setOption(this.bloodSportbloodOption())
+    bloodFood.setOption(this.bloodFoodOption('kaluli'))
+
+    this.bloodsportChecked.date[0].isChecked = true
+    this.bloodsportChecked.kaluli = true
+    this.updateSport(this.bloodsportChecked.date[0].date)
     let bloodSport = echarts.init(document.getElementById('bloodSport'))
-    bloodSport.setOption(this.bloodSportOption())
+    bloodSport.setOption(this.bloodSportOption('kaluli'))
   }
 }
 </script>
@@ -1382,7 +1895,9 @@ export default {
     color:#e87070 !important;
   }
   .float-box{
-    float: left;
+    /* float: left; */
+    display: inline-block;
+    /* width: 100%; */
   }
   .checked-kaluli{
     margin-top: 80px;

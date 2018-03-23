@@ -1,11 +1,12 @@
 <template>
   <div class="box">
       <div class="left-arrow">
-        <el-button @click="goleft()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
+        <el-button @click="next()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
       </div>
       <div class="right-arrow">
-        <el-button @click="goright()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
+        <el-button @click="pre()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
       </div>
+      <i class="new"></i>
       <slot></slot>
   </div>
 </template>
@@ -15,7 +16,8 @@ export default {
   data () {
     return {
       activeindex: 99999,
-      defaultactive: 0
+      defaultactive: 0,
+      isNew: true
     }
   },
   methods: {
@@ -35,22 +37,23 @@ export default {
         }
       })
     },
-    goleft () {
+    pre () {
       this.defaultactive += 1
       if (this.defaultactive >= (this.getItems().length)) {
         this.defaultactive = 0
       }
       this.setCardGoDirection(this.defaultactive, 'leftarrow')
       this.setactive(this.defaultactive)
+      console.log('前', this.defaultactive)
     },
-    goright () {
+    next () {
       this.defaultactive -= 1
       if (this.defaultactive < 0) {
         this.defaultactive = this.getItems().length - 1
       }
       this.setCardGoDirection(this.defaultactive, 'rightarrow')
       this.setactive(this.defaultactive)
-      console.log(this.defaultactive)
+      console.log('hou', this.defaultactive)
     }
   },
   mounted () {
@@ -97,7 +100,8 @@ export default {
 
   .box{
     margin-top:8px;
-    overflow: hidden;
+    /* overflow: hidden; */
+    /* float: none; */
     position: relative;
     background-color: #fff;
     padding:0px 50px 24px 50px;
@@ -118,5 +122,20 @@ export default {
     position: absolute;
     top:150px;
     right: 10px;
+  }
+  .new{
+    position: relative;
+  }
+  .new::before{
+    z-index: 22222222222222;
+    top:0;
+    left: -50px;
+    position: absolute;
+    content: '';
+    width: 64px;
+    height: 44px;
+    /* display: block; */
+    /* vertical-align: middle; */
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-31.png') no-repeat;
   }
 </style>

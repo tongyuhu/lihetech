@@ -1,22 +1,26 @@
 <template>
-  <div class="clear box" ref="sickCard">
+   <div class="clear box">
+     <div class="left-arrow">
+        <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
+      </div>
+      <div class="right-arrow">
+        <el-button @click="next()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
+      </div>
+      <i :class="{'new':isnew}"></i>
       <div class="table-top">
         <span class="table-top-span">病历卡  {{currentpage}}/{{totalPage}}</span>
-        <span>2017年4月12日 星期四</span>
+        <span>{{createTime}}</span>
       </div>
       <div>
         <table cellpadding='0' cellspacing="0" class="table">
               <tr>
                 <th class="table-head">用户自述</th>
                 <td> 
-                  最近总是恶心、呕吐、浑身无力、四肢无力最近总是恶心、
-           
-            
-                 
+                  {{readme}}
                   <el-button size="mini" type="text" class="table-btn" @click="play">
                     <i class="play"></i>播放
                   </el-button>
-                  <audio src="" :id="'index'+index">
+                  <audio :src="readmeUrl" id="audio">
                   Your browser does not support the audio element.
                   </audio>
                 </td>
@@ -25,15 +29,15 @@
                 <th class="table-head">系统分析</th>
                 <td>
                   <span>
-                    高血压用药不能停止，请继续服用
+                    {{systemAnalysis}}
                   </span>
                 </td>
               </tr>
               <tr>
                 <th class="table-head">医生诊断</th>
                 <td>
-                  您属于二型糖尿病、请按照下面的药品进行服用
-                  <el-button type="text" size="mini" class="table-btn" @click="sendVoice(index)">
+                  {{doctorDiagnos}}
+                  <el-button type="text" size="mini" class="table-btn" @click="sendVoice()">
                     <i class="send"></i>发送语音
                   </el-button>
                 </td>
@@ -68,11 +72,11 @@
                   <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
                     <tr>
                       <td class="only-bottom-border">
-                        药品1   药品2 
-                        <el-button type="text" size="mini" class="table-btn" @click="deleteMedicine(index)">
+                        {{medicine}}
+                        <el-button type="text" size="mini" class="table-btn" @click="deleteMedicine()">
                           <i class="delete"></i>删除
                         </el-button>
-                        <el-button type="text" size="mini" class="table-btn" @click="addMedicine(index)">
+                        <el-button type="text" size="mini" class="table-btn" @click="addMedicine()">
                           <i class="add"></i>添加
                         </el-button>
                       </td>
@@ -83,12 +87,12 @@
                           血压偏高，不宜大幅度运动、请选择每天步行30min
                         </span> -->
                         
-                            血压偏高，不宜大幅度运动、请选择每天步行30min
+                            {{movement}}
                           
-                            <el-button type="text" size="mini" class="table-btn" @click="deleteSport(index)">
+                            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()">
                               <i class="delete"></i>删除
                             </el-button>
-                            <el-button type="text" size="mini" class="table-btn" @click="addSport(index)">
+                            <el-button type="text" size="mini" class="table-btn" @click="addSport()">
                               <i class="add"></i>添加
                             </el-button>
                           
@@ -97,7 +101,7 @@
                     <tr>
                       <td class="no-border">
                         <span>
-                          饮食清淡为主、不要多吃肉
+                          {{diet}}
                         </span>
                       </td>
                     </tr>
@@ -110,7 +114,7 @@
                 </th>
                 <td>
                   <span>
-                    李那那        上海张江高科诊所   糖尿病慢性病家庭医生
+                    李那那  上海张江高科诊所  糖尿病慢性病家庭医生
                   </span>
                 </td>
               </tr>
@@ -120,124 +124,151 @@
 </template>
 
 <script>
+// import {Bus} from './../../bus'
 export default {
-  name: 'sickcard',
   props: {
-    index: {
-      type: [Number, String]
+    totalPage: {
+      type: [Number, String],
+      default: 1
     },
-    totalCard: {
-      type: [Number, String]
+    sickData: {
+
     }
+    // sickID: {
+    //   default: 0
+    // },
+    // hospitalId: {
+    //   default: 0
+    // }
   },
   data () {
     return {
-      currentpage: Number(this.index) + 1,
-      totalPage: this.totalCard,
-      items: [
-        {
-          show: true,
-          index: 1
-        },
-        {
-          show: false,
-          index: 2
-        },
-        {
-          show: false,
-          index: 3
+      currentpage: 1,
+      isnew: true
+      // totalPage: ''
+    }
+  },
+  computed: {
+    readme () {
+      if (this.sickData) {
+        if (this.sickData.readme) {
+          return this.sickData.readme
         }
-      ],
-      sickCardData: [
-        {
-          height: '181',
-          weight: '66',
-          historySick: '恶性肿瘤 结核病',
-          geneticSick: '恶性肿瘤 结核病',
-          liveHabits: '不抽烟 喝酒',
-          complication: '眼病 足柄',
-          checkItem: '心电图、肾脏',
-          phone: '18669874498',
-          checkTime: '2014-8-9 星期5',
-          sickSay: '最近总是恶心、呕吐、浑身无力、四肢无力',
-          sickSayUrl: '',
-          systemResults: '高血压用药不能停止，请继续服用',
-          doctorResults: '您属于二型糖尿病、请按照下面的药品进行服用',
-          doctorResultsUrl: '',
-          useMedicine: '药品1 药品2',
-          sportSuggest: '血压偏高，不宜大幅度运动、请选择每天步行30min',
-          foodSuggest: '饮食清淡为主、不要多吃肉',
-          doctorMsg: '李那那 上海张江高科诊所 糖尿病慢性病家庭医生',
-          inex: 1,
-          new: true,
-          show: true
+      }
+    },
+    readmeUrl () {
+      if (this.sickData) {
+        if (this.sickData.readmeUrl) {
+          return this.sickData.readmeUrl
         }
-
-      ]
+      }
+    },
+    systemAnalysis () {
+      if (this.sickData) {
+        if (this.sickData.systemAnalysis) {
+          return this.sickData.systemAnalysis
+        }
+      }
+    },
+    doctorDiagnos () {
+      if (this.sickData) {
+        if (this.sickData.doctorDiagnos) {
+          return this.sickData.doctorDiagnos
+        }
+      }
+    },
+    doctorDiagnosUrl () {
+      if (this.sickData) {
+        if (this.sickData.doctorDiagnosUrl) {
+          return this.sickData.doctorDiagnosUrl
+        }
+      }
+    },
+    medicine () {
+      if (this.sickData) {
+        if (this.sickData.medicine) {
+          return this.sickData.medicine
+        }
+      }
+    },
+    movement () {
+      if (this.sickData) {
+        if (this.sickData.movement) {
+          return this.sickData.movement
+        }
+      }
+    },
+    diet () {
+      if (this.sickData) {
+        if (this.sickData.diet) {
+          return this.sickData.diet
+        }
+      }
+    },
+    createTime () {
+      if (this.sickData) {
+        if (this.sickData.createTime) {
+          return this.sickData.createTime
+        }
+      }
+    }
+  },
+  watch: {
+    currentpage (val) {
+      if (val === 1) {
+        this.isnew = true
+      } else {
+        this.isnew = false
+      }
     }
   },
   methods: {
-    left (table) {
-      this.list = 'leftarrow'
-      this.items.forEach((item, index) => {
-        item.show = false
-      })
-
-      if (table >= this.items.length - 1) {
-        this.items[0].show = true
-      } else {
-        this.items[table + 1].show = true
+    next () {
+      if (this.currentpage) {
+        this.currentpage = parseInt(this.currentpage)
       }
-    },
-    right (table) {
-      this.list = 'rightarrow'
-      this.items.forEach((item, index) => {
-        item.show = false
-      })
-
-      if (table <= 0) {
-        this.items[this.items.length - 1].show = true
-      } else {
-        this.items[table - 1].show = true
+      if (this.totalPage) {
+        this.totalPage = parseInt(this.totalPage)
       }
+      if (this.currentpage >= this.totalPage) {
+        this.currentpage = 0
+      }
+      this.currentpage += 1
+      this.$emit('preBtn', this.currentpage)
     },
-    sendVoice (index) {
-      // 当前病历卡位于 index+1
-      // console.log(index)
+    pre () {
+      if (this.currentpage) {
+        this.currentpage = parseInt(this.currentpage)
+      }
+      if (this.totalPage) {
+        this.totalPage = parseInt(this.totalPage)
+      }
+      if (this.currentpage <= 1) {
+        this.currentpage = this.totalPage + 1
+      }
+      this.currentpage -= 1
+      this.$emit('preBtn', this.currentpage)
     },
     play () {
-      let id = 'index' + this.index
       this.$nextTick(function () {
-        console.log(id)
-        document.getElementById(id).play()
+        document.getElementById('audio').play()
       })
     },
-    addMedicine () {},
+    sendVoice () {
+
+    },
     deleteMedicine () {},
-    addSport () {},
-    deleteSport () {}
-  },
-  computed: {
-    isnew () {
-      if (this.index === 0) {
-        return true
-      } else {
-        return false
-      }
-    }
-  },
-  mounted () {
-    // console.log('sickCard', this.$refs.sickCard.clientHeight)
-    // this.height = this.$refs.card[0].$el.offsetHeight
-    // console.log(this.$refs.card[0].$el.offsetHeight)
+    addMedicine () {},
+    deleteSport () {},
+    addSport () {}
   }
 }
 </script>
 
 <style scoped>
   .clear{
-    overflow:hidden;
-  }
+      overflow:hidden;
+    }
   .clear::after{
   content:"";
   height:0;
@@ -249,6 +280,10 @@ export default {
   .box{
     position: relative;
     background-color: #fff;
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 24px;
+    margin-bottom: 8px;
   }
 
   table{
@@ -355,7 +390,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-25.png') no-repeat;
+    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-25.png') no-repeat;
   }
   .send{
     position: relative;
@@ -368,7 +403,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-26.png') no-repeat;
+    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-26.png') no-repeat;
   }
   .delete{
     position: relative;
@@ -381,7 +416,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-27.png') no-repeat;
+    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-27.png') no-repeat;
   }
   .add{
     position: relative;
@@ -394,7 +429,21 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-28.png') no-repeat;
+    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-28.png') no-repeat;
+  }
+   .new{
+    position: relative;
+  }
+  .new::before{
+    z-index: 22222222222222;
+    top:0;
+    left: -50px;
+    position: absolute;
+    content: '';
+    width: 64px;
+    height: 44px;
+    /* display: block; */
+    /* vertical-align: middle; */
+    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-31.png') no-repeat;
   }
 </style>
-

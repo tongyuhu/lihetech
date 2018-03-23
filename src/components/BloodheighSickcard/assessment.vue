@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-card :body-style="{ padding: '0px' }">
-
       <div class="card-header">
         <p class="title">心血管评估</p>
       </div>
@@ -21,40 +20,40 @@
           </tr>
           <tr>
             <td class="icon-normal">
-              天鹅型</td>
+              {{sysTypeName}}</td>
             <td>
-              <img :src="pingtan" alt="">
+              <img :src="img(sysTypeName)" alt="">
             </td>
             <td>
-              <img :src="truepingtan" alt="">
+              <img :src="trueimg(sysTypeName)" alt="">
             </td>
             <td>
-              <p>正常 非动脉硬化型高血压</p>
+              <p>{{sysImageAnalyze}}</p>
             </td>
           </tr>
           <tr>
-            <td class="icon-self">天鹅型</td>
+            <td class="icon-self">{{userTypeName}}</td>
             <td>
-              <img :src="tiane" alt="">
+              <img :src="img(userTypeName)" alt="">
             </td>
             <td>
-              <img :src="truetiane" alt="">
+              <img :src="trueimg(userTypeName)" alt="">
             </td>
             <td>
-              <p>正常 非动脉硬化型高血压</p>
+              <p>{{userImageAnalyze}}</p>
             </td>
           </tr>
         </table>
       </div>
       <div class="report-box clear">
         <div class="report">
-          <p>您当前血压KSG图：<span class="red-text">双峰型</span> </p>
-          <p>病情预估：<span class="red-text"> 心脏疾病、年轻型高血压、肾性高血压、本态性高血压</span></p>
-          <p>心血管疾病评估未来十年风险：<span class="red-text a-text blod-text">0.38%</span></p>
+          <p>您当前血压KSG图：<span class="red-text">{{userTypeName}}</span> </p>
+          <p>病情预估：<span class="red-text">{{userConditionPredict}}</span></p>
+          <p>心血管疾病评估未来十年风险：<span class="red-text a-text blod-text">{{dangerRate}}</span></p>
         </div>
         <div class="report">
           <p class="blod-text">分析信息</p>
-          <p>您当前血压控制较好，可每日适当提升自己的运动量，但不要做高强度运动</p>
+          <p>{{sysConditionPredict}}</p>
         </div>
       </div>
     </el-card>
@@ -72,7 +71,16 @@ import buzheng from './../../../诊所-高血压/hospitalIcon/诊所-icon-51.png
 import truebuzheng from './../../../诊所-高血压/hospitalIcon/诊所-icon-61.png'
 import quexue from './../../../诊所-高血压/hospitalIcon/诊所-icon-52.png'
 import truequexue from './../../../诊所-高血压/hospitalIcon/诊所-icon-62.png'
+import {assessmentApi} from './../../api/components/BloodheighSickcard/assessment'
 export default {
+  props: {
+    sickID: {
+      default: 0
+    },
+    hospitalId: {
+      default: 0
+    }
+  },
   data () {
     return {
       'tiane': tiane,
@@ -84,8 +92,94 @@ export default {
       'buzheng': buzheng,
       'truebuzheng': truebuzheng,
       'quexue': quexue,
-      'truequexue': truequexue
+      'truequexue': truequexue,
+      userTypeName: '',
+      userImageAnalyze: '',
+      userConditionPredict: '',
+      dangerRate: '',
+      sysConditionPredict: '',
+      sysImageAnalyze: '',
+      sysTypeName: ''
     }
+  },
+  methods: {
+    img (value) {
+      let img = ''
+      if (value === '天鹅型') {
+        img = this.tiane
+      }
+      if (value === '平坦型') {
+        img = this.pingtan
+      }
+      if (value === '双峰型') {
+        img = this.shuangfeng
+      }
+      if (value === '不整型') {
+        img = this.buzheng
+      }
+      if (value === '缺血型') {
+        img = this.quexue
+      }
+      return img
+    },
+    trueimg (value) {
+      let img = ''
+      if (value === '天鹅型') {
+        img = this.truetiane
+      }
+      if (value === '平坦型') {
+        img = this.truepingtan
+      }
+      if (value === '双峰型') {
+        img = this.trueshuangfeng
+      }
+      if (value === '不整型') {
+        img = this.truebuzheng
+      }
+      if (value === '缺血型') {
+        img = this.truequexue
+      }
+      return img
+    },
+    getAssessmentData () {
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId
+      }
+      this.$axios(assessmentApi(params))
+      .then(res => {
+        if (res.data.data) {
+          if (res.data.data.userDoubleArm) {
+            if (res.data.data.userDoubleArm.typeName) {
+              this.userTypeName = res.data.data.userDoubleArm.typeName || ''
+            }
+            if (res.data.data.userDoubleArm.conditionPredict) {
+              this.userImageAnalyze = res.data.data.userDoubleArm.conditionPredict || ''
+            }
+            if (res.data.data.userDoubleArm.imageAnalyze) {
+              this.userConditionPredict = res.data.data.userDoubleArm.imageAnalyze || ''
+            }
+          }
+          if (res.data.data.ICVDRisk) {
+            this.dangerRate = res.data.data.ICVDRisk + '%' || ''
+          }
+          if (res.data.data.sysDoubleArm) {
+            if (res.data.data.sysDoubleArm.conditionPredict) {
+              this.sysConditionPredict = res.data.data.sysDoubleArm.conditionPredict || ''
+            }
+            if (res.data.data.sysDoubleArm.imageAnalyze) {
+              this.sysImageAnalyze = res.data.data.sysDoubleArm.imageAnalyze || ''
+            }
+            if (res.data.data.sysDoubleArm.typeName) {
+              this.sysTypeName = res.data.data.sysDoubleArm.typeName || ''
+            }
+          }
+        }
+      })
+    }
+  },
+  mounted () {
+    this.getAssessmentData()
   }
 }
 </script>

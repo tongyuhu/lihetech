@@ -6,7 +6,7 @@
         <p class="name">{{name}}</p>
         <div class="sick-card-head-left-msg">
           <span>性别:{{sex}}</span>
-          <span>年龄:{{age}}岁</span>
+          <span>年龄:{{age}}</span>
           <span>电话:{{mobile}}</span>
           <span class="sick">确诊为:{{doctorDiagnos}}</span>
         </div>
@@ -20,7 +20,7 @@
       <div class="tabs">
         <tabs
         v-model="activeKey"
-        :hassuger="true"
+        :hassuger="isSugerHeigh"
         @checkSuger="checkSuger">
           <pane
           label="病历(远程)" name="1">
@@ -50,16 +50,11 @@
             </div>
             <!-- 病人简历 end  -->
             <!-- 病历卡 -->
-            <!-- <Fcard>
-              <Fcard-item v-for="(item,index) in sickCard" :key="item.index">
-                <sickcard
-                :index="index"
-                :totalCard="sickCard.length"
-                >
-                </sickcard>
-              </Fcard-item>
-            </Fcard> -->
-            <Fcarousel :cardsData="cardData"></Fcarousel>
+            <card
+            @preBtn="changePage"
+            :sickData="cardData"
+            :totalPage="totalPage">
+            </card>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
             <note></note>
@@ -72,23 +67,23 @@
           </pane>
           <pane
           label="用药" name="3">
-            <useDrug></useDrug>
+            <useDrug :sickID="sickID" :hospitalId="hospitalId"></useDrug>
           </pane>
           <pane
           label="心血管评估" name="4">
-          <assessment></assessment>
+          <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment>
           </pane>
           <pane
           label="24小时动态血压" name="5">
-          <alldayheighblood></alldayheighblood>
+          <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood>
           </pane>
           <pane
           label="分析报告" name="6">
-          <report></report>
+          <report :sickID="sickID" :hospitalId="hospitalId"></report>
           </pane>
           <pane
           label="原始数据" name="7">
-          <original></original>
+          <original :sickID="sickID" :hospitalId="hospitalId"></original>
           </pane>
         </tabs>
       </div>
@@ -101,8 +96,6 @@ import sickcard from './../sickcard.vue'
 import {bloodheighSickDataApi} from './../../api/components/BloodheighSickcard/bloodheighSick'
 import tabs from './../tabs.vue'
 import pane from './../pane.vue'
-import Fcard from './../Fcard.vue'
-import FcardItem from './../FcardItem.vue'
 import note from './../note.vue'
 import bloodCover from './bloodCover'
 import useDrug from './useDrug'
@@ -110,14 +103,12 @@ import assessment from './assessment'
 import alldayheighblood from './alldayheighblood'
 import report from './report'
 import original from './original'
-import Fcarousel from './../Fcarousel'
+import card from './card'
 export default {
   components: {
     sickcard,
     tabs,
     pane,
-    Fcard,
-    FcardItem,
     note,
     bloodCover,
     useDrug,
@@ -125,108 +116,209 @@ export default {
     alldayheighblood,
     report,
     original,
-    Fcarousel
+    card
   },
   data () {
     return {
+      cardArr: [],
       cardData: {},
-      autoplay: false,
-      sickInfo: [],
-      sickBasics: {
-        method: 1,
-        name: '毛健康',
-        sex: 1,
-        age: 56,
-        sick: '原发性高血压'
-      },
       activeKey: '1',
-      sickCard: [1, 2, 3, 4, 5],
       currentPage: 1,
+      totalPage: null,
       pageSize: 1,
-      // sickID: ''
-      // sickInfo: this.$route.params.sickInfo
-      // name: this.$route.params.sickInfo.name
-
-      // 整理后数据
-      name: '',  // 姓名
-      age: '', // 年龄
-      sex: '', // 性别
-      mobile: '', // 电话
-      height: '', // 身高
-      weight: '', // 体重
-      doctorDiagnos: '', // 医生诊断
-      illnessHistoryIdDisease: '', // 疾病史id集合
-      illnessHistoryIdGenetic: '', // 家族遗传病史 id集合
-      smoking: null, // 抽烟情况 1：是、2：否、3：已戒烟
-      is23Sleep: null, // 是否23点前睡觉 0-否 1-是
-      dietStatus: null, // 饮食是否规律 1：是、2：否
-      medicineStatus: null, // 是否长期服用止痛药或镇定催眠药 1：是、2：否
-      urineStatus: null, // 大小便是否正常 1：是、2：否
-      drinking: null, // 饮酒情况 1：从不、2：偶尔、3：经常、4：每天
-      illnessHistoryIdConcurrent: '', // 并发症
-      createTime: '' // 创建时间
+      isSugerHeigh: false
     }
   },
   methods: {
     checkSuger () {
 
     },
-    getSickCardData () {
-      let obj = {
+    changePage (currentpage) {
+      this.currentPage = currentpage
+      this.getCardData()
+      console.log(currentpage)
+    },
+    getCardData () {
+      let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId,
         pageNum: this.currentPage,
         pageSize: this.pageSize
       }
-      this.$axios(bloodheighSickDataApi(obj)).then(res => {
-        this.cardData = res
-        this.name = res.data.data[this.currentPage - 1].realName
-        this.age = res.data.data[this.currentPage - 1].age
-        this.sex = res.data.data[this.currentPage - 1].sex
-        this.mobile = res.data.data[this.currentPage - 1].mobile
-        this.height = res.data.data[this.currentPage - 1].height
-        this.weight = res.data.data[this.currentPage - 1].weight
-        this.doctorDiagnos = res.data.data[this.currentPage - 1].doctorDiagnos
-        this.illnessHistoryIdDisease = res.data.data[this.currentPage - 1].illnessHistoryIdDisease
-        this.illnessHistoryIdGenetic = res.data.data[this.currentPage - 1].illnessHistoryIdGenetic
-        this.smoking = res.data.data[this.currentPage - 1].smoking
-        this.is23Sleep = res.data.data[this.currentPage - 1].is23Sleep
-        this.dietStatus = res.data.data[this.currentPage - 1].dietStatus
-        this.medicineStatus = res.data.data[this.currentPage - 1].medicineStatus
-        this.urineStatus = res.data.data[this.currentPage - 1].urineStatus
-        this.drinking = res.data.data[this.currentPage - 1].drinking
-        this.illnessHistoryIdConcurrent = res.data.data[this.currentPage - 1].illnessHistoryIdConcurrent
-        this.createTime = res.data.data[this.currentPage - 1].createTime
-
-        // console.log(res)
+      this.$axios(bloodheighSickDataApi(params))
+      .then(res => {
+        if (res.data) {
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.totalPage = res.data.pages
+              this.$set(this.cardArr, this.currentPage - 1, res.data.data[0])
+              // this.cardArr[this.currentPage - 1] = res.data.data
+              this.cardData = this.cardArr[this.currentPage - 1]
+              // console.log('arr', this.cardArr)
+              // console.log(this.cardData)
+            }
+          }
+        }
       })
     }
-
   },
   computed: {
-    // sex () {
-    //   if (this.sickBasics.sex === 0) {
-    //     return '女'
-    //   } else {
-    //     return '男'
-    //   }
-    // },
     sickID () {
       return this.$route.params.sickID
     },
     hospitalId () {
       return this.$route.params.hospitalId
+    },
+    name () {
+      if (this.cardData) {
+        if (this.cardData.realName) {
+          return this.cardData.realName
+        }
+      }
+    },
+    sex () {
+      if (this.cardData) {
+        if (this.cardData.sex === 1) {
+          return '男'
+        }
+        if (this.cardData.sex === 0) {
+          return '女'
+        }
+      }
+    },
+    age () {
+      if (this.cardData) {
+        if (this.cardData.age) {
+          return this.cardData.age + '岁'
+        }
+      }
+    },
+    mobile () {
+      if (this.cardData) {
+        if (this.cardData.mobile) {
+          return this.cardData.mobile
+        }
+      }
+    },
+    doctorDiagnos () {
+      if (this.cardData) {
+        if (this.cardData.doctorDiagnos) {
+          return this.cardData.doctorDiagnos
+        }
+      }
+    },
+    height () {
+      if (this.cardData) {
+        if (this.cardData.height) {
+          return this.cardData.height + 'cm'
+        }
+      }
+    },
+    weight () {
+      if (this.cardData) {
+        if (this.cardData.weight) {
+          return this.cardData.weight + 'kg'
+        }
+      }
+    },
+    illnessHistoryIdDisease () {
+      if (this.cardData) {
+        if (this.cardData.illnessHistoryIdDisease) {
+          return this.cardData.illnessHistoryIdDisease
+        }
+      }
+    },
+    illnessHistoryIdGenetic () {
+      if (this.cardData) {
+        if (this.cardData.illnessHistoryIdGenetic) {
+          return this.cardData.illnessHistoryIdGenetic
+        }
+      }
+    },
+    habits () {
+      let habits = []
+      let str = ''
+      if (this.cardData) {
+        if (this.cardData.highSaltStatus === 1) {
+          habits.push('长期膳食高盐')
+        }
+        if (this.cardData.highSaltStatus === 2) {
+          habits.push('不长期膳食高盐')
+        }
+        if (this.cardData.sleepStatus === 1) {
+          habits.push('睡眠规律')
+        }
+        if (this.cardData.sleepStatus === 2) {
+          habits.push('睡眠不规律')
+        }
+        if (this.cardData.smoking === 1) {
+          habits.push('抽烟')
+        }
+        if (this.cardData.smoking === 2) {
+          habits.push('不抽烟')
+        }
+        if (this.cardData.smoking === 3) {
+          habits.push('已戒烟')
+        }
+        if (this.cardData.is23Sleep === 0) {
+          habits.push('23点前睡觉')
+        }
+        if (this.cardData.is23Sleep === 1) {
+          habits.push('没有23点前睡觉')
+        }
+        if (this.cardData.dietStatus === 1) {
+          habits.push('饮食规律')
+        }
+        if (this.cardData.dietStatus === 2) {
+          habits.push('饮食不规律')
+        }
+        if (this.cardData.medicineStatus === 1) {
+          habits.push('长期服用止痛药或镇定催眠药')
+        }
+        if (this.cardData.medicineStatus === 2) {
+          habits.push('没有长期服用止痛药或镇定催眠药')
+        }
+        if (this.cardData.urineStatus === 1) {
+          habits.push('大小便正常')
+        }
+        if (this.cardData.urineStatus === 2) {
+          habits.push('大小便不正常')
+        }
+        if (this.cardData.drinking === 1) {
+          habits.push('从不饮酒')
+        }
+        if (this.cardData.drinking === 2) {
+          habits.push('偶尔饮酒')
+        }
+        if (this.cardData.drinking === 3) {
+          habits.push('经常饮酒')
+        }
+        if (this.cardData.drinking === 4) {
+          habits.push('每天饮酒')
+        }
+      }
+      if (habits.length !== 0) {
+        str = habits.join(',')
+      }
+      return str
+    },
+    illnessHistoryIdConcurrent () {
+      if (this.cardData) {
+        if (this.cardData.illnessHistoryIdConcurrent) {
+          return this.cardData.illnessHistoryIdConcurrent
+        }
+      }
+    },
+    createTime () {
+      if (this.cardData) {
+        if (this.cardData.createTime) {
+          return this.cardData.createTime
+        }
+      }
     }
   },
   mounted () {
-    this.getSickCardData()
-    this.$axios(bloodheighSickDataApi(this.sickID))
-    .then((response) => {
-      this.sickInfo = response.data.sickList[0]
-    })
-    .catch(err => {
-      return err
-    })
+    this.getCardData()
   }
 }
 </script>

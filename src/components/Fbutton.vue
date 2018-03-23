@@ -23,13 +23,18 @@ export default {
   },
   data () {
     return {
-      defaultChecked: false
+      defaultChecked: this.isChecked
     }
   },
   methods: {
     stutasHandle () {
       this.defaultChecked = !this.defaultChecked
       this.$emit('checked')
+    }
+  },
+  watch: {
+    isChecked (val) {
+      this.defaultChecked = val
     }
   },
   mounted () {

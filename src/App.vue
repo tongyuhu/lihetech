@@ -47,17 +47,17 @@ export default {
         // 设置http response拦截
         this.$axios.interceptors.response.use(
           res => {
-            if (res.code === '1004' || res.code === '1005') {
-              this.$confirm('未登录或登陆超时', '确定登出', {
+            if (res.data.code === '1004' || res.data.code === '1005') {
+              this.$confirm('登陆超时', '确定登出', {
                 confirmButtonText: '确定',
-                cancelButtonText: '取消',
+                // cancelButtonText: '取消',
                 type: 'warning'
               }).then(() => {
                 sessionStorage.clear()
                 this.$router.push({path: '/login'})
                 location.reload()
               })
-              return Promise.reject(res)
+              // return Promise.reject(res)
             } else {
               return res
             }

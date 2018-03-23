@@ -1,13 +1,13 @@
-// 病人基本信息
-export const bloodheighSickDataApi = (params) => {
+export const assessmentApi = (params, data) => {
   return {
     method: 'post',
-    url: '/highBlood/userInfo',
+    url: '/highBlood/bpDoubleArm',
     data: {
       'userId': params.userId,
       'adminHospitalId': params.adminHospitalId,
-      'pageNum': params.pageNum,
-      'pageSize': params.pageSize || 1
+      'bpMeasureTime': params.bpMeasureTime || '',
+      'pageNum': params.pageNum || 1,
+      'pageSize': params.pageSize || 10
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     outtime: 10000

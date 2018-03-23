@@ -409,7 +409,7 @@ export default {
   },
   methods: {
     jumppage (page) {
-      console.log(page, 266)
+      // console.log(page, 266)
     },
     careText,
     care,
@@ -426,7 +426,6 @@ export default {
         this.newsickaskData = res.data
         this.newAskTotal = res.data.recordCount
         this.newAskPageSize = res.data.pageSize
-        console.log(res.data)
       })
     },
     newAskSizeChange (val) {  // 患者最新问诊  每页显示数量变化
@@ -484,7 +483,6 @@ export default {
       console.log(`当前页: ${val}`)
       this.newsickaskDataRUS()
     },
-    // diagnose,
     msgTipBtn () {
       this.$router.push({
         name: 'accountSetting'
@@ -539,33 +537,6 @@ export default {
       hospitalId: this.adminHospitalId,
       currentPage: this.nolistenCurrentPage,
       pageSize: this.nolistenPageSize
-    })
-
-    this.$axios.all([
-      this.newsickaskDataRUS(),
-      this.badsickDataRUS(),
-      this.noListenDoctorDataRUS(),
-      this.unperfectMsgDataRUS()])
-    .then(this.$axios.spread((a, b, c, d) => {
-      this.newsickaskData = a.data
-
-      this.badSickRate = b.data.badSickRate
-      this.badsickData = b.data.sickList
-
-      this.noListenDoctorRate = c.data.noListenDoctorRate
-      this.noListenDoctorData = c.data.sickList
-
-      this.unperfectMsgRate = d.data.unperfectMsgRate
-      this.unperfectMsgData = d.data.sickList
-
-      // console.log(a)
-      // console.log(b)
-      // console.log(c)
-      // console.log(d)
-      // 两个请求现在都执行完成
-    }))
-    .catch(err => {
-      console.log(err)
     })
   }
 }

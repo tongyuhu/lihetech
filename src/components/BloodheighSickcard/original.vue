@@ -2,7 +2,7 @@
   <div>
     <el-card :body-style="{ padding: '0px' }">
         <div class="card-header">
-          <p class="title">血压与行为分数</p>
+          <p class="title">原始数据</p>
         </div>
         <div class="original">
           <div>
@@ -40,6 +40,14 @@
 
 <script>
 export default {
+  props: {
+    sickID: {
+      default: 0
+    },
+    hospitalId: {
+      default: 0
+    }
+  },
   data () {
     return {
       month: ''
