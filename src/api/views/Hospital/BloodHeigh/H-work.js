@@ -47,3 +47,16 @@ export const unperfectMsgDataApi = {
   headers: { 'Content-type': 'application/x-www-form-urlencoded' },
   timeout: 10000
 }
+export const careApi = (params) => {
+  return {
+    method: 'post',
+    url: '/wholePoint/blood/focus/on',
+    data: {
+      'adminHospitalId': params.adminHospitalId,
+      'userId': params.userId,
+      'isDocusOn': params.isDocusOn
+    },
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    timeout: 10000
+  }
+}

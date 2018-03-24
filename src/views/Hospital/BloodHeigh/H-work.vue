@@ -3,15 +3,10 @@
     <!-- 工作台 start -->
     <div class="workhead">
       <span>工作台</span>
-      <!-- <i class="work-icon"></i> -->
-      <!-- <el-badge :value="msgTip" :max="99" class="item" is-dot> -->
         <el-button type="text" @click="msgTipBtn" class="work-msg">
-          <!-- 。。 -->
           <i class="work-icon" @click="msgTipBtn"></i>
           <i :class="{workMsgtip:showMsgTip}"></i>
         </el-button>
-         <!-- <button><i class="work-icon"></i></button> -->
-      <!-- </el-badge> -->
     </div>
     <el-card :body-style="{padding: '0px'}">
     <!-- 工作台 end -->
@@ -24,7 +19,7 @@
           </div>
           <div class="table">
             <el-table 
-                :data='newsickaskData.data'
+                :data='newsickaskData'
                 style="width: 100%"
                 row-class-name="table-row">
                 <el-table-column
@@ -83,12 +78,11 @@
       <div class="bottom-margin" id="bloodbad">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">严重患者({{ badsickData.recordCount }})</p>
+            <p class="title">严重患者({{badsickTotal }})</p>
           </div>
           <div class="table">
-
             <el-table 
-                :data='badsickData.data'
+                :data='badsickData'
                 style="width: 100%"
                 row-class-name="table-row">
                 <el-table-column
@@ -133,7 +127,7 @@
                         <el-button 
                         size="mini" 
                         type="primary" 
-                        @click.native="isCare(scope.$index,badsickData.data)" 
+                        @click.native="isCare(scope.row)" 
                         :key="scope.row.id" 
                         :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
                         >
@@ -177,7 +171,7 @@
           <div class="table">
 
             <el-table 
-                :data='noListenDoctorData.data'
+                :data='noListenDoctorData'
                 style="width: 100%"
                 row-class-name="table-row">
                 <el-table-column
@@ -209,7 +203,7 @@
                     label="未遵医嘱"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
-                      <span> {{scope.row.notCount}}天（共{{scope.row.count}}）</span>                                        
+                      <span> {{scope.row.notCount}}天（共{{scope.row.count+'天'}}）</span>                                        
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -225,21 +219,19 @@
                         <el-button 
                         size="mini" 
                         type="primary" 
-                        @click.native="care(scope.$index,noListenDoctorData)" 
+                        @click.native="isCare(scope.row)" 
                         :key="scope.row.id" 
                         :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
                         >
                           <span v-if="scope.row.isDocusOn">取消关注</span>
                           <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
-
                         <el-button size="mini" type="primary" 
                         @click="diagnose(scope.row)" 
                         :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">
                         诊断
                         </el-button>
                         <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
-                        <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
                 </el-table-column>
             </el-table>
@@ -313,20 +305,12 @@
                         <el-button 
                         size="mini" 
                         type="primary" 
-                        @click.native="care(scope.$index,unperfectMsgData)" 
+                        @click.native="isCare(scope.$index,unperfectMsgData.data)" 
                         :key="scope.row.id" 
                         :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
-                        v-if="scope.row.care">
-                          {{careText(scope.row.care)}}
-                        </el-button>
-                        <el-button 
-                        v-else
-                        size="mini" 
-                        type="plain" 
-                        @click.native="care(scope.$index,unperfectMsgData)" 
-                        :key="scope.row.id" :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
                         >
-                          {{careText(scope.row.care)}}
+                          <span v-if="scope.row.isDocusOn">取消关注</span>
+                          <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
                         :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">去完善</el-button>
@@ -360,12 +344,12 @@
 <script>
 // import from './../../../../诊所-高血压/hospitalIcon/诊所-icon-21.png'
 import { mapState } from 'vuex'
-import {careText, care} from './../../../untils/untils'
+// import {careText, care} from './../../../untils/untils'
 import {
   newsickaskDataApi,
   badsickDataApi,
   noListenDoctorDataApi,
-  unperfectMsgDataApi} from './../../../api/views/Hospital/BloodHeigh/H-work'
+  careApi} from './../../../api/views/Hospital/BloodHeigh/H-work'
 import mpages from './../../../components/cutpage.vue'
 export default {
   name: 'H-work',
@@ -382,13 +366,14 @@ export default {
       currentPage: 1,
       totalSize: 15,
       // 整理后数据
-      newsickaskData: {},
-      badsickData: {},
-      noListenDoctorData: {},
+      newsickaskData: [],
+      badsickData: [],
+      // badsickTotal:'',
+      noListenDoctorData: [],
 
       adminHospitalId: '',
       careState: '',
-
+      // 分页数据
       newAskCurrentPage: 1,
       newAskPageSize: 5,
       newAskTotal: 1,
@@ -408,22 +393,53 @@ export default {
     })
   },
   methods: {
-    jumppage (page) {
-      // console.log(page, 266)
-    },
-    careText,
-    care,
-    isCare (index, val) {
-      val[index].isDocusOn = !val[index].isDocusOn
-      console.log(index, val)
-      // care = !care
+    // jumppage (page) {
+    //   // console.log(page, 266)
+    // },
+    // careText (boolean) {
+    //   if (boolean) {
+    //     return '取消关注'
+    //   } else {
+    //     return '关注'
+    //   }
+    // },
+    isCare (val) {
+      let sickid = ''
+      let hospitalid = ''
+      let care = ''
+      if (val && val.id) {
+        sickid = val.i
+      }
+      if (val && val.adminHospitalId) {
+        hospitalid = val.adminHospitalId
+      }
+      if (val && val.isDocusOn) {
+        care = !val.isDocusOn
+      }
+      let params = {
+        'adminHospitalId': hospitalid,
+        'userId': sickid,
+        'isDocusOn': care
+      }
+      this.$axios(careApi(params))
+      .then(res => {
+        if (res.data.code === '0000') {
+          val.isDocusOn = !val.isDocusOn
+        }
+        if (res.data.code === '1001') {
+        }
+      })
     },
     newAskRequest (params) {
       params.hospitalId = params.hospitalId || this.adminHospitalId
       this.$axios(newsickaskDataApi(
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
-        this.newsickaskData = res.data
+        if (res.data) {
+          if (res.data.data.length !== 0) {
+            this.newsickaskData = res.data.data
+          }
+        }
         this.newAskTotal = res.data.recordCount
         this.newAskPageSize = res.data.pageSize
       })
@@ -444,13 +460,16 @@ export default {
       this.$axios(badsickDataApi(
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
-        this.badsickData = res.data
+        if (res.data && res.data.data.length !== 0) {
+          this.badsickData = res.data.data
+        }
         this.badsickTotal = res.data.recordCount
         this.badsickPageSize = res.data.pageSize
       })
     },
 
     badsickSizeChange (val) {},
+
     badsickCurrentChange (val) {
       this.badsickRequest({
         hospitalId: this.adminHospitalId,
@@ -464,7 +483,7 @@ export default {
       this.$axios(noListenDoctorDataApi(
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
-        this.noListenDoctorData = res.data
+        this.noListenDoctorData = res.data.data
         this.nolistenTotal = res.data.recordCount
         this.nolistenPageSize = res.data.pageSize
       })
@@ -481,7 +500,6 @@ export default {
 
     unperfectChangepage (val) {   // 患者最新问诊页数变化
       console.log(`当前页: ${val}`)
-      this.newsickaskDataRUS()
     },
     msgTipBtn () {
       this.$router.push({
@@ -499,24 +517,6 @@ export default {
       console.log(row.mobile)
     },
     handlePersonMsg (row, column, cell, event) {
-      // console.log(row, column, cell, event)
-      // console.log(row)
-      // console.log(column)
-      // console.log(cell)
-      // console.log(event)
-      // console.log(row.name)
-    },
-    newsickaskDataRUS  () {
-      // return this.$axios(newsickaskDataApi(this.currentPage))
-    },
-    badsickDataRUS  () {
-      return this.$axios(badsickDataApi)
-    },
-    noListenDoctorDataRUS  () {
-      return this.$axios(noListenDoctorDataApi)
-    },
-    unperfectMsgDataRUS  () {
-      return this.$axios(unperfectMsgDataApi)
     }
   },
   mounted () {

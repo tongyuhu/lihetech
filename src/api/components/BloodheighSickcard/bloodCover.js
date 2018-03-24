@@ -31,7 +31,7 @@ export const bloodheighSickDataApi = (params, data) => {
     }
   }
   // 周
-  if (data === 7) {
+  if (data === 2) {
     return {
       method: 'post',
       url: '/highBlood/weekAvg',
@@ -47,7 +47,7 @@ export const bloodheighSickDataApi = (params, data) => {
     }
   }
   // 月
-  if (data === 30) {
+  if (data === 3) {
     return {
       method: 'post',
       url: '/highBlood/monthAvg',

@@ -328,7 +328,10 @@ export default {
         week: [],
         avgSystolic: [],
         avgDiastolic: [],
-        avgBehaveScore: []
+        avgBehaveScore: [],
+        pages: 1,
+        pageNum: 1,
+        index: 0
       },
       // 血压与行为分数 选择按钮
       bloodAndBehaviourDate: [
@@ -404,11 +407,37 @@ export default {
       this.ischeckAll = !this.ischeckAll
       // this.updatebloodTrendData(this.bloodTrendChecked, this.statusArr)
     },
-    bloodBehaviourBloodOption () {
+    bloodBehaviourBloodOption (val) {
       let vm = this
-
+      let zoomstart = 0
+      if (val) {
+        zoomstart = val
+      }
       let option = {
         color: ['#8ecefc', 'e6f5fe', '8ecefc'],
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0, 1],
+            // disabled: false,
+            show: true,
+            realtime: true,
+            start: zoomstart,
+            end: 98,
+            showDetail: false,
+            // minValueSpan: 98,
+            // maxValueSpan: 98,
+            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
+            // handleSize: '30%',
+            handleStyle: {
+              color: '#80cbc4'
+            },
+            fillerColor: '#d8faf4',
+            borderColor: '#b1b1b1',
+            right: '30',
+            left: '30'
+          }
+        ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -457,13 +486,15 @@ export default {
           left: '30',
           right: '58%',
           width: 'auto',
-          height: 'auto'
+          height: 'auto',
+          bottom: '95'
         },
         {
           top: '30px',
           left: '50%',
           width: 'auto',
-          height: 'auto'
+          height: 'auto',
+          bottom: '95'
         }
         ],
         xAxis: [
@@ -703,7 +734,7 @@ export default {
               vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
             }
             vm.bloodTrendIndex = a.dataIndex
-            console.log(a)
+            // console.log(a)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
@@ -750,7 +781,6 @@ export default {
             show: false
           },
           // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          // data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
           data: this.bloodTrendData.date
         },
         yAxis: { // 直角坐标系grid的y轴
@@ -881,12 +911,21 @@ export default {
       this.behaviourChecked = index
       this.updateBehaviourData(index)
     },
-    updateBehaviourData (index) {
+    // 更新数据 index 为0,1,2分别代表日周月
+    updateBehaviourData (index, pageNum) {
+      // if (this.bloodAndBehaviourData.index !== index) {
+      // this.bloodAndBehaviourData.date = []
+      // this.bloodAndBehaviourData.week = []
+      // this.bloodAndBehaviourData.avgSystolic = []
+      // this.bloodAndBehaviourData.avgDiastolic = []
+      // }
+      // this.bloodAndBehaviourData.index = index
       let vm = this
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': vm.bpMeasureTime || ''
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': pageNum
       }
       this.bloodAndBehaviourData.date = []
       this.bloodAndBehaviourData.week = []
@@ -895,20 +934,22 @@ export default {
       if (index === 0) {
         this.$axios(bloodheighSickDataApi(params, 1))
         .then(res => {
-          res.data.data.forEach((item, inx) => {
+          res.data.data.forEach((item, index) => {
             if (!item.description) {
               item.description = 0
             }
-            this.$set(this.bloodAndBehaviourData.date, inx, item.description)
-            this.$set(this.bloodAndBehaviourData.avgSystolic, inx, item.avgSystolic)
-            this.$set(this.bloodAndBehaviourData.avgDiastolic, inx, item.avgDiastolic)
-            // if (inx === 0) {
+            this.$set(this.bloodAndBehaviourData.date, index, item.description)
+            this.$set(this.bloodAndBehaviourData.avgSystolic, index, item.avgSystolic)
+            this.$set(this.bloodAndBehaviourData.avgDiastolic, index, item.avgDiastolic)
+            this.bloodAndBehaviourData.pages = res.data.pages
+            this.bloodAndBehaviourData.pageNum = res.data.pageNum
+            // if (index === 0) {
             //   this.$set(this.chartA, 'date', item.description)
             // }
             if (!item.avgBehaveScore) {
               item.avgBehaveScore = 0
             }
-            this.$set(this.bloodAndBehaviourData.avgBehaveScore, inx, item.avgBehaveScore)
+            this.$set(this.bloodAndBehaviourData.avgBehaveScore, index, item.avgBehaveScore)
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
@@ -920,7 +961,7 @@ export default {
         })
       }
       if (index === 1) {
-        this.$axios(bloodheighSickDataApi(params, 7))
+        this.$axios(bloodheighSickDataApi(params, 2))
         .then(res => {
           res.data.data.forEach(item => {
             this.computeYearWeek(item.yearWeek)
@@ -937,11 +978,15 @@ export default {
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
-          this.updateBehaviourRateDate(res.data.data[0].description)
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updateBehaviourRateDate(res.data.data[0].description)
+            }
+          }
         })
       }
       if (index === 2) {
-        this.$axios(bloodheighSickDataApi(params, 30))
+        this.$axios(bloodheighSickDataApi(params, 3))
         .then(res => {
           res.data.data.forEach(item => {
             this.bloodAndBehaviourData.date.push(item.description)
@@ -954,7 +999,11 @@ export default {
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
-          this.updateBehaviourRateDate(res.data.data[0].description)
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updateBehaviourRateDate(res.data.data[0].description)
+            }
+          }
         })
       }
     },
@@ -967,7 +1016,9 @@ export default {
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': vm.bpMeasureTime || ''
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': this.bloodAndBehaviourData.pageNum
+        // 'pageSize': params.pageSize
       }
       this.$axios(updateBehaviourRateApi(params, this.behaviourChecked, date))
       .then(res => {
@@ -1042,7 +1093,7 @@ export default {
         })
       }
       if (index === 2) {
-        this.$axios(bloodheighSickDataApi(params, 7))
+        this.$axios(bloodheighSickDataApi(params, 2))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.week = []
@@ -1067,7 +1118,7 @@ export default {
         })
       }
       if (index === 3) {
-        this.$axios(bloodheighSickDataApi(params, 30))
+        this.$axios(bloodheighSickDataApi(params, 3))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -1123,6 +1174,7 @@ export default {
         year = parseInt(time.toString().substr(0, 4))
         week = parseInt(time.toString().substr(4))
       } else if (isNaN(time)) {
+        time = time + ''
         year = time.substr(0, 4)
         week = time.substr(4)
       }
@@ -1150,12 +1202,74 @@ export default {
     }
   },
   mounted () {
+    let vm = this
     this.updatebloodTrendChecked(0)
     this.dataIndex = 0
     this.updateBehaviourChecked(0)
     this.updateBehaviourData(0)
     let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
     bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
+    bloodBehaviourBlood.on('datazoom', function (chartsparams) {
+      if (chartsparams.end === 100) {
+        vm.bloodAndBehaviourData.pageNum ++
+        let params = {
+          'userId': vm.sickID,
+          'adminHospitalId': vm.hospitalId,
+          'bpMeasureTime': vm.bpMeasureTime || '',
+          'pageNum': vm.bloodAndBehaviourData.pageNum
+        }
+        bloodBehaviourBlood.showLoading(
+          {
+            text: '加载中...',
+            color: '#1991fc',
+            textColor: '#000',
+            maskColor: 'rgba(255, 255, 255, 0.8)',
+            zlevel: 0
+          }
+        )
+        vm.$axios(bloodheighSickDataApi(params, vm.behaviourChecked + 1))
+        .then(res => {
+          res.data.data.forEach((item, index) => {
+            if (!item.description) {
+              item.description = 0
+            }
+            console.log('page', vm.bloodAndBehaviourData.pages)
+            console.log('pages', res.data.pages)
+            if (vm.bloodAndBehaviourData.pages < res.data.pages) {
+              vm.bloodAndBehaviourData.date.push(item.description)
+              vm.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
+              vm.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
+              vm.bloodAndBehaviourData.pages = res.data.pages
+              vm.bloodAndBehaviourData.pageNum = res.data.pageNum
+            }
+            // if (index === 0) {
+            //   vm.$set(vm.chartA, 'date', item.description)
+            // }
+            if (!item.avgBehaveScore) {
+              item.avgBehaveScore = 0
+            }
+            // vm.$set(vm.bloodAndBehaviourData.avgBehaveScore, index, item.avgBehaveScore)
+            let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
+            bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50))
+            // console.log(bloodBehaviourBlood)
+            // bloodBehaviourBlood._model.option.dataZoom[0].start = 90
+            // chartsparams.start = 90
+            // bloodBehaviourBlood.setOption({
+            //   dataZoom[0].start : 90
+            // })
+          })
+          // if (res.data.data) {
+          //   if (res.data.data.length !== 0) {
+          //     this.updateBehaviourRateDate(res.data.data[0].description)
+          //   }
+          // }
+          bloodBehaviourBlood.hideLoading()
+        })
+        // vm.updateBehaviourData(vm.behaviourChecked, vm.bloodAndBehaviourData.pageNum)
+        console.log('on', vm.bloodAndBehaviourData.pageNum)
+        console.log('on', params)
+      }
+    })
     let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
     bloodTrend.setOption(this.bloodTrendOption())
   }

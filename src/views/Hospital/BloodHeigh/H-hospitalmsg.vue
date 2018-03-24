@@ -9,7 +9,7 @@
 
 <script>
 import {dateFormat} from './../../../untils/date'
-import Bus from './../../../bus'
+// import Bus from './../../../bus'
 import { mapState } from 'vuex'
 export default {
   name: 'H-addsick',
@@ -57,7 +57,7 @@ export default {
     // })
   },
   beforeDestroy () {
-    Bus.$off('adminInfo')
+    // Bus.$off('adminInfo')
   }
 }
 </script>

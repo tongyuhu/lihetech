@@ -136,7 +136,7 @@ export default {
     changePage (currentpage) {
       this.currentPage = currentpage
       this.getCardData()
-      console.log(currentpage)
+      // console.log(currentpage)
     },
     getCardData () {
       let params = {

@@ -83,19 +83,13 @@
                     </tr>
                     <tr>
                       <td class="only-bottom-border">
-                        <!-- <span>
-                          血压偏高，不宜大幅度运动、请选择每天步行30min
-                        </span> -->
-                        
                             {{movement}}
-                          
-                            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()">
-                              <i class="delete"></i>删除
-                            </el-button>
-                            <el-button type="text" size="mini" class="table-btn" @click="addSport()">
-                              <i class="add"></i>添加
-                            </el-button>
-                          
+                          <el-button type="text" size="mini" class="table-btn" @click="deleteSport()">
+                            <i class="delete"></i>删除
+                          </el-button>
+                          <el-button type="text" size="mini" class="table-btn" @click="addSport()">
+                            <i class="add"></i>添加
+                          </el-button>
                       </td>
                     </tr>
                     <tr>
@@ -253,14 +247,23 @@ export default {
       this.$nextTick(function () {
         document.getElementById('audio').play()
       })
+      console.log('用户自述')
     },
     sendVoice () {
-
+      console.log('发送语音')
     },
-    deleteMedicine () {},
-    addMedicine () {},
-    deleteSport () {},
-    addSport () {}
+    deleteMedicine () {
+      console.log('删除药')
+    },
+    addMedicine () {
+      console.log('添加药')
+    },
+    deleteSport () {
+      console.log('删除运动')
+    },
+    addSport () {
+      console.log('添加运动')
+    }
   }
 }
 </script>

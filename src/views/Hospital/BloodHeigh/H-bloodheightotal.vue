@@ -38,7 +38,7 @@
 <script>
 import echarts from 'echarts'
 // import {checkDateBtn} from './../../../untils/untils'
-import {sickDistributionDataApi, sickTrendDataApi} from './../../../api/views/Hospital/BloodHeigh/H-bloodheightotal'
+// import {sickDistributionDataApi, sickTrendDataApi} from './../../../api/views/Hospital/BloodHeigh/H-bloodheightotal'
 export default {
   name: 'H-bloodheighttotal',
   data () {

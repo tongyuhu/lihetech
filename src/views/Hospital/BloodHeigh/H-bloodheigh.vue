@@ -40,6 +40,7 @@ export default {
     // })
   },
   beforeRouteLeave (to, from, next) {
+    // 离开当前页面关闭导航
     Bus.$emit('closemenu', 1)
     next()
   }
