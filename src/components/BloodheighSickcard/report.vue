@@ -55,7 +55,7 @@
         <div class="card-header">
             <p class="title">血压与饮食</p>
         </div>
-        <div class="check-date">
+        <div class="check-date" v-show="false">
           <el-row type="flex" justify="start">
             <button v-for="(item,index) in bloodfoodChecked.date" 
             :key="item.date" 
@@ -102,7 +102,7 @@
         <div class="card-header">
             <p class="title">血压与运动</p>
         </div>
-        <div class="check-date">
+        <div class="check-date" v-show="false">
           <el-row type="flex" justify="start">
             <button v-for="(item,index) in bloodsportChecked.date" 
             :key="item.date" 
@@ -277,7 +277,9 @@ export default {
         systolic: [],
         diastolic: [],
         foodScore: [],
-        calories: []
+        calories: [],
+        pages: 1,
+        pageNum: 1
       },
       bloodsportChecked: {
         date: [
@@ -311,7 +313,9 @@ export default {
         systolic: [],
         diastolic: [],
         movementScore: [],
-        calories: []
+        calories: [],
+        pages: 1,
+        pageNum: 1
       }
     }
   },
@@ -434,6 +438,7 @@ export default {
       .then(res => {
         if (res.data) {
           if (res.data.data) {
+            this.histogramData = []
             res.data.data.forEach((item, index) => {
               this.$set(this.histogramData, index, item)
             })
@@ -486,9 +491,14 @@ export default {
       }
     },
     updateFood (date, enddate) {
+      // if(pageNum){
+      //   this.bloodfoodData.pageNum =
+      // }
       let params = {
         'userId': this.sickID,
-        'adminHospitalId': this.hospitalId
+        'adminHospitalId': this.hospitalId,
+        'pageNum': this.bloodfoodData.pageNum,
+        'pageSize': 5
       }
       let dateParams = {
         label: '',
@@ -512,65 +522,72 @@ export default {
       }
       this.$axios(bloodfoodApi(params, dateParams))
       .then(res => {
-        // if (res.data) {
-          // if (res.data.data) {
-        let data1 = [
-          {
-            'systolic': 144,
-            'diastolic': 82,
-            'createTime': '2018-03-08',
-            'calories': 0
-          },
-          {
-            'systolic': 122,
-            'diastolic': 76,
-            'createTime': '2018-02-04',
-            'calories': 100,
-            'foodScore': 33
-          },
-          {
-            'systolic': 165,
-            'diastolic': 106,
-            'createTime': '2018-02-03',
-            'calories': 23,
-            'foodScore': 35
-          },
-          {
-            'systolic': 199,
-            'diastolic': 86,
-            'createTime': '2018-02-02',
-            'calories': 50,
-            'foodScore': 20.9
-          },
-          {
-            'systolic': 171,
-            'diastolic': 118,
-            'createTime': '2018-02-01',
-            'calories': 60,
-            'foodScore': 35.5
+        if (res.data) {
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              // let data1 = [
+              //   {
+              //     'systolic': 144,
+              //     'diastolic': 82,
+              //     'createTime': '2018-03-08',
+              //     'calories': 0
+              //   },
+              //   {
+              //     'systolic': 122,
+              //     'diastolic': 76,
+              //     'createTime': '2018-02-04',
+              //     'calories': 100,
+              //     'foodScore': 33
+              //   },
+              //   {
+              //     'systolic': 165,
+              //     'diastolic': 106,
+              //     'createTime': '2018-02-03',
+              //     'calories': 23,
+              //     'foodScore': 35
+              //   },
+              //   {
+              //     'systolic': 199,
+              //     'diastolic': 86,
+              //     'createTime': '2018-02-02',
+              //     'calories': 50,
+              //     'foodScore': 20.9
+              //   },
+              //   {
+              //     'systolic': 171,
+              //     'diastolic': 118,
+              //     'createTime': '2018-02-01',
+              //     'calories': 60,
+              //     'foodScore': 35.5
+              //   }
+              // ]
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.foodScore) {
+                  item.foodScore = 0
+                }
+                this.bloodfoodData.x.push(item.createTime)
+                this.bloodfoodData.systolic.push(item.systolic)
+                this.bloodfoodData.diastolic.push(item.diastolic)
+                this.bloodfoodData.foodScore.push(item.foodScore)
+                this.bloodfoodData.calories.push(item.calories)
+                // this.$set(this.bloodfoodData.x, index, item.createTime)
+                // this.$set(this.bloodfoodData.systolic, index, item.systolic)
+                // this.$set(this.bloodfoodData.diastolic, index, item.diastolic)
+                // this.$set(this.bloodfoodData.foodScore, index, item.foodScore)
+                // this.$set(this.bloodfoodData.calories, index, item.calories)
+              })
+            }
           }
-        ]
-        data1.forEach((item, index) => {
-          if (!item.systolic) {
-            item.systolic = 0
-          }
-          if (!item.diastolic) {
-            item.diastolic = 0
-          }
-          if (!item.calories) {
-            item.calories = 0
-          }
-          if (!item.foodScore) {
-            item.foodScore = 0
-          }
-          this.$set(this.bloodfoodData.x, index, item.createTime)
-          this.$set(this.bloodfoodData.systolic, index, item.systolic)
-          this.$set(this.bloodfoodData.diastolic, index, item.diastolic)
-          this.$set(this.bloodfoodData.foodScore, index, item.foodScore)
-          this.$set(this.bloodfoodData.calories, index, item.calories)
-        })
-          // }
-        // }
+        }
         let state = ''
         if (this.bloodfoodChecked.kaluli) {
           state = 'kaluli'
@@ -615,7 +632,9 @@ export default {
     updateSport (date, enddate) {
       let params = {
         'userId': this.sickID,
-        'adminHospitalId': this.hospitalId
+        'adminHospitalId': this.hospitalId,
+        'pageNum': this.bloodsportData.pageNum,
+        'pageSize': 5
       }
       let dateParams = {
         label: '',
@@ -639,65 +658,73 @@ export default {
       }
       this.$axios(bloodsportApi(params, dateParams))
       .then(res => {
-        // if (res.data) {
-          // if (res.data.data) {
-        let data1 = [
-          {
-            'systolic': 144,
-            'diastolic': 82,
-            'createTime': '2018-03-08',
-            'calories': 0
-          },
-          {
-            'systolic': 122,
-            'diastolic': 76,
-            'createTime': '2018-02-04',
-            'calories': 100,
-            'movementScore': 33
-          },
-          {
-            'systolic': 165,
-            'diastolic': 106,
-            'createTime': '2018-02-03',
-            'calories': 23,
-            'movementScore': 35
-          },
-          {
-            'systolic': 199,
-            'diastolic': 86,
-            'createTime': '2018-02-02',
-            'calories': 50,
-            'movementScore': 20.9
-          },
-          {
-            'systolic': 171,
-            'diastolic': 118,
-            'createTime': '2018-02-01',
-            'calories': 60,
-            'movementScore': 35.5
+        if (res.data) {
+          this.$set(this.bloodsportData, 'pages', res.data.pages)
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.movementScore) {
+                  item.movementScore = 0
+                }
+                // this.$set(this.bloodsportData.x, index, item.createTime)
+                // this.$set(this.bloodsportData.systolic, index, item.systolic)
+                // this.$set(this.bloodsportData.diastolic, index, item.diastolic)
+                // this.$set(this.bloodsportData.movementScore, index, item.movementScore)
+                // this.$set(this.bloodsportData.calories, index, item.calories)
+                this.bloodsportData.x.push(item.createTime)
+                this.bloodsportData.systolic.push(item.systolic)
+                this.bloodsportData.diastolic.push(item.diastolic)
+                this.bloodsportData.movementScore.push(item.movementScore)
+                this.bloodsportData.calories.push(item.calories)
+              })
+            }
+            // let data1 = [
+            //   {
+            //     'systolic': 144,
+            //     'diastolic': 82,
+            //     'createTime': '2018-03-08',
+            //     'calories': 0
+            //   },
+            //   {
+            //     'systolic': 122,
+            //     'diastolic': 76,
+            //     'createTime': '2018-02-04',
+            //     'calories': 100,
+            //     'movementScore': 33
+            //   },
+            //   {
+            //     'systolic': 165,
+            //     'diastolic': 106,
+            //     'createTime': '2018-02-03',
+            //     'calories': 23,
+            //     'movementScore': 35
+            //   },
+            //   {
+            //     'systolic': 199,
+            //     'diastolic': 86,
+            //     'createTime': '2018-02-02',
+            //     'calories': 50,
+            //     'movementScore': 20.9
+            //   },
+            //   {
+            //     'systolic': 171,
+            //     'diastolic': 118,
+            //     'createTime': '2018-02-01',
+            //     'calories': 60,
+            //     'movementScore': 35.5
+            //   }
+            // ]
           }
-        ]
-        data1.forEach((item, index) => {
-          if (!item.systolic) {
-            item.systolic = 0
-          }
-          if (!item.diastolic) {
-            item.diastolic = 0
-          }
-          if (!item.calories) {
-            item.calories = 0
-          }
-          if (!item.movementScore) {
-            item.movementScore = 0
-          }
-          this.$set(this.bloodsportData.x, index, item.createTime)
-          this.$set(this.bloodsportData.systolic, index, item.systolic)
-          this.$set(this.bloodsportData.diastolic, index, item.diastolic)
-          this.$set(this.bloodsportData.movementScore, index, item.movementScore)
-          this.$set(this.bloodsportData.calories, index, item.calories)
-        })
-          // }
-        // }
+        }
         let state = ''
         if (this.bloodsportChecked.kaluli) {
           state = 'kaluli'
@@ -1019,8 +1046,9 @@ export default {
       }
       // return option
     },
-    bloodFoodOption (state) {
+    bloodFoodOption (state, start, end) {
       let vm = this
+
       let foodSeriesData = []
       let foodSeriesTitle = ''
       if (state === 'kaluli') {
@@ -1030,8 +1058,39 @@ export default {
         foodSeriesData = vm.bloodfoodData.foodScore
         foodSeriesTitle = '分数'
       }
+      let zoomstart = 0
+      let zoomend = 50
+      if (start) {
+        zoomstart = start
+      }
+      if (end) {
+        zoomend = end
+      }
       let option = {
         color: ['#8ecefc', 'e6f5fe', '8ecefc'],
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0, 1],
+            // disabled: false,
+            show: true,
+            realtime: true,
+            start: zoomstart,
+            end: zoomend,
+            showDetail: false,
+            // minValueSpan: 98,
+            // maxValueSpan: 98,
+            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
+            // handleSize: '30%',
+            handleStyle: {
+              color: '#80cbc4'
+            },
+            fillerColor: '#d8faf4',
+            borderColor: '#b1b1b1',
+            right: '60',
+            left: '60'
+          }
+        ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -1072,13 +1131,15 @@ export default {
             left: '60px',
             right: '58%',
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            bottom: '90px'
           },
           {
             top: '30px',
             left: '50%',
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            bottom: '90px'
           }
         ],
         xAxis: [
@@ -1276,7 +1337,7 @@ export default {
       }
       return option
     },
-    bloodSportOption (state) {
+    bloodSportOption (state, start, end) {
       let vm = this
       let sportSeriesData = []
       let sportSeriesTitle = ''
@@ -1287,8 +1348,39 @@ export default {
         sportSeriesData = vm.bloodsportData.movementScore
         sportSeriesTitle = '分数'
       }
+      let zoomstart = 0
+      let zoomend = 50
+      if (start) {
+        zoomstart = start
+      }
+      if (end) {
+        zoomend = end
+      }
       let option = {
         color: ['#8ecefc', 'e6f5fe', '8ecefc'],
+        dataZoom: [
+          {
+            type: 'slider',
+            xAxisIndex: [0, 1],
+            // disabled: false,
+            show: true,
+            realtime: true,
+            start: zoomstart,
+            end: zoomend,
+            showDetail: false,
+            // minValueSpan: 98,
+            // maxValueSpan: 98,
+            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
+            // handleSize: '30%',
+            handleStyle: {
+              color: '#80cbc4'
+            },
+            fillerColor: '#d8faf4',
+            borderColor: '#b1b1b1',
+            right: '60',
+            left: '60'
+          }
+        ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -1329,13 +1421,15 @@ export default {
             left: '60px',
             right: '58%',
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            bottom: '90px'
           },
           {
             top: '30px',
             left: '50%',
             width: 'auto',
-            height: 'auto'
+            height: 'auto',
+            bottom: '90px'
           }
         ],
         xAxis: [
@@ -1533,193 +1627,11 @@ export default {
       }
       return option
     }
-    // bloodSportOption () {
-    //   return {
-    //     title: {
-    //     // text: '控压走势',
-    //       // subtext: '控压走势',
-    //       // subtextStyle: {
-    //       //   color: '#111'
-    //       // },
-    //     // x: 'center'
-    //       // right: '20',
-    //       // top: '-10'
-    //     },
-    //     // tooltip: { // 提示框组件
-    //     //   trigger: 'axis',
-    //     //   axisPointer: {
-    //     //     type: 'cross'
-    //     //   },
-    //     //   snap: true,
-    //     //   formatter: '{b} : {c}%'
-    //     // },
-    //     grid: { // 直角坐标系内绘图网格
-    //       show: false,
-    //       // left: '40px',
-    //       top: '30px',
-    //       // bottom: '24px',
-    //       // width: 'auto',
-    //       // height: 'auto',
-    //       width: '100%',
-    //       height: '100%'
-    //       // containLabel: true
-    //     },
-    //   // toolbox: { // 工具栏
-    //     // show: true
-    //     // feature: {
-    //     //   asveAsImage: {}
-    //     // }
-    //   // },
-    //     // legend: { // 图例组件
-    //     //   show: true,
-    //     //   type: 'plain',
-    //     //   orient: 'vertical',
-    //     //   right: 15,
-    //     //   top: 10,
-    //     //   data: [{
-    //     //     name: '控压走势',
-    //     //     icon: 'roundRect',
-    //     //     textStyle: {
-    //     //       fontSize: 14
-    //     //     }
-    //     //   }],
-    //     //   selectedMode: false,
-    //     //   itemWidth: 20,
-    //     //   itemHeight: 20
-    //     // },
-    //     // visualMap: [
-    //     //   {
-    //     //     type: 'piecewise',
-    //     //     pieces: [{gt: 'aa'}]
-    //     //   }
-    //     // ],
-    //     xAxis: { // 直角坐标系grid的x轴
-    //       type: 'category',
-    //       // type: 'time',
-    //       boundaryGap: false,
-    //       // minInterval: 1,
-    //       // interval: 0,
-    //       // nameTextStyle: {
-    //       //   normal: {
-    //       //     color: '#666',
-    //       //     fontSize: 12
-    //       //   }
-    //       // },
-    //       // splitLine: {
-    //       //   show: false
-    //       // },
-    //       axisLabel: {
-    //         interval: 0,  // 显示x轴数据
-    //         showMinLabel: true,
-    //         showMaxLabel: true,
-    //         align: 'left',
-    //         rotate: 330
-    //       },
-    //       axisLine: {
-    //         lineStyle: {
-    //           color: '#999'
-    //         }
-    //       },
-    //       // min: 0,
-    //       axisTick: {
-    //         show: false
-    //       },
-    //       // data: this.sickTrendDataX[this.clickTime]
-    //       // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-    //       // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-    //       data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-    //     },
-    //     yAxis: { // 直角坐标系grid的y轴
-    //       name: '血压',
-    //       nameLocation: 'end',
-    //       type: 'value',
-    //       axisLine: {
-    //         onZero: false,
-    //         lineStyle: {
-    //           color: '#999'
-    //         }
-    //       },
-    //       axisTick: {
-    //         show: false
-    //       },
-    //       // axisLabel: {
-    //       //   // formatter: '{value}%'
-    //       // },
-    //       splitLine: {  // y轴网格显示
-    //         show: true
-    //       },
-    //       nameTextStyle: { // 坐标轴名样式
-    //         color: '#666',
-    //         fontSize: 12,
-    //         align: 'left'
-    //       },
-    //       boundaryGap: true,
-    //       splitNumber: 3,  // 坐标轴分割段数
-    //       minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-    //       // interval: 50, // 强制设置坐标轴分割间隔。
-    //       data: ['0', '120', '140', '180']
-    //     },
-    //     series: [
-    //       {
-    //         name: '舒张压',
-    //         type: 'line',
-    //         smooth: true,
-    //         smoothMonotone: 'x',
-    //         lineStyle: {
-    //           normal: {
-    //             width: 2,
-    //             color: '#8ecefc'
-    //           }
-    //         },
-    //         itemStyle: {
-    //           normal: {
-    //             color: '#8ecefc'
-    //           }
-    //         },
-    //         areaStyle: {
-    //           normal: {
-    //             color: '#e6f5fe',
-    //             origin: 'auto',
-    //             shadowColor: '#e6f5fe'
-    //           }
-    //         },
-    //         data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
-    //       },
-    //       {
-    //         name: '收缩压',
-    //         type: 'line',
-    //         smooth: true,
-    //         smoothMonotone: 'x',
-    //         lineStyle: {
-    //           normal: {
-    //             width: 2,
-    //             color: '#7cedc4'
-    //           }
-    //         },
-    //         itemStyle: {
-    //           normal: {
-    //             color: '#7cedc4'
-    //           }
-    //         },
-    //         areaStyle: {
-    //           normal: {
-    //             color: '#def3f2',
-    //             origin: 'auto'
-    //           }
-    //         },
-    //         data: [ 34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10 ]
-    //       }
-    //     ],
-    //     textStyle: {
-    //       color: '#666',
-    //       fontSize: 12
-    //     }
-    //   }
-    // }
   },
   watch: {
   },
   mounted () {
+    let vm = this
     // 初始化血压分布图
     this.coverChecked.date[0].isChecked = true
     this.updateCover(this.coverChecked.date[0].date)
@@ -1736,12 +1648,135 @@ export default {
     this.updateFood(this.bloodfoodChecked.date[0].date)
     let bloodFood = echarts.init(document.getElementById('bloodFood'))
     bloodFood.setOption(this.bloodFoodOption('kaluli'))
+    bloodFood.on('datazoom', function (chartsparams) {
+      if (chartsparams.end === 100) {
+        if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
+          return
+        }
+        vm.bloodfoodData.pageNum ++
+        let params = {
+          'userId': vm.sickID,
+          'adminHospitalId': vm.hospitalId,
+          'bpMeasureTime': vm.bpMeasureTime || '',
+          'pageNum': vm.bloodfoodData.pageNum,
+          'pageSize': 5
+        }
+        vm.$axios(bloodfoodApi(params))
+          .then(res => {
+            let bloodFood = echarts.init(document.getElementById('bloodFood'))
+            bloodFood.showLoading(
+              {
+                text: '加载中...',
+                color: '#1991fc',
+                textColor: '#000',
+                maskColor: 'rgba(255, 255, 255, 0.8)',
+                zlevel: 0
+              }
+            )
+            if (vm.bloodfoodData.pageNum <= res.data.pages) {
+              if (res.data.data.length !== 0) {
+                res.data.data.forEach((item, index) => {
+                  if (!item.systolic) {
+                    item.systolic = 0
+                  }
+                  if (!item.diastolic) {
+                    item.diastolic = 0
+                  }
+                  if (!item.calories) {
+                    item.calories = 0
+                  }
+                  if (!item.foodScore) {
+                    item.foodScore = 0
+                  }
+                  vm.bloodfoodData.x.push(item.createTime)
+                  vm.bloodfoodData.systolic.push(item.systolic)
+                  vm.bloodfoodData.diastolic.push(item.diastolic)
+                  vm.bloodfoodData.foodScore.push(item.foodScore)
+                  vm.bloodfoodData.calories.push(item.calories)
+                })
+              }
+            }
+            if (vm.bloodfoodChecked.kaluli) {
+              bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 80))
+            }
+            if (vm.bloodfoodChecked.score) {
+              bloodFood.setOption(vm.bloodFoodOption('score', 50, 80))
+            }
+            // bloodFood.setOption(vm.bloodFoodOption(50, 80))
+            bloodFood.hideLoading()
+          })
+      }
+    })
 
     this.bloodsportChecked.date[0].isChecked = true
     this.bloodsportChecked.kaluli = true
     this.updateSport(this.bloodsportChecked.date[0].date)
     let bloodSport = echarts.init(document.getElementById('bloodSport'))
     bloodSport.setOption(this.bloodSportOption('kaluli'))
+    bloodSport.on('datazoom', function (chartsparams) {
+      // let vm = this
+      // console.log('num', vm.bloodsportData.pageNum)
+      // console.log('num', vm.bloodsportData)
+      if (chartsparams.end === 100) {
+        // console.log('num', vm.bloodsportData.pageNum)
+        if (vm.bloodsportData.pageNum >= vm.bloodsportData.pages) {
+          return
+        }
+        vm.bloodsportData.pageNum ++
+
+        let params = {
+          'userId': vm.sickID,
+          'adminHospitalId': vm.hospitalId,
+          'bpMeasureTime': vm.bpMeasureTime || '',
+          'pageNum': vm.bloodsportData.pageNum,
+          'pageSize': 5
+        }
+        vm.$axios(bloodsportApi(params))
+          .then(res => {
+            let bloodSport = echarts.init(document.getElementById('bloodSport'))
+            bloodSport.showLoading(
+              {
+                text: '加载中...',
+                color: '#1991fc',
+                textColor: '#000',
+                maskColor: 'rgba(255, 255, 255, 0.8)',
+                zlevel: 0
+              }
+            )
+            if (vm.bloodsportData.pageNum <= res.data.pages) {
+              if (res.data.data.length !== 0) {
+                res.data.data.forEach((item, index) => {
+                  if (!item.systolic) {
+                    item.systolic = 0
+                  }
+                  if (!item.diastolic) {
+                    item.diastolic = 0
+                  }
+                  if (!item.calories) {
+                    item.calories = 0
+                  }
+                  if (!item.foodScore) {
+                    item.foodScore = 0
+                  }
+                  vm.bloodsportData.x.push(item.createTime)
+                  vm.bloodsportData.systolic.push(item.systolic)
+                  vm.bloodsportData.diastolic.push(item.diastolic)
+                  vm.bloodsportData.movementScore.push(item.movementScore)
+                  vm.bloodsportData.calories.push(item.calories)
+                })
+              }
+            }
+            if (vm.bloodsportChecked.kaluli) {
+              bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 80))
+            }
+            if (vm.bloodsportChecked.score) {
+              bloodSport.setOption(vm.bloodSportOption('score', 50, 80))
+            }
+
+            bloodSport.hideLoading()
+          })
+      }
+    })
   }
 }
 </script>

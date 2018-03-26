@@ -101,16 +101,24 @@ export default {
         }
       ],
       optionData: [],
-      xasis: []
+      xasis: [],
+      pageNum: 1,
+      pageSize: 5
     }
   },
   methods: {
-    getData () {
+    getData (pagenum) {
+      let pageNum = 1
+      if (pagenum) {
+        pageNum = pagenum
+      }
       let vm = this
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': vm.bpMeasureTime || ''
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': pageNum,
+        'pageSize': vm.pageSize
       }
       this.$axios(useDrugApi(params))
       .then(res => {
@@ -120,10 +128,12 @@ export default {
             this.$set(this.data, index, item)
           })
           this.data = res.data.data
-          this.optionData = this.formatterDate(this.data)
+          // this.optionData = this.formatterDate(this.data)
+          this.optionData = this.optionData.push.apply(this.optionData, res.data.data)
         }
         // console.log(this.optionData)
         // console.log(this.data)
+        this.pages = res.data.pages
         let useDrug = echarts.init(document.getElementById('useDrug'))
         useDrug.setOption(this.useDrugOption())
       })
@@ -209,7 +219,8 @@ export default {
       }
 
       arr = this.seriesItem(arr)
-      this.xasis = xasis
+      // this.xasis = xasis
+      this.xasis = this.xasis.push.apply(this.xasis, xasis)
       return arr
     },
     sortDate (date1, date2) {
@@ -269,7 +280,15 @@ export default {
 
       return arr
     },
-    useDrugOption () {
+    useDrugOption (start, end) {
+      let zoomstart = 0
+      let zoomend = 50
+      if (start) {
+        zoomstart = start
+      }
+      if (end) {
+        zoomend = end
+      }
       let hours = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00']
       // let days = ['2017/12/06', '2017/12/07', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06']
       let days = this.xasis
@@ -321,9 +340,9 @@ export default {
           {
             type: 'slider',
             show: true,
-            start: 0,
-            end: 8,
-            // handleSize:50,
+            start: zoomstart,
+            end: zoomend,
+            // handleSize: 50,
             minValueSpan: 6,
             maxValueSpan: 6
           }
@@ -525,10 +544,20 @@ export default {
     }
   },
   mounted () {
+    let vm = this
     let useDrug = echarts.init(document.getElementById('useDrug'))
     useDrug.setOption(this.useDrugOption())
     this.getData()
-    // this.formatterDate(this.data)
+    useDrug.on('datazoom', function (chartsparams) {
+      if (chartsparams.end === 100) {
+        if (vm.pageNum >= vm.pages) {
+          return
+        }
+        vm.pageNum++
+        vm.getData(vm.pageNum)
+        useDrug.setOption(this.useDrugOption(50, 80))
+      }
+    })
   }
 }
 </script>

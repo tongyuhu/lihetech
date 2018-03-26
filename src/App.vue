@@ -73,6 +73,18 @@ export default {
                   })
               }
             }
+            if (error.response) {
+              switch (error.response.status) {
+                case 504:
+                  sessionStorage.clear()
+                  vm.$router.push({
+                    name: 'login',
+                    params: {
+                      from: vm.$router.currentRoute.path
+                    }
+                  })
+              }
+            }
             return Promise.reject(error.response)
           }
         )

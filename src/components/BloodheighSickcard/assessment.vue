@@ -9,19 +9,19 @@
           <tr>
             <th>行为指数</th>
             <th>
-              <p>图形</p>
+              图形
             </th>
             <th>
-              <p>实际图形</p>
+              实际图形
             </th>
             <th>
-              <p>症状</p>
+              症状
             </th>
           </tr>
           <tr>
             <td class="icon-normal">
               {{sysTypeName}}</td>
-            <td>
+            <td class="img">
               <img :src="img(sysTypeName)" alt="">
             </td>
             <td>
@@ -318,5 +318,11 @@ export default {
   }
   .a-text{
     font-size: 24px;
+  }
+  .img{
+    min-width: 80px;
+  }
+  .img img{
+    min-width: 50px;
   }
 </style>

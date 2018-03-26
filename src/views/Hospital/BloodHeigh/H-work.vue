@@ -404,17 +404,21 @@ export default {
     //   }
     // },
     isCare (val) {
-      let sickid = ''
+      let sickid = '1'
       let hospitalid = ''
       let care = ''
       if (val && val.id) {
-        sickid = val.i
+        sickid = val.id
       }
       if (val && val.adminHospitalId) {
         hospitalid = val.adminHospitalId
       }
       if (val && val.isDocusOn) {
-        care = !val.isDocusOn
+        care = !val.isDocusOn + ''
+      } else {
+        if (val && !val.isDocusOn) {
+          care = !val.isDocusOn + ''
+        }
       }
       let params = {
         'adminHospitalId': hospitalid,
@@ -507,9 +511,10 @@ export default {
       })
     },
     diagnose (row) {
+      console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: row.userId,
+          sickID: row.id,
           hospitalId: row.adminHospitalId
         }})
     },

@@ -8,7 +8,7 @@
       </div>
       <i :class="{'new':isnew}"></i>
       <div class="table-top">
-        <span class="table-top-span">病历卡  {{currentpage}}/{{totalPage}}</span>
+        <span class="table-top-span">病历卡  {{currentpage}}/{{cardtotalPage}}</span>
         <span>{{createTime}}</span>
       </div>
       <div>
@@ -138,7 +138,8 @@ export default {
   data () {
     return {
       currentpage: 1,
-      isnew: true
+      isnew: true,
+      cardtotalPage: this.totalPage
       // totalPage: ''
     }
   },
@@ -218,29 +219,36 @@ export default {
   },
   methods: {
     next () {
-      if (this.currentpage) {
+      if (isNaN(this.currentpage)) {
         this.currentpage = parseInt(this.currentpage)
       }
-      if (this.totalPage) {
-        this.totalPage = parseInt(this.totalPage)
+      if (isNaN(this.cardtotalPage)) {
+        this.cardtotalPage = parseInt(this.cardtotalPage)
       }
-      if (this.currentpage >= this.totalPage) {
+      if (this.currentpage >= this.cardtotalPage) {
         this.currentpage = 0
       }
       this.currentpage += 1
       this.$emit('preBtn', this.currentpage)
     },
     pre () {
-      if (this.currentpage) {
+      // console.log(this.currentpage)
+      if (isNaN(this.currentpage)) {
         this.currentpage = parseInt(this.currentpage)
       }
-      if (this.totalPage) {
-        this.totalPage = parseInt(this.totalPage)
+      if (isNaN(this.cardtotalPage)) {
+        this.cardtotalPage = parseInt(this.cardtotalPage)
       }
       if (this.currentpage <= 1) {
-        this.currentpage = this.totalPage + 1
+        this.currentpage = this.cardtotalPage + 1
       }
+      // if (this.cardtotalPage === 0 || !this.cardtotalPage) {
+      //   this.cardtotalPage = 1
+      //   this.currentpage = 2
+      // }
+      // console.log('ii', this.cardtotalPage)
       this.currentpage -= 1
+
       this.$emit('preBtn', this.currentpage)
     },
     play () {
@@ -263,6 +271,11 @@ export default {
     },
     addSport () {
       console.log('添加运动')
+    }
+  },
+  mounted () {
+    if (!this.cardtotalPage || this.cardtotalPage === 0) {
+      this.cardtotalPage = 1
     }
   }
 }
@@ -390,7 +403,7 @@ export default {
     left: -22px;
     position: absolute;
     content: '';
-    width: 20px;;
+    width: 20px;
     height: 20px;
     vertical-align: middle;
     background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-25.png') no-repeat;

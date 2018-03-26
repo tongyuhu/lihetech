@@ -379,7 +379,10 @@ export default {
         date: [],
         week: [],
         systolic: [],
-        diastolic: []
+        diastolic: [],
+        pages: 1,
+        pageNum: 1,
+        index: 0
       },
       // 当前选择的图表时间戳
       bloodTrendIndex: 0,
@@ -407,11 +410,15 @@ export default {
       this.ischeckAll = !this.ischeckAll
       // this.updatebloodTrendData(this.bloodTrendChecked, this.statusArr)
     },
-    bloodBehaviourBloodOption (val) {
+    bloodBehaviourBloodOption (start, end) {
       let vm = this
       let zoomstart = 0
-      if (val) {
-        zoomstart = val
+      let zoomend = 50
+      if (start) {
+        zoomstart = start
+      }
+      if (end) {
+        zoomend = end
       }
       let option = {
         color: ['#8ecefc', 'e6f5fe', '8ecefc'],
@@ -423,7 +430,7 @@ export default {
             show: true,
             realtime: true,
             start: zoomstart,
-            end: 98,
+            end: zoomend,
             showDetail: false,
             // minValueSpan: 98,
             // maxValueSpan: 98,
@@ -700,8 +707,16 @@ export default {
       return option
     },
 
-    bloodTrendOption () {
+    bloodTrendOption (start, end) {
       let vm = this
+      let zoomstart = 0
+      let zoomend = 50
+      if (start) {
+        zoomstart = start
+      }
+      if (end) {
+        zoomend = end
+      }
       return {
         title: {
           // text: '广场舞30min',
@@ -713,11 +728,26 @@ export default {
           },
           left: '40%'
         },
-        // tooltip: { // 提示框组件
-        //   // trigger: 'item'
-        //   // trigger: 'axis'
-        // },
-        // tooltip: {},
+        dataZoom: [
+          {
+            type: 'slider',
+            // xAxisIndex: [0, 1],
+            // disabled: false,
+            show: true,
+            realtime: true,
+            start: zoomstart,
+            end: zoomend,
+            showDetail: false,
+            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
+            handleStyle: {
+              color: '#80cbc4'
+            },
+            fillerColor: '#d8faf4',
+            borderColor: '#b1b1b1',
+            right: '30',
+            left: '30'
+          }
+        ],
         tooltip: {
           trigger: 'axis',
           axisPointer: {
@@ -770,7 +800,7 @@ export default {
             showMinLabel: true,
             showMaxLabel: true,
             align: 'left',
-            rotate: 320
+            rotate: 340
           },
           axisLine: {
             lineStyle: {
@@ -932,6 +962,7 @@ export default {
       this.bloodAndBehaviourData.avgSystolic = []
       this.bloodAndBehaviourData.avgDiastolic = []
       if (index === 0) {
+        vm.bloodAndBehaviourData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 1))
         .then(res => {
           res.data.data.forEach((item, index) => {
@@ -950,6 +981,7 @@ export default {
               item.avgBehaveScore = 0
             }
             this.$set(this.bloodAndBehaviourData.avgBehaveScore, index, item.avgBehaveScore)
+            this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
@@ -961,6 +993,7 @@ export default {
         })
       }
       if (index === 1) {
+        vm.bloodAndBehaviourData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 2))
         .then(res => {
           res.data.data.forEach(item => {
@@ -978,6 +1011,7 @@ export default {
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
+          this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
           if (res.data.data) {
             if (res.data.data.length !== 0) {
               this.updateBehaviourRateDate(res.data.data[0].description)
@@ -986,6 +1020,7 @@ export default {
         })
       }
       if (index === 2) {
+        vm.bloodAndBehaviourData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 3))
         .then(res => {
           res.data.data.forEach(item => {
@@ -997,6 +1032,7 @@ export default {
             }
             this.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
+            this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
           if (res.data.data) {
@@ -1055,6 +1091,7 @@ export default {
       }
       let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
       if (index === 0) {
+        vm.bloodTrendData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 0))
         .then(res => {
           this.bloodTrendData.date = []
@@ -1065,6 +1102,9 @@ export default {
             this.$set(this.bloodTrendData.systolic, index, item.systolic)
             this.$set(this.bloodTrendData.diastolic, index, item.diastolic)
           })
+          this.$set(this.bloodTrendData, 'pages', res.data.pages)
+          // this.bloodAndBehaviourData.pages = res.data.pages
+          // console.log('vm1', vm.bloodTrendData.pages)
           bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
@@ -1074,6 +1114,7 @@ export default {
         })
       }
       if (index === 1) {
+        vm.bloodTrendData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 1))
         .then(res => {
           this.bloodTrendData.date = []
@@ -1084,6 +1125,7 @@ export default {
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
           })
+          this.$set(this.bloodTrendData, 'pages', res.data.pages)
           bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
@@ -1093,6 +1135,7 @@ export default {
         })
       }
       if (index === 2) {
+        vm.bloodTrendData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 2))
         .then(res => {
           this.bloodTrendData.date = []
@@ -1109,6 +1152,7 @@ export default {
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
           })
+          this.$set(this.bloodTrendData, 'pages', res.data.pages)
           bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
@@ -1118,6 +1162,7 @@ export default {
         })
       }
       if (index === 3) {
+        vm.bloodTrendData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 3))
         .then(res => {
           this.bloodTrendData.date = []
@@ -1128,6 +1173,7 @@ export default {
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
           })
+          this.$set(this.bloodTrendData, 'pages', res.data.pages)
           bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
@@ -1211,6 +1257,9 @@ export default {
     bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
     bloodBehaviourBlood.on('datazoom', function (chartsparams) {
       if (chartsparams.end === 100) {
+        if (vm.bloodAndBehaviourData.pageNum >= vm.bloodAndBehaviourData.pages) {
+          return
+        }
         vm.bloodAndBehaviourData.pageNum ++
         let params = {
           'userId': vm.sickID,
@@ -1218,60 +1267,109 @@ export default {
           'bpMeasureTime': vm.bpMeasureTime || '',
           'pageNum': vm.bloodAndBehaviourData.pageNum
         }
-        bloodBehaviourBlood.showLoading(
-          {
-            text: '加载中...',
-            color: '#1991fc',
-            textColor: '#000',
-            maskColor: 'rgba(255, 255, 255, 0.8)',
-            zlevel: 0
-          }
-        )
         vm.$axios(bloodheighSickDataApi(params, vm.behaviourChecked + 1))
-        .then(res => {
-          res.data.data.forEach((item, index) => {
-            if (!item.description) {
-              item.description = 0
-            }
-            console.log('page', vm.bloodAndBehaviourData.pages)
-            console.log('pages', res.data.pages)
-            if (vm.bloodAndBehaviourData.pages < res.data.pages) {
-              vm.bloodAndBehaviourData.date.push(item.description)
-              vm.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
-              vm.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
-              vm.bloodAndBehaviourData.pages = res.data.pages
-              vm.bloodAndBehaviourData.pageNum = res.data.pageNum
-            }
-            // if (index === 0) {
-            //   vm.$set(vm.chartA, 'date', item.description)
-            // }
-            if (!item.avgBehaveScore) {
-              item.avgBehaveScore = 0
-            }
-            // vm.$set(vm.bloodAndBehaviourData.avgBehaveScore, index, item.avgBehaveScore)
+          .then(res => {
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-            bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50))
-            // console.log(bloodBehaviourBlood)
-            // bloodBehaviourBlood._model.option.dataZoom[0].start = 90
-            // chartsparams.start = 90
-            // bloodBehaviourBlood.setOption({
-            //   dataZoom[0].start : 90
-            // })
+            bloodBehaviourBlood.showLoading(
+              {
+                text: '加载中...',
+                color: '#1991fc',
+                textColor: '#000',
+                maskColor: 'rgba(255, 255, 255, 0.8)',
+                zlevel: 0
+              }
+            )
+            if (vm.bloodAndBehaviourData.pageNum <= res.data.pages) {
+              if (res.data.data.length !== 0) {
+                res.data.data.forEach((item, index) => {
+                  if (!item.description) {
+                    item.description = 0
+                  }
+                  if (vm.behaviourChecked === 0 || vm.behaviourChecked === 2) {
+                    vm.bloodAndBehaviourData.date.push(item.description)
+                  }
+                  if (vm.behaviourChecked === 1) {
+                    vm.computeYearWeek(item.yearWeek)
+                    let week = vm.computeYearWeek(item.yearWeek)[0] + '年' + '第' + vm.computeYearWeek(item.yearWeek)[1] + '周'
+                    vm.bloodAndBehaviourData.date.push(week)
+                    vm.bloodAndBehaviourData.week.push(item.yearWeek)
+                    // vm.bloodAndBehaviourData.date.push(item.description)
+                  }
+                  vm.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
+                  vm.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
+                  if (!item.avgBehaveScore) {
+                    item.avgBehaveScore = 0
+                  }
+                  vm.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
+                  vm.bloodAndBehaviourData.pages = res.data.pages
+                  vm.bloodAndBehaviourData.pageNum = res.data.pageNum
+                })
+              }
+            }
+            bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 80))
+            bloodBehaviourBlood.hideLoading()
           })
-          // if (res.data.data) {
-          //   if (res.data.data.length !== 0) {
-          //     this.updateBehaviourRateDate(res.data.data[0].description)
-          //   }
-          // }
-          bloodBehaviourBlood.hideLoading()
-        })
-        // vm.updateBehaviourData(vm.behaviourChecked, vm.bloodAndBehaviourData.pageNum)
-        console.log('on', vm.bloodAndBehaviourData.pageNum)
-        console.log('on', params)
       }
     })
     let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
     bloodTrend.setOption(this.bloodTrendOption())
+    bloodTrend.on('datazoom', function (chartsparams) {
+      if (chartsparams.end === 100) {
+        if (vm.bloodTrendData.pageNum >= vm.bloodTrendData.pages) {
+          return
+        }
+        vm.bloodTrendData.pageNum ++
+        let params = {
+          'userId': vm.sickID,
+          'adminHospitalId': vm.hospitalId,
+          'bpMeasureTime': vm.bpMeasureTime || '',
+          'pageNum': vm.bloodTrendData.pageNum
+        }
+        vm.$axios(bloodheighSickDataApi(params, vm.bloodTrendChecked))
+          .then(res => {
+            bloodTrend.showLoading(
+              {
+                text: '加载中...',
+                color: '#1991fc',
+                textColor: '#000',
+                maskColor: 'rgba(255, 255, 255, 0.8)',
+                zlevel: 0
+              }
+                )
+            if (vm.bloodTrendData.pageNum <= res.data.pages) {
+              if (res.data.data.length !== 0) {
+                res.data.data.forEach((item, index) => {
+                  if (!item.description) {
+                    item.description = 0
+                  }
+                  if (vm.bloodTrendChecked === 0) {
+                    vm.bloodTrendData.date.push(item.measureTime)
+                    vm.bloodTrendData.systolic.push(item.systolic)
+                    vm.bloodTrendData.diastolic.push(item.diastolic)
+                  }
+                  if (vm.bloodTrendChecked === 1 || vm.bloodTrendChecked === 3) {
+                    vm.bloodTrendData.date.push(item.description)
+                    vm.bloodTrendData.systolic.push(item.avgSystolic)
+                    vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+                  }
+                  if (vm.bloodTrendChecked === 2) {
+                    vm.computeYearWeek(item.yearWeek)
+                    let week = vm.computeYearWeek(item.yearWeek)[0] + '年' + '第' + vm.computeYearWeek(item.yearWeek)[1] + '周'
+                    vm.bloodTrendData.date.push(week)
+                    vm.bloodTrendData.week.push(item.yearWeek)
+                    vm.bloodTrendData.systolic.push(item.avgSystolic)
+                    vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+                  }
+                  vm.bloodTrendData.pages = res.data.pages
+                  vm.bloodTrendData.pageNum = res.data.pageNum
+                })
+              }
+            }
+            bloodTrend.setOption(vm.bloodTrendOption(50, 80))
+            bloodTrend.hideLoading()
+          })
+      }
+    })
   }
 }
 </script>

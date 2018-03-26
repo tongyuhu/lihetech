@@ -234,27 +234,27 @@
           </tr>
           <tr>
             <th>24小时</th>
-            <td>139/86</td>
-            <td>139/86</td>
-            <td>139/86</td>
+            <td>{{ABPM.oneday.avgSystolic}}/{{ABPM.oneday.avgDiastolic}}</td>
+            <td>{{ABPM.oneday.bptype}}</td>
+            <td>{{ABPM.oneday.referValue}}</td>
           </tr>
           <tr>
             <th>白天</th>
-            <td>139/86</td>
-            <td>139/86</td>
-            <td>139/86</td>
+            <td>{{ABPM.day.avgSystolic}}/{{ABPM.day.avgDiastolic}}</td>
+            <td>{{ABPM.day.bptype}}</td>
+            <td>{{ABPM.day.referValue}}</td>
           </tr>
           <tr>
             <th>夜间</th>
-            <td>139/86</td>
-            <td>139/86</td>
-            <td>139/86</td>
+            <td>{{ABPM.night.avgSystolic}}/{{ABPM.night.avgDiastolic}}</td>
+            <td>{{ABPM.night.bptype}}</td>
+            <td>{{ABPM.night.referValue}}</td>
           </tr>
           <tr>
             <th>清晨</th>
-            <td>139/86</td>
-            <td>139/86</td>
-            <td>139/86</td>
+            <td>{{ABPM.moring.avgSystolic}}/{{ABPM.moring.avgDiastolic}}</td>
+            <td>{{ABPM.moring.bptype}}</td>
+            <td>{{ABPM.moring.referValue}}</td>
           </tr>
         </table>
       </div>
@@ -301,7 +301,9 @@ export default {
           sickRadioDiastolic: '',
           sickRadioSystolic: '',
           moringTopSystolic: '',
-          nightLowRatioDiastolic: ''
+          nightLowRatioDiastolic: '',
+          bptype: '',
+          referValue: ''
         },
         night: {
           maxDiastolic: '',
@@ -328,7 +330,9 @@ export default {
           sickRadioDiastolic: '',
           sickRadioSystolic: '',
           moringTopSystolic: '',
-          nightLowRatioDiastolic: ''
+          nightLowRatioDiastolic: '',
+          bptype: '',
+          referValue: ''
         },
         moring: {
           maxDiastolic: '',
@@ -355,7 +359,9 @@ export default {
           sickRadioDiastolic: '',
           sickRadioSystolic: '',
           moringTopSystolic: '',
-          nightLowRatioDiastolic: ''
+          nightLowRatioDiastolic: '',
+          bptype: '',
+          referValue: ''
         },
         oneday: {
           maxDiastolic: '',
@@ -382,7 +388,9 @@ export default {
           sickRadioDiastolic: '',
           sickRadioSystolic: '',
           moringTopSystolic: '',
-          nightLowRatioDiastolic: ''
+          nightLowRatioDiastolic: '',
+          bptype: '',
+          referValue: ''
         }
       }
     }
