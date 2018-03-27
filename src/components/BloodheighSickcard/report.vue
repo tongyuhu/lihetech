@@ -1634,12 +1634,12 @@ export default {
     let vm = this
     // 初始化血压分布图
     this.coverChecked.date[0].isChecked = true
-    this.updateCover(this.coverChecked.date[0].date)
+    this.updateCover(this.coverChecked.date[0].value)
     let bloodCover = echarts.init(document.getElementById('bloodCover'))
     bloodCover.setOption(this.bloodCoverOption())
     // 初始化血压直方图
     this.histogramChecked.date[0].isChecked = true
-    this.updateHistogram(this.histogramChecked.date[0].date)
+    this.updateHistogram(this.histogramChecked.date[0].value)
     let bloodHistogram = echarts.init(document.getElementById('bloodHistogram'))
     bloodHistogram.setOption(this.bloodHistogramOption())
 

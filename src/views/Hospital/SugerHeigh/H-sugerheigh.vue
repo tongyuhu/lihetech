@@ -2,9 +2,9 @@
   <div>
       <el-row>
           <el-col :span="24">
-            <HAddsick></HAddsick>
+            <hospitalMsg></hospitalMsg>
             <HSugerheightotal></HSugerheightotal>
-            <HWork></HWork>
+            <HsugerWork></HsugerWork>
             <HSicklist></HSicklist>
           </el-col>
       </el-row>
@@ -12,17 +12,28 @@
 </template>
 
 <script>
-import HAddsick from './S-addsick'
+import Bus from './../../../bus'
 import HSugerheightotal from './H-sugerheightotal'
-import HWork from './H-work'
+import HsugerWork from './H-sugerWork'
 import HSicklist from './H-sicklist'
+import hospitalMsg from './../../../components/hospitalMsg.vue'
 export default {
   name: 'H-bloodheigh',
   components: {
-    HAddsick,
     HSugerheightotal,
-    HWork,
-    HSicklist
+    HsugerWork,
+    HSicklist,
+    hospitalMsg
+  },
+  data () {
+    return {
+
+    }
+  },
+  beforeRouteLeave (to, from, next) {
+    // 离开当前页面关闭导航
+    Bus.$emit('closemenu', 2)
+    next()
   }
 }
 </script>

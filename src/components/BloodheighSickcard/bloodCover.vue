@@ -380,6 +380,7 @@ export default {
         week: [],
         systolic: [],
         diastolic: [],
+        bptype: [],
         pages: 1,
         pageNum: 1,
         index: 0
@@ -1097,12 +1098,15 @@ export default {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
           this.bloodTrendData.diastolic = []
+          this.bloodTrendData.bptype = []
+
           res.data.data.forEach((item, index) => {
             this.$set(this.bloodTrendData.date, index, item.measureTime)
             this.$set(this.bloodTrendData.systolic, index, item.systolic)
             this.$set(this.bloodTrendData.diastolic, index, item.diastolic)
+            this.$set(this.bloodTrendData.bptype, index, item.bpType)
           })
-          this.$set(this.bloodTrendData, 'pages', res.data.pages)
+          // this.$set(this.bloodTrendData, 'pages', res.data.pages)
           // this.bloodAndBehaviourData.pages = res.data.pages
           // console.log('vm1', vm.bloodTrendData.pages)
           bloodTrend.setOption(this.bloodTrendOption())
@@ -1184,6 +1188,26 @@ export default {
       }
     },
     updatebloodTrendState (date, index) {
+      if (this.bloodTrendChecked === 0) {
+        this.bloodTrendState.total = 1
+        // }
+        if (this.bloodTrendData.bptype[index] === 1) {
+          this.bloodTrendState.normal = 1
+          this.bloodTrendState.heigh = 0
+          this.bloodTrendState.danger = 0
+        }
+        if (this.bloodTrendData.bptype[index] === 2) {
+          this.bloodTrendState.normal = 0
+          this.bloodTrendState.heigh = 1
+          this.bloodTrendState.danger = 0
+        }
+        if (this.bloodTrendData.bptype[index] === 3) {
+          this.bloodTrendState.normal = 0
+          this.bloodTrendState.heigh = 0
+          this.bloodTrendState.danger = 1
+        }
+        return
+      }
       if (this.bloodTrendChecked === 2) {
         let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
         date = dateFromWeek(yearweek[0], yearweek[1])
@@ -1196,10 +1220,12 @@ export default {
       }
       this.$axios(updatebloodTrendStateApi(params, this.bloodTrendChecked, date))
       .then(res => {
+        let total = 0
         res.data.data.forEach(item => {
-          if (item.id === 1) {
-            this.$set(this.bloodTrendState, 'total', item.highNum)
-          }
+          total += item.highNum
+          // if (item.id === 1) {
+          //   this.$set(this.bloodTrendState, 'total', item.highNum)
+          // }
           if (item.id === 2) {
             this.$set(this.bloodTrendState, 'normal', item.highNum)
           }
@@ -1210,6 +1236,7 @@ export default {
             this.$set(this.bloodTrendState, 'danger', item.highNum)
           }
         })
+        this.$set(this.bloodTrendState, 'total', total)
       })
     },
     computeYearWeek (value) {

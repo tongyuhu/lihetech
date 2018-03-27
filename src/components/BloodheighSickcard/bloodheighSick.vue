@@ -44,7 +44,8 @@
                 </div>
               </div>
               <div class="sick-history-bottom">
-                <button><span>体检表</span></button>
+                <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
+                <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button>
                 <button><span>检查单</span></button>
               </div>
             </div>
@@ -104,6 +105,7 @@ import alldayheighblood from './alldayheighblood'
 import report from './report'
 import original from './original'
 import card from './card'
+import healthForm from './../healthForm.vue'
 export default {
   components: {
     sickcard,
@@ -116,7 +118,8 @@ export default {
     alldayheighblood,
     report,
     original,
-    card
+    card,
+    healthForm
   },
   data () {
     return {

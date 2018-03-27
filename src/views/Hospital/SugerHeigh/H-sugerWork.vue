@@ -5,14 +5,14 @@
       <span>工作台</span>
         <el-button type="text" @click="msgTipBtn" class="work-msg">
           <i class="work-icon" @click="msgTipBtn"></i>
-          <i :class="{workMsgtip:showMsgTip}"></i>
+          <i :class="{'workMsgtip':showMsgTip}"></i>
         </el-button>
     </div>
     <el-card :body-style="{padding: '0px'}">
     <!-- 工作台 end -->
 
       <!-- 患者最新问诊  start -->
-      <div class="bottom-margin" id="bloodnew">
+      <div class="bottom-margin" id="sugerNew">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">患者最新问诊</p>
@@ -75,7 +75,7 @@
       <!-- 患者最新问诊  end -->
 
       <!-- 严重患者 start -->
-      <div class="bottom-margin" id="bloodbad">
+      <div class="bottom-margin" id="sugerBad">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">严重患者({{badsickTotal }})</p>
@@ -163,7 +163,7 @@
       <!-- 严重患者结束 end -->
 
       <!-- 未遵医嘱患者 start -->
-      <div class="bottom-margin" id="bloodnolisten">
+      <div class="bottom-margin" id="sugerNolisten">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">未遵医嘱患者({{noListenDoctorRate }})</p>
@@ -255,7 +255,7 @@
       <!-- 未遵医嘱患者 end -->
 
       <!-- 建档不完整患者 start -->
-      <div id="bloodunperfect">
+      <div id="sugerUnperfect">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">建档不完整患者({{unperfectMsgRate}})</p>
@@ -372,7 +372,7 @@ export default {
       noListenDoctorData: [],
 
       adminHospitalId: '',
-      careState: '',
+      // careState: '',
       // 分页数据
       newAskCurrentPage: 1,
       newAskPageSize: 5,
@@ -514,7 +514,7 @@ export default {
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: row.userId,
+          sickID: row.id,
           hospitalId: row.adminHospitalId
         }})
     },
