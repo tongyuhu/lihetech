@@ -1191,17 +1191,17 @@ export default {
       if (this.bloodTrendChecked === 0) {
         this.bloodTrendState.total = 1
         // }
-        if (this.bloodTrendData.bptype[index] === 1) {
+        if (this.bloodTrendData.bptype[index] === 2) {
           this.bloodTrendState.normal = 1
           this.bloodTrendState.heigh = 0
           this.bloodTrendState.danger = 0
         }
-        if (this.bloodTrendData.bptype[index] === 2) {
+        if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
           this.bloodTrendState.normal = 0
           this.bloodTrendState.heigh = 1
           this.bloodTrendState.danger = 0
         }
-        if (this.bloodTrendData.bptype[index] === 3) {
+        if (this.bloodTrendData.bptype[index] === 5) {
           this.bloodTrendState.normal = 0
           this.bloodTrendState.heigh = 0
           this.bloodTrendState.danger = 1
@@ -1370,9 +1370,9 @@ export default {
                     item.description = 0
                   }
                   if (vm.bloodTrendChecked === 0) {
-                    vm.bloodTrendData.date.push(item.measureTime)
-                    vm.bloodTrendData.systolic.push(item.systolic)
-                    vm.bloodTrendData.diastolic.push(item.diastolic)
+                    // vm.bloodTrendData.date.push(item.measureTime)
+                    // vm.bloodTrendData.systolic.push(item.systolic)
+                    // vm.bloodTrendData.diastolic.push(item.diastolic)
                   }
                   if (vm.bloodTrendChecked === 1 || vm.bloodTrendChecked === 3) {
                     vm.bloodTrendData.date.push(item.description)

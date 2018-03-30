@@ -16,6 +16,7 @@ export default {
 /* 高血压 */
   .heigh-blood-close{
     position: relative;
+    font-size: 0;
   }
   .heigh-blood-close::before{
     top: 0px;
@@ -27,6 +28,7 @@ export default {
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-11.png') no-repeat;
   }
   .heigh-blood-open{
+    font-size: 0;
     position: relative;
   }
   .heigh-blood-open::before{
@@ -40,6 +42,7 @@ export default {
   }
 /* 糖尿病 */
   .heigh-suger-close{
+    font-size: 0;
     position: relative;
   }
   .heigh-suger-close::before{
@@ -52,6 +55,7 @@ export default {
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-13.png') no-repeat;
   }
   .heigh-suger-open{
+    font-size: 0;
     position: relative;
   }
   .heigh-suger-open::before{
@@ -65,6 +69,7 @@ export default {
   }
 /* 其他 */
   .other-close{
+    font-size: 0;
     position: relative;
   }
   .other-close::before{
@@ -77,6 +82,7 @@ export default {
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-14.png') no-repeat;
   }
   .other-open{
+    font-size: 0;
     position: relative;
   }
   .other-open::before{
@@ -90,6 +96,7 @@ export default {
   }
 /* 病例库 */
   .cases-close{
+    font-size: 0;
     position: relative;
   }
   .cases-close::before{
@@ -102,6 +109,7 @@ export default {
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-15.png') no-repeat;
   }
   .cases-open{
+    font-size: 0;
     position: relative;
   }
   .cases-open::before{
@@ -115,6 +123,7 @@ export default {
   }
 /* 人员管理 */
   .admin-close{
+    font-size: 0;
     position: relative;
   }
   .admin-close::before{
@@ -127,6 +136,7 @@ export default {
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-16.png') no-repeat;
   }
   .admin-open{
+    font-size: 0;
     position: relative;
   }
   .admin-open::before{
@@ -140,6 +150,7 @@ export default {
   }
   /* 我的消息 */
   .message-close{
+    font-size: 0;
     position: relative;
   }
   .message-close::before{
@@ -152,6 +163,7 @@ export default {
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-17.png') no-repeat;
   }
   .message-open{
+    font-size: 0;
     position: relative;
   }
   .message-open::before{

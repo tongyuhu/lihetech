@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="health-form">
     <div>
       <el-card :body-style="{ padding: '0px' }">
         <p class='head'>
@@ -66,19 +66,23 @@
               label="编号"
               width="50">
             </el-table-column> -->
-            <el-table-column 
+            <el-table-column
+            align="center" 
             prop="testItem"
             label="检查项目">
             </el-table-column>
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
             <el-table-column
+            align="center"
             prop="unit"
             label="单位">
             </el-table-column>
             <el-table-column
+            align="center"
             prop="normalNum"
             label="正常参考">
             </el-table-column>
@@ -103,19 +107,23 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column 
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
             <el-table-column 
+            align="center"
             prop="ab"
             label="缩写">
             </el-table-column>
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="normalNum"
             label="正常参考">
             </el-table-column>
@@ -136,11 +144,13 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column 
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
@@ -162,25 +172,30 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column 
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
-            <el-table-column 
+            <el-table-column
+            align="center" 
             prop="ab"
             label="缩写">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="unit"
             label="单位">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="normalNum"
             label="正常参考">
             </el-table-column>
@@ -209,6 +224,7 @@
               :header-row-class-name="tableRowClassName"
               :header-cell-class-name="cellClassName">
                 <el-table-column 
+                align="center"
                 prop="testItem"
                 label="检查项目">
                 </el-table-column>
@@ -239,6 +255,7 @@
               :header-row-class-name="tableRowClassName"
               :header-cell-class-name="cellClassName">
                 <el-table-column 
+                align="center"
                 prop="testItem"
                 label="检查项目">
                 </el-table-column>
@@ -249,12 +266,7 @@
                 </el-table-column>
               </el-table>
             </el-card>
-            <div>
-              <div>
-                <span>初步意见</span>
-                <span>乳腺增生</span>
-              </div>
-            </div>
+            
           </div>
           <!-- 外科 end -->
         </el-col>
@@ -276,19 +288,17 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column 
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
         
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
           </el-table>
-          <div class="suggest">
-            <span>初步意见</span>
-            <span>乳腺增生</span>
-          </div>
         </el-card>
         <!-- 耳鼻喉科 end -->
       </el-col>
@@ -306,19 +316,17 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column 
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
         
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
           </el-table>
-          <div class="suggest">
-            <span>初步意见</span>
-            <span>阻生齿</span>
-          </div>
         </el-card>
         <!-- 口腔科 end -->
       </el-col>
@@ -339,31 +347,37 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="ab"
             label="缩写">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="tip"
             label="提示">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="normalNum"
             label="正常参考">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="unit"
             label="单位">
             </el-table-column>
@@ -387,31 +401,37 @@
         :header-row-class-name="tableRowClassName"
         :header-cell-class-name="cellClassName">
           <el-table-column
+          align="center"
           prop="testItem"
           label="检查项目">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="ab"
           label="缩写">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="result"
           label="结果">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="tip"
           label="提示">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="normalNum"
           label="正常参考">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="unit"
           label="单位">
           </el-table-column>
@@ -434,31 +454,37 @@
         :header-row-class-name="tableRowClassName"
         :header-cell-class-name="cellClassName">
           <el-table-column
+          align="center"
           prop="testItem"
           label="检查项目">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="ab"
           label="缩写">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="result"
           label="结果">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="tip"
           label="提示">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="normalNum"
           label="正常参考">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="unit"
           label="单位">
           </el-table-column>
@@ -486,11 +512,13 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
@@ -512,11 +540,13 @@
           :header-row-class-name="tableRowClassName"
           :header-cell-class-name="cellClassName">
             <el-table-column
+            align="center"
             prop="testItem"
             label="检查项目">
             </el-table-column>
 
             <el-table-column
+            align="center"
             prop="result"
             label="结果">
             </el-table-column>
@@ -538,14 +568,15 @@
         style="{width: 100%}"
         :data="XlineTestData"
         :header-row-class-name="tableRowClassName"
-        :header-cell-class-name="cellClassName"
-        :span-method="mergeRow">
+        :header-cell-class-name="cellClassName">
           <el-table-column
+          align="center"
           prop="testItem"
           label="检查项目">
           </el-table-column>
 
           <el-table-column
+          align="center"
           prop="result"
           label="结果">
           </el-table-column>
@@ -556,11 +587,15 @@
           </el-table-column> -->
           
         </el-table>
+        <table>
+          <tr>
+            <td>
+              <span>初步意见:</span>
+              <span>乳腺增生</span>
+            </td>
+          </tr>
+        </table>
       </el-card>
-      <div class="suggest">
-        <span>初步意见</span>
-        <span>乳腺增生</span>
-      </div>
     </div>
     </div>
     <!-- X线检查 end -->
@@ -572,7 +607,7 @@
     line-height: 47px;
     background-color: #def2ff;
   }
-.el-table__body-wrapper {
+.health-form .el-table__body-wrapper {
     overflow: auto;
     overflow-x: hidden;
     /* overflow-y: auto; */
@@ -761,8 +796,8 @@ export default {
           // suggest: '正常'
         },
         {
-          testItem: '正常'
-          // suggest: '正常'
+          testItem: '肝',
+          result: '正常'
         }
       ],
       row: 0
@@ -801,18 +836,6 @@ export default {
         return 'table-row'
       }
       return 'table-row'
-    },
-    mergeRow ({ row, column, rowIndex, columnIndex }) {
-      console.log('ib', rowIndex)
-      this.row = rowIndex
-      if (rowIndex === 1) {
-        // if (columnIndex === 0) {
-        return [1, 99]
-        // }
-      }
-      // else if (columnIndex === 1) {
-      //   return [0, 0]
-      // }
     }
   }
 }
@@ -845,6 +868,22 @@ export default {
     display: inline-block;
     margin-left:34px;
   }
+  .card-bottom{
+    margin-bottom:8px;
+  }
+  table{
+    border:1px solid rgb(235, 238, 245);
+    width:100%;
+    border-top:none;
+  }
+  table td{
+    padding:12px;
+    color:#666;
+    text-align:center;
+  }
+  table tr:hover{
+    background-color:#fbfbfb;
+  }
   .icon-heart{
     position: relative;
   }
@@ -857,8 +896,149 @@ export default {
     height: 21px;
     background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-67.png')
   }
-  .card-bottom{
-    margin-bottom:8px;
+  .icon-normal-test{
+    position: relative;
+  }
+  .icon-normal-test::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-73.png')
+  }
+  .icon-arm{
+    position: relative;
+  }
+  .icon-arm::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-68.png')
+  }
+  .icon-bio{
+    position: relative;
+  }
+  .icon-bio::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-75.png')
+  }
+  .icon-in{
+    position: relative;
+  }
+  .icon-in::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-63.png')
+  }
+  .icon-out{
+    position: relative;
+  }
+  .icon-out::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-64.png')
+  }
+  .icon-ears{
+    position: relative;
+  }
+  .icon-ears::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-69.png')
+  }
+  .icon-mouth{
+    position: relative;
+  }
+  .icon-mouth::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-74.png')
+  }
+  .icon-blood{
+    position: relative;
+  }
+  .icon-blood::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-74.png')
+  }
+  .icon-urine{
+    position: relative;
+  }
+  .icon-urine::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-72.png')
+  }
+  .icon-tumour{
+    position: relative;
+  }
+  .icon-tumour::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-65.png')
+  }
+  .icon-sound{
+    position: relative;
+  }
+  .icon-sound::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-71.png')
+  }
+  .icon-x{
+    position: relative;
+  }
+  .icon-x::before{
+    top: 0px;
+    /* left: 36px; */
+    position: absolute;
+    content: '';
+    width: 24px;;
+    height: 21px;
+    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-70.png')
   }
 </style>
 

@@ -10,7 +10,7 @@ export const bloodheighSickDataApi = (params, data) => {
         'adminHospitalId': params.adminHospitalId,
         'bpMeasureTime': params.bpMeasureTime,
         'pageNum': params.pageNum || 1,
-        'pageSize': params.pageSize || 10
+        'pageSize': params.pageSize || 7
       },
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       outtime: 10000
@@ -163,8 +163,8 @@ export const updatebloodTrendStateApi = (params, type, date) => {
         'pageNum': params.pageNum || 1,
         'pageSize': params.pageSize || 10,
         'bpMeasureTime': params.bpMeasureTime,
-        'startDate': daybefor(date, 6, 1),
-        'endDate': date
+        'startDate': date,
+        'endDate': daybefor(date, -6, 1)
       },
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       outtime: 10000

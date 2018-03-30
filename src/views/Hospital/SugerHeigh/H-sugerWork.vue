@@ -622,13 +622,17 @@ export default {
   border: none;
   outline: none;
   background-color: #fff;
-  height: 28px;
-  /* width: 30px; */
+  height: 21px;
+  width: 21px;
   padding: 0;
   margin:0;
   position: relative;
   cursor: pointer;
-  margin-left: 10px;
+  font-size: 0;
+  vertical-align: middle;
+  /* margin-left: 10px; */
+  /* width: 30px; */
+  
 }
 .telephone-btn:hover{
   background-color: #f5f7fa;
@@ -636,10 +640,11 @@ export default {
 .telephone-btn-icon::after{
   cursor: pointer;
   position: absolute;
-  /* top:0px;    */
+  /* top:3px;  */
+  bottom:0;
   content: '';
-  width: 30px;
-  height: 27px;
+  width: 21px;
+  height: 21px;
   background: url('./../../../../诊所-高血压/hospitalIcon/诊所-icon-23.png') no-repeat;
 }
 </style>

@@ -69,6 +69,7 @@ ul{
  }
  .fmenu-item-icon{
     position: relative;
+    font-size: 16px;
  }
 /* .fmenu-item-icon::before{
   bottom: 9px;
@@ -81,7 +82,7 @@ ul{
   background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-09.png') no-repeat;
 } */
 .fmenu-item-icon::after{
-  top: 3px;
+  top: 2px;
   left: -28px;
   position: absolute;
   content: '';

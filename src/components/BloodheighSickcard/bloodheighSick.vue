@@ -28,15 +28,15 @@
             <div class="sick-history">
               <div class="sick-history-top">
                 <div>
-                  <span>身高：{{height}}cm</span>
-                  <span>体重：{{weight}}kg</span>
+                  <span>身高：{{height}}</span>
+                  <span>体重：{{weight}}</span>
                 </div>
                 <div>
                   <span>病史：{{illnessHistoryIdDisease}}</span>
                   <span>遗传史：{{illnessHistoryIdGenetic}}</span>
                 </div>
                 <div>
-                  <span>生活习惯：不抽烟 喝酒</span>
+                  <span>生活习惯：{{habits}}</span>
                   <span class="sick">并发症：{{illnessHistoryIdConcurrent}}</span>
                 </div>
                 <div>
@@ -89,6 +89,7 @@
         </tabs>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -139,7 +140,7 @@ export default {
     changePage (currentpage) {
       this.currentPage = currentpage
       this.getCardData()
-      // console.log(currentpage)
+      console.log(currentpage)
     },
     getCardData () {
       let params = {
@@ -152,13 +153,13 @@ export default {
       .then(res => {
         if (res.data) {
           if (res.data.data) {
+            this.totalPage = res.data.pages
             if (res.data.data.length !== 0) {
-              this.totalPage = res.data.pages
               this.$set(this.cardArr, this.currentPage - 1, res.data.data[0])
               // this.cardArr[this.currentPage - 1] = res.data.data
               this.cardData = this.cardArr[this.currentPage - 1]
               // console.log('arr', this.cardArr)
-              // console.log(this.cardData)
+              // console.log(this.totalPage)
             }
           }
         }
@@ -301,7 +302,7 @@ export default {
         }
       }
       if (habits.length !== 0) {
-        str = habits.join(',')
+        str = habits.join('、')
       }
       return str
     },

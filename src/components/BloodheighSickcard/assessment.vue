@@ -7,7 +7,7 @@
       <div class="table">
         <table>
           <tr>
-            <th>行为指数</th>
+            <th width="150px">行为指数</th>
             <th>
               图形
             </th>
@@ -21,24 +21,26 @@
           <tr>
             <td class="icon-normal">
               {{sysTypeName}}</td>
-            <td class="img">
-              <img :src="img(sysTypeName)" alt="">
+            <td>
+              <img :src="sysSimpleImage" alt="暂无波形图" width="200px">
             </td>
             <td>
-              <img :src="trueimg(sysTypeName)" alt="">
+              <img :src="sysBpImage" alt="暂无波形图" width="200px">
             </td>
+            
             <td>
               <p>{{sysImageAnalyze}}</p>
             </td>
           </tr>
           <tr>
             <td class="icon-self">{{userTypeName}}</td>
-            <td>
-              <img :src="img(userTypeName)" alt="">
+            <td class="img">
+              <img :src="userSimpleImage" alt="暂无波形图" width="200px">
             </td>
             <td>
-              <img :src="trueimg(userTypeName)" alt="">
+              <img :src="userBpImage" alt="暂无波形图" width="200px">
             </td>
+           
             <td>
               <p>{{userImageAnalyze}}</p>
             </td>
@@ -96,7 +98,11 @@ export default {
       userTypeName: '',
       userImageAnalyze: '',
       userConditionPredict: '',
+      userSimpleImage: '',
+      userBpImage: '',
       dangerRate: '',
+      sysSimpleImage: '',
+      sysBpImage: '',
       sysConditionPredict: '',
       sysImageAnalyze: '',
       sysTypeName: ''
@@ -159,6 +165,12 @@ export default {
             if (res.data.data.userDoubleArm.imageAnalyze) {
               this.userConditionPredict = res.data.data.userDoubleArm.imageAnalyze || ''
             }
+            if (res.data.data.userDoubleArm.simpleImage) {
+              this.userSimpleImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.userDoubleArm.simpleImage || ''
+            }
+            if (res.data.data.userDoubleArm.bpImage) {
+              this.userBpImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.userDoubleArm.bpImage || ''
+            }
           }
           if (res.data.data.ICVDRisk) {
             this.dangerRate = res.data.data.ICVDRisk + '%' || ''
@@ -172,6 +184,12 @@ export default {
             }
             if (res.data.data.sysDoubleArm.typeName) {
               this.sysTypeName = res.data.data.sysDoubleArm.typeName || ''
+            }
+            if (res.data.data.sysDoubleArm.simpleImage) {
+              this.sysSimpleImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.sysDoubleArm.simpleImage || ''
+            }
+            if (res.data.data.sysDoubleArm.originalImage) {
+              this.sysBpImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.sysDoubleArm.originalImage || ''
             }
           }
         }

@@ -404,8 +404,8 @@ export default {
       // 'userId': 11,
       // 'adminHospitalId': 2,
       'adminHospitalId': this.hospitalId,
-      'getupTime': '2017-12-15 06:20:00',
-      'sleepTime': '2017-12-14 23:00:00'
+      'getupTime': '2018-03-26 03:20:00',
+      'sleepTime': '2018-03-26 24:00:00'
     }
     this.$axios(alldayHeighBloodApi(params))
     .then(res => {
@@ -420,9 +420,9 @@ export default {
           this.$set(this.ABPM.night, key, data.night[key])
         }
       }
-      if (data.moring) {
-        for (let key in data.moring) {
-          this.$set(this.ABPM.moring, key, data.moring[key])
+      if (data.morning) {
+        for (let key in data.morning) {
+          this.$set(this.ABPM.moring, key, data.morning[key])
         }
       }
       if (data.oneday) {

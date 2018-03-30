@@ -1,128 +1,152 @@
 <template>
    <div class="clear box">
-     <div class="left-arrow">
-        <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
-      </div>
-      <div class="right-arrow">
-        <el-button @click="next()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
-      </div>
-      <i :class="{'new':isnew}"></i>
-      <div class="table-top">
-        <span class="table-top-span">病历卡  {{currentpage}}/{{cardtotalPage}}</span>
-        <span>{{createTime}}</span>
-      </div>
-      <div>
-        <table cellpadding='0' cellspacing="0" class="table">
-              <tr>
-                <th class="table-head">用户自述</th>
-                <td> 
-                  {{readme}}
-                  <el-button size="mini" type="text" class="table-btn" @click="play">
-                    <i class="play"></i>播放
-                  </el-button>
-                  <audio :src="readmeUrl" id="audio">
-                  Your browser does not support the audio element.
-                  </audio>
-                </td>
-              </tr>
-              <tr>
-                <th class="table-head">系统分析</th>
-                <td>
-                  <span>
-                    {{systemAnalysis}}
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <th class="table-head">医生诊断</th>
-                <td>
-                  {{doctorDiagnos}}
-                  <el-button type="text" size="mini" class="table-btn" @click="sendVoice()">
-                    <i class="send"></i>发送语音
-                  </el-button>
-                </td>
-              </tr>
-              <!-- 医治方案 -->
-              <tr>
-                <td>
-                  <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
-                    <td class="text-center no-bottom-border no-top-border no-left-border table-head">
-                      医治方案
-                    </td>
-                    <td class="no-border">
-                      <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
-                        <tr>
-                          <td class="text-center only-bottom-border table-head">
-                            <div class="padding">
-                              用药
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td class="text-center only-bottom-border table-head">运动</td>
-                        </tr>
-                        <tr>
-                          <td class="text-center no-border table-head">饮食</td>
-                        </tr>
-                      </table>
-                    </td>
-                  </table>
-                </td>
-                <td class="no-bottom-border">
-                  <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
-                    <tr>
-                      <td class="only-bottom-border">
-                        {{medicine}}
-                        <el-button type="text" size="mini" class="table-btn" @click="deleteMedicine()">
-                          <i class="delete"></i>删除
-                        </el-button>
-                        <el-button type="text" size="mini" class="table-btn" @click="addMedicine()">
-                          <i class="add"></i>添加
-                        </el-button>
+    <div class="left-arrow">
+      <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
+    </div>
+    <div class="right-arrow">
+      <el-button @click="next()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
+    </div>
+    <i :class="{'new':isnew}"></i>
+    <div class="table-top">
+      <span class="table-top-span">病历卡  {{currentpage}}/{{cardtotalPage}}</span>
+      <span>{{createTime}}</span>
+    </div>
+    <div>
+      <table cellpadding='0' cellspacing="0" class="table">
+                <tr>
+                  <th class="table-head">用户自述</th>
+                  <td> 
+                    {{readme}}
+                    <el-button size="mini" type="text" class="table-btn" @click="play">
+                      <i class="play"></i>播放
+                    </el-button>
+                    <audio :src="readmeUrl" id="audio">
+                    Your browser does not support the audio element.
+                    </audio>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="table-head">系统分析</th>
+                  <td>
+                    <span>
+                      {{systemAnalysis}}
+                    </span>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="table-head">医生诊断</th>
+                  <td>
+                    {{doctorDiagnos}}
+                    <el-button type="text" size="mini" class="table-btn" @click="sendVoice()" v-if="currentpage === 1">
+                      <i class="send"></i>发送语音
+                    </el-button>
+                  </td>
+                </tr>
+                <!-- 医治方案 -->
+                <tr>
+                  <td>
+                    <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
+                      <td class="text-center no-bottom-border no-top-border no-left-border table-head">
+                        医治方案
                       </td>
-                    </tr>
-                    <tr>
-                      <td class="only-bottom-border">
-                            {{movement}}
-                          <el-button type="text" size="mini" class="table-btn" @click="deleteSport()">
+                      <td class="no-border">
+                        <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
+                          <tr>
+                            <td class="text-center only-bottom-border table-head">
+                              <div class="padding">
+                                用药
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-center only-bottom-border table-head">运动</td>
+                          </tr>
+                          <tr>
+                            <td class="text-center no-border table-head">饮食</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </table>
+                  </td>
+                  <td class="no-bottom-border">
+                    <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
+                      <tr>
+                        <td class="only-bottom-border">
+                          {{medicine}}
+                          <el-button type="text" size="mini" class="table-btn" @click="deleteMedicine()" v-if="currentpage === 1">
                             <i class="delete"></i>删除
                           </el-button>
-                          <el-button type="text" size="mini" class="table-btn" @click="addSport()">
+                          <el-button type="text" size="mini" class="table-btn" @click="addMedicine()" v-if="currentpage === 1">
                             <i class="add"></i>添加
                           </el-button>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td class="no-border">
-                        <span>
-                          {{diet}}
-                        </span>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <th class="table-head">
-                  医生信息
-                </th>
-                <td>
-                  <span>
-                    李那那  上海张江高科诊所  糖尿病慢性病家庭医生
-                  </span>
-                </td>
-              </tr>
-            </table>
-      </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="only-bottom-border">
+                              {{movement}}
+                            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
+                              <i class="delete"></i>删除
+                            </el-button>
+                            <el-button type="text" size="mini" class="table-btn" @click="addSport()" v-if="currentpage === 1">
+                              <i class="add"></i>添加
+                            </el-button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="no-border">
+                          <span>
+                            {{diet}}
+                          </span>
+                          <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
+                            <i class="delete"></i>删除
+                          </el-button>
+                          <el-button type="text" size="mini" class="table-btn" @click="addFood()" v-if="currentpage === 1">
+                            <i class="add"></i>添加
+                          </el-button>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <th class="table-head">
+                    医生信息
+                  </th>
+                  <td>
+                    <span>
+                      李那那  上海张江高科诊所  糖尿病慢性病家庭医生
+                    </span>
+                  </td>
+                </tr>
+              </table>
+    </div>
+    <el-dialog
+      :visible.sync="medicineData.add"
+      width="750px"
+      center>
+      <span slot="title" class="dialog-title">添加用药</span>
+      <addMedicine></addMedicine>
+      <span slot="footer">
+        <el-button @click="medicineData.add = false">取 消</el-button>
+        <el-button type="primary" @click="medicineData.add = false">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- <addMedicine></addMedicine> -->
   </div>
 </template>
 
 <script>
 // import {Bus} from './../../bus'
+import medicine from './../medicine/medicine'
+import addMedicine from './../addMedicine'
 export default {
+  components: {
+    medicine,
+    addMedicine
+  },
   props: {
     totalPage: {
-      type: [Number, String],
+      // type: [Number, String],
       default: 1
     },
     sickData: {
@@ -139,7 +163,25 @@ export default {
     return {
       currentpage: 1,
       isnew: true,
-      cardtotalPage: this.totalPage
+      cardtotalPage: this.totalPage,
+      medicineData: {
+        add: false,
+        delete: false,
+        data: []
+
+      },
+      sportData: {
+        add: false,
+        delete: false,
+        data: []
+
+      },
+      foodData: {
+        add: false,
+        delete: false,
+        data: []
+
+      }
       // totalPage: ''
     }
   },
@@ -215,6 +257,10 @@ export default {
       } else {
         this.isnew = false
       }
+    },
+    totalPage (val) {
+      this.cardtotalPage = val
+      // return val
     }
   },
   methods: {
@@ -228,7 +274,8 @@ export default {
       if (this.currentpage >= this.cardtotalPage) {
         this.currentpage = 0
       }
-      this.currentpage += 1
+      console.log(this.cardtotalPage)
+      this.currentpage ++
       this.$emit('preBtn', this.currentpage)
     },
     pre () {
@@ -264,6 +311,7 @@ export default {
       console.log('删除药')
     },
     addMedicine () {
+      this.medicineData.add = true
       console.log('添加药')
     },
     deleteSport () {
@@ -271,6 +319,12 @@ export default {
     },
     addSport () {
       console.log('添加运动')
+    },
+    deleteFood () {
+      console.log('删除饮食')
+    },
+    addFood () {
+      console.log('添加饮食')
     }
   },
   mounted () {
@@ -449,17 +503,27 @@ export default {
   }
    .new{
     position: relative;
+    line-height: 0;
+    height: 0;
+    font-size: 0;
+    box-sizing: border-box; border: 0; margin: 0; padding: 0
   }
   .new::before{
-    z-index: 22222222222222;
-    top:0;
+    box-sizing: border-box; border: 0; margin: 0; padding: 0;
+    /* z-index: 22222222222222; */
+    /* top:0px; */
     left: -50px;
     position: absolute;
     content: '';
     width: 64px;
     height: 44px;
-    /* display: block; */
+    display: block;
+
     /* vertical-align: middle; */
     background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-31.png') no-repeat;
+  }
+  .dialog-title{
+    font-size: 16px;
+    font-weight: bold;
   }
 </style>

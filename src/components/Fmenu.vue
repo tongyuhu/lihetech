@@ -1,6 +1,8 @@
 <template>
 <div>
   <ul>
+        <!-- <fi v-if="showicon" :icon="iconNameclose"></fi> -->
+        <!-- <fi v-else :icon="iconNameopen"></fi> -->
     <li class="fmenu" :class="{'fmenuactive':fmenuactive}">
       <!-- <slot name="1icon"> -->
         <!-- <i class="fmenu-icon"></i> -->
@@ -156,6 +158,7 @@ export default {
  }
  .fmenu-item-icon{
     position: relative;
+    font-size: 16px;
  }
 /* .fmenu-item-icon::before{
   bottom: 9px;
@@ -167,8 +170,8 @@ export default {
   background-color: #ffffff99;
   background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-09.png') no-repeat;
 } */
-.fmenu-item-icon::after{
-  top: 3px;
+.fmenu-item-icon::before{
+  /* top: -13px; */
   left: -28px;
   position: absolute;
   content: '';
