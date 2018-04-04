@@ -25,7 +25,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-11.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-11.png') no-repeat;
   }
   .heigh-blood-open{
     font-size: 0;
@@ -38,7 +38,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-12.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-12.png') no-repeat;
   }
 /* 糖尿病 */
   .heigh-suger-close{
@@ -52,7 +52,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-13.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-13.png') no-repeat;
   }
   .heigh-suger-open{
     font-size: 0;
@@ -65,7 +65,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-02.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-02.png') no-repeat;
   }
 /* 其他 */
   .other-close{
@@ -79,7 +79,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-14.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-14.png') no-repeat;
   }
   .other-open{
     font-size: 0;
@@ -92,7 +92,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-03.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-03.png') no-repeat;
   }
 /* 病例库 */
   .cases-close{
@@ -106,7 +106,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-15.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-15.png') no-repeat;
   }
   .cases-open{
     font-size: 0;
@@ -119,7 +119,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-04.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-04.png') no-repeat;
   }
 /* 人员管理 */
   .admin-close{
@@ -133,7 +133,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-16.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-16.png') no-repeat;
   }
   .admin-open{
     font-size: 0;
@@ -146,7 +146,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-05.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-05.png') no-repeat;
   }
   /* 我的消息 */
   .message-close{
@@ -160,7 +160,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-17.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-17.png') no-repeat;
   }
   .message-open{
     font-size: 0;
@@ -173,6 +173,6 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-06.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-06.png') no-repeat;
   }
 </style>

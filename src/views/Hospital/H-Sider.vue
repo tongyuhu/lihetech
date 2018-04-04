@@ -22,7 +22,6 @@
         :title="i.title"
         :index="i.index"
         :id="i.id"
-        
         @activeitemmenu="goanchor"></FmenuItem>
       </Fmenu>
 
@@ -136,7 +135,19 @@ export default {
           id: 5,
           iconName: 'admin',
           title: '人员管理',
-          pathname: 'booldheigh'
+          pathname: 'booldheigh',
+          child: [
+            {
+              // id: 'sugerCases',
+              title: '医生',
+              index: 1
+            },
+            {
+              // id: 'sugerCases',
+              title: '患者',
+              index: 2
+            }
+          ]
         },
         {
           id: 6,

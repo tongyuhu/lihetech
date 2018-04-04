@@ -19,6 +19,16 @@ export default {
     },
     unit: {
       type: String
+    },
+    index: {
+      type: Number
+    },
+    type: {
+      type: String
+    },
+    step: {
+      type: Number,
+      default: 1
     }
   },
   data () {
@@ -27,6 +37,16 @@ export default {
       countUnit: '粒/次',
       max: Infinity
     }
+  },
+  computed: {
+    // num: {
+    //   get: function () {
+    //     return this.initNum
+    //   },
+    //   set: function (val) {
+    //     return val
+    //   }
+    // }
   },
   watch: {
     initNum (val) {
@@ -47,19 +67,19 @@ export default {
   },
   methods: {
     reduce () {
-      if (this.num > 1) {
-        this.num--
+      if (this.num > this.step) {
+        this.num -= this.step
       }
-      this.$emit('numChange', this.num)
+      this.$emit('numChange', {num: this.num, index: this.index, type: this.type})
     },
     add () {
       if (this.num < this.max) {
-        this.num++
+        this.num += this.step
       }
-      this.$emit('numChange', this.num)
+      this.$emit('numChange', {num: this.num, index: this.index, type: this.type})
     }
   },
-  mounted () {
+  created () {
     if (this.initNum) {
       this.num = this.initNum
     }

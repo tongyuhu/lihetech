@@ -118,6 +118,8 @@ export const updateBehaviourRateApi = (params, type, date) => {
   }
 }
 export const updatebloodTrendStateApi = (params, type, date) => {
+  // date = dateFormat(date, 0, 1)
+  console.log('after', date)
   // 最近
   if (type === 0) {
     return {

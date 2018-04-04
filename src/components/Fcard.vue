@@ -136,6 +136,6 @@ export default {
     height: 44px;
     /* display: block; */
     /* vertical-align: middle; */
-    background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-31.png') no-repeat;
+    background: url('./../../hospitalImage/hospitalIcon/诊所-icon-31.png') no-repeat;
   }
 </style>

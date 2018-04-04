@@ -342,7 +342,7 @@
 </template>
 
 <script>
-// import from './../../../../诊所-高血压/hospitalIcon/诊所-icon-21.png'
+// import from './../../../../hospitalImage/hospitalIcon/诊所-icon-21.png'
 import { mapState } from 'vuex'
 // import {careText, care} from './../../../untils/untils'
 import {
@@ -584,7 +584,7 @@ export default {
     content: '';
     width: 30px;
     height: 27px;
-    background: url('./../../../../诊所-高血压/hospitalIcon/诊所-icon-21.png') no-repeat;
+    background: url('./../../../../hospitalImage/hospitalIcon/诊所-icon-21.png') no-repeat;
 }
 .workMsgtip::after{
   top: -10px;
@@ -593,7 +593,7 @@ export default {
   content: '';
   width: 15px;
   height: 15px;
-  background: url('./../../../../诊所-高血压/hospitalIcon/诊所-icon-10.png') no-repeat;
+  background: url('./../../../../hospitalImage/hospitalIcon/诊所-icon-10.png') no-repeat;
 }
 .title{
   /* margin-left:20px; */
@@ -645,7 +645,7 @@ export default {
   content: '';
   width: 21px;
   height: 21px;
-  background: url('./../../../../诊所-高血压/hospitalIcon/诊所-icon-23.png') no-repeat;
+  background: url('./../../../../hospitalImage/hospitalIcon/诊所-icon-23.png') no-repeat;
 }
 </style>
 <style>

@@ -32,12 +32,12 @@
                   <span>体重：{{weight}}</span>
                 </div>
                 <div>
-                  <span>病史：{{illnessHistoryIdDisease}}</span>
-                  <span>遗传史：{{illnessHistoryIdGenetic}}</span>
+                  <span>病史：{{sysIllnessHistoryNameDisease}}</span>
+                  <span>遗传史：{{sysIllnessHistoryNameGenetic}}</span>
                 </div>
                 <div>
                   <span>生活习惯：{{habits}}</span>
-                  <span class="sick">并发症：{{illnessHistoryIdConcurrent}}</span>
+                  <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent}}</span>
                 </div>
                 <div>
                   <span>检查项目：心电图、肾脏</span>
@@ -155,9 +155,16 @@ export default {
           if (res.data.data) {
             this.totalPage = res.data.pages
             if (res.data.data.length !== 0) {
-              this.$set(this.cardArr, this.currentPage - 1, res.data.data[0])
+              // this.$set(this.cardArr, this.currentPage - 1, res.data.data[0])
+              // this.$set(this.cardData, this.currentPage - 1, res.data.data[0])
               // this.cardArr[this.currentPage - 1] = res.data.data
-              this.cardData = this.cardArr[this.currentPage - 1]
+              // this.cardData = this.cardArr[this.currentPage - 1]
+              this.cardData = Object.assign({}, {})
+              this.cardData = Object.assign({}, res.data.data[0])
+              // for (let property in res.data.data[0]) {
+              //   this.$set(this.cardData, property, res.data.data[0][property])
+              // }
+
               // console.log('arr', this.cardArr)
               // console.log(this.totalPage)
             }
@@ -225,17 +232,17 @@ export default {
         }
       }
     },
-    illnessHistoryIdDisease () {
+    sysIllnessHistoryNameDisease () {
       if (this.cardData) {
-        if (this.cardData.illnessHistoryIdDisease) {
-          return this.cardData.illnessHistoryIdDisease
+        if (this.cardData.sysIllnessHistoryNameDisease) {
+          return this.cardData.sysIllnessHistoryNameDisease
         }
       }
     },
-    illnessHistoryIdGenetic () {
+    sysIllnessHistoryNameGenetic () {
       if (this.cardData) {
-        if (this.cardData.illnessHistoryIdGenetic) {
-          return this.cardData.illnessHistoryIdGenetic
+        if (this.cardData.sysIllnessHistoryNameGenetic) {
+          return this.cardData.sysIllnessHistoryNameGenetic
         }
       }
     },
@@ -247,7 +254,7 @@ export default {
           habits.push('长期膳食高盐')
         }
         if (this.cardData.highSaltStatus === 2) {
-          habits.push('不长期膳食高盐')
+          habits.push('无长期膳食高盐')
         }
         if (this.cardData.sleepStatus === 1) {
           habits.push('睡眠规律')
@@ -306,10 +313,10 @@ export default {
       }
       return str
     },
-    illnessHistoryIdConcurrent () {
+    sysIllnessHistoryNameBpConcurrent () {
       if (this.cardData) {
-        if (this.cardData.illnessHistoryIdConcurrent) {
-          return this.cardData.illnessHistoryIdConcurrent
+        if (this.cardData.sysIllnessHistoryNameBpConcurrent) {
+          return this.cardData.sysIllnessHistoryNameBpConcurrent
         }
       }
     },
@@ -469,7 +476,7 @@ export default {
     display: block;
     width:14px;
     height: 16px;
-    background:url("./../../../诊所-高血压/hospitalIcon/诊所-icon-29.png") no-repeat;
+    background:url("./../../../hospitalImage/hospitalIcon/诊所-icon-29.png") no-repeat;
     left:-16px;
     top:1px;
   }
@@ -482,7 +489,7 @@ export default {
     display: block;
     width:14px;
     height: 16px;
-    background:url("./../../../诊所-高血压/hospitalIcon/诊所-icon-30.png") no-repeat;
+    background:url("./../../../hospitalImage/hospitalIcon/诊所-icon-30.png") no-repeat;
     left:-16px;
     top:1px;
   }

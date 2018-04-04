@@ -79,7 +79,7 @@ ul{
   width: 1px;;
   height: 50px;
   background-color: #ffffff99;
-  background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-09.png') no-repeat;
+  background: url('./../../hospitalImage/hospitalIcon/诊所-icon-09.png') no-repeat;
 } */
 .fmenu-item-icon::after{
   top: 2px;
@@ -89,7 +89,7 @@ ul{
   width: 14px;;
   height: 15px;
   background-color: #ffffff99;
-  background: url('./../../诊所-高血压/hospitalIcon/诊所-icon-09.png') no-repeat;
+  background: url('./../../hospitalImage/hospitalIcon/诊所-icon-09.png') no-repeat;
   z-index: 999;
 }
  .fmenu-item{

@@ -1,5 +1,5 @@
 <template>
-   <div class="clear box">
+   <div class="clear box" @click.prevent="cancelDelet">
     <div class="left-arrow">
       <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
     </div>
@@ -12,123 +12,155 @@
       <span>{{createTime}}</span>
     </div>
     <div>
-      <table cellpadding='0' cellspacing="0" class="table">
-                <tr>
-                  <th class="table-head">用户自述</th>
-                  <td> 
-                    {{readme}}
-                    <el-button size="mini" type="text" class="table-btn" @click="play">
-                      <i class="play"></i>播放
-                    </el-button>
-                    <audio :src="readmeUrl" id="audio">
-                    Your browser does not support the audio element.
-                    </audio>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="table-head">系统分析</th>
-                  <td>
-                    <span>
-                      {{systemAnalysis}}
-                    </span>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="table-head">医生诊断</th>
-                  <td>
-                    {{doctorDiagnos}}
-                    <el-button type="text" size="mini" class="table-btn" @click="sendVoice()" v-if="currentpage === 1">
-                      <i class="send"></i>发送语音
-                    </el-button>
-                  </td>
-                </tr>
-                <!-- 医治方案 -->
-                <tr>
-                  <td>
-                    <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
-                      <td class="text-center no-bottom-border no-top-border no-left-border table-head">
-                        医治方案
-                      </td>
-                      <td class="no-border">
-                        <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
-                          <tr>
-                            <td class="text-center only-bottom-border table-head">
-                              <div class="padding">
-                                用药
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="text-center only-bottom-border table-head">运动</td>
-                          </tr>
-                          <tr>
-                            <td class="text-center no-border table-head">饮食</td>
-                          </tr>
-                        </table>
-                      </td>
-                    </table>
-                  </td>
-                  <td class="no-bottom-border">
-                    <table cellpadding='0' cellspacing="0" class="border-collapse no-border">
-                      <tr>
-                        <td class="only-bottom-border">
-                          {{medicine}}
-                          <el-button type="text" size="mini" class="table-btn" @click="deleteMedicine()" v-if="currentpage === 1">
-                            <i class="delete"></i>删除
-                          </el-button>
-                          <el-button type="text" size="mini" class="table-btn" @click="addMedicine()" v-if="currentpage === 1">
-                            <i class="add"></i>添加
-                          </el-button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="only-bottom-border">
-                              {{movement}}
-                            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
-                              <i class="delete"></i>删除
-                            </el-button>
-                            <el-button type="text" size="mini" class="table-btn" @click="addSport()" v-if="currentpage === 1">
-                              <i class="add"></i>添加
-                            </el-button>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="no-border">
-                          <span>
-                            {{diet}}
-                          </span>
-                          <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
-                            <i class="delete"></i>删除
-                          </el-button>
-                          <el-button type="text" size="mini" class="table-btn" @click="addFood()" v-if="currentpage === 1">
-                            <i class="add"></i>添加
-                          </el-button>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-                <tr>
-                  <th class="table-head">
-                    医生信息
-                  </th>
-                  <td>
-                    <span>
-                      李那那  上海张江高科诊所  糖尿病慢性病家庭医生
-                    </span>
-                  </td>
-                </tr>
-              </table>
+      <table>
+        <tr>
+          <td colspan="2" class="table-head">用户自述</td>
+          <td>
+            {{readme}}
+            <el-button size="mini" type="text" class="table-btn" @click="play">
+              <i class="play"></i>播放
+            </el-button>
+            <audio :src="readmeUrl" id="audio">
+            Your browser does not support the audio element.
+            </audio>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="table-head">系统分析</td>
+          <td>
+            <span>
+              {{systemAnalysis}}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="table-head">医生诊断</td>
+          <td>
+            {{doctorDiagnos}}
+            <el-button type="text" size="mini" class="table-btn" @click="sendVoice()" v-if="currentpage === 1">
+              <i class="send"></i>发送语音
+            </el-button>
+          </td>
+        </tr>
+        <tr>
+          <td rowspan="3" class="table-head">医治方案</td>
+          <td class="table-head">用药</td>
+          <td>
+            <div class="use-medicine">
+              <div class="use-medicine-item" v-for="(item,index) in medicineData.data" :key="index">
+                <div>
+                  <div>
+                    <button class="delete-medicine-btn" v-if="item.showDelete" @click.stop="deleteMedicineHandle(item,index)">
+                      <i></i>
+                    </button>
+                  </div>
+                  <div>
+                    <div>{{item.medicineName}}</div>
+                    <div>
+                      <span>{{item.useNum ? item.useNum+'粒/次' :''}}</span>
+                      <span>{{ item.useTimes ? item.useTimes+'次/日' :''}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="use-medicine-item">
+                <div>
+                  <div>
+                    <button class="delete-medicine-btn">
+                      <i></i>
+                    </button>
+                  </div>
+                  <div>
+                    <div>瑞泰(雷米普利片)</div>
+                    <div>
+                      <span>12/22</span>
+                      <span>1225/55</span>
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+              
+              <div>
+                <el-button type="text" size="mini" class="table-btn" @click.stop="deleteMedicine" v-if="currentpage === 1">
+                  <i class="delete"></i>删除
+                </el-button>
+                <el-button type="text" size="mini" class="table-btn" @click="addMedicine" v-if="currentpage === 1">
+                  <i class="add"></i>添加
+                </el-button>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <!-- <td>3</td> -->
+          <td class="table-head">运动</td>
+          <td>
+             {{movement}}
+            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
+              <i class="delete"></i>删除
+            </el-button>
+            <el-button type="text" size="mini" class="table-btn" @click="addSport()" v-if="currentpage === 1">
+              <i class="add"></i>添加
+            </el-button>
+          </td>
+        </tr>
+        <tr>
+          <!-- <td>4</td> -->
+          <td class="table-head">饮食</td>
+          <td>
+            <span>
+              {{diet}}
+            </span>
+            <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
+              <i class="delete"></i>删除
+            </el-button>
+            <el-button type="text" size="mini" class="table-btn" @click="addFood()" v-if="currentpage === 1">
+              <i class="add"></i>添加
+            </el-button>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="table-head">医生信息</td>
+          <td>
+            <span>
+              李那那  上海张江高科诊所  糖尿病慢性病家庭医生
+            </span>
+          </td>
+        </tr>
+      </table>
     </div>
     <el-dialog
       :visible.sync="medicineData.add"
       width="750px"
       center>
       <span slot="title" class="dialog-title">添加用药</span>
-      <addMedicine></addMedicine>
+      <addMedicine
+      @addMedicine="addMedicineHandle"></addMedicine>
       <span slot="footer">
-        <el-button @click="medicineData.add = false">取 消</el-button>
-        <el-button type="primary" @click="medicineData.add = false">确 定</el-button>
+        <el-button @click="cancelAddmedicine">取 消</el-button>
+        <el-button type="primary" @click="sedAddmedicine">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+    :visible.sync="sportData.add"
+    width="578px"
+    center>
+      <span slot="title" class="dialog-title">添加运动</span>
+      <addSport></addSport>
+      <span slot="footer">
+        <el-button @click="cancelAddsport">取 消</el-button>
+        <el-button type="primary" @click="sedAddsport">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+    :visible.sync="foodData.add"
+    width="456px"
+    center>
+      <span slot="title" class="dialog-title">添加饮食</span>
+      <addFood></addFood>
+      <span slot="footer">
+        <el-button @click="cancelAddfood">取 消</el-button>
+        <el-button type="primary" @click="sedAddfood">确 定</el-button>
       </span>
     </el-dialog>
     <!-- <addMedicine></addMedicine> -->
@@ -139,19 +171,22 @@
 // import {Bus} from './../../bus'
 import medicine from './../medicine/medicine'
 import addMedicine from './../addMedicine'
+import addSport from './../addSport'
+import addFood from './../addFood'
+// import index from 'vue'
 export default {
   components: {
     medicine,
-    addMedicine
+    addMedicine,
+    addSport,
+    addFood
   },
   props: {
     totalPage: {
       // type: [Number, String],
       default: 1
     },
-    sickData: {
-
-    }
+    sickData: {}
     // sickID: {
     //   default: 0
     // },
@@ -168,7 +203,6 @@ export default {
         add: false,
         delete: false,
         data: []
-
       },
       sportData: {
         add: false,
@@ -224,6 +258,7 @@ export default {
     medicine () {
       if (this.sickData) {
         if (this.sickData.medicine) {
+          // this.medicineData.data = []
           return this.sickData.medicine
         }
       }
@@ -261,6 +296,14 @@ export default {
     totalPage (val) {
       this.cardtotalPage = val
       // return val
+    },
+    sickData: {
+      handler (curVal, oldVal) {
+        // 接口完成后 需要做数据处理
+        this.medicineData.data = []
+        console.log('111', curVal, oldVal)
+      },
+      deep: true
     }
   },
   methods: {
@@ -289,11 +332,6 @@ export default {
       if (this.currentpage <= 1) {
         this.currentpage = this.cardtotalPage + 1
       }
-      // if (this.cardtotalPage === 0 || !this.cardtotalPage) {
-      //   this.cardtotalPage = 1
-      //   this.currentpage = 2
-      // }
-      // console.log('ii', this.cardtotalPage)
       this.currentpage -= 1
 
       this.$emit('preBtn', this.currentpage)
@@ -308,23 +346,69 @@ export default {
       console.log('发送语音')
     },
     deleteMedicine () {
+      this.medicineData.data.forEach((item, index) => {
+        this.$set(item, 'showDelete', true)
+      })
+      this.medicineData = Object.assign({}, this.medicineData)
+      // 需要提交到服务器
       console.log('删除药')
+      console.log(this.medicineData.data)
+    },
+    cancelDelet () {
+      this.medicineData.data.forEach((item, index) => {
+        this.$set(item, 'showDelete', false)
+      })
+      this.medicineData = Object.assign({}, this.medicineData)
+    },
+    deleteMedicineHandle (medicine, index) {
+      this.medicineData.data.splice(index, 1)
+    },
+    addMedicineHandle (val) {
+      console.log(val.list)
+      this.medicineData.data.push(val.list)
+      this.medicineData.data = this.removeSame(this.medicineData.data)
+      // this.$mount('#app')
     },
     addMedicine () {
       this.medicineData.add = true
       console.log('添加药')
     },
+    cancelAddmedicine () {
+      // 取消添加 需要修改
+      this.medicineData.add = false
+    },
+    sedAddmedicine () {
+      // 确定添加 需要上传
+      this.medicineData.add = false
+    },
     deleteSport () {
       console.log('删除运动')
     },
     addSport () {
+      this.sportData.add = true
       console.log('添加运动')
+    },
+    cancelAddsport () {
+      this.sportData.add = false
+    },
+    sedAddsport () {
+      this.sportData.add = false
     },
     deleteFood () {
       console.log('删除饮食')
     },
     addFood () {
+      this.foodData.add = true
       console.log('添加饮食')
+    },
+    cancelAddfood () {
+      this.foodData.add = false
+    },
+    sedAddfood () {
+      this.foodData.add = false
+    },
+    removeSame (arr) {
+      return Array.from(new Set(arr))
     }
   },
   mounted () {
@@ -370,7 +454,8 @@ export default {
     border:1px solid #eaeaea;
     height: 30px;
     vertical-align: middle;
-    /* padding: 5px; */
+    padding: 5px;
+    cursor: default;
   }
   td{
     border:1px solid #eaeaea;
@@ -379,37 +464,7 @@ export default {
     vertical-align: middle;
     /* padding: 5px; */
     line-height: 20px;
-  }
-  .border-collapse{
-    border-collapse: collapse;
-  }
-  .no-border{
-    border:none;
-  }
-  .no-bottom-border{
-    border-bottom: none;
-  }
-  .no-top-border{
-    border-top: none;
-  }
-  .no-right-border{
-    border-right: none;
-  }
-  .no-left-border{
-    border-left: none;
-  }
-  .only-bottom-border{
-    border-right: none;
-    border-left: none;
-    border-top: none;
-  }
-  .text-center{
-    text-align:center;  
-  }
-  .sick-card-center{
-    border:1px solid #eaeaea;
-    margin-bottom: 5px;
-    line-height: 54px;
+    cursor: default;
   }
   .arrow{
     font-size: 24px;
@@ -419,6 +474,7 @@ export default {
   .table-head{
     color: #041421;
     font-weight: bold;
+    min-width: 80px;
   }
   .table-top{
     height: 62px;
@@ -441,9 +497,7 @@ export default {
     top:40%;
     right: 10px;
   }
-  .padding{
-    padding:0 10px;
-  }
+
   .table-btn{
     color: #1991fc;
     font-size: 14px;
@@ -460,7 +514,7 @@ export default {
     width: 20px;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-25.png') no-repeat;
+    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-25.png') no-repeat;
   }
   .send{
     position: relative;
@@ -473,7 +527,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-26.png') no-repeat;
+    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-26.png') no-repeat;
   }
   .delete{
     position: relative;
@@ -486,7 +540,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-27.png') no-repeat;
+    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-27.png') no-repeat;
   }
   .add{
     position: relative;
@@ -499,7 +553,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-28.png') no-repeat;
+    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-28.png') no-repeat;
   }
    .new{
     position: relative;
@@ -518,12 +572,73 @@ export default {
     width: 64px;
     height: 44px;
     display: block;
-
-    /* vertical-align: middle; */
-    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-31.png') no-repeat;
+    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-31.png') no-repeat;
   }
   .dialog-title{
     font-size: 16px;
     font-weight: bold;
+  }
+  .use-medicine{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    /* min-width: 800px; */
+  }
+  .use-medicine-item{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding-right: 15px;
+    text-align: center;
+    /* min-width: 80px; */
+  }
+  .use-medicine-item>div{
+     display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .use-medicine-item span{
+    display: inline-block;
+    padding-right: 10px;
+    text-align: center
+  }
+  .delete-medicine-btn{
+    border: none;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+  }
+  .delete-medicine-btn:active{
+    background: #fff;
+    opacity: 0.3;
+  }
+  .delete-medicine-btn i{
+    height:15px; 
+    width:15px; 
+    display:inline-block; 
+    position:relative;
+  } 
+
+  .delete-medicine-btn i:before, .delete-medicine-btn i:after{
+    content:''; 
+    height:4px; 
+    width:15px;
+    display:inline-block; 
+    background:#e87070; 
+    border-radius:10px;
+    -webkit-border-radius:10px;
+    -moz-border-radius:10px; 
+    position:absolute; 
+    top:7px; 
+    left:0px; 
+    transform:rotate(-45deg);
+    -webkit-transform:rotate(-45deg);
+    -moz-transform:rotate(-45deg);-o-transform:rotate(-45deg);-ms-transform:rotate(-45deg);}
+
+  .delete-medicine-btn i:after{
+    transform:rotate(45deg);
+    -webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-ms-transform:rotate(45deg);
   }
 </style>

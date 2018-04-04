@@ -762,7 +762,11 @@ export default {
             if (a[0].dataIndex === vm.bloodTrendIndex) {
               // vm.updateBehaviourRateDate(a[0].axisValue)
             } else {
-              vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+              if (vm.bloodTrendChecked === 2) {
+                vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
+              } else {
+                vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+              }
             }
             vm.bloodTrendIndex = a.dataIndex
             // console.log(a)
@@ -1110,11 +1114,29 @@ export default {
           // this.bloodAndBehaviourData.pages = res.data.pages
           // console.log('vm1', vm.bloodTrendData.pages)
           bloodTrend.setOption(this.bloodTrendOption())
-          if (res.data.data) {
-            if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(res.data.data[0].measureTime)
-            }
+          this.bloodTrendState.total = 1
+        // }
+          if (this.bloodTrendData.bptype[0] === 2) {
+            this.bloodTrendState.normal = 1
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 0
           }
+          if (this.bloodTrendData.bptype[0] === 3 || this.bloodTrendData.bptype[0] === 4) {
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 1
+            this.bloodTrendState.danger = 0
+          }
+          if (this.bloodTrendData.bptype[0] === 5) {
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 1
+          }
+          // this.updatebloodTrendState()
+          // if (res.data.data) {
+          //   if (res.data.data.length !== 0) {
+          //     this.updatebloodTrendState(res.data.data[0].measureTime)
+          //   }
+          // }
         })
       }
       if (index === 1) {
@@ -1160,7 +1182,8 @@ export default {
           bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(res.data.data[0].description)
+              console.log('dsad', res.data.data[0].yearWeek)
+              this.updatebloodTrendState(res.data.data[0].yearWeek)
             }
           }
         })
@@ -1209,7 +1232,9 @@ export default {
         return
       }
       if (this.bloodTrendChecked === 2) {
-        let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
+        // date = dateFormat(date, 0, 1)
+        // let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
+        let yearweek = this.computeYearWeek(date)
         date = dateFromWeek(yearweek[0], yearweek[1])
       }
       let vm = this
@@ -1522,7 +1547,7 @@ export default {
     width: 20px; 
     height: 20px;  
     vertical-align: middle;
-    background: url('./../../../诊所-高血压/hospitalIcon/诊所-icon-44.png')
+    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-44.png')
   }
   .label-right{
     margin-right: 20px;
