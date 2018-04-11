@@ -81,6 +81,7 @@
     margin: 0;
     padding: 0;
     position: relative;
+    height: 100%;
   }
   .container-head{
     height: 80px;
@@ -91,12 +92,17 @@
     /* top:0; */
   }
   .container-sider{
+    overflow: auto;
     height: 100%;
     background-color: #1991fc;
     width: 250px;
     position: fixed;
     top:0px;
     z-index: 999;
+  }
+  .container-sider::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 0;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 0;
   }
   .container-main{
     /* height: 2800px; */
@@ -108,6 +114,7 @@
     margin-left: 250px;
     padding: 24px;
     background-color: #f4f6f9;
+    height:100% ;
     /* position: relative; */
     /* left: 250px; */
     /* top:80px; */

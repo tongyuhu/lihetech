@@ -9,7 +9,6 @@
         {{item.label}}
       </div>
       <div class="has-suger" v-if="hassuger">
-        <!-- <slot name="hassuger"></slot> -->
         <el-button size="small" type="primary" :style="{'width':'100px'}" @click="seeSuger">查看血糖</el-button>
       </div>
     </div>
@@ -79,7 +78,7 @@ export default {
       let name = nav.name
       this.currentValue = name
       this.$emit('input', name)
-      this.$emit('on-click', name)
+      // this.$emit('on-click', name)
     },
     seeSuger () {
       this.$emit('checkSuger')

@@ -9,7 +9,7 @@ import qs from 'qs' // formdata序列化
 // Promise.reject 如果不丢出reject 就是每个都要判断 没有返回掉
 axios.defaults.timeout = 100000
 axios.defaults.baseURL = '/api/' // api的base_url // api接口地址
-// axios.defaults.baseURL = 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital' // api接口地址
+// axios.defaults.baseURL = 'http://10.7.6.131:80/BPWatch/admin/' // api的base_url // api接口地址
 // axios.defaults.headers.common = '4550b8ecfbe54b038c260913bb9b3bf3'
 // axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
     // headers: { 'Content-type': 'application/x-www-form-urlencoded' }

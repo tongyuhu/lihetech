@@ -17,6 +17,8 @@ import HBloodheightotal from './H-bloodheightotal'
 import HWork from './H-work'
 import HSicklist from './H-sicklist'
 import Bus from './../../../bus'
+import wmenu from './../../../components/wmenu'
+import wmenuitem from './../../../components/wmenuitem'
 // import {cookie} from './../../../untils/cookie'
 export default {
   name: 'H-bloodheigh',
@@ -24,9 +26,12 @@ export default {
     Hhospitalmsg,
     HBloodheightotal,
     HWork,
-    HSicklist
+    HSicklist,
+    wmenu,
+    wmenuitem
   },
   mounted () {
+    console.log('blood', this.$route.name)
     // document.cookie = 'name=676767'
 
     // console.log(cookie.get(12))
@@ -41,7 +46,8 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     // 离开当前页面关闭导航
-    Bus.$emit('closemenu', 1)
+    // Bus.$emit('closemenu', 1)
+    Bus.$emit('closemenu', this.$route.name)
     next()
   }
 }

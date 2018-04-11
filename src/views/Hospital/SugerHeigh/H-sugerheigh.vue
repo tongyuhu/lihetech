@@ -32,7 +32,7 @@ export default {
   },
   beforeRouteLeave (to, from, next) {
     // 离开当前页面关闭导航
-    Bus.$emit('closemenu', 2)
+    Bus.$emit('closemenu', this.$route.name)
     next()
   }
 }

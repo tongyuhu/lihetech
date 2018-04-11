@@ -5,6 +5,8 @@
 </template>
 
 <script>
+// import Vue from 'vue'
+// Vue.component()
 export default {
   name: 'pane',
   props: {

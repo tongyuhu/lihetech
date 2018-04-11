@@ -63,16 +63,16 @@
 </template>
 
 <script>
-import tiane from './../../../hospitalImage/hospitalIcon/诊所-icon-48.png'
-import truetiane from './../../../hospitalImage/hospitalIcon/诊所-icon-58.png'
-import pingtan from './../../../hospitalImage/hospitalIcon/诊所-icon-49.png'
-import truepingtan from './../../../hospitalImage/hospitalIcon/诊所-icon-59.png'
-import shuangfeng from './../../../hospitalImage/hospitalIcon/诊所-icon-50.png'
-import trueshuangfeng from './../../../hospitalImage/hospitalIcon/诊所-icon-60.png'
-import buzheng from './../../../hospitalImage/hospitalIcon/诊所-icon-51.png'
-import truebuzheng from './../../../hospitalImage/hospitalIcon/诊所-icon-61.png'
-import quexue from './../../../hospitalImage/hospitalIcon/诊所-icon-52.png'
-import truequexue from './../../../hospitalImage/hospitalIcon/诊所-icon-62.png'
+import tiane from 'icon/诊所-icon-48.png'
+import truetiane from 'icon/诊所-icon-58.png'
+import pingtan from 'icon/诊所-icon-49.png'
+import truepingtan from 'icon/诊所-icon-59.png'
+import shuangfeng from 'icon/诊所-icon-50.png'
+import trueshuangfeng from 'icon/诊所-icon-60.png'
+import buzheng from 'icon/诊所-icon-51.png'
+import truebuzheng from 'icon/诊所-icon-61.png'
+import quexue from 'icon/诊所-icon-52.png'
+import truequexue from 'icon/诊所-icon-62.png'
 import {assessmentApi} from './../../api/components/BloodheighSickcard/assessment'
 export default {
   props: {

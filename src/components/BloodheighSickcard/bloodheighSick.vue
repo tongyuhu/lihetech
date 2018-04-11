@@ -64,7 +64,10 @@
           </pane>
           <pane
           label="血压分布" name="2">
-            <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover>
+
+            <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
+            <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover>
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component> -->
           </pane>
           <pane
           label="用药" name="3">
@@ -72,19 +75,19 @@
           </pane>
           <pane
           label="心血管评估" name="4">
-          <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment>
+            <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment>
           </pane>
           <pane
           label="24小时动态血压" name="5">
-          <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood>
+            <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood>
           </pane>
           <pane
           label="分析报告" name="6">
-          <report :sickID="sickID" :hospitalId="hospitalId"></report>
+           <report :sickID="sickID" :hospitalId="hospitalId"></report>
           </pane>
           <pane
           label="原始数据" name="7">
-          <original :sickID="sickID" :hospitalId="hospitalId"></original>
+           <original :sickID="sickID" :hospitalId="hospitalId"></original>
           </pane>
         </tabs>
       </div>
@@ -114,6 +117,26 @@ export default {
     pane,
     note,
     bloodCover,
+    // 'bloodCover': function (resolve) {
+    //   require(['./bloodCover.vue'], resolve)
+    // },
+    // 'bloodCover': () => import('./bloodCover.vue').then(component => {
+    //   component.default._Ctor = {}
+
+    //   if (!component.default.attached) {
+    //     component.default.backupMounted = component.default.mounted
+    //   }
+
+    //   component.default.mounted = function () {
+    //     if (component.default.backupMounted) {
+    //       component.default.backupMounted.call(this)
+    //     }
+    //   }
+
+    //   component.default.attached = true
+
+    //   return component
+    // }),
     useDrug,
     assessment,
     alldayheighblood,
@@ -130,7 +153,8 @@ export default {
       currentPage: 1,
       totalPage: null,
       pageSize: 1,
-      isSugerHeigh: false
+      isSugerHeigh: false,
+      bloodCover: 'bloodCover'
     }
   },
   methods: {
@@ -476,7 +500,7 @@ export default {
     display: block;
     width:14px;
     height: 16px;
-    background:url("./../../../hospitalImage/hospitalIcon/诊所-icon-29.png") no-repeat;
+    background:url("~icon/诊所-icon-29.png") no-repeat;
     left:-16px;
     top:1px;
   }
@@ -489,7 +513,7 @@ export default {
     display: block;
     width:14px;
     height: 16px;
-    background:url("./../../../hospitalImage/hospitalIcon/诊所-icon-30.png") no-repeat;
+    background:url("~icon/诊所-icon-30.png") no-repeat;
     left:-16px;
     top:1px;
   }

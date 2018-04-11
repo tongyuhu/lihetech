@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="sider">
     <div class="head-logo">
-      <img src="./../../../static/hospitalIcon/诊所-icon-01.png" alt="logo" class="head-logo-img">
+      <img src="~icon/诊所-icon-01.png" alt="logo" class="head-logo-img">
     </div>
-    <div
+    <!-- <div
     v-for="item in menu"
     :key="item.id"
     class="menu"
@@ -14,17 +14,33 @@
         :pathname="item.pathname"
         :index="item.id"
         :isOpen="item.open">
-        <!-- <p>111</p> -->
-        <!-- <li is="FmenuItem"></li> -->
         <FmenuItem
         v-for="i in item.child"
         :key="i.title"
         :title="i.title"
         :index="i.index"
         :id="i.id"
-        @activeitemmenu="goanchor"></FmenuItem>
+        @activeitemmenu="goanchor">
+        </FmenuItem>
       </Fmenu>
-
+    </div> -->
+    <div
+    v-for="item in menu"
+    :key="item.id"
+    class="menu"
+    >
+      <wmenu 
+        :iconName="item.iconName"
+        :title="item.title"
+        :routerName="item.pathname"
+        :open="item.open">
+        <wmenuitem
+        v-for="i in item.child"
+        :key="i.title"
+        :title="i.title"
+        :id="i.id"
+        @activeitemmenu="goanchor"></wmenuitem>
+      </wmenu>
     </div>
   </div>
 </template>
@@ -33,11 +49,15 @@
 
 import Fmenu from './../../components/Fmenu.vue'
 import FmenuItem from './../../components/FmenuItem.vue'
+import wmenu from './../../components/wmenu.vue'
+import wmenuitem from './../../components/wmenuitem.vue'
 export default {
   name: 'H-Sider',
   components: {
     Fmenu,
-    FmenuItem
+    FmenuItem,
+    wmenu,
+    wmenuitem
   },
   data () {
     return {
@@ -135,7 +155,7 @@ export default {
           id: 5,
           iconName: 'admin',
           title: '人员管理',
-          pathname: 'booldheigh',
+          // pathname: 'booldheigh',
           child: [
             {
               // id: 'sugerCases',
@@ -153,7 +173,7 @@ export default {
           id: 6,
           iconName: 'message',
           title: '我的消息',
-          pathname: 'booldheigh'
+          pathname: 'accountSetting'
         }
       ]
     }
@@ -193,8 +213,10 @@ export default {
 </script>
 
 <style scoped>
-  .siader{
+  .sider{
     /* background-color: #1991fc; */
+    /* overflow-y: auto; */
+    /* overflow-x: hidden; */
   }
   .menu{
     /* position:relative; */
@@ -204,14 +226,15 @@ export default {
   }
   .head-logo{
     /* float: left; */
-    width: 250px;
+    /* width: 250px; */
+    width: 100%;
     background-color: #1991fc;
     height: 80px;
     position:relative;
   }
   .head-logo-img{
     display: block;
-    margin-left: 40px;
+    padding-left: 40px;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

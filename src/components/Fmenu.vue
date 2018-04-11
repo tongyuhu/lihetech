@@ -168,7 +168,7 @@ export default {
   width: 1px;;
   height: 50px;
   background-color: #ffffff99;
-  background: url('./../../hospitalImage/hospitalIcon/诊所-icon-09.png') no-repeat;
+  background: url('~icon/诊所-icon-09.png') no-repeat;
 } */
 .fmenu-item-icon::before{
   /* top: -13px; */
@@ -178,7 +178,7 @@ export default {
   width: 14px;;
   height: 15px;
   background-color: #ffffff99;
-  background: url('./../../hospitalImage/hospitalIcon/诊所-icon-09.png') no-repeat;
+  background: url('~icon/诊所-icon-09.png') no-repeat;
   z-index: 999;
 }
  .fmenu-item{

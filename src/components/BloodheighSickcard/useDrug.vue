@@ -7,23 +7,23 @@
       <!-- 图例 -->
       <div class="chart-head">
         <span class="text-center">
-          <img src="./../../../hospitalImage/hospitalIcon/诊所-icon-34.png" alt="">
+          <img src="~icon/诊所-icon-34.png" alt="">
           <span>利尿剂</span> 
         </span>
         <span class="text-center">
-          <img src="./../../../hospitalImage/hospitalIcon/诊所-icon-35.png" alt="">
+          <img src="~icon/诊所-icon-35.png" alt="">
           <span>β受体阻滞剂</span> 
         </span>
         <span class="text-center">
-          <img src="./../../../hospitalImage/hospitalIcon/诊所-icon-36.png" alt="">
+          <img src="~icon/诊所-icon-36.png" alt="">
           <span>钙通道拮抗剂(CCB)</span> 
         </span>
         <span class="text-center">
-          <img src="./../../../hospitalImage/hospitalIcon/诊所-icon-37.png" alt="">
+          <img src="~icon/诊所-icon-37.png" alt="">
           <span>血管紧张素抑制剂(ACEI)</span> 
         </span>
         <span class="text-center">
-          <img src="./../../../hospitalImage/hospitalIcon/诊所-icon-38.png" alt="">
+          <img src="~icon/诊所-icon-38.png" alt="">
           <span>血管紧张素二受体阻滞剂(ARB)</span> 
         </span>
       </div>
@@ -43,11 +43,11 @@ import {useDrugApi} from './../../api/components/BloodheighSickcard/useDrug'
 import {dateFormat} from './../../untils/date'
 // import {deepcopy} from './../../untils/untils'
 import echarts from 'echarts'
-import LI from './../../../hospitalImage/hospitalIcon/诊所-icon-34.png'
-import B from './../../../hospitalImage/hospitalIcon/诊所-icon-35.png'
-import CCB from './../../../hospitalImage/hospitalIcon/诊所-icon-36.png'
-import ACEI from './../../../hospitalImage/hospitalIcon/诊所-icon-37.png'
-import ARB from './../../../hospitalImage/hospitalIcon/诊所-icon-38.png'
+import LI from 'icon/诊所-icon-34.png'
+import B from 'icon/诊所-icon-35.png'
+import CCB from 'icon/诊所-icon-36.png'
+import ACEI from 'icon/诊所-icon-37.png'
+import ARB from 'icon/诊所-icon-38.png'
 export default {
   props: {
     sickID: {

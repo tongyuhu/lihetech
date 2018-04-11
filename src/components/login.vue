@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="login">
     <div class="g-center login-page" @keyup.enter="login">
       <el-form class="login-form">
         <el-form-item>
@@ -104,9 +104,14 @@ export default {
 </script>
 
 <style scoped>
+  .login{
+    background:#f4f6f9;
+    width: 100%;
+    height: 100%;
+  }
   #app{display: table;width:100%;}
   .main-title{text-align: center;}
   .des{text-align: center;color:#999;margin-bottom: 2em;}
   .login-form{width: 400px;margin:13% auto 0;}
-  .login-page{background:#fff;}
+  .login-page{background:#f4f6f9;}
 </style>

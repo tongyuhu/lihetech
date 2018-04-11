@@ -6,6 +6,7 @@ import router from './router'
 // import Vuex from 'vuex'
 import echarts from 'echarts'
 import axios from './api/axios'
+import _ from 'lodash'
 // import axios from 'axios'
 import qs from 'qs'
 import {store} from './store/store'
@@ -14,6 +15,7 @@ import session from './untils/session'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Fbutton from './components/Fbutton.vue'
+Vue.prototype._ = _
 // import {
 //   Container,
 //   Header,

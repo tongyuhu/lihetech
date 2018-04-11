@@ -1902,7 +1902,7 @@ export default {
     width: 20px; 
     height: 20px;  
     vertical-align: middle;
-    background: url('./../../../hospitalImage/hospitalIcon/诊所-icon-44.png')
+    background: url('~icon/诊所-icon-44.png')
   }
   .label-right{
     margin-right: 20px;
