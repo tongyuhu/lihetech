@@ -5,18 +5,18 @@
             <Hhospitalmsg></Hhospitalmsg>
             <HBloodheightotal></HBloodheightotal>
             <HWork></HWork>
-            <HSicklist></HSicklist>
+            <bloodSicklist></bloodSicklist>
           </el-col>
       </el-row>
   </div>
 </template>
 
 <script>
-import Hhospitalmsg from './H-hospitalmsg.vue'
+import Hhospitalmsg from '@/views/Hospital/H-hospitalMsg.vue'
 import HBloodheightotal from './H-bloodheightotal'
 import HWork from './H-work'
-import HSicklist from './H-sicklist'
-import Bus from './../../../bus'
+import bloodSicklist from './H-bloodSicklist.vue'
+import Bus from '@/bus'
 import wmenu from './../../../components/wmenu'
 import wmenuitem from './../../../components/wmenuitem'
 // import {cookie} from './../../../untils/cookie'
@@ -26,7 +26,7 @@ export default {
     Hhospitalmsg,
     HBloodheightotal,
     HWork,
-    HSicklist,
+    bloodSicklist,
     wmenu,
     wmenuitem
   },

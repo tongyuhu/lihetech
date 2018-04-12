@@ -30,7 +30,7 @@
 <script>
 import fi from './icon.vue'
 import FmenuItem from './FmenuItem.vue'
-import Bus from './../bus'
+import Bus from '@/bus'
 export default {
   name: 'Fmenu',
   components: {

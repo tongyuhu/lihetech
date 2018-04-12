@@ -140,28 +140,20 @@
                   label=""
                   width="275px">
                     <template slot-scope="scope">
-                        <el-button 
-                        size="mini" 
-                        type="primary" 
-                        @click.native="care(scope.$index,sicklistData)" 
-                        :key="scope.row.id" 
-                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
-                        v-if="scope.row.care">
-                          {{careText(scope.row.care)}}
-                        </el-button>
-                        <el-button 
-                        v-else
-                        size="mini" 
-                        type="plain" 
-                        @click.native="care(scope.$index,sicklistData)" 
-                        :key="scope.row.id" :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
-                        >
-                          {{careText(scope.row.care)}}
-                        </el-button>
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
-                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
-                        <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
+                      <el-button 
+                      size="mini" 
+                      type="primary" 
+                      @click.native="isCare(scope.row)" 
+                      :key="scope.row.id" 
+                      :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
+                      >
+                        <span v-if="scope.row.isDocusOn">取消关注</span>
+                        <span v-if="!scope.row.isDocusOn">关注</span>
+                      </el-button>
+                      <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
+                      :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
+                      <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+                      <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
                   </el-table-column>
                 </el-table>
@@ -175,8 +167,7 @@
 </template>
 
 <script>
-import {sicklistDataApi, halfyearSickListApi, sicknameSelectApi, sicktypeselect} from './../../../api/views/Hospital/BloodHeigh/H-sicklist'
-import {careText, care} from './../../../untils/untils'
+import {sicklistDataApi, halfyearSickListApi, sicknameSelectApi, sicktypeselect} from '@/api/views/Hospital/BloodHeigh/H-sicklist'
 export default {
   data () {
     return {
@@ -191,8 +182,42 @@ export default {
     }
   },
   methods: {
-    careText,
-    care,
+    isCare (val) {
+      // let sickid = ''
+      // let hospitalid = ''
+      // let care = ''
+      // if (val && val.id) {
+      //   sickid = val.id
+      // }
+      // if (val && val.adminHospitalId) {
+      //   hospitalid = val.adminHospitalId
+      // }
+      // if (val && val.isDocusOn) {
+      //   care = !val.isDocusOn + ''
+      // } else {
+      //   if (val && !val.isDocusOn) {
+      //     care = !val.isDocusOn + ''
+      //   }
+      // }
+      // let params = {
+      //   'adminHospitalId': hospitalid,
+      //   'userId': sickid,
+      //   'isDocusOn': care
+      // }
+      if (val.isDocusOn === 'undefiend') {
+        val.isDocusOn = false
+      }
+      val.isDocusOn = !val.isDocusOn
+      // this.$axios(careApi(params))
+      // .then(res => {
+      //   if (res.data.code === '0000') {
+      //     // val.isDocusOn = !val.isDocusOn
+      //   }
+      //   if (res.data.code === '1001') {
+      //   }
+      // })
+      this.$mount('#app')
+    },
     diagnose (row) {
       this.$router.push({name: 'bloodheighSick',
         params: {

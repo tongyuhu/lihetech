@@ -3,7 +3,6 @@
     <div class="head">
       <span>张江高科诊所</span>
     </div>
-
     <el-card class="msg" :body-style="{ padding: '0px' }">
       <div class="msg-title">
         <span>消息列表</span>

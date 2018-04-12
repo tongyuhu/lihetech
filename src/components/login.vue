@@ -77,7 +77,7 @@ export default {
           .then(res => {
             vm.isBtnLoading = true
             if (res.data.data) {
-              if (res.data.data.admin_token && !(res.data.data.admin_token.length === 0)) {
+              if (res.data.data.admin_token && res.data.data.admin_token.length !== 0) {
                 // 保存token到本地
                 session('token', res.data.data.admin_token)
                 vm.$emit('login', vm.$router.currentRoute.path)
@@ -92,6 +92,7 @@ export default {
             }
           })
           .catch(err => {
+            vm.isBtnLoading = false
             console.log(err)
           })
       }

@@ -2,28 +2,28 @@
   <div>
       <el-row>
           <el-col :span="24">
-            <hospitalMsg></hospitalMsg>
+            <Hhospitalmsg></Hhospitalmsg>
             <HSugerheightotal></HSugerheightotal>
             <HsugerWork></HsugerWork>
-            <HSicklist></HSicklist>
+            <sugerSicklist></sugerSicklist>
           </el-col>
       </el-row>
   </div>
 </template>
 
 <script>
-import Bus from './../../../bus'
+import Bus from '@/bus'
 import HSugerheightotal from './H-sugerheightotal'
 import HsugerWork from './H-sugerWork'
-import HSicklist from './H-sicklist'
-import hospitalMsg from './../../../components/hospitalMsg.vue'
+import sugerSicklist from './H-sugerSicklist.vue'
+import Hhospitalmsg from '@/views/Hospital/H-hospitalMsg.vue'
 export default {
   name: 'H-bloodheigh',
   components: {
     HSugerheightotal,
     HsugerWork,
-    HSicklist,
-    hospitalMsg
+    sugerSicklist,
+    Hhospitalmsg
   },
   data () {
     return {

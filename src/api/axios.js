@@ -1,28 +1,21 @@
+import { Message, MessageBox } from 'element-ui'
 import axios from 'axios'
 import qs from 'qs' // formdata序列化
+import router from './../router/index'
 // import { Message, MessageBox, Loading } from 'element-ui'
 // import Vue from 'vue'
-// import s from './../../config'
-// import router from './router'
 // axios 配置
-// 因为js 异步原因  所以这里会拿到null 解决方案 vuex ？
+// 因为js 异步原因  所以这里会拿到null 解决方案 vuex
 // Promise.reject 如果不丢出reject 就是每个都要判断 没有返回掉
-axios.defaults.timeout = 100000
-axios.defaults.baseURL = '/api/' // api的base_url // api接口地址
-// axios.defaults.baseURL = 'http://10.7.6.131:80/BPWatch/admin/' // api的base_url // api接口地址
-// axios.defaults.headers.common = '4550b8ecfbe54b038c260913bb9b3bf3'
-// axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
-    // headers: { 'Content-type': 'application/x-www-form-urlencoded' }
+axios.defaults.timeout = 5000
+axios.defaults.baseURL = process.env.API_HOST // api的base_url // api接口地址
+axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
     config.data = qs.stringify(config.data)
   }
   return config
 })
-// process.env.API_ROOT
-// http://apimanager.arbexpress.cn/arbmanager
-// http://116.62.63.96:8081/arbmanager
-// http://192.168.1.120:8086/arbmanager
 
 // axios.interceptors.request.use((config) => {
 //   if (localStorage.getItem('token')) {
@@ -98,5 +91,96 @@ axios.interceptors.request.use((config) => {
 //   }
 //   return Promise.reject(error)
 // })
+axios.interceptors.response.use(
+  res => {
+    if (res.data && res.data.code) {
+      switch (res.data.code) {
+        case '0000':
+          break
+        case '1001':
+          Message({
+            type: 'error',
+            message: '请求数据失败,请重试',
+            duration: 5000,
+            showClose: true
+          })
+          break
+        case '1005':
+          MessageBox.alert('登录超时,请重新登录', '提示信息', {
+            'confirmButtonText': '确定'
+          }).then(() => {
+            sessionStorage.clear()
+            router.push({path: '/login'})
+            location.reload()
+          })
+          break
+        case '1006':
+          Message({
+            type: 'error',
+            message: '对不起，您没有相关权限',
+            duration: 5000,
+            showClose: true
+          })
+          break
+        default:
+      }
+    }
+    return res
+  },
+  err => {
+    if (err && err.response) {
+      switch (err.response.status) {
+        case 400:
+          err.message = '请求错误'
+          break
 
+        case 401:
+          sessionStorage.clear()
+          router.replace({path: '/login'})
+          location.reload()
+          err.message = '未授权，请登录'
+          break
+
+        case 403:
+          err.message = '拒绝访问'
+          break
+
+        case 404:
+          err.message = `请求地址出错: ${err.response.config.url}`
+          break
+
+        case 408:
+          err.message = '请求超时'
+          break
+
+        case 500:
+          err.message = '服务器内部错误'
+          break
+
+        case 501:
+          err.message = '服务未实现'
+          break
+
+        case 502:
+          err.message = '网关错误'
+          break
+
+        case 503:
+          err.message = '服务不可用'
+          break
+
+        case 504:
+          err.message = '网关超时'
+          break
+
+        case 505:
+          err.message = 'HTTP版本不受支持'
+          break
+
+        default:
+      }
+    }
+    return Promise.reject(err)
+  }
+)
 export default axios

@@ -168,7 +168,7 @@
 </template>
 
 <script>
-// import {Bus} from './../../bus'
+// import {Bus} from '@/bus'
 import medicine from './../medicine/medicine'
 import addMedicine from './../addMedicine'
 import addSport from './../addSport'

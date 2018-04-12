@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import {dateFormat} from './../untils/date'
+import {dateFormat} from '@/untils/date'
 import { mapState } from 'vuex'
 export default {
-  name: 'hospitalMsg',
+  name: 'H-hospitalMessage',
   data () {
     return {
     }
@@ -48,10 +48,6 @@ export default {
     }
   },
   methods: {
-  },
-  mounted () {
-  },
-  beforeDestroy () {
   }
 }
 </script>

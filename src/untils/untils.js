@@ -1,62 +1,6 @@
-import axios from 'axios'
 import Vue from 'vue'
 import { Message } from 'element-ui'
 Vue.component(Message.name, Message)
-// 年月周日按钮的选择
-export const checkDateBtn = (btn, btnArr, defaultType, changeType) => {
-  if (btnArr[btn] === defaultType) {
-    for (let i = 0; i < btnArr.length; i++) {
-      btnArr.splice(i, 1, defaultType)
-    }
-    btnArr.splice(btn, 1, changeType)
-  }
-}
-
-// 关注按钮 的设置
-export const careText = (boolean) => {
-  if (boolean) {
-    return '取消关注'
-  } else {
-    return '关注'
-  }
-}
-export const care = (index, row) => {
-  if (row[index].care === false) {
-    row[index].care = true
-    axios({
-      method: 'post',
-      url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/badsick',
-      data: {
-        sickID: row[index].id,
-        sickName: row[index].name,
-        isCare: row[index].care
-      }
-    })
-    .then()
-    .catch(err => {
-      return err
-    })
-    // 点击关注的动作
-    // console.log(row[index].name)
-    // console.log(row[index].id)
-  } else {
-    // 取消关注 do thing
-    row[index].care = false
-    axios({
-      method: 'post',
-      url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/badsick',
-      data: {
-        sickID: row[index].id,
-        sickName: row[index].name,
-        isCare: row[index].care
-      }
-    })
-      .then()
-      .catch(err => {
-        return err
-      })
-  }
-}
 // 判断数据类型
 function typeOf (obj) {
   const toString = Object.prototype.toString
@@ -163,40 +107,40 @@ export const session = (key, value) => {
 // instance.defaults.headers.post['Content-Type'] = 'application/json'
 
 // 错误处理
-export const catchError = (error) => {
-  if (error.response) {
-    switch (error.response.status) {
-      case 400:
-        Vue.prototype.$message({
-          message: error.response.data.message || '请求参数异常',
-          type: 'error'
-        })
-        break
-      case 401:
-        sessionStorage.removeItem('user')
-        Vue.prototype.$message({
-          message: error.response.data.message || '密码或账号错误',
-          type: 'warning',
-          onClose: function () {
-            location.reload()
-          }
-        })
-        break
-      case 403:
-        Vue.prototype.$message({
-          message: error.response.data.message || '无权访问',
-          type: 'warning'
-        })
-        break
-      default:
-        Vue.prototype.$message({
-          message: error.response.data.message || '服务端异常',
-          type: 'error'
-        })
-    }
-  }
-  return Promise.reject(error)
-}
+// export const catchError = (error) => {
+//   if (error.response) {
+//     switch (error.response.status) {
+//       case 400:
+//         Vue.prototype.$message({
+//           message: error.response.data.message || '请求参数异常',
+//           type: 'error'
+//         })
+//         break
+//       case 401:
+//         sessionStorage.removeItem('user')
+//         Vue.prototype.$message({
+//           message: error.response.data.message || '密码或账号错误',
+//           type: 'warning',
+//           onClose: function () {
+//             location.reload()
+//           }
+//         })
+//         break
+//       case 403:
+//         Vue.prototype.$message({
+//           message: error.response.data.message || '无权访问',
+//           type: 'warning'
+//         })
+//         break
+//       default:
+//         Vue.prototype.$message({
+//           message: error.response.data.message || '服务端异常',
+//           type: 'error'
+//         })
+//     }
+//   }
+//   return Promise.reject(error)
+// }
 // instance.interceptors.response.use(response => {
 //   return response
 // }, catchError)

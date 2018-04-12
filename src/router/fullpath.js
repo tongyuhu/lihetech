@@ -9,7 +9,10 @@ const addDoctor = (resolve) => require(['@/components/addDoctor.vue'], resolve)
 const accountSetting = (resolve) => require(['@/components/accountSetting.vue'], resolve)
 const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve)
 const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
-const medicine = (resolve) => require(['@/components/medicine/medicine.vue'], resolve)
+// const medicine = (resolve) => require(['@/components/medicine/medicine.vue'], resolve)
+const sickManage = (resolve) => require(['@/views/Hospital/personManage/H-sick.vue'], resolve)
+const doctorManage = (resolve) => require(['@/views/Hospital/personManage/H-doctor.vue'], resolve)
+const personManage = (resolve) => require(['@/views/Hospital/personManage/personManage.vue'], resolve)
 
 export default[
   {
@@ -18,7 +21,6 @@ export default[
     meta: {
       name: '主页',
       requireAuth: true,
-      scrollToTop: true,
       role: ['admin', 'doctor']
     },
     redirect: '/Hospital'
@@ -30,8 +32,7 @@ export default[
     redirect: 'hospital/booldheigh',
     meta: {
       requireAuth: true,
-      scrollToTop: true,
-      name: '主页',
+      name: '诊所主页',
       role: ['admin', 'doctor']
     },
     children: [
@@ -41,8 +42,7 @@ export default[
         component: booldheigh,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '高血压',
           role: ['admin', 'doctor']
         }
       },
@@ -52,8 +52,8 @@ export default[
         component: sugerheigh,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+
+          name: '糖尿病',
           role: ['admin', 'doctor']
         }
       },
@@ -63,8 +63,7 @@ export default[
         component: other,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '其他',
           role: ['admin', 'doctor']
         }
       },
@@ -74,10 +73,42 @@ export default[
         component: cases,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '病例库',
           role: ['admin', 'doctor']
         }
+      },
+      {
+        path: 'personManage',
+        name: 'personManage',
+        component: personManage,
+        meta: {
+          requireAuth: true,
+          name: '人员管理',
+          role: ['admin', 'doctor']
+        },
+        redirect: { name: 'doctorManage' },
+        children: [
+          {
+            path: 'doctorManage',
+            name: 'doctorManage',
+            component: doctorManage,
+            meta: {
+              requireAuth: true,
+              name: '医生管理',
+              role: ['admin', 'doctor']
+            }
+          },
+          {
+            path: 'sickManage',
+            name: 'sickManage',
+            component: sickManage,
+            meta: {
+              requireAuth: true,
+              name: '患者管理',
+              role: ['admin', 'doctor']
+            }
+          }
+        ]
       },
       {
         path: 'bloodheighSick/:sickID',
@@ -85,8 +116,7 @@ export default[
         component: bloodheighSick,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '高血压病人',
           role: ['admin', 'doctor']
         }
       },
@@ -96,8 +126,7 @@ export default[
         component: sugerheighSick,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '糖尿病病人',
           role: ['admin', 'doctor']
         }
       },
@@ -107,8 +136,7 @@ export default[
         component: addDoctor,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '添加医生',
           role: ['admin', 'doctor']
         }
       },
@@ -118,8 +146,7 @@ export default[
         component: healthForm,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '病历',
           role: ['admin', 'doctor']
         }
       },
@@ -129,8 +156,7 @@ export default[
         component: addSick,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
+          name: '添加病人',
           role: ['admin', 'doctor']
         }
       },
@@ -140,22 +166,21 @@ export default[
         component: accountSetting,
         meta: {
           requireAuth: true,
-          scrollToTop: true,
-          name: '主页',
-          role: ['admin', 'doctor']
-        }
-      },
-      {
-        path: 'medicine',
-        name: 'medicine',
-        component: medicine,
-        meta: {
-          requireAuth: true,
-          scrollToTop: true,
-          name: '44',
+          name: '账户设置',
           role: ['admin', 'doctor']
         }
       }
+      // {
+      //   path: 'medicine',
+      //   name: 'medicine',
+      //   component: medicine,
+      //   meta: {
+      //     requireAuth: true,
+      //     scrollToTop: true,
+      //     name: '44',
+      //     role: ['admin', 'doctor']
+      //   }
+      // }
     ]
   }
 ]

@@ -1,6 +1,5 @@
 <template>
     <div class='tatalsick' id="bloodtotal">
-      <!-- <el-row> -->
         <el-row type="flex" justify="start">
           <button v-for="(item,index) in checkDate" 
           :key="item.date" 
@@ -10,15 +9,15 @@
             {{item.date}}
           </button>
         </el-row>
-        <p class="heightblood-total">高血压患者({{ heightbloodTotal }}人)</p>
+        <p class="heightblood-total">共({{ heightbloodTotal }}名病人)</p>
     
         <el-row :gutter="8">
             <el-col :span='12' >
               <el-card :body-style="{ padding: '0px' }">
                   <div class="card-header">
-                    <p class="title">患者分布</p>
+                    <p class="title">整体分布</p>
                   </div>
-                  <div id='HBcover'  :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HtotalCover'  :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
             <el-col :span='12'>
@@ -27,17 +26,15 @@
                   <div class="card-header">
                     <p class="title">患者走势</p>
                   </div>
-                  <div id='HBtrend' :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HsickTrend' :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
         </el-row>
-      <!-- </el-row>  -->
     </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-// import {sickDistributionDataApi, sickTrendDataApi} from './../../../api/views/Hospital/BloodHeigh/H-bloodheightotal'
 export default {
   name: 'H-bloodheighttotal',
   data () {
@@ -109,7 +106,7 @@ export default {
     }
   },
   methods: {
-    HBcoverOption () {
+    HtotalCoverOption () {
       return {
         // 提示框 在饼图上显示数据
         // tooltip: {
@@ -173,7 +170,7 @@ export default {
         }
       }
     },
-    HBtrendOption () {
+    HsickTrendOption () {
       return {
         title: {
         // text: '控压走势',
@@ -311,10 +308,10 @@ export default {
     // 初始化选择时间为日
     this.checkDate[0].isChecked = true
 
-    let HBcover = echarts.init(document.getElementById('HBcover'))
-    HBcover.setOption(this.HBcoverOption())
-    let HBtrend = echarts.init(document.getElementById('HBtrend'))
-    HBtrend.setOption(this.HBtrendOption())
+    let HtotalCover = echarts.init(document.getElementById('HtotalCover'))
+    HtotalCover.setOption(this.HtotalCoverOption())
+    let HsickTrend = echarts.init(document.getElementById('HsickTrend'))
+    HsickTrend.setOption(this.HsickTrendOption())
   }
 }
 </script>
@@ -375,7 +372,7 @@ p {
   color:#fff;
   border-radius:2px;
 }
-.HBtrend{
+.HsickTrend{
   z-index: 9;
 }
 </style>

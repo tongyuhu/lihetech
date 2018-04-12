@@ -5,3 +5,9 @@ export const sendUserMsg = (obj) => {
     data: obj
   }
 }
+export const getAdminInfo = () => {
+  return {
+    method: 'post',
+    url: '/info'
+  }
+}

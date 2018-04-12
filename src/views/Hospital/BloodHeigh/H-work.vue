@@ -350,8 +350,8 @@ import {
   newsickaskDataApi,
   badsickDataApi,
   noListenDoctorDataApi,
-  careApi} from './../../../api/views/Hospital/BloodHeigh/H-work'
-import mpages from './../../../components/cutpage.vue'
+  careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
+import mpages from '@/components/cutpage.vue'
 export default {
   name: 'H-work',
   components: {
@@ -405,7 +405,7 @@ export default {
     //   }
     // },
     isCare (val) {
-      let sickid = '1'
+      let sickid = ''
       let hospitalid = ''
       let care = ''
       if (val && val.id) {

@@ -39,6 +39,7 @@
         :key="i.title"
         :title="i.title"
         :id="i.id"
+        :routerName="i.pathname"
         @activeitemmenu="goanchor"></wmenuitem>
       </wmenu>
     </div>
@@ -155,15 +156,17 @@ export default {
           id: 5,
           iconName: 'admin',
           title: '人员管理',
-          // pathname: 'booldheigh',
+          pathname: 'personManage',
           child: [
             {
               // id: 'sugerCases',
+              pathname: 'doctorManage',
               title: '医生',
               index: 1
             },
             {
               // id: 'sugerCases',
+              pathname: 'sickManage',
               title: '患者',
               index: 2
             }

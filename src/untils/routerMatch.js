@@ -1,3 +1,4 @@
+import _ from 'lodash'
 // 根据返回路由匹配路由
 export const routeMatch = function (route, full) {
   let arr = []
@@ -38,3 +39,19 @@ export const roleMatch = function (role, full) {
   }
   return arr
 }
+function routerRoleMatch (role, fullRouter) {
+  let routers = []
+  let full = fullRouter
+  if (!_.isArray(full)) {
+    full = []
+  }
+
+  routers = _.filter(full, (o) => {
+    if (o.children) {
+      o.children = routerRoleMatch(role, o.children)
+    }
+    return _.includes(o.meta.role, role)
+  })
+  return routers
+}
+export {routerRoleMatch}

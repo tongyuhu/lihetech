@@ -22,7 +22,7 @@
 
 <script>
 import fi from './icon.vue'
-import Bus from './../bus'
+import Bus from '@/bus'
 import {findComponentsDownward} from './../untils/untils'
 export default {
   name: 'wmenu',
