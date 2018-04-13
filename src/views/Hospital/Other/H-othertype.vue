@@ -1,14 +1,14 @@
 <template>
   <div class='work'>
-    <!-- 工作台 start -->
+    <!-- title start -->
     <div class="workhead">
       <span>患者分类</span>
     </div>
     <el-card :body-style="{padding: '0px'}">
-    <!-- 工作台 end -->
+    <!-- title end -->
 
-      <!-- 患者最新问诊  start -->
-      <div class="bottom-margin" id="">
+      <!-- 呼吸道  start -->
+      <div class="bottom-margin" id="respire">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">呼吸道</p>
@@ -68,10 +68,10 @@
           </div>
         </el-card>
       </div>
-      <!-- 患者最新问诊  end -->
+      <!-- 呼吸道  end -->
 
-      <!-- 严重患者 start -->
-      <div class="bottom-margin" id="">
+      <!-- 癌症 start -->
+      <div class="bottom-margin" id="cancer">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">癌症({{badsickTotal }})</p>
@@ -157,10 +157,10 @@
           </div>
         </el-card>
       </div>
-      <!-- 严重患者结束 end -->
+      <!-- 癌症结束 end -->
 
-      <!-- 未遵医嘱患者 start -->
-      <div class="bottom-margin" id="">
+      <!-- 传染病 start -->
+      <div class="bottom-margin" id="infection">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">传染病({{noListenDoctorRate }})</p>
@@ -249,10 +249,10 @@
           
         </el-card>
       </div>
-      <!-- 未遵医嘱患者 end -->
+      <!-- 传染病 end -->
 
-      <!-- 建档不完整患者 start -->
-      <div id="">
+      <!-- 肿瘤 start -->
+      <div id="tumour">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">肿瘤({{unperfectMsgRate}})</p>
@@ -332,7 +332,7 @@
           </div>
         </el-card>
       </div>
-      <!-- 建档不完整患者 end -->
+      <!-- 肿瘤 end -->
     </el-card>
     
   </div>

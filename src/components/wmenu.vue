@@ -7,6 +7,7 @@
         <fi :icon="icon"></fi>
         <div class="menu-name">
           <span>{{title}}</span>
+          <i :class="{'has-message':hasMsg}"></i>
           <!-- <router-link :to="{name:routerName}" tag="span">{{title}}</router-link> -->
         </div>
       </div>
@@ -42,6 +43,10 @@ export default {
       default: '导航名'
     },
     open: {
+      type: Boolean,
+      default: false
+    },
+    hasMsg: {
       type: Boolean,
       default: false
     }
@@ -193,7 +198,13 @@ export default {
       background-color: #fff;
     }
   }
-
+  .has-message{
+      display: inline-block;
+      width: 12px;
+      height: 13px;
+      background: url(~icon/诊所-icon-22.png) no-repeat;
+      margin-left: 5px;
+  }
 </style>
 
 

@@ -1,12 +1,6 @@
 <template>
   <li class="menu-item" :class="{'color':color}" @click.stop="checkMenuItem">
     <i :class="{'menu-item-icon':icon}"></i>
-    <!-- <span v-if="routerName">
-      <router-link :to="{name:routerName}" tag="span">{{title}}</router-link>
-    </span>
-    <span>
-
-    </span> -->
     <span>
       {{title}}
     </span>
@@ -117,4 +111,6 @@ $url:'./../../hospitalImage/hospitalIcon/';
 .color{
   color: #fff;
 }
+
+
 </style>

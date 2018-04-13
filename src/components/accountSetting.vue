@@ -24,18 +24,6 @@
             <div class="msg-tip-time">2017-12-21 12:00</div>
           </div>
         </div>
-        <!-- <div class="msg-container">
-          <div class="msg-tip">
-            <span class="msg-tip-circle"></span>
-          </div>
-          <div class="msg-tip">
-            <span class="msg-tip-type">糖尿病</span>
-          </div>
-          <div>
-            <div class="msg-tip-text">今天你所管理的患者，糖尿病出现了较为明显的波动， 控糖没有达到理想的状态， 主要患者有：张丽曼、王二、刘二涛、吴大明请及时跟踪这些患者</div>
-            <div class="msg-tip-time">2017-12-21 12:00</div>
-          </div>
-        </div> -->
         <p class="no-tip" v-if="tipData.length===0">暂无消息</p>
       </div>
     </el-card>
@@ -80,11 +68,24 @@ export default {
       }
     },
     editTips () {
+      this.deleteTipsArr = []
       this.showEdit = false
+    },
+    tipDataInit (arr) {
+      if (arr.length !== 0) {
+        arr.forEach(item => {
+          if (!this._.isObject(item)) {
+            item = {}
+          }
+          item.checked = false
+        })
+      }
+      return arr
     },
     cancelEdit () {
       this.showEdit = true
       this.deleteTipsArr = []
+      this.tipDataInit(this.tipData)
     },
     deleteTips () {
       this.showEdit = true
@@ -93,8 +94,14 @@ export default {
     },
     checkTip (index) {
       this.tipData[index].checked = !this.tipData[index].checked
-      if (this.tipData[index].checked) {
-        this.deleteTipsArr.push(this.tipData[index])
+      let ready = this.tipData[index]
+      if (ready.checked) {
+        this.deleteTipsArr.push(ready)
+      }
+      if (!ready.checked) {
+        if (this._.indexOf(this.deleteTipsArr, ready) !== -1) {
+          this.deleteTipsArr.splice(this._.indexOf(this.deleteTipsArr, ready), 1)
+        }
       }
     }
   },

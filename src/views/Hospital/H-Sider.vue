@@ -3,27 +3,6 @@
     <div class="head-logo">
       <img src="~icon/诊所-icon-01.png" alt="logo" class="head-logo-img">
     </div>
-    <!-- <div
-    v-for="item in menu"
-    :key="item.id"
-    class="menu"
-    >
-      <Fmenu 
-        :iconName="item.iconName"
-        :title="item.title"
-        :pathname="item.pathname"
-        :index="item.id"
-        :isOpen="item.open">
-        <FmenuItem
-        v-for="i in item.child"
-        :key="i.title"
-        :title="i.title"
-        :index="i.index"
-        :id="i.id"
-        @activeitemmenu="goanchor">
-        </FmenuItem>
-      </Fmenu>
-    </div> -->
     <div
     v-for="item in menu"
     :key="item.id"
@@ -32,14 +11,15 @@
       <wmenu 
         :iconName="item.iconName"
         :title="item.title"
-        :routerName="item.pathname"
-        :open="item.open">
+        :routerName="item.routerName"
+        :open="item.open"
+        :hasMsg="item.hasMsg">
         <wmenuitem
         v-for="i in item.child"
         :key="i.title"
         :title="i.title"
         :id="i.id"
-        :routerName="i.pathname"
+        :routerName="i.routerName"
         @activeitemmenu="goanchor"></wmenuitem>
       </wmenu>
     </div>
@@ -48,15 +28,11 @@
 
 <script>
 
-import Fmenu from './../../components/Fmenu.vue'
-import FmenuItem from './../../components/FmenuItem.vue'
 import wmenu from './../../components/wmenu.vue'
 import wmenuitem from './../../components/wmenuitem.vue'
 export default {
   name: 'H-Sider',
   components: {
-    Fmenu,
-    FmenuItem,
     wmenu,
     wmenuitem
   },
@@ -64,41 +40,34 @@ export default {
     return {
       menu: [
         {
-          id: 1,
           iconName: 'heigh-blood',
           title: '高血压',
-          pathname: 'booldheigh',
+          routerName: 'booldheigh',
           open: true,
           child: [
             {
               id: 'bloodtotal',
-              title: '总体趋势',
-              index: 1
+              title: '总体趋势'
             },
             {
               id: 'bloodnew',
-              title: '最新问诊',
-              index: 2
+              title: '最新问诊'
             },
             {
               id: 'bloodbad',
-              title: '严重患者',
-              index: 3
+              title: '严重患者'
             },
             {
               id: 'bloodnolisten',
-              title: '未遵医嘱',
-              index: 4
+              title: '未遵医嘱'
             },
             {
               id: 'bloodunperfect',
-              title: '建档不完善',
-              index: 5
+              title: '建档不完善'
             },
             {
               id: 'bloodcases',
-              title: '患者列表',
-              index: 6
+              title: '患者列表'
             }
           ]
         },
@@ -106,37 +75,31 @@ export default {
           id: 2,
           iconName: 'heigh-suger',
           title: '糖尿病',
-          pathname: 'sugerheigh',
+          routerName: 'sugerheigh',
           child: [
             {
               id: 'sugerTotal',
-              title: '总体趋势',
-              index: 1
+              title: '总体趋势'
             },
             {
               id: 'sugerNew',
-              title: '最新问诊',
-              index: 2
+              title: '最新问诊'
             },
             {
               id: 'sugerBad',
-              title: '严重患者',
-              index: 3
+              title: '严重患者'
             },
             {
               id: 'sugerNolisten',
-              title: '未遵医嘱',
-              index: 4
+              title: '未遵医嘱'
             },
             {
               id: 'sugerUnperfect',
-              title: '建档不完整',
-              index: 5
+              title: '建档不完整'
             },
             {
               id: 'sugerCases',
-              title: '患者列表',
-              index: 6
+              title: '患者列表'
             }
           ]
         },
@@ -144,39 +107,60 @@ export default {
           id: 3,
           iconName: 'other',
           title: '其他',
-          pathname: 'other'
+          routerName: 'other',
+          child: [
+            {
+              id: 'othertotal',
+              title: '整体趋势'
+            },
+            {
+              id: 'respire',
+              title: '呼吸道'
+            },
+            {
+              id: 'cancer',
+              title: '癌症'
+            },
+            {
+              id: 'infection',
+              title: '传染病'
+            },
+            {
+              id: 'tumour',
+              title: '肿瘤'
+            }
+          ]
         },
         {
           id: 4,
           iconName: 'cases',
           title: '病例库',
-          pathname: 'cases'
+          routerName: 'cases'
         },
         {
           id: 5,
           iconName: 'admin',
           title: '人员管理',
-          pathname: 'personManage',
+          routerName: 'personManage',
           child: [
             {
               // id: 'sugerCases',
-              pathname: 'doctorManage',
-              title: '医生',
-              index: 1
+              routerName: 'doctorManage',
+              title: '医生'
             },
             {
               // id: 'sugerCases',
-              pathname: 'sickManage',
-              title: '患者',
-              index: 2
+              routerName: 'sickManage',
+              title: '患者'
             }
           ]
         },
         {
           id: 6,
           iconName: 'message',
+          hasMsg: true,
           title: '我的消息',
-          pathname: 'accountSetting'
+          routerName: 'accountSetting'
         }
       ]
     }

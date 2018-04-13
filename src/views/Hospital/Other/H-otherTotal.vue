@@ -1,5 +1,5 @@
 <template>
-    <div class='tatalsick' id="bloodtotal">
+    <div class='tatalsick' id="othertotal">
         <el-row type="flex" justify="start">
           <button v-for="(item,index) in checkDate" 
           :key="item.date" 
@@ -36,7 +36,7 @@
 <script>
 import echarts from 'echarts'
 export default {
-  name: 'H-bloodheighttotal',
+  name: 'H-otherTotal',
   data () {
     return {
       checkDate: [
