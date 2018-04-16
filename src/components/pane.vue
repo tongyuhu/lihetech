@@ -5,13 +5,12 @@
 </template>
 
 <script>
-// import Vue from 'vue'
-// Vue.component()
 export default {
   name: 'pane',
   props: {
-    name: {
-      type: [String, Number]
+    paneName: {
+      type: [String, Number],
+      default: ''
     },
     label: {
       type: String,
@@ -20,8 +19,8 @@ export default {
   },
   data () {
     return {
-      show: true,
-      panename: this.name
+      show: true
+      // panename: this.name
     }
   },
   methods: {
