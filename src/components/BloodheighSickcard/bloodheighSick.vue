@@ -19,11 +19,12 @@
     <div class="clear">
       <div class="tabs">
         <tabs
-        v-model="activeKey"
+        v-model="activeIndex"
         :hassuger="isSugerHeigh"
-        @checkSuger="checkSuger">
+        @checkSuger="checkSuger"
+        @checkd="changeTab">
           <pane
-          label="病历(远程)" name="1">
+          label="病历(远程)" >
             <!-- 病人简历 start  -->
             <div class="sick-history">
               <div class="sick-history-top">
@@ -63,31 +64,36 @@
 
           </pane>
           <pane
-          label="血压分布" name="2">
+          label="血压分布">
 
             <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
-            <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover>
-            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component> -->
+            <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
           </pane>
           <pane
-          label="用药" name="3">
-            <useDrug :sickID="sickID" :hospitalId="hospitalId"></useDrug>
+          label="用药">
+            <!-- <useDrug :sickID="sickID" :hospitalId="hospitalId"></useDrug> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="useDrug"></component>
           </pane>
           <pane
-          label="心血管评估" name="4">
-            <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment>
+          label="心血管评估">
+            <!-- <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="assessment"></component>
           </pane>
           <pane
-          label="24小时动态血压" name="5">
-            <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood>
+          label="24小时动态血压">
+            <!-- <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
           </pane>
           <pane
-          label="分析报告" name="6">
-           <report :sickID="sickID" :hospitalId="hospitalId"></report>
+          label="分析报告">
+            <!-- <report :sickID="sickID" :hospitalId="hospitalId"></report> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
           </pane>
           <pane
-          label="原始数据" name="7">
-           <original :sickID="sickID" :hospitalId="hospitalId"></original>
+          label="原始数据">
+            <!-- <original :sickID="sickID" :hospitalId="hospitalId"></original> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="original"></component>
           </pane>
         </tabs>
       </div>
@@ -117,26 +123,6 @@ export default {
     pane,
     note,
     bloodCover,
-    // 'bloodCover': function (resolve) {
-    //   require(['./bloodCover.vue'], resolve)
-    // },
-    // 'bloodCover': () => import('./bloodCover.vue').then(component => {
-    //   component.default._Ctor = {}
-
-    //   if (!component.default.attached) {
-    //     component.default.backupMounted = component.default.mounted
-    //   }
-
-    //   component.default.mounted = function () {
-    //     if (component.default.backupMounted) {
-    //       component.default.backupMounted.call(this)
-    //     }
-    //   }
-
-    //   component.default.attached = true
-
-    //   return component
-    // }),
     useDrug,
     assessment,
     alldayheighblood,
@@ -149,15 +135,47 @@ export default {
     return {
       cardArr: [],
       cardData: {},
-      activeKey: '1',
+      activeIndex: 1,
       currentPage: 1,
       totalPage: null,
       pageSize: 1,
       isSugerHeigh: false,
-      bloodCover: 'bloodCover'
+      bloodCover: '',
+      useDrug: '',
+      assessment: '',
+      alldayheighblood: '',
+      report: '',
+      original: ''
     }
   },
   methods: {
+    tabs (index) {
+      switch (index) {
+        case 0:
+          break
+        case 1:
+          this.bloodCover = 'bloodCover'
+          break
+        case 2:
+          this.useDrug = 'useDrug'
+          break
+        case 3:
+          this.assessment = 'assessment'
+          break
+        case 4:
+          this.alldayheighblood = 'alldayheighblood'
+          break
+        case 5:
+          this.report = 'report'
+          break
+        case 6:
+          this.original = 'original'
+          break
+      }
+    },
+    changeTab (index) {
+      this.tabs(index)
+    },
     checkSuger () {
 
     },
@@ -352,8 +370,11 @@ export default {
       }
     }
   },
+  created () {
+  },
   mounted () {
     this.getCardData()
+    // this.changeTab(this.activeIndex)
   }
 }
 </script>

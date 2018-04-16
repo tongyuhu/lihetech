@@ -22,7 +22,7 @@
 export default {
   props: {
     value: {
-      type: [String, Number]
+      type: [Number, String]
     },
     hassuger: {
       type: Boolean
@@ -30,14 +30,24 @@ export default {
   },
   data () {
     return {
-      currentValue: this.value,
+      // currentValue: this.value,
       navList: []
+    }
+  },
+  computed: {
+    currentValue: {
+      get: function () {
+        return this._.toNumber(this.value)
+      },
+      set: function (val) {
+        return this._.toNumber(val)
+      }
     }
   },
   methods: {
     tabCls (item) {
       return ['tabs-tab', {
-        'tabs-tab-active': item.name === this.currentValue
+        'tabs-tab-active': item.panename === this.currentValue
       }]
     },
     getTabs () {
@@ -50,16 +60,16 @@ export default {
       this.navList = []
       let vm = this
       this.getTabs().forEach((pane, index) => {
+        if (!pane.panename) {
+          pane.panename = index + 1
+        }
         vm.navList.push({
           label: pane.label,
-          name: pane.name || index
+          panename: pane.panename || index + 1
         })
-        if (!pane.name) {
-          pane.name = index
-        }
         if (index === 0) {
           if (!vm.currentValue) {
-            vm.currentValue = pane.name || index
+            vm.currentValue = pane.panename || index + 1
           }
         }
       })
@@ -68,16 +78,20 @@ export default {
     updateStatus () {
       let tabs = this.getTabs()
       let vm = this
-      tabs.forEach((tab) => {
-        // vm.$refs.pane.name
-        tab.show = (tab.name === vm.currentValue)
+      tabs.forEach((tab, index) => {
+        tab.show = (tab.panename === vm.currentValue)
+        if (tab.show) {
+          this.$emit('checkd', index)
+        }
+        // console.log(index, tab.show)
       })
     },
     handleChange: function (index) {
       let nav = this.navList[index]
-      let name = nav.name
-      this.currentValue = name
-      this.$emit('input', name)
+      let panename = nav.panename
+      this.currentValue = panename
+      this.$emit('input', panename)
+      // this.$emit('checkd', index)
       // this.$emit('on-click', name)
     },
     seeSuger () {

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <f-tabs>
+      <f-pane>1</f-pane>
+      <f-pane>2</f-pane>
+    </f-tabs>
       <el-row>
           <el-col :span="24">
             <Hhospitalmsg></Hhospitalmsg>
@@ -17,8 +21,8 @@ import HBloodheightotal from './H-bloodheightotal'
 import HWork from './H-work'
 import bloodSicklist from './H-bloodSicklist.vue'
 import Bus from '@/bus'
-import wmenu from './../../../components/wmenu'
-import wmenuitem from './../../../components/wmenuitem'
+import fTabs from './../../../components/Ftabs'
+import fPane from './../../../components/Fpane'
 // import {cookie} from './../../../untils/cookie'
 export default {
   name: 'H-bloodheigh',
@@ -27,8 +31,8 @@ export default {
     HBloodheightotal,
     HWork,
     bloodSicklist,
-    wmenu,
-    wmenuitem
+    fTabs,
+    fPane
   },
   mounted () {
     console.log('blood', this.$route.name)
