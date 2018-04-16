@@ -30,7 +30,6 @@ export default {
   },
   data () {
     return {
-      // currentValue: this.value,
       navList: []
     }
   },
@@ -83,7 +82,6 @@ export default {
         if (tab.show) {
           this.$emit('checkd', index)
         }
-        // console.log(index, tab.show)
       })
     },
     handleChange: function (index) {
@@ -91,8 +89,6 @@ export default {
       let panename = nav.panename
       this.currentValue = panename
       this.$emit('input', panename)
-      // this.$emit('checkd', index)
-      // this.$emit('on-click', name)
     },
     seeSuger () {
       this.$emit('checkSuger')

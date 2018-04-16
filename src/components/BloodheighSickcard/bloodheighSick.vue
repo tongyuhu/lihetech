@@ -197,18 +197,8 @@ export default {
           if (res.data.data) {
             this.totalPage = res.data.pages
             if (res.data.data.length !== 0) {
-              // this.$set(this.cardArr, this.currentPage - 1, res.data.data[0])
-              // this.$set(this.cardData, this.currentPage - 1, res.data.data[0])
-              // this.cardArr[this.currentPage - 1] = res.data.data
-              // this.cardData = this.cardArr[this.currentPage - 1]
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
-              // for (let property in res.data.data[0]) {
-              //   this.$set(this.cardData, property, res.data.data[0][property])
-              // }
-
-              // console.log('arr', this.cardArr)
-              // console.log(this.totalPage)
             }
           }
         }

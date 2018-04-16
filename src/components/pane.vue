@@ -20,7 +20,6 @@ export default {
   data () {
     return {
       show: true
-      // panename: this.name
     }
   },
   methods: {
@@ -33,9 +32,6 @@ export default {
       this.updateNav()
     }
   },
-  // beforeMount () {
-  //   this.updateNav()
-  // },
   mounted () {
     this.updateNav()
   }
