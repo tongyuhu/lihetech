@@ -47,8 +47,6 @@ export default {
         // 获取用户信息及权限数据 路由信息
         this.$axios(getAdminInfo())
         .then(res => {
-        // 获取 用户 权限
-
         // 获取 用户信息
           // vm.$store.state.adminInfo = res.data.data
           if (res.data.data) {
@@ -96,8 +94,6 @@ export default {
     }
   },
   mounted () {
-    // let vm = this
-    // Bus.$emit('adminInfo', vm.adminInfo)
   },
   created () {
     this.loginDirect()
@@ -106,24 +102,24 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* text-align: center; */
-  color: #2c3e50;
-}
-.clear::after{
-  display:block;
-  clear:both;
-  content:"";
-  visibility:hidden;
-  height:0;
-  width: 0;
-}
-/* 解决element table出现横向滚动条 */
-.el-table__body-wrapper, .el-table__footer-wrapper, .el-table__header-wrapper{
-width: 101%;
-}
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* text-align: center; */
+    color: #2c3e50;
+  }
+  .clear::after{
+    display:block;
+    clear:both;
+    content:"";
+    visibility:hidden;
+    height:0;
+    width: 0;
+  }
+  /* 解决element table出现横向滚动条 */
+  .el-table__body-wrapper, .el-table__footer-wrapper, .el-table__header-wrapper{
+  width: 101%;
+  }
 
 </style>

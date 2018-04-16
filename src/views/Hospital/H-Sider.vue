@@ -28,8 +28,8 @@
 
 <script>
 
-import wmenu from './../../components/wmenu.vue'
-import wmenuitem from './../../components/wmenuitem.vue'
+import wmenu from '@/components/wmenu.vue'
+import wmenuitem from '@/components/wmenuitem.vue'
 export default {
   name: 'H-Sider',
   components: {

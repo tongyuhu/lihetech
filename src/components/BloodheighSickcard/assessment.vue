@@ -40,7 +40,6 @@
             <td>
               <img :src="userBpImage" alt="暂无波形图" width="200px">
             </td>
-           
             <td>
               <p>{{userImageAnalyze}}</p>
             </td>
@@ -166,10 +165,10 @@ export default {
               this.userConditionPredict = res.data.data.userDoubleArm.imageAnalyze || ''
             }
             if (res.data.data.userDoubleArm.simpleImage) {
-              this.userSimpleImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.userDoubleArm.simpleImage || ''
+              this.userSimpleImage = process.env.IMG_URL + res.data.data.userDoubleArm.simpleImage || ''
             }
             if (res.data.data.userDoubleArm.bpImage) {
-              this.userBpImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.userDoubleArm.bpImage || ''
+              this.userBpImage = process.env.IMG_URL + res.data.data.userDoubleArm.bpImage || ''
             }
           }
           if (res.data.data.ICVDRisk) {
@@ -186,10 +185,10 @@ export default {
               this.sysTypeName = res.data.data.sysDoubleArm.typeName || ''
             }
             if (res.data.data.sysDoubleArm.simpleImage) {
-              this.sysSimpleImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.sysDoubleArm.simpleImage || ''
+              this.sysSimpleImage = process.env.IMG_URL + res.data.data.sysDoubleArm.simpleImage || ''
             }
             if (res.data.data.sysDoubleArm.originalImage) {
-              this.sysBpImage = 'http://10.7.6.131:80/BPWatch/' + res.data.data.sysDoubleArm.originalImage || ''
+              this.sysBpImage = process.env.IMG_URL + res.data.data.sysDoubleArm.originalImage || ''
             }
           }
         }

@@ -1,5 +1,6 @@
 'use strict'
 const utils = require('./utils')
+// utils提供工具函数，包括生成处理各种样式语言的loader，获取资源文件存放路径的工具函数。 
 const webpack = require('webpack')
 const config = require('../config')
 const merge = require('webpack-merge')
