@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import baseroutes from './routers'
+import baseroutes from '@/router/routers'
 
 Vue.use(Router)
 const scrollBehavior = (to, from, savedPosition) => {

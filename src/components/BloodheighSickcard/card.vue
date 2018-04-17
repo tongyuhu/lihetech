@@ -1,5 +1,5 @@
 <template>
-   <div class="clear box" @click.prevent="cancelDelet">
+  <div class="clear box" @click.prevent="cancelDelet">
     <div class="left-arrow">
       <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
     </div>
@@ -95,7 +95,7 @@
           <!-- <td>3</td> -->
           <td class="table-head">运动</td>
           <td>
-             {{movement}}
+            {{movement}}
             <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
@@ -295,6 +295,9 @@ export default {
     },
     totalPage (val) {
       this.cardtotalPage = val
+      if (val === 0) {
+        this.cardtotalPage = 1
+      }
       // return val
     },
     sickData: {

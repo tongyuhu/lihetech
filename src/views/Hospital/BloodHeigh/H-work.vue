@@ -515,7 +515,7 @@ export default {
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: row.userId,
+          sickID: row.id,
           hospitalId: row.adminHospitalId
         }})
     },

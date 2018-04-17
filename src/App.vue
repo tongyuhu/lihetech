@@ -9,7 +9,8 @@ import session from './untils/session'
 import {getAdminInfo} from '@/api/components/login'
 import {routerRoleMatch} from './untils/routerMatch'
 // import {routeMatch, roleMatch, routerRoleMatch} from './untils/routerMatch'
-import fullpath from './router/fullpath'
+import fullpath from '@/router/fullpath'
+// import baseroutes from '@/router/routers'
 // import { newsickaskDataApi } from './api/views/Hospital/BloodHeigh/H-work'
 // import Bus from './bus'
 // import qs form 'qs'
@@ -79,6 +80,7 @@ export default {
             let router = []
             router = routerRoleMatch(role, fullpath)
             // 动态注入路由 addroute
+            // this.$router = baseroutes
             this.$router.addRoutes(router)
             this.$router.replace({
               name: 'Home'

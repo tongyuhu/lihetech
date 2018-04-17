@@ -22,10 +22,7 @@
           <el-button style="width:100%" @click.native="login" type="primary" :loading="isBtnLoading">{{btnText}}</el-button>
         </el-form-item>
       </el-form>
-      
     </div>
-      {{password}}
-      {{userAccount}}
   </div>
 </template>
 

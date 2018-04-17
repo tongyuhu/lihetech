@@ -104,6 +104,9 @@ axios.interceptors.response.use(
             duration: 5000,
             showClose: true
           })
+          setTimeout(() => {
+            router.go(-1)
+          }, 3000)
           break
         case '1005':
           MessageBox.alert('登录超时,请重新登录', '提示信息', {
@@ -116,7 +119,7 @@ axios.interceptors.response.use(
           break
         case '1006':
           Message({
-            type: 'error',
+            type: 'warning',
             message: '对不起，您没有相关权限',
             duration: 5000,
             showClose: true

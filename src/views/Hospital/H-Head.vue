@@ -1,9 +1,5 @@
 <template>
   <div class="head clear">
-     
-        <!-- <div class="head-logo">
-          <img src="~icon/诊所-icon-01.png" alt="logo" class="head-logo-img">
-        </div> -->
         <div class="head-left">
             <p>立德济世 阖泰天下</p>
         </div>
@@ -210,7 +206,6 @@ export default {
       sessionStorage.clear()
     },
     adminAccount () {
-
     }
   }
 }
