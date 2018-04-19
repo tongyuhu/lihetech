@@ -13,6 +13,7 @@ const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
 const sickManage = (resolve) => require(['@/views/Hospital/personManage/H-sick.vue'], resolve)
 const doctorManage = (resolve) => require(['@/views/Hospital/personManage/H-doctor.vue'], resolve)
 const personManage = (resolve) => require(['@/views/Hospital/personManage/personManage.vue'], resolve)
+// const addDoctor = (resolve) => require(['@/views/Hospital/personManage/addDoctor.vue'], resolve)
 
 export default[
   {
@@ -89,6 +90,16 @@ export default[
         redirect: { name: 'doctorManage' },
         children: [
           {
+            path: 'addDoctor',
+            name: 'addDoctor',
+            component: addDoctor,
+            meta: {
+              requireAuth: true,
+              name: '添加医生',
+              role: ['admin', 'doctor']
+            }
+          },
+          {
             path: 'doctorManage',
             name: 'doctorManage',
             component: doctorManage,
@@ -97,6 +108,18 @@ export default[
               name: '医生管理',
               role: ['admin', 'doctor']
             }
+            // children: [
+              // {
+              //   path: 'addDoctor',
+              //   name: 'addDoctor',
+              //   component: addDoctor,
+              //   meta: {
+              //     requireAuth: true,
+              //     name: '添加医生',
+              //     role: ['admin', 'doctor']
+              //   }
+              // }
+            // ]
           },
           {
             path: 'sickManage',

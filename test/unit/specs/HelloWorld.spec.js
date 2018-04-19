@@ -1,11 +1,14 @@
 import Vue from 'vue'
-import HelloWorld from '@/components/HelloWorld'
+// import login from '@/components/login'
+import login from './../../../src/components/login'
+import ElementUI from 'element-ui'
+Vue.use(ElementUI)
 
-describe('HelloWorld.vue', () => {
+describe('login.vue', () => {
   it('should render correct contents', () => {
-    const Constructor = Vue.extend(HelloWorld)
+    const Constructor = Vue.extend(login)
     const vm = new Constructor().$mount()
-    expect(vm.$el.querySelector('.hello h1').textContent)
-    .toEqual('Welcome to Your Vue.js App')
+    expect(vm.password)
+    .toEqual('123456')
   })
 })

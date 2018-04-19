@@ -29,7 +29,7 @@
 
 <script>
 import {sendUserMsg} from './../api/components/login'
-import session from './../untils/session'
+import session from '@/untils/session'
 
 export default {
   data () {
@@ -95,7 +95,10 @@ export default {
       }
     }
   },
-  created () {
+  // created () {
+  //   Window.sessionStorage.clear()
+  // },
+  mounted () {
     sessionStorage.clear()
   }
 }

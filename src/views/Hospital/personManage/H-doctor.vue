@@ -1,27 +1,21 @@
 <template>
   <div>
-    <!-- <div class="head">
-      <span>医生管理</span>
-    </div> -->
     <div class="head-edit clear">
       <div class="head-title">医生管理</div>
       <div class="head-edit-wrap">
-        <button class="head-edit-button margin-right">新增医生</button>
+        <button class="head-edit-button margin-right" @click="addDoctor">新增医生</button>
         <button class="head-edit-button delete" @click="deleteDoctor">删除</button>
       </div>
     </div>
     <div>
       <el-card>
         <div class="search">
-          <!-- <input type="text"> -->
-          <!-- suffix-icon="el-icon-search" -->
           <el-input placeholder="账号 \ 姓名 \ 电话" v-model="doctorName" size="small"
           :style="{'padding':'0'}" 
           @blur="selectName"
           :maxlength="30"
           >
             <el-button slot="append" icon="el-icon-search"></el-button>
-            <!-- <el-button slot="suffix" icon="el-icon-search" type="text" @click="sicknameSelect"></el-button> -->
           </el-input>
         </div>
         <table v-loading="loading">
@@ -37,11 +31,6 @@
           </tr>
           <tr v-for="(item,index) in doctorList" :key="index">
             <td class="checked">
-              <!-- <div>
-                <button @click="doctorSelectionChange(item)">
-                  <span :class="{'checked-icon':item.checked,'checked-default':!item.checked}"></span>
-                </button>
-              </div> -->
               <el-checkbox  v-model="item.i" @change="doctorSelectionChange(item)"></el-checkbox>
             </td>
             <td>序号</td>
@@ -61,72 +50,6 @@
             <td colspan="8">暂无数据</td>
           </tr>
         </table>
-        <!-- <el-table
-          border
-          ref="multipleTable"
-          :data="doctorList"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="doctorSelectionChange">
-          <el-table-column
-          type="selection"
-          width="55"
-          align="center">
-          </el-table-column>
-          <el-table-column
-          label="序号"
-          type="index"
-          width="50"
-          align="center"
-          label-class-name="tableTitle"
-          class-name="table-height">
-          </el-table-column>
-          <el-table-column
-          prop="loginAccount"
-          label="登录账号"
-          align="center"
-          label-class-name="tableTitle">
-          </el-table-column>
-          <el-table-column
-          prop="doctorName"
-          label="医生姓名"
-          align="center"
-          label-class-name="tableTitle">
-          </el-table-column>
-          <el-table-column
-          prop="doctorPhone"
-          label="联系电话"
-          align="center"
-          label-class-name="tableTitle"
-          show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-          prop="doctorEmail"
-          label="邮箱"
-          align="center"
-          label-class-name="tableTitle"
-          show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-          prop="doctorMark"
-          align="center"
-          label="备注"
-          label-class-name="tableTitle"
-          show-overflow-tooltip>
-          </el-table-column>
-          <el-table-column
-          prop="action"
-          label="操作"
-          align="center"
-          label-class-name="tableTitle">
-          <template slot-scope="scope">
-            <el-button type="text">
-              <span class="action-text"> <i class="el-icon-edit-outline"></i> 
-              编辑</span>
-              </el-button>
-          </template>
-          </el-table-column>
-        </el-table> -->
 
         <div class="page">
           <el-pagination
@@ -147,12 +70,6 @@
         :visible.sync="modifyDoctor"
         width="456px"
         center>
-        <!-- <div class="input">
-          医生姓名:
-          <el-input
-            v-model="editDoctorName">
-          </el-input>
-        </div> -->
         <div class="input-wrap">
           <span>医生姓名:</span>
           <input type="text" v-model="editDoctorName">
@@ -227,7 +144,6 @@ export default {
       readyDelete: [],
       doctorName: '',
       currentPage: 1,
-      // checked: false,
       loading: false,
       modifyDoctor: false,
       editDoctorName: '',
@@ -249,20 +165,14 @@ export default {
       }
       return list
     },
-    // toggleSelection (rows) {
-    //   if (rows) {
-    //     rows.forEach(row => {
-    //       this.$refs.multipleTable.toggleRowSelection(row)
-    //     })
-    //   } else {
-    //     this.$refs.multipleTable.clearSelection()
-    //   }
-    // },
     doctorSelectionChange (selection) {
-      // selection.checked = !selection.checked
+      selection.checked = !selection.checked
+      if (!selection.checked) {
+        if (this._.indexOf(this.readyDelete, selection) !== -1) {
+          this.readyDelete.splice(this._.indexOf(this.readyDelete, selection), 1)
+        }
+      }
       console.log(selection)
-      this.$mount('#app')
-      // this.readyDelete = readyDelete
     },
     selectName () {
       console.log(this.doctorName)
@@ -278,7 +188,14 @@ export default {
       console.log(doctor)
     },
     deleteDoctor () {
-      this.confirmDelete = true
+      if (this.readyDelete.length !== 0) {
+        this.confirmDelete = true
+      }
+    },
+    addDoctor () {
+      this.$router.push({
+        name: 'addDoctor'
+      })
     }
   },
   mounted () {

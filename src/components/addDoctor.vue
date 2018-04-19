@@ -2,81 +2,54 @@
 
   <div class="add-doctor">
     <div class="header">
-      <h2>添加医生</h2>
+      <span>新增医生</span>
     </div>
-    <div class="form">
-      <el-form 
-      :model="addDoctorForm" 
-      status-icon 
-      :rules="rules" 
-      ref="ruleForm" 
-      label-width="50px" 
-      :label-position="labelPosition">
-        <el-form-item label="姓名" prop="name">
-          <el-input type="text" v-model="addDoctorForm.name" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="职责" prop="adminNote">
-          <el-input type="text" v-model="addDoctorForm.adminNote" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="mobile">
-          <el-input type="text" v-model="addDoctorForm.mobile" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input type="email" v-model="addDoctorForm.email" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="addDoctorForm.password" size="small"></el-input>
-        </el-form-item>
-        <el-form-item class="submit-btn">
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-
-    <!-- <el-button type="text" @click="dialogFormVisible = true">打开嵌套表单的 Dialog</el-button>
-    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-      <el-form 
-      :model="addDoctorForm" 
-      status-icon 
-      :rules="rules" 
-      ref="ruleForm" 
-      label-width="50px" 
-      :label-position="labelPosition">
-        <el-form-item label="邮箱" prop="email">
-          <el-input type="email" v-model="addDoctorForm.email" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input type="text" v-model="addDoctorForm.name" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="电话" prop="mobile">
-          <el-input type="text" v-model="addDoctorForm.mobile" size="small"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="addDoctorForm.password" size="small"></el-input>
-        </el-form-item>
-        <el-form-item class="submit-btn">
-          <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-          <el-button @click="resetForm('ruleForm')">重置</el-button>
-        </el-form-item>
-      </el-form>
-
-
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+    <el-card>
+      <div class="form">
+        <el-form 
+        :model="addDoctorForm" 
+        status-icon 
+        :rules="rules" 
+        ref="ruleForm" 
+        label-width="70px" 
+        :label-position="labelPosition"
+        >
+          <el-form-item label="医生姓名" prop="name">
+            <el-input type="text" v-model="addDoctorForm.name" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="mobile">
+            <el-input type="text" v-model="addDoctorForm.mobile" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="工作邮箱" prop="email">
+            <el-input type="email" v-model="addDoctorForm.email" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="登录账号" prop="account">
+            <el-input type="text" v-model="addDoctorForm.account" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="初始密码" prop="password">
+            <el-input type="password" v-model="addDoctorForm.password" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item class="submit-btn">
+            <button @click.prevent="submitForm('ruleForm')">保存</button>
+            <button @click.prevent="resetForm('ruleForm')">取消</button>
+            <!-- <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button> -->
+            <!-- <el-button @click="resetForm('ruleForm')">取消</el-button> -->
+          </el-form-item>
+        </el-form>
       </div>
-    </el-dialog> -->
+    </el-card>
   </div>
 </template>
 
 <script>
-import {addDoctorApi} from './../api/components/addDoctor'
+import {addDoctorApi} from '@/api/components/addDoctor'
 export default {
   data () {
     var checkEmail = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('邮箱不能为空'))
+        // callback()
+        // return callback(new Error('邮箱不能为空'))
+        return true
       } else {
         callback()
       }
@@ -91,12 +64,12 @@ export default {
         callback()
       }
     }
-    var checkAdminNote = (rule, value, callback) => {
-      let namerule = /^.{3,20}$/
+    var checkAccount = (rule, value, callback) => {
+      let accountRule = /[a-zA-Z0-9_]{4,15}$/
       if (!value) {
-        return callback(new Error('职责不能为空'))
-      } else if (!namerule.exec(value)) {
-        return callback(new Error('请输入正确的职责'))
+        return callback(new Error('账号不能为空'))
+      } else if (!accountRule.exec(value)) {
+        return callback(new Error('允许5-16字节，允许字母数字下划线'))
       } else {
         callback()
       }
@@ -128,7 +101,7 @@ export default {
         name: '',
         mobile: null,
         password: '',
-        adminNote: ''
+        account: ''
       },
       dialogFormVisible: false,
       rules: {
@@ -138,11 +111,12 @@ export default {
         name: [
           { validator: checkName, trigger: 'blur' }
         ],
-        adminNote: [
-          { validator: checkAdminNote, trigger: 'blur' }
+        account: [
+          { validator: checkAccount, trigger: 'blur' }
         ],
         mobile: [
           { validator: checkmobile, trigger: 'blur' }
+          // {required: false}
         ],
         password: [
           { validator: checkPass, trigger: 'blur' }
@@ -156,24 +130,23 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.addDoctorForm, 'submit!')
+          // console.log(this.addDoctorForm, 'submit!')
           let doctorMsg = {
-            username: this.addDoctorForm.name,
+            name: this.addDoctorForm.name,
             password: this.addDoctorForm.password,
             email: this.addDoctorForm.email,
             department: null,
-            name: this.addDoctorForm.name,
             roleId: null,
             mobile: this.addDoctorForm.mobile,
             regionId: 1,                          // 默认未设置
             adminType: 3,
-            adminNote: this.addDoctorForm.adminNote,
+            username: this.addDoctorForm.account,
             address: null
           }
           this.$axios(addDoctorApi(doctorMsg))
           .then()
           .catch()
-          this.$router.replace(this.$route.params.from)
+          // this.$router.replace(this.$route.params.from)
         } else {
           // console.log('error     submit!!')
           return false
@@ -182,6 +155,7 @@ export default {
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
+      // this.$router.go(-1)
     }
   },
   mounted () {
@@ -194,20 +168,39 @@ export default {
 .add-doctor{
   /* display: flex; */
   /* justify-content: center; */
-  width: 40%;
-  padding-left: 20%;
-  padding-right: 20%;
+  /* width: 40%; */
+  /* padding-left: 20%; */
+  /* padding-right: 20%; */
   /* height: 100%; */
 }
 .header{
-  text-align: center;
+  font-size: 24px;
+  color:#041421;
+  margin-top:6px;
+  margin-bottom: 24px;
 }
 .form{
-  width: 320px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 360px;
+  color:#666;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+}
+button{
+  width: 72px;
+  height: 24px;
+  background: #1991fc;
+  font-size:14px;
+  color:#fff;
+  outline: none;
+  border:none;
+  border-radius: 2px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+button:hover{
+  opacity: 0.9;
 }
 .submit-btn{
-  margin-left: 20px;
+  /* margin-left: 20px; */
 }
 </style>

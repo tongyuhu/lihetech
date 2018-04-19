@@ -3,8 +3,8 @@
     <div class="head-edit clear">
       <div class="head-title">患者管理</div>
       <div class="head-edit-wrap">
-        <button class="head-edit-button margin-right">新增患者</button>
-        <button class="head-edit-button delete" @click="deleteDoctor">删除</button>
+        <button class="head-edit-button margin-right" @click="addSick">新增患者</button>
+        <button class="head-edit-button delete" @click="deleteSick">删除</button>
       </div>
     </div>
     <div>
@@ -15,7 +15,7 @@
             <button>糖尿病</button>
           </div>
           <div class="search card-head-left">
-            <el-input placeholder="账号 \ 姓名 \ 电话" v-model="doctorName" size="small"
+            <el-input placeholder="账号 \ 姓名 \ 电话" v-model="sickName" size="small"
             :style="{'padding':'0'}" 
             @blur="selectName"
             :maxlength="30"
@@ -36,9 +36,9 @@
             <th>加入时间</th>
             <th>操作</th>
           </tr>
-          <tr v-for="(item,index) in doctorList" :key="index">
+          <tr v-for="(item,index) in sickList" :key="index">
             <td class="checked">
-              <el-checkbox  v-model="item.i" @change="doctorSelectionChange(item)"></el-checkbox>
+              <el-checkbox  v-model="item.i" @change="SickSelectionChange(item)"></el-checkbox>
             </td>
             <td>序号</td>
             <td>姓名</td>
@@ -48,13 +48,13 @@
             <td>病情</td>
             <td>加入时间</td>
             <td>
-              <el-button type="text" @click="editDoctor(item)">
+              <el-button type="text" @click="editSick(item)">
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
               编辑</span>
               </el-button>
             </td>
           </tr>
-          <tr v-if="doctorList.length === 0">
+          <tr v-if="sickList.length === 0">
             <td colspan="8">暂无数据</td>
           </tr>
         </table>
@@ -75,39 +75,52 @@
     <div class="dialog">
 
       <el-dialog
-        :visible.sync="modifyDoctor"
+        :visible.sync="modifySick"
         width="456px"
         center>
         <div class="input-wrap">
           <span>医生姓名:</span>
-          <input type="text" v-model="editDoctorName">
+          <input type="text" v-model="editSickName">
         </div>
         <div class="input-wrap">
           <span>联系电话:</span>
-          <input type="text" v-model="editDoctorPhone">
+          <input type="text" v-model="editSickPhone">
         </div>
         <div class="input-wrap">
           <span>已绑定居民:</span>
-          <input type="text" v-model="editDoctorPerson">
+          <input type="text" v-model="editSickPerson">
         </div>
         <div class="input-wrap">
           <span>组织站点:</span>
-          <input type="text" v-model="editDoctorAddress">
+          <input type="text" v-model="editSickAddress">
         </div>
-        <span slot="title" class="dialog-title">修改医生</span>
+        <span slot="title" class="dialog-title">修改患者</span>
         <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="modifyDoctor = false">确 定</button>
-          <button class="cancel" @click="modifyDoctor = false">取 消</button>
+          <button  type="primary" @click="modifySick = false">确 定</button>
+          <button class="cancel" @click="modifySick = false">取 消</button>
         </span>
       </el-dialog>
       <el-dialog
         :visible.sync="confirmDelete"
         width="456px"
         center>
-        <span slot="title" class="dialog-title">确定删除该医生记录吗？</span>
+        <span slot="title" class="dialog-title">确定删除该患者记录吗？</span>
         <span slot="footer" class="dialog-footer">
           <button  type="primary" @click="confirmDelete = false">确 定</button>
           <button class="cancel" @click="confirmDelete = false">取 消</button>
+        </span>
+      </el-dialog>
+      <el-dialog
+        :visible.sync="showAddSick"
+        width="456px"
+        center>
+        <span slot="title" class="dialog-title">请患者扫描下方二维码</span>
+        <div class="add-sick-img">
+          <img width="200px" :src="addSickImg" alt="二维码">
+        </div>
+        <span slot="footer" class="dialog-footer">
+          <button  type="primary" @click="showAddSick = false">确 定</button>
+          <button class="cancel" @click="showAddSick = false">取 消</button>
         </span>
       </el-dialog>
     </div>
@@ -119,52 +132,54 @@ export default {
   name: 'accountSetting',
   data () {
     return {
-      doctorList: [
+      sickList: [
         {
           loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
+          sickName: '王小虎',
+          sickPhone: '上海市普陀区金沙江路 1518 弄',
+          sickEmail: '上海市普陀区金沙江路 1518 弄',
+          sickMark: '上海市普陀区金沙江路 1518 弄'
         },
         {
           loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
+          sickName: '王小虎',
+          sickPhone: '上海市普陀区金沙江路 1518 弄',
+          sickEmail: '上海市普陀区金沙江路 1518 弄',
+          sickMark: '上海市普陀区金沙江路 1518 弄'
         },
         {
           loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
+          sickName: '王小虎',
+          sickPhone: '上海市普陀区金沙江路 1518 弄',
+          sickEmail: '上海市普陀区金沙江路 1518 弄',
+          sickMark: '上海市普陀区金沙江路 1518 弄'
         },
         {
           loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
+          sickName: '王小虎',
+          sickPhone: '上海市普陀区金沙江路 1518 弄',
+          sickEmail: '上海市普陀区金沙江路 1518 弄',
+          sickMark: '上海市普陀区金沙江路 1518 弄'
         }
       ],
       readyDelete: [],
-      doctorName: '',
+      sickName: '',
       currentPage: 1,
       // checked: false,
       loading: false,
-      modifyDoctor: false,
-      editDoctorName: '',
-      editDoctorPhone: '',
-      editDoctorPerson: '',
-      editDoctorAddress: '',
-      confirmDelete: false
+      modifySick: false,
+      editSickName: '',
+      editSickPhone: '',
+      editSickPerson: '',
+      editSickAddress: '',
+      confirmDelete: false,
+      showAddSick: false,
+      addSickImg: ''
     }
   },
 
   methods: {
-    formatterDoctorList (list) {
+    formatterSickList (list) {
       if (list.length === 0) {
         return list
       } else {
@@ -174,12 +189,22 @@ export default {
       }
       return list
     },
-    doctorSelectionChange (selection) {
+    SickSelectionChange (selection) {
+      selection.checked = !selection.checked
+      if (selection.checked) {
+        this.readyDelete.push(selection)
+      }
+      if (!selection.checked) {
+        if (this._.indexOf(this.readyDelete, selection) !== -1) {
+          this.readyDelete.splice(this._.indexOf(this.readyDelete, selection), 1)
+        }
+      }
       console.log(selection)
-      this.$mount('#app')
+      console.log('deletearr', this.readyDelete)
+      // this.$mount('#app')
     },
     selectName () {
-      console.log(this.doctorName)
+      console.log(this.sickName)
     },
     handleSizeChange (val) {
       console.log(`每页 ${val} 条`)
@@ -187,20 +212,32 @@ export default {
     handleCurrentChange (val) {
       console.log(`当前页: ${val}`)
     },
-    editDoctor (doctor) {
-      this.modifyDoctor = true
-      console.log(doctor)
+    editSick (Sick) {
+      this.modifySick = true
+      console.log(Sick)
     },
-    deleteDoctor () {
-      this.confirmDelete = true
+    deleteSick () {
+      if (this.readyDelete.length !== 0) {
+        this.confirmDelete = true
+      }
+    },
+    addSick () {
+      this.showAddSick = true
+      this.$axios({
+        method: 'post',
+        url: 'qrcode/url'
+      })
+      .then(res => {
+        // this.addSickImg = process.env.IMG_URL + res.data.data
+        this.addSickImg = res.data.data
+      })
     }
   },
   mounted () {
-    this.doctorList = this.formatterDoctorList(this.doctorList)
+    this.sickList = this.formatterSickList(this.sickList)
   }
 }
 </script>
-
 
 
 <style lang="scss" scoped>
@@ -374,5 +411,10 @@ input{
   .input{
     width:300px;
     display:flex;
+  }
+  .add-sick-img{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
   }
 </style>
