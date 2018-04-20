@@ -13,7 +13,7 @@
         <p class="heightblood-total">高血压患者({{ heightbloodTotal }}人)</p>
     
         <el-row :gutter="8">
-            <el-col :span='12' >
+            <el-col :span='12' v-loading="HBcoverLoading">
               <el-card :body-style="{ padding: '0px' }">
                   <div class="card-header">
                     <p class="title">患者分布</p>
@@ -21,7 +21,7 @@
                   <div id='HBcover'  :style="{width:'auto',height:'250px'}"></div>
               </el-card>
             </el-col>
-            <el-col :span='12'>
+            <el-col :span='12' v-loading="HBtrendLoading">
               <el-card :body-style="{ padding: '0px' }">
                   
                   <div class="card-header">
@@ -105,7 +105,9 @@ export default {
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
         [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月' ]
       ],
-      clickTime: 0
+      clickTime: 0,
+      HBcoverLoading: false,
+      HBtrendLoading: false
     }
   },
   methods: {

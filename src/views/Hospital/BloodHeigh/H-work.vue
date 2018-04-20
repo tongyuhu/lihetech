@@ -19,9 +19,10 @@
           </div>
           <div class="table">
             <el-table 
-                :data='newsickaskData'
-                style="width: 100%"
-                row-class-name="table-row">
+            :data='newsickaskData'
+            style="width: 100%"
+            row-class-name="table-row"
+            v-loading="newSickTableLoading">
                 <el-table-column
                     prop="realName"
                     label="姓名"
@@ -82,9 +83,10 @@
           </div>
           <div class="table">
             <el-table 
-                :data='badsickData'
-                style="width: 100%"
-                row-class-name="table-row">
+            :data='badsickData'
+            style="width: 100%"
+            row-class-name="table-row"
+            v-loading="badSickTableLoading">
                 <el-table-column
                     prop="realName"
                     label="姓名"
@@ -172,9 +174,10 @@
           <div class="table">
 
             <el-table 
-                :data='noListenDoctorData'
-                style="width: 100%"
-                row-class-name="table-row">
+            :data='noListenDoctorData'
+            style="width: 100%"
+            row-class-name="table-row"
+            v-loading="noListenTableLoading">
                 <el-table-column
                     prop="realName"
                     label="姓名"
@@ -264,9 +267,10 @@
           <div class="table">
 
             <el-table 
-                :data='unperfectMsgData'
-                row-class-name="table-row"
-                style="width: 100%">
+            :data='unperfectMsgData'
+            row-class-name="table-row"
+            style="width: 100%"
+            v-loading="unperfectTableLoading">
                 <el-table-column
                     prop="name"
                     label="姓名"
@@ -364,6 +368,8 @@ export default {
       noListenDoctorRate: '',
       unperfectMsgRate: '',
       unperfectMsgData: [],
+      unperfectTableLoading: false,
+
       currentPage: 1,
       totalSize: 15,
       // 整理后数据
@@ -378,14 +384,17 @@ export default {
       newAskCurrentPage: 1,
       newAskPageSize: 5,
       newAskTotal: 1,
+      newSickTableLoading: false,
 
       badsickCurrentPage: 1,
       badsickPageSize: 5,
       badsickTotal: 1,
+      badSickTableLoading: false,
 
       nolistenCurrentPage: 1,
       nolistenPageSize: 5,
-      nolistenTotal: 1
+      nolistenTotal: 1,
+      noListenTableLoading: false
     }
   },
   computed: {
@@ -436,6 +445,7 @@ export default {
       })
     },
     newAskRequest (params) {
+      this.newSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
       this.$axios(newsickaskDataApi(
         params.hospitalId, params.currentPage, params.pageSize
@@ -447,6 +457,9 @@ export default {
         }
         this.newAskTotal = res.data.recordCount
         this.newAskPageSize = res.data.pageSize
+        this.newSickTableLoading = false
+      }).catch(err => {
+        if (err) this.newSickTableLoading = false
       })
     },
     newAskSizeChange (val) {  // 患者最新问诊  每页显示数量变化
@@ -461,6 +474,7 @@ export default {
     },
 
     badsickRequest (params) {
+      this.badSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
       this.$axios(badsickDataApi(
         params.hospitalId, params.currentPage, params.pageSize
@@ -470,6 +484,9 @@ export default {
         }
         this.badsickTotal = res.data.recordCount
         this.badsickPageSize = res.data.pageSize
+        this.badSickTableLoading = false
+      }).catch(err => {
+        if (err) this.badSickTableLoading = false
       })
     },
 
@@ -484,6 +501,7 @@ export default {
     },
 
     nolistenRequest (params) {
+      this.noListenTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
       this.$axios(noListenDoctorDataApi(
         params.hospitalId, params.currentPage, params.pageSize
@@ -491,6 +509,9 @@ export default {
         this.noListenDoctorData = res.data.data
         this.nolistenTotal = res.data.recordCount
         this.nolistenPageSize = res.data.pageSize
+        this.noListenTableLoading = false
+      }).catch(err => {
+        if (err) this.noListenTableLoading = false
       })
     },
     nolistenSizeChange (val) {},
