@@ -4,7 +4,7 @@
       <div v-show="show" class="carousel">
         <slot></slot>
       </div>
-     <!-- </transition> -->
+      <!-- </transition> -->
   </div>
 </template>
 

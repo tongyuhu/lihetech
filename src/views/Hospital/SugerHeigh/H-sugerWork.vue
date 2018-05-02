@@ -29,7 +29,7 @@
                     class-name="table-col"
                     width="200">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row)"
+                      <el-button type="text" @click="diagnose(scope.row,'useUserId')"
                       :style="{'color':'#1991fc'}">
                         {{scope.row.realName}}
                       </el-button>
@@ -51,7 +51,7 @@
                     label=""
                     width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row)"
+                        <el-button size="mini" type="primary" @click="diagnose(scope.row,'useUserId')"
                         :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
                     </template>
                 </el-table-column>
@@ -393,6 +393,7 @@ export default {
     })
   },
   methods: {
+
     // jumppage (page) {
     //   // console.log(page, 266)
     // },
@@ -510,11 +511,17 @@ export default {
         name: 'accountSetting'
       })
     },
-    diagnose (row) {
+    diagnose (row, val) {
+      let id
+      if (val) {
+        id = row.userId
+      } else {
+        id = row.id
+      }
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: row.id,
+          sickID: id,
           hospitalId: row.adminHospitalId
         }})
     },

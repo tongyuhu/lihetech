@@ -9,6 +9,10 @@
     <div class="container-main">
       <router-view></router-view>
     </div>
+    <!-- <div class="container-footer"> -->
+      <!-- <el-button>11111</el-button> -->
+      <!-- 聊天窗口 -->
+    <!-- </div> -->
   </div>
 
     <!-- <div>
@@ -115,10 +119,20 @@
     padding: 24px;
     background-color: #f4f6f9;
     height:100% ;
+    margin-bottom: 50px;
     /* position: relative; */
     /* left: 250px; */
     /* top:80px; */
     /* right: 0px; */
     /* margin-right: -250px; */
+  }
+  .container-footer{
+    position: fixed;
+    width: 200px;
+    height: 50px;
+    background:#1991fc;
+    bottom: 10px;
+    right: 25px;
+    z-index: 99;
   }
 </style>

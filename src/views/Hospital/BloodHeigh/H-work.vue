@@ -30,7 +30,7 @@
                     class-name="table-col"
                     width="200">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row)"
+                      <el-button type="text" @click="diagnose(scope.row,'useUserId')"
                       :style="{'color':'#1991fc'}">
                         {{scope.row.realName}}
                       </el-button>
@@ -52,7 +52,7 @@
                     label=""
                     width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row)"
+                        <el-button size="mini" type="primary" @click="diagnose(scope.row,'useUserId')"
                         :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
                     </template>
                 </el-table-column>
@@ -130,7 +130,7 @@
                         <el-button 
                         size="mini" 
                         type="primary" 
-                        @click.native="isCare(scope.row)" 
+                        @click.native="isCare(scope.row,badsickData)" 
                         :key="scope.row.id" 
                         :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
                         >
@@ -403,6 +403,22 @@ export default {
     })
   },
   methods: {
+    sortSickList (arr) {
+      let copyArr = arr
+      let topArr = []
+      copyArr.forEach((item, index) => {
+        if (!item.isDocusOn) {
+          topArr.push(item)
+          // copyArr.splice(index, 1)
+        } else {
+          topArr.unshift(item)
+        }
+      })
+      // topArr.forEach(item => {
+      //   copyArr.unshift(item)
+      // })
+      return copyArr
+    },
     // jumppage (page) {
     //   // console.log(page, 266)
     // },
@@ -413,7 +429,10 @@ export default {
     //     return '关注'
     //   }
     // },
-    isCare (val) {
+    isCare (val, data) {
+      let arr = data
+      console.log(arr)
+      // console.log('sort', this.sortSickList(data))
       let sickid = ''
       let hospitalid = ''
       let care = ''
@@ -532,11 +551,17 @@ export default {
         name: 'accountSetting'
       })
     },
-    diagnose (row) {
+    diagnose (row, val) {
+      let id
+      if (val) {
+        id = row.userId
+      } else {
+        id = row.id
+      }
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: row.id,
+          sickID: id,
           hospitalId: row.adminHospitalId
         }})
     },

@@ -12,7 +12,7 @@
     <!-- 健康专家指导 -->
     <div>
       <div class="table-title">健康专家指导</div>
-      <div>
+      <div class="health-table">
         <el-card :body-style="{ padding: '16px 16px 30px 16px'}">
           <div class="card-head">
             <span class="icon-heart"></span>
@@ -52,7 +52,7 @@
     <!-- 一般项目检查（健康小屋） -->
     <div>
       <div class="table-title">一般项目检查（健康小屋）</div>
-      <div>
+      <div class="health-table">
         <el-card>
           <el-table
           border
@@ -92,7 +92,7 @@
     </div>
     <!-- 一般项目检查（健康小屋）end -->
     <!-- 双臂血压计 -->
-    <div>
+    <div class="health-table">
       <div class="table-title">双臂血压计</div>
       <div>
         <el-card :body-style="{ padding: '16px 16px 30px 16px'  }">
@@ -133,7 +133,7 @@
     </div>
     <!-- 双臂血压计 end -->
     <!-- 临床辅助检查 -->
-    <div>
+    <div class="health-table">
       <div class="table-title">临床辅助检查</div>
       <div>
         <el-card :body-style="{ padding: '16px 16px 30px 16px'  }">
@@ -161,7 +161,7 @@
     </div>
     <!-- 临床辅助检查 end-->
     <!-- 生化项目 -->
-    <div>
+    <div class="health-table">
       <div class="table-title">生化项目</div>
       <div>
         <el-card :body-style="{ padding: '16px 16px 30px 16px'  }">
@@ -206,7 +206,7 @@
     </div>
     <!-- 生化项目 end -->
     <!-- 临床科室检查 -->
-    <div>
+    <div class="health-table">
       <div class="table-title">临床科室检查</div>
       <el-row :gutter="8">
         <!-- 内科 -->
@@ -273,7 +273,7 @@
       </el-row>
     </div>
     <!-- 临床科室检查 end -->
-    <el-row :gutter="8">
+    <el-row :gutter="8" class="health-table">
       <el-col :span="12">
         <!-- 耳鼻喉科 -->
         <el-card :body-style="{ padding: '16px 16px 30px 16px'}">
@@ -332,7 +332,7 @@
       </el-col>
     </el-row>
     <!-- 血常规 -->
-    <div class="card-bottom">
+    <div class="card-bottom health-table" >
       <div class="table-title">实验室检查</div>
       <div>
         <el-card :body-style="{ padding: '16px 16px 30px 16px'}">
@@ -388,7 +388,7 @@
     </div>
     <!-- 血常规 end -->
     <!-- 尿常规 -->
-    <div class="card-bottom">
+    <div class="card-bottom health-table">
       <el-card :body-style="{ padding: '16px 16px 30px 16px'}">
         <div class="card-head">
           <span class="icon-heart"></span>
@@ -441,7 +441,7 @@
     </div>
     <!-- 尿常规 end -->
     <!-- 肺瘤筛查 -->
-    <div>
+    <div class="health-table">
       <el-card :body-style="{ padding: '16px 16px 30px 16px'}">
         <div class="card-head">
           <span class="icon-heart"></span>
@@ -494,7 +494,7 @@
     </div>
     <!-- 肺瘤筛查 end -->
     <!-- 超声检查 -->
-    <div>
+    <div class="health-table">
       <div class="table-title">
         <span>临床辅助检查</span>
       </div>
@@ -557,7 +557,7 @@
     </div>
     <!-- 超声检查 end -->
     <!-- X线检查 -->
-    <div>
+    <div class="health-table">
       <el-card :body-style="{ padding: '16px 16px 30px 16px'}">
         <div class="card-head">
           <span class="icon-heart"></span>
@@ -601,7 +601,7 @@
     <!-- X线检查 end -->
 </template>
 <style>
-.el-table .table-row{
+.health-table .el-table .table-row{
     color: black;
     padding: 0;
     line-height: 47px;

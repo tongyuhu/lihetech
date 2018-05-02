@@ -8,7 +8,6 @@ const sugerheighSick = (resolve) => require(['@/components/SugerheighSickcard/su
 const addDoctor = (resolve) => require(['@/components/addDoctor.vue'], resolve)
 const accountSetting = (resolve) => require(['@/components/accountSetting.vue'], resolve)
 const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve)
-const addSick = (resolve) => require(['@/components/addSick.vue'], resolve)
 // const medicine = (resolve) => require(['@/components/medicine/medicine.vue'], resolve)
 const sickManage = (resolve) => require(['@/views/Hospital/personManage/H-sick.vue'], resolve)
 const doctorManage = (resolve) => require(['@/views/Hospital/personManage/H-doctor.vue'], resolve)
@@ -154,32 +153,12 @@ export default[
         }
       },
       {
-        path: 'addDoctor',
-        name: 'addDoctor',
-        component: addDoctor,
-        meta: {
-          requireAuth: true,
-          name: '添加医生',
-          role: ['admin', 'doctor']
-        }
-      },
-      {
         path: 'healthForm',
         name: 'healthForm',
         component: healthForm,
         meta: {
           requireAuth: true,
           name: '病历',
-          role: ['admin', 'doctor']
-        }
-      },
-      {
-        path: 'addSick',
-        name: 'addSick',
-        component: addSick,
-        meta: {
-          requireAuth: true,
-          name: '添加病人',
           role: ['admin', 'doctor']
         }
       },
@@ -193,17 +172,6 @@ export default[
           role: ['admin', 'doctor']
         }
       }
-      // {
-      //   path: 'medicine',
-      //   name: 'medicine',
-      //   component: medicine,
-      //   meta: {
-      //     requireAuth: true,
-      //     scrollToTop: true,
-      //     name: '44',
-      //     role: ['admin', 'doctor']
-      //   }
-      // }
     ]
   }
 ]
