@@ -174,4 +174,13 @@ export default[
       }
     ]
   }
+  // {
+  //   path: '*',
+  //   meta: {
+  //     name: '主页',
+  //     requireAuth: true,
+  //     role: ['admin', 'doctor']
+  //   },
+  //   redirect: '/'
+  // }
 ]

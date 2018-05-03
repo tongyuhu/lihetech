@@ -20,7 +20,10 @@
           <span class="head-right">{{ adminName }}</span>
         </div>
         <div class="head-right">
-            <img :src="adminIcon" alt="user" class="admin-icon">
+          <!-- <div class="admin-icon-wrap"> -->
+
+            <img :src="adminIcon" alt="暂无头像"  class="admin-icon" width="34px" height="34px">
+          <!-- </div> -->
         </div>
   
       <el-dialog
@@ -105,7 +108,7 @@ export default {
       // adminRoot: '管理员',
       isshow: false,
       showshade: false,
-      adminIcon: './../../../static/admin.jpg',
+      adminIcon: '/BPWatch/web/static/admin.jpg',
       labelPosition: 'center',
       changePasswordForm: {
         oldPassword: '',
@@ -268,14 +271,19 @@ export default {
       right: 250px;
       transform: translateY(-50%); */
     }
+    /* .admin-icon-wrap{
+      width: 34px;
+      height: 34px;
+    } */
    .admin-icon{
-     width: 34px;
-     height: 34px;
-     border-radius: 50%;
-     box-shadow: 0 0 0 1px #dedede;
-     display:inline;
-     vertical-align:middle;
-     margin-right: 5px;
+      /* width: 34px; */
+      /* height: 34px; */
+      border-radius: 50%;
+      border:1px solid #dedede;
+      /* box-shadow: 0 0 0 1px #dedede; */
+      display:inline;
+      vertical-align:middle;
+      margin-right: 5px;
    }
    /* .btn{
      color: #fff;

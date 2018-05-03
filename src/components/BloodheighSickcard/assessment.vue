@@ -22,10 +22,10 @@
             <td class="icon-normal">
               {{sysTypeName}}</td>
             <td>
-              <img :src="sysSimpleImage" alt="暂无波形图" width="200px">
+              <img :src="sysSimpleImage" alt="暂无波形图" height="200px">
             </td>
             <td>
-              <img :src="sysBpImage" alt="暂无波形图" width="200px">
+              <img :src="sysBpImage" alt="暂无波形图" height="200px">
             </td>
             
             <td>
@@ -35,10 +35,10 @@
           <tr>
             <td class="icon-self">{{userTypeName}}</td>
             <td class="img">
-              <img :src="userSimpleImage" alt="暂无波形图" width="200px">
+              <img :src="userSimpleImage" alt="暂无波形图" height="200px">
             </td>
             <td>
-              <img :src="userBpImage" alt="暂无波形图" width="200px">
+              <img :src="userBpImage" alt="暂无波形图" height="200px">
             </td>
             <td>
               <p>{{userImageAnalyze}}</p>
@@ -172,7 +172,7 @@ export default {
             }
           }
           if (res.data.data.ICVDRisk) {
-            this.dangerRate = res.data.data.ICVDRisk + '%' || ''
+            this.dangerRate = res.data.data.ICVDRisk || ''
           }
           if (res.data.data.sysDoubleArm) {
             if (res.data.data.sysDoubleArm.conditionPredict) {
