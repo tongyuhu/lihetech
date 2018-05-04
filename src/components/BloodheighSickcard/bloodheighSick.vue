@@ -497,7 +497,7 @@ export default {
     border:none;
     background-color:#fff;
     cursor: pointer;
-    font-size:14px;
+    font-size:16px;
     color:#1991fc;
     margin-right:30px;
     outline:none;

@@ -16,10 +16,6 @@ const baseroutes = [
     name: '401',
     component: (resolve) => require(['../components/401.vue'], resolve)
 
-  },
-  {
-    path: '*',
-    redirect: '404'
   }
 ]
 export default baseroutes

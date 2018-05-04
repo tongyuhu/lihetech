@@ -48,7 +48,7 @@
                     width="150">
                     <template slot-scope="scope">
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)"
-                        :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
+                        :style="{'width':'72px','color':'#fff'}">诊断</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -126,13 +126,13 @@
                         type="primary" 
                         @click.native="isCare(scope.row)" 
                         :key="scope.row.id" 
-                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
+                        :style="{'width':'80px','color':'#fff'}"
                         >
                           <span v-if="scope.row.isDocusOn">取消关注</span>
                           <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">诊断</el-button>
+                        :style="{'width':'72px','color':'#fff'}">诊断</el-button>
                         <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
@@ -218,14 +218,14 @@
                         type="primary" 
                         @click.native="isCare(scope.row)" 
                         :key="scope.row.id" 
-                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
+                        :style="{'width':'80px','color':'#fff'}"
                         >
                           <span v-if="scope.row.isDocusOn">取消关注</span>
                           <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
                         <el-button size="mini" type="primary" 
                         @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">
+                        :style="{'width':'72px','color':'#fff'}">
                         诊断
                         </el-button>
                         <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
@@ -304,13 +304,13 @@
                         type="primary" 
                         @click.native="isCare(scope.$index,unperfectMsgData.data)" 
                         :key="scope.row.id" 
-                        :style="{'width':'80px','backgroundColor':'#1991fc','color':'#fff'}"
+                        :style="{'width':'80px','color':'#fff'}"
                         >
                           <span v-if="scope.row.isDocusOn">取消关注</span>
                           <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','backgroundColor':'#1991fc','color':'#fff'}">去完善</el-button>
+                        :style="{'width':'72px','color':'#fff'}">去完善</el-button>
                         <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
@@ -613,7 +613,7 @@ export default {
 .tableTitle{
   height: 20px;
   color: #041421;
-  font-size:14px;
+  font-size:16px;
 }
 .telephone-btn{
   border: none;
@@ -649,7 +649,7 @@ export default {
 .tableTitle{
   /* height: 18px; */
   color: #041421;
-  font-size:14px;
+  font-size:16px;
   margin:8px 0 7px 0;
 }
 .table-row td{
@@ -661,6 +661,6 @@ export default {
 } */
 /* .el-table thead {
     color: #041421;
-    font-size:14px;
+    font-size:16px;
     } */
 </style>

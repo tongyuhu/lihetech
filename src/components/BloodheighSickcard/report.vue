@@ -21,7 +21,7 @@
             </div>
             <div
             id='bloodCover'
-            :style="{width:'auto',height:'250px'}"
+            :style="{width:'auto',height:'300px'}"
             >
             </div>
           </el-card>
@@ -44,7 +44,7 @@
               </el-row>
             </div>
             <!-- <div id='bloodAverage'  :style="{width:'auto',height:'250px'}"></div> -->
-            <div id='bloodHistogram'  :style="{width:'auto',height:'250px'}"></div>
+            <div id='bloodHistogram'  :style="{width:'auto',height:'300px'}"></div>
           </el-card>
         </el-col>
       </el-row>
@@ -69,7 +69,7 @@
         <div>
           <el-row type="flex">
             <el-col >
-              <div id='bloodFood' :style="{width:'auto',height:'250px'}"></div>
+              <div id='bloodFood' :style="{width:'auto',height:'400px'}"></div>
             </el-col>
             <el-col :span="3">
               <div>
@@ -116,7 +116,7 @@
         <div>
           <el-row type="flex">
             <el-col>
-              <div id='bloodSport' :style="{width:'auto',height:'250px'}"></div>
+              <div id='bloodSport' :style="{width:'auto',height:'400px'}"></div>
             </el-col>
             <el-col :span="3">
               <div>

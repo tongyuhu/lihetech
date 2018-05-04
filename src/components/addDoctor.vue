@@ -189,7 +189,7 @@ button{
   width: 72px;
   height: 24px;
   background: #1991fc;
-  font-size:14px;
+  font-size:16px;
   color:#fff;
   outline: none;
   border:none;

@@ -1,11 +1,12 @@
 <template>
   <div id="app">
-    <router-view @login="loginDirect"></router-view>
+    <router-view></router-view>
+    <!-- <router-view @login="loginDirect"></router-view> -->
   </div>
 </template>
 
 <script>
-import session from './untils/session'
+// import session from './untils/session'
 import {getAdminInfo} from '@/api/components/login'
 import {routerRoleMatch} from './untils/routerMatch'
 // import {routeMatch, roleMatch, routerRoleMatch} from './untils/routerMatch'
@@ -25,14 +26,16 @@ export default {
     loginDirect () {
       let vm = this
       // 检查登录状态
-      let localUserMsg = session('token')
+      // let localUserMsg = session('token')
+      let localUserMsg = '111111111111'
       if (!localUserMsg) {
-        return vm.$router.push({
-          name: 'login',
-          params: {
-            from: vm.$router.currentRoute.path
-          }
-        })
+        window.location.href = '/BPWatch/admin/login/page'
+        // return vm.$router.push({
+        //   name: 'login',
+        //   params: {
+        //     from: vm.$router.currentRoute.path
+        //   }
+        // })
       } else {
         // 设置请求头携带token
         this.$axios.defaults.headers.common['token'] = localUserMsg
@@ -81,14 +84,16 @@ export default {
             router = routerRoleMatch(role, fullpath)
             // 动态注入路由 addroute
             // this.$router = baseroutes
+            console.log(router)
             this.$router.addRoutes(router)
             this.$router.replace({
               name: 'Home'
             })
           } else {
-            this.$router.replace({
-              name: 'login'
-            })
+            window.location.href = '/BPWatch/admin/login/page'
+            // this.$router.replace({
+            //   name: 'login'
+            // })
           }
         })
         .catch()

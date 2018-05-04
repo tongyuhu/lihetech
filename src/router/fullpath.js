@@ -21,7 +21,7 @@ export default[
     meta: {
       name: '主页',
       requireAuth: true,
-      role: ['admin', 'doctor']
+      role: ['admin', 'doctor', 'hospital', 'nurse']
     },
     redirect: '/Hospital'
   },
@@ -33,7 +33,7 @@ export default[
     meta: {
       requireAuth: true,
       name: '诊所主页',
-      role: ['admin', 'doctor']
+      role: ['admin', 'doctor', 'hospital', 'nurse']
     },
     children: [
       {
@@ -43,7 +43,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '高血压',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -54,7 +54,7 @@ export default[
           requireAuth: true,
 
           name: '糖尿病',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -64,7 +64,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '其他',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -74,7 +74,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '病例库',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -84,7 +84,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '人员管理',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         },
         redirect: { name: 'doctorManage' },
         children: [
@@ -95,7 +95,7 @@ export default[
             meta: {
               requireAuth: true,
               name: '添加医生',
-              role: ['admin', 'doctor']
+              role: ['admin', 'doctor', 'hospital', 'nurse']
             }
           },
           {
@@ -105,7 +105,7 @@ export default[
             meta: {
               requireAuth: true,
               name: '医生管理',
-              role: ['admin', 'doctor']
+              role: ['admin', 'doctor', 'hospital', 'nurse']
             }
             // children: [
               // {
@@ -115,7 +115,7 @@ export default[
               //   meta: {
               //     requireAuth: true,
               //     name: '添加医生',
-              //     role: ['admin', 'doctor']
+              //     role: ['admin', 'doctor','hospital','nurse']
               //   }
               // }
             // ]
@@ -127,7 +127,7 @@ export default[
             meta: {
               requireAuth: true,
               name: '患者管理',
-              role: ['admin', 'doctor']
+              role: ['admin', 'doctor', 'hospital', 'nurse']
             }
           }
         ]
@@ -139,7 +139,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '高血压病人',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -149,7 +149,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '糖尿病病人',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -159,7 +159,7 @@ export default[
         meta: {
           requireAuth: true,
           name: '病历',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },
       {
@@ -169,9 +169,18 @@ export default[
         meta: {
           requireAuth: true,
           name: '账户设置',
-          role: ['admin', 'doctor']
+          role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       }
     ]
   }
+  // {
+  //   path: '*',
+  //   meta: {
+  //     name: '主页',
+  //     requireAuth: true,
+  //     role: ['admin', 'doctor','hospital','nurse']
+  //   },
+  //   redirect: '/'
+  // }
 ]

@@ -8,10 +8,11 @@ import axios from '@/api/axios'
 import _ from 'lodash'
 import qs from 'qs'
 import {store} from './store/store'
-import session from './untils/session'
+// import session from './untils/session'
 // 引入element-ui
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 Vue.prototype._ = _
 
@@ -38,14 +39,16 @@ Vue.directive('hasRoot', {
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
-    if (session('token')) {
-      next()
-    } else {
-      next({
-        path: '/login',
-        query: {redirect: to.fullPath}
-      })
-    }
+    // if (session('token')) {
+      // next()
+    // } else {
+      // window.location.href = '/BPWatch/admin/login/page'
+      // next({
+      //   path: '/login',
+      //   query: {redirect: to.fullPath}
+      // })
+    // }
+    next()
   } else {
     next()
   }

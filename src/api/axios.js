@@ -1,7 +1,7 @@
 import { Message, MessageBox } from 'element-ui'
 import axios from 'axios'
 import qs from 'qs' // formdata序列化
-import router from './../router/index'
+// import router from './../router/index'
 // import { Message, MessageBox, Loading } from 'element-ui'
 // import Vue from 'vue'
 // axios 配置
@@ -114,7 +114,8 @@ axios.interceptors.response.use(
             'confirmButtonText': '确定'
           }).then(() => {
             sessionStorage.clear()
-            router.push({path: '/login'})
+            window.location.href = '/BPWatch/admin/login/page'
+            // router.push({path: '/login'})
             location.reload()
           })
           break
@@ -140,7 +141,8 @@ axios.interceptors.response.use(
 
         case 401:
           sessionStorage.clear()
-          router.replace({path: '/login'})
+          window.location.href = '/BPWatch/admin/login/page'
+          // router.replace({path: '/login'})
           location.reload()
           err.message = '未授权，请登录'
           break
