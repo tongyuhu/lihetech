@@ -894,7 +894,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-67.png')
+    background: url('~icon/hospital-icon-67.png')
   }
   .icon-normal-test{
     position: relative;
@@ -906,7 +906,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-73.png')
+    background: url('~icon/hospital-icon-73.png')
   }
   .icon-arm{
     position: relative;
@@ -918,7 +918,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-68.png')
+    background: url('~icon/hospital-icon-68.png')
   }
   .icon-bio{
     position: relative;
@@ -930,7 +930,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-75.png')
+    background: url('~icon/hospital-icon-75.png')
   }
   .icon-in{
     position: relative;
@@ -942,7 +942,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-63.png')
+    background: url('~icon/hospital-icon-63.png')
   }
   .icon-out{
     position: relative;
@@ -954,7 +954,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-64.png')
+    background: url('~icon/hospital-icon-64.png')
   }
   .icon-ears{
     position: relative;
@@ -966,7 +966,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-69.png')
+    background: url('~icon/hospital-icon-69.png')
   }
   .icon-mouth{
     position: relative;
@@ -978,7 +978,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-74.png')
+    background: url('~icon/hospital-icon-74.png')
   }
   .icon-blood{
     position: relative;
@@ -990,7 +990,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-74.png')
+    background: url('~icon/hospital-icon-74.png')
   }
   .icon-urine{
     position: relative;
@@ -1002,7 +1002,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-72.png')
+    background: url('~icon/hospital-icon-72.png')
   }
   .icon-tumour{
     position: relative;
@@ -1014,7 +1014,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-65.png')
+    background: url('~icon/hospital-icon-65.png')
   }
   .icon-sound{
     position: relative;
@@ -1026,7 +1026,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-71.png')
+    background: url('~icon/hospital-icon-71.png')
   }
   .icon-x{
     position: relative;
@@ -1038,7 +1038,7 @@ export default {
     content: '';
     width: 24px;;
     height: 21px;
-    background: url('~icon/诊所-icon-70.png')
+    background: url('~icon/hospital-icon-70.png')
   }
 </style>
 

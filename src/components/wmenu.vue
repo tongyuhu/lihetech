@@ -202,7 +202,7 @@ export default {
       display: inline-block;
       width: 12px;
       height: 13px;
-      background: url(~icon/诊所-icon-22.png) no-repeat;
+      background: url(~icon/hospital-icon-22.png) no-repeat;
       margin-left: 5px;
   }
 </style>

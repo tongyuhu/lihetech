@@ -385,12 +385,12 @@ $url:'./../../hospitalImage/hospitalIcon/';
         width: 21px;
         height: 21px;
         background-color: #fff;
-        // background: url($url+'诊所-icon-47.png');
-        background: url(~icon/诊所-icon-47.png);
+        // background: url($url+'hospital-icon-47.png');
+        background: url(~icon/hospital-icon-47.png);
         cursor: pointer;
       }
       .checked{
-        background: url('~icon/诊所-icon-46.png');
+        background: url('~icon/hospital-icon-46.png');
       }
       &-circle{
         display: inline-block;
