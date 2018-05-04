@@ -517,7 +517,7 @@ export default {
     width: 20px;
     height: 20px;
     vertical-align: middle;
-    background: url('~icon/诊所-icon-25.png') no-repeat;
+    background: url('~icon/hospital-icon-25.png') no-repeat;
   }
   .send{
     position: relative;
@@ -530,7 +530,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('~icon/诊所-icon-26.png') no-repeat;
+    background: url('~icon/hospital-icon-26.png') no-repeat;
   }
   .delete{
     position: relative;
@@ -543,7 +543,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('~icon/诊所-icon-27.png') no-repeat;
+    background: url('~icon/hospital-icon-27.png') no-repeat;
   }
   .add{
     position: relative;
@@ -556,7 +556,7 @@ export default {
     width: 20px;;
     height: 20px;
     vertical-align: middle;
-    background: url('~icon/诊所-icon-28.png') no-repeat;
+    background: url('~icon/hospital-icon-28.png') no-repeat;
   }
    .new{
     position: relative;
@@ -575,7 +575,7 @@ export default {
     width: 64px;
     height: 44px;
     display: block;
-    background: url('~icon/诊所-icon-31.png') no-repeat;
+    background: url('~icon/hospital-icon-31.png') no-repeat;
   }
   .dialog-title{
     font-size: 16px;

@@ -260,7 +260,7 @@ table{
       display: block;
       width: 20px;
       height: 20px;
-      background: url("~icon/诊所-icon-45.png") no-repeat;
+      background: url("~icon/hospital-icon-45.png") no-repeat;
     }
     .checked-icon{
       position: relative;
@@ -275,7 +275,7 @@ table{
       display: block;
       width: 20px;
       height: 20px;
-      background: url("~icon/诊所-icon-44.png") no-repeat;
+      background: url("~icon/hospital-icon-44.png") no-repeat;
     }
 
   }

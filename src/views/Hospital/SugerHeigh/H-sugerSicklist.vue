@@ -354,7 +354,7 @@ export default {
   content: '';
   width: 21px;
   height: 21px;
-  background: url('~icon/诊所-icon-23.png') no-repeat;
+  background: url('~icon/hospital-icon-23.png') no-repeat;
 }
 .sick-list-head p{
   font-size: 24px;
