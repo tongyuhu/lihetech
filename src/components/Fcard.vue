@@ -136,6 +136,6 @@ export default {
     height: 44px;
     /* display: block; */
     /* vertical-align: middle; */
-    background: url('~icon/诊所-icon-31.png') no-repeat;
+    background: url('~icon/hospital-icon-31.png') no-repeat;
   }
 </style>

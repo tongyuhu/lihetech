@@ -511,7 +511,7 @@ export default {
     display: block;
     width:14px;
     height: 16px;
-    background:url("~icon/诊所-icon-29.png") no-repeat;
+    background:url("~icon/hospital-icon-29.png") no-repeat;
     left:-16px;
     top:1px;
   }
@@ -524,7 +524,7 @@ export default {
     display: block;
     width:14px;
     height: 16px;
-    background:url("~icon/诊所-icon-30.png") no-repeat;
+    background:url("~icon/hospital-icon-30.png") no-repeat;
     left:-16px;
     top:1px;
   }

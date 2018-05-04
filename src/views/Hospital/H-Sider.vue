@@ -1,7 +1,7 @@
 <template>
   <div class="sider">
     <div class="head-logo">
-      <img src="~icon/诊所-icon-01.png" alt="logo" class="head-logo-img">
+      <img src="~icon/hospital-icon-01.png" alt="logo" class="head-logo-img">
     </div>
     <div
     v-for="item in menu"

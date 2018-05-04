@@ -103,7 +103,7 @@ $url:'./../../hospitalImage/hospitalIcon/';
       width: 14px;;
       height: 15px;
       background-color: #ffffff99;
-      background: url('~icon/诊所-icon-09.png') no-repeat;
+      background: url('~icon/hospital-icon-09.png') no-repeat;
       z-index: 999;
     }
   }
