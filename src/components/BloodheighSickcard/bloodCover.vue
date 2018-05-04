@@ -19,11 +19,11 @@
           </el-row>
         </div>
         <div class="chart">
-          <el-row :gutter="20">
-            <el-col :span="18" :xl="16" :lg="18" :md="24">
-              <div id='bloodBehaviourBlood' :style="{width:'auto',height:'250px'}"></div>
+          <el-row>
+            <el-col>
+              <div id='bloodBehaviourBlood' :style="{width:'auto',height:'400px'}"></div>
             </el-col>
-            <el-col :span="6" :xl="8" :lg="6" :md="12">
+            <el-col>
               <div class="table">
                 <table>
                   <tr>
@@ -103,7 +103,7 @@
           </span>
         </div>
         <!-- 运动后 -->
-        <div class="check-status">
+        <!-- <div class="check-status">
           <span class="label-right">运动后：</span>
           <span class="status-span"
           v-for="item in sportsType" :key="item.value">
@@ -113,9 +113,9 @@
             :isChecked='item.default'
             @checked='changeStatus'>{{item.label}}</f-button>
           </span>
-        </div>
+        </div> -->
         <!-- 餐后 -->
-        <div class="check-status">
+        <!-- <div class="check-status">
           <span class="label-right">餐后：</span>
           <span class="status-span"
           v-for="item in foodType" :key="item.value">
@@ -125,11 +125,11 @@
             :isChecked='item.default'
             @checked='changeStatus'>{{item.label}}</f-button>
           </span>
-        </div>
+        </div> -->
         <div>
           <el-row>
             <el-col :span="12">
-              <div id='bloodTrend' :style="{width:'auto',height:'250px'}"></div>
+              <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
             </el-col>
             <el-col :span="12">
               <div class="clear">

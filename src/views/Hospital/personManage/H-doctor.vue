@@ -358,7 +358,7 @@ input{
   .tableTitle{
     height: 20px;
     color: #041421;
-    font-size:14px;
+    font-size:16px;
   }
   .action-text{
     color: #1991fc;

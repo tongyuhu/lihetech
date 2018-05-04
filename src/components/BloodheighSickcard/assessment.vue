@@ -172,7 +172,12 @@ export default {
             }
           }
           if (res.data.data.ICVDRisk) {
-            this.dangerRate = res.data.data.ICVDRisk || ''
+            if (res.data.data.ICVDRisk === '年龄要大于35！') {
+              this.dangerRate = '年龄要大于35！'
+            } else {
+              this.dangerRate = res.data.data.ICVDRisk + '%' || ''
+            }
+            // "年龄要大于35！"
           }
           if (res.data.data.sysDoubleArm) {
             if (res.data.data.sysDoubleArm.conditionPredict) {

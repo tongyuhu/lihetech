@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import adminicon from 'icon/admin.jpg'
 export default {
   name: 'H-Head',
   data () {
@@ -108,7 +109,7 @@ export default {
       // adminRoot: '管理员',
       isshow: false,
       showshade: false,
-      adminIcon: '/BPWatch/web/static/admin.jpg',
+      adminIcon: adminicon,
       labelPosition: 'center',
       changePasswordForm: {
         oldPassword: '',
@@ -200,12 +201,21 @@ export default {
     },
     exit () {
       this.isshowshade()
-      this.$router.push({
-        name: 'login',
-        params: {
-          from: this.$router.currentRoute.path
+      this.$axios({
+        method: 'post',
+        url: '/login/out'
+      }).then(res => {
+        if (res.data.code === '0000') {
+          window.location.href = '/BPWatch/admin/login/page'
         }
       })
+      // window.location.href = '/BPWatch/admin/login/page'
+      // this.$router.push({
+      //   name: 'login',
+      //   params: {
+      //     from: this.$router.currentRoute.path
+      //   }
+      // })
       sessionStorage.clear()
     },
     adminAccount () {
