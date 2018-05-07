@@ -64,10 +64,11 @@
 
           </pane>
           <pane
-          label="血压分布">
+          label="分析报告">
 
             <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
             <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
           </pane>
           <pane
@@ -85,11 +86,11 @@
             <!-- <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
           </pane>
-          <pane
-          label="分析报告">
+          <!-- <pane -->
+          <!-- label="分析报告"> -->
             <!-- <report :sickID="sickID" :hospitalId="hospitalId"></report> -->
-            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
-          </pane>
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component> -->
+          <!-- </pane> -->
           <pane
           label="原始数据">
             <!-- <original :sickID="sickID" :hospitalId="hospitalId"></original> -->
@@ -155,6 +156,7 @@ export default {
           break
         case 1:
           this.bloodCover = 'bloodCover'
+          this.report = 'report'
           break
         case 2:
           this.useDrug = 'useDrug'
@@ -166,10 +168,9 @@ export default {
           this.alldayheighblood = 'alldayheighblood'
           break
         case 5:
-          this.report = 'report'
+          this.original = 'original'
           break
         case 6:
-          this.original = 'original'
           break
       }
     },

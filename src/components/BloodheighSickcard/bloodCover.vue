@@ -21,7 +21,7 @@
         <div class="chart">
           <el-row>
             <el-col>
-              <div id='bloodBehaviourBlood' :style="{width:'auto',height:'400px'}"></div>
+              <div id='bloodBehaviourBlood' :style="{width:'auto',height:'600px'}"></div>
             </el-col>
             <el-col>
               <div class="table">
@@ -128,10 +128,10 @@
         </div> -->
         <div>
           <el-row>
-            <el-col :span="12">
+            <el-col :span="16">
               <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
             </el-col>
-            <el-col :span="12">
+            <el-col :span="8">
               <div class="clear">
                 <div class="blood-trend-item">
                   <p>{{this.bloodTrendState.total}}</p>
@@ -168,6 +168,7 @@
 import echarts from 'echarts'
 import {dateFromWeek} from './../../untils/date'
 import {bloodheighSickDataApi, updateBehaviourRateApi, updatebloodTrendStateApi} from './../../api/components/BloodheighSickcard/bloodCover'
+import {deleteYear} from '@/untils/deleteYear'
 // import { deepcopy } from './../../untils/untils'
 export default {
   props: {
@@ -414,7 +415,7 @@ export default {
     bloodBehaviourBloodOption (start, end) {
       let vm = this
       let zoomstart = 0
-      let zoomend = 50
+      let zoomend = 85
       if (start) {
         zoomstart = start
       }
@@ -490,19 +491,19 @@ export default {
         },
         grid: [{ // 直角坐标系内绘图网格
             //   show: false,
-          top: '30px',
-          left: '30',
-          right: '58%',
+          top: '5%',
+          // left: '30',
+          // right: '58%',
           width: 'auto',
           height: 'auto',
-          bottom: '95'
+          bottom: '55%'
         },
         {
-          top: '30px',
-          left: '50%',
+          top: '55%',
+          // left: '50%',
           width: 'auto',
           height: 'auto',
-          bottom: '95'
+          bottom: '90px'
         }
         ],
         xAxis: [
@@ -512,11 +513,26 @@ export default {
             type: 'category',
             boundaryGap: false,
             axisLabel: {
+              show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let time = val
+                // if (time.length >= 13) {
+                //   time = time.slice(0, 11)
+                // }
+                let arr = []
+                let before = time.slice(5)
+                let after = time.slice(0, 5)
+                arr.push(after)
+                arr.push(before)
+                return arr.join('\n')
+                // return val.split('').join('\n')
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -539,8 +555,32 @@ export default {
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let time = val
+                let timearr = []
+                let before
+                let after
+                let arr = []
+                if (time.length > 6) {
+                  timearr = time.split('-')
+                  before = timearr[0]
+                  timearr.splice(0, 1)
+                  after = timearr.join('-')
+                  arr.push(after)
+                  arr.push(before)
+                } else {
+                  // before = time.slice(5)
+                  // after = time.slice(0, 5)
+                  // arr.push(after)
+                  // arr.push(before)
+                  return val
+                }
+                return arr.join('\n')
+                // return val.split('').join('\n')
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -552,7 +592,8 @@ export default {
             },
             // 行为分数横坐标
             // data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-            data: vm.bloodAndBehaviourData.date
+            data: deleteYear(vm.bloodAndBehaviourData.date)
+            // data: vm.bloodAndBehaviourData.date
           }
         ],
         yAxis: [{ // 直角坐标系grid的y轴
@@ -711,7 +752,7 @@ export default {
     bloodTrendOption (start, end) {
       let vm = this
       let zoomstart = 0
-      let zoomend = 50
+      let zoomend = 85
       if (start) {
         zoomstart = start
       }
@@ -801,11 +842,41 @@ export default {
           type: 'category',
           boundaryGap: false,
           axisLabel: {
-            interval: 0,  // 显示x轴数据
+            interval: 0, // 显示x轴数据
             showMinLabel: true,
             showMaxLabel: true,
-            align: 'left',
-            rotate: 340
+            align: 'center',
+            rotate: 0,
+            formatter: function (val) {
+              let time = val
+              let timearr = []
+              let before
+              let after
+              let arr = []
+              if (time.length >= 13) {
+                timearr = time.split(' ')
+                before = timearr[0]
+                after = timearr[1]
+                arr.push(before)
+                arr.push(after)
+              } else if (time.length > 6) {
+                timearr = time.split('-')
+                before = timearr[0]
+                timearr.splice(0, 1)
+                after = timearr.join('-')
+                arr.push(after)
+                arr.push(before)
+              } else {
+                  // before = time.slice(5)
+                  // after = time.slice(0, 5)
+                  // arr.push(after)
+                  // arr.push(before)
+                return val
+              }
+              return arr.join('\n')
+                // return val.split('').join('\n')
+            }
+              // rotate: 330
           },
           axisLine: {
             lineStyle: {
@@ -816,7 +887,7 @@ export default {
             show: false
           },
           // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-          data: this.bloodTrendData.date
+          data: deleteYear(this.bloodTrendData.date)
         },
         yAxis: { // 直角坐标系grid的y轴
           type: 'value',
@@ -1003,7 +1074,7 @@ export default {
         .then(res => {
           res.data.data.forEach(item => {
             this.computeYearWeek(item.yearWeek)
-            let week = this.computeYearWeek(item.yearWeek)[0] + '年' + '第' + this.computeYearWeek(item.yearWeek)[1] + '周'
+            let week = this.computeYearWeek(item.yearWeek)[0] + '-' + this.computeYearWeek(item.yearWeek)[1] + '周'
 
             this.bloodAndBehaviourData.date.push(week)
             this.bloodAndBehaviourData.week.push(item.yearWeek)
@@ -1170,7 +1241,7 @@ export default {
           this.bloodTrendData.diastolic = []
           res.data.data.forEach((item, index) => {
             this.computeYearWeek(item.yearWeek)
-            let week = this.computeYearWeek(item.yearWeek)[0] + '年' + '第' + this.computeYearWeek(item.yearWeek)[1] + '周'
+            let week = this.computeYearWeek(item.yearWeek)[0] + '-' + this.computeYearWeek(item.yearWeek)[1] + '周'
 
             this.bloodTrendData.date.push(week)
             this.bloodTrendData.week.push(item.yearWeek)
@@ -1342,7 +1413,7 @@ export default {
                   }
                   if (vm.behaviourChecked === 1) {
                     vm.computeYearWeek(item.yearWeek)
-                    let week = vm.computeYearWeek(item.yearWeek)[0] + '年' + '第' + vm.computeYearWeek(item.yearWeek)[1] + '周'
+                    let week = vm.computeYearWeek(item.yearWeek)[0] + '年' + '-' + vm.computeYearWeek(item.yearWeek)[1] + '周'
                     vm.bloodAndBehaviourData.date.push(week)
                     vm.bloodAndBehaviourData.week.push(item.yearWeek)
                     // vm.bloodAndBehaviourData.date.push(item.description)
@@ -1358,7 +1429,7 @@ export default {
                 })
               }
             }
-            bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 80))
+            bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 85))
             bloodBehaviourBlood.hideLoading()
           })
       }
@@ -1406,7 +1477,7 @@ export default {
                   }
                   if (vm.bloodTrendChecked === 2) {
                     vm.computeYearWeek(item.yearWeek)
-                    let week = vm.computeYearWeek(item.yearWeek)[0] + '年' + '第' + vm.computeYearWeek(item.yearWeek)[1] + '周'
+                    let week = vm.computeYearWeek(item.yearWeek)[0] + '-' + vm.computeYearWeek(item.yearWeek)[1] + '周'
                     vm.bloodTrendData.date.push(week)
                     vm.bloodTrendData.week.push(item.yearWeek)
                     vm.bloodTrendData.systolic.push(item.avgSystolic)
@@ -1417,7 +1488,7 @@ export default {
                 })
               }
             }
-            bloodTrend.setOption(vm.bloodTrendOption(50, 80))
+            bloodTrend.setOption(vm.bloodTrendOption(50, 85))
             bloodTrend.hideLoading()
           })
       }

@@ -69,28 +69,29 @@
         <div>
           <el-row type="flex">
             <el-col >
-              <div id='bloodFood' :style="{width:'auto',height:'400px'}"></div>
+              <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
             </el-col>
             <el-col :span="3">
-              <div>
-                <div class="checked-kaluli">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="isFoodKaluliChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
-                      <span>卡路里</span>
-                    </button>
-                  </span>
-                </div>
-                <div class="checked-score">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="isFoodScoreChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
-                      <span>分数</span>
-                    </button>
-                  </span>
+              <div class="middle-wrap">
+                <div class="middle">
+                  <div class="checked-kaluli">
+                    <span class="check-all-span">
+                      <button class="check-all-btn" @click="isFoodKaluliChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
+                        <span>卡路里</span>
+                      </button>
+                    </span>
+                  </div>
+                  <div class="checked-score">
+                    <span class="check-all-span">
+                      <button class="check-all-btn" @click="isFoodScoreChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
+                        <span>分数</span>
+                      </button>
+                    </span>
+                  </div>
                 </div>
               </div>
-
             </el-col>
           </el-row>
         </div>
@@ -116,25 +117,27 @@
         <div>
           <el-row type="flex">
             <el-col>
-              <div id='bloodSport' :style="{width:'auto',height:'400px'}"></div>
+              <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
             </el-col>
             <el-col :span="3">
-              <div>
-                <div class="checked-kaluli">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="issSportKaluliChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
-                      <span>卡路里</span>
-                    </button>
-                  </span>
-                </div>
-                <div class="checked-score">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="isSportScoreChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
-                      <span>分数</span>
-                    </button>
-                  </span>
+              <div class="middle-wrap">
+                <div class="middle">
+                  <div class="checked-kaluli">
+                    <span class="check-all-span">
+                      <button class="check-all-btn" @click="issSportKaluliChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
+                        <span>卡路里</span>
+                      </button>
+                    </span>
+                  </div>
+                  <div class="checked-score">
+                    <span class="check-all-span">
+                      <button class="check-all-btn" @click="isSportScoreChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
+                        <span>分数</span>
+                      </button>
+                    </span>
+                  </div>
                 </div>
               </div>
             </el-col>
@@ -148,6 +151,7 @@
 <script>
 import echarts from 'echarts'
 import {bloodCoverApi, histogramApi, bloodfoodApi, bloodsportApi} from './../../api/components/BloodheighSickcard/report'
+import {deleteYear} from '@/untils/deleteYear'
 export default {
   props: {
     sickID: {
@@ -360,7 +364,7 @@ export default {
           for (let data in res.data.data) {
             this.$set(this.coverData, data, res.data.data[data])
           }
-          // console.log(this.coverData)
+          console.log(this.coverData)
           // console.log(1, res.data.data)
         }
         let bloodCover = echarts.init(document.getElementById('bloodCover'))
@@ -374,31 +378,23 @@ export default {
      * */
     formatCoverData (data) {
       let arr = []
-      if (data.normal) {
-        arr.push({value: data.normal, name: '正常'})
-      } else {
-        arr.push({value: 0, name: '正常'})
-      }
-      if (data.normalHigh) {
-        arr.push({value: data.normalHigh, name: '正常高值'})
-      } else {
-        arr.push({value: 0, name: '正常高值'})
-      }
-      if (data.mildHigh) {
-        arr.push({value: data.mildHigh, name: '轻度'})
-      } else {
-        arr.push({value: 0, name: '轻度'})
-      }
-      if (data.moderateHigh) {
-        arr.push({value: data.moderateHigh, name: '中度'})
-      } else {
-        arr.push({value: 0, name: '中度'})
-      }
-      if (data.danger) {
-        arr.push({value: data.danger, name: '危险'})
-      } else {
-        arr.push({value: 0, name: '危险'})
-      }
+      data.forEach(item => {
+        if (item.bpType == 1) {
+          arr.push({value: item.countBest, name: '正常'})
+        }
+        if (item.bpType == 2) {
+          arr.push({value: item.countBest, name: '正常高值'})
+        }
+        if (item.bpType == 3) {
+          arr.push({value: item.countBest, name: '轻度'})
+        }
+        if (item.bpType == 4) {
+          arr.push({value: item.countBest, name: '中度'})
+        }
+        if (item.bpType == 5) {
+          arr.push({value: item.countBest, name: '危险'})
+        }
+      })
       // console.log('arr', arr)
       return arr
     },
@@ -746,28 +742,45 @@ export default {
       this.checkDate[index].isChecked = true
     },
     bloodCoverOption () {
+      let color = []
+      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
+      let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      let is = true
+      this.formatCoverData(this.coverData).forEach((item) => {
+        if (item.value === 0) {
+          is = false
+        } else {
+          is = true
+        }
+      })
+      if (is) {
+        color = hascolor
+      } else {
+        color = nullcolor
+      }
+      // console.log('coverData', this.formatCoverData(this.coverData))
       return {
-        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252'],
+        color: color,
         legend: {
           orient: 'vertical',
           left: '50%',
           top: 'center',
           data: ['正常', '正常高值', '轻度', '中度', '危险'],
           selectedMode: false,
-          formatter: (name) => {
-            let i = 0
-            let num = ''
-            if (this.coverData) {
-              this.formatCoverData(this.coverData).forEach((item, index) => {
-                if (item.name === name) {
-                  i = index
-                  return i
-                }
-              })
-              num = this.formatCoverData(this.coverData)[i].value
-            }
-            return name + '（共' + num + '次）'
-          },
+          // formatter: (name) => {
+          //   let i = 0
+          //   let num = ''
+          //   if (this.coverData) {
+          //     this.formatCoverData(this.coverData).forEach((item, index) => {
+          //       if (item.name === name) {
+          //         i = index
+          //         return i
+          //       }
+          //     })
+          //     num = this.formatCoverData(this.coverData)[i].value
+          //   }
+          //   return name + '（共' + num + '次）'
+          // },
           itemGap: 10,
           itemWidth: 20,
           itemHeight: 20,
@@ -865,6 +878,7 @@ export default {
             show: false
           },
           min: 60,
+          max: 120,
           minInterval: 10
         }],
         yAxis: [
@@ -880,7 +894,6 @@ export default {
               show: false
             },
             min: 90
-
           }
         ],
         series: [{
@@ -1024,8 +1037,8 @@ export default {
               }
               return (
                 time +
-               low + '<br>' +
-               heigh
+              low + '<br>' +
+              heigh
               )
             }
           },
@@ -1059,7 +1072,7 @@ export default {
         foodSeriesTitle = '分数'
       }
       let zoomstart = 0
-      let zoomend = 50
+      let zoomend = 85
       if (start) {
         zoomstart = start
       }
@@ -1127,19 +1140,29 @@ export default {
         },
         grid: [
           { // 直角坐标系内绘图网格
-            top: '30px',
+            top: '5%',
             left: '60px',
-            right: '58%',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '55%'
+            // top: '30px',
+            // left: '60px',
+            // right: '58%',
+            // width: 'auto',
+            // height: 'auto',
+            // bottom: '90px'
           },
           {
-            top: '30px',
-            left: '50%',
+            top: '55%',
+            left: '60px',
             width: 'auto',
             height: 'auto',
             bottom: '90px'
+            // top: '30px',
+            // left: '50%',
+            // width: 'auto',
+            // height: 'auto',
+            // bottom: '90px'
           }
         ],
         xAxis: [
@@ -1148,11 +1171,36 @@ export default {
             type: 'category',
             boundaryGap: false,
             axisLabel: {
+              show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let time = val
+                let timearr = []
+                let before
+                let after
+                let arr = []
+                if (time.length > 6) {
+                  timearr = time.split('-')
+                  before = timearr[0]
+                  timearr.splice(0, 1)
+                  after = timearr.join('-')
+                  arr.push(after)
+                  arr.push(before)
+                } else {
+                  // before = time.slice(5)
+                  // after = time.slice(0, 5)
+                  // arr.push(after)
+                  // arr.push(before)
+                  return val
+                }
+                return arr.join('\n')
+                // return val.split('').join('\n')
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1164,7 +1212,7 @@ export default {
               show: false
             },
             // 血压横坐标
-            data: vm.bloodfoodData.x
+            data: deleteYear(vm.bloodfoodData.x)
           },
           { // 直角坐标系grid的x轴
             type: 'category',
@@ -1174,8 +1222,32 @@ export default {
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let time = val
+                let timearr = []
+                let before
+                let after
+                let arr = []
+                if (time.length > 6) {
+                  timearr = time.split('-')
+                  before = timearr[0]
+                  timearr.splice(0, 1)
+                  after = timearr.join('-')
+                  arr.push(after)
+                  arr.push(before)
+                } else {
+                  // before = time.slice(5)
+                  // after = time.slice(0, 5)
+                  // arr.push(after)
+                  // arr.push(before)
+                  return val
+                }
+                return arr.join('\n')
+                // return val.split('').join('\n')
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1186,7 +1258,7 @@ export default {
               show: false
             },
             // 分数横坐标
-            data: vm.bloodfoodData.x
+            data: deleteYear(vm.bloodfoodData.x)
           }
         ],
         yAxis: [
@@ -1349,7 +1421,7 @@ export default {
         sportSeriesTitle = '分数'
       }
       let zoomstart = 0
-      let zoomend = 50
+      let zoomend = 85
       if (start) {
         zoomstart = start
       }
@@ -1417,16 +1489,15 @@ export default {
         },
         grid: [
           { // 直角坐标系内绘图网格
-            top: '30px',
+            top: '5%',
             left: '60px',
-            right: '58%',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '55%'
           },
           {
-            top: '30px',
-            left: '50%',
+            top: '55%',
+            left: '60px',
             width: 'auto',
             height: 'auto',
             bottom: '90px'
@@ -1438,11 +1509,36 @@ export default {
             type: 'category',
             boundaryGap: false,
             axisLabel: {
+              show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let time = val
+                let timearr = []
+                let before
+                let after
+                let arr = []
+                if (time.length > 6) {
+                  timearr = time.split('-')
+                  before = timearr[0]
+                  timearr.splice(0, 1)
+                  after = timearr.join('-')
+                  arr.push(after)
+                  arr.push(before)
+                } else {
+                  // before = time.slice(5)
+                  // after = time.slice(0, 5)
+                  // arr.push(after)
+                  // arr.push(before)
+                  return val
+                }
+                return arr.join('\n')
+                // return val.split('').join('\n')
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1454,18 +1550,43 @@ export default {
               show: false
             },
             // 血压横坐标
-            data: vm.bloodsportData.x
+            data: deleteYear(vm.bloodsportData.x)
           },
           { // 直角坐标系grid的x轴
             type: 'category',
             gridIndex: 1,
             boundaryGap: false,
             axisLabel: {
+              // show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let time = val
+                let timearr = []
+                let before
+                let after
+                let arr = []
+                if (time.length > 6) {
+                  timearr = time.split('-')
+                  before = timearr[0]
+                  timearr.splice(0, 1)
+                  after = timearr.join('-')
+                  arr.push(after)
+                  arr.push(before)
+                } else {
+                  // before = time.slice(5)
+                  // after = time.slice(0, 5)
+                  // arr.push(after)
+                  // arr.push(before)
+                  return val
+                }
+                return arr.join('\n')
+                // return val.split('').join('\n')
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1476,7 +1597,7 @@ export default {
               show: false
             },
             // 分数横坐标
-            data: vm.bloodsportData.x
+            data: deleteYear(vm.bloodsportData.x)
           }
         ],
         yAxis: [
@@ -1697,10 +1818,10 @@ export default {
               }
             }
             if (vm.bloodfoodChecked.kaluli) {
-              bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 80))
+              bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 85))
             }
             if (vm.bloodfoodChecked.score) {
-              bloodFood.setOption(vm.bloodFoodOption('score', 50, 80))
+              bloodFood.setOption(vm.bloodFoodOption('score', 50, 85))
             }
             // bloodFood.setOption(vm.bloodFoodOption(50, 80))
             bloodFood.hideLoading()
@@ -1767,10 +1888,10 @@ export default {
               }
             }
             if (vm.bloodsportChecked.kaluli) {
-              bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 80))
+              bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 85))
             }
             if (vm.bloodsportChecked.score) {
-              bloodSport.setOption(vm.bloodSportOption('score', 50, 80))
+              bloodSport.setOption(vm.bloodSportOption('score', 50, 85))
             }
 
             bloodSport.hideLoading()
@@ -1935,9 +2056,20 @@ export default {
     /* width: 100%; */
   }
   .checked-kaluli{
-    margin-top: 80px;
+    /* margin-top: 80px; */
   }
   .checked-score{
     margin-top:10px;
+  }
+  .middle-wrap{
+    position: relative;
+    height: 100%;
+  }
+  .middle{
+    position: absolute;
+    /* display: table-cell; */
+    /* vertical-align: middle; */
+    top:50%;
+    transform: translateY(-50%)
   }
 </style>
