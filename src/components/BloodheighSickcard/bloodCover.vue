@@ -128,10 +128,43 @@
         </div> -->
         <div>
           <el-row>
-            <el-col :span="16">
+            <el-col :span="16" :lg="16" :md="24" :sm="24" :xs="24">
               <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
             </el-col>
-            <el-col :span="8">
+            <el-col :span="8" :lg="8" class="wrap">
+              <div class="blood-trend-right">
+
+                <div class="clear">
+                  <div class="blood-trend-item">
+                    <p>{{this.bloodTrendState.total}}</p>
+                    <p>总测量次数</p>
+                  </div>
+                  <div class="blood-trend-item">
+                    <p>{{this.bloodTrendState.normal}}</p>
+                    <p>正常偏高次数</p>
+                    <p>121/81~139/89</p>
+                  </div>
+                </div>
+                <div class="clear">
+                  <div class="blood-trend-item">
+                    <p>{{this.bloodTrendState.heigh}}</p>
+                    <p>高血压次数</p>
+                    <p>121/81~139/89</p>
+                  </div>
+                  <div class="blood-trend-item">
+                    <p class="danger-text">{{this.bloodTrendState.danger}}</p>
+                    <p>危险次数</p>
+                    <p>>179/109</p>
+                  </div>
+                </div>
+              </div>
+            </el-col>
+          </el-row>
+          <!-- <div class="bloodTrend-chart">
+            <div class="blood-trend-left">
+              <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
+            </div>
+            <div class="blood-trend-right">
               <div class="clear">
                 <div class="blood-trend-item">
                   <p>{{this.bloodTrendState.total}}</p>
@@ -155,8 +188,9 @@
                   <p>>179/109</p>
                 </div>
               </div>
-            </el-col>
-          </el-row>
+            </div> -->
+            <!-- <div class="footer"></div> -->
+          <!-- </div> -->
         </div>
       </el-card>
     </div>
@@ -1630,7 +1664,7 @@ export default {
     background-color: #f4f6f9;
     height: 80px;
     margin:10px 10px 0 0;
-    width: 150px;
+    width: 100px;
     padding: 10px;
     float: left;
   }
@@ -1653,5 +1687,48 @@ export default {
   }
   .checked-score{
     margin-top:10px;
+  }
+  .bloodTrend-chart{
+    /* overflow: hidden; *zoom: 1; */
+    /* position: relative; */
+    display: flex;
+  }
+  .blood-trend-left{
+    /* float: left; */
+    /* max-width: 800px; */
+    /* width: 100%; */
+    /* margin-right: 450px; */
+    /* display: flex; */
+    /* justify-content: flex-start; */
+    width: 100%;
+  }
+  .wrap{
+    height: 100%;
+    /* position: relative; */
+  }
+  .blood-trend-right{
+    /* display: table-cell; */
+    /* float: right; */
+    /* position: relative; */
+    /* height: 300px; */
+    /* width: 300px; */
+    /* width: 100%; */
+    /* margin: 0 auto; */
+    display: flex;
+    /* flex-direction: column; */
+    align-items: center;
+    justify-content: center;
+    /* display: table-cell; */
+    /* vertical-align: middle; */
+    /* top:50%; */
+    /* transform: translateY(-50%); */
+    
+    /* position: absolute; */
+    /* top:0; */
+    /* right: 0; */
+  }
+  .footer{
+    background-color: #e87070;
+    height: 10px;
   }
 </style>
