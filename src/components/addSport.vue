@@ -3,11 +3,16 @@
     <div class="inline" v-for="(item,index) in 4" :key="index">
       <div>
         <div class="sport-strength">
-          <i class="sport-strength-icon" :class="color(index)"></i>
+          <!-- <i class="sport-strength-icon" :class="color(index)"></i> -->
           最轻运动
+          <span class="text-6">(80千卡/30min)</span>
+          
         </div>
         <div class="sport-type">
+          <span class="text-6">
+
           散步 打太极
+          </span>
         </div>
       </div>
       <div class="inline">
@@ -20,9 +25,9 @@
             :step="10"
             @numChange="sportTime"></count>
         </div>
-        <div>
+        <!-- <div>
           2000千卡
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -63,10 +68,14 @@ export default {
 </script>
 
 <style scoped>
+.sport{
+  width: 100%;
+}
 .sport>div{
   padding-bottom:16px;
   padding-top:16px;
-  border-bottom:1px solid #eaeaea;
+  border-bottom:1px solid #ebeef5;
+  width: 100%;
 }
 .sport>div:nth-last-child(1){
   border-bottom:none;
@@ -78,6 +87,8 @@ export default {
 }
 .sport-strength{
   margin-left: 20px;
+  margin-bottom: 10px;
+  color: #041421;
 }
 .sport-type{
   margin-left: 20px;
@@ -113,5 +124,8 @@ export default {
 }
 .four::before{
   background-color: #ee7753;
+}
+.text-6{
+  color: #666;
 }
 </style>

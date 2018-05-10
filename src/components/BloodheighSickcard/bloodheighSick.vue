@@ -8,7 +8,7 @@
           <span>性别:{{sex}}</span>
           <span>年龄:{{age}}</span>
           <span>电话:{{mobile}}</span>
-          <span class="sick">确诊为:{{doctorDiagnos}}</span>
+          <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
         </div>
       </div>
       <div class="sick-card-head-right">
@@ -24,9 +24,9 @@
         @checkSuger="checkSuger"
         @checkd="changeTab">
           <pane
-          label="病历(远程)" >
+          label="病历" >
             <!-- 病人简历 start  -->
-            <div class="sick-history">
+            <div class="sick-history" v-show="showcard">
               <div class="sick-history-top">
                 <div>
                   <span>身高：{{height}}</span>
@@ -55,8 +55,11 @@
             <card
             @preBtn="changePage"
             :sickData="cardData"
-            :totalPage="totalPage">
+            :totalPage="totalPage"
+            v-show="showcard">
             </card>
+            <face v-show="!showcard"
+            @complete="completeDiag"></face>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
             <note></note>
@@ -117,6 +120,7 @@ import report from './report'
 import original from './original'
 import card from './card'
 import healthForm from './../healthForm.vue'
+import face from '@/components/BloodheighSickcard/facediagnosis'
 export default {
   components: {
     sickcard,
@@ -130,7 +134,8 @@ export default {
     report,
     original,
     card,
-    healthForm
+    healthForm,
+    face
   },
   data () {
     return {
@@ -140,13 +145,15 @@ export default {
       currentPage: 1,
       totalPage: null,
       pageSize: 1,
+      // pages: 0,
       isSugerHeigh: false,
       bloodCover: '',
       useDrug: '',
       assessment: '',
       alldayheighblood: '',
       report: '',
-      original: ''
+      original: '',
+      showcard: true
     }
   },
   methods: {
@@ -197,13 +204,23 @@ export default {
         if (res.data) {
           if (res.data.data) {
             this.totalPage = res.data.pages
+            if (this.totalPage < 1) {
+              // console.log('page', this.totalPage)
+              this.showcard = false
+            }
+              // this.pages =
             if (res.data.data.length !== 0) {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
+              console.log(this.cardData)
             }
           }
         }
       })
+    },
+    completeDiag () {
+      // this.getCardData()
+      this.showcard = true
     }
   },
   computed: {
@@ -361,10 +378,32 @@ export default {
       }
     }
   },
+  watch: {
+    // totalPage: {
+    //   handler: function (val) {
+    //     if (!val) {
+    //       val = 0
+    //     }
+    //     if (val < 1) {
+    //       this.showcard = false
+    //     }
+    //   },
+    //   immediate: true
+    // }
+  },
   created () {
+    this.getCardData()
   },
   mounted () {
-    this.getCardData()
+    console.log(this.cardData)
+    // if (!this.totalPage) {
+    //   this.totalPage = 0
+    // }
+    if (this.totalPage < 1) {
+      console.log('page', this.totalPage)
+      // this.showcard = false
+    }
+    // this.getCardData()
     // this.changeTab(this.activeIndex)
   }
 }
