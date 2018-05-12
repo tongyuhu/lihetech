@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div>
-      <el-row>
+    <div class="margin-bottom">
+      <el-row :gutter="8">
         <!-- 血压分布  -->
         <el-col :span="12">
           <el-card :body-style="{ padding: '0px' }">
@@ -49,102 +49,122 @@
         </el-col>
       </el-row>
     </div>
-    <!-- 血压与饮食 -->
-    <div>
-      <el-card :body-style="{ padding: '0px' }">
-        <div class="card-header">
-            <p class="title">血压与饮食</p>
-        </div>
-        <div class="check-date" v-show="false">
-          <el-row type="flex" justify="start">
-            <button v-for="(item,index) in bloodfoodChecked.date" 
-            :key="item.date" 
-            class="check-date-btn" 
-            :class="{checked:item.isChecked}" 
-            @click="isfoodChecked(item,index)">
-              {{item.date}}
-            </button>
-          </el-row>
-        </div>
+
+    <el-row :gutter="8">
+      <el-col :span="12">
+        <!-- 血压与饮食 -->
         <div>
-          <el-row type="flex">
-            <el-col >
-              <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
-            </el-col>
-            <el-col :span="3">
-              <div class="middle-wrap">
-                <div class="middle">
-                  <div class="checked-kaluli">
-                    <span class="check-all-span">
-                      <button class="check-all-btn" @click="isFoodKaluliChecked()">
-                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
-                        <span>卡路里</span>
-                      </button>
-                    </span>
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+                <p class="title">血压与饮食</p>
+            </div>
+            <!-- <div class="check-date" v-show="false">
+              <el-row type="flex" justify="start">
+                <button v-for="(item,index) in bloodfoodChecked.date" 
+                :key="item.date" 
+                class="check-date-btn" 
+                :class="{checked:item.isChecked}" 
+                @click="isfoodChecked(item,index)">
+                  {{item.date}}
+                </button>
+              </el-row>
+            </div> -->
+            <div>
+              <el-row type="flex">
+                <!-- <el-col >
+                  <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
+                </el-col>
+                <el-col :span="3">
+                  <div class="middle-wrap">
+                    <div class="middle">
+                      <div class="checked-kaluli">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="isFoodKaluliChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
+                            <span>卡路里</span>
+                          </button>
+                        </span>
+                      </div>
+                      <div class="checked-score">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="isFoodScoreChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
+                            <span>分数</span>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="checked-score">
-                    <span class="check-all-span">
-                      <button class="check-all-btn" @click="isFoodScoreChecked()">
-                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
-                        <span>分数</span>
-                      </button>
-                    </span>
+                </el-col> -->
+                <div class="flex">
+                  <div class="flex-btn-left">
+                    <el-button icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                  <div class="chart-min-width">
+                    <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
+                  </div>
+                  <div class="flex-btn">
+                    <el-button icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                 </div>
-              </div>
-            </el-col>
-          </el-row>
+              </el-row>
+            </div>
+          </el-card>
         </div>
-      </el-card>
-    </div>
-    <!-- 血压与运动 -->
-    <div>
-      <el-card :body-style="{ padding: '0px' }">
-        <div class="card-header">
-            <p class="title">血压与运动</p>
-        </div>
-        <div class="check-date" v-show="false">
-          <el-row type="flex" justify="start">
-            <button v-for="(item,index) in bloodsportChecked.date" 
-            :key="item.date" 
-            class="check-date-btn" 
-            :class="{checked:item.isChecked}" 
-            @click="issportChecked(item,index)">
-              {{item.date}}
-            </button>
-          </el-row>
-        </div>
+
+      </el-col>
+      <el-col :span="12">
+        <!-- 血压与运动 -->
         <div>
-          <el-row type="flex">
-            <el-col>
-              <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
-            </el-col>
-            <el-col :span="3">
-              <div class="middle-wrap">
-                <div class="middle">
-                  <div class="checked-kaluli">
-                    <span class="check-all-span">
-                      <button class="check-all-btn" @click="issSportKaluliChecked()">
-                        <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
-                        <span>卡路里</span>
-                      </button>
-                    </span>
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+                <p class="title">血压与运动</p>
+            </div>
+            <div class="check-date" v-show="false">
+              <el-row type="flex" justify="start">
+                <button v-for="(item,index) in bloodsportChecked.date" 
+                :key="item.date" 
+                class="check-date-btn" 
+                :class="{checked:item.isChecked}" 
+                @click="issportChecked(item,index)">
+                  {{item.date}}
+                </button>
+              </el-row>
+            </div>
+            <div>
+              <el-row type="flex">
+                <el-col>
+                  <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
+                </el-col>
+                <el-col :span="3">
+                  <div class="middle-wrap">
+                    <div class="middle">
+                      <div class="checked-kaluli">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="issSportKaluliChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
+                            <span>卡路里</span>
+                          </button>
+                        </span>
+                      </div>
+                      <div class="checked-score">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="isSportScoreChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
+                            <span>分数</span>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="checked-score">
-                    <span class="check-all-span">
-                      <button class="check-all-btn" @click="isSportScoreChecked()">
-                        <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
-                        <span>分数</span>
-                      </button>
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
+                </el-col>
+              </el-row>
+            </div>
+          </el-card>
         </div>
-      </el-card>
-    </div>
+      </el-col>
+
+    </el-row>
   </div>
 </template>
 
@@ -282,8 +302,10 @@ export default {
         diastolic: [],
         foodScore: [],
         calories: [],
+        bpType: [],
         pages: 1,
-        pageNum: 1
+        pageNum: 1,
+        currentPage: 1
       },
       bloodsportChecked: {
         date: [
@@ -316,10 +338,12 @@ export default {
         x: [],
         systolic: [],
         diastolic: [],
+        bpType: [],
         movementScore: [],
         calories: [],
         pages: 1,
-        pageNum: 1
+        pageNum: 1,
+        currentPage: 1
       }
     }
   },
@@ -361,6 +385,7 @@ export default {
       this.$axios(bloodCoverApi(params, dateParams))
       .then(res => {
         if (res.data.data) {
+          this.coverData = []
           for (let data in res.data.data) {
             this.$set(this.coverData, data, res.data.data[data])
           }
@@ -395,7 +420,19 @@ export default {
           arr.push({value: item.countBest, name: '危险'})
         }
       })
-      // console.log('arr', arr)
+      let namearr = ['正常', '正常高值', '轻度', '中度', '危险']
+      if (arr.length !== 5) {
+        arr.forEach(item => {
+          if (item.name === '正常' || '正常高值' || '轻度' || '中度' || '危险') {
+            namearr = this._.filter(namearr, function (val) {
+              return val !== item.name
+            })
+          }
+        })
+        namearr.forEach(item => {
+          arr.push({value: 0, name: item})
+        })
+      }
       return arr
     },
     isHistogramChecked (date, index) {
@@ -521,42 +558,6 @@ export default {
         if (res.data) {
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              // let data1 = [
-              //   {
-              //     'systolic': 144,
-              //     'diastolic': 82,
-              //     'createTime': '2018-03-08',
-              //     'calories': 0
-              //   },
-              //   {
-              //     'systolic': 122,
-              //     'diastolic': 76,
-              //     'createTime': '2018-02-04',
-              //     'calories': 100,
-              //     'foodScore': 33
-              //   },
-              //   {
-              //     'systolic': 165,
-              //     'diastolic': 106,
-              //     'createTime': '2018-02-03',
-              //     'calories': 23,
-              //     'foodScore': 35
-              //   },
-              //   {
-              //     'systolic': 199,
-              //     'diastolic': 86,
-              //     'createTime': '2018-02-02',
-              //     'calories': 50,
-              //     'foodScore': 20.9
-              //   },
-              //   {
-              //     'systolic': 171,
-              //     'diastolic': 118,
-              //     'createTime': '2018-02-01',
-              //     'calories': 60,
-              //     'foodScore': 35.5
-              //   }
-              // ]
               res.data.data.forEach((item, index) => {
                 if (!item.systolic) {
                   item.systolic = 0
@@ -570,16 +571,15 @@ export default {
                 if (!item.foodScore) {
                   item.foodScore = 0
                 }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
                 this.bloodfoodData.x.push(item.createTime)
                 this.bloodfoodData.systolic.push(item.systolic)
                 this.bloodfoodData.diastolic.push(item.diastolic)
                 this.bloodfoodData.foodScore.push(item.foodScore)
                 this.bloodfoodData.calories.push(item.calories)
-                // this.$set(this.bloodfoodData.x, index, item.createTime)
-                // this.$set(this.bloodfoodData.systolic, index, item.systolic)
-                // this.$set(this.bloodfoodData.diastolic, index, item.diastolic)
-                // this.$set(this.bloodfoodData.foodScore, index, item.foodScore)
-                // this.$set(this.bloodfoodData.calories, index, item.calories)
+                this.bloodfoodData.bpType.push(item.bpType)
               })
             }
           }
@@ -671,6 +671,9 @@ export default {
                 if (!item.movementScore) {
                   item.movementScore = 0
                 }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
                 // this.$set(this.bloodsportData.x, index, item.createTime)
                 // this.$set(this.bloodsportData.systolic, index, item.systolic)
                 // this.$set(this.bloodsportData.diastolic, index, item.diastolic)
@@ -681,44 +684,9 @@ export default {
                 this.bloodsportData.diastolic.push(item.diastolic)
                 this.bloodsportData.movementScore.push(item.movementScore)
                 this.bloodsportData.calories.push(item.calories)
+                this.bloodsportData.bpType.push(item.bpType)
               })
             }
-            // let data1 = [
-            //   {
-            //     'systolic': 144,
-            //     'diastolic': 82,
-            //     'createTime': '2018-03-08',
-            //     'calories': 0
-            //   },
-            //   {
-            //     'systolic': 122,
-            //     'diastolic': 76,
-            //     'createTime': '2018-02-04',
-            //     'calories': 100,
-            //     'movementScore': 33
-            //   },
-            //   {
-            //     'systolic': 165,
-            //     'diastolic': 106,
-            //     'createTime': '2018-02-03',
-            //     'calories': 23,
-            //     'movementScore': 35
-            //   },
-            //   {
-            //     'systolic': 199,
-            //     'diastolic': 86,
-            //     'createTime': '2018-02-02',
-            //     'calories': 50,
-            //     'movementScore': 20.9
-            //   },
-            //   {
-            //     'systolic': 171,
-            //     'diastolic': 118,
-            //     'createTime': '2018-02-01',
-            //     'calories': 60,
-            //     'movementScore': 35.5
-            //   }
-            // ]
           }
         }
         let state = ''
@@ -745,19 +713,19 @@ export default {
       let color = []
       let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
       let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
-      let is = true
+      // let is = true
+      let count = 0
       this.formatCoverData(this.coverData).forEach((item) => {
         if (item.value === 0) {
-          is = false
-        } else {
-          is = true
+          count++
         }
       })
-      if (is) {
+      if (count !== 5) {
         color = hascolor
       } else {
         color = nullcolor
       }
+      count = 0
       // console.log('coverData', this.formatCoverData(this.coverData))
       return {
         color: color,
@@ -1061,7 +1029,7 @@ export default {
     },
     bloodFoodOption (state, start, end) {
       let vm = this
-
+      let x1 = ''
       let foodSeriesData = []
       let foodSeriesTitle = ''
       if (state === 'kaluli') {
@@ -1072,7 +1040,7 @@ export default {
         foodSeriesTitle = '分数'
       }
       let zoomstart = 0
-      let zoomend = 85
+      let zoomend = 100
       if (start) {
         zoomstart = start
       }
@@ -1086,22 +1054,16 @@ export default {
             type: 'slider',
             xAxisIndex: [0, 1],
             // disabled: false,
-            show: true,
+            show: false,
             realtime: true,
             start: zoomstart,
             end: zoomend,
-            showDetail: false,
-            // minValueSpan: 98,
-            // maxValueSpan: 98,
-            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-            // handleSize: '30%',
-            handleStyle: {
-              color: '#80cbc4'
-            },
-            fillerColor: '#d8faf4',
-            borderColor: '#b1b1b1',
-            right: '60',
-            left: '60'
+            zoomlock: true,
+            minValueSpan: 10,
+            maxValueSpan: 10,
+            throttle: 500,
+            filterMode: 'none',
+            zoomOnMouseWheel: false
           }
         ],
         tooltip: {
@@ -1141,23 +1103,24 @@ export default {
         grid: [
           { // 直角坐标系内绘图网格
             top: '5%',
-            left: '60px',
+            left: '90px',
             width: 'auto',
             height: 'auto',
-            bottom: '55%'
+            bottom: '55%',
             // top: '30px',
             // left: '60px',
-            // right: '58%',
+            right: '80'
             // width: 'auto',
             // height: 'auto',
             // bottom: '90px'
           },
           {
             top: '55%',
-            left: '60px',
+            left: '90px',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '40px',
+            right: '80'
             // top: '30px',
             // left: '50%',
             // width: 'auto',
@@ -1178,27 +1141,25 @@ export default {
               align: 'center',
               rotate: 0,
               formatter: function (val) {
-                let time = val
-                let timearr = []
-                let before
-                let after
-                let arr = []
-                if (time.length > 6) {
-                  timearr = time.split('-')
-                  before = timearr[0]
-                  timearr.splice(0, 1)
-                  after = timearr.join('-')
-                  arr.push(after)
-                  arr.push(before)
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
                 } else {
-                  // before = time.slice(5)
-                  // after = time.slice(0, 5)
-                  // arr.push(after)
-                  // arr.push(before)
-                  return val
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
                 }
-                return arr.join('\n')
-                // return val.split('').join('\n')
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(time)
+                  arr.push(value)
+                  x1 = time
+                  return arr.join('\n')
+                }
               }
               // rotate: 330
             },
@@ -1212,7 +1173,7 @@ export default {
               show: false
             },
             // 血压横坐标
-            data: deleteYear(vm.bloodfoodData.x)
+            data: vm.bloodfoodData.x
           },
           { // 直角坐标系grid的x轴
             type: 'category',
@@ -1225,27 +1186,25 @@ export default {
               align: 'center',
               rotate: 0,
               formatter: function (val) {
-                let time = val
-                let timearr = []
-                let before
-                let after
-                let arr = []
-                if (time.length > 6) {
-                  timearr = time.split('-')
-                  before = timearr[0]
-                  timearr.splice(0, 1)
-                  after = timearr.join('-')
-                  arr.push(after)
-                  arr.push(before)
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
                 } else {
-                  // before = time.slice(5)
-                  // after = time.slice(0, 5)
-                  // arr.push(after)
-                  // arr.push(before)
-                  return val
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
                 }
-                return arr.join('\n')
-                // return val.split('').join('\n')
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(time)
+                  arr.push(value)
+                  x1 = time
+                  return arr.join('\n')
+                }
               }
               // rotate: 330
             },
@@ -1258,7 +1217,7 @@ export default {
               show: false
             },
             // 分数横坐标
-            data: deleteYear(vm.bloodfoodData.x)
+            data: vm.bloodfoodData.x
           }
         ],
         yAxis: [
@@ -1327,6 +1286,8 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -1354,6 +1315,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
@@ -1381,6 +1343,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
@@ -1411,6 +1374,7 @@ export default {
     },
     bloodSportOption (state, start, end) {
       let vm = this
+      let x1 = ''
       let sportSeriesData = []
       let sportSeriesTitle = ''
       if (state === 'kaluli') {
@@ -1490,17 +1454,19 @@ export default {
         grid: [
           { // 直角坐标系内绘图网格
             top: '5%',
-            left: '60px',
+            left: '90px',
+            right: '80px',
             width: 'auto',
             height: 'auto',
             bottom: '55%'
           },
           {
             top: '55%',
-            left: '60px',
+            left: '90px',
+            right: '80px',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '40px'
           }
         ],
         xAxis: [
@@ -1516,30 +1482,29 @@ export default {
               align: 'center',
               rotate: 0,
               formatter: function (val) {
-                let time = val
-                let timearr = []
-                let before
-                let after
-                let arr = []
-                if (time.length > 6) {
-                  timearr = time.split('-')
-                  before = timearr[0]
-                  timearr.splice(0, 1)
-                  after = timearr.join('-')
-                  arr.push(after)
-                  arr.push(before)
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
                 } else {
-                  // before = time.slice(5)
-                  // after = time.slice(0, 5)
-                  // arr.push(after)
-                  // arr.push(before)
-                  return val
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
                 }
-                return arr.join('\n')
-                // return val.split('').join('\n')
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(time)
+                  arr.push(value)
+                  x1 = time
+                  return arr.join('\n')
+                }
               }
               // rotate: 330
             },
+            symbol: 'circle',
             axisLine: {
               lineStyle: {
                 color: '#999'
@@ -1550,12 +1515,13 @@ export default {
               show: false
             },
             // 血压横坐标
-            data: deleteYear(vm.bloodsportData.x)
+            data: vm.bloodsportData.x
           },
           { // 直角坐标系grid的x轴
             type: 'category',
             gridIndex: 1,
             boundaryGap: false,
+            symbol: 'circle',
             axisLabel: {
               // show: false,
               interval: 0, // 显示x轴数据
@@ -1564,27 +1530,25 @@ export default {
               align: 'center',
               rotate: 0,
               formatter: function (val) {
-                let time = val
-                let timearr = []
-                let before
-                let after
-                let arr = []
-                if (time.length > 6) {
-                  timearr = time.split('-')
-                  before = timearr[0]
-                  timearr.splice(0, 1)
-                  after = timearr.join('-')
-                  arr.push(after)
-                  arr.push(before)
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
                 } else {
-                  // before = time.slice(5)
-                  // after = time.slice(0, 5)
-                  // arr.push(after)
-                  // arr.push(before)
-                  return val
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
                 }
-                return arr.join('\n')
-                // return val.split('').join('\n')
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(time)
+                  arr.push(value)
+                  x1 = time
+                  return arr.join('\n')
+                }
               }
               // rotate: 330
             },
@@ -1597,7 +1561,7 @@ export default {
               show: false
             },
             // 分数横坐标
-            data: deleteYear(vm.bloodsportData.x)
+            data: vm.bloodsportData.x
           }
         ],
         yAxis: [
@@ -1666,6 +1630,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
@@ -1693,6 +1658,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
@@ -1720,6 +1686,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
@@ -1747,6 +1714,48 @@ export default {
         }
       }
       return option
+    },
+    computeStartend (pageNum, pages) {
+      let page = {
+      }
+      if (pageNum === 1 && pages === 1) {
+        page.start = 0
+        page.end = 100
+      } else if (pageNum === 1) {
+        page.start = 0
+        page.end = parseInt((pageNum / pages) * 100)
+      } else if (pageNum < pages || pageNum === pages) {
+        page.start = parseInt(((pageNum - 1) / pages) * 100)
+        page.end = parseInt((pageNum / pages) * 100)
+      }
+      return page
+    },
+    computeDanger (bptype) {
+      let type = this._.toNumber(bptype)
+      let color = ''
+      switch (type) {
+        case 1:
+          color = '#81cefc'
+          break
+        case 2:
+          color = '#7cedc4'
+          break
+        case 3:
+          color = '#f4e07a'
+          break
+        case 4:
+          color = '#ff947b'
+          break
+        case 5:
+          color = '#ff5252'
+          break
+        case 0:
+          color = '#191918'
+          break
+        default:
+          color = '#191918'
+      }
+      return color
     }
   },
   watch: {
@@ -1809,11 +1818,15 @@ export default {
                   if (!item.foodScore) {
                     item.foodScore = 0
                   }
+                  if (!item.bpType) {
+                    item.bpType = 0
+                  }
                   vm.bloodfoodData.x.push(item.createTime)
                   vm.bloodfoodData.systolic.push(item.systolic)
                   vm.bloodfoodData.diastolic.push(item.diastolic)
                   vm.bloodfoodData.foodScore.push(item.foodScore)
                   vm.bloodfoodData.calories.push(item.calories)
+                  vm.bloodfoodData.bpType.push(item.bpType)
                 })
               }
             }
@@ -1879,11 +1892,15 @@ export default {
                   if (!item.foodScore) {
                     item.foodScore = 0
                   }
+                  if (!item.bpType) {
+                    item.bpType = 0
+                  }
                   vm.bloodsportData.x.push(item.createTime)
                   vm.bloodsportData.systolic.push(item.systolic)
                   vm.bloodsportData.diastolic.push(item.diastolic)
                   vm.bloodsportData.movementScore.push(item.movementScore)
                   vm.bloodsportData.calories.push(item.calories)
+                  vm.bloodsportData.bpType.push(item.bpType)
                 })
               }
             }
@@ -2071,5 +2088,39 @@ export default {
     /* vertical-align: middle; */
     top:50%;
     transform: translateY(-50%)
+  }
+  .margin-bottom{
+    margin-bottom:8px;
+    color: #ffffff1a;
+  }
+  .flex{
+    display: flex;
+    position: relative;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .chart-min-width{
+    min-width: 100%;
+  }
+  .flex-btn{
+    max-width: 55px;
+    min-width: 55px;
+    /* height: 100%; */
+    position: absolute;
+    bottom:50%;
+    right: 0;
+    z-index:999;
+  }
+  .flex-btn-left{
+    max-width: 55px;
+    min-width: 55px;
+    /* height: 100%; */
+    position: absolute;
+    bottom:50%;
+    left: 25px;
+    z-index:999;
+  }
+  .widthone{
+    width: 100%;
   }
 </style>

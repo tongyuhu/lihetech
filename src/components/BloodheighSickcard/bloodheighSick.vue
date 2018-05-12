@@ -71,8 +71,8 @@
 
             <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
             <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
-            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
           </pane>
           <pane
           label="用药">

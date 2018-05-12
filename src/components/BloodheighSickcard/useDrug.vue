@@ -146,14 +146,18 @@ export default {
           // copydata.
           this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatter(copydata)))
           this.xasis = this._.concat(this.xasis, this.dateX(copydata))
-          // console.log('optionData', this.optionData)
-          // console.log(this.formatter(copydata))
+
+          console.log('copydata', copydata)
+          console.log('res.data.data', res.data.data)
+          console.log('optionData', this.optionData)
+          console.log('formatter', this.formatter(copydata))
+          console.log('xasis', this.xasis)
         }
+        this.loading = false
         let useDrug = echarts.init(document.getElementById('useDrug'))
         useDrug.setOption(this.useDrugOption())
         this.pageNum = res.data.pageNum
         this.pages = res.data.pages
-        this.loading = false
         // console.log(res.data)
       })
     },
@@ -377,6 +381,7 @@ export default {
         for (let i = 0; i < arr.length - 1; i++) {
           let X = arr[i].takeMedicineTime.slice(0, 11)
           let afterX = arr[i + 1].takeMedicineTime.slice(0, 11)
+
           if (!this._.eq(X, afterX)) {
             // if (i === 0) {
             time.push(X)
@@ -384,6 +389,9 @@ export default {
           }
         }
         if (!this._.eq(arr[arr.length - 1].takeMedicineTime.slice(0, 11), arr[arr.length - 2].takeMedicineTime.slice(0, 11))) {
+          time.push(arr[arr.length - 1].takeMedicineTime.slice(0, 11))
+        }
+        if (time.length === 0) {
           time.push(arr[arr.length - 1].takeMedicineTime.slice(0, 11))
         }
         // if(arr[arr.length-1].takeMedicineTime.slice(0, 11))
@@ -957,7 +965,7 @@ export default {
   mounted () {
     let vm = this
     let useDrug = echarts.init(document.getElementById('useDrug'))
-    useDrug.setOption(vm.useDrugOption())
+    // useDrug.setOption(vm.useDrugOption())
     vm.getData()
     // console.log('medicine', this.getData())
     useDrug.on('datazoom', function (chartsparams) {

@@ -39,3 +39,7 @@ export const deleteYear = function (arr) {
   })
   return time
 }
+export const deleteSecond = function (time) {
+  time = time.slice()
+  return time
+}

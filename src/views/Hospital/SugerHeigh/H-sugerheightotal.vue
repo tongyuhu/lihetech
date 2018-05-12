@@ -283,6 +283,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
