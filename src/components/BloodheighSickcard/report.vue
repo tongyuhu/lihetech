@@ -98,13 +98,13 @@
                 </el-col> -->
                 <div class="flex">
                   <div class="flex-btn-left">
-                    <el-button icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                   <div class="chart-min-width">
                     <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
                   </div>
                   <div class="flex-btn">
-                    <el-button icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button @click="bloodFoodNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                 </div>
               </el-row>
@@ -133,7 +133,7 @@
             </div>
             <div>
               <el-row type="flex">
-                <el-col>
+                <!-- <el-col>
                   <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
                 </el-col>
                 <el-col :span="3">
@@ -157,7 +157,18 @@
                       </div>
                     </div>
                   </div>
-                </el-col>
+                </el-col> -->
+                <div class="flex">
+                  <div class="flex-btn-left">
+                    <el-button @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                  <div class="chart-min-width">
+                    <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
+                  </div>
+                  <div class="flex-btn">
+                    <el-button @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                </div>
               </el-row>
             </div>
           </el-card>
@@ -531,7 +542,7 @@ export default {
         'userId': this.sickID,
         'adminHospitalId': this.hospitalId,
         'pageNum': this.bloodfoodData.pageNum,
-        'pageSize': 5
+        'pageSize': 10
       }
       let dateParams = {
         label: '',
@@ -592,7 +603,8 @@ export default {
           state = 'score'
         }
         let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        bloodFood.setOption(this.bloodFoodOption(state))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        bloodFood.setOption(this.bloodFoodOption(state, position.start, position.end))
       })
     },
     issportChecked (date, index) {
@@ -630,7 +642,7 @@ export default {
         'userId': this.sickID,
         'adminHospitalId': this.hospitalId,
         'pageNum': this.bloodsportData.pageNum,
-        'pageSize': 5
+        'pageSize': 10
       }
       let dateParams = {
         label: '',
@@ -697,7 +709,8 @@ export default {
           state = 'score'
         }
         let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        bloodSport.setOption(this.bloodSportOption(state))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+        bloodSport.setOption(this.bloodSportOption(state, position.start, position.end))
       })
     },
     changeStatus () {
@@ -1291,12 +1304,15 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#32b77a'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodfoodData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
             areaStyle: {
@@ -1319,12 +1335,15 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#7cedc4'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#7cedc4'
+                color: function (param) {
+                  let index = vm.bloodfoodData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
             areaStyle: {
@@ -1347,12 +1366,15 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodfoodData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
             areaStyle: {
@@ -1399,22 +1421,16 @@ export default {
             type: 'slider',
             xAxisIndex: [0, 1],
             // disabled: false,
-            show: true,
+            show: false,
             realtime: true,
             start: zoomstart,
             end: zoomend,
-            showDetail: false,
-            // minValueSpan: 98,
-            // maxValueSpan: 98,
-            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-            // handleSize: '30%',
-            handleStyle: {
-              color: '#80cbc4'
-            },
-            fillerColor: '#d8faf4',
-            borderColor: '#b1b1b1',
-            right: '60',
-            left: '60'
+            zoomlock: true,
+            minValueSpan: 10,
+            maxValueSpan: 10,
+            throttle: 500,
+            filterMode: 'none',
+            zoomOnMouseWheel: false
           }
         ],
         tooltip: {
@@ -1634,12 +1650,15 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#32b77a'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodsportData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
             areaStyle: {
@@ -1662,12 +1681,15 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#7cedc4'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#7cedc4'
+                color: function (param) {
+                  let index = vm.bloodsportData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
             areaStyle: {
@@ -1690,12 +1712,15 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodsportData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
             areaStyle: {
@@ -1756,6 +1781,192 @@ export default {
           color = '#191918'
       }
       return color
+    },
+    bloodFoodNext () {
+      let vm = this
+      let bloodFood = echarts.init(document.getElementById('bloodFood'))
+      if (vm.bloodfoodData.currentPage > vm.bloodfoodData.pageNum) {
+        vm.bloodfoodData.currentPage = vm.bloodfoodData.pageNum
+      }
+      if (vm.bloodfoodData.currentPage <= vm.bloodfoodData.pageNum) {
+        vm.bloodfoodData.currentPage ++
+      }
+      if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        if (vm.bloodfoodChecked.kaluli) {
+          bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+        }
+        if (vm.bloodfoodChecked.score) {
+          bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
+        }
+        // bloodFood.setOption(this.bloodFoodOption(state, position.start, position.end))
+        return
+      }
+      vm.bloodfoodData.pageNum ++
+      let params = {
+        'userId': vm.sickID,
+        'adminHospitalId': vm.hospitalId,
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': vm.bloodfoodData.pageNum,
+        'pageSize': 5
+      }
+      vm.$axios(bloodfoodApi(params))
+        .then(res => {
+          // let bloodFood = echarts.init(document.getElementById('bloodFood'))
+          bloodFood.showLoading(
+            {
+              text: '加载中...',
+              color: '#1991fc',
+              textColor: '#000',
+              maskColor: 'rgba(255, 255, 255, 0.8)',
+              zlevel: 0
+            }
+          )
+          if (vm.bloodfoodData.pageNum <= res.data.pages) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.foodScore) {
+                  item.foodScore = 0
+                }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
+                vm.bloodfoodData.x.push(item.createTime)
+                vm.bloodfoodData.systolic.push(item.systolic)
+                vm.bloodfoodData.diastolic.push(item.diastolic)
+                vm.bloodfoodData.foodScore.push(item.foodScore)
+                vm.bloodfoodData.calories.push(item.calories)
+                vm.bloodfoodData.bpType.push(item.bpType)
+              })
+            }
+          }
+          let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+          if (vm.bloodfoodChecked.kaluli) {
+            bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+          }
+          if (vm.bloodfoodChecked.score) {
+            bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
+          }
+          // bloodFood.setOption(vm.bloodFoodOption(50, 80))
+          bloodFood.hideLoading()
+        })
+    },
+    bloodFoodPer () {
+      let vm = this
+      let bloodFood = echarts.init(document.getElementById('bloodFood'))
+      this.bloodfoodData.currentPage --
+      if (this.bloodfoodData.currentPage < 1) {
+        this.bloodfoodData.currentPage = 1
+      }
+      let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+      if (vm.bloodfoodChecked.kaluli) {
+        bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+      }
+      if (vm.bloodfoodChecked.score) {
+        bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
+      }
+    },
+    bloodSportPer () {
+      let vm = this
+      let bloodSport = echarts.init(document.getElementById('bloodSport'))
+      this.bloodsportData.currentPage --
+      if (this.bloodsportData.currentPage < 1) {
+        this.bloodsportData.currentPage = 1
+      }
+      let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+      if (vm.bloodsportChecked.kaluli) {
+        bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+      }
+      if (vm.bloodsportChecked.score) {
+        bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+      }
+    },
+    bloodSportNext () {
+      let vm = this
+      let bloodSport = echarts.init(document.getElementById('bloodSport'))
+      if (vm.bloodsportData.currentPage > vm.bloodsportData.pageNum) {
+        vm.bloodsportData.currentPage = vm.bloodsportData.pageNum
+      }
+      if (vm.bloodsportData.currentPage <= vm.bloodsportData.pageNum) {
+        vm.bloodsportData.currentPage ++
+      }
+
+      if (vm.bloodsportData.pageNum >= vm.bloodsportData.pages) {
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+        if (vm.bloodsportChecked.kaluli) {
+          bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+        }
+        if (vm.bloodsportChecked.score) {
+          bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+        }
+        return
+      }
+      vm.bloodsportData.pageNum ++
+
+      let params = {
+        'userId': vm.sickID,
+        'adminHospitalId': vm.hospitalId,
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': vm.bloodsportData.pageNum,
+        'pageSize': 5
+      }
+      vm.$axios(bloodsportApi(params))
+        .then(res => {
+          // let bloodSport = echarts.init(document.getElementById('bloodSport'))
+          bloodSport.showLoading(
+            {
+              text: '加载中...',
+              color: '#1991fc',
+              textColor: '#000',
+              maskColor: 'rgba(255, 255, 255, 0.8)',
+              zlevel: 0
+            }
+          )
+          if (vm.bloodsportData.pageNum <= res.data.pages) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.foodScore) {
+                  item.foodScore = 0
+                }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
+                vm.bloodsportData.x.push(item.createTime)
+                vm.bloodsportData.systolic.push(item.systolic)
+                vm.bloodsportData.diastolic.push(item.diastolic)
+                vm.bloodsportData.movementScore.push(item.movementScore)
+                vm.bloodsportData.calories.push(item.calories)
+                vm.bloodsportData.bpType.push(item.bpType)
+              })
+            }
+          }
+          let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          if (vm.bloodsportChecked.kaluli) {
+            bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+          }
+          if (vm.bloodsportChecked.score) {
+            bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+          }
+          bloodSport.hideLoading()
+        })
     }
   },
   watch: {

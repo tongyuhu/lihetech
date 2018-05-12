@@ -68,7 +68,6 @@
           </pane>
           <pane
           label="分析报告">
-
             <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
             <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>

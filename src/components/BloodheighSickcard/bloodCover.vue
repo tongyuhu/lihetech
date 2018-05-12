@@ -1671,9 +1671,9 @@ export default {
         this.bloodTrendData.currentPage = 1
       }
       let position = vm.computeStartend(vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
-      console.log('soureposition', vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
       bloodTrend.setOption(vm.bloodTrendOption(position.start, position.end))
-      console.log('position', position.start, position.end)
+      // console.log('soureposition', vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
+      // console.log('position', position.start, position.end)
       // let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
       // let position = this.computeStartend(this.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
       // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
