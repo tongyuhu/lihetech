@@ -68,7 +68,7 @@
                     <div class="blood-trend-item heighbg">
                       <p>{{this.bloodTrendState.heigh}}</p>
                       <p>高血压次数</p>
-                      <p>121/81~139/89</p>
+                      <p>140/90~179/109</p>
                     </div>
                     <div class="blood-trend-item dangerbg">
                       <p class="danger-text">{{this.bloodTrendState.danger}}</p>
@@ -205,7 +205,6 @@
 import echarts from 'echarts'
 import {dateFromWeek, dateFormat} from '@/untils/date'
 import {bloodheighSickDataApi, updateBehaviourRateApi, updatebloodTrendStateApi} from './../../api/components/BloodheighSickcard/bloodCover'
-import {deleteYear} from '@/untils/deleteYear'
 // import { deepcopy } from './../../untils/untils'
 export default {
   props: {
@@ -478,7 +477,7 @@ export default {
             minValueSpan: 10,
             maxValueSpan: 10,
             throttle: 500,
-            filterMode: 'none',
+            filterMode: 'empty',
             zoomOnMouseWheel: false
             // showDetail: false
             // minValueSpan: 98,
@@ -500,7 +499,10 @@ export default {
             animation: false
           },
           // alwaysShowContent: true,
-          backgroundColor: 'rgba(50,50,50,0.2)',
+          backgroundColor: 'rgba(250,250,250,0.7)',
+          textStyle: {
+            color: '#000'
+          },
           triggerOn: 'click',
           // triggerOn: 'mousemove|click',
           formatter: function (a) {
@@ -856,7 +858,10 @@ export default {
             animation: false
           },
           // alwaysShowContent: true,
-          backgroundColor: 'rgba(50,50,50,0.2)',
+          backgroundColor: 'rgba(250,250,250,0.7)',
+          textStyle: {
+            color: '#000'
+          },
           triggerOn: 'click',
           // triggerOn: 'mousemove|click',
           formatter: function (a) {
@@ -1512,7 +1517,7 @@ export default {
       if (vm.bloodAndBehaviourData.currentPage > vm.bloodAndBehaviourData.pageNum) {
         vm.bloodAndBehaviourData.currentPage = vm.bloodAndBehaviourData.pageNum
       }
-      if (vm.bloodAndBehaviourData.currentPage <= vm.bloodAndBehaviourData.pageNum) {
+      if (vm.bloodAndBehaviourData.currentPage < vm.bloodAndBehaviourData.pages) {
         vm.bloodAndBehaviourData.currentPage ++
       }
       if (vm.bloodAndBehaviourData.pageNum >= vm.bloodAndBehaviourData.pages) {
@@ -1589,7 +1594,7 @@ export default {
       if (vm.bloodTrendData.currentPage > vm.bloodTrendData.pageNum) {
         vm.bloodTrendData.currentPage = vm.bloodTrendData.pageNum
       }
-      if (vm.bloodTrendData.currentPage <= vm.bloodTrendData.pageNum) {
+      if (vm.bloodTrendData.currentPage <= vm.bloodTrendData.pages) {
         vm.bloodTrendData.currentPage ++
       }
       let bloodTrend = echarts.init(document.getElementById('bloodTrend'))

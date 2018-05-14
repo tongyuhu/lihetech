@@ -104,7 +104,7 @@ export default {
       optionData: [],
       xasis: [],
       pageNum: 1,
-      pageSize: 5,
+      pageSize: 15,
       pages: 1,
       initX: 0,
       loading: true

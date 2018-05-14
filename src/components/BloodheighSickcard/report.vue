@@ -73,9 +73,9 @@
               <el-row type="flex">
                 <!-- <el-col >
                   <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
-                </el-col>
-                <el-col :span="3">
-                  <div class="middle-wrap">
+                </el-col> -->
+                <!-- <el-col :span="3"> -->
+                  <!-- <div class="middle-wrap">
                     <div class="middle">
                       <div class="checked-kaluli">
                         <span class="check-all-span">
@@ -94,13 +94,23 @@
                         </span>
                       </div>
                     </div>
-                  </div>
-                </el-col> -->
+                  </div> -->
+                <!-- </el-col> -->
                 <div class="flex">
                   <div class="flex-btn-left">
                     <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
-                  <div class="chart-min-width">
+                  <div class="chart-min-width kaluli-wrap">
+                    <div class="kaluli-btn-wrap">
+                      <button class="check-all-btn" @click="isFoodKaluliChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
+                        <span>卡路里</span>
+                      </button>
+                      <button class="check-all-btn" @click="isFoodScoreChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
+                        <span>分数</span>
+                      </button>
+                    </div>
                     <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
                   </div>
                   <div class="flex-btn">
@@ -113,6 +123,7 @@
         </div>
 
       </el-col>
+
       <el-col :span="12">
         <!-- 血压与运动 -->
         <div>
@@ -162,7 +173,17 @@
                   <div class="flex-btn-left">
                     <el-button @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
-                  <div class="chart-min-width">
+                  <div class="chart-min-width kaluli-wrap">
+                    <div class="kaluli-btn-wrap">
+                      <button class="check-all-btn" @click="issSportKaluliChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
+                        <span>卡路里</span>
+                      </button>
+                      <button class="check-all-btn" @click="isSportScoreChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
+                        <span>分数</span>
+                      </button>
+                    </div>
                     <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
                   </div>
                   <div class="flex-btn">
@@ -182,7 +203,6 @@
 <script>
 import echarts from 'echarts'
 import {bloodCoverApi, histogramApi, bloodfoodApi, bloodsportApi} from './../../api/components/BloodheighSickcard/report'
-import {deleteYear} from '@/untils/deleteYear'
 export default {
   props: {
     sickID: {
@@ -519,7 +539,14 @@ export default {
       }
       if (this.bloodfoodChecked.kaluli && !this.bloodfoodChecked.score) {
         let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        bloodFood.setOption(this.bloodFoodOption('kaluli'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        // if (this.bloodfoodChecked.kaluli) {
+        bloodFood.setOption(this.bloodFoodOption('kaluli', position.start, position.end))
+        // }
+        // if (this.bloodfoodChecked.score) {
+        //   bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
+        // }
+        // bloodFood.setOption(this.bloodFoodOption('kaluli'))
         // this.bloodFoodOption()
       }
     },
@@ -530,7 +557,14 @@ export default {
       }
       if (!this.bloodfoodChecked.kaluli && this.bloodfoodChecked.score) {
         let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        bloodFood.setOption(this.bloodFoodOption('score'))
+        // bloodFood.setOption(this.bloodFoodOption('score'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+          // if (vm.bloodfoodChecked.kaluli) {
+            // bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodfoodChecked.score) {
+        bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
+          // }
         // this.bloodFoodOption('score')
       }
     },
@@ -621,7 +655,14 @@ export default {
       }
       if (this.bloodsportChecked.kaluli && !this.bloodsportChecked.score) {
         let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        bloodSport.setOption(this.bloodSportOption('kaluli'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          // if (vm.bloodsportChecked.kaluli) {
+        bloodSport.setOption(this.bloodSportOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodsportChecked.score) {
+            // bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+          // }
+        // bloodSport.setOption(this.bloodSportOption('kaluli'))
       }
     },
     isSportScoreChecked () {
@@ -631,7 +672,14 @@ export default {
       }
       if (!this.bloodsportChecked.kaluli && this.bloodsportChecked.score) {
         let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        bloodSport.setOption(this.bloodSportOption('score'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          // if (vm.bloodsportChecked.kaluli) {
+            // bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodsportChecked.score) {
+        bloodSport.setOption(this.bloodSportOption('score', position.start, position.end))
+          // }
+        // bloodSport.setOption(this.bloodSportOption('score'))
       }
     },
     checkAllHandle () {
@@ -805,6 +853,8 @@ export default {
       }
     },
     bloodHistogramOption () {
+      // let areaColor = ['#33b2f2', '#59D8A1', '#efa13a', '#ff7d43', '#f96767']
+      let areaColor = ['#0099FF', '#59D8A1', '#efa13a', '#ff7d43', '#e21b1b']
       return {
         color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252'],
         tooltip: {
@@ -877,153 +927,164 @@ export default {
             min: 90
           }
         ],
-        series: [{
-          type: 'line',
-          name: '正常',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#81cefc'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#81cefc'
-            }
-          },
-          z: 10,
-          connectNulls: true,
-          data: [
-                [0, 130],
-                [85, 130]
-          ]
-        },
-        {
-          type: 'line',
-          name: '正常高值',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#7cedc4'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#7cedc4'
-            }
-          },
-          itemStyle: {},
-          z: 9,
-          connectNulls: true,
-          step: true,
-          data: [
-                [0, 140],
-                [90, 140]
-          ]
-
-        },
-        {
-          type: 'line',
-          name: '轻度',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#f4e07a'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#f4e07a'
-            }
-          },
-          z: 8,
-          data: [
-                [0, 160],
-                [100, 160]
-          ]
-        },
-        {
-          type: 'line',
-          name: '中度',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#ff947b'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#ff947b'
-            }
-          },
-          z: 7,
-          data: [
-                [0, 180],
-                [110, 180]
-          ]
-        },
-        {
-          type: 'line',
-          name: '危险',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#e21b1b'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#e21b1b'
-            }
-          },
-          z: 1,
-          data: [
-                [0, 210],
-                [120, 210]
-          ]
-        },
-        {
-          type: 'scatter',
-          symbol: 'circle',
-          symbolSize: 5,
-          itemStyle: {
-            normal: {
-              color: '#fff'
-            }
-          },
-          z: 20,
-          tooltip: {
-            show: true,
-            backgroundColor: 'rgba(50,50,50,0.2)',
-            triggerOn: 'click',
-            formatter: function (a) {
-              let low = ''
-              let heigh = ''
-              let time = ''
-              if (a.data) {
-                if (a.data[0]) {
-                  low = '低压' + a.data[0]
-                }
-                if (a.data[1]) {
-                  heigh = '高压' + a.data[1]
-                }
-                if (a.data[2]) {
-                  time = '时间' + a.data[2] + '<br>'
-                }
+        series: [
+          {
+            type: 'line',
+            name: '正常',
+            symbol: 'none',
+            // stack: '堆叠',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[0]
               }
-              return (
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[0]
+              }
+            },
+            z: 10,
+            connectNulls: true,
+            data: [
+                [0, 130],
+                [85, 130],
+                [85, 0]
+            ]
+          },
+          {
+            type: 'line',
+            name: '正常高值',
+            symbol: 'none',
+            // stack: '堆叠',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[1]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[1]
+              }
+            },
+            itemStyle: {},
+            z: 9,
+            connectNulls: true,
+            step: true,
+            data: [
+                [0, 140],
+                [90, 140],
+                [90, 0]
+            ]
+
+          },
+          {
+            type: 'line',
+            name: '轻度',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[2]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[2]
+              }
+            },
+            z: 8,
+            data: [
+                [0, 160],
+                [100, 160],
+                [100, 0]
+            ]
+          },
+          {
+            type: 'line',
+            name: '中度',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[3]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[3]
+              }
+            },
+            z: 7,
+            data: [
+                [0, 180],
+                [110, 180],
+                [110, 0]
+            ]
+          },
+          {
+            type: 'line',
+            name: '危险',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[4]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[4]
+              }
+            },
+            z: 1,
+            data: [
+                [0, 210],
+                [120, 210],
+                [120, 0]
+            ]
+          },
+          {
+            type: 'scatter',
+            symbol: 'circle',
+            symbolSize: 6,
+            itemStyle: {
+              normal: {
+                color: '#fff'
+              }
+            },
+            z: 20,
+            tooltip: {
+              show: true,
+              backgroundColor: 'rgba(250,250,250,0.7)',
+              textStyle: {
+                color: '#000'
+              },
+              triggerOn: 'click',
+              formatter: function (a) {
+                let low = ''
+                let heigh = ''
+                let time = ''
+                if (a.data) {
+                  if (a.data[0]) {
+                    low = '低压:' + a.data[0]
+                  }
+                  if (a.data[1]) {
+                    heigh = '高压:' + a.data[1]
+                  }
+                  if (a.data[2]) {
+                    time = '时间:' + a.data[2] + '<br>'
+                  }
+                }
+                return (
                 time +
               low + '<br>' +
               heigh
-              )
-            }
-          },
-          data: this.formatHistogram(this.histogramData)
+                )
+              }
+            },
+            data: this.formatHistogram(this.histogramData)
 
           // data: [
             //   [145, 119, '2018-01-08 18:48:16'],
@@ -1035,7 +1096,7 @@ export default {
             //   [185, 81, '2018-02-03 16:09:48']
             // ]
 
-        }
+          }
         ]
       }
       // return option
@@ -1075,7 +1136,7 @@ export default {
             minValueSpan: 10,
             maxValueSpan: 10,
             throttle: 500,
-            filterMode: 'none',
+            filterMode: 'empty',
             zoomOnMouseWheel: false
           }
         ],
@@ -1084,24 +1145,27 @@ export default {
           axisPointer: {
             animation: false
           },
-          backgroundColor: 'rgba(50,50,50,0.2)',
+          backgroundColor: '#B2DAFE',
+          textStyle: {
+            color: '#000'
+          },
           triggerOn: 'click',
           formatter: function (a) {
-            return (
-                a[0]['axisValueLabel'] + '<br>' +
-                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-                a[2]['seriesName'] + ': ' + a[2]['value']
-            )
             // return (
             //     a[0]['axisValueLabel'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
             //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[2]['seriesName'] + ': ' + a[2]['value']
             // )
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[2]['seriesName'] + ': ' + a[2]['value']
+            )
           }
         },
         axisPointer: {
@@ -1297,8 +1361,8 @@ export default {
             yAxisIndex: 0,
             name: '舒张压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
             symbol: 'circle',
             symbolSize: 6,
             lineStyle: {
@@ -1315,13 +1379,13 @@ export default {
                 }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: vm.bloodfoodData.diastolic
           },
           {
@@ -1329,9 +1393,10 @@ export default {
             yAxisIndex: 0,
             name: '收缩压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -1346,13 +1411,13 @@ export default {
                 }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#def3f2',
-                origin: 'auto',
-                shadowColor: '#def3f2'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#def3f2',
+            //     origin: 'auto',
+            //     shadowColor: '#def3f2'
+            //   }
+            // },
             data: vm.bloodfoodData.systolic
           },
           {
@@ -1360,9 +1425,10 @@ export default {
             yAxisIndex: 1,
             name: foodSeriesTitle,
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -1377,13 +1443,13 @@ export default {
                 }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: foodSeriesData
           }
         ],
@@ -1407,7 +1473,7 @@ export default {
         sportSeriesTitle = '分数'
       }
       let zoomstart = 0
-      let zoomend = 85
+      let zoomend = 100
       if (start) {
         zoomstart = start
       }
@@ -1427,9 +1493,9 @@ export default {
             end: zoomend,
             zoomlock: true,
             minValueSpan: 10,
-            maxValueSpan: 10,
+            maxValueSpan: 11,
             throttle: 500,
-            filterMode: 'none',
+            filterMode: 'empty',
             zoomOnMouseWheel: false
           }
         ],
@@ -1438,24 +1504,27 @@ export default {
           axisPointer: {
             animation: false
           },
-          backgroundColor: 'rgba(50,50,50,0.2)',
+          backgroundColor: 'rgba(250,250,250,0.7)',
+          textStyle: {
+            color: '#000'
+          },
           triggerOn: 'click',
           formatter: function (a) {
-            return (
-                a[0]['axisValueLabel'] + '<br>' +
-                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-                a[2]['seriesName'] + ': ' + a[2]['value']
-            )
             // return (
             //     a[0]['axisValueLabel'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
             //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[2]['seriesName'] + ': ' + a[2]['value']
             // )
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[2]['seriesName'] + ': ' + a[2]['value']
+            )
           }
         },
         axisPointer: {
@@ -1521,6 +1590,7 @@ export default {
               // rotate: 330
             },
             symbol: 'circle',
+            symbolSize: 6,
             axisLine: {
               lineStyle: {
                 color: '#999'
@@ -1538,6 +1608,7 @@ export default {
             gridIndex: 1,
             boundaryGap: false,
             symbol: 'circle',
+            symbolSize: 6,
             axisLabel: {
               // show: false,
               interval: 0, // 显示x轴数据
@@ -1644,9 +1715,10 @@ export default {
             yAxisIndex: 0,
             name: '舒张压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -1661,13 +1733,13 @@ export default {
                 }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: vm.bloodsportData.diastolic
           },
           {
@@ -1675,9 +1747,10 @@ export default {
             yAxisIndex: 0,
             name: '收缩压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -1692,13 +1765,13 @@ export default {
                 }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#def3f2',
-                origin: 'auto',
-                shadowColor: '#def3f2'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#def3f2',
+            //     origin: 'auto',
+            //     shadowColor: '#def3f2'
+            //   }
+            // },
             data: vm.bloodsportData.systolic
           },
           {
@@ -1706,9 +1779,10 @@ export default {
             yAxisIndex: 1,
             name: sportSeriesTitle,
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -1723,13 +1797,13 @@ export default {
                 }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: sportSeriesData
           }
         ],
@@ -1788,7 +1862,7 @@ export default {
       if (vm.bloodfoodData.currentPage > vm.bloodfoodData.pageNum) {
         vm.bloodfoodData.currentPage = vm.bloodfoodData.pageNum
       }
-      if (vm.bloodfoodData.currentPage <= vm.bloodfoodData.pageNum) {
+      if (vm.bloodfoodData.currentPage < vm.bloodfoodData.pages) {
         vm.bloodfoodData.currentPage ++
       }
       if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
@@ -1891,16 +1965,20 @@ export default {
       }
     },
     bloodSportNext () {
+      console.log('position1', this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+      console.log('position2', this.bloodsportData.pages, this.bloodsportData.pageNum)
+
       let vm = this
       let bloodSport = echarts.init(document.getElementById('bloodSport'))
       if (vm.bloodsportData.currentPage > vm.bloodsportData.pageNum) {
         vm.bloodsportData.currentPage = vm.bloodsportData.pageNum
+        // return
       }
-      if (vm.bloodsportData.currentPage <= vm.bloodsportData.pageNum) {
+      if (vm.bloodsportData.currentPage < vm.bloodsportData.pages) {
         vm.bloodsportData.currentPage ++
       }
 
-      if (vm.bloodsportData.pageNum >= vm.bloodsportData.pages) {
+      if (!(vm.bloodsportData.pageNum < vm.bloodsportData.pages)) {
         let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
         if (vm.bloodsportChecked.kaluli) {
           bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
@@ -1917,7 +1995,7 @@ export default {
         'adminHospitalId': vm.hospitalId,
         'bpMeasureTime': vm.bpMeasureTime || '',
         'pageNum': vm.bloodsportData.pageNum,
-        'pageSize': 5
+        'pageSize': 9
       }
       vm.$axios(bloodsportApi(params))
         .then(res => {
@@ -1958,6 +2036,8 @@ export default {
               })
             }
           }
+          console.log('position', this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+
           let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
           if (vm.bloodsportChecked.kaluli) {
             bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
@@ -1965,6 +2045,7 @@ export default {
           if (vm.bloodsportChecked.score) {
             bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
           }
+          console.log('positionX', position.start, position.end)
           bloodSport.hideLoading()
         })
     }
@@ -1989,6 +2070,13 @@ export default {
     this.updateFood(this.bloodfoodChecked.date[0].date)
     let bloodFood = echarts.init(document.getElementById('bloodFood'))
     bloodFood.setOption(this.bloodFoodOption('kaluli'))
+
+    this.bloodsportChecked.date[0].isChecked = true
+    this.bloodsportChecked.kaluli = true
+    this.updateSport(this.bloodsportChecked.date[0].date)
+    let bloodSport = echarts.init(document.getElementById('bloodSport'))
+    bloodSport.setOption(this.bloodSportOption('kaluli'))
+
     bloodFood.on('datazoom', function (chartsparams) {
       if (chartsparams.end === 100) {
         if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
@@ -2052,12 +2140,6 @@ export default {
           })
       }
     })
-
-    this.bloodsportChecked.date[0].isChecked = true
-    this.bloodsportChecked.kaluli = true
-    this.updateSport(this.bloodsportChecked.date[0].date)
-    let bloodSport = echarts.init(document.getElementById('bloodSport'))
-    bloodSport.setOption(this.bloodSportOption('kaluli'))
     bloodSport.on('datazoom', function (chartsparams) {
       // let vm = this
       // console.log('num', vm.bloodsportData.pageNum)
@@ -2131,12 +2213,12 @@ export default {
 </script>
 
 <style scoped>
-.title{
-  /* margin-left:20px; */
-  margin-top:24px;
-  margin-bottom:2px;
-  font-size:20px;
-  color:#666
+  .title{
+    /* margin-left:20px; */
+    margin-top:24px;
+    margin-bottom:2px;
+    font-size:20px;
+    color:#666
   }
   .card-header{
     margin: 0 20px 0 20px;
@@ -2333,5 +2415,16 @@ export default {
   }
   .widthone{
     width: 100%;
+  }
+  .kaluli-wrap{
+    position: relative;
+  }
+  .kaluli-btn-wrap{
+    position: absolute;
+    width: 200px;
+    height: 40px;
+    top: 50%;
+    left: 150px;
+    z-index: 99;
   }
 </style>
