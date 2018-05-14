@@ -1,28 +1,43 @@
 <template>
   <div class="inline">
-    <div v-for="(i,index) in arr" :key="index" class="food">
-      <button :class="{'checked':ischecked}" @click="checked">减少钠盐</button>
+    <div class="food">
+      <button :class="{'checked':ischecked}" @click="checked">{{food}}</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'addfood',
+  props: {
+    food: {
+      type: [String],
+      default: ''
+    },
+    index: {
+      type: [Number],
+      default: 1
+    },
+    defaultChecked: {
+      type: [Boolean],
+      default: false
+    }
+  },
   data () {
     return {
-      arr: [
-        {}, {}, {}, {}, {}, {}
-      ],
       ischecked: false
     }
   },
   methods: {
     checked () {
       this.ischecked = !this.ischecked
-    },
-    init () {
-
+      // if (this.ischecked) {
+      this.$emit('addfood', {food: this.food, add: this.ischecked})
+      // }
     }
+  },
+  mounted () {
+    this.ischecked = this.defaultChecked
   }
 }
 </script>

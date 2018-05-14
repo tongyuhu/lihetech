@@ -18,7 +18,7 @@
             <span class="case-left-type-se">治疗中</span>
           </div>
           <div class="case-left-btn">
-            <el-button type="primary">历史病历</el-button>
+            <el-button type="primary" @click="histroySickcard">历史病历</el-button>
             <el-button type="primary" @click="completeInfo">完善信息</el-button>
           </div>
           <div class="case-left-msg">
@@ -403,7 +403,18 @@
                 <div class="pane-bg">
                 </div>
                 <div class="pane-bgc">
-                  <addSport></addSport>
+                  <div
+                  v-for="(sport,index) in addSportData" :key="index">
+                    <addSport
+                    :title="sport.title"
+                    :subtitle="sport.subtitle"
+                    :itemlist="sport.itemlist"
+                    :initNum="sport.initNum"
+                    :step="sport.step"
+                    :index="index"
+                    @addsport="addsports"
+                    ></addSport>
+                  </div>
                 </div>
               </pane>
               <pane
@@ -411,7 +422,13 @@
                 <div class="pane-bg">
                 </div>
                 <div class="pane-bgc">
-                  <addFood></addFood>
+                  <!-- <div v-for="(food,index) in addFoodData" :key="index"> -->
+                    <addFood
+                    v-for="(food,index) in addFoodData" :key="index"
+                    :food="food.food"
+                    @addfood="addfoods">
+                    </addFood>
+                  <!-- </div> -->
                 </div>
               </pane>
             </tabs>
@@ -420,49 +437,53 @@
       </div>
 
 
-      <div id="print" class="print" style="padding-bottom: 30px;margin-top: 130px;position: relative;">
-        <div style="border-bottom: 1px solid #eaeaea;">
+      <div id="print" class="print">
+        <div class="title">
+          <h1>上海立阖泰科技</h1>
+          <h1>门诊病历</h1>
+        </div>
+        <div class="bottom-boder cardnum">
           <span>医疗证/医保卡号：</span>
         </div>
-        <div style="border-bottom: 1px solid #eaeaea;">
-          <div>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">姓名：{{info.name}}</span>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">性别：{{info.sex}}</span>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">年龄：{{info.name}}</span>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">科室：{{info.name}}</span>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">费别：{{info.name}}</span>
+        <div class="bottom-boder">
+          <div class="base-info">
+            <span>姓名：{{info.name}}</span>
+            <span>性别：{{info.sex === 'man' ? '男':'女'}}</span>
+            <span>年龄：{{info.age}}</span>
+            <span>科室：{{footerData.type}}</span>
+            <span>费别：{{footerData.total}}</span>
           </div>
-          <div>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">病历号：</span>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">住址/电话：</span>
+          <div class="info-card">
+            <span>病历号：</span>
+            <span>住址/电话：</span>
           </div>
-          <div style="border-bottom: 1px solid #eaeaea;">
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">诊断：</span>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">开具时间：</span>
+          <div class="info-card">
+            <span>诊断：{{medication.sureSick}}</span>
+            <span>开具时间：</span>
           </div>
         </div>
-        <div>
+        <div class="bottom-boder diagnos">
           <p>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">主诉：</span>
+            <span>主诉：{{medication.symptom}}</span>
           </p>
           <p>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">现病史：</span>
+            <span>现病史：</span>
           </p>
           <p>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">既往病史：</span>
+            <span>既往病史：</span>
           </p>
           <p>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">过敏史：</span>
+            <span>过敏史：</span>
           </p>
           <p>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">体格检查：</span>
+            <span>体格检查：</span>
           </p>
           <p>
-            <span style="display: inline-block;margin-top:10px;margin-bottom:10px;margin-right: 30px;">处理意见：</span>
+            <span>处理意见：{{medication.doctorTip}}</span>
           </p>
         </div>
-        <div class="print-footer" style="position: absolute;bottom: 5px;right: 150px;">
-          <p>签字医生：</p>
+        <div class="print-footer">
+          <p>签字医生：{{footerData.doctor}}</p>
         </div>
       </div>
     </div>
@@ -536,18 +557,85 @@ export default {
         doctor: '',
         type: '',
         total: ''
-      }
+      },
+      addSportData: [
+        {
+          title: '最轻运动',
+          subtitle: '80千卡/30min',
+          itemlist: ['散步', '购物', '散步', '购物'],
+          initNum: 30,
+          step: 10,
+          num: null
+        },
+        {
+          title: '最轻运动',
+          subtitle: '80千卡/20min',
+          itemlist: ['散步', '购物', '散步', '购物'],
+          initNum: 20,
+          step: 5,
+          num: null
+
+        },
+        {
+          title: '最轻运动',
+          subtitle: '80千卡/10min',
+          itemlist: ['散步', '购物', '购物', '散步', '购物'],
+          initNum: 10,
+          step: 5,
+          num: null
+        },
+        {
+          title: '最轻运动',
+          subtitle: '80千卡/5min',
+          itemlist: ['散步', '购物', '散步', '购物', '散步', '购物'],
+          initNum: 5,
+          step: 5,
+          num: null
+        }
+      ],
+      addFoodData: [
+        {
+          food: '减少钠盐',
+          isChoose: false
+        },
+        {
+          food: '多食优质蛋白质',
+          isChoose: false
+        },
+        {
+          food: '限制饮酒',
+          isChoose: false
+        },
+        {
+          food: '低脂饮食',
+          isChoose: false
+        },
+        {
+          food: '多吃蔬菜水果',
+          isChoose: false
+        },
+        {
+          food: '补充维生素C',
+          isChoose: false
+        }
+      ],
+      foodlist: []
     }
   },
   methods: {
     changeTab () {
 
     },
-    addMedicineHandle () {},
+    // addMedicineHandle () {},
+    // 药物搜索
     handleSelectionChange (val) {
       this.multipleSelection = val
       console.log('val', val)
     },
+    /**
+    *@description select选择
+    *@augments 选择的药物列表
+    */
     changeMedicineList (list) {
       let vm = this
       vm.medicineList = []
@@ -567,14 +655,17 @@ export default {
       this.copyInfo = this._.cloneDeep(this.info)
       this.showEditMsg = true
     },
+    // 取消完善信息
     cancelInfo () {
       this.copyInfo = {}
       this.showEditMsg = false
     },
+    // 保存完善信息
     saveInfo () {
       this.info = this.copyInfo
       this.showEditMsg = false
     },
+    // 确认添加药物
     addsure () {
       if (this.multipleSelection.length !== 0) {
         this.multipleSelection.forEach(item => {
@@ -592,42 +683,65 @@ export default {
       }
       this.$refs.multipleTable.clearSelection()
     },
+    // 删除药物
     deleteMedicine (index, rows) {
       rows.splice(index, 1)
     },
+    // 完成就诊
     complete () {
       this.$emit('complete', '1')
       // this.showface = false
     },
+    addsports (obj) {
+      console.log(obj.num)
+      console.log(obj.index)
+      this.addSportData[obj.index].num = obj.num
+    },
+    addfoods (food) {
+      if (food.add) {
+        this.foodlist.push(food.food)
+      }
+      if (!food.add) {
+        let index = this._.indexOf(this.foodlist, food.food)
+        if (index !== -1) {
+          this.foodlist.splice(index, 1)
+        }
+      }
+      console.log('foodlist', this.foodlist)
+    },
+    histroySickcard () {
+      this.$emit('openSickCard')
+    },
+    // 打印病历
     dayin () {
-      // var headhtml = '<html><head><title>立阖泰处方</title></head><body>'
-      // var foothtml = '</body>'
-      // // 获取div中的html内容
-      // // var newhtml = document.all.item(printpage).innerHTML;
-      // var newhtml = document.getElementById('print').innerHTML
-      // // 获取div中的html内容，jquery写法如下
-      // // var newhtml= $("#" + printpage).html();
+      var headhtml = '<html><head></head><body>'
+      var foothtml = '</body>'
+      // 获取div中的html内容
+      // var newhtml = document.all.item(printpage).innerHTML;
+      var newhtml = document.getElementById('print').innerHTML
+      // 获取div中的html内容，jquery写法如下
+      // var newhtml= $("#" + printpage).html();
 
-      // // 获取原来的窗口界面body的html内容，并保存起来
-      // var oldhtml = document.body.innerHTML
+      // 获取原来的窗口界面body的html内容，并保存起来
+      var oldhtml = document.body.innerHTML
 
-      // // 给窗口界面重新赋值，赋自己拼接起来的html内容
-      // document.body.innerHTML = headhtml + newhtml + foothtml
-      // // 调用window.print方法打印新窗口
-      // window.print()
-      // window.reload()
-      // // 将原来窗口body的html值回填展示
-      // document.body.innerHTML = oldhtml
-      // return false
-      let subOutputRankPrint = document.getElementById('print')
-      console.log(subOutputRankPrint.innerHTML)
-      let newContent = subOutputRankPrint.innerHTML
-      let oldContent = document.body.innerHTML
-      document.body.innerHTML = newContent
+      // 给窗口界面重新赋值，赋自己拼接起来的html内容
+      document.body.innerHTML = headhtml + newhtml + foothtml
+      // 调用window.print方法打印新窗口
       window.print()
       window.location.reload()
-      document.body.innerHTML = oldContent
+      // 将原来窗口body的html值回填展示
+      document.body.innerHTML = oldhtml
       return false
+      // let subOutputRankPrint = document.getElementById('print')
+      // console.log(subOutputRankPrint.innerHTML)
+      // let newContent = subOutputRankPrint.innerHTML
+      // let oldContent = document.body.innerHTML
+      // document.body.innerHTML = newContent
+      // window.print()
+      // window.location.reload()
+      // document.body.innerHTML = oldContent
+      // return false
     }
   }
 }
@@ -635,7 +749,8 @@ export default {
 
 <style lang="scss" scoped>
   // $border-color-input:#dcdfe6;#ebeef5
-  $border-color-input:#ebeef5;
+  $border-color-input:#eaeaea;
+  // $border-color-input:#ebeef5;
   $border-radius:4px;
   input{
     border:1px solid $border-color-input;
@@ -851,11 +966,11 @@ export default {
     }
     &-rp{
       &-title{
-      font-size: 20px;
-      color: #1991fc;
-      border-bottom: 1px solid $border-color-input;
-      padding:30px 0 5px 0;
-      margin-bottom: 20px;
+        font-size: 20px;
+        color: #1991fc;
+        border-bottom: 1px solid $border-color-input;
+        padding:30px 0 15px 0;
+        margin-bottom: 20px;
       }
       table{
         border:1px solid $border-color-input;
@@ -969,4 +1084,56 @@ export default {
     background: url('~icon/hospital-icon-93.png') no-repeat;
   }
 </style>
+<style>
+@media print {
+    /* .print{ */
+  .title{
+    font-size: 24px;
+    text-align: center;
+    padding-top: 66px;
+    padding-bottom: 30px;
+  }
+  .title h1{
+    margin-bottom: 5px;
+  }
+  .print{
+    padding-bottom: 30px;position: relative;
+  }
+  .bottom-boder{
+    border-bottom: 1px solid #eaeaea;
+  }
+  .diagnos{
+    margin-top:20px;
+    padding-left: 20px;
+  }
+  .diagnos p{
+    margin-bottom: 20px;
+  }
+  .cardnum{
+    padding-bottom: 20px;
+    padding-left: 20px;
+  }
+  .print-footer{
+    position: absolute;bottom: 5px;right: 150px;
+  }
+  .base-info{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 20px;
+  }
+  .base-info span{
+    display: inline-block;
+    width: 18%;
+  }
+  .info-card{
+    padding-bottom: 20px;
+    padding-left: 20px;
+  }
+  .info-card span{
+    display: inline-block;
+    width: 40%;
+  }
+}
+</style>
+
 

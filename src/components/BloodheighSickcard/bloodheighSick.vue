@@ -59,7 +59,8 @@
             v-show="showcard">
             </card>
             <face v-show="!showcard"
-            @complete="completeDiag"></face>
+            @complete="completeDiag"
+            @openSickCard="openHistroyCard"></face>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
             <note></note>
@@ -102,6 +103,47 @@
       </div>
     </div>
 
+    <el-dialog
+    :visible.sync="histroyCard"
+    width="80%"
+    :before-close="handleClose">
+      <span slot="title" class="dialog-title">
+        历史病历
+      </span>
+      <!-- 病人简历 start  -->
+      <div class="open-sick-history">
+        <div class="sick-history-top">
+          <div>
+            <span>身高：{{height}}</span>
+            <span>体重：{{weight}}</span>
+          </div>
+          <div>
+            <span>病史：{{sysIllnessHistoryNameDisease}}</span>
+            <span>遗传史：{{sysIllnessHistoryNameGenetic}}</span>
+          </div>
+          <div>
+            <span>生活习惯：{{habits}}</span>
+            <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent}}</span>
+          </div>
+          <div>
+            <span>检查项目：心电图、肾脏</span>
+          </div>
+        </div>
+        <div class="sick-history-bottom">
+          <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
+          <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button>
+          <button><span>检查单</span></button> -->
+        </div>
+      </div>
+      <!-- 病人简历 end  -->
+      <!-- 病历卡 -->
+      <card
+      @preBtn="changePage"
+      :sickData="cardData"
+      :totalPage="totalPage"
+      >
+      </card>
+    </el-dialog>
   </div>
 </template>
 
@@ -152,7 +194,8 @@ export default {
       alldayheighblood: '',
       report: '',
       original: '',
-      showcard: true
+      showcard: true,
+      histroyCard: false
     }
   },
   methods: {
@@ -220,6 +263,12 @@ export default {
     completeDiag () {
       // this.getCardData()
       this.showcard = true
+    },
+    openHistroyCard () {
+      this.histroyCard = true
+    },
+    handleClose () {
+      this.histroyCard = false
     }
   },
   computed: {
@@ -409,6 +458,12 @@ export default {
 </script>
 
 <style scoped>
+.dialog-title{
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  font-size: 24px;
+}
 .fixed {
   width: 16.66667%;
   position: fixed;
@@ -505,6 +560,16 @@ export default {
     background-color:#fff;
     padding-left:38px;
     padding-top:24px;
+    padding-bottom:24px;
+    font-size:14px;
+    line-height:28px;
+    color:#666;
+    margin-bottom: 8px;
+  }
+  .open-sick-history{
+    background-color:#fff;
+    padding-left:38px;
+    margin-top:-24px;
     padding-bottom:24px;
     font-size:14px;
     line-height:28px;

@@ -1,17 +1,16 @@
 <template>
   <div class="sport">
-    <div class="inline" v-for="(item,index) in 4" :key="index">
+    <div class="inline">
       <div>
         <div class="sport-strength">
           <!-- <i class="sport-strength-icon" :class="color(index)"></i> -->
-          最轻运动
-          <span class="text-6">(80千卡/30min)</span>
+          {{title}}
+          <span class="text-6">({{subtitle}})</span>
           
         </div>
         <div class="sport-type">
           <span class="text-6">
-
-          散步 打太极
+          {{item}}
           </span>
         </div>
       </div>
@@ -19,10 +18,10 @@
         <div>
           <count
             :index="1"
-            :initNum="10"
+            :initNum="initNum"
             type="sport"
             unit="min"
-            :step="10"
+            :step="step"
             @numChange="sportTime"></count>
         </div>
         <!-- <div>
@@ -37,6 +36,33 @@
 import count from './../components/count.vue'
 
 export default {
+  name: 'addsport',
+  props: {
+    title: {
+      type: String,
+      default: '最轻运动'
+    },
+    subtitle: {
+      type: String,
+      default: '80千卡/30min'
+    },
+    itemlist: {
+      type: [Array],
+      default: []
+    },
+    step: {
+      type: [Number],
+      default: 10
+    },
+    initNum: {
+      type: [Number],
+      default: 30
+    },
+    index: {
+      type: [Number],
+      default: 1
+    }
+  },
   components: {
     count
   },
@@ -45,9 +71,20 @@ export default {
       // color: 'one'
     }
   },
+  computed: {
+    item () {
+      if (this.itemlist.length !== 0) {
+        return this.itemlist.join(' ')
+      } else {
+        return ''
+      }
+    }
+  },
   methods: {
-    sportTime () {
-
+    sportTime (val) {
+      // {num: this.num, index: this.index, type: this.type}
+      // console.log('sportnum', val)
+      this.$emit('addsport', {num: val.num, index: this.index})
     },
     color (index) {
       if (index === 0) {

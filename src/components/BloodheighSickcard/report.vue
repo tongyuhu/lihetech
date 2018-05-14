@@ -435,19 +435,19 @@ export default {
     formatCoverData (data) {
       let arr = []
       data.forEach(item => {
-        if (item.bpType == 1) {
+        if (this._.toNumber(item.bpType) === 1) {
           arr.push({value: item.countBest, name: '正常'})
         }
-        if (item.bpType == 2) {
+        if (this._.toNumber(item.bpType) === 2) {
           arr.push({value: item.countBest, name: '正常高值'})
         }
-        if (item.bpType == 3) {
+        if (this._.toNumber(item.bpType) === 3) {
           arr.push({value: item.countBest, name: '轻度'})
         }
-        if (item.bpType == 4) {
+        if (this._.toNumber(item.bpType) === 4) {
           arr.push({value: item.countBest, name: '中度'})
         }
-        if (item.bpType == 5) {
+        if (this._.toNumber(item.bpType) === 5) {
           arr.push({value: item.countBest, name: '危险'})
         }
       })
