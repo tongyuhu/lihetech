@@ -5,5 +5,5 @@ const prodEnv = require('./prod.env')
 module.exports = merge(prodEnv, {
   NODE_ENV: '"development"',
   API_HOST:'"/api/"',
-  IMG_URL:'"http://10.7.6.131:80/BPWatch/"'
+  IMG_URL:'"http://192.168.2.131:80/BPWatch/"'
 })
