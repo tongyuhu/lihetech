@@ -771,6 +771,7 @@ export default {
       this.checkDate[index].isChecked = true
     },
     bloodCoverOption () {
+      let vm = this
       let color = []
       let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
       let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
@@ -824,7 +825,7 @@ export default {
             type: 'pie',
             radius: '70%',
             center: ['25%', '50%'],
-            // stillShowZeroSum: false,
+            stillShowZeroSum: false,
             data: this.formatCoverData(this.coverData),
             // data: [
             //     {value: 335, name: '正常'},
@@ -832,7 +833,13 @@ export default {
             label: {
               normal: {
                 position: 'inner',
-                formatter: '{d}%',
+                formatter: function (params) {
+                  if (vm._.toNumber(params.value) === 0) {
+                    return ''
+                  } else {
+                    return params.value + '%'
+                  }
+                },
                 fontSize: 10
               }
             },

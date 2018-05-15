@@ -152,10 +152,11 @@ export default {
           return false
         }
       })
+      this.$router.go(-1)
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
-      // this.$router.go(-1)
+      this.$router.go(-1)
     }
   },
   mounted () {

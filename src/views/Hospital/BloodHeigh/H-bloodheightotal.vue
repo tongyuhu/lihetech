@@ -112,6 +112,7 @@ export default {
   },
   methods: {
     HBcoverOption () {
+      let vm = this
       return {
         // 提示框 在饼图上显示数据
         // tooltip: {
@@ -155,7 +156,13 @@ export default {
             label: {
               normal: {
                 position: 'inner',
-                formatter: '{d}%',
+                formatter: function (params) {
+                  if (vm._.toNumber(params.value) === 0) {
+                    return ''
+                  } else {
+                    return params.percent + '%'
+                  }
+                },
                 fontSize: 10
               }
             },
