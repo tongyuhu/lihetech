@@ -231,11 +231,7 @@ export default {
         this.getDoctorList()
       } else {
         let param = {}
-        if (this._.isNumber(this.searchDoctorMsg) && this.searchDoctorMsg.length > 6) {
-          param.param = this.searchDoctorMsg
-        } else {
-          param.name = this.searchDoctorMsg
-        }
+        param.fields = this.searchDoctorMsg
         param.pageSize = this.pageSize
         this.$axios(getDoctorListAPI(param))
         .then(res => {
@@ -296,6 +292,13 @@ export default {
       let param = {
         pageNum: this.currentPage,
         pageSize: this.pageSize
+      }
+      if (this.searchDoctorMsg) {
+        // if (this._.toNumber(this.searchDoctorMsg) > 0) {
+        param.fields = this.searchDoctorMsg
+        // } else {
+        //   param.name = this.searchDoctorMsg
+        // }
       }
       this.$axios(getDoctorListAPI(param))
       .then(res => {

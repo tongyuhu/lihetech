@@ -137,11 +137,11 @@
         width="456px"
         center>
         <div class="input-wrap">
-          <span>医生姓名:</span>
+          <span>患者姓名:</span>
           <input type="text" v-model="editSickName">
         </div>
         <div class="input-wrap">
-          <span>联系电话:</span>
+          <span>患者电话:</span>
           <input type="text" v-model="editSickPhone">
         </div>
         <div class="input-wrap">
@@ -298,11 +298,7 @@ export default {
         this.getSickList()
       } else {
         let param = {}
-        if (this._.isNumber(this.searchSickMsg) && this.searchSickMsg.length > 6) {
-          param.mobile = this.searchSickMsg
-        } else {
-          param.realName = this.searchSickMsg
-        }
+        param.fields = this.searchSickMsg
         param.pageSize = this.pageSize
         this.$axios(getSickListAPI(param))
         .then(res => {
@@ -315,8 +311,10 @@ export default {
             })
           }
           this.sickList = this.formatterSickList(this.sickList)
+          console.log('param', param)
         })
       }
+      console.log('sickList', this.sickList)
       console.log(this.searchSickMsg)
     },
     handleSizeChange (val) {
@@ -365,6 +363,9 @@ export default {
       let param = {
         pageNum: this.currentPage,
         pageSize: this.pageSize
+      }
+      if (this.searchSickMsg) {
+        param.fields = this.searchSickMsg
       }
       this.$axios(getSickListAPI(param))
       .then(res => {

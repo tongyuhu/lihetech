@@ -3,10 +3,10 @@ export const getDoctorListAPI = (parmas) => {
     method: 'post',
     url: '/user/manage/doctor/list',
     data: {
-      'name': parmas.name,
+      'fields': parmas.fields,
       'pageNum': parmas.pageNum,
-      'pageSize': parmas.pageSize,
-      'mobile': parmas.mobile
+      'pageSize': parmas.pageSize
+      // 'mobile': parmas.mobile
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     timeout: 10000
@@ -17,10 +17,10 @@ export const getSickListAPI = (parmas) => {
     method: 'post',
     url: '/user/manage/member/list',
     data: {
-      'name': parmas.name,
+      'fields': parmas.fields,
       'pageNum': parmas.pageNum,
-      'pageSize': parmas.pageSize,
-      'mobile': parmas.mobile
+      'pageSize': parmas.pageSize
+      // 'mobile': parmas.mobile
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     timeout: 10000

@@ -28,10 +28,11 @@
                     label="姓名"
                     label-class-name="tableTitle"
                     class-name="table-col"
-                    width="200">
+                    width="100"
+                    align="left">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row,'useUserId')"
-                      :style="{'color':'#1991fc'}">
+                      :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
                     </template>
@@ -90,10 +91,11 @@
                 <el-table-column
                     prop="realName"
                     label="姓名"
+                    width="100"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
-                      :style="{'color':'#1991fc'}">
+                      :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
                     </template>
@@ -181,10 +183,11 @@
                 <el-table-column
                     prop="realName"
                     label="姓名"
+                    width="100"
                     label-class-name="tableTitle">
                       <template slot-scope="scope">
                         <el-button type="text" @click="diagnose(scope.row)"
-                        :style="{'color':'#1991fc'}">
+                        :style="{'color':'#1991fc','padding':0}">
                           {{scope.row.realName}}
                         </el-button>
                       </template>
@@ -274,10 +277,11 @@
                 <el-table-column
                     prop="name"
                     label="姓名"
+                    width="100"
                     label-class-name="tableTitle">
                       <template slot-scope="scope">
                         <el-button type="text" @click="diagnose(scope.row)"
-                        :style="{'color':'#1991fc'}">
+                        :style="{'color':'#1991fc','padding':0}">
                           {{scope.row.name}}
                         </el-button>
                       </template>
