@@ -27,6 +27,12 @@
 //     return source
 //   }
 // }
+/**
+ *
+ * @param {*} source 原始时间
+ * @param {*} monthbefor 几个月前
+ * @param {*} ignoreMinute 忽略分钟
+ */
 export const dateFormat = function (source, monthbefor, ignoreMinute) {
   let myDate
   let separate = '-'
@@ -97,7 +103,7 @@ export const daybefor = function (sourceDay, day, ignoreMinute) {
   let value = date.getTime() - day * 86400000
   return dateFormat(value, 0, ignoreMinute)
 }
- //   通过周数和星期计算日期
+//   通过周数和星期计算日期
 export const dateFromWeek = function (year, week, day) {
   //   year       年
   //   week       周

@@ -1,59 +1,76 @@
 <template>
   <div class="inline">
-    <div v-for="(i,index) in arr" :key="index" class="food">
-      <button :class="{'checked':false}">减少钠盐</button>
+    <div class="food">
+      <button :class="{'checked':ischecked}" @click="checked">{{food}}</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'addfood',
+  props: {
+    food: {
+      type: [String],
+      default: ''
+    },
+    index: {
+      type: [Number],
+      default: 1
+    },
+    defaultChecked: {
+      type: [Boolean],
+      default: false
+    }
+  },
   data () {
     return {
-      arr: [
-        {}, {}, {}, {}, {}
-      ]
+      ischecked: false
     }
   },
   methods: {
-    checked (index) {
-
-    },
-    init () {
-
+    checked () {
+      this.ischecked = !this.ischecked
+      // if (this.ischecked) {
+      this.$emit('addfood', {food: this.food, add: this.ischecked})
+      // }
     }
+  },
+  mounted () {
+    this.ischecked = this.defaultChecked
   }
 }
 </script>
 
 <style scoped>
   .inline{
-    display: flex;
-    align-items: center;
+    display: inline-block;
+    /* align-items: center;
     justify-content:center;
-    flex-wrap: wrap
+    flex-wrap: wrap */
   }
   .food{
     margin-bottom: 15px;
     margin-right:5px; 
     margin-left:5px; 
+    display: inline-block;
   }
   button{
     border:1px solid #eaeaea;
-    background-color: #fff;
+    background-color: #f4f6f9;
     color:#666;
     outline: none;
-    width: 150px;
-    height: 28px;
+    /* width: 120px; */
+    /* height: 28px; */
+    /* line-height: 28px; */
     font-size: 14px;
     text-align: center;
-    line-height: 24px;
     vertical-align: middle;
     display: inline-block;
     margin:0;
-    padding:0;
+    padding:7px;
     cursor: pointer;
-    border-radius: 2px;
+    border-radius: 4px;
   }
   /* button:active{
     border:1px solid #1991fc;

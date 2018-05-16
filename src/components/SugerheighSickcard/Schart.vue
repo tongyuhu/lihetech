@@ -747,6 +747,7 @@ export default {
       series: {
         name: '葡萄糖趋势',
         type: 'line',
+        symbol: 'circle',
         data: ['121', '131', '157', '123', '156', '136', '164', '99']
             // markLine: {
             //     silent: true,
@@ -902,6 +903,7 @@ export default {
         {
           name: 'HbA1C',
           type: 'line',
+          symbol: 'circle',
           lineStyle: {
             normal: {
               width: 3,

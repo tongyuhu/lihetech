@@ -10,15 +10,14 @@
     <div>
       <el-card>
         <div class="search">
-          <el-input placeholder="账号 \ 姓名 \ 电话" v-model="doctorName" size="small"
+          <el-input placeholder="账号 \ 姓名 \ 电话" v-model="searchDoctorMsg" size="small"
           :style="{'padding':'0'}" 
-          @blur="selectName"
           :maxlength="30"
           >
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button slot="append" icon="el-icon-search" @click="selectName"></el-button>
           </el-input>
         </div>
-        <table v-loading="loading">
+        <!-- <table v-loading="loading">
           <tr>
             <th width="40px" class="checked"></th>
             <th>序号</th>
@@ -31,14 +30,14 @@
           </tr>
           <tr v-for="(item,index) in doctorList" :key="index">
             <td class="checked">
-              <el-checkbox  v-model="item.i" @change="doctorSelectionChange(item)"></el-checkbox>
+              <el-checkbox  v-model="item.checked" @change="doctorSelectionChange(item,index)"></el-checkbox>
             </td>
-            <td>序号</td>
-            <td>登录账号</td>
-            <td>医生姓名</td>
-            <td>联系电话</td>
-            <td>邮箱</td>
-            <td>备注</td>
+            <td width="50px">{{index}}</td>
+            <td>{{item.username}}</td>
+            <td>{{item.name}}</td>
+            <td>{{item.mobile}}</td>
+            <td>{{item.email}}</td>
+            <td>{{item.adminNote}}</td>
             <td>
               <el-button type="text" @click="editDoctor(item)">
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
@@ -49,17 +48,70 @@
           <tr v-if="doctorList.length === 0">
             <td colspan="8">暂无数据</td>
           </tr>
-        </table>
-
+        </table> -->
+        <el-table
+        border
+        ref="doctorlist"
+        :data="doctorList"
+        style="width:100%"
+        @selection-change="doctorSelectionChange">
+          <el-table-column
+          type="selection"
+          width="55"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          label="序号"
+          type="index"
+          width="55"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="username"
+          label="登录账号"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="name"
+          label="医生姓名"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="mobile"
+          label="联系电话"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="email"
+          label="邮箱"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          prop="adminNote"
+          label="备注"
+          align="center">
+          </el-table-column>
+          <el-table-column
+          label="操作"
+          align="center"
+          width="100">
+            <template slot-scope="scope">
+              <el-button type="text" @click="editDoctor(scope.row)">
+              <span class="action-text"> <i class="el-icon-edit-outline"></i> 
+              编辑</span>
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         <div class="page">
           <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[10, 20, 30, 40]"
-          :page-size="100"
+          :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="400">
+          :total="totalpage">
         </el-pagination>
         </div>
       </el-card>
@@ -98,8 +150,8 @@
         center>
         <span slot="title" class="dialog-title">确定删除该医生记录吗？</span>
         <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmDelete = false">确 定</button>
-          <button class="cancel" @click="confirmDelete = false">取 消</button>
+          <button  type="primary" @click="confirmDeleteHandle">确 定</button>
+          <button class="cancel" @click="cancelDeleteHandle">取 消</button>
         </span>
       </el-dialog>
     </div>
@@ -107,6 +159,7 @@
 </template>
 
 <script>
+import {getDoctorListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
   name: 'accountSetting',
   data () {
@@ -120,30 +173,32 @@ export default {
           doctorMark: '上海市普陀区金沙江路 1518 弄'
         },
         {
-          loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          loginAccount: '2016-05-03',
+          loginAccount: '2016-059-03',
           doctorName: '王小虎',
           doctorPhone: '上海市普陀区金沙江路 1518 弄',
           doctorEmail: '上海市普陀区金沙江路 1518 弄',
           doctorMark: '上海市普陀区金沙江路 1518 弄'
         }
+        // {
+        //   loginAccount: '2016-05-03',
+        //   doctorName: '王小虎',
+        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
+        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
+        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
+        // },
+        // {
+        //   loginAccount: '2016-05-03',
+        //   doctorName: '王小虎',
+        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
+        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
+        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
+        // }
       ],
       readyDelete: [],
-      doctorName: '',
+      searchDoctorMsg: null,
       currentPage: 1,
+      pageSize: 10,
+      totalpage: null,
       loading: false,
       modifyDoctor: false,
       editDoctorName: '',
@@ -165,44 +220,102 @@ export default {
       }
       return list
     },
+    // 选择要删除的医生
     doctorSelectionChange (selection) {
-      selection.checked = !selection.checked
-      if (!selection.checked) {
-        if (this._.indexOf(this.readyDelete, selection) !== -1) {
-          this.readyDelete.splice(this._.indexOf(this.readyDelete, selection), 1)
-        }
-      }
-      console.log(selection)
+      this.readyDelete = selection
+      console.log('delete', this.readyDelete)
     },
+    // 模糊搜索医生
     selectName () {
-      console.log(this.doctorName)
+      if (!this.searchDoctorMsg) {
+        this.getDoctorList()
+      } else {
+        let param = {}
+        if (this._.isNumber(this.searchDoctorMsg) && this.searchDoctorMsg.length > 6) {
+          param.param = this.searchDoctorMsg
+        } else {
+          param.name = this.searchDoctorMsg
+        }
+        param.pageSize = this.pageSize
+        this.$axios(getDoctorListAPI(param))
+        .then(res => {
+          this.doctorList = []
+          this.totalpage = res.data.recordCount
+          this.currentPage = res.data.pageNum
+          if (res.data.data.length !== 0) {
+            res.data.data.forEach(item => {
+              this.doctorList.push(item)
+            })
+          }
+        })
+      }
     },
+    // 页数变化
     handleSizeChange (val) {
+      this.pageSize = val
+      this.getDoctorList()
       console.log(`每页 ${val} 条`)
     },
+    // 当前页变化
     handleCurrentChange (val) {
+      this.currentPage = val
+      this.getDoctorList()
       console.log(`当前页: ${val}`)
     },
+    // 编辑医生打开弹窗 信息
     editDoctor (doctor) {
       this.modifyDoctor = true
       console.log(doctor)
     },
+    // 删除打开弹窗
     deleteDoctor () {
       if (this.readyDelete.length !== 0) {
         this.confirmDelete = true
       }
     },
+    // 确认删除
+    confirmDeleteHandle () {
+      this.doctorList = this._.differenceWith(this.doctorList, this.readyDelete, this._.isEqual)
+      this.confirmDelete = false
+    },
+    // 取消删除
+    cancelDeleteHandle () {
+      this.readyDelete = []
+      this.$refs.doctorlist.clearSelection()
+      // this.doctorList = this.formatterDoctorList(this.doctorList)
+      this.confirmDelete = false
+    },
+    // 添加医生 跳转路由
     addDoctor () {
       this.$router.push({
         name: 'addDoctor'
       })
+    },
+    // 获取医生列表
+    getDoctorList () {
+      let param = {
+        pageNum: this.currentPage,
+        pageSize: this.pageSize
+      }
+      this.$axios(getDoctorListAPI(param))
+      .then(res => {
+        this.doctorList = []
+        this.totalpage = res.data.recordCount
+        this.currentPage = res.data.pageNum
+        if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            this.doctorList.push(item)
+          })
+        }
+        // this.doctorList = this.formatterDoctorList(this.doctorList)
+      })
     }
   },
   mounted () {
-    this.doctorList = this.formatterDoctorList(this.doctorList)
+    this.getDoctorList()
   },
   updated () {
-    // this.doctorList = this.formatterDoctorList(this.doctorList)
+
   }
 }
 </script>

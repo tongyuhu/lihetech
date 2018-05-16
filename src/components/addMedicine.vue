@@ -110,8 +110,8 @@
 </template>
 
 <script>
-import count from './../components/count.vue'
-import {sickTypeApi, medicineTypeApi} from './../api/components/addMedicine'
+import count from '@/components/count.vue'
+import {sickTypeApi, medicineTypeApi} from '@/api/components/addMedicine'
 export default {
   props: {
     // histroyMedicine: []
@@ -267,7 +267,7 @@ export default {
                 obj.id = item.id
                 obj.medicineId = item.medicineId
                 obj.makeEnterprise = item.makeEnterprise
-                obj.medicineImgUrl = 'http://10.7.6.131:80/BPWatch' + item.medicineImgUrl
+                obj.medicineImgUrl = process.env.IMG_URL + item.medicineImgUrl
                 arr.push(obj)
               })
             }

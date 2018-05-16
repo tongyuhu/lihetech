@@ -18,7 +18,7 @@
                   <div class="card-header">
                     <p class="title">患者分布</p>
                   </div>
-                  <div id='HBcover'  :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HBcover'  :style="{width:'auto',height:'300px'}"></div>
               </el-card>
             </el-col>
             <el-col :span='12' v-loading="HBtrendLoading">
@@ -27,7 +27,7 @@
                   <div class="card-header">
                     <p class="title">患者走势</p>
                   </div>
-                  <div id='HBtrend' :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div>
               </el-card>
             </el-col>
         </el-row>
@@ -112,6 +112,7 @@ export default {
   },
   methods: {
     HBcoverOption () {
+      let vm = this
       return {
         // 提示框 在饼图上显示数据
         // tooltip: {
@@ -155,7 +156,13 @@ export default {
             label: {
               normal: {
                 position: 'inner',
-                formatter: '{d}%',
+                formatter: function (params) {
+                  if (vm._.toNumber(params.value) === 0) {
+                    return ''
+                  } else {
+                    return params.percent + '%'
+                  }
+                },
                 fontSize: 10
               }
             },
@@ -269,6 +276,7 @@ export default {
             type: 'line',
             smooth: true,
             smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,

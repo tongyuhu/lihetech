@@ -8,7 +8,7 @@
           <span>性别:{{sex}}</span>
           <span>年龄:{{age}}</span>
           <span>电话:{{mobile}}</span>
-          <span class="sick">确诊为:{{doctorDiagnos}}</span>
+          <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
         </div>
       </div>
       <div class="sick-card-head-right">
@@ -24,9 +24,9 @@
         @checkSuger="checkSuger"
         @checkd="changeTab">
           <pane
-          label="病历(远程)" >
+          label="病历" >
             <!-- 病人简历 start  -->
-            <div class="sick-history">
+            <div class="sick-history" v-show="showcard">
               <div class="sick-history-top">
                 <div>
                   <span>身高：{{height}}</span>
@@ -55,8 +55,12 @@
             <card
             @preBtn="changePage"
             :sickData="cardData"
-            :totalPage="totalPage">
+            :totalPage="totalPage"
+            v-show="showcard">
             </card>
+            <face v-show="!showcard"
+            @complete="completeDiag"
+            @openSickCard="openHistroyCard"></face>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
             <note></note>
@@ -64,11 +68,11 @@
 
           </pane>
           <pane
-          label="血压分布">
-
+          label="分析报告">
             <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
             <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
           </pane>
           <pane
           label="用药">
@@ -85,11 +89,11 @@
             <!-- <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
           </pane>
-          <pane
-          label="分析报告">
+          <!-- <pane -->
+          <!-- label="分析报告"> -->
             <!-- <report :sickID="sickID" :hospitalId="hospitalId"></report> -->
-            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
-          </pane>
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component> -->
+          <!-- </pane> -->
           <pane
           label="原始数据">
             <!-- <original :sickID="sickID" :hospitalId="hospitalId"></original> -->
@@ -99,6 +103,47 @@
       </div>
     </div>
 
+    <el-dialog
+    :visible.sync="histroyCard"
+    width="80%"
+    :before-close="handleClose">
+      <span slot="title" class="dialog-title">
+        历史病历
+      </span>
+      <!-- 病人简历 start  -->
+      <div class="open-sick-history">
+        <div class="sick-history-top">
+          <div>
+            <span>身高：{{height}}</span>
+            <span>体重：{{weight}}</span>
+          </div>
+          <div>
+            <span>病史：{{sysIllnessHistoryNameDisease}}</span>
+            <span>遗传史：{{sysIllnessHistoryNameGenetic}}</span>
+          </div>
+          <div>
+            <span>生活习惯：{{habits}}</span>
+            <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent}}</span>
+          </div>
+          <div>
+            <span>检查项目：心电图、肾脏</span>
+          </div>
+        </div>
+        <div class="sick-history-bottom">
+          <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
+          <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button>
+          <button><span>检查单</span></button> -->
+        </div>
+      </div>
+      <!-- 病人简历 end  -->
+      <!-- 病历卡 -->
+      <card
+      @preBtn="changePage"
+      :sickData="cardData"
+      :totalPage="totalPage"
+      >
+      </card>
+    </el-dialog>
   </div>
 </template>
 
@@ -116,6 +161,7 @@ import report from './report'
 import original from './original'
 import card from './card'
 import healthForm from './../healthForm.vue'
+import face from '@/components/BloodheighSickcard/facediagnosis'
 export default {
   components: {
     sickcard,
@@ -129,7 +175,8 @@ export default {
     report,
     original,
     card,
-    healthForm
+    healthForm,
+    face
   },
   data () {
     return {
@@ -139,13 +186,16 @@ export default {
       currentPage: 1,
       totalPage: null,
       pageSize: 1,
+      // pages: 0,
       isSugerHeigh: false,
       bloodCover: '',
       useDrug: '',
       assessment: '',
       alldayheighblood: '',
       report: '',
-      original: ''
+      original: '',
+      showcard: true,
+      histroyCard: false
     }
   },
   methods: {
@@ -155,6 +205,7 @@ export default {
           break
         case 1:
           this.bloodCover = 'bloodCover'
+          this.report = 'report'
           break
         case 2:
           this.useDrug = 'useDrug'
@@ -166,10 +217,9 @@ export default {
           this.alldayheighblood = 'alldayheighblood'
           break
         case 5:
-          this.report = 'report'
+          this.original = 'original'
           break
         case 6:
-          this.original = 'original'
           break
       }
     },
@@ -196,13 +246,29 @@ export default {
         if (res.data) {
           if (res.data.data) {
             this.totalPage = res.data.pages
+            if (this.totalPage < 1) {
+              // console.log('page', this.totalPage)
+              this.showcard = false
+            }
+              // this.pages =
             if (res.data.data.length !== 0) {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
+              console.log(this.cardData)
             }
           }
         }
       })
+    },
+    completeDiag () {
+      // this.getCardData()
+      this.showcard = true
+    },
+    openHistroyCard () {
+      this.histroyCard = true
+    },
+    handleClose () {
+      this.histroyCard = false
     }
   },
   computed: {
@@ -360,16 +426,44 @@ export default {
       }
     }
   },
+  watch: {
+    // totalPage: {
+    //   handler: function (val) {
+    //     if (!val) {
+    //       val = 0
+    //     }
+    //     if (val < 1) {
+    //       this.showcard = false
+    //     }
+    //   },
+    //   immediate: true
+    // }
+  },
   created () {
+    this.getCardData()
   },
   mounted () {
-    this.getCardData()
+    console.log(this.cardData)
+    // if (!this.totalPage) {
+    //   this.totalPage = 0
+    // }
+    if (this.totalPage < 1) {
+      console.log('page', this.totalPage)
+      // this.showcard = false
+    }
+    // this.getCardData()
     // this.changeTab(this.activeIndex)
   }
 }
 </script>
 
 <style scoped>
+.dialog-title{
+  display: inline-block;
+  text-align: center;
+  width: 100%;
+  font-size: 24px;
+}
 .fixed {
   width: 16.66667%;
   position: fixed;
@@ -466,6 +560,16 @@ export default {
     background-color:#fff;
     padding-left:38px;
     padding-top:24px;
+    padding-bottom:24px;
+    font-size:14px;
+    line-height:28px;
+    color:#666;
+    margin-bottom: 8px;
+  }
+  .open-sick-history{
+    background-color:#fff;
+    padding-left:38px;
+    margin-top:-24px;
     padding-bottom:24px;
     font-size:14px;
     line-height:28px;

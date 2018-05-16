@@ -706,6 +706,10 @@ export default {
   /* background-color:#111; */
   padding:5px;
 }
+.el-button{
+  /* font-size:14px; */
+  padding:7px 10px;
+}
 /* .table-col{
   color:#1991fc;
 } */

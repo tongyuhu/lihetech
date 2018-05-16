@@ -104,7 +104,7 @@ export default {
       optionData: [],
       xasis: [],
       pageNum: 1,
-      pageSize: 5,
+      pageSize: 15,
       pages: 1,
       initX: 0,
       loading: true
@@ -127,7 +127,7 @@ export default {
           let copydata = res.data.data
           copydata = this._.filter(copydata, function (item) {
             let hasBlood
-            if (item.beforeDiastolic2 || item.beforeSystolic2 || item.adterSystolic || item.afterDiastolic) {
+            if (item.beforeDiastolic2 || item.beforeSystolic2 || item.afterSystolic || item.afterDiastolic) {
               hasBlood = true
             } else {
               hasBlood = false
@@ -146,14 +146,18 @@ export default {
           // copydata.
           this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatter(copydata)))
           this.xasis = this._.concat(this.xasis, this.dateX(copydata))
-          console.log(this.optionData)
-          console.log(this.xasis)
+
+          console.log('copydata', copydata)
+          console.log('res.data.data', res.data.data)
+          console.log('optionData', this.optionData)
+          console.log('formatter', this.formatter(copydata))
+          console.log('xasis', this.xasis)
         }
+        this.loading = false
         let useDrug = echarts.init(document.getElementById('useDrug'))
         useDrug.setOption(this.useDrugOption())
         this.pageNum = res.data.pageNum
         this.pages = res.data.pages
-        this.loading = false
         // console.log(res.data)
       })
     },
@@ -182,8 +186,8 @@ export default {
             } else {
               readyarr.push('未测量')
             }
-            if (!this._.isUndefined(arr[i].adterSystolic)) {
-              readyarr.push(arr[i].adterSystolic)
+            if (!this._.isUndefined(arr[i].afterSystolic)) {
+              readyarr.push(arr[i].afterSystolic)
             } else {
               readyarr.push('未测量')
             }
@@ -194,6 +198,19 @@ export default {
             }
             readyarr.push(arr[i].takeMedicineTime)
             readyarr.push(arr[i].sysMedicineId)
+            if (!this._.isUndefined(arr[i].bpTypeBefore)) {
+              readyarr.push(arr[i].bpTypeBefore)
+            } else {
+              readyarr.push('nullType')
+            }
+            if (!this._.isUndefined(arr[i].bpTypeAfter)) {
+              readyarr.push(arr[i].bpTypeAfter)
+            } else {
+              readyarr.push('nullType')
+            }
+            // readyarr.push(arr[i].bpTypeBefore)
+            // readyarr.push(arr[i].bpTypeAfter)
+
             optionarr.push(readyarr)
           } else {
             if (vm.initX === 0) {
@@ -210,8 +227,8 @@ export default {
               } else {
                 readyarr.push('未测量')
               }
-              if (!this._.isUndefined(arr[i].adterSystolic)) {
-                readyarr.push(arr[i].adterSystolic)
+              if (!this._.isUndefined(arr[i].afterSystolic)) {
+                readyarr.push(arr[i].afterSystolic)
               } else {
                 readyarr.push('未测量')
               }
@@ -222,6 +239,16 @@ export default {
               }
               readyarr.push(arr[i].takeMedicineTime)
               readyarr.push(arr[i].sysMedicineId)
+              if (!this._.isUndefined(arr[i].bpTypeBefore)) {
+                readyarr.push(arr[i].bpTypeBefore)
+              } else {
+                readyarr.push('nullType')
+              }
+              if (!this._.isUndefined(arr[i].bpTypeAfter)) {
+                readyarr.push(arr[i].bpTypeAfter)
+              } else {
+                readyarr.push('nullType')
+              }
               optionarr.push(readyarr)
             } else {
               vm.initX = vm.initX + 1
@@ -239,8 +266,8 @@ export default {
               } else {
                 readyarr.push('未测量')
               }
-              if (!this._.isUndefined(arr[i].adterSystolic)) {
-                readyarr.push(arr[i].adterSystolic)
+              if (!this._.isUndefined(arr[i].afterSystolic)) {
+                readyarr.push(arr[i].afterSystolic)
               } else {
                 readyarr.push('未测量')
               }
@@ -251,6 +278,16 @@ export default {
               }
               readyarr.push(arr[i].takeMedicineTime)
               readyarr.push(arr[i].sysMedicineId)
+              if (!this._.isUndefined(arr[i].bpTypeBefore)) {
+                readyarr.push(arr[i].bpTypeBefore)
+              } else {
+                readyarr.push('nullType')
+              }
+              if (!this._.isUndefined(arr[i].bpTypeAfter)) {
+                readyarr.push(arr[i].bpTypeAfter)
+              } else {
+                readyarr.push('nullType')
+              }
               optionarr.push(readyarr)
             }
           }
@@ -270,8 +307,8 @@ export default {
           } else {
             readyarr.push('未测量')
           }
-          if (!this._.isUndefined(arr[arr.length - 1].adterSystolic)) {
-            readyarr.push(arr[arr.length - 1].adterSystolic)
+          if (!this._.isUndefined(arr[arr.length - 1].afterSystolic)) {
+            readyarr.push(arr[arr.length - 1].afterSystolic)
           } else {
             readyarr.push('未测量')
           }
@@ -282,6 +319,16 @@ export default {
           }
           readyarr.push(arr[arr.length - 1].takeMedicineTime)
           readyarr.push(arr[arr.length - 1].sysMedicineId)
+          if (!this._.isUndefined(arr[arr.length - 1].bpTypeBefore)) {
+            readyarr.push(arr[arr.length - 1].bpTypeBefore)
+          } else {
+            readyarr.push('nullType')
+          }
+          if (!this._.isUndefined(arr[arr.length - 1].bpTypeAfter)) {
+            readyarr.push(arr[arr.length - 1].bpTypeAfter)
+          } else {
+            readyarr.push('nullType')
+          }
           optionarr.push(readyarr)
         } else {
           let readyarr = []
@@ -298,8 +345,8 @@ export default {
           } else {
             readyarr.push('未测量')
           }
-          if (!this._.isUndefined(arr[arr.length - 1].adterSystolic)) {
-            readyarr.push(arr[arr.length - 1].adterSystolic)
+          if (!this._.isUndefined(arr[arr.length - 1].afterSystolic)) {
+            readyarr.push(arr[arr.length - 1].afterSystolic)
           } else {
             readyarr.push('未测量')
           }
@@ -310,6 +357,16 @@ export default {
           }
           readyarr.push(arr[arr.length - 1].takeMedicineTime)
           readyarr.push(arr[arr.length - 1].sysMedicineId)
+          if (!this._.isUndefined(arr[arr.length - 1].bpTypeBefore)) {
+            readyarr.push(arr[arr.length - 1].bpTypeBefore)
+          } else {
+            readyarr.push('nullType')
+          }
+          if (!this._.isUndefined(arr[arr.length - 1].bpTypeAfter)) {
+            readyarr.push(arr[arr.length - 1].bpTypeAfter)
+          } else {
+            readyarr.push('nullType')
+          }
           optionarr.push(readyarr)
         }
         vm.initX += 1
@@ -324,6 +381,7 @@ export default {
         for (let i = 0; i < arr.length - 1; i++) {
           let X = arr[i].takeMedicineTime.slice(0, 11)
           let afterX = arr[i + 1].takeMedicineTime.slice(0, 11)
+
           if (!this._.eq(X, afterX)) {
             // if (i === 0) {
             time.push(X)
@@ -331,6 +389,9 @@ export default {
           }
         }
         if (!this._.eq(arr[arr.length - 1].takeMedicineTime.slice(0, 11), arr[arr.length - 2].takeMedicineTime.slice(0, 11))) {
+          time.push(arr[arr.length - 1].takeMedicineTime.slice(0, 11))
+        }
+        if (time.length === 0) {
           time.push(arr[arr.length - 1].takeMedicineTime.slice(0, 11))
         }
         // if(arr[arr.length-1].takeMedicineTime.slice(0, 11))
@@ -506,18 +567,47 @@ export default {
     //     return false
     //   }
     // },
+    colorBg (bptype) {
+      let type
+      switch (bptype) {
+        case 1:
+          type = 'normalBg'
+          break
+        case 2:
+          type = 'middleBg'
+          break
+        case 3:
+          type = 'normalheighBg'
+          break
+        case 4:
+          type = 'middleheighBg'
+          break
+        case 5:
+          type = 'dangerBg'
+          break
+        default:
+          type = 'nullBg'
+      }
+      return type
+    },
     seriesItem (data) {
       let arr = []
       if (data.length > 0) {
         data.forEach(item => {
           let befor = ''
+          let befordata = ''
           let after = ''
+          let afterdata = ''
           let icon = ''
-          // if (item.beforeDiastolic2 && item.beforeSystolic2) {
-          befor = '[' + item[2] + '/' + item[3] + ']'
-          // }
+          if (item[2] !== '未测量' && item[3] !== '未测量') {
+            let bg = this.colorBg(item[8])
+            befor = '{' + bg + '|' + '[' + item[2] + '/' + item[3] + ']' + '}'
+            befordata = '[' + item[2] + '/' + item[3] + ']'
+          }
           if (item[4] !== '未测量' && item[5] !== '未测量') {
-            after = '[' + item[4] + '/' + item[5] + ']'
+            let bg = this.colorBg(item[9])
+            after = '{' + bg + '|' + '[' + item[4] + '/' + item[5] + ']' + '}'
+            afterdata = '[' + item[4] + '/' + item[5] + ']'
           }
           if (item[7]) {
             if (item[7].split(',').indexOf('1') !== -1) {
@@ -537,15 +627,15 @@ export default {
             }
           }
           let obj = {
-            value: [item[0], item[1], befor, after, item[6]],
+            value: [item[0], item[1], befordata, afterdata, item[6]],
             label: {
               normal: {
                 formatter: [
-                  '{bBg|' + befor + '}',
+                  befor,
                   '{hr|}',
                   icon,
                   '{hr|}',
-                  '{liBg|' + after + '}'
+                  after
                 ].join('\n'),
                 rich: {
                 }
@@ -697,9 +787,52 @@ export default {
             normal: {
               show: true,
               color: '#000',
-              fontSize: 10,
+              fontSize: 12,
               align: 'center',
               rich: {
+                // ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
+                normalBg: {
+                  backgroundColor: '#81cefc',
+                  color: '#fff',
+                  fontSize: 12,
+                  align: 'center',
+                  fontWeight: 'bold'
+                },
+                middleBg: {
+                  backgroundColor: '#7cedc4',
+                  color: '#fff',
+                  fontSize: 12,
+                  align: 'center',
+                  fontWeight: 'bold'
+                },
+                normalheighBg: {
+                  backgroundColor: '#f4e07a',
+                  color: '#fff',
+                  fontSize: 12,
+                  align: 'center',
+                  fontWeight: 'bold'
+                },
+                middleheighBg: {
+                  backgroundColor: '#ff947b',
+                  color: '#fff',
+                  fontSize: 12,
+                  align: 'center',
+                  fontWeight: 'bold'
+                },
+                dangerBg: {
+                  backgroundColor: '#ff5252',
+                  color: '#fff',
+                  fontSize: 12,
+                  align: 'center',
+                  fontWeight: 'bold'
+                },
+                nullBg: {
+                  backgroundColor: '#666',
+                  color: '#fff',
+                  fontSize: 12,
+                  align: 'center',
+                  fontWeight: 'bold'
+                },
                 bBg: {
                   backgroundColor: '#f4e07a',
                   color: '#fff',
@@ -719,7 +852,7 @@ export default {
                 ccbBg: {
                   backgroundColor: '#7cedc4',
                   color: '#fff',
-                  fontSize: 10,
+                  fontSize: 12,
                   align: 'center',
                   fontWeight: 'bold'
                   // fontWeight: 'blod'
@@ -832,7 +965,7 @@ export default {
   mounted () {
     let vm = this
     let useDrug = echarts.init(document.getElementById('useDrug'))
-    useDrug.setOption(vm.useDrugOption())
+    // useDrug.setOption(vm.useDrugOption())
     vm.getData()
     // console.log('medicine', this.getData())
     useDrug.on('datazoom', function (chartsparams) {
