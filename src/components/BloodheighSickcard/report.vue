@@ -433,6 +433,54 @@ export default {
      * @returns Array
      * */
     formatCoverData (data) {
+      let vm = this
+      if (data.length !== 5) {
+        let a = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 1)
+        })
+        let b = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 2)
+        })
+        let c = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 3)
+        })
+        let d = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 4)
+        })
+        let e = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 5)
+        })
+        if (a === -1) {
+          data.splice(0, 0, {
+            'bpType': 1,
+            'countBest': 0
+          })
+        }
+        if (b === -1) {
+          data.splice(1, 0, {
+            'bpType': 2,
+            'countBest': 0
+          })
+        }
+        if (c === -1) {
+          data.splice(2, 0, {
+            'bpType': 3,
+            'countBest': 0
+          })
+        }
+        if (d === -1) {
+          data.splice(3, 0, {
+            'bpType': 4,
+            'countBest': 0
+          })
+        }
+        if (e === -1) {
+          data.splice(4, 0, {
+            'bpType': 5,
+            'countBest': 0
+          })
+        }
+      }
       let arr = []
       data.forEach(item => {
         if (this._.toNumber(item.bpType) === 1) {
@@ -775,7 +823,6 @@ export default {
       let color = []
       let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
       let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
-      // let is = true
       let count = 0
       this.formatCoverData(this.coverData).forEach((item) => {
         if (item.value === 0) {
@@ -788,7 +835,7 @@ export default {
         color = nullcolor
       }
       count = 0
-      // console.log('coverData', this.formatCoverData(this.coverData))
+      console.log('coverData', this.formatCoverData(this.coverData))
       return {
         color: color,
         legend: {
@@ -825,7 +872,7 @@ export default {
             type: 'pie',
             radius: '70%',
             center: ['25%', '50%'],
-            stillShowZeroSum: false,
+            stillShowZeroSum: true,
             data: this.formatCoverData(this.coverData),
             // data: [
             //     {value: 335, name: '正常'},
@@ -840,7 +887,7 @@ export default {
                     return params.value + '%'
                   }
                 },
-                fontSize: 10
+                fontSize: 14
               }
             },
             labelLine: {

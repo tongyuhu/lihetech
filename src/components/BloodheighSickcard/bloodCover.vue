@@ -1273,7 +1273,7 @@ export default {
           })
           // this.$set(this.bloodTrendData, 'pages', res.data.pages)
           // this.bloodAndBehaviourData.pages = res.data.pages
-          // console.log('vm1', vm.bloodTrendData.pages)
+          console.log('bloodTrendData', this.bloodTrendData)
           // bloodTrend.setOption(this.bloodTrendOption())
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
@@ -1317,13 +1317,17 @@ export default {
             this.$set(this.bloodTrendData.date, index, item.description)
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
-            if (item.bpType) {
-              this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
-            } else {
-              this.$set(this.bloodAndBehaviourData.bpType, index, 0)
-            }
+            this.$set(this.bloodTrendData.bptype, index, item.bpType)
+            // if (item.bpType) {
+            //   // this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
+            //   this.bloodAndBehaviourData.bpType.push(item.bpType)
+            // } else {
+            //   // this.$set(this.bloodAndBehaviourData.bpType, index, 0)
+            //   this.bloodAndBehaviourData.bpType.push(0)
+            // }
           })
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
+          console.log('bloodTrendData', this.bloodTrendData)
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
           // bloodTrend.setOption(this.bloodTrendOption())
@@ -1349,16 +1353,18 @@ export default {
 
             this.bloodTrendData.date.push(week)
             this.bloodTrendData.week.push(item.yearWeek)
-            if (item.bpType) {
-              this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
-            } else {
-              this.$set(this.bloodAndBehaviourData.bpType, index, 0)
-            }
+            // if (item.bpType) {
+            //   this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
+            // } else {
+            //   this.$set(this.bloodAndBehaviourData.bpType, index, 0)
+            // }
+            this.$set(this.bloodTrendData.bptype, index, item.bpType)
             // this.$set(this.bloodTrendData.date, index, item.description)
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
           })
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
+          console.log('bloodTrendData', this.bloodTrendData)
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
           // bloodTrend.setOption(this.bloodTrendOption())
@@ -1382,13 +1388,15 @@ export default {
             this.$set(this.bloodTrendData.date, index, item.description)
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
-            if (item.bpType) {
-              this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
-            } else {
-              this.$set(this.bloodAndBehaviourData.bpType, index, 0)
-            }
+            // if (item.bpType) {
+            //   this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
+            // } else {
+            //   this.$set(this.bloodAndBehaviourData.bpType, index, 0)
+            // }
+            this.$set(this.bloodTrendData.bptype, index, item.bpType)
           })
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
+          console.log('bloodTrendData', this.bloodTrendData)
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
           // bloodTrend.setOption(this.bloodTrendOption())
@@ -1636,11 +1644,12 @@ export default {
                 vm.bloodTrendData.date.push(item.description)
                 vm.bloodTrendData.systolic.push(item.avgSystolic)
                 vm.bloodTrendData.diastolic.push(item.avgDiastolic)
-                if (item.bpType) {
-                  this.bloodAndBehaviourData.bpType.push(item.bpType)
-                } else {
-                  this.bloodAndBehaviourData.bpType.push(0)
-                }
+                // if (item.bpType) {
+                //   this.bloodAndBehaviourData.bpType.push(item.bpType)
+                // } else {
+                //   this.bloodAndBehaviourData.bpType.push(0)
+                // }
+                vm.bloodTrendData.bptype.push(item.bpType)
               }
               if (vm.bloodTrendChecked === 2) {
                 vm.computeYearWeek(this._.toString(item.yearWeek))
@@ -1649,11 +1658,12 @@ export default {
                 vm.bloodTrendData.week.push(this._.toString(item.yearWeek))
                 vm.bloodTrendData.systolic.push(item.avgSystolic)
                 vm.bloodTrendData.diastolic.push(item.avgDiastolic)
-                if (item.bpType) {
-                  this.bloodAndBehaviourData.bpType.push(item.bpType)
-                } else {
-                  this.bloodAndBehaviourData.bpType.push(0)
-                }
+                // if (item.bpType) {
+                //   this.bloodAndBehaviourData.bpType.push(item.bpType)
+                // } else {
+                //   this.bloodAndBehaviourData.bpType.push(0)
+                // }
+                vm.bloodTrendData.bptype.push(item.bpType)
               }
               let position = vm.computeStartend(vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
               console.log('soureposition', vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
