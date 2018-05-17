@@ -29,7 +29,7 @@
               <div>
                 <ul>
                   <li v-for="(friend,index) in list" :key="index" @click.stop="chartWith(friend.userId)">
-                    <el-badge is-dot >
+                    <el-badge :is-dot="false" >
 
                       <img  class="friend-icon" :src="friend.userImg.length !==0 ? friend.userId :'/static/user.png'" alt="">
                     </el-badge>
@@ -162,13 +162,13 @@ export default {
   }
   
   .im{
+    z-index: 998;
     button{
       // opacity: 0;
       background: rgba(255, 255, 255, 0);
       outline: none;
       border: none;
       cursor: pointer;
-      z-index: 998;
     }
     width: 250px;
     height: 510px;

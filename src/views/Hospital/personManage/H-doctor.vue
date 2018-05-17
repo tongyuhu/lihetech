@@ -50,10 +50,10 @@
           </tr>
         </table> -->
         <el-table
-        border
         ref="doctorlist"
         :data="doctorList"
         style="width:100%"
+        border
         @selection-change="doctorSelectionChange">
           <el-table-column
           type="selection"
@@ -165,20 +165,20 @@ export default {
   data () {
     return {
       doctorList: [
-        {
-          loginAccount: '2016-05-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          loginAccount: '2016-059-03',
-          doctorName: '王小虎',
-          doctorPhone: '上海市普陀区金沙江路 1518 弄',
-          doctorEmail: '上海市普陀区金沙江路 1518 弄',
-          doctorMark: '上海市普陀区金沙江路 1518 弄'
-        }
+        // {
+        //   loginAccount: '2016-05-03',
+        //   doctorName: '王小虎',
+        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
+        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
+        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
+        // },
+        // {
+        //   loginAccount: '2016-059-03',
+        //   doctorName: '王小虎',
+        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
+        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
+        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
+        // }
         // {
         //   loginAccount: '2016-05-03',
         //   doctorName: '王小虎',
@@ -323,76 +323,76 @@ export default {
 
 
 <style lang="scss" scoped>
-table{
-  border-collapse:collapse;
-  width: 100%;
-  font-size: 14px;
-  border: 1px solid #eaeaea;
-  th, td{
-  border: 1px solid #eaeaea;
-  text-align: center;
-  vertical-align: middle;
-  min-height: 40px;
-  height: 40px;
-  line-height: 28px;
-  // min-width: 80px;
-  color: #666;
-  }
-  tr:nth-child(n+2):hover{
-    background-color: #f5f7fa;
-  }
-  .checked{
-    // max-width: 40px !important;
-    text-align: center;
+// table{
+//   border-collapse:collapse;
+//   width: 100%;
+//   font-size: 14px;
+//   border: 1px solid #eaeaea;
+//   th, td{
+//   border: 1px solid #eaeaea;
+//   text-align: center;
+//   vertical-align: middle;
+//   min-height: 40px;
+//   height: 40px;
+//   line-height: 28px;
+//   // min-width: 80px;
+//   color: #666;
+//   }
+//   tr:nth-child(n+2):hover{
+//     background-color: #f5f7fa;
+//   }
+//   .checked{
+//     // max-width: 40px !important;
+//     text-align: center;
 
-    // margin:0 auto;
-    &>div{
-      cursor: pointer;
-      width: 20px;
-      height: 20px;
-    }
-    & button{
-      cursor: pointer;
-      // width: 20px;
-      // height: 20px;
-      padding: 0;
-      margin:0;
-      background: #fff;
-      // font-size: 0;
-    }
-    .checked-default{
-       position: relative;
-      cursor: pointer;
-    }
-    .checked-default::before{
-      left: 0;
-      cursor: pointer;
-      bottom:0;
-      position: absolute;
-      content: '';
-      display: block;
-      width: 20px;
-      height: 20px;
-      background: url("~icon/hospital-icon-45.png") no-repeat;
-    }
-    .checked-icon{
-      position: relative;
-      cursor: pointer;
-    }
-    .checked-icon::before{
-      left: 0;
-      cursor: pointer;
-      bottom:0;
-      position: absolute;
-      content: '';
-      display: block;
-      width: 20px;
-      height: 20px;
-      background: url("~icon/hospital-icon-44.png") no-repeat;
-    }
+//     // margin:0 auto;
+//     &>div{
+//       cursor: pointer;
+//       width: 20px;
+//       height: 20px;
+//     }
+//     & button{
+//       cursor: pointer;
+//       // width: 20px;
+//       // height: 20px;
+//       padding: 0;
+//       margin:0;
+//       background: #fff;
+//       // font-size: 0;
+//     }
+//     .checked-default{
+//        position: relative;
+//       cursor: pointer;
+//     }
+//     .checked-default::before{
+//       left: 0;
+//       cursor: pointer;
+//       bottom:0;
+//       position: absolute;
+//       content: '';
+//       display: block;
+//       width: 20px;
+//       height: 20px;
+//       background: url("~icon/hospital-icon-45.png") no-repeat;
+//     }
+//     .checked-icon{
+//       position: relative;
+//       cursor: pointer;
+//     }
+//     .checked-icon::before{
+//       left: 0;
+//       cursor: pointer;
+//       bottom:0;
+//       position: absolute;
+//       content: '';
+//       display: block;
+//       width: 20px;
+//       height: 20px;
+//       background: url("~icon/hospital-icon-44.png") no-repeat;
+//     }
 
-  }
-}
+//   }
+// }
 
 input{
     -webkit-appearance: none;
@@ -422,104 +422,104 @@ input{
     width: 80px;
   }
 }
-  button{
-    border:none;
-    outline: none;
-  }
-  .head-title{
-    float: left;
-    padding-bottom: 10px;
-    padding-left: 15px;
-    padding-top:6px;
-    font-size: 24px;
-    color:#041421;
-  }
-  .head{
-    padding-bottom: 10px;
-    padding-left: 15px;
-    padding-top:6px;
-    font-size: 24px;
-    color:#041421;
-    &-edit{
-      margin-bottom: 20px;
-      &-wrap{
-        float: right;
-      }
-      .margin-right{
-        margin-right: 15px;
-      }
-      &-button{
-        width: 130px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        font-size: 18px;
-        color:#fff;
-        opacity: 0.9;
-        background-color: #1991fc;
-        cursor: pointer;
-        border-radius: 2px;
-        &:hover{
-          opacity: 1;
-        }
-      }
-      .delete{
-        background-color: #e87070;
-      }
+button{
+  border:none;
+  outline: none;
+}
+.head-title{
+  float: left;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-top:6px;
+  font-size: 24px;
+  color:#041421;
+}
+.head{
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-top:6px;
+  font-size: 24px;
+  color:#041421;
+  &-edit{
+    margin-bottom: 20px;
+    &-wrap{
+      float: right;
     }
-  }
-  .tableTitle{
-    height: 20px;
-    color: #041421;
-    font-size:16px;
-  }
-  .action-text{
-    color: #1991fc;
-    font-size: 14px;
-  }
-  .table-height{
-    height: 40px;
-    color: #e87070;
-  }
-  .search{
-    width: 200px;
-    margin-bottom: 15px;
-  }
-  .page{
-    margin-top:20px;
-  }
-  .dialog{
-    &-title{
-      // color:#041421;
-      font-weight: bold;
+    .margin-right{
+      margin-right: 15px;
     }
-    button{
+    &-button{
       width: 130px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        font-size: 18px;
-        color:#fff;
-        opacity: 0.9;
-        background-color: #1991fc;
-        cursor: pointer;
-        border-radius: 2px;
-        border:1px solid #1991fc;
-        &:hover{
-          opacity: 1;
-        }
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      font-size: 18px;
+      color:#fff;
+      opacity: 0.9;
+      background-color: #1991fc;
+      cursor: pointer;
+      border-radius: 2px;
+      &:hover{
+        opacity: 1;
+      }
     }
-    .cancel{
-      background-color: #fff;
-      color:#1991fc;
+    .delete{
+      background-color: #e87070;
+    }
+  }
+}
+.tableTitle{
+  height: 20px;
+  color: #041421;
+  font-size:16px;
+}
+.action-text{
+  color: #1991fc;
+  font-size: 14px;
+}
+.table-height{
+  height: 40px;
+  color: #e87070;
+}
+.search{
+  width: 200px;
+  margin-bottom: 15px;
+}
+.page{
+  margin-top:20px;
+}
+.dialog{
+  &-title{
+    // color:#041421;
+    font-weight: bold;
+  }
+  button{
+    width: 130px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      font-size: 18px;
+      color:#fff;
+      opacity: 0.9;
+      background-color: #1991fc;
+      cursor: pointer;
+      border-radius: 2px;
       border:1px solid #1991fc;
-      margin-left: 20px;
-    }
+      &:hover{
+        opacity: 1;
+      }
   }
-  .input{
-    width:300px;
-    display:flex;
+  .cancel{
+    background-color: #fff;
+    color:#1991fc;
+    border:1px solid #1991fc;
+    margin-left: 20px;
   }
+}
+.input{
+  width:300px;
+  display:flex;
+}
 </style>
 <style>
 .el-input-group__append, .el-input-group__prepend{

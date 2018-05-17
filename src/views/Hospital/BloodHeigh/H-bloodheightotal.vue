@@ -6,7 +6,7 @@
           :key="item.date" 
           class="check-date-btn" 
           :class="{checked:item.isChecked}" 
-          @click="updateDate(item,index)">
+          @click="updateDate(item.value,index)">
             {{item.date}}
           </button>
         </el-row>
@@ -37,7 +37,8 @@
 
 <script>
 import echarts from 'echarts'
-// import {sickDistributionDataApi, sickTrendDataApi} from './../../../api/views/Hospital/BloodHeigh/H-bloodheightotal'
+import {dateFormat, daybefor} from '@/untils/date.js'
+import {sickDistributionDataApi, sickTrendDataApi} from '@/api/views/Hospital/BloodHeigh/H-bloodheightotal'
 export default {
   name: 'H-bloodheighttotal',
   data () {
@@ -65,22 +66,22 @@ export default {
         }
       ],
       sickDistributionData: [
-        {
-          'value': 36,
-          'name': '正常'
-        },
-        {
-          'value': 38,
-          'name': '偏高'
-        },
-        {
-          'value': 3,
-          'name': '高'
-        },
-        {
-          'value': 83,
-          'name': '危险'
-        }
+        // {
+        //   'value': 36,
+        //   'name': '正常'
+        // },
+        // {
+        //   'value': 38,
+        //   'name': '偏高'
+        // },
+        // {
+        //   'value': 3,
+        //   'name': '高'
+        // },
+        // {
+        //   'value': 83,
+        //   'name': '危险'
+        // }
 
       ],
       sickTrendData: [
@@ -113,13 +114,27 @@ export default {
   methods: {
     HBcoverOption () {
       let vm = this
+      let count = 0
+      let color = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let nocolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      this.sickDistributionData.forEach(item => {
+        if (this._.toNumber(item.value) === 0) {
+          count++
+        }
+      })
+      if (count === 4) {
+        color = nocolor
+      } else {
+        color = hascolor
+      }
       return {
         // 提示框 在饼图上显示数据
         // tooltip: {
         //   trigger: 'item',
         //   formatter: '{a} <br/>{b} : {c}人 <br/> {d}%'
         // },
-        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f'],
+        color: color,
         legend: {
           orient: 'vertical',
           left: '50%',
@@ -307,19 +322,77 @@ export default {
         }
       }
     },
-
+    startendDate (date) {
+      let obj = {}
+      let now = Date()
+      switch (date) {
+        case 'day':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = dateFormat(now, 0, true)
+          break
+        case 'week':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = daybefor(now, 6, true)
+          break
+        case 'month':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = dateFormat(now, 1, true)
+          break
+        case 'year':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = dateFormat(now, 12, true)
+          break
+      }
+      return obj
+    },
     updateDate (date, index) {
       this.checkDate.forEach(item => {
         item.isChecked = false
       })
       this.checkDate[index].isChecked = true
-      console.log('更新整体患者分布与走势时间')
+      // console.log(this.startendDate(date))
+      let time = this.startendDate(date)
+      this.getCoverData(time)
+      console.log('更新整体患者分布与走势时间', this.sickDistributionData)
+    },
+    getCoverData (params) {
+      this.$axios(sickDistributionDataApi(params))
+      .then(res => {
+        this.sickDistributionData = []
+        if (res.data) {
+          if (res.data.data) {
+            let coverData = res.data.data
+            // let obj = {}
+            this.sickDistributionData.push({
+              'value': coverData.normalCount,
+              'name': '正常'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.normalHighCount,
+              'name': '偏高'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.mildHighCount,
+              'name': '高'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.dangerCount,
+              'name': '危险'
+            })
+          }
+        }
+        let HBcover = echarts.init(document.getElementById('HBcover'))
+        HBcover.setOption(this.HBcoverOption())
+      })
+    },
+    getTrendData () {
+
     }
   },
 
   mounted () {
     // 初始化选择时间为日
-    this.checkDate[0].isChecked = true
+    this.updateDate(this.checkDate[0].value, 0)
 
     let HBcover = echarts.init(document.getElementById('HBcover'))
     HBcover.setOption(this.HBcoverOption())
