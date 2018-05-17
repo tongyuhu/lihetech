@@ -390,28 +390,28 @@ export default {
 
 
 <style lang="scss" scoped>
-table{
-  border-collapse:collapse;
-  width: 100%;
-  font-size: 14px;
-  border: 1px solid #eaeaea;
-  th, td{
-  border: 1px solid #eaeaea;
-  text-align: center;
-  vertical-align: middle;
-  min-height: 40px;
-  height: 40px;
-  line-height: 28px;
-  // min-width: 80px;
-  color: #666;
-  }
-  tr:nth-child(n+2):hover{
-    background-color: #f5f7fa;
-  }
-  .checked{
-    max-width: 40px !important;
-  }
-}
+// table{
+//   border-collapse:collapse;
+//   width: 100%;
+//   font-size: 14px;
+//   border: 1px solid #eaeaea;
+//   th, td{
+//   border: 1px solid #eaeaea;
+//   text-align: center;
+//   vertical-align: middle;
+//   min-height: 40px;
+//   height: 40px;
+//   line-height: 28px;
+//   // min-width: 80px;
+//   color: #666;
+//   }
+//   tr:nth-child(n+2):hover{
+//     background-color: #f5f7fa;
+//   }
+//   .checked{
+//     max-width: 40px !important;
+//   }
+// }
 
 input{
     -webkit-appearance: none;

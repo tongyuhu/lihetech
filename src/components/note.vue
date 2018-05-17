@@ -2,7 +2,7 @@
   <div>
     <div class="table-top clear">
       <span class="table-top-span">今日笔记</span>
-      <span>2017年4月12日 星期四</span>
+      <span>{{noteDate}}</span>
       <span class="check-date">
       
       <el-date-picker
@@ -10,6 +10,8 @@
         type="date"
         placeholder="选择日期"
         size="mini"
+        value-format="yyyy-MM-dd"
+        :clearable = "false"
         :style="{'width':'150px'}">
       </el-date-picker>
       </span>
@@ -25,73 +27,88 @@
         <tr>
           <th>饮食</th>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <!-- <p>早餐：蔬菜 水果 524千卡</p>
+            <p>午餐：蔬菜 水果 524千卡</p>
+            <p>晚餐：蔬菜 水果 524千卡</p> -->
+            <p>暂无数据</p>
           </td>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <!-- <p></p> -->
+            <p>{{userFood[0] !==undefined ? '早餐：'+userFood[0].foodName+' ' +userFood[0].caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>{{userFood[1] !==undefined ? '午餐：'+userFood[1].foodName+ ' '+userFood[1].caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>{{userFood[2] !==undefined ? '晚餐：'+userFood[2].foodName+' ' +userFood[2].caloriesTotal+'千卡':'暂无数据'}} </p>
+            <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
+            <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
           </td>
           <td>
-            <p>-3</p>
+            <!-- <p>-3</p>
             <p>-8</p>
-            <p>-5</p>
+            <p>-5</p> -->
+            <p>{{userScore.foodScore}}</p>
           </td>
         </tr>
         <tr>
           <th>运动</th>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <!-- <p v-show="userMove.length !==0" v-for="sport in userMove" :key="sport.id">
+              {{sport.planName +' '+ sport.movementTime +'分钟 '+ sport.caloriesTotal}}
+            </p> -->
+            <p>暂无数据</p>
+            <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
           </td>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <p v-show="userMove.length !==0" v-for="sport in userMove" :key="sport.id">
+              {{sport.planName +' '+ sport.movementTime +'分钟 '+ sport.caloriesTotal+'千卡'}}
+            </p>
+            <p v-show="userMove.length ===0">暂无数据</p>
           </td>
           <td>
-            <p>-3</p>
-            <p>-8</p>
-            <p>-5</p>
+            <p>{{userScore.movementScore}}</p>
+            <!-- <p>-8</p> -->
+            <!-- <p>-5</p> -->
           </td>
         </tr>
         <tr>
           <th>用药</th>
           <td>
             <div>
-              <p>早餐：蔬菜 水果 524千卡</p>
-              <p>早餐：蔬菜 水果 524千卡</p>
-              <p>早餐：蔬菜 水果 524千卡</p>
+              <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
+              <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
+              <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
+              <p>暂无数据</p>
             </div>
             <!-- <p></p> -->
           </td>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <p v-show="userMedicine.length !==0" v-for="medicine in userMedicine" :key="medicine.id">
+              {{medicine.medicineName +' 共'+ medicine.everyDosageSum + medicine.unit}}
+            </p>
+            <p v-show="userMedicine.length ===0">暂无数据</p>
           </td>
           <td>
-            <p>-3</p>
-            <p>-8</p>
-            <p>-5</p>
+            <p v-show="userMedicine.length !==0" v-for="medicine in userMedicine" :key="medicine.id">
+              {{medicine.achieveStatus}}
+            </p>
+            <p v-show="userMedicine.length ===0">暂无数据</p>
           </td>
         </tr>
         <tr>
           <th>体重</th>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <p>暂无数据</p>
+            
           </td>
           <td>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
-            <p>早餐：蔬菜 水果 524千卡</p>
+            <p>{{userWeight.weight==='暂无数据'?userWeight.weight:userWeight.weight+'kg'}}</p>
+            <p>BMI: {{userWeight.bmi}}</p>
           </td>
-          <td><p :class="{'red-text':true}">未遵医嘱</p></td>
+          <td>
+            <p>
+              {{userWeight.bmiType}}
+            </p>
+            <!-- <p :class="{'red-text':true}">未遵医嘱
+              </p> -->
+          </td>
         </tr>
       </table>
     </div>
@@ -99,11 +116,116 @@
 </template>
 
 <script>
+import {dateFormat} from '@/untils/date.js'
+import {noteApi} from '@/api/components/note.js'
 export default {
+  name: 'note',
+  props: {
+    sickID: '',
+    hospitalId: ''
+  },
   data () {
     return {
-      noteDate: ''
+      noteDate: '',
+      userFood: [],
+      userMove: [],
+      userWeight: {
+        'weight': '暂无数据',
+        'bmiType': 0,
+        'bmi': '暂无数据'
+      },
+      userMedicine: [],
+      userScore: {
+        'medicationScore': '暂无分数',
+        'foodScore': '暂无分数',
+        'movementScore': '暂无分数',
+        'testingNumberScore': '暂无分数',
+        'buckBrowseScore': '暂无分数',
+        'currentTotalScore': '暂无分数'
+      }
     }
+  },
+  methods: {
+    getData (data) {
+      let parmas = {
+        userId: this.sickID,
+        adminHospitalId: this.hospitalId,
+        time: data
+      }
+      this.$axios(noteApi(parmas))
+      .then(res => {
+        if (res.data.data) {
+          this.userScore = {
+            'medicationScore': '暂无分数',
+            'foodScore': '暂无分数',
+            'movementScore': '暂无分数',
+            'testingNumberScore': '暂无分数',
+            'buckBrowseScore': '暂无分数',
+            'currentTotalScore': '暂无分数'
+          }
+          this.userWeight = {
+            'weight': '暂无数据',
+            'bmiType': 0,
+            'bmi': '暂无数据'
+          }
+          this.userFood = res.data.data.foodList
+          this.userMove = res.data.data.moveList
+          // res.data.data.body.forEach(item => {
+          if (this._.has(res.data.data.body, 'bmiType')) {
+            let type = this._.toNumber(res.data.data.body.bmiType)
+            if (type === 0) {
+              res.data.data.body.bmiType = '暂无数据'
+            }
+            if (type === 1) {
+              res.data.data.body.bmiType = '消瘦 '
+            }
+            if (type === 2) {
+              res.data.data.body.bmiType = '消瘦'
+            }
+            if (type === 3) {
+              res.data.data.body.bmiType = '超重'
+            }
+            if (type === 4) {
+              res.data.data.body.bmiType = '肥胖'
+            }
+          }
+          // })
+          this.userWeight = res.data.data.body
+          res.data.data.medicineList.forEach(item => {
+            if (this._.has(item, 'achieveStatus')) {
+              let type = this._.toNumber(item.achieveStatus)
+              if (type === 0) {
+                item.achieveStatus = '未完成'
+              }
+              if (type === 1) {
+                item.achieveStatus = '完成'
+              }
+              if (type === 2) {
+                item.achieveStatus = '未记录'
+              }
+            }
+          })
+          this.userMedicine = res.data.data.medicineList
+          this._.merge(this.userScore, res.data.data.score)
+          // this.userScore = res.data.data.score
+        }
+      })
+    }
+  },
+  watch: {
+    noteDate: {
+      handler: function (val) {
+        if (this._.gt(val, dateFormat(Date(), 0, true))) {
+          this.noteDate = dateFormat(Date(), 0, true)
+        }
+        this.getData(val)
+      },
+      immediate: false
+    }
+  },
+  mounted () {
+    this.noteDate = dateFormat(Date(), 0, true)
+    // console.log(this.noteDate)
   }
 }
 </script>

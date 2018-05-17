@@ -63,7 +63,9 @@
             @openSickCard="openHistroyCard"></face>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
-            <note></note>
+            <note
+            :sickID="sickID" 
+            :hospitalId="hospitalId"></note>
             <!-- 今日笔记 end-->
 
           </pane>
