@@ -97,7 +97,7 @@
                   </div> -->
                 <!-- </el-col> -->
                 <div class="flex">
-                  <div class="flex-btn-left">
+                  <div class="flex-btn-left" v-show="foodBtnPre">
                     <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                   <div class="chart-min-width kaluli-wrap">
@@ -113,7 +113,7 @@
                     </div>
                     <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
                   </div>
-                  <div class="flex-btn">
+                  <div class="flex-btn" v-show="foodBtnNext">
                     <el-button @click="bloodFoodNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                 </div>
@@ -171,7 +171,7 @@
                 </el-col> -->
                 <div class="flex">
                   <div class="flex-btn-left">
-                    <el-button @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button v-show="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                   <div class="chart-min-width kaluli-wrap">
                     <div class="kaluli-btn-wrap">
@@ -187,7 +187,7 @@
                     <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
                   </div>
                   <div class="flex-btn">
-                    <el-button @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button v-show="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                 </div>
               </el-row>
@@ -338,6 +338,8 @@ export default {
         pageNum: 1,
         currentPage: 1
       },
+      foodBtnPre: true,
+      foodBtnNext: true,
       bloodsportChecked: {
         date: [
           {
@@ -375,7 +377,9 @@ export default {
         pages: 1,
         pageNum: 1,
         currentPage: 1
-      }
+      },
+      sportBtnPre: true,
+      sportBtnNext: true
     }
   },
   methods: {
@@ -649,6 +653,7 @@ export default {
       this.$axios(bloodfoodApi(params, dateParams))
       .then(res => {
         if (res.data) {
+          this.bloodfoodData.pages = res.data.pages
           if (res.data.data) {
             if (res.data.data.length !== 0) {
               res.data.data.forEach((item, index) => {
@@ -1286,8 +1291,8 @@ export default {
                   return value
                 } else {
                   let arr = []
-                  arr.push(time)
                   arr.push(value)
+                  arr.push(time)
                   x1 = time
                   return arr.join('\n')
                 }
@@ -1331,8 +1336,8 @@ export default {
                   return value
                 } else {
                   let arr = []
-                  arr.push(time)
                   arr.push(value)
+                  arr.push(time)
                   x1 = time
                   return arr.join('\n')
                 }
@@ -1635,8 +1640,8 @@ export default {
                   return value
                 } else {
                   let arr = []
-                  arr.push(time)
                   arr.push(value)
+                  arr.push(time)
                   x1 = time
                   return arr.join('\n')
                 }
@@ -1685,8 +1690,8 @@ export default {
                   return value
                 } else {
                   let arr = []
-                  arr.push(time)
                   arr.push(value)
+                  arr.push(time)
                   x1 = time
                   return arr.join('\n')
                 }
@@ -2105,6 +2110,46 @@ export default {
     }
   },
   watch: {
+    bloodfoodData: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.foodBtnNext = false
+          this.foodBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.foodBtnNext = false
+          } else {
+            this.foodBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.foodBtnPre = true
+          } else {
+            this.foodBtnPre = false
+          }
+        }
+      },
+      deep: true
+    },
+    bloodsportData: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.sportBtnNext = false
+          this.sportBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.sportBtnNext = false
+          } else {
+            this.sportBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.sportBtnPre = true
+          } else {
+            this.sportBtnPre = false
+          }
+        }
+      },
+      deep: true
+    }
   },
   mounted () {
     let vm = this

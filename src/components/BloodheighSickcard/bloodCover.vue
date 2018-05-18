@@ -41,13 +41,13 @@
               <div class="flex">
                 <div class="flex widthone">
                   <div class="flex-btn-left">
-                    <el-button @click="bloodTrendPer" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
+                    <el-button v-show="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
                   </div>
                   <div class="chart-min-width">
                     <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
                   </div>
                   <div class="flex-btn">
-                    <el-button @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button v-show="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                 </div>
 
@@ -141,13 +141,13 @@
             <el-col>
               <div class="flex">
                 <div class="flex-btn-left">
-                  <el-button icon="el-icon-arrow-left" @click="bloodBehaviorPer" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <el-button v-show="behaviourBtnPre" icon="el-icon-arrow-left" @click="bloodBehaviorPer" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                 </div>
                 <div class="chart-min-width">
                   <div id='bloodBehaviourBlood' :style="{width:'auto',height:'600px'}"></div>
                 </div>
                 <div class="flex-btn">
-                  <el-button icon="el-icon-arrow-right" @click="bloodBehaviorNext" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <el-button v-show="behaviourBtnNext" icon="el-icon-arrow-right" @click="bloodBehaviorNext" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                 </div>
               </div>
             </el-col>
@@ -433,7 +433,11 @@ export default {
         normal: '',
         heigh: '',
         danger: ''
-      }
+      },
+      trendBtnPre: true,
+      trendBtnNext: true,
+      behaviourBtnPre: true,
+      behaviourBtnNext: true
     }
   },
   methods: {
@@ -463,7 +467,7 @@ export default {
         zoomend = end
       }
       let option = {
-        color: ['#8ecefc', 'e6f5fe', '8ecefc'],
+        color: ['#8ecefc', '#e6f5fe', '#8ecefc'],
         dataZoom: [
           {
             type: 'slider',
@@ -479,18 +483,6 @@ export default {
             throttle: 500,
             filterMode: 'empty',
             zoomOnMouseWheel: false
-            // showDetail: false
-            // minValueSpan: 98,
-            // maxValueSpan: 98,
-            // handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-            // // handleSize: '30%',
-            // handleStyle: {
-            //   color: '#80cbc4'
-            // },
-            // fillerColor: '#d8faf4',
-            // borderColor: '#b1b1b1'
-            // right: '30',
-            // left: '30'
           }
         ],
         tooltip: {
@@ -928,8 +920,8 @@ export default {
                 return value
               } else {
                 let arr = []
-                arr.push(time)
                 arr.push(value)
+                arr.push(time)
                 x1 = time
                 return arr.join('\n')
               }
@@ -1001,7 +993,7 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#32b77a'
               }
             },
             itemStyle: {
@@ -1044,7 +1036,7 @@ export default {
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#7cedc4'
+                color: '#228ec4'
               }
             },
             symbol: 'circle',
@@ -1708,6 +1700,46 @@ export default {
           vm.ischeckAll = true
         } else {
           vm.ischeckAll = false
+        }
+      },
+      deep: true
+    },
+    bloodAndBehaviourData: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.behaviourBtnNext = false
+          this.behaviourBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.behaviourBtnNext = false
+          } else {
+            this.behaviourBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.behaviourBtnPre = true
+          } else {
+            this.behaviourBtnPre = false
+          }
+        }
+      },
+      deep: true
+    },
+    bloodTrendData: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.trendBtnNext = false
+          this.trendBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.trendBtnNext = false
+          } else {
+            this.trendBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.trendBtnPre = true
+          } else {
+            this.trendBtnPre = false
+          }
         }
       },
       deep: true
