@@ -427,14 +427,17 @@ export default {
       })
       this.checkDate[index].isChecked = true
       // console.log(this.startendDate(date))
-      let time = this.startendDate(date)
-      this.getCoverData(time)
+      // let time = this.startendDate(date)
       let trendtime = this.trendcheck(date)
+      this.getCoverData(trendtime)
       this.getTrendData(trendtime)
       // console.log('更新整体患者分布与走势时间', this.sickDistributionData)
     },
     getCoverData (params) {
-      this.$axios(sickDistributionDataApi(params))
+      let obj = {
+        periodTime: params
+      }
+      this.$axios(sickDistributionDataApi(obj))
       .then(res => {
         this.sickDistributionData = []
         if (res.data) {

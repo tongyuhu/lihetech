@@ -1116,6 +1116,7 @@ export default {
             }
             this.bloodAndBehaviourData.pages = res.data.pages
             this.bloodAndBehaviourData.pageNum = res.data.pageNum
+            this.bloodAndBehaviourData.currentPage = 1
             // if (index === 0) {
             //   this.$set(this.chartA, 'date', item.description)
             // }
@@ -1158,6 +1159,7 @@ export default {
             }
           })
           this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
+          this.bloodAndBehaviourData.currentPage = 1
           let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
           let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
           bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
@@ -1189,6 +1191,7 @@ export default {
             this.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
             let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
+            this.bloodAndBehaviourData.currentPage = 1
             let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
             // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
@@ -1263,7 +1266,8 @@ export default {
             this.$set(this.bloodTrendData.diastolic, index, item.diastolic)
             this.$set(this.bloodTrendData.bptype, index, item.bpType)
           })
-          // this.$set(this.bloodTrendData, 'pages', res.data.pages)
+          this.bloodTrendData.pages = 1
+          this.bloodTrendData.currentPage = 1
           // this.bloodAndBehaviourData.pages = res.data.pages
           console.log('bloodTrendData', this.bloodTrendData)
           // bloodTrend.setOption(this.bloodTrendOption())
@@ -1318,6 +1322,7 @@ export default {
             //   this.bloodAndBehaviourData.bpType.push(0)
             // }
           })
+          this.bloodTrendData.currentPage = 1
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
           console.log('bloodTrendData', this.bloodTrendData)
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
@@ -1355,6 +1360,7 @@ export default {
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
           })
+          this.bloodTrendData.currentPage = 1
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
           console.log('bloodTrendData', this.bloodTrendData)
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
@@ -1387,6 +1393,7 @@ export default {
             // }
             this.$set(this.bloodTrendData.bptype, index, item.bpType)
           })
+          this.bloodTrendData.currentPage = 1
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
           console.log('bloodTrendData', this.bloodTrendData)
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
@@ -1567,13 +1574,18 @@ export default {
                     item.avgBehaveScore = 0
                   }
                   vm.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
+                  if (item.bpType) {
+                    vm.bloodAndBehaviourData.bpType.push(item.bpType)
+                  } else {
+                    vm.bloodAndBehaviourData.bpType.push(0)
+                  }
                   vm.bloodAndBehaviourData.pages = res.data.pages
                   vm.bloodAndBehaviourData.pageNum = res.data.pageNum
                 })
               }
             }
             // if(vm.bloodAndBehaviourData.currentPage <)
-            let position = this.computeStartend(vm.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
+            let position = vm.computeStartend(vm.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
             // let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
             // bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 85))

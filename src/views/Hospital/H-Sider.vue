@@ -132,6 +132,12 @@ export default {
           ]
         },
         {
+          // id: 4,
+          iconName: 'order',
+          title: '预约管理',
+          routerName: 'order'
+        },
+        {
           id: 4,
           iconName: 'cases',
           title: '病例库',
