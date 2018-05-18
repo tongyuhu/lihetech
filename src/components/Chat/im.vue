@@ -28,9 +28,8 @@
             :total="friendList.length">
               <div>
                 <ul>
-                  <li v-for="(friend,index) in list" :key="index" @click.stop="chartWith(friend.userId)">
-                    <el-badge :is-dot="false" >
-
+                  <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
+                    <el-badge :is-dot="friend.hasMsg" >
                       <img  class="friend-icon" :src="friend.userImg.length !==0 ? friend.userId :'/static/user.png'" alt="">
                     </el-badge>
                     <span class="im-panes-name">{{friend.userName}}</span>
@@ -76,7 +75,7 @@
 import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
-
+import {mapState, mapMutations, mapActions} from 'vuex'
 export default {
   name: 'im',
   components: {
@@ -94,41 +93,92 @@ export default {
   },
   data () {
     return {
-      message: '',
-      list: [
-        {
-          userId: '5277',
-          userImg: '',
-          userName: '夏良开'
-        },
-        {
-          userId: 3,
-          userImg: '',
-          userName: '夏良凯'
-        },
-        {
-          userId: 3,
-          userImg: '',
-          userName: '夏邦为'
-        },
-        {
-          userId: 3,
-          userImg: '',
-          userName: '夏利坚'
-        }
-      ],
-      names: ['夏良开', '夏良凯', '夏邦为', '夏潮', '夏利坚',
-        '夏雨翔', '夏灏文', '夏鑫', '夏维', '夏心刚', '夏浩文',
-        '夏浚', '夏雨霖', '夏雨汉', '夏飞', '夏闻', '夏收', '夏宣',
-        '夏轩', '夏学', '夏学期' ]
+      message: ''
+      // list: [
+        // {
+        //   userId: '5277',
+        //   userImg: '',
+        //   userName: '夏良开',
+        //   hasMsg: false,
+        //   currentChat: false
+        // },
+        // {
+        //   userId: 3,
+        //   userImg: '',
+        //   userName: '夏良凯',
+        //   hasMsg: false,
+        //   currentChat: false
+        // },
+        // {
+        //   userId: 3,
+        //   userImg: '',
+        //   userName: '夏邦为',
+        //   hasMsg: false,
+        //   currentChat: false
+        // },
+        // {
+        //   userId: 3,
+        //   userImg: '',
+        //   userName: '夏利坚',
+        //   hasMsg: false,
+        //   currentChat: false
+        // }
+      // ]
     }
   },
+  computed: {
+    ...mapState({
+      friendsList: 'friendsList'
+    })
+  },
   methods: {
+    ...mapMutations([
+      'changeChatFriend',
+      'addChatFriend'
+    ]),
     closeIM () {
       this.$emit('closeIM')
     },
-    chartWith (item) {
-      // item
+    chartWith (friend) {
+      let vm = this
+      let history = []
+      if (this._.has(friend, 'history')) {
+        history = friend.history
+        vm.addChatFriend(friend)
+        vm.changeChatFriend(friend)
+      } else {
+        // let historys = []
+        friend.history = []
+        vm.addChatFriend(friend)
+        vm.changeChatFriend(friend)
+      }
+      // console.log('好友列表', this.friendsList)
+      // friend.history = []
+      // 获取历史消息
+      let timestrap = null
+      let count = 20
+      let userId = friend.userId
+      // console.log('RongIMLib.ConversationType.PRIVATE', RongIMLib.ConversationType.PRIVATE)
+      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+      RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
+        onSuccess: function (list, hasMsg) {
+        // hasMsg为boolean值，如果为true则表示还有剩余历史消息可拉取，为false的话表示没有剩余历史消息可供拉取。
+        // list 为拉取到的历史消息列表
+          // let history = list
+          // friend.history = history
+          console.log('历史消息', list, hasMsg)
+        },
+        onError: function (error) {
+          console.log('历史消息获取失败', error)
+        // APP未开启消息漫游或处理异常
+        // throw new ERROR ......
+        }
+      })
+
+      // this.addChatFriend(friend)
+      // this.changeChatFriend(friend)
+      this.$emit('chat', history)
+      // console.log('好友huihua', friend)
     }
   },
   mounted () {

@@ -17,7 +17,8 @@ export const sickTrendDataApi = (param) => {
     url: '/wholePoint/blood/countBase/list',
     data: {
       pageNum: param.pageNum,
-      pageSize: param.pageSize
+      pageSize: param.pageSize,
+      periodTime: param.periodTime
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     timeout: 10000

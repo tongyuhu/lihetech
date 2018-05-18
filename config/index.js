@@ -13,7 +13,7 @@ module.exports = {
     // proxyTable: {},
     proxyTable: {
       '/api': {
-        // target: 'http://139.196.204.123:80/BPWatch/admin/', // 线上环境
+        // target: 'http://lhtwell.com:80/BPWatch/admin/', // 线上环境
         // target: 'http://139.196.204.123:80/BPWatch/admin/', // 线上环境
         target: 'http://192.168.2.131:80/BPWatch/admin/', // 本地131环境
 

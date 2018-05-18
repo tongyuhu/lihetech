@@ -14,10 +14,15 @@
       </button>
       <!-- <div class="chat-icon"></div> -->
     </div>
-    <chat></chat>
     <im
     v-show="imStatus"
-    @closeIM="closeIMhandle"></im>
+    @closeIM="closeIMhandle"
+    @chat="chatWith"></im>
+    <chat 
+    v-if="chatStatus"
+    @colseChat="closeChatWindow"
+    :friend="whichFriend"
+    ></chat>
   </div>
 
 </template>
@@ -26,37 +31,66 @@
   import HSider from './../Hospital/H-Sider.vue'
   import chat from '@/components/Chat/chat.vue'
   import im from '@/components/Chat/im.vue'
+  import Bus from '@/bus.js'
+  import { mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   export default {
     name: 'H-index',
-    data () {
-      return {
-        imStatus: false,
-        appKey: 'pwe86ga5pv726',
-        token: 'Dxfv/bGrIxWKCDWXcFVbmd3PKX0oYabJU5xpYqan3zBYh+kCuHmij1uKmYhRIABTOcVjODKzGb3wB3WXmhmBIA=='
-      }
-    },
     components: {
       HHead,
       HSider,
       chat,
       im
     },
+    data () {
+      return {
+        imStatus: false,
+        chatStatus: false,
+        appKey: 'pwe86ga5pv726',
+        token: '',
+        whichFriend: {}
+      }
+    },
+    computed: {
+      ...mapState({
+        adminInfo: 'adminInfo'
+      }),
+      ...mapGetters([
+        'currentChat',
+        'friendsList'
+      ])
+    },
     methods: {
+      ...mapMutations([
+        'setRongUserId'
+      ]),
+      ...mapActions([
+        'setRongUserIdAction'
+      ]),
       showFriendWindow () {
         this.imStatus = true
       },
       closeIMhandle () {
         this.imStatus = false
+      },
+      closeChatWindow () {
+        this.chatStatus = false
+      },
+      chatWith (history) {
+        Bus.$emit('history', history)
+  
+        // this.$set(this.whichFriend,)
+        // Object.assign(this.whichFriend, friend)
+        // console.log('聊天对象', friend)
+        // this.whichFriend = friend
+        this.chatStatus = true
       }
-    },
-    computed: {
     },
     mounted () {
       let vm = this
+      this.token = this.adminInfo.rongCloudToken
       // let RongIMLib = RongIMLib
       // console.log('RongIMLib', RongIMLib)
       let config = {
-      // protobuf : "//cdn.ronghub.com/protobuf-2.3.0.min.js"
         protobuf: '/static/protobuf-2.2.8.min.js'
       }
       // 初始化
@@ -94,9 +128,13 @@
             // 判断消息类型
           switch (message.messageType) {
             case RongIMClient.MessageType.TextMessage:
-              console.log(message.content.content)
-              console.log(message.content)
+              // console.log(message.content.content)
+              // console.log(message.content)
               console.log(message)
+              if (message.senderUserId === vm.currentChat.userId) {
+                Bus.$emit('hasMessage', message)
+              }
+  
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
@@ -147,6 +185,7 @@
       RongIMLib.RongIMClient.connect(this.token, {
         onSuccess: function (userId) {
           console.log('Connect successfully.' + userId)
+          vm.setRongUserId(userId)
           // 获取消息列表
           RongIMLib.RongIMClient.getInstance().getConversationList({
             onSuccess: function (list) {
@@ -166,6 +205,24 @@
             },
             onError: function (error) {
                 // error => 获取总未读数错误码。
+            }
+          })
+  
+          // 获取历史消息
+          let timestrap = null
+          let count = 20
+          console.log('RongIMLib.ConversationType.PRIVATE', RongIMLib.ConversationType.PRIVATE)
+          // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+          RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, '5277', timestrap, count, {
+            onSuccess: function (list, hasMsg) {
+            // hasMsg为boolean值，如果为true则表示还有剩余历史消息可拉取，为false的话表示没有剩余历史消息可供拉取。
+            // list 为拉取到的历史消息列表
+              console.log('历史消息', list, hasMsg)
+            },
+            onError: function (error) {
+              console.log('历史消息获取失败', error)
+            // APP未开启消息漫游或处理异常
+            // throw new ERROR ......
             }
           })
         },
@@ -194,7 +251,7 @@
           console.log(errorCode)
         }
       })
-  }
+    }
   }
 </script>
 

@@ -1,18 +1,31 @@
 <template>
-    <li :class="['clear',cls ? 'left' : 'right']">
-      <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
-        <div>
-          <img class="avatar" :src="userImg" alt="头像">
-        </div>
-        <div :class="['message-wrap',cls ? 'left-angle':'right-angle']">
-            <slot></slot>
+  <div>
+      <div :class="[cls ? 'left' : 'right']">
+        <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
+          <div>
+            <img class="avatar" :src="userImg" alt="头像">
+          </div>
+          <div :class="['message-wrap',cls ? 'left-angle':'right-angle']">
+              <slot></slot>
+          </div>
         </div>
       </div>
-    </li>
+      <!-- <div v-if="!moreMessage" class="center">
+        <el-button type="text">查看更多历史消息</el-button>
+      </div> -->
+      
+  </div>
+
+    <!-- <div class="flex">
+      <div>
+
+      </div>
+    </div> -->
 </template>
 
 <script>
 // import img from '~icon/hospital-icon2-04.png'
+import {mapState} from 'vuex'
 export default {
   name: 'chartmessage',
   props: {
@@ -23,6 +36,10 @@ export default {
     userImg: {
       type: [String],
       default: '/static/user.png'
+    },
+    moreMessage: {
+      type: [Boolean],
+      default: false
     }
   },
   data () {
@@ -30,15 +47,20 @@ export default {
       cls: false
     }
   },
+  computed: {
+    ...mapState([
+      'rongUserId'
+    ])
+  },
   methods: {
   },
   watch: {
     who: {
       handler: function (val) {
-        if (this.who === 'self') {
+        if (this.who === this.rongUserId) {
           this.cls = false
         }
-        if (this.who === 'other') {
+        if (this.who !== this.rongUserId) {
           this.cls = true
         }
       },
@@ -50,15 +72,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  // $bagcolor:#fff;
-  .clear::after{
-    content: "";
-    width:0;
-    height: 0;
-    visibility: hidden;
-    display: block;
-    clear: both;
+  .center{
+    text-align: center;
   }
+  .flex{
+    display:flex;
+  }
+  .left{
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .right{
+    width: 100%;
+
+  }
+  // $bagcolor:#fff;
+  // .clear::after{
+  //   content: "";
+  //   width:0;
+  //   height: 0;
+  //   visibility: hidden;
+  //   display: block;
+  //   clear: both;
+  // }
   .avatar{
     width: 46px;
     height: 46px;
@@ -71,8 +107,10 @@ export default {
     margin-right: 5px;
   }
   .left{
+    margin-top:15px;
     float: left;
     $bagcolor:#fff;
+    max-width: 60%;
     .message-wrap{
       background-color: $bagcolor;
       border-radius: 5px;
@@ -98,7 +136,9 @@ export default {
     }
   }
   .right{
+    margin-top:15px;
     float: right;
+    max-width: 60%;
     $bagcolor:#1991fc;
     .message-wrap{
       background-color: $bagcolor;

@@ -1,5 +1,5 @@
 <template>
-  <div class="chart-window clear" v-drag="'chart'" v-if="showChart">
+  <div class="chart-window clear" v-drag="'chart'">
     <div class="chart-window-left" v-if="false">
       <!-- 左侧聊天好友列表 -->
       <ul>
@@ -24,11 +24,11 @@
       <div class="chart-wrap-head" id="chart">
         <div class="chart-wrap-name">
           <!-- <span class="iconfont icon-people_fill"></span> -->
-          <span>夏良开</span>
+          <span>{{currentChat.userName}}</span>
         </div>
         <div class="chart-wrap-close">
           <button type="text">
-            <i class="el-icon-minus"></i>
+            <i class="el-icon-minus" @click="closeChart"></i>
           </button>
           <button type="text" @click="closeChart">
             <!-- <button type="text"><i class="el-icon-close"></i></button> -->
@@ -42,9 +42,9 @@
         <chartMessageGroup>
           <chartMessage
           v-for="(item) in historyMsg" :key="item.index"
-          :who="item.who"
+          :who="item.senderUserId"
           >
-          {{item.msg}}
+          {{historyMsg.length !== 0 ? item.content.content :''}}
           </chartMessage>
         </chartMessageGroup>
       </div>
@@ -87,56 +87,82 @@
 <script>
 import chartMessage from './chartMessage'
 import chartMessageGroup from './chartMessageGroup'
+import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+import Bus from '@/bus.js'
 export default {
   name: 'chart',
+  props: {
+    // friend: {
+    //   type: Object,
+    //   default: function () {
+    //     return {}
+    //   }
+    // }
+  },
   components: {
     chartMessage,
     chartMessageGroup
   },
   data () {
     return {
-      historyMsg: [
-        {
-          who: 'self',
-          type: 'text',
-          msg: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'other',
-          type: 'text',
-          msg: '2容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '3容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '4容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'other',
-          type: 'text',
-          msg: '5容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '3容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '4容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        },
-        {
-          who: 'other',
-          type: 'text',
-          msg: '5容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-        }
-      ],
+      // historyMsg: [
+      //   // {
+      //   //   who: 'self',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'other',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'self',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'self',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'other',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'self',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'self',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // },
+      //   // {
+      //   //   who: 'other',
+      //   //   type: 'text',
+      //   //   content: {
+      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //   //   }
+      //   // }
+      // ],
       readyMsg: '',
       chartList: [
         {
@@ -154,15 +180,94 @@ export default {
         }
       ],
       showList: false,
-      showChart: true
+      historyMsg: []
+      // showChart: true
     }
   },
+  computed: {
+    ...mapGetters([
+      'currentChat'
+    ]),
+    ...mapState([
+      'rongUserId'
+    ])
+    // historyMsg () {
+    //   return this.currentChat.history
+    // }
+  },
   methods: {
+    ...mapActions([
+      'setaddChatFriend'
+    ]),
+    ...mapMutations([
+      'addChatFriend'
+    ]),
     sendMsg () {
+      let vm = this
+      // vm.historyMsg = []
+      if (this.readyMsg !== '') {
+        let targetId = vm.currentChat.userId
+        let conversationtype = RongIMLib.ConversationType.PRIVATE
+        let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
+        RongIMLib.RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+          onSuccess: function (message) {
+            let msgObj = {
+              content: {
+                messageName: 'TextMessage',
+                content: vm.readyMsg
+              },
+              senderUserId: vm.rongUserId
+            }
+            vm.historyMsg = vm.currentChat.history
+            vm.historyMsg.push(msgObj)
+            // vm.currentChat.history.push(msgObj)
+            console.log('urrentChat.history', vm.currentChat.history)
+            console.log('msg', msg)
+            console.log('currentChat', vm.currentChat)
+            console.log('rongUserId', vm.rongUserId)
+            let newChat = vm.currentChat
+            newChat.history = vm.historyMsg
+            console.log('newChat', newChat)
+            vm.addChatFriend(newChat)
+            // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+            console.log('Send successfully')
+            vm.readyMsg = ''
+          },
+          onError: function (errorCode, message) {
+            var info = ''
+            switch (errorCode) {
+              case RongIMLib.ErrorCode.TIMEOUT:
+                info = '超时'
+                break
+              case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+                info = '未知错误'
+                break
+              case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+                info = '在黑名单中，无法向对方发送消息'
+                break
+              case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+                info = '不在讨论组中'
+                break
+              case RongIMLib.ErrorCode.NOT_IN_GROUP:
+                info = '不在群组中'
+                break
+              case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+                info = '不在聊天室中'
+                break
+              default :
+                info = x
+                break
+            }
+            console.log('发送失败:' + info)
+          }
+        })
+      }
+
       console.log(this.readyMsg)
     },
     closeChart () {
-      this.showChart = false
+      this.$emit('colseChat')
+      // this.showChart = false
     }
   },
   watch: {
@@ -177,6 +282,15 @@ export default {
       deep: true,
       immediate: true
     }
+  },
+  mounted () {
+    let vm = this
+    Bus.$on('history', (val) => {
+      vm.historyMsg = val
+    })
+    Bus.$on('hasMessage', (val) => {
+      vm.historyMsg.push(val)
+    })
   }
 }
 </script>

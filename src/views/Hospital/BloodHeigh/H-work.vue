@@ -4,7 +4,7 @@
     <div class="workhead">
       <span>工作台</span>
         <el-button type="text" @click="msgTipBtn" class="work-msg">
-          <i class="work-icon" @click="msgTipBtn"></i>
+          <i class="work-icon"></i>
           <i :class="{workMsgtip:showMsgTip}"></i>
         </el-button>
     </div>
@@ -626,10 +626,11 @@ export default {
 .work-icon{
   position: relative;
   width: 10px;
+  height: 20px;
   display: block;
 }
 .work-icon::after{
-    top: -18px;
+    /* top: -18px; */
     right: -25px;
     position: absolute;
     content: '';
@@ -638,8 +639,8 @@ export default {
     background: url('~icon/hospital-icon-21.png') no-repeat;
 }
 .workMsgtip::after{
-  top: -10px;
-  right: -30px;
+  top: 5px;
+  right: -20px;
   position: absolute;
   content: '';
   width: 15px;

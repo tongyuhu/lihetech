@@ -385,8 +385,34 @@ export default {
         HBcover.setOption(this.HBcoverOption())
       })
     },
-    getTrendData () {
+    trendcheck (date) {
+      let periodTime = null
+      switch (date) {
+        case 'day':
+          periodTime = 1
+          break
+        case 'week':
+          periodTime = 2
+          break
+        case 'month':
+          periodTime = 3
+          break
+        case 'year':
+          periodTime = 4
+          break
+      }
+      return periodTime
+    },
+    getTrendData (periodTime) {
+      let params = {
+        pageNum: 1,
+        pageSize: 31,
+        'periodTime': periodTime
+      }
+      this.$axios(sickTrendDataApi(params))
+      .then(res => {
 
+      })
     }
   },
 
