@@ -12,6 +12,9 @@ const healthForm = (resolve) => require(['@/components/healthForm.vue'], resolve
 const sickManage = (resolve) => require(['@/views/Hospital/personManage/H-sick.vue'], resolve)
 const doctorManage = (resolve) => require(['@/views/Hospital/personManage/H-doctor.vue'], resolve)
 const personManage = (resolve) => require(['@/views/Hospital/personManage/personManage.vue'], resolve)
+const order = (resolve) => require(['@/components/order/order.vue'], resolve)
+const orderSick = (resolve) => require(['@/components/order/orderSick.vue'], resolve)
+const orderSetting = (resolve) => require(['@/components/order/orderSetting.vue'], resolve)
 // const addDoctor = (resolve) => require(['@/views/Hospital/personManage/addDoctor.vue'], resolve)
 
 export default[
@@ -68,6 +71,32 @@ export default[
         }
       },
       {
+        path: 'order',
+        name: 'order',
+        component: order,
+        meta: {
+          requireAuth: true,
+          name: '预约管理',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        },
+        redirect: {name: 'orders'},
+        children: [
+          {
+            path: 'orders',
+            name: 'orders',
+            components: {
+              default: orderSick,
+              setting: orderSetting
+            },
+            meta: {
+              requireAuth: true,
+              name: '预约',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          }
+        ]
+      },
+      {
         path: 'cases',
         name: 'cases',
         component: cases,
@@ -107,18 +136,6 @@ export default[
               name: '医生管理',
               role: ['admin', 'doctor', 'hospital', 'nurse']
             }
-            // children: [
-              // {
-              //   path: 'addDoctor',
-              //   name: 'addDoctor',
-              //   component: addDoctor,
-              //   meta: {
-              //     requireAuth: true,
-              //     name: '添加医生',
-              //     role: ['admin', 'doctor','hospital','nurse']
-              //   }
-              // }
-            // ]
           },
           {
             path: 'sickManage',
