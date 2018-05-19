@@ -25,10 +25,10 @@
             <th class="left-time">日期</th>
             <th colspan="2">预约详情</th>
           </thead>
-          <tbody v-for="item in 5" :key="item.i">
+          <tbody v-for="item in currentOrder" :key="item.i">
                 <tr>
                   <th rowspan="2">
-                      <span>2018-5-14 周一</span>
+                      <span>{{item.today}}</span>
                   </th>
                   <td class="width">
                     <span>上午</span>
@@ -40,7 +40,7 @@
                       <div>高血压并发症</div>
                       <div>已就诊</div>
                       <div>
-                        <button>会诊</button>
+                        <button @click="diagnosis">会诊</button>
                         <button>联系</button>
                       </div>
                     </div>
@@ -142,11 +142,14 @@
 </template>
 
 <script>
+import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
+import Bus from '@/bus'
 export default {
   name: 'orderSick',
   data () {
     return {
-      checkOrderBtn: false
+      checkOrderBtn: false,
+      currentOrder: []
     }
   },
   methods: {
@@ -160,7 +163,54 @@ export default {
       this.$router.push({
         name: 'orderSetting'
       })
+    },
+    nextSunday () {
+      let today = new Date()
+      let befor = -7
+      let arr = []
+      let befortoday = daybefor(today, befor, true)
+      let week = computeWeekday(befortoday)
+      if (week === '周日') {
+        return today
+      } else {
+        while (week !== '周日') {
+          befor--
+          befortoday = daybefor(befortoday, befor, true)
+          week = computeWeekday(befortoday)
+        }
+      }
+      while (!(befor > 0)) {
+        // console.log(befor)
+        arr.push(befortoday + ' ' + week)
+        befor = befor + 1
+        befortoday = daybefor(today, befor, true)
+        week = computeWeekday(befortoday)
+      }
+      return arr.reverse()
+    },
+    computeColor () {
+
+    },
+    diagnosis () {
+      this.$router.push({
+        name: 'bloodheighSick',
+        params: {
+          sickID: 12,
+          hospitalId: 2
+        }})
+      Bus.$emit('huizhen')
+      // console.log('$refs', this.$refs.sickcard)
     }
+  },
+  mounted () {
+    this.nextSunday().forEach(item => {
+      let obj = {}
+      obj.today = item
+      this.currentOrder.push(obj)
+    })
+
+    // console.log('今天星期几', today, computeWeekday(today))
+    console.log('星期几', this.nextSunday())
   }
 }
 </script>
@@ -181,7 +231,7 @@ export default {
     text-align: center;
   }
   .width{
-    width: 120px;
+    width: 100px;
   }
   .black{
     color:#041421;

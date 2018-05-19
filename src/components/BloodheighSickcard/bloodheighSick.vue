@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div ref="sickcard">
+    {{showcard}}
     <!-- 头部 -->
     <div class="sick-card-head clear">
       <div class="sick-card-head-left">
@@ -58,9 +59,26 @@
             :totalPage="totalPage"
             v-show="showcard">
             </card>
-            <face v-show="!showcard"
+            <component
+            
+            v-show="!showcard"
+            v-if="name"
             @complete="completeDiag"
-            @openSickCard="openHistroyCard"></face>
+            @openSickCard="openHistroyCard"
+            :sickID="sickID" 
+            :hospitalId="hospitalId"
+            :name="name"
+            :sex="sex"
+            :age="age"
+            :mobile="mobile"
+            :doctorDiagnos="doctorDiagnos"
+            :heigh="height"
+            :weight="weight"
+            :sysIllnessHistoryNameDisease="sysIllnessHistoryNameDisease"
+            :sysIllnessHistoryNameGenetic="sysIllnessHistoryNameGenetic"
+            :habits="habits"
+            :sysIllnessHistoryNameBpConcurrent="sysIllnessHistoryNameBpConcurrent"
+            :is="face"></component>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
             <note
@@ -164,6 +182,7 @@ import original from './original'
 import card from './card'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
+import Bus from '@/bus'
 export default {
   components: {
     sickcard,
@@ -197,7 +216,9 @@ export default {
       report: '',
       original: '',
       showcard: true,
-      histroyCard: false
+      histroyCard: false,
+      huizhen: false,
+      face: face
     }
   },
   methods: {
@@ -237,6 +258,7 @@ export default {
       console.log(currentpage)
     },
     getCardData () {
+      // let vm = this
       let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId,
@@ -256,7 +278,7 @@ export default {
             if (res.data.data.length !== 0) {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
-              console.log(this.cardData)
+              // console.log(this.cardData)
             }
           }
         }
@@ -280,6 +302,7 @@ export default {
     hospitalId () {
       return this.$route.params.hospitalId
     },
+    // 姓名
     name () {
       if (this.cardData) {
         if (this.cardData.realName) {
@@ -287,6 +310,7 @@ export default {
         }
       }
     },
+    // 性别
     sex () {
       if (this.cardData) {
         if (this.cardData.sex === 1) {
@@ -297,6 +321,7 @@ export default {
         }
       }
     },
+    // 年龄
     age () {
       if (this.cardData) {
         if (this.cardData.age) {
@@ -304,6 +329,7 @@ export default {
         }
       }
     },
+    // 电话
     mobile () {
       if (this.cardData) {
         if (this.cardData.mobile) {
@@ -311,6 +337,7 @@ export default {
         }
       }
     },
+    // 医生诊断
     doctorDiagnos () {
       if (this.cardData) {
         if (this.cardData.doctorDiagnos) {
@@ -318,6 +345,7 @@ export default {
         }
       }
     },
+    // 身高
     height () {
       if (this.cardData) {
         if (this.cardData.height) {
@@ -325,6 +353,7 @@ export default {
         }
       }
     },
+    // 体重
     weight () {
       if (this.cardData) {
         if (this.cardData.weight) {
@@ -332,6 +361,7 @@ export default {
         }
       }
     },
+    // 疾病史
     sysIllnessHistoryNameDisease () {
       if (this.cardData) {
         if (this.cardData.sysIllnessHistoryNameDisease) {
@@ -339,6 +369,7 @@ export default {
         }
       }
     },
+    // 家族遗传史
     sysIllnessHistoryNameGenetic () {
       if (this.cardData) {
         if (this.cardData.sysIllnessHistoryNameGenetic) {
@@ -346,6 +377,7 @@ export default {
         }
       }
     },
+    // 生活喜好
     habits () {
       let habits = []
       let str = ''
@@ -413,6 +445,7 @@ export default {
       }
       return str
     },
+    // 血压并发症
     sysIllnessHistoryNameBpConcurrent () {
       if (this.cardData) {
         if (this.cardData.sysIllnessHistoryNameBpConcurrent) {
@@ -429,6 +462,18 @@ export default {
     }
   },
   watch: {
+    huizhen: {
+      handler: function (newval, oldval) {
+        if (newval) {
+          console.log(' this.showcard', this.showcard, 'val', newval)
+          // this.showcard = false
+        } else {
+          this.showcard = false
+          console.log(' this.showcard1', this.showcard, 'val1', newval)
+        }
+      },
+      immediate: true
+    }
     // totalPage: {
     //   handler: function (val) {
     //     if (!val) {
@@ -442,17 +487,50 @@ export default {
     // }
   },
   created () {
-    this.getCardData()
+    // this.getCardData()
   },
   mounted () {
-    console.log(this.cardData)
+    let vm = this
+    this.getCardData()
+    // console.log(this.cardData)
     // if (!this.totalPage) {
     //   this.totalPage = 0
     // }
-    if (this.totalPage < 1) {
-      console.log('page', this.totalPage)
-      // this.showcard = false
-    }
+
+    // if (this.totalPage < 1) {
+    //   console.log('page', this.totalPage)
+    //   // this.showcard = false
+    // }
+
+    Bus.$on('huizhen', function () {
+      vm.huizhen = true
+      // vm.getCardData()
+      console.log('huizhen1', vm.showcard)
+
+      console.log('huizhen', vm.huizhen)
+    })
+    // let async = function () {
+    //   let a = new Promise(function () {
+    //     vm.getCardData()
+    //   })
+    //   return a
+    // }
+    // async().then(function () {
+    //   Bus.$on('huizhen', function () {
+    //     console.log('huizhen1', vm.showcard)
+    //     vm.showcard = false
+    //     console.log('huizhen', vm.showcard)
+    //   })
+    // })
+    // new Promise(function () {
+    //   vm.getCardData()
+    // }).then(function () {
+    //   Bus.$on('huizhen', function () {
+    //     console.log('huizhen1', vm.showcard)
+    //     vm.showcard = false
+    //     console.log('huizhen', vm.showcard)
+    //   })
+    // })
     // this.getCardData()
     // this.changeTab(this.activeIndex)
   }

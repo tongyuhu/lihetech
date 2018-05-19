@@ -14,7 +14,7 @@
             <img src="~icon/admin.jpg" alt="">
           </div>
           <div class="case-left-type">
-            <span class="case-left-type-name">周</span>
+            <span class="case-left-type-name">{{info.name}}</span>
             <span class="case-left-type-se">治疗中</span>
           </div>
           <div class="case-left-btn">
@@ -85,27 +85,27 @@
                   <el-col :span="6" :lg="6" :md="24" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">姓名:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.name">
                     </div>
                   </el-col>
                   <el-col :span="6" :lg="6" :md="24" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div>患病时长:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.sickDuration">
                     </div>
                   </el-col>
                   <el-col :span="7" :lg="7" :md="24" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div>电话号码:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.phone">
                     </div>
                   </el-col>
                   <el-col :span="5" :lg="5" :md="24" :sm="24" :sx="24" class="margin-top">
-                    <select>
+                    <select v-model="medication.sex">
                       <option value="man">男</option>
                       <option value="woman">女</option>
                     </select>
-                    <select style="{'width':'40px'}">
+                    <select style="{'width':'40px'}" v-model="medication.isfirst">
                       <option value="first">初诊</option>
                       <option value="nofirst">复诊</option>
                     </select>
@@ -116,19 +116,19 @@
                   <el-col :span="6" :lg="6" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">病史:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.sickHistroy">
                     </div>
                   </el-col>
                   <el-col :span="6" :lg="6" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">遗传史:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.inhereHistroy">
                     </div>
                   </el-col>
                   <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">生活习惯:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.habit">
                     </div>
                   </el-col>
                 </el-row>
@@ -136,13 +136,13 @@
                   <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">检查项目:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.checkItem">
                     </div>
                   </el-col>
                   <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">并发症:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.complication">
                     </div>
                   </el-col>
                 </el-row>
@@ -150,13 +150,13 @@
                   <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">确诊疾病:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.sureSick">
                     </div>
                   </el-col>
                   <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group" >
                       <div for="name">上次就诊时间:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.lastTime">
                     </div>
                   </el-col>
                 </el-row>
@@ -164,7 +164,7 @@
                   <el-col>
                     <div class="input-group">
                       <div for="name">症状:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.symptom">
                     </div>
                   </el-col>
                 </el-row>
@@ -172,7 +172,7 @@
                   <el-col>
                     <div class="input-group">
                       <div for="name">诊所信息:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.hospitalMsg">
                     </div>
                   </el-col>
                 </el-row>
@@ -180,7 +180,7 @@
                   <el-col>
                     <div class="input-group">
                       <div for="name">医嘱:</div>
-                      <input type="text">
+                      <input type="text" v-model="medication.doctorTip">
                     </div>
                   </el-col>
                 </el-row>
@@ -509,6 +509,60 @@ export default {
     addSport,
     addFood
   },
+  props: {
+    sickID: {
+      type: [Number, String],
+      default: null
+    },
+    hospitalId: {
+      type: [Number, String],
+      default: null
+    },
+    name: {
+      type: [Number, String],
+      default: null
+    },
+    sex: {
+      type: [Number, String],
+      default: null
+    },
+    age: {
+      type: [Number, String],
+      default: null
+    },
+    mobile: {
+      type: [Number, String],
+      default: null
+    },
+    doctorDiagnos: {
+      type: [Number, String],
+      default: null
+    },
+    heigh: {
+      type: [Number, String],
+      default: null
+    },
+    weight: {
+      type: [Number, String],
+      default: null
+    },
+    sysIllnessHistoryNameDisease: {
+      type: [Number, String],
+      default: null
+    },
+    sysIllnessHistoryNameGenetic: {
+      type: [Number, String],
+      default: null
+    },
+    habits: {
+      type: [Number, String],
+      default: null
+    },
+    sysIllnessHistoryNameBpConcurrent: {
+      type: [Number, String],
+      default: null
+    }
+  },
   data () {
     return {
       activeIndex: 1,
@@ -526,7 +580,7 @@ export default {
       info: {
         name: '',
         sex: 'man',
-        age: 16,
+        age: '',
         heigh: 172,
         weight: '65',
         BMI: 2.5,
@@ -620,6 +674,15 @@ export default {
         }
       ],
       foodlist: []
+    }
+  },
+  watch: {
+    info: {
+      handler: function () {
+
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {
@@ -743,6 +806,45 @@ export default {
       // document.body.innerHTML = oldContent
       // return false
     }
+  },
+  // created () {
+  //   this.info.name = this.name
+  //   this.info.sex = (this.sex === '男' ? 'man' : 'woman')
+  //   this.info.age = this.age
+  //   this.info.heigh = this.heigh
+  //   console.log('heigh1', this.heigh)
+  //   console.log('heigh', this.info.heigh)
+  //   this.info.weight = this.weight
+  //   this.medication.name = this.name
+  //   this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
+  //   this.medication.phone = this.mobile
+  //   this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
+  //   this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
+  //   this.medication.habit = this.habits
+  //   this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
+  //   this.medication.sureSick = this.doctorDiagnos
+  // },
+  mounted () {
+    this.info.name = this.name
+    this.info.sex = (this.sex === '男' ? 'man' : 'woman')
+    this.info.age = parseInt(this.age)
+    this.info.heigh = parseInt(this.heigh)
+    console.log('name', this.name)
+    console.log('heigh1', this.heigh)
+    console.log('heigh', this.info.heigh)
+    this.info.weight = parseInt(this.weight)
+    this.medication.name = this.name
+    this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
+    this.medication.phone = this.mobile
+    this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
+    this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
+    this.medication.habit = this.habits
+    this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
+    this.medication.sureSick = this.doctorDiagnos
+    // this.$set(this.info, 'name', this.name)
+    // this.$mount('#app')
+    // this.medication.name = this.name
+    // this.medication.name = this.name
   }
 }
 </script>
