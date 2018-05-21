@@ -60,9 +60,7 @@
             v-show="showcard">
             </card>
             <component
-            
             v-show="!showcard"
-            v-if="name"
             @complete="completeDiag"
             @openSickCard="openHistroyCard"
             :sickID="sickID" 
@@ -169,7 +167,7 @@
 
 <script>
 import sickcard from './../sickcard.vue'
-import {bloodheighSickDataApi} from './../../api/components/BloodheighSickcard/bloodheighSick'
+import {bloodheighSickDataApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 import tabs from './../tabs.vue'
 import pane from './../pane.vue'
 import note from './../note.vue'
@@ -182,7 +180,8 @@ import original from './original'
 import card from './card'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
-import Bus from '@/bus'
+// import Bus from '@/bus.js'
+import {mapState, mapMutations} from 'vuex'
 export default {
   components: {
     sickcard,
@@ -217,11 +216,12 @@ export default {
       original: '',
       showcard: true,
       histroyCard: false,
-      huizhen: false,
-      face: face
+      huizhen: null,
+      face: null
     }
   },
   methods: {
+    ...mapMutations(['SET_SICK_CARD']),
     tabs (index) {
       switch (index) {
         case 0:
@@ -250,7 +250,6 @@ export default {
       this.tabs(index)
     },
     checkSuger () {
-
     },
     changePage (currentpage) {
       this.currentPage = currentpage
@@ -273,19 +272,21 @@ export default {
             if (this.totalPage < 1) {
               // console.log('page', this.totalPage)
               this.showcard = false
+              this.SET_SICK_CARD(true)
             }
               // this.pages =
+            this.SET_SICK_CARD(false)
             if (res.data.data.length !== 0) {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
-              // console.log(this.cardData)
+              // this.showcard = true
+              console.log(this.cardData)
             }
           }
         }
       })
     },
     completeDiag () {
-      // this.getCardData()
       this.showcard = true
     },
     openHistroyCard () {
@@ -296,6 +297,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['showSickCard']),
     sickID () {
       return this.$route.params.sickID
     },
@@ -462,77 +464,35 @@ export default {
     }
   },
   watch: {
-    huizhen: {
+    showSickCard: {
       handler: function (newval, oldval) {
         if (newval) {
-          console.log(' this.showcard', this.showcard, 'val', newval)
-          // this.showcard = false
-        } else {
+          console.log('this.showcard', this.showcard, 'val', newval)
           this.showcard = false
-          console.log(' this.showcard1', this.showcard, 'val1', newval)
+        } else {
+          console.log('newval', newval)
+          // this.showcard = true
+          console.log('this.showcard1', this.showcard, 'val1', newval)
         }
       },
-      immediate: true
+      immediate: true,
+      deep: true
     }
-    // totalPage: {
-    //   handler: function (val) {
-    //     if (!val) {
-    //       val = 0
-    //     }
-    //     if (val < 1) {
-    //       this.showcard = false
-    //     }
-    //   },
-    //   immediate: true
-    // }
   },
   created () {
-    // this.getCardData()
+    this.getCardData()
   },
   mounted () {
     let vm = this
-    this.getCardData()
-    // console.log(this.cardData)
-    // if (!this.totalPage) {
-    //   this.totalPage = 0
-    // }
-
-    // if (this.totalPage < 1) {
-    //   console.log('page', this.totalPage)
-    //   // this.showcard = false
-    // }
-
-    Bus.$on('huizhen', function () {
-      vm.huizhen = true
-      // vm.getCardData()
-      console.log('huizhen1', vm.showcard)
-
-      console.log('huizhen', vm.huizhen)
-    })
-    // let async = function () {
-    //   let a = new Promise(function () {
-    //     vm.getCardData()
-    //   })
-    //   return a
-    // }
-    // async().then(function () {
-    //   Bus.$on('huizhen', function () {
-    //     console.log('huizhen1', vm.showcard)
-    //     vm.showcard = false
-    //     console.log('huizhen', vm.showcard)
-    //   })
+    this.face = face
+    // this.SET_SICK_CARD(false)
+    // Bus.$on('huizhen', function () {
+    //   vm.huizhen = true
+    //   vm.showcard = false
+    //   // vm.getCardData()
+    //   console.log('huizhen1', vm.showcard)
+    //   console.log('huizhen', vm.huizhen)
     // })
-    // new Promise(function () {
-    //   vm.getCardData()
-    // }).then(function () {
-    //   Bus.$on('huizhen', function () {
-    //     console.log('huizhen1', vm.showcard)
-    //     vm.showcard = false
-    //     console.log('huizhen', vm.showcard)
-    //   })
-    // })
-    // this.getCardData()
-    // this.changeTab(this.activeIndex)
   }
 }
 </script>

@@ -494,7 +494,7 @@ export default {
       }
       vm.$axios(sickTrendDataApi(params))
       .then(res => {
-        if (res.data.data.length !== 0) {
+        if (res.data.data) {
           // let x =[]
           let HBtrend = echarts.init(document.getElementById('HBtrend'))
           vm.sickTrendDataX = []

@@ -498,6 +498,7 @@ import addMedicine from '@/components/addMedicine.vue'
 import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
+import {bloodheighSickDataApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
   components: {
@@ -517,54 +518,55 @@ export default {
     hospitalId: {
       type: [Number, String],
       default: null
-    },
-    name: {
-      type: [Number, String],
-      default: null
-    },
-    sex: {
-      type: [Number, String],
-      default: null
-    },
-    age: {
-      type: [Number, String],
-      default: null
-    },
-    mobile: {
-      type: [Number, String],
-      default: null
-    },
-    doctorDiagnos: {
-      type: [Number, String],
-      default: null
-    },
-    heigh: {
-      type: [Number, String],
-      default: null
-    },
-    weight: {
-      type: [Number, String],
-      default: null
-    },
-    sysIllnessHistoryNameDisease: {
-      type: [Number, String],
-      default: null
-    },
-    sysIllnessHistoryNameGenetic: {
-      type: [Number, String],
-      default: null
-    },
-    habits: {
-      type: [Number, String],
-      default: null
-    },
-    sysIllnessHistoryNameBpConcurrent: {
-      type: [Number, String],
-      default: null
     }
+    // name: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // sex: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // age: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // mobile: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // doctorDiagnos: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // heigh: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // weight: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // sysIllnessHistoryNameDisease: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // sysIllnessHistoryNameGenetic: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // habits: {
+    //   type: [Number, String],
+    //   default: null
+    // },
+    // sysIllnessHistoryNameBpConcurrent: {
+    //   type: [Number, String],
+    //   default: null
+    // }
   },
   data () {
     return {
+      cardData: {},
       activeIndex: 1,
       showEditMsg: false,
       showface: true,
@@ -686,6 +688,51 @@ export default {
     }
   },
   methods: {
+    getData () {
+      let params = {
+        userId: this.sickID,
+        adminHospitalId: this.hospitalId
+        // pageNum: this.currentPage,
+        // pageSize: this.pageSize
+      }
+      this.$axios(bloodheighSickDataApi(params))
+      .then(res => {
+        if (res.data) {
+          if (res.data.data) {
+            // this.totalPage = res.data.pages
+            // if (this.totalPage < 1) {
+              // console.log('page', this.totalPage)
+              // this.showcard = false
+              // this.SET_SICK_CARD(true)
+            // }
+              // this.pages =
+            // this.SET_SICK_CARD(false)
+            // if (res.data.data.length !== 0) {
+            this.cardData = Object.assign({}, {})
+            this.cardData = Object.assign({}, res.data.data[0])
+            this.info.name = this.name
+            this.info.sex = (this.sex === '男' ? 'man' : 'woman')
+            this.info.age = parseInt(this.age)
+            this.info.heigh = parseInt(this.heigh)
+            console.log('name', this.name)
+            console.log('heigh1', this.heigh)
+            console.log('heigh', this.info.heigh)
+            this.info.weight = parseInt(this.weight)
+            this.medication.name = this.name
+            this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
+            this.medication.phone = this.mobile
+            this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
+            this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
+            this.medication.habit = this.habits
+            this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
+            this.medication.sureSick = this.doctorDiagnos
+              // this.showcard = true
+              // console.log(this.cardData)
+            // }
+          }
+        }
+      })
+    },
     changeTab () {
 
     },
@@ -807,44 +854,174 @@ export default {
       // return false
     }
   },
-  // created () {
-  //   this.info.name = this.name
-  //   this.info.sex = (this.sex === '男' ? 'man' : 'woman')
-  //   this.info.age = this.age
-  //   this.info.heigh = this.heigh
-  //   console.log('heigh1', this.heigh)
-  //   console.log('heigh', this.info.heigh)
-  //   this.info.weight = this.weight
-  //   this.medication.name = this.name
-  //   this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
-  //   this.medication.phone = this.mobile
-  //   this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
-  //   this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
-  //   this.medication.habit = this.habits
-  //   this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
-  //   this.medication.sureSick = this.doctorDiagnos
-  // },
+  computed: {
+    // sickID () {
+    //   return this.$route.params.sickID
+    // },
+    // hospitalId () {
+    //   return this.$route.params.hospitalId
+    // },
+    // 姓名
+    name () {
+      if (this.cardData) {
+        if (this.cardData.realName) {
+          return this.cardData.realName
+        }
+      }
+    },
+    // 性别
+    sex () {
+      if (this.cardData) {
+        if (this.cardData.sex === 1) {
+          return '男'
+        }
+        if (this.cardData.sex === 0) {
+          return '女'
+        }
+      }
+    },
+    // 年龄
+    age () {
+      if (this.cardData) {
+        if (this.cardData.age) {
+          return this.cardData.age + '岁'
+        }
+      }
+    },
+    // 电话
+    mobile () {
+      if (this.cardData) {
+        if (this.cardData.mobile) {
+          return this.cardData.mobile
+        }
+      }
+    },
+    // 医生诊断
+    doctorDiagnos () {
+      if (this.cardData) {
+        if (this.cardData.doctorDiagnos) {
+          return this.cardData.doctorDiagnos
+        }
+      }
+    },
+    // 身高
+    height () {
+      if (this.cardData) {
+        if (this.cardData.height) {
+          return this.cardData.height + 'cm'
+        }
+      }
+    },
+    // 体重
+    weight () {
+      if (this.cardData) {
+        if (this.cardData.weight) {
+          return this.cardData.weight + 'kg'
+        }
+      }
+    },
+    // 疾病史
+    sysIllnessHistoryNameDisease () {
+      if (this.cardData) {
+        if (this.cardData.sysIllnessHistoryNameDisease) {
+          return this.cardData.sysIllnessHistoryNameDisease
+        }
+      }
+    },
+    // 家族遗传史
+    sysIllnessHistoryNameGenetic () {
+      if (this.cardData) {
+        if (this.cardData.sysIllnessHistoryNameGenetic) {
+          return this.cardData.sysIllnessHistoryNameGenetic
+        }
+      }
+    },
+    // 生活喜好
+    habits () {
+      let habits = []
+      let str = ''
+      if (this.cardData) {
+        if (this.cardData.highSaltStatus === 1) {
+          habits.push('长期膳食高盐')
+        }
+        if (this.cardData.highSaltStatus === 2) {
+          habits.push('无长期膳食高盐')
+        }
+        if (this.cardData.sleepStatus === 1) {
+          habits.push('睡眠规律')
+        }
+        if (this.cardData.sleepStatus === 2) {
+          habits.push('睡眠不规律')
+        }
+        if (this.cardData.smoking === 1) {
+          habits.push('抽烟')
+        }
+        if (this.cardData.smoking === 2) {
+          habits.push('不抽烟')
+        }
+        if (this.cardData.smoking === 3) {
+          habits.push('已戒烟')
+        }
+        if (this.cardData.is23Sleep === 0) {
+          habits.push('23点前睡觉')
+        }
+        if (this.cardData.is23Sleep === 1) {
+          habits.push('没有23点前睡觉')
+        }
+        if (this.cardData.dietStatus === 1) {
+          habits.push('饮食规律')
+        }
+        if (this.cardData.dietStatus === 2) {
+          habits.push('饮食不规律')
+        }
+        if (this.cardData.medicineStatus === 1) {
+          habits.push('长期服用止痛药或镇定催眠药')
+        }
+        if (this.cardData.medicineStatus === 2) {
+          habits.push('没有长期服用止痛药或镇定催眠药')
+        }
+        if (this.cardData.urineStatus === 1) {
+          habits.push('大小便正常')
+        }
+        if (this.cardData.urineStatus === 2) {
+          habits.push('大小便不正常')
+        }
+        if (this.cardData.drinking === 1) {
+          habits.push('从不饮酒')
+        }
+        if (this.cardData.drinking === 2) {
+          habits.push('偶尔饮酒')
+        }
+        if (this.cardData.drinking === 3) {
+          habits.push('经常饮酒')
+        }
+        if (this.cardData.drinking === 4) {
+          habits.push('每天饮酒')
+        }
+      }
+      if (habits.length !== 0) {
+        str = habits.join('、')
+      }
+      return str
+    },
+    // 血压并发症
+    sysIllnessHistoryNameBpConcurrent () {
+      if (this.cardData) {
+        if (this.cardData.sysIllnessHistoryNameBpConcurrent) {
+          return this.cardData.sysIllnessHistoryNameBpConcurrent
+        }
+      }
+    },
+    createTime () {
+      if (this.cardData) {
+        if (this.cardData.createTime) {
+          return this.cardData.createTime
+        }
+      }
+    }
+  },
   mounted () {
-    this.info.name = this.name
-    this.info.sex = (this.sex === '男' ? 'man' : 'woman')
-    this.info.age = parseInt(this.age)
-    this.info.heigh = parseInt(this.heigh)
-    console.log('name', this.name)
-    console.log('heigh1', this.heigh)
-    console.log('heigh', this.info.heigh)
-    this.info.weight = parseInt(this.weight)
-    this.medication.name = this.name
-    this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
-    this.medication.phone = this.mobile
-    this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
-    this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
-    this.medication.habit = this.habits
-    this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
-    this.medication.sureSick = this.doctorDiagnos
-    // this.$set(this.info, 'name', this.name)
-    // this.$mount('#app')
-    // this.medication.name = this.name
-    // this.medication.name = this.name
+    this.getData()
   }
 }
 </script>

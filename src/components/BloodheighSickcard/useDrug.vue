@@ -57,49 +57,49 @@ export default {
   data () {
     return {
       data: [
-        {
-          'takeMedicineTime': '2018-04-29 10:25:31',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 236,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 93,
-          'beforeSystolic2': 155,
-          'takeMedicineTime': '2018-04-26 16:26:26',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 199,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 83,
-          'beforeSystolic2': 138,
-          'takeMedicineTime': '2018-04-25 17:18:39',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 187,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 83,
-          'beforeSystolic2': 138,
-          'takeMedicineTime': '2018-04-25 17:18:22',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 186,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 83,
-          'beforeSystolic2': 138,
-          'takeMedicineTime': '2018-04-25 17:18:20',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 184,
-          'userId': 12
-        }
+        // {
+        //   'takeMedicineTime': '2018-04-29 10:25:31',
+        //   'sysMedicineName': 'ACEI',
+        //   'sysMedicineId': '1',
+        //   'id': 236,
+        //   'userId': 12
+        // },
+        // {
+        //   'beforeDiastolic2': 93,
+        //   'beforeSystolic2': 155,
+        //   'takeMedicineTime': '2018-04-26 16:26:26',
+        //   'sysMedicineName': 'ACEI',
+        //   'sysMedicineId': '1',
+        //   'id': 199,
+        //   'userId': 12
+        // },
+        // {
+        //   'beforeDiastolic2': 83,
+        //   'beforeSystolic2': 138,
+        //   'takeMedicineTime': '2018-04-25 17:18:39',
+        //   'sysMedicineName': 'ACEI',
+        //   'sysMedicineId': '1',
+        //   'id': 187,
+        //   'userId': 12
+        // },
+        // {
+        //   'beforeDiastolic2': 83,
+        //   'beforeSystolic2': 138,
+        //   'takeMedicineTime': '2018-04-25 17:18:22',
+        //   'sysMedicineName': 'ACEI',
+        //   'sysMedicineId': '1',
+        //   'id': 186,
+        //   'userId': 12
+        // },
+        // {
+        //   'beforeDiastolic2': 83,
+        //   'beforeSystolic2': 138,
+        //   'takeMedicineTime': '2018-04-25 17:18:20',
+        //   'sysMedicineName': 'ACEI',
+        //   'sysMedicineId': '1',
+        //   'id': 184,
+        //   'userId': 12
+        // }
       ],
       optionData: [],
       xasis: [],

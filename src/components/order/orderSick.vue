@@ -143,7 +143,8 @@
 
 <script>
 import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
-import Bus from '@/bus'
+import Bus from '@/bus.js'
+import {mapMutations} from 'vuex'
 export default {
   name: 'orderSick',
   data () {
@@ -153,6 +154,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['SET_SICK_CARD']),
     checkHistory () {
       this.checkOrderBtn = true
     },
@@ -198,7 +200,8 @@ export default {
           sickID: 12,
           hospitalId: 2
         }})
-      Bus.$emit('huizhen')
+      // Bus.$emit('huizhen', true)
+      this.SET_SICK_CARD(true)
       // console.log('$refs', this.$refs.sickcard)
     }
   },
