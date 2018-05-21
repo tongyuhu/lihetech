@@ -142,8 +142,9 @@
 </template>
 
 <script>
-import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
-import Bus from '@/bus.js'
+import {daybefor, computeWeekday} from '@/untils/date.js'
+// import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
+// import Bus from '@/bus.js'
 import {mapMutations} from 'vuex'
 export default {
   name: 'orderSick',
@@ -177,14 +178,15 @@ export default {
       } else {
         while (week !== '周日') {
           befor--
-          befortoday = daybefor(befortoday, befor, true)
+          befortoday = daybefor(today, befor, true)
           week = computeWeekday(befortoday)
         }
       }
+      // return [befortoday, week]
       while (!(befor > 0)) {
         // console.log(befor)
         arr.push(befortoday + ' ' + week)
-        befor = befor + 1
+        befor++
         befortoday = daybefor(today, befor, true)
         week = computeWeekday(befortoday)
       }

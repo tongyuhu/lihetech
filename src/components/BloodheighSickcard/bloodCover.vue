@@ -1734,7 +1734,8 @@ export default {
           }
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
     bloodTrendData: {
       handler: function (val) {
@@ -1754,7 +1755,8 @@ export default {
           }
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   mounted () {

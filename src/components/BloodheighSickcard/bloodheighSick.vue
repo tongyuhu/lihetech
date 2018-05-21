@@ -1,6 +1,6 @@
 <template>
   <div ref="sickcard">
-    {{showcard}}
+    <!-- {{showcard}} -->
     <!-- 头部 -->
     <div class="sick-card-head clear">
       <div class="sick-card-head-left">

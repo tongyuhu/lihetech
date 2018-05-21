@@ -2,7 +2,7 @@
   <div>
     <div class="order-setting">
       <button @click="setWeektime">周批量设置</button>
-      <span>2018-05-01  05-08</span>
+      <span class="title">{{start}} 至 {{end}}</span>
     </div>
 
     <div>
@@ -14,19 +14,19 @@
             <th>编辑</th>
           </thead>
           <tbody>
-            <tr>
-              <td>2018-5-14 周一</td>
+            <tr v-for="(item,index) in order" :key="item.time">
+              <td>{{item.time}}</td>
               <td>该日预约
                 <el-switch
-                  v-model="value2"
+                  v-model="item.order"
                   active-color="#1991fc"
                   inactive-color="#f1f1f1">
                 </el-switch>
               </td>
               <td>
-                <span>上午08:30-12:00</span>
-                <span>上午08:30-12:00</span>
-                <el-button type="text" icon="el-icon-edit-outline">编辑</el-button>
+                <span>上午：{{item.morning ? item.morning:'/'}}</span>
+                <span>下午：{{item.noon ? item.noon:'/'}}</span>
+                <el-button @click="editTime(index)" type="text" icon="el-icon-edit-outline">编辑</el-button>
               </td>
             </tr>
           </tbody>
@@ -48,7 +48,7 @@
           :picker-options="{
             start: '00:00',
             step: '00:30',
-            end: '24:00',
+            end: '12:00',
           }">
           </el-time-select>
           至
@@ -58,7 +58,7 @@
           :picker-options="{
             start: '00:00',
             step: '00:30',
-            end: '24:00',
+            end: '12:00',
           }">
           </el-time-select>
         </div>
@@ -68,7 +68,7 @@
           :style="{'width':'150px'}"
           v-model="settingSingleNoon.start"
           :picker-options="{
-            start: '00:00',
+            start: '12:00',
             step: '00:30',
             end: '24:00',
           }">
@@ -78,7 +78,7 @@
           :style="{'width':'150px'}"
           v-model="settingSingleNoon.end"
           :picker-options="{
-            start: '00:00',
+            start: '12:00',
             step: '00:30',
             end: '24:00',
           }">
@@ -98,14 +98,15 @@
       <span slot="title" class="dialog-title">周批量预约时间设置</span>
       <div class="dialog-main">
         <div>
-          <span>日期</span>
-          <el-date-picker
+          <span>日期选择：</span>
+          <button @click="chooseWeek(index)" :class="{'group-btn-active':item.choose,'group-btn':!item.choose}" v-for="(item,index) in week" :key="item.time">{{item.time}}</button>
+          <!-- <el-date-picker
             :style="{'width':'150px'}"
             v-model="settingGroupTime.start"
             type="date"
             placeholder="选择日期"
             :default-value="defaultvalue"
-            :picker-options="settingGroupTimeOptions">
+            >
           </el-date-picker>
         至
           <el-date-picker
@@ -113,16 +114,7 @@
             v-model="settingGroupTime.end"
             type="date"
             placeholder="选择日期"
-            :picker-options="settingGroupTimeOptions">
-          </el-date-picker>
-
-          <!-- <el-date-picker
-            v-model="settingGroupTime.end"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            format="MM-dd">
+            >
           </el-date-picker> -->
         </div>
         <div>
@@ -180,11 +172,14 @@
 </template>
 
 <script>
-import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
+import {daybefor, computeWeekday} from '@/untils/date.js'
+// import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 export default {
   name: 'orderSetting',
   data () {
     return {
+      start: '',
+      end: '',
       settingSingle: false,
       settingSingleMorning: {
         start: '',
@@ -207,96 +202,142 @@ export default {
         start: '',
         end: ''
       },
-      settingGroupTimeOptions: {
-        disabledDate (time) {
-          let today = new Date()
-          let befor = -7
-          let befortoday = daybefor(today, befor, true)
-          let week = computeWeekday(befortoday)
-          if (week === '周日') {
-            return today
-          } else {
-            while (week !== '周日') {
-              befor--
-              befortoday = daybefor(befortoday, befor, true)
-              week = computeWeekday(befortoday)
-            }
-          }
-          befortoday = daybefor(befortoday, -1, true)
-          let endtoday = daybefor(befortoday, -8, true)
-          let start = befortoday.split('-')
-
-          start[0] = parseInt(start[0])
-          start[1] = parseInt(start[1])
-          start[2] = parseInt(start[2])
-          // if(start)
-          let startDate = new Date(start[0], start[1] - 1, start[2])
-
-          let end = endtoday.split('-')
-
-          end[0] = parseInt(end[0])
-          end[1] = parseInt(end[1])
-          end[2] = parseInt(end[2])
-          // if(end)
-          let endDate = new Date(end[0], end[1] - 1, end[2])
-
-          // console.log('time', time)
-          return time.getTime() > endDate && time.getTime() > startDate
+      openOrder: '',
+      defaultvalue: null,
+      order: [],
+      index: null,
+      // week: [, '周二', '周三', '周四', '周五', '周六', '周日']
+      week: [
+        {
+          time: '周一',
+          choose: false
+        },
+        {
+          time: '周二',
+          choose: false
+        },
+        {
+          time: '周三',
+          choose: false
+        },
+        {
+          time: '周四',
+          choose: false
+        },
+        {
+          time: '周五',
+          choose: false
+        },
+        {
+          time: '周六',
+          choose: false
+        },
+        {
+          time: '周日',
+          choose: false
         }
-      },
-      value2: '',
-      defaultvalue: null
+      ]
     }
   },
   methods: {
+    // 打开周批量设置窗口
     setWeektime () {
       this.settingGroup = true
     },
+    // 取消编辑预约时间
     settingSingleCancel () {
       this.settingSingle = false
     },
+    // 确认编辑时间
     settingSingleConfirm () {
-      this.settingSingle = false
+      console.log(this.settingSingleMorning)
+      console.log(this.settingSingleNoon)
+      let morning = this._.gt(this.settingSingleMorning.start, this.settingSingleMorning.end)
+      let noon = this._.gt(this.settingSingleNoon.start, this.settingSingleNoon.end)
+      if (morning || noon) {
+        this.$message({
+          message: '起始时间不能大于结束时间,请重新设置',
+          type: 'warning'
+        })
+        this.settingSingleMorning.start = ''
+        this.settingSingleMorning.end = ''
+        this.settingSingleNoon.start = ''
+        this.settingSingleNoon.end = ''
+      } else {
+        this.order[this.index].morning = this.settingSingleMorning.start + '/' + this.settingSingleMorning.end
+        this.order[this.index].noon = this.settingSingleNoon.start + '/' + this.settingSingleNoon.end
+        this.settingSingle = false
+      }
     },
+    // 取消周批量设置
     settingGroupCancel () {
       this.settingGroup = false
     },
+    // 确定周批量设置
     settingGroupConfirm () {
       this.settingGroup = false
+    },
+    // 打开编辑时间窗口
+    editTime (index) {
+      this.index = index
+      console.log(this.openOrder)
+      if (this.order[index].order) {
+        this.settingSingle = true
+      }
+    },
+    nextSunday () {
+      let arr = []
+      let day = 1
+      let today = new Date()
+      let befor = -7
+      let befortoday = daybefor(today, befor, true)
+      let week = computeWeekday(befortoday)
+      if (week === '周日') {
+        return today
+      } else {
+        while (week !== '周日') {
+          befor--
+          befortoday = daybefor(today, befor, true)
+          week = computeWeekday(befortoday)
+        }
+      }
+      befortoday = daybefor(today, befor - 1, true)
+      week = computeWeekday(befortoday)
+      while (day !== 8) {
+        arr.push((befortoday + ' ' + week))
+        befortoday = daybefor(today, befor - (day + 1), true)
+        week = computeWeekday(befortoday)
+        day++
+      }
+      return arr
+    },
+    chooseWeek (index) {
+      this.week[index].choose = true
     }
   },
   mounted () {
-    let today = new Date()
-    let befor = -7
-    let befortoday = daybefor(today, befor, true)
-    let week = computeWeekday(befortoday)
-    if (week === '周日') {
-      return today
-    } else {
-      while (week !== '周日') {
-        befor--
-        befortoday = daybefor(befortoday, befor, true)
-        week = computeWeekday(befortoday)
+    console.log(this.settingSingleMorning)
+    console.log(this.settingSingleNoon)
+    let data = this.nextSunday()
+    this.start = data[0]
+    this.end = data[6]
+    data.forEach(item => {
+      let order = {
+        order: false,
+        morning: '',
+        noon: '',
+        time: item
       }
-    }
-    befortoday = daybefor(befortoday, -1, true)
-    // let endtoday = daybefor(befortoday, -8, true)
-    let start = befortoday.split('-')
-
-    start[0] = parseInt(start[0])
-    start[1] = parseInt(start[1])
-    start[2] = parseInt(start[2])
-          // if(start)
-    let startDate = new Date(start[0], start[1] - 1, start[2])
-    this.defaultvalue = startDate
-    console.log('start', start)
-    console.log('start2', startDate)
-    console.log('start1', befortoday)
+      this.order.push(order)
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .title{
+    font-size: 14px;
+  }
   span{
     display: inline-block;
     margin-right: 10px;
@@ -342,6 +383,28 @@ export default {
 }
 .dialog-main div{
   margin-top:10px;
+}
+.group-btn-active{
+  border:none;
+  border-radius: 2px;
+  outline: none;
+  padding:5px;
+  background-color: #1991fc;
+  color:#fff;
+  cursor: pointer;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+.group-btn{
+  border:none;
+  border-radius: 2px;
+  outline: none;
+  padding:5px;
+  background-color: #f4f6f9;
+  color:#041421;
+  cursor: pointer;
+  margin-left: 3px;
+  margin-right: 3px;
 }
 </style>
 
