@@ -1422,12 +1422,12 @@ export default {
           this.bloodTrendState.heigh = 0
           this.bloodTrendState.danger = 0
         }
-        if (this.bloodTrendData.bptype[index] === 3) {
+        if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
           this.bloodTrendState.normal = 0
           this.bloodTrendState.heigh = 1
           this.bloodTrendState.danger = 0
         }
-        if (this.bloodTrendData.bptype[index] === 4 || this.bloodTrendData.bptype[index] === 5) {
+        if (this.bloodTrendData.bptype[index] === 5) {
           this.bloodTrendState.normal = 0
           this.bloodTrendState.heigh = 0
           this.bloodTrendState.danger = 1
@@ -1449,25 +1449,25 @@ export default {
       this.$axios(updatebloodTrendStateApi(params, this.bloodTrendChecked, date))
       .then(res => {
         let total = 0
+        let heigh = 0
         res.data.data.forEach(item => {
           total += item.highNum
           // if (item.id === 1) {
           //   this.$set(this.bloodTrendState, 'total', item.highNum)
           // }
-          let heigh = 0
-          if (item.id === 2) {
+          if (this._.toNumber(item.id) === 2) {
             this.$set(this.bloodTrendState, 'normal', item.highNum)
           }
-          if (item.id === 3) {
-            heigh += item.highNum
+          if (this._.toNumber(item.id) === 3) {
+            heigh = heigh + item.highNum
             // this.$set(this.bloodTrendState, 'heigh', item.highNum)
           }
-          if (item.id === 4) {
-            heigh += item.highNum
+          if (this._.toNumber(item.id) === 4) {
+            heigh = heigh + item.highNum
             // this.$set(this.bloodTrendState, 'heigh', item.highNum)
           }
           this.$set(this.bloodTrendState, 'heigh', heigh)
-          if (item.id === 5) {
+          if (this._.toNumber(item.id) === 5) {
             this.$set(this.bloodTrendState, 'danger', item.highNum)
           }
         })

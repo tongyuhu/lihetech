@@ -45,10 +45,11 @@
           :who="item.senderUserId"
           >
           {{historyMsg.length !== 0 ? item.content.content :''}}
+          <!-- <img src=""> -->
+            <!-- <img src="" alt=""> -->
           </chartMessage>
         </chartMessageGroup>
       </div>
-
       <!-- 工具 -->
       <div class="chart-wrap-tool">
         <button>
@@ -99,64 +100,64 @@ export default {
   },
   data () {
     return {
-      // historyMsg: [
-      //   // {
-      //   //   who: 'self',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'other',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'self',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'self',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'other',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'self',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'self',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // },
-      //   // {
-      //   //   who: 'other',
-      //   //   type: 'text',
-      //   //   content: {
-      //   //     content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //   //   }
-      //   // }
-      // ],
+      historyMsg: [
+        {
+          who: 'self',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'other',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'self',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'self',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'other',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'self',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'self',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        },
+        {
+          who: 'other',
+          type: 'text',
+          content: {
+            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+          }
+        }
+      ],
       readyMsg: '',
       chartList: [
         {
@@ -173,8 +174,8 @@ export default {
           historyMsg: []
         }
       ],
-      showList: false,
-      historyMsg: []
+      showList: false
+      // historyMsg: []
       // showChart: true
     }
   },
