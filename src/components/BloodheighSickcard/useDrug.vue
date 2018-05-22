@@ -288,6 +288,7 @@ export default {
           }
           if (item.sysMedicineId !== 'null') {
             if (item.sysMedicineId.split(',').indexOf('1') !== -1) {
+              // console.log('item.sysMedicineId.split(', ')', item.sysMedicineId.split(','))
               icon += '{acei|}'
             }
             if (item.sysMedicineId.split(',').indexOf('2') !== -1) {
