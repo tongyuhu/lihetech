@@ -276,13 +276,15 @@ export default {
           let icon = ''
           if (item.beforeDiastolic2 !== 'null' && item.beforeSystolic2 !== 'null') {
             let bg = this.colorBg(item.bpTypeBefore)
-            befor = '{' + bg + '|' + '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']' + '}'
-            befordata = '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']'
+            befor = '{' + bg + '|' + '[' + item.beforeSystolic2 + '/' + item.beforeDiastolic2 + ']' + '}'
+            // befordata = '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']'
+            befordata = '[' + item.beforeSystolic2 + '/' + item.beforeDiastolic2 + ']'
           }
           if (item.afterDiastolic !== 'null' && item.afterSystolic !== 'null') {
             let bg = this.colorBg(item.bpTypeAfter)
-            after = '{' + bg + '|' + '[' + item.afterDiastolic + '/' + item.afterSystolic + ']' + '}'
-            afterdata = '[' + item.afterDiastolic + '/' + item.afterSystolic + ']'
+            after = '{' + bg + '|' + '[' + item.afterSystolic + '/' + item.afterDiastolic + ']' + '}'
+            afterdata = '[' + item.afterSystolic + '/' + item.afterDiastolic + ']'
+            // afterdata = '[' + item.afterDiastolic + '/' + item.afterSystolic + ']'
           }
           if (item.sysMedicineId !== 'null') {
             if (item.sysMedicineId.split(',').indexOf('1') !== -1) {
