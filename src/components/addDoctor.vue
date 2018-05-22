@@ -144,7 +144,14 @@ export default {
             address: null
           }
           this.$axios(addDoctorApi(doctorMsg))
-          .then()
+          .then(res => {
+            if (res.data.code !== '0000') {
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              })
+            }
+          })
           .catch()
           // this.$router.replace(this.$route.params.from)
         } else {
@@ -158,6 +165,9 @@ export default {
       this.$refs[formName].resetFields()
       this.$router.go(-1)
     }
+    // addDoctor(){
+    //   this.$axios(address())
+    // }
   },
   mounted () {
     // console.log(this.$route.params.from)

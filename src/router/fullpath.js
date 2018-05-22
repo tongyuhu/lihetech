@@ -79,14 +79,27 @@ export default[
           name: '预约管理',
           role: ['admin', 'doctor', 'hospital', 'nurse']
         },
-        redirect: {name: 'orders'},
+        redirect: {name: 'orderSick'},
         children: [
           {
-            path: 'orders',
-            name: 'orders',
+            path: 'orderSick',
+            name: 'orderSick',
             components: {
               default: orderSick,
               setting: orderSetting
+            },
+            meta: {
+              requireAuth: true,
+              name: '预约',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          },
+          {
+            path: 'orderSetting',
+            name: 'orderSetting',
+            components: {
+              default: orderSetting,
+              setting: orderSick
             },
             meta: {
               requireAuth: true,

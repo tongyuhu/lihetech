@@ -120,7 +120,7 @@
 
     <!-- 血压与行为分数 -->
     <div class="blood-cover">
-      <el-card :body-style="{ padding: '0px' }">
+      <el-card :body-style="{ 'padding': '0px' ,'padding-bottom':'20px'}">
         <div class="card-header">
           <p class="title">血压与行为分数</p>
         </div>
@@ -151,7 +151,7 @@
                 </div>
               </div>
             </el-col>
-            <el-col>
+            <el-col v-if="false">
               <div class="table">
                 <table>
                   <tr>
@@ -857,17 +857,17 @@ export default {
           triggerOn: 'click',
           // triggerOn: 'mousemove|click',
           formatter: function (a) {
-            if (a[0].dataIndex === vm.bloodTrendIndex) {
-              // vm.updateBehaviourRateDate(a[0].axisValue)
+            // if (a[0].dataIndex === vm.bloodTrendIndex) {
+              // vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+            // } else {
+            if (vm.bloodTrendChecked === 2) {
+              vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
             } else {
-              if (vm.bloodTrendChecked === 2) {
-                vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
-              } else {
-                vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
-              }
+              vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
             }
+            // }
             vm.bloodTrendIndex = a.dataIndex
-            // console.log(a)
+            console.log(a)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
@@ -1229,6 +1229,7 @@ export default {
       this.bloodTrendDate[index].isChecked = true
       this.bloodTrendChecked = index
       this.updatebloodTrendData(index, this.statusArr)
+      console.log('index, this.statusArr', index, this.statusArr)
     },
     changeStatus (index) {
       if (index !== 'all') {
@@ -1291,11 +1292,11 @@ export default {
             this.bloodTrendState.danger = 1
           }
           // this.updatebloodTrendState()
-          // if (res.data.data) {
-          //   if (res.data.data.length !== 0) {
-          //     this.updatebloodTrendState(res.data.data[0].measureTime)
-          //   }
-          // }
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updatebloodTrendState(res.data.data[0].measureTime, 0)
+            }
+          }
         })
       }
       if (index === 1) {
@@ -1411,17 +1412,22 @@ export default {
       if (this.bloodTrendChecked === 0) {
         this.bloodTrendState.total = 1
         // }
+        if (this.bloodTrendData.bptype[index] === 1) {
+          this.bloodTrendState.normal = 0
+          this.bloodTrendState.heigh = 0
+          this.bloodTrendState.danger = 0
+        }
         if (this.bloodTrendData.bptype[index] === 2) {
           this.bloodTrendState.normal = 1
           this.bloodTrendState.heigh = 0
           this.bloodTrendState.danger = 0
         }
-        if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
+        if (this.bloodTrendData.bptype[index] === 3) {
           this.bloodTrendState.normal = 0
           this.bloodTrendState.heigh = 1
           this.bloodTrendState.danger = 0
         }
-        if (this.bloodTrendData.bptype[index] === 5) {
+        if (this.bloodTrendData.bptype[index] === 4 || this.bloodTrendData.bptype[index] === 5) {
           this.bloodTrendState.normal = 0
           this.bloodTrendState.heigh = 0
           this.bloodTrendState.danger = 1
@@ -1448,13 +1454,20 @@ export default {
           // if (item.id === 1) {
           //   this.$set(this.bloodTrendState, 'total', item.highNum)
           // }
+          let heigh = 0
           if (item.id === 2) {
             this.$set(this.bloodTrendState, 'normal', item.highNum)
           }
           if (item.id === 3) {
-            this.$set(this.bloodTrendState, 'heigh', item.highNum)
+            heigh += item.highNum
+            // this.$set(this.bloodTrendState, 'heigh', item.highNum)
           }
           if (item.id === 4) {
+            heigh += item.highNum
+            // this.$set(this.bloodTrendState, 'heigh', item.highNum)
+          }
+          this.$set(this.bloodTrendState, 'heigh', heigh)
+          if (item.id === 5) {
             this.$set(this.bloodTrendState, 'danger', item.highNum)
           }
         })
@@ -1734,7 +1747,8 @@ export default {
           }
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     },
     bloodTrendData: {
       handler: function (val) {
@@ -1754,7 +1768,8 @@ export default {
           }
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   mounted () {

@@ -117,7 +117,7 @@
       </el-card>
     </div>
     <div class="dialog">
-
+      <!-- 修改医生 -->
       <el-dialog
         :visible.sync="modifyDoctor"
         width="456px"
@@ -140,10 +140,11 @@
         </div>
         <span slot="title" class="dialog-title">修改医生</span>
         <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="modifyDoctor = false">确 定</button>
-          <button class="cancel" @click="modifyDoctor = false">取 消</button>
+          <button  type="primary" @click="editDoctorConfirm">确 定</button>
+          <button class="cancel" @click="editDoctorCancel">取 消</button>
         </span>
       </el-dialog>
+
       <el-dialog
         :visible.sync="confirmDelete"
         width="456px"
@@ -159,7 +160,7 @@
 </template>
 
 <script>
-import {getDoctorListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {getDoctorListAPI, editDoctorAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
   name: 'accountSetting',
   data () {
@@ -205,6 +206,8 @@ export default {
       editDoctorPhone: '',
       editDoctorPerson: '',
       editDoctorAddress: '',
+      doctorId: '',
+      roleId: '',
       confirmDelete: false
     }
   },
@@ -260,8 +263,42 @@ export default {
     },
     // 编辑医生打开弹窗 信息
     editDoctor (doctor) {
+      this.editDoctorName = doctor.name
+      this.editDoctorPhone = ''
+      this.editDoctorAddress = doctor.address
+      this.doctorId = doctor.id
+      this.roleId = doctor.roleId
       this.modifyDoctor = true
+
       console.log(doctor)
+    },
+    editDoctorCancel () {
+      this.editDoctorName = ''
+      this.editDoctorPhone = ''
+      this.editDoctorAddress = ''
+      this.doctorId = ''
+      this.roleId = ''
+      this.modifyDoctor = false
+    },
+    editDoctorConfirm () {
+      let params = {
+        'id': this.doctorId,
+        'username': this.editDoctorName,
+        'mobile': this.editDoctorPhone,
+        'regionId': this.editDoctorAddress,
+        'roleId': this.roleId
+      }
+      console.log('params', params)
+      this.$axios(editDoctorAPI(params))
+      .then(res => {
+        if (res.data.code !== '0000') {
+          this.$message({
+            message: res.data.msg,
+            type: 'error'
+          })
+        }
+        this.modifyDoctor = false
+      })
     },
     // 删除打开弹窗
     deleteDoctor () {

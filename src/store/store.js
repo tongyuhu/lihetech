@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { SET_ADMIN_INFO } from './mutationstypes'
+import { SET_ADMIN_INFO, SET_SICK_CARD } from './mutationstypes'
 import _ from 'lodash'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
     adminInfo: {},
+    showSickCard: false,
     rongUserId: '',
     chatfriend: [],
     friendsList: [
@@ -50,6 +51,10 @@ export const store = new Vuex.Store({
   mutations: {
     [SET_ADMIN_INFO] (state, info) {
       state.adminInfo = info
+    },
+    [SET_SICK_CARD] (state, type) {
+      state.showSickCard = type
+      // console.log('ssss', 'dododo')
     },
     setRongUserId (state, id) {
       state.rongUserId = id

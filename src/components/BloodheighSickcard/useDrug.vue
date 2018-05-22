@@ -28,8 +28,18 @@
         </span>
       </div>
       <!-- 图表 -->
-      <div class="chart" v-loading="loading">
-        <div id='useDrug'  :style="{width:'auto',height:'650px'}"></div>
+      <div class="chart" >
+        <div class="flex">
+          <div class="flex-btn-left">
+            <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-left" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+          </div>
+          <div class="chart-min-width">
+            <div v-loading="loading" id='useDrug'  :style="{width:'auto',height:'650px'}"></div>
+          </div>
+          <div class="flex-btn">
+            <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-right" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+          </div>
+        </div>
       </div>
     </el-card>
   </div>
@@ -37,8 +47,6 @@
 
 <script>
 import {useDrugApi} from './../../api/components/BloodheighSickcard/useDrug'
-// import {dateFormat} from './../../untils/date'
-// import {deepcopy} from './../../untils/untils'
 import echarts from 'echarts'
 import LI from 'icon/hospital-icon-34.png'
 import B from 'icon/hospital-icon-35.png'
@@ -56,348 +64,138 @@ export default {
   },
   data () {
     return {
-      data: [
-        {
-          'takeMedicineTime': '2018-04-29 10:25:31',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 236,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 93,
-          'beforeSystolic2': 155,
-          'takeMedicineTime': '2018-04-26 16:26:26',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 199,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 83,
-          'beforeSystolic2': 138,
-          'takeMedicineTime': '2018-04-25 17:18:39',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 187,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 83,
-          'beforeSystolic2': 138,
-          'takeMedicineTime': '2018-04-25 17:18:22',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 186,
-          'userId': 12
-        },
-        {
-          'beforeDiastolic2': 83,
-          'beforeSystolic2': 138,
-          'takeMedicineTime': '2018-04-25 17:18:20',
-          'sysMedicineName': 'ACEI',
-          'sysMedicineId': '1',
-          'id': 184,
-          'userId': 12
-        }
-      ],
+      // data: [
+      // ],
+      // 图表数据
       optionData: [],
+      // 图表X轴
       xasis: [],
-      pageNum: 1,
-      pageSize: 15,
-      pages: 1,
-      initX: 0,
-      loading: true
+      page: {
+        pageNum: 1,
+        pageSize: 15,
+        pages: 1,
+        currentPage: 1
+      },
+      // pageNum: 1,
+      // pageSize: 15,
+      // pages: 1,
+      // currentPage: 1,
+      loading: true,
+      useDrugBtnPre: true,
+      useDrugBtnNext: true,
+      // 计算x轴坐标
+      initX: -1,
+      // 计算Y轴坐标
+      befor: {
+        takeMedicineTime: '00000000000'
+      }
+
     }
   },
   methods: {
+    // 获取数据
     getData (pagenum) {
       let vm = this
+      vm.loading = true
       if (!pagenum) { pagenum = 1 }
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
         'pageNum': pagenum,
-        'pageSize': this.pageSize
+        'pageSize': this.page.pageSize
       }
-      this.$axios(useDrugApi(params))
+      vm.$axios(useDrugApi(params))
       .then(res => {
-        this.loading = true
+        // vm.loading = true
+        console.log('vm.loading', vm.loading)
         if (res.data.data) {
           let copydata = res.data.data
-          copydata = this._.filter(copydata, function (item) {
+          copydata = vm._.filter(copydata, function (item) {
             let hasBlood
-            if (item.beforeDiastolic2 || item.beforeSystolic2 || item.afterSystolic || item.afterDiastolic) {
+            let hasBD = vm._.has(item, 'beforeDiastolic2')
+            let hasBS = vm._.has(item, 'beforeSystolic2')
+            let hasAS = vm._.has(item, 'afterSystolic')
+            let hasAD = vm._.has(item, 'afterDiastolic')
+            let hasT = vm._.has(item, 'takeMedicineTime')
+            if (hasBD || hasBS || hasAS || hasAD) {
               hasBlood = true
             } else {
               hasBlood = false
             }
-            return item.takeMedicineTime && hasBlood
+            return hasT && hasBlood
           })
-          copydata = this._.sortBy(copydata, function (item) {
+          let merge = function (item) {
+            let obj = {
+              beforeDiastolic2: 'null',
+              beforeSystolic2: 'null',
+              bpTypeBefore: 'null',
+              afterSystolic: 'null',
+              afterDiastolic: 'null',
+              bpTypeAfter: 'null',
+              sysMedicineId: 'null'
+            }
+            return vm._.merge(obj, item)
+          }
+          copydata = vm._.map(copydata, merge)
+          copydata = vm._.sortBy(copydata, function (item) {
             return item.takeMedicineTime
           })
-          // this.formatter(copydata)
-          // this.formatter(copydata)
-          // console.log('copydata', copydata)
-          // console.log('optiondata', this.formatter(copydata))
-          // console.log('date', this.dateX(copydata))
-          // console.log('ot', this.seriesItem(this.formatter(copydata)))
-          // copydata.
-          this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatter(copydata)))
-          this.xasis = this._.concat(this.xasis, this.dateX(copydata))
+          copydata = copydata.reverse()
+          let useDrugData = vm.formatter(copydata)
+          let theX = vm.axisX(copydata)
+          vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
+          vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
 
           console.log('copydata', copydata)
-          console.log('res.data.data', res.data.data)
+          console.log('useDrugData', useDrugData)
+          console.log('theX', theX)
           console.log('optionData', this.optionData)
-          console.log('formatter', this.formatter(copydata))
-          console.log('xasis', this.xasis)
         }
-        this.loading = false
+        vm.loading = false
+        let position = this.computeStartend(vm.page.currentPage, vm.page.pageNum)
         let useDrug = echarts.init(document.getElementById('useDrug'))
-        useDrug.setOption(this.useDrugOption())
-        this.pageNum = res.data.pageNum
-        this.pages = res.data.pages
-        // console.log(res.data)
+        useDrug.setOption(this.useDrugOption(position.start, position.end))
+        this.page.pageNum = res.data.pageNum
+        this.page.pages = res.data.pages
       })
     },
+    // 格式化数据 计算x，y轴坐标
     formatter (arr) {
       let vm = this
-      let optionarr = []
-      if (arr.length > 0) {
-        // let initX = 0
-        // let initY = 0
-        for (let i = 0; i < arr.length - 1; i++) {
-          let readyarr = [] // 准备加入option的数组
-          let X = arr[i].takeMedicineTime.slice(0, 11)
-          let afterX = arr[i + 1].takeMedicineTime.slice(0, 11)
-          if (this._.eq(X, afterX)) {
-            readyarr.push(vm.initX)
-            readyarr.push(this.axisY(arr[i].takeMedicineTime))
-
-            // initY += 1
-            if (!this._.isUndefined(arr[i].beforeDiastolic2)) {
-              readyarr.push(arr[i].beforeDiastolic2)  // 低压
-            } else {
-              readyarr.push('未测量')  // 低压
-            }
-            if (!this._.isUndefined(arr[i].beforeSystolic2)) {
-              readyarr.push(arr[i].beforeSystolic2)
-            } else {
-              readyarr.push('未测量')
-            }
-            if (!this._.isUndefined(arr[i].afterSystolic)) {
-              readyarr.push(arr[i].afterSystolic)
-            } else {
-              readyarr.push('未测量')
-            }
-            if (!this._.isUndefined(arr[i].afterDiastolic)) {
-              readyarr.push(arr[i].afterDiastolic)
-            } else {
-              readyarr.push('未测量')
-            }
-            readyarr.push(arr[i].takeMedicineTime)
-            readyarr.push(arr[i].sysMedicineId)
-            if (!this._.isUndefined(arr[i].bpTypeBefore)) {
-              readyarr.push(arr[i].bpTypeBefore)
-            } else {
-              readyarr.push('nullType')
-            }
-            if (!this._.isUndefined(arr[i].bpTypeAfter)) {
-              readyarr.push(arr[i].bpTypeAfter)
-            } else {
-              readyarr.push('nullType')
-            }
-            // readyarr.push(arr[i].bpTypeBefore)
-            // readyarr.push(arr[i].bpTypeAfter)
-
-            optionarr.push(readyarr)
-          } else {
-            if (vm.initX === 0) {
-              readyarr.push(vm.initX)
-
-              readyarr.push(this.axisY(arr[i].takeMedicineTime))
-              if (!this._.isUndefined(arr[i].beforeDiastolic2)) {
-                readyarr.push(arr[i].beforeDiastolic2)  // 低压
-              } else {
-                readyarr.push('未测量')  // 低压
-              }
-              if (!this._.isUndefined(arr[i].beforeSystolic2)) {
-                readyarr.push(arr[i].beforeSystolic2)
-              } else {
-                readyarr.push('未测量')
-              }
-              if (!this._.isUndefined(arr[i].afterSystolic)) {
-                readyarr.push(arr[i].afterSystolic)
-              } else {
-                readyarr.push('未测量')
-              }
-              if (!this._.isUndefined(arr[i].afterDiastolic)) {
-                readyarr.push(arr[i].afterDiastolic)
-              } else {
-                readyarr.push('未测量')
-              }
-              readyarr.push(arr[i].takeMedicineTime)
-              readyarr.push(arr[i].sysMedicineId)
-              if (!this._.isUndefined(arr[i].bpTypeBefore)) {
-                readyarr.push(arr[i].bpTypeBefore)
-              } else {
-                readyarr.push('nullType')
-              }
-              if (!this._.isUndefined(arr[i].bpTypeAfter)) {
-                readyarr.push(arr[i].bpTypeAfter)
-              } else {
-                readyarr.push('nullType')
-              }
-              optionarr.push(readyarr)
-            } else {
-              vm.initX = vm.initX + 1
-              // initY = 0
-              readyarr.push(vm.initX)
-              readyarr.push(this.axisY(arr[i].takeMedicineTime))
-              // initY += 1
-              if (!this._.isUndefined(arr[i].beforeDiastolic2)) {
-                readyarr.push(arr[i].beforeDiastolic2)  // 低压
-              } else {
-                readyarr.push('未测量')  // 低压
-              }
-              if (!this._.isUndefined(arr[i].beforeSystolic2)) {
-                readyarr.push(arr[i].beforeSystolic2)
-              } else {
-                readyarr.push('未测量')
-              }
-              if (!this._.isUndefined(arr[i].afterSystolic)) {
-                readyarr.push(arr[i].afterSystolic)
-              } else {
-                readyarr.push('未测量')
-              }
-              if (!this._.isUndefined(arr[i].afterDiastolic)) {
-                readyarr.push(arr[i].afterDiastolic)
-              } else {
-                readyarr.push('未测量')
-              }
-              readyarr.push(arr[i].takeMedicineTime)
-              readyarr.push(arr[i].sysMedicineId)
-              if (!this._.isUndefined(arr[i].bpTypeBefore)) {
-                readyarr.push(arr[i].bpTypeBefore)
-              } else {
-                readyarr.push('nullType')
-              }
-              if (!this._.isUndefined(arr[i].bpTypeAfter)) {
-                readyarr.push(arr[i].bpTypeAfter)
-              } else {
-                readyarr.push('nullType')
-              }
-              optionarr.push(readyarr)
-            }
-          }
-        }
-        // let last = arr[i].takeMedicineTime.slice(0, 11)
-        if (this._.eq(arr[arr.length - 1].takeMedicineTime.slice(0, 11), arr[arr.length - 2].takeMedicineTime.slice(0, 11))) {
-          let readyarr = []
-          readyarr.push(vm.initX)
-          readyarr.push(this.axisY(arr[arr.length - 1].takeMedicineTime))
-          if (!this._.isUndefined(arr[arr.length - 1].beforeDiastolic2)) {
-            readyarr.push(arr[arr.length - 1].beforeDiastolic2)  // 低压
-          } else {
-            readyarr.push('未测量')  // 低压
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].beforeSystolic2)) {
-            readyarr.push(arr[arr.length - 1].beforeSystolic2)
-          } else {
-            readyarr.push('未测量')
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].afterSystolic)) {
-            readyarr.push(arr[arr.length - 1].afterSystolic)
-          } else {
-            readyarr.push('未测量')
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].afterDiastolic)) {
-            readyarr.push(arr[arr.length - 1].afterDiastolic)
-          } else {
-            readyarr.push('未测量')
-          }
-          readyarr.push(arr[arr.length - 1].takeMedicineTime)
-          readyarr.push(arr[arr.length - 1].sysMedicineId)
-          if (!this._.isUndefined(arr[arr.length - 1].bpTypeBefore)) {
-            readyarr.push(arr[arr.length - 1].bpTypeBefore)
-          } else {
-            readyarr.push('nullType')
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].bpTypeAfter)) {
-            readyarr.push(arr[arr.length - 1].bpTypeAfter)
-          } else {
-            readyarr.push('nullType')
-          }
-          optionarr.push(readyarr)
+      let readyarr = []
+      // let befor = {
+      //   takeMedicineTime: '00000000000'
+      // }
+      vm._(arr).forEach(function (value, index) {
+        // if (index === 0) {
+          // value.x = 0
+        // } else {
+        let time = value.takeMedicineTime.slice(0, 10)
+        let befortime = vm.befor.takeMedicineTime.slice(0, 10)
+        if (vm._.eq(time, befortime)) {
+          value.x = vm.initX
         } else {
-          let readyarr = []
-          vm.initX = vm.initX + 1
-          readyarr.push(vm.initX)
-          readyarr.push(this.axisY(arr[arr.length - 1].takeMedicineTime))
-          if (!this._.isUndefined(arr[arr.length - 1].beforeDiastolic2)) {
-            readyarr.push(arr[arr.length - 1].beforeDiastolic2)  // 低压
-          } else {
-            readyarr.push('未测量')  // 低压
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].beforeSystolic2)) {
-            readyarr.push(arr[arr.length - 1].beforeSystolic2)
-          } else {
-            readyarr.push('未测量')
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].afterSystolic)) {
-            readyarr.push(arr[arr.length - 1].afterSystolic)
-          } else {
-            readyarr.push('未测量')
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].afterDiastolic)) {
-            readyarr.push(arr[arr.length - 1].afterDiastolic)
-          } else {
-            readyarr.push('未测量')
-          }
-          readyarr.push(arr[arr.length - 1].takeMedicineTime)
-          readyarr.push(arr[arr.length - 1].sysMedicineId)
-          if (!this._.isUndefined(arr[arr.length - 1].bpTypeBefore)) {
-            readyarr.push(arr[arr.length - 1].bpTypeBefore)
-          } else {
-            readyarr.push('nullType')
-          }
-          if (!this._.isUndefined(arr[arr.length - 1].bpTypeAfter)) {
-            readyarr.push(arr[arr.length - 1].bpTypeAfter)
-          } else {
-            readyarr.push('nullType')
-          }
-          optionarr.push(readyarr)
+          vm.initX++
+          value.x = vm.initX
         }
-        vm.initX += 1
-        // if(arr[arr.length-1])
-      }
-      return optionarr
-        // arr[m].takeMedicineTime.slice(0, 11)
+        // }
+        value.y = vm.axisY(value.takeMedicineTime)
+        readyarr.push(value)
+        vm.befor = value
+      })
+      return readyarr
     },
-    dateX (arr) {
-      let time = []
-      if (arr.length > 0) {
-        for (let i = 0; i < arr.length - 1; i++) {
-          let X = arr[i].takeMedicineTime.slice(0, 11)
-          let afterX = arr[i + 1].takeMedicineTime.slice(0, 11)
-
-          if (!this._.eq(X, afterX)) {
-            // if (i === 0) {
-            time.push(X)
-            // }
-          }
-        }
-        if (!this._.eq(arr[arr.length - 1].takeMedicineTime.slice(0, 11), arr[arr.length - 2].takeMedicineTime.slice(0, 11))) {
-          time.push(arr[arr.length - 1].takeMedicineTime.slice(0, 11))
-        }
-        if (time.length === 0) {
-          time.push(arr[arr.length - 1].takeMedicineTime.slice(0, 11))
-        }
-        // if(arr[arr.length-1].takeMedicineTime.slice(0, 11))
-      }
-      return time
+    // 计算X轴坐数据
+    axisX (arr) {
+      let vm = this
+      let x = []
+      vm._(arr).forEach(function (item, index) {
+        x.push(item.takeMedicineTime.slice(0, 10))
+      })
+      x = vm._.uniq(x)
+      return x
     },
+    // 计算Y轴坐标
     axisY (str) {
       let time = str.slice(11, -1)
       let y
@@ -440,153 +238,30 @@ export default {
       }
       return y
     },
-    // getData (pagenum) {
-    //   let pageNum = 1
-    //   if (pagenum) {
-    //     pageNum = pagenum
-    //   }
-    //   let vm = this
-    //   let params = {
-    //     'userId': vm.sickID,
-    //     'adminHospitalId': vm.hospitalId,
-    //     // 'bpMeasureTime': vm.bpMeasureTime || '',
-    //     'pageNum': pageNum,
-    //     'pageSize': vm.pageSize
-    //   }
-    //   this.$axios(useDrugApi(params))
-    //   .then(res => {
-    //     if (res.data.data) {
-    //       res.data.data.forEach((item, index) => {
-    //         this.data.push(item)
-    //         this.optionData.push(item)
-    //         // this.$set(this.data, index, item)
-    //       })
-    //       // this.data = res.data.data
-    //       // this.optionData = this.formatterDate(this.data)
-    //       // this.optionData = this.optionData.push.apply(this.optionData, res.data.data)
-    //     }
-    //     this.pages = res.data.pages
-    //     let useDrug = echarts.init(document.getElementById('useDrug'))
-    //     useDrug.setOption(this.useDrugOption())
-    //   })
-    // },
-    // formatterDate (date) {
-    //   let arr = date
-    //   let xasis = []
-    //   // let arr = deepcopy(date)
-    //   if (arr.length <= 1) return date
-    //   for (let i = 0; i < arr.length; i++) {
-    //     for (let j = 0; j < arr.length; j++) {
-    //     // 获取第一个值和后一个值比较
-    //       let cur = dateFormat(arr[i].takeMedicineTime, 0)
-    //       if (cur < dateFormat(arr[j].takeMedicineTime, 0)) {
-    //     // 因为需要交换值，所以会把后一个值替换，我们要先保存下来
-    //         let index = arr[j]
-    //       // 交换值
-    //         arr[j] = arr[i]
-    //         arr[i] = index
-    //       }
-    //     }
-    //   }
-    //   let index = 0
-
-    //   for (let n = 0; n < arr.length - 1; n++) {
-    //     if (dateFormat(arr[n].takeMedicineTime, 0, 1) === dateFormat(arr[n + 1].takeMedicineTime, 0, 1)) {
-    //       arr[n].x = index
-    //       arr[n + 1].x = index
-    //       if (xasis.indexOf(dateFormat(arr[n].takeMedicineTime, 0, 1)) === -1) {
-    //         xasis.push(dateFormat(arr[n].takeMedicineTime, 0, 1))
-    //       }
-    //     } else {
-    //       if (xasis.indexOf(dateFormat(arr[n].takeMedicineTime, 0, 1)) === -1) {
-    //         xasis.push(dateFormat(arr[n].takeMedicineTime, 0, 1))
-    //       }
-    //       index++
-    //       arr[n + 1].x = index
-    //     }
-    //   }
-    //   for (let m = 0; m < arr.length; m++) {
-    //     let dateSlice = arr[m].takeMedicineTime.slice(0, 11)
-    //     let a0 = dateSlice + '00:00'
-    //     let a2 = dateSlice + '02:00'
-    //     let a4 = dateSlice + '04:00'
-    //     let a6 = dateSlice + '06:00'
-    //     let a8 = dateSlice + '08:00'
-    //     let a10 = dateSlice + '10:00'
-    //     let a12 = dateSlice + '12:00'
-    //     let a14 = dateSlice + '14:00'
-    //     let a16 = dateSlice + '16:00'
-    //     let a18 = dateSlice + '18:00'
-    //     let a20 = dateSlice + '20:00'
-    //     let a22 = dateSlice + '22:00'
-    //     // let a24 = dateSlice + '24:00'
-    //     if (!this.sortDate(arr[m].takeMedicineTime, a0)) {
-    //       arr[m].y = 12
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a2)) {
-    //       arr[m].y = 0
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a4)) {
-    //       arr[m].y = 1
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a6)) {
-    //       arr[m].y = 2
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a8)) {
-    //       arr[m].y = 3
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a10)) {
-    //       arr[m].y = 4
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a12)) {
-    //       arr[m].y = 5
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a14)) {
-    //       arr[m].y = 6
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a16)) {
-    //       arr[m].y = 7
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a18)) {
-    //       arr[m].y = 8
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a20)) {
-    //       arr[m].y = 9
-    //     } else if (!this.sortDate(arr[m].takeMedicineTime, a22)) {
-    //       arr[m].y = 10
-    //     }
-    //     // else if (!this.sortDate(arr[m].takeMedicineTime, a24)) {
-    //     //   arr[m].y = 11
-    //     // }
-    //   }
-
-    //   arr = this.seriesItem(arr)
-    //   // this.xasis = xasis
-    //   xasis.forEach(item => {
-    //     this.xasis.push(item)
-    //   })
-    //   // this.xasis = this.xasis.push.apply(this.xasis, xasis)
-    //   return arr
-    // },
-    // sortDate (date1, date2) {
-    //   let oDate1 = new Date(date1)
-    //   let oDate2 = new Date(date2)
-    //   if (oDate1.getTime() > oDate2.getTime()) {
-    //     return true
-    //   } else {
-    //     return false
-    //   }
-    // },
+    // 背景颜色
     colorBg (bptype) {
       let type
-      switch (bptype) {
-        case 1:
-          type = 'normalBg'
-          break
-        case 2:
-          type = 'middleBg'
-          break
-        case 3:
-          type = 'normalheighBg'
-          break
-        case 4:
-          type = 'middleheighBg'
-          break
-        case 5:
-          type = 'dangerBg'
-          break
-        default:
-          type = 'nullBg'
+      if (bptype !== 'null') {
+        bptype = parseInt(bptype)
+        switch (bptype) {
+          case 1:
+            type = 'normalBg'
+            break
+          case 2:
+            type = 'middleBg'
+            break
+          case 3:
+            type = 'normalheighBg'
+            break
+          case 4:
+            type = 'middleheighBg'
+            break
+          case 5:
+            type = 'dangerBg'
+            break
+          default:
+            type = 'nullBg'
+        }
       }
       return type
     },
@@ -599,35 +274,35 @@ export default {
           let after = ''
           let afterdata = ''
           let icon = ''
-          if (item[2] !== '未测量' && item[3] !== '未测量') {
-            let bg = this.colorBg(item[8])
-            befor = '{' + bg + '|' + '[' + item[2] + '/' + item[3] + ']' + '}'
-            befordata = '[' + item[2] + '/' + item[3] + ']'
+          if (item.beforeDiastolic2 !== 'null' && item.beforeSystolic2 !== 'null') {
+            let bg = this.colorBg(item.bpTypeBefore)
+            befor = '{' + bg + '|' + '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']' + '}'
+            befordata = '[' + item.beforeDiastolic2 + '/' + item.beforeSystolic2 + ']'
           }
-          if (item[4] !== '未测量' && item[5] !== '未测量') {
-            let bg = this.colorBg(item[9])
-            after = '{' + bg + '|' + '[' + item[4] + '/' + item[5] + ']' + '}'
-            afterdata = '[' + item[4] + '/' + item[5] + ']'
+          if (item.afterDiastolic !== 'null' && item.afterSystolic !== 'null') {
+            let bg = this.colorBg(item.bpTypeAfter)
+            after = '{' + bg + '|' + '[' + item.afterDiastolic + '/' + item.afterSystolic + ']' + '}'
+            afterdata = '[' + item.afterDiastolic + '/' + item.afterSystolic + ']'
           }
-          if (item[7]) {
-            if (item[7].split(',').indexOf('1') !== -1) {
+          if (item.sysMedicineId !== 'null') {
+            if (item.sysMedicineId.split(',').indexOf('1') !== -1) {
               icon += '{acei|}'
             }
-            if (item[7].split(',').indexOf('2') !== -1) {
+            if (item.sysMedicineId.split(',').indexOf('2') !== -1) {
               icon += '{ccb|}'
             }
-            if (item[7].split(',').indexOf('3') !== -1) {
+            if (item.sysMedicineId.split(',').indexOf('3') !== -1) {
               icon += '{arb|}'
             }
-            if (item[7].split(',').indexOf('4') !== -1) {
+            if (item.sysMedicineId.split(',').indexOf('4') !== -1) {
               icon += '{b|}'
             }
-            if (item[7].split(',').indexOf('6') !== -1) {
+            if (item.sysMedicineId.split(',').indexOf('6') !== -1) {
               icon += '{li|}'
             }
           }
           let obj = {
-            value: [item[0], item[1], befordata, afterdata, item[6]],
+            value: [item.x, item.y, befordata, afterdata, item.takeMedicineTime],
             label: {
               normal: {
                 formatter: [
@@ -649,20 +324,21 @@ export default {
       return arr
     },
     useDrugOption (start, end) {
+      let vm = this
+      let x1 = ''
       let zoomstart = 0
-      let zoomend = 17
+      let zoomend = 100
+      console.log('888888')
       if (start) {
         zoomstart = start
       }
       if (end) {
         zoomend = end
       }
-      if (this.xasis.length <= 6) {
-        zoomend = 98
-      }
-      // console.log('zoomend', zoomend)
+      // if (this.xasis.length <= 6) {
+      //   zoomend = 98
+      // }
       let hours = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-      // let days = ['2017/12/06', '2017/12/07', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06']
       let days = this.xasis
       let Icons = {
         'li': LI,
@@ -674,9 +350,9 @@ export default {
       let option = {
         color: ['#fff'],
         grid: {
-          left: '2%',
+          left: '80',
           bottom: '8%',
-          right: '10%',
+          right: '80',
           top: 0,
           containLabel: true
         },
@@ -704,32 +380,44 @@ export default {
         dataZoom: [
           {
             type: 'slider',
-            show: true,
-            showDataShadow: false,
+            // xAxisIndex: [0, 1],
+            // disabled: false,
+            show: false,
+            realtime: true,
             start: zoomstart,
             end: zoomend,
-            // start: 0,
-            // end: 10,
-            // handleSize: 50,
-            showDetail: false,
-            // minValueSpan: 98,
-            // maxValueSpan: 98,
-            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-            // handleSize: '30%',
-            handleStyle: {
-              color: '#80cbc4'
-            },
-            fillerColor: '#d8faf4',
-            borderColor: '#b1b1b1',
-            minValueSpan: 6,
-            maxValueSpan: 6,
-            zoomlock: true
+            zoomlock: true,
+            minValueSpan: 10,
+            maxValueSpan: 10,
+            throttle: 500,
+            filterMode: 'empty',
+            zoomOnMouseWheel: false
+            // type: 'slider',
+            // show: true,
+            // showDataShadow: false,
+            // start: zoomstart,
+            // end: zoomend,
+            // // start: 0,
+            // // end: 10,
+            // // handleSize: 50,
+            // showDetail: false,
+            // // minValueSpan: 98,
+            // // maxValueSpan: 98,
+            // handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
+            // // handleSize: '30%',
+            // handleStyle: {
+            //   color: '#80cbc4'
+            // },
+            // fillerColor: '#d8faf4',
+            // borderColor: '#b1b1b1',
+            // minValueSpan: 6,
+            // maxValueSpan: 6,
+            // zoomlock: true
           }
         ],
         xAxis: {
           type: 'category',
           data: days,
-          // data: ['2017/12/06', '2017/12/07', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06', '2017/12/08', '2017/12/09', '2017/12/10', '2017/12/11', '2017/12/06'],
           boundaryGap: true,
           // padding: 2,
           splitLine: {
@@ -745,9 +433,30 @@ export default {
             show: false,
             alignWithLabel: true
           },
-          // axisLabel: {
-          //   width: 500
-          // },
+          axisLabel: {
+            interval: 0, // 显示x轴数据
+            showMinLabel: true,
+            showMaxLabel: true,
+            align: 'center',
+            rotate: 0,
+            formatter: function (val) {
+              let value
+              let time = val.slice(0, 4)
+              // console.log('time', time)
+              // console.log('x1', x1)
+              if (vm._.eq(time, x1)) {
+                value = val.slice(5)
+                x1 = time
+                return value
+              } else {
+                let arr = []
+                arr.push(time)
+                arr.push(val.slice(5))
+                x1 = time
+                return arr.join('\n')
+              }
+            }
+          },
           axisLine: {
             show: true,
             lineStyle: {
@@ -778,210 +487,260 @@ export default {
             }
           }
         },
-        series: [{
-        // name: 'medicine',
-          type: 'scatter',
-          symbol: 'rect',
-          symbolSize: [60, 15],
-          label: {
-            normal: {
-              show: true,
-              color: '#000',
-              fontSize: 12,
-              align: 'center',
-              rich: {
-                // ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
-                normalBg: {
-                  backgroundColor: '#81cefc',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
-                },
-                middleBg: {
-                  backgroundColor: '#7cedc4',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
-                },
-                normalheighBg: {
-                  backgroundColor: '#f4e07a',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
-                },
-                middleheighBg: {
-                  backgroundColor: '#ff947b',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
-                },
-                dangerBg: {
-                  backgroundColor: '#ff5252',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
-                },
-                nullBg: {
-                  backgroundColor: '#666',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
-                },
-                bBg: {
-                  backgroundColor: '#f4e07a',
-                  color: '#fff',
-                  fontSize: 10,
-                  align: 'center',
-                  fontWeight: 'bold'
+        series: [
+          {
+            name: 'medicine',
+            xAxisIndex: 0,
+            type: 'scatter',
+            symbol: 'rect',
+            symbolSize: [60, 15],
+            label: {
+              normal: {
+                show: true,
+                color: '#000',
+                fontSize: 12,
+                align: 'center',
+                rich: {
+                  normalBg: {
+                    backgroundColor: '#33b2f2',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  middleBg: {
+                    backgroundColor: '#32b77a',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  normalheighBg: {
+                    backgroundColor: '#efa13a',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  middleheighBg: {
+                    backgroundColor: '#ff7d43',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  dangerBg: {
+                    backgroundColor: '#f96767',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  nullBg: {
+                    backgroundColor: '#666',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  bBg: {
+                    backgroundColor: '#f4e07a',
+                    color: '#fff',
+                    fontSize: 10,
+                    align: 'center',
+                    fontWeight: 'bold'
                   // fontWeight: 'blod'
-                },
-                liBg: {
-                  backgroundColor: '#81cefc',
-                  color: '#fff',
-                  fontSize: 10,
-                  align: 'center',
-                  fontWeight: 'bold'
+                  },
+                  liBg: {
+                    backgroundColor: '#81cefc',
+                    color: '#fff',
+                    fontSize: 10,
+                    align: 'center',
+                    fontWeight: 'bold'
                   // fontWeight: 'blod'
-                },
-                ccbBg: {
-                  backgroundColor: '#7cedc4',
-                  color: '#fff',
-                  fontSize: 12,
-                  align: 'center',
-                  fontWeight: 'bold'
+                  },
+                  ccbBg: {
+                    backgroundColor: '#7cedc4',
+                    color: '#fff',
+                    fontSize: 12,
+                    align: 'center',
+                    fontWeight: 'bold'
                   // fontWeight: 'blod'
-                },
-                aceiBg: {
-                  backgroundColor: '#9c9ce2',
-                  color: '#fff',
-                  fontSize: 10,
-                  align: 'center',
-                  fontWeight: 'bold'
+                  },
+                  aceiBg: {
+                    backgroundColor: '#9c9ce2',
+                    color: '#fff',
+                    fontSize: 10,
+                    align: 'center',
+                    fontWeight: 'bold'
                   // fontWeight: 'blod'
-                },
-                arbBg: {
-                  backgroundColor: '#ff8f8f',
-                  color: '#fff',
-                  fontSize: 10,
-                  align: 'center',
-                  fontWeight: 'bold'
+                  },
+                  arbBg: {
+                    backgroundColor: '#ff8f8f',
+                    color: '#fff',
+                    fontSize: 10,
+                    align: 'center',
+                    fontWeight: 'bold'
                   // fontWeight: 'blod'
-                },
+                  },
 
-                tc: {
-                  align: 'center',
-                  color: '#eee'
-                },
-                hr: {
+                  tc: {
+                    align: 'center',
+                    color: '#eee'
+                  },
+                  hr: {
                   // borderColor: '#777',
-                  width: '100%',
+                    width: '100%',
                   // borderWidth: 0.5,
-                  height: 0
-                },
-                li: {
-                  height: 15,
-                  align: 'center',
-                  backgroundColor: {
-                    image: Icons.li
-                  }
-                },
-                b: {
-                  height: 15,
-                  align: 'center',
-                  backgroundColor: {
-                    image: Icons.b
-                  }
-                },
-                ccb: {
-                  height: 15,
-                  align: 'center',
-                  backgroundColor: {
-                    image: Icons.ccb
-                  }
-                },
-                acei: {
-                  height: 15,
-                  align: 'center',
-                  backgroundColor: {
-                    image: Icons.acei
-                  }
-                },
-                arb: {
-                  height: 15,
-                  align: 'center',
-                  backgroundColor: {
-                    image: Icons.arb
+                    height: 0
+                  },
+                  li: {
+                    height: 15,
+                    align: 'center',
+                    backgroundColor: {
+                      image: Icons.li
+                    }
+                  },
+                  b: {
+                    height: 15,
+                    align: 'center',
+                    backgroundColor: {
+                      image: Icons.b
+                    }
+                  },
+                  ccb: {
+                    height: 15,
+                    align: 'center',
+                    backgroundColor: {
+                      image: Icons.ccb
+                    }
+                  },
+                  acei: {
+                    height: 15,
+                    align: 'center',
+                    backgroundColor: {
+                      image: Icons.acei
+                    }
+                  },
+                  arb: {
+                    height: 15,
+                    align: 'center',
+                    backgroundColor: {
+                      image: Icons.arb
+                    }
                   }
                 }
               }
-            }
-          },
-          data: this.optionData
+            },
+            data: this.optionData
           // data: [
-          //   {
-          //     value: [0, 0, '[120/120]', '[120/120]', 'time'],
-          //     label: {
-          //       normal: {
-          //         formatter: [
-          //           // '{bBg|[120/120]}{li|}{b|}{liBg|[120/120]}'
-          //           '{ccbBg|[120/120]}',
-          //           '{hr|}',
-          //           '{ccb|} {arb|}',
-          //           '{hr|}',
-          //           '{arbBg|[120/120]}'
-          //         ].join('\n')
-          //       }
-          //     }
-          //   },
-          //   {
-          //     value: [2, 1, '[120/120][120/120]'],
-          //     label: {
-          //       normal: {
-          //         formatter: [
-          //           // '{ccbBg|[120/120]}{ccb|}{arb|}{arbBg|[120/120]}'
-          //           '{ccbBg|[120/120]}',
-          //           '{hr|}',
-          //           '{ccb|} {arb|}',
-          //           '{hr|}',
-          //           '{arbBg|[120/120]}'
-          //         ].join('\n'),
-          //         rich: {
-          //         }
-          //       }
-          //     }
-          //   }
+            //   {
+            //     value: [0, 0, '[120/120]', '[120/120]', 'time'],
+            //     label: {
+            //       normal: {
+            //         formatter: [
+            //           // '{bBg|[120/120]}{li|}{b|}{liBg|[120/120]}'
+            //           '{ccbBg|[120/120]}',
+            //           '{hr|}',
+            //           '{ccb|} {arb|}',
+            //           '{hr|}',
+            //           '{arbBg|[120/120]}'
+            //         ].join('\n')
+            //       }
+            //     }
+            //   },
+            //   {
+            //     value: [2, 1, '[120/120][120/120]'],
+            //     label: {
+            //       normal: {
+            //         formatter: [
+            //           // '{ccbBg|[120/120]}{ccb|}{arb|}{arbBg|[120/120]}'
+            //           '{ccbBg|[120/120]}',
+            //           '{hr|}',
+            //           '{ccb|} {arb|}',
+            //           '{hr|}',
+            //           '{arbBg|[120/120]}'
+            //         ].join('\n'),
+            //         rich: {
+            //         }
+            //       }
+            //     }
+            //   }
           // ]
-        }]
+          }
+        ]
       }
       return option
+    },
+    computeStartend (pageNum, pages) {
+      let page = {
+      }
+      if (pageNum === 1 && pages === 1) {
+        page.start = 0
+        page.end = 100
+      } else if (pageNum === 1) {
+        page.start = 0
+        page.end = parseInt((pageNum / pages) * 100)
+      } else if (pageNum < pages || pageNum === pages) {
+        page.start = parseInt(((pageNum - 1) / pages) * 100)
+        page.end = parseInt((pageNum / pages) * 100)
+      }
+      return page
+    },
+    useDrugPer () {
+      let vm = this
+      this.page.currentPage --
+      if (this.page.currentPage < 1) {
+        this.page.currentPage = 1
+      }
+      let position = this.computeStartend(vm.page.currentPage, vm.page.pageNum)
+      let useDrug = echarts.init(document.getElementById('useDrug'))
+      useDrug.setOption(this.useDrugOption(position.start, position.end))
+    },
+    useDrugNext () {
+      let vm = this
+      if (vm.page.currentPage > vm.page.pageNum) {
+        vm.page.currentPage = vm.page.pageNum
+      }
+      if (vm.page.currentPage < vm.page.pages) {
+        vm.page.currentPage ++
+      }
+      if (vm.page.pageNum >= vm.page.pages) {
+        let position = this.computeStartend(vm.page.pageNum, vm.page.pageNum)
+        let useDrug = echarts.init(document.getElementById('useDrug'))
+        useDrug.setOption(this.useDrugOption(position.start, position.end))
+        return
+      }
+      vm.page.pageNum ++
+      vm.getData(vm.page.pageNum)
+    }
+  },
+  watch: {
+    page: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.useDrugBtnNext = false
+          this.useDrugBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.useDrugBtnNext = false
+          } else {
+            this.useDrugBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.useDrugBtnPre = true
+          } else {
+            this.useDrugBtnPre = false
+          }
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
   mounted () {
     let vm = this
-    let useDrug = echarts.init(document.getElementById('useDrug'))
-    // useDrug.setOption(vm.useDrugOption())
     vm.getData()
-    // console.log('medicine', this.getData())
-    useDrug.on('datazoom', function (chartsparams) {
-      if (chartsparams.end === 100) {
-        if (vm.pageNum >= vm.pages) {
-          // return
-        } else {
-          // console.log(vm.pages)
-          vm.loading = false
-          vm.pageNum++
-          vm.getData(vm.pageNum)
-          useDrug.setOption(vm.useDrugOption())
-          vm.loading = true
-        }
-      }
-    })
   }
 }
 </script>
@@ -1028,5 +787,34 @@ export default {
     margin-right: 10px;
   }
 
-
+.flex{
+    display: flex;
+    position: relative;
+    flex-wrap: nowrap;
+  }
+  .chart-min-width{
+    min-width: 100%;
+  }
+  .flex-btn{
+    max-width: 55px;
+    min-width: 55px;
+    /* height: 100%; */
+    position: absolute;
+    bottom:50%;
+    right: 0;
+    z-index:999;
+  }
+  .flex-btn-left{
+    max-width: 55px;
+    min-width: 55px;
+    
+    /* height: 100%; */
+    position: absolute;
+    bottom:50%;
+    left: 25px;
+    z-index:999;
+  }
+  .widthone{
+    width: 100%;
+  }
 </style>
