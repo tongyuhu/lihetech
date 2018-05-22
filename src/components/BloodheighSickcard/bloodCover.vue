@@ -1294,7 +1294,8 @@ export default {
           // this.updatebloodTrendState()
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(res.data.data[0].measureTime, 0)
+              // this.updatebloodTrendState(res.data.data[0].measureTime, 0)
+              this.updatebloodTrendState(false, false, true)
             }
           }
         })
@@ -1331,7 +1332,8 @@ export default {
           // bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(res.data.data[0].description)
+              // this.updatebloodTrendState(res.data.data[0].description)
+              this.updatebloodTrendState(false, false, true)
             }
           }
         })
@@ -1370,7 +1372,8 @@ export default {
           if (res.data.data) {
             if (res.data.data.length !== 0) {
               console.log('dsad', res.data.data[0].yearWeek)
-              this.updatebloodTrendState(res.data.data[0].yearWeek)
+              // this.updatebloodTrendState(res.data.data[0].yearWeek)
+              this.updatebloodTrendState(false, false, true)
             }
           }
         })
@@ -1402,77 +1405,85 @@ export default {
           // bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(res.data.data[0].description)
+              // this.updatebloodTrendState(res.data.data[0].description)
+              this.updatebloodTrendState(false, false, true)
             }
           }
         })
       }
     },
-    updatebloodTrendState (date, index) {
-      if (this.bloodTrendChecked === 0) {
-        this.bloodTrendState.total = 1
-        // }
-        if (this.bloodTrendData.bptype[index] === 1) {
-          this.bloodTrendState.normal = 0
-          this.bloodTrendState.heigh = 0
-          this.bloodTrendState.danger = 0
-        }
-        if (this.bloodTrendData.bptype[index] === 2) {
-          this.bloodTrendState.normal = 1
-          this.bloodTrendState.heigh = 0
-          this.bloodTrendState.danger = 0
-        }
-        if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
-          this.bloodTrendState.normal = 0
-          this.bloodTrendState.heigh = 1
-          this.bloodTrendState.danger = 0
-        }
-        if (this.bloodTrendData.bptype[index] === 5) {
-          this.bloodTrendState.normal = 0
-          this.bloodTrendState.heigh = 0
-          this.bloodTrendState.danger = 1
-        }
-        return
-      }
-      if (this.bloodTrendChecked === 2) {
-        // date = dateFormat(date, 0, 1)
-        // let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
-        let yearweek = this.computeYearWeek(date)
-        date = dateFromWeek(yearweek[0], yearweek[1])
-      }
-      let vm = this
-      let params = {
-        'userId': vm.sickID,
-        'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': this.statusArr || ''
-      }
-      this.$axios(updatebloodTrendStateApi(params, this.bloodTrendChecked, date))
-      .then(res => {
-        let total = 0
-        let heigh = 0
-        res.data.data.forEach(item => {
-          total += item.highNum
-          // if (item.id === 1) {
-          //   this.$set(this.bloodTrendState, 'total', item.highNum)
+    updatebloodTrendState (date, index, showzero) {
+      if (showzero) {
+        this.bloodTrendState.total = 0
+        this.bloodTrendState.normal = 0
+        this.bloodTrendState.heigh = 0
+        this.bloodTrendState.danger = 0
+      } else {
+        if (this.bloodTrendChecked === 0) {
+          this.bloodTrendState.total = 1
           // }
-          if (this._.toNumber(item.id) === 2) {
-            this.$set(this.bloodTrendState, 'normal', item.highNum)
+          if (this.bloodTrendData.bptype[index] === 1) {
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 0
           }
-          if (this._.toNumber(item.id) === 3) {
-            heigh = heigh + item.highNum
-            // this.$set(this.bloodTrendState, 'heigh', item.highNum)
+          if (this.bloodTrendData.bptype[index] === 2) {
+            this.bloodTrendState.normal = 1
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 0
           }
-          if (this._.toNumber(item.id) === 4) {
-            heigh = heigh + item.highNum
-            // this.$set(this.bloodTrendState, 'heigh', item.highNum)
+          if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 1
+            this.bloodTrendState.danger = 0
           }
-          this.$set(this.bloodTrendState, 'heigh', heigh)
-          if (this._.toNumber(item.id) === 5) {
-            this.$set(this.bloodTrendState, 'danger', item.highNum)
+          if (this.bloodTrendData.bptype[index] === 5) {
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 1
           }
+          return
+        }
+        if (this.bloodTrendChecked === 2) {
+          // date = dateFormat(date, 0, 1)
+          // let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
+          let yearweek = this.computeYearWeek(date)
+          date = dateFromWeek(yearweek[0], yearweek[1])
+        }
+        let vm = this
+        let params = {
+          'userId': vm.sickID,
+          'adminHospitalId': vm.hospitalId,
+          'bpMeasureTime': this.statusArr || ''
+        }
+        this.$axios(updatebloodTrendStateApi(params, this.bloodTrendChecked, date))
+        .then(res => {
+          let total = 0
+          let heigh = 0
+          res.data.data.forEach(item => {
+            total += item.highNum
+            // if (item.id === 1) {
+            //   this.$set(this.bloodTrendState, 'total', item.highNum)
+            // }
+            if (this._.toNumber(item.id) === 2) {
+              this.$set(this.bloodTrendState, 'normal', item.highNum)
+            }
+            if (this._.toNumber(item.id) === 3) {
+              heigh = heigh + item.highNum
+              // this.$set(this.bloodTrendState, 'heigh', item.highNum)
+            }
+            if (this._.toNumber(item.id) === 4) {
+              heigh = heigh + item.highNum
+              // this.$set(this.bloodTrendState, 'heigh', item.highNum)
+            }
+            this.$set(this.bloodTrendState, 'heigh', heigh)
+            if (this._.toNumber(item.id) === 5) {
+              this.$set(this.bloodTrendState, 'danger', item.highNum)
+            }
+          })
+          this.$set(this.bloodTrendState, 'total', total)
         })
-        this.$set(this.bloodTrendState, 'total', total)
-      })
+      }
     },
     computeYearWeek (value) {
       let time = value
