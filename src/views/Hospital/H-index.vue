@@ -44,7 +44,7 @@
     data () {
       return {
         imStatus: false,
-        chatStatus: false,
+        // chatStatus: false,
         appKey: 'pwe86ga5pv726',
         token: '',
         whichFriend: {}
@@ -52,7 +52,8 @@
     },
     computed: {
       ...mapState({
-        adminInfo: 'adminInfo'
+        adminInfo: 'adminInfo',
+        chatStatus: 'chatStatus'
       }),
       ...mapGetters([
         'currentChat',
@@ -61,7 +62,9 @@
     },
     methods: {
       ...mapMutations([
-        'setRongUserId'
+        'setRongUserId',
+        'openChatWindow',
+        'closeChatWindow'
       ]),
       ...mapActions([
         'setRongUserIdAction'
@@ -73,15 +76,13 @@
         this.imStatus = false
       },
       closeChatWindow () {
-        this.chatStatus = false
+        this.closeChatWindow()
+        // this.chatStatus = false
       },
       chatWith (history) {
         Bus.$emit('history', history)
   
-        // this.$set(this.whichFriend,)
-        // Object.assign(this.whichFriend, friend)
-        // console.log('聊天对象', friend)
-        // this.whichFriend = friend
+        this.openChatWindow()
         this.chatStatus = true
       }
     },

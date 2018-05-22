@@ -41,7 +41,7 @@
                       <div>已就诊</div>
                       <div>
                         <button @click="diagnosis">会诊</button>
-                        <button>联系</button>
+                        <button @click="contact">联系</button>
                       </div>
                     </div>
                   </td>
@@ -101,7 +101,6 @@
                       <div>高血压并发症</div>
                       <div>已就诊</div>
                       <div>
-                        <button>会诊</button>
                         <button>联系</button>
                       </div>
                     </div>
@@ -118,7 +117,6 @@
                       <div>高血压并发症</div>
                       <div>已就诊</div>
                       <div>
-                        <button>会诊</button>
                         <button>联系</button>
                       </div>
                     </div>
@@ -128,7 +126,6 @@
                       <div>高血压并发症</div>
                       <div>已就诊</div>
                       <div>
-                        <button>会诊</button>
                         <button>联系</button>
                       </div>
                     </div>
@@ -155,7 +152,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['SET_SICK_CARD']),
+    ...mapMutations(
+      ['SET_SICK_CARD',
+        'addChatFriend',
+        'changeChatFriend',
+        'openChatWindow'
+      ]),
     checkHistory () {
       this.checkOrderBtn = true
     },
@@ -205,6 +207,18 @@ export default {
       // Bus.$emit('huizhen', true)
       this.SET_SICK_CARD(true)
       // console.log('$refs', this.$refs.sickcard)
+    },
+    contact () {
+      let sick = {
+        userId: '5277',
+        userImg: '',
+        userName: '患者',
+        hasMsg: false,
+        currentChat: false
+      }
+      this.addChatFriend(sick)
+      this.changeChatFriend(sick)
+      this.openChatWindow()
     }
   },
   mounted () {
@@ -213,8 +227,6 @@ export default {
       obj.today = item
       this.currentOrder.push(obj)
     })
-
-    // console.log('今天星期几', today, computeWeekday(today))
     console.log('星期几', this.nextSunday())
   }
 }

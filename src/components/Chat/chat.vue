@@ -92,12 +92,6 @@ import Bus from '@/bus.js'
 export default {
   name: 'chart',
   props: {
-    // friend: {
-    //   type: Object,
-    //   default: function () {
-    //     return {}
-    //   }
-    // }
   },
   components: {
     chartMessage,
@@ -200,7 +194,8 @@ export default {
       'setaddChatFriend'
     ]),
     ...mapMutations([
-      'addChatFriend'
+      'addChatFriend',
+      'closeChatWindow'
     ]),
     sendMsg () {
       let vm = this
@@ -266,8 +261,9 @@ export default {
       console.log(this.readyMsg)
     },
     closeChart () {
-      this.$emit('colseChat')
+      // this.$emit('colseChat')
       // this.showChart = false
+      this.closeChatWindow()
     }
   },
   watch: {
