@@ -1229,6 +1229,7 @@ export default {
       this.bloodTrendDate[index].isChecked = true
       this.bloodTrendChecked = index
       this.updatebloodTrendData(index, this.statusArr)
+      console.log('index, this.statusArr', index, this.statusArr)
     },
     changeStatus (index) {
       if (index !== 'all') {
@@ -1291,11 +1292,11 @@ export default {
             this.bloodTrendState.danger = 1
           }
           // this.updatebloodTrendState()
-          // if (res.data.data) {
-          //   if (res.data.data.length !== 0) {
-          //     this.updatebloodTrendState(res.data.data[0].measureTime)
-          //   }
-          // }
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              this.updatebloodTrendState(res.data.data[0].measureTime, 0)
+            }
+          }
         })
       }
       if (index === 1) {
