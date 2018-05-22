@@ -34,9 +34,17 @@
           </td>
           <td>
             <!-- <p></p> -->
-            <p>{{userFood[0] !==undefined ? '早餐：'+userFood[0].foodName+' ' +userFood[0].caloriesTotal+'千卡':'暂无数据'}} </p>
-            <p>{{userFood[1] !==undefined ? '午餐：'+userFood[1].foodName+ ' '+userFood[1].caloriesTotal+'千卡':'暂无数据'}} </p>
-            <p>{{userFood[2] !==undefined ? '晚餐：'+userFood[2].foodName+' ' +userFood[2].caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>
+              <span>
+
+              </span>
+              {{morning.foodName !=='' ? '早餐：'+morning.foodName:''}}
+              {{morning.caloriesTotal !== '' ?' ' +morning.caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>{{noon.foodName!=='' ? '午餐：'+noon.foodName:''}} {{noon.caloriesTotal !== '' ?' '+noon.caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>{{night.foodName!=='' ? '晚餐：'+night.foodName:''}} {{night.caloriesTotal !== '' ?' ' +night.caloriesTotal+'千卡':'暂无数据'}} </p>
+            <!-- <p>{{morning !==undefined ? '早餐：'+morning.foodName+' ' +morning.caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>{{noon!==undefined ? '午餐：'+noon.foodName+ ' '+noon.caloriesTotal+'千卡':'暂无数据'}} </p>
+            <p>{{night!==undefined ? '晚餐：'+night.foodName+' ' +night.caloriesTotal+'千卡':'暂无数据'}} </p> -->
             <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
             <!-- <p>早餐：蔬菜 水果 524千卡</p> -->
           </td>
@@ -128,6 +136,18 @@ export default {
     return {
       noteDate: '',
       userFood: [],
+      morning: {
+        foodName: '',
+        caloriesTotal: ''
+      },
+      noon: {
+        foodName: '',
+        caloriesTotal: ''
+      },
+      night: {
+        foodName: '',
+        caloriesTotal: ''
+      },
       userMove: [],
       userWeight: {
         'weight': '暂无数据',
@@ -168,7 +188,38 @@ export default {
             'bmiType': 0,
             'bmi': '暂无数据'
           }
-          this.userFood = res.data.data.foodList
+          // this.userFood = res.data.data.
+          this.morning = {
+            foodName: '',
+            caloriesTotal: ''
+          }
+          this.noon = {
+            foodName: '',
+            caloriesTotal: ''
+          }
+          this.night = {
+            foodName: '',
+            caloriesTotal: ''
+          }
+          if (res.data.data.foodList.length > 0) {
+            res.data.data.foodList.forEach(item => {
+              if (item.biteTime === 1) {
+                // this.set
+                this.morning.foodName = item.foodName
+                this.morning.caloriesTotal = item.caloriesTotal
+              }
+              if (item.biteTime === 2) {
+                // this.set
+                this.noon.foodName = item.foodName
+                this.noon.caloriesTotal = item.caloriesTotal
+              }
+              if (item.biteTime === 3) {
+                // this.set
+                this.night.foodName = item.foodName
+                this.night.caloriesTotal = item.caloriesTotal
+              }
+            })
+          }
           this.userMove = res.data.data.moveList
           // res.data.data.body.forEach(item => {
           if (this._.has(res.data.data.body, 'bmiType')) {

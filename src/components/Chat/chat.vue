@@ -39,6 +39,15 @@
 
       <!-- 聊天记录 -->
       <div class="chart-wrap-box">
+        <!-- <span slot="no-more">没有更多数据了</span> -->
+        <!-- <div v-if="!isTriggerFirstLoad" class="center">
+          <el-button type="text" @click="isTriggerFirstLoad = true" >点击加载更多...</el-button>
+        </div>
+        <infinite-loading v-else  @infinite="infiniteHandler" 
+        direction="top"  
+        spinner="circles"
+        :distance="10"
+        ></infinite-loading> -->
         <chartMessageGroup>
           <chartMessage
           v-for="(item) in historyMsg" :key="item.index"
@@ -90,74 +99,76 @@ import chartMessage from './chartMessage'
 import chartMessageGroup from './chartMessageGroup'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import Bus from '@/bus.js'
+import InfiniteLoading from 'vue-infinite-loading'
 export default {
   name: 'chart',
   props: {
   },
   components: {
     chartMessage,
-    chartMessageGroup
+    chartMessageGroup,
+    InfiniteLoading
   },
   data () {
     return {
-      historyMsg: [
-        {
-          who: 'self',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'other',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'self',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'self',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'other',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'self',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'self',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        },
-        {
-          who: 'other',
-          type: 'text',
-          content: {
-            content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-          }
-        }
-      ],
+      // historyMsg: [
+      //   {
+      //     who: 'self',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'other',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'self',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'self',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'other',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'self',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'self',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   },
+      //   {
+      //     who: 'other',
+      //     type: 'text',
+      //     content: {
+      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
+      //     }
+      //   }
+      // ],
       readyMsg: '',
       chartList: [
         {
@@ -174,8 +185,9 @@ export default {
           historyMsg: []
         }
       ],
-      showList: false
-      // historyMsg: []
+      showList: false,
+      isTriggerFirstLoad: false,
+      historyMsg: []
       // showChart: true
     }
   },
@@ -265,6 +277,52 @@ export default {
       // this.$emit('colseChat')
       // this.showChart = false
       this.closeChatWindow()
+    },
+    infiniteHandler ($state) {
+      let vm = this
+      let state = $state
+
+      let arr = [
+        {
+          who: 'self',
+          type: 'text',
+          msg: '1111111111111111111'
+        },
+        {
+          who: 'other',
+          type: 'text',
+          msg: '2222222222222222222222222'
+        },
+        {
+          who: 'self',
+          type: 'text',
+          msg: '3333333333333333333333333333'
+        },
+        {
+          who: 'self',
+          type: 'text',
+          msg: '44444444444444444444444444444444'
+        }
+      ]
+      new Promise(function (resolve, reject) {
+        setTimeout(function () {
+          vm.isTriggerFirstLoad = false
+          resolve('success')
+          console.log('1')
+        }, 1500)
+      }).then(function (resolve) {
+        if (resolve === 'success') {
+          if (!vm.isTriggerFirstLoad) {
+            vm.$refs.infiniteLoading.scrollTop = 400
+            vm.isTriggerFirstLoad = false
+            state.loaded()
+            // $state.reset()
+            state.complete()
+            console.log('2')
+          }
+        }
+      })
+      // $state.complete()
     }
   },
   watch: {
@@ -531,6 +589,9 @@ export default {
         // border:
       }
     }
+  }
+  .center{
+    text-align:center;
   }
 </style>
 

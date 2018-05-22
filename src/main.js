@@ -16,6 +16,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
+// import InfiniteLoading from 'vue-infinite-loading'
 Vue.prototype._ = _
 
 Vue.config.productionTip = false
