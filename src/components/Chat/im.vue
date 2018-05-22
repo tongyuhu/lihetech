@@ -134,7 +134,8 @@ export default {
   methods: {
     ...mapMutations([
       'changeChatFriend',
-      'addChatFriend'
+      'addChatFriend',
+      'openChatWindow'
     ]),
     closeIM () {
       this.$emit('closeIM')
@@ -175,10 +176,7 @@ export default {
         }
       })
 
-      // this.addChatFriend(friend)
-      // this.changeChatFriend(friend)
-      this.$emit('chat', history)
-      // console.log('好友huihua', friend)
+      vm.openChatWindow()
     }
   },
   mounted () {

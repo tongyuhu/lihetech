@@ -23,40 +23,7 @@
             </el-input>
           </div>
         </div>
-        <!-- <table v-loading="loading">
-          <tr>
-            <th width="40px" class="checked"></th>
-            <th>序号</th>
-            <th>姓名</th>
-            <th>患者类型</th>
-            <th>联系电话</th>
-            <th>严重比例</th>
-            <th>病情</th>
-            <th>加入时间</th>
-            <th>操作</th>
-          </tr>
-          <tr v-for="(item,index) in sickList" :key="index">
-            <td class="checked">
-              <el-checkbox  v-model="item.i" @change="SickSelectionChange(item)"></el-checkbox>
-            </td>
-            <td>序号</td>
-            <td>姓名</td>
-            <td>患者类型</td>
-            <td>联系电话</td>
-            <td>严重比例</td>
-            <td>病情</td>
-            <td>加入时间</td>
-            <td>
-              <el-button type="text" @click="editSick(item)">
-              <span class="action-text"> <i class="el-icon-edit-outline"></i> 
-              编辑</span>
-              </el-button>
-            </td>
-          </tr>
-          <tr v-if="sickList.length === 0">
-            <td colspan="8">暂无数据</td>
-          </tr>
-        </table> -->
+
 
         <el-table
         border
@@ -137,7 +104,7 @@
         width="456px"
         center>
         <div class="input-wrap">
-          <span>医生姓名:</span>
+          <span>患者姓名:</span>
           <input type="text" v-model="editSickName">
         </div>
         <div class="input-wrap">
@@ -145,11 +112,11 @@
           <input type="text" v-model="editSickPhone">
         </div>
         <div class="input-wrap">
-          <span>已绑定居民:</span>
+          <span>患者类型:</span>
           <input type="text" v-model="editSickPerson">
         </div>
         <div class="input-wrap">
-          <span>组织站点:</span>
+          <span>病情:</span>
           <input type="text" v-model="editSickAddress">
         </div>
         <span slot="title" class="dialog-title">修改患者</span>
