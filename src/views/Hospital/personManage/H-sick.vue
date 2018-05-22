@@ -155,7 +155,7 @@
 <script>
 import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
-  name: 'accountSetting',
+  name: 'sick-manage',
   data () {
     return {
       checkblood: true,
@@ -265,11 +265,12 @@ export default {
         this.getSickList()
       } else {
         let param = {}
-        if (this._.isNumber(this.searchSickMsg) && this.searchSickMsg.length > 6) {
-          param.mobile = this.searchSickMsg
-        } else {
-          param.realName = this.searchSickMsg
-        }
+        // if (this._.isNumber(this.searchSickMsg) && this.searchSickMsg.length > 6) {
+        //   param.mobile = this.searchSickMsg
+        // } else {
+        //   param.realName = this.searchSickMsg
+        // }
+        param.fields = this.searchSickMsg
         param.pageSize = this.pageSize
         this.$axios(getSickListAPI(param))
         .then(res => {

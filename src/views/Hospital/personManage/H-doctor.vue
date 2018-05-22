@@ -234,12 +234,14 @@ export default {
         this.getDoctorList()
       } else {
         let param = {}
-        if (this._.isNumber(this.searchDoctorMsg) && this.searchDoctorMsg.length > 6) {
-          param.param = this.searchDoctorMsg
-        } else {
-          param.name = this.searchDoctorMsg
-        }
+        // if (this._.isNumber(this.searchDoctorMsg) && this.searchDoctorMsg.length > 6) {
+        //   param.param = this.searchDoctorMsg
+        // } else {
+        //   param.name = this.searchDoctorMsg
+        // }
+
         param.pageSize = this.pageSize
+        param.fields = this.searchDoctorMsg
         this.$axios(getDoctorListAPI(param))
         .then(res => {
           this.doctorList = []
