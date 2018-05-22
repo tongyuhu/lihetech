@@ -267,6 +267,10 @@ export default {
     noteDate: {
       handler: function (val) {
         if (this._.gt(val, dateFormat(Date(), 0, true))) {
+          this.$message({
+            message: '选择日期不能大于当前时间！',
+            type: 'warning'
+          })
           this.noteDate = dateFormat(Date(), 0, true)
         }
         this.getData(val)
