@@ -321,11 +321,11 @@ export default {
                   return arr.join('\n')
                 }
               } else {
-                let start = val.slice(0, 11)
+                let start = val.slice(5, 11)
                 if (vm._.eq(start, x1)) {
                   value = val.slice(11)
                   x1 = start
-                  return value
+                  return value + '时'
                 } else {
                   let arr = []
                   arr.push((val.slice(11) + '时'))

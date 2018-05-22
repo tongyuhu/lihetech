@@ -64,9 +64,11 @@ export default {
   },
   data () {
     return {
-      data: [
-      ],
+      // data: [
+      // ],
+      // 图表数据
       optionData: [],
+      // 图表X轴
       xasis: [],
       page: {
         pageNum: 1,
@@ -74,18 +76,24 @@ export default {
         pages: 1,
         currentPage: 1
       },
-      pageNum: 1,
-      pageSize: 15,
-      pages: 1,
-      currentPage: 1,
-      initX: -1,
+      // pageNum: 1,
+      // pageSize: 15,
+      // pages: 1,
+      // currentPage: 1,
       loading: true,
       useDrugBtnPre: true,
-      useDrugBtnNext: true
+      useDrugBtnNext: true,
+      // 计算x轴坐标
+      initX: -1,
+      // 计算Y轴坐标
+      befor: {
+        takeMedicineTime: '00000000000'
+      }
 
     }
   },
   methods: {
+    // 获取数据
     getData (pagenum) {
       let vm = this
       vm.loading = true
@@ -94,7 +102,7 @@ export default {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
         'pageNum': pagenum,
-        'pageSize': this.pageSize
+        'pageSize': this.page.pageSize
       }
       vm.$axios(useDrugApi(params))
       .then(res => {
@@ -151,19 +159,19 @@ export default {
         this.page.pages = res.data.pages
       })
     },
-
+    // 格式化数据 计算x，y轴坐标
     formatter (arr) {
       let vm = this
       let readyarr = []
-      let befor = {
-        takeMedicineTime: '00000000000'
-      }
+      // let befor = {
+      //   takeMedicineTime: '00000000000'
+      // }
       vm._(arr).forEach(function (value, index) {
         // if (index === 0) {
           // value.x = 0
         // } else {
         let time = value.takeMedicineTime.slice(0, 10)
-        let befortime = befor.takeMedicineTime.slice(0, 10)
+        let befortime = vm.befor.takeMedicineTime.slice(0, 10)
         if (vm._.eq(time, befortime)) {
           value.x = vm.initX
         } else {
@@ -173,10 +181,11 @@ export default {
         // }
         value.y = vm.axisY(value.takeMedicineTime)
         readyarr.push(value)
-        befor = value
+        vm.befor = value
       })
       return readyarr
     },
+    // 计算X轴坐数据
     axisX (arr) {
       let vm = this
       let x = []
@@ -186,6 +195,7 @@ export default {
       x = vm._.uniq(x)
       return x
     },
+    // 计算Y轴坐标
     axisY (str) {
       let time = str.slice(11, -1)
       let y
@@ -228,6 +238,7 @@ export default {
       }
       return y
     },
+    // 背景颜色
     colorBg (bptype) {
       let type
       if (bptype !== 'null') {
@@ -491,35 +502,35 @@ export default {
                 align: 'center',
                 rich: {
                   normalBg: {
-                    backgroundColor: '#81cefc',
+                    backgroundColor: '#33b2f2',
                     color: '#fff',
                     fontSize: 12,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   middleBg: {
-                    backgroundColor: '#7cedc4',
+                    backgroundColor: '#32b77a',
                     color: '#fff',
                     fontSize: 12,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   normalheighBg: {
-                    backgroundColor: '#f4e07a',
+                    backgroundColor: '#efa13a',
                     color: '#fff',
                     fontSize: 12,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   middleheighBg: {
-                    backgroundColor: '#ff947b',
+                    backgroundColor: '#ff7d43',
                     color: '#fff',
                     fontSize: 12,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   dangerBg: {
-                    backgroundColor: '#ff5252',
+                    backgroundColor: '#f96767',
                     color: '#fff',
                     fontSize: 12,
                     align: 'center',

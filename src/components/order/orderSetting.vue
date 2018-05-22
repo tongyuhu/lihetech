@@ -98,24 +98,13 @@
       <span slot="title" class="dialog-title">周批量预约时间设置</span>
       <div class="dialog-main">
         <div>
-          <span>日期选择：</span>
-          <button @click="chooseWeek(index)" :class="{'group-btn-active':item.choose,'group-btn':!item.choose}" v-for="(item,index) in week" :key="item.time">{{item.time}}</button>
-          <!-- <el-date-picker
-            :style="{'width':'150px'}"
-            v-model="settingGroupTime.start"
-            type="date"
-            placeholder="选择日期"
-            :default-value="defaultvalue"
-            >
-          </el-date-picker>
-        至
-          <el-date-picker
-            :style="{'width':'150px'}"
-            v-model="settingGroupTime.end"
-            type="date"
-            placeholder="选择日期"
-            >
-          </el-date-picker> -->
+          <span>日期选择:</span>
+          <button @click="chooseWeek(index)" 
+          :class="{'group-btn-active':item.choose,'group-btn':!item.choose}" 
+          v-for="(item,index) in week" 
+          :key="item.time">
+            {{item.time}}
+          </button>
         </div>
         <div>
           <span>上午</span>
@@ -210,33 +199,41 @@ export default {
       week: [
         {
           time: '周一',
-          choose: false
+          choose: false,
+          value: 1
         },
         {
           time: '周二',
-          choose: false
+          choose: false,
+          value: 2
         },
         {
           time: '周三',
-          choose: false
+          choose: false,
+          value: 3
         },
         {
           time: '周四',
-          choose: false
+          choose: false,
+          value: 4
         },
         {
           time: '周五',
-          choose: false
+          choose: false,
+          value: 5
         },
         {
           time: '周六',
-          choose: false
+          choose: false,
+          value: 6
         },
         {
           time: '周日',
-          choose: false
+          choose: false,
+          value: 7
         }
-      ]
+      ],
+      cheeckedweek: []
     }
   },
   methods: {
@@ -246,6 +243,10 @@ export default {
     },
     // 取消编辑预约时间
     settingSingleCancel () {
+      this.settingSingleMorning.start = ''
+      this.settingSingleMorning.end = ''
+      this.settingSingleNoon.start = ''
+      this.settingSingleNoon.end = ''
       this.settingSingle = false
     },
     // 确认编辑时间
@@ -271,11 +272,42 @@ export default {
     },
     // 取消周批量设置
     settingGroupCancel () {
+      this.settingGroupMorning.start = ''
+      this.settingGroupMorning.end = ''
+      this.settingGroupNoon.start = ''
+      this.settingGroupNoon.end = ''
       this.settingGroup = false
     },
     // 确定周批量设置
     settingGroupConfirm () {
-      this.settingGroup = false
+      if (this.cheeckedweek.length === 0) {
+        this.$message({
+          message: '请选择日期',
+          type: 'warning'
+        })
+      } else {
+        let morning = this._.gt(this.settingGroupMorning.start, this.settingGroupMorning.end)
+        let noon = this._.gt(this.settingGroupNoon.start, this.settingGroupNoon.end)
+        if (morning || noon) {
+          this.$message({
+            message: '起始时间不能大于结束时间,请重新设置',
+            type: 'warning'
+          })
+          this.settingGroupMorning.start = ''
+          this.settingGroupMorning.end = ''
+          this.settingGroupNoon.start = ''
+          this.settingGroupNoon.end = ''
+        } else {
+          this.cheeckedweek.forEach(item => {
+            this.order[item].order = true
+            this.order[item].morning = this.settingGroupMorning.start + '/' + this.settingGroupMorning.end
+            this.order[item].noon = this.settingGroupNoon.start + '/' + this.settingGroupNoon.end
+          })
+          this.settingGroup = false
+        }
+      }
+
+      // this.settingGroup = false
     },
     // 打开编辑时间窗口
     editTime (index) {
@@ -283,6 +315,11 @@ export default {
       console.log(this.openOrder)
       if (this.order[index].order) {
         this.settingSingle = true
+      } else {
+        this.$message({
+          message: '请先开启预约',
+          type: 'warning'
+        })
       }
     },
     nextSunday () {
@@ -312,7 +349,17 @@ export default {
       return arr
     },
     chooseWeek (index) {
-      this.week[index].choose = true
+      this.week[index].choose = !this.week[index].choose
+      if (this.week[index].choose) {
+        this.cheeckedweek.push(index)
+      } else {
+        let hasIndex = this._.indexOf(this.cheeckedweek, index)
+        if (hasIndex !== -1) {
+          this.cheeckedweek.splice(hasIndex, 1)
+        }
+      }
+      this.cheeckedweek = this._.uniq(this.cheeckedweek)
+      console.log('this.cheeckedweek', this.cheeckedweek)
     }
   },
   mounted () {
