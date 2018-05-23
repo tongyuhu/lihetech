@@ -15,11 +15,13 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
+    "babel-polyfill": "^6.26.0",
     "echarts": "^3.8.5",
     "element-ui": "^2.0.10",
     "lodash": "^4.17.5",
     "sass-loader": "^6.0.7",
     "vue": "^2.5.2",
+    "vue-infinite-loading": "^2.3.1",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },

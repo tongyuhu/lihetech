@@ -1,28 +1,32 @@
 <template>
   <div class="sport">
-    <div class="inline" v-for="(item,index) in 4" :key="index">
+    <div class="inline">
       <div>
         <div class="sport-strength">
-          <i class="sport-strength-icon" :class="color(index)"></i>
-          最轻运动
+          <!-- <i class="sport-strength-icon" :class="color(index)"></i> -->
+          {{title}}
+          <span class="text-6">({{subtitle}})</span>
+          
         </div>
         <div class="sport-type">
-          散步 打太极
+          <span class="text-6">
+          {{item}}
+          </span>
         </div>
       </div>
       <div class="inline">
         <div>
           <count
             :index="1"
-            :initNum="10"
+            :initNum="initNum"
             type="sport"
             unit="min"
-            :step="10"
+            :step="step"
             @numChange="sportTime"></count>
         </div>
-        <div>
+        <!-- <div>
           2000千卡
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -32,6 +36,33 @@
 import count from './../components/count.vue'
 
 export default {
+  name: 'addsport',
+  props: {
+    title: {
+      type: String,
+      default: '最轻运动'
+    },
+    subtitle: {
+      type: String,
+      default: '80千卡/30min'
+    },
+    itemlist: {
+      type: [Array],
+      default: []
+    },
+    step: {
+      type: [Number],
+      default: 10
+    },
+    initNum: {
+      type: [Number],
+      default: 30
+    },
+    index: {
+      type: [Number],
+      default: 1
+    }
+  },
   components: {
     count
   },
@@ -40,9 +71,20 @@ export default {
       // color: 'one'
     }
   },
+  computed: {
+    item () {
+      if (this.itemlist.length !== 0) {
+        return this.itemlist.join(' ')
+      } else {
+        return ''
+      }
+    }
+  },
   methods: {
-    sportTime () {
-
+    sportTime (val) {
+      // {num: this.num, index: this.index, type: this.type}
+      // console.log('sportnum', val)
+      this.$emit('addsport', {num: val.num, index: this.index})
     },
     color (index) {
       if (index === 0) {
@@ -63,10 +105,14 @@ export default {
 </script>
 
 <style scoped>
+.sport{
+  width: 100%;
+}
 .sport>div{
   padding-bottom:16px;
   padding-top:16px;
-  border-bottom:1px solid #eaeaea;
+  border-bottom:1px solid #ebeef5;
+  width: 100%;
 }
 .sport>div:nth-last-child(1){
   border-bottom:none;
@@ -78,6 +124,8 @@ export default {
 }
 .sport-strength{
   margin-left: 20px;
+  margin-bottom: 10px;
+  color: #041421;
 }
 .sport-type{
   margin-left: 20px;
@@ -113,5 +161,8 @@ export default {
 }
 .four::before{
   background-color: #ee7753;
+}
+.text-6{
+  color: #666;
 }
 </style>

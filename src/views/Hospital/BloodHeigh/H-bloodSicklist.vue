@@ -23,10 +23,8 @@
                 filterable	
                 @change="selectTimeHandle">
                   <!-- <el-option v-for="item in cityList" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-option> -->
-                  <el-option value="舒张期高血压" label="舒张期高血压">半年未检查</el-option>
-                  <el-option value="舒张高血压" label="舒高血压">一年未检查</el-option>
-                  <el-option value="高血压" label="舒张期血压">两年未检查</el-option>
-                  <el-option value="舒张期" label="舒期血压">三年未检查</el-option>
+                  <el-option value="舒张期高血压" label="半年未检查">半年未检查</el-option>
+                  <el-option value="舒张高血压" label="一年未检查">一年未检查</el-option>
                 </el-select>
               </el-col>
               <el-col :span="4">
@@ -37,10 +35,11 @@
                 filterable	
                 @change="selectsickType">
                     <!-- <el-option v-for="item in cityList" :value="item.value" :key="item.value" :label="item.label">{{ item.label }}</el-option> -->
-                    <el-option value="舒张期高血压" label="舒张期高血压">舒期高血压</el-option>
-                    <el-option value="舒张高血压" label="舒高血压">舒期压</el-option>
-                    <el-option value="高血压" label="舒张期血压">舒张期高血压</el-option>
-                    <el-option value="舒张期" label="舒期血压">舒期高压</el-option>
+                    <el-option value="舒张期高血压" label="1型糖尿病">1型糖尿病</el-option>
+                    <el-option value="舒张高血压" label="2型糖尿病">2型糖尿病</el-option>
+                    <el-option value="高血压" label="妊娠型糖尿病">妊娠型糖尿病</el-option>
+                    <el-option value="舒张期" label="特殊型糖尿病">特殊型糖尿病</el-option>
+                    <el-option value="舒张期" label="未知">未知</el-option>
                 </el-select>
               </el-col>
               <el-col :span="4">
@@ -51,8 +50,10 @@
                     placeholder="高血压类型"
                     @change="selectsickType"
                     size="small">
-                    <el-option value="舒张期" label="舒张期"></el-option>
+                    <el-option value="舒张期" label="原发性高血压"></el-option>
+                    <el-option value="舒张期高" label="收缩高血压"></el-option>
                     <el-option value="舒张期高" label="舒张期高血压"></el-option>
+                    <el-option value="舒张期高" label="未知"></el-option>
                     <!-- <el-el-option
                     v-for="item in el-options4"
                     :key="item.value"
@@ -75,16 +76,22 @@
                     :label="item.label"
                     :value="item.value">
                     </el-el-option> -->
-                    <el-option value="xiaoguo" label="好转"></el-option>
-                    <el-option value="xiaoguo2" label="恶化"></el-option>
+                    <el-option value="xiaoguo" label="病情好转"></el-option>
+                    <el-option value="xiaoguo2" label="病情恶化"></el-option>
+                    <el-option value="xiaoguo2" label="未见明显效果"></el-option>
                   </el-select>
               </el-col>
               <el-col :span="4">
                 <el-input placeholder="请输入患者姓名" v-model="sicknameSelectData" size="small"
                 :style="{'padding':'0'}" 
-                suffix-icon="el-icon-search"
                 @blur="selectName"
                 >
+                <!-- suffix-icon="el-icon-search" -->
+                <el-button slot="append" 
+                icon="el-icon-search" 
+                :style="{'background':'#fff','width': '44px','padding-left': '0px','padding-right': '0px'}"
+                >
+                </el-button>
                   <!-- <el-button slot="suffix" icon="el-icon-search" type="text" @click="sicknameSelect"></el-button> -->
                 </el-input>
               </el-col>

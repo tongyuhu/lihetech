@@ -1,5 +1,5 @@
 <template>
-   <div class="count">
+  <div class="count">
     <button class="add-btn" @click="reduce"><span class="reduce"></span></button>
     <button class="medinice-num">{{num}}{{countUnit}}</button>
     <button class="add-btn" @click="add">

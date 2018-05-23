@@ -177,6 +177,33 @@ export default {
     height: 28px;
     background: url('~icon/hospital-icon-06.png') no-repeat;
   }
+  /* 预约管理 */
+  .order-close{
+    /* font-size: 0; */
+    position: relative;
+  }
+  .order-close::before{
+    top: 0px;
+    left: -36px;
+    position: absolute;
+    content: '';
+    width: 23px;;
+    height: 28px;
+    background: url('~icon/hospital-icon-102.png') no-repeat;
+  }
+  .order-open{
+    /* font-size: 0; */
+    position: relative;
+  }
+  .order-open::before{
+    top: 0px;
+    left: -36px;
+    position: absolute;
+    content: '';
+    width: 23px;;
+    height: 28px;
+    background: url('~icon/hospital-icon-101.png') no-repeat;
+  }
 
   .menu-close{
     position: relative;

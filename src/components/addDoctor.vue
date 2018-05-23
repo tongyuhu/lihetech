@@ -43,19 +43,24 @@
 
 <script>
 import {addDoctorApi} from '@/api/components/addDoctor'
+import {mapState} from 'vuex'
 export default {
   data () {
     var checkEmail = (rule, value, callback) => {
+      let emailrule = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
       if (!value) {
         // callback()
-        // return callback(new Error('邮箱不能为空'))
-        return true
+        return callback(new Error('邮箱不能为空'))
+        // return true
+      } else if (!emailrule.exec(value)) {
+        return callback(new Error('请输入正确的邮箱'))
+        // callback()
       } else {
         callback()
       }
     }
     var checkName = (rule, value, callback) => {
-      let namerule = /^.{3,20}$/
+      let namerule = /^.{2,20}$/
       if (!value) {
         return callback(new Error('姓名不能为空'))
       } else if (!namerule.exec(value)) {
@@ -126,8 +131,14 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState([
+      'adminInfo'
+    ])
+  },
   methods: {
     submitForm (formName) {
+      let vm = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(this.addDoctorForm, 'submit!')
@@ -138,13 +149,24 @@ export default {
             department: null,
             roleId: null,
             mobile: this.addDoctorForm.mobile,
-            regionId: 1,                          // 默认未设置
+            regionId: '',                          // 默认未设置
             adminType: 3,
+            // adminType: vm.adminInfo.adminType,
             username: this.addDoctorForm.account,
             address: null
           }
           this.$axios(addDoctorApi(doctorMsg))
-          .then()
+          .then(res => {
+            if (res.data.code !== '0000') {
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              })
+            }
+            if (res.data.code === '0000') {
+              this.$router.go(-1)
+            }
+          })
           .catch()
           // this.$router.replace(this.$route.params.from)
         } else {
@@ -152,13 +174,18 @@ export default {
           return false
         }
       })
+      // this.$router.go(-1)
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()
-      // this.$router.go(-1)
+      this.$router.go(-1)
     }
+    // addDoctor(){
+    //   this.$axios(address())
+    // }
   },
   mounted () {
+    this.$refs.ruleForm.resetFields()
     // console.log(this.$route.params.from)
   }
 }

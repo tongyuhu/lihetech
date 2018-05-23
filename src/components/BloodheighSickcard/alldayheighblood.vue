@@ -263,7 +263,8 @@
 </template>
 
 <script>
-import {alldayHeighBloodApi} from './../../api/components/BloodheighSickcard/alldayheighblood'
+import {alldayHeighBloodApi} from '@/api/components/BloodheighSickcard/alldayheighblood'
+import {daybefor} from '@/untils/date.js'
 export default {
   props: {
     sickID: {
@@ -399,13 +400,17 @@ export default {
 
   },
   mounted () {
+    let date = new Date()
+    date = daybefor(date, 1, true)
+    let start = date + ' 03:20:00'
+    let end = date + ' 24:00:00'
     let params = {
       'userId': this.sickID,
       // 'userId': 11,
       // 'adminHospitalId': 2,
       'adminHospitalId': this.hospitalId,
-      'getupTime': '2018-03-26 03:20:00',
-      'sleepTime': '2018-03-26 24:00:00'
+      'getupTime': start,
+      'sleepTime': end
     }
     this.$axios(alldayHeighBloodApi(params))
     .then(res => {
@@ -476,6 +481,6 @@ export default {
     text-align: center;
     vertical-align: middle;
     color:#666;
-    font-size:16px;
+    font-size:14px;
   }
 </style>

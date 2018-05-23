@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div>
-      <el-row>
+    <div class="margin-bottom">
+      <el-row :gutter="8">
         <!-- 血压分布  -->
         <el-col :span="12">
           <el-card :body-style="{ padding: '0px' }">
@@ -49,99 +49,154 @@
         </el-col>
       </el-row>
     </div>
-    <!-- 血压与饮食 -->
-    <div>
-      <el-card :body-style="{ padding: '0px' }">
-        <div class="card-header">
-            <p class="title">血压与饮食</p>
-        </div>
-        <div class="check-date" v-show="false">
-          <el-row type="flex" justify="start">
-            <button v-for="(item,index) in bloodfoodChecked.date" 
-            :key="item.date" 
-            class="check-date-btn" 
-            :class="{checked:item.isChecked}" 
-            @click="isfoodChecked(item,index)">
-              {{item.date}}
-            </button>
-          </el-row>
-        </div>
-        <div>
-          <el-row type="flex">
-            <el-col >
-              <div id='bloodFood' :style="{width:'auto',height:'400px'}"></div>
-            </el-col>
-            <el-col :span="3">
-              <div>
-                <div class="checked-kaluli">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="isFoodKaluliChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
-                      <span>卡路里</span>
-                    </button>
-                  </span>
-                </div>
-                <div class="checked-score">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="isFoodScoreChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
-                      <span>分数</span>
-                    </button>
-                  </span>
-                </div>
-              </div>
 
-            </el-col>
-          </el-row>
-        </div>
-      </el-card>
-    </div>
-    <!-- 血压与运动 -->
-    <div>
-      <el-card :body-style="{ padding: '0px' }">
-        <div class="card-header">
-            <p class="title">血压与运动</p>
-        </div>
-        <div class="check-date" v-show="false">
-          <el-row type="flex" justify="start">
-            <button v-for="(item,index) in bloodsportChecked.date" 
-            :key="item.date" 
-            class="check-date-btn" 
-            :class="{checked:item.isChecked}" 
-            @click="issportChecked(item,index)">
-              {{item.date}}
-            </button>
-          </el-row>
-        </div>
+    <el-row :gutter="8">
+      <el-col :span="12">
+        <!-- 血压与饮食 -->
         <div>
-          <el-row type="flex">
-            <el-col>
-              <div id='bloodSport' :style="{width:'auto',height:'400px'}"></div>
-            </el-col>
-            <el-col :span="3">
-              <div>
-                <div class="checked-kaluli">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="issSportKaluliChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
-                      <span>卡路里</span>
-                    </button>
-                  </span>
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+                <p class="title">血压与饮食</p>
+            </div>
+            <!-- <div class="check-date" v-show="false">
+              <el-row type="flex" justify="start">
+                <button v-for="(item,index) in bloodfoodChecked.date" 
+                :key="item.date" 
+                class="check-date-btn" 
+                :class="{checked:item.isChecked}" 
+                @click="isfoodChecked(item,index)">
+                  {{item.date}}
+                </button>
+              </el-row>
+            </div> -->
+            <div>
+              <el-row type="flex">
+                <!-- <el-col >
+                  <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
+                </el-col> -->
+                <!-- <el-col :span="3"> -->
+                  <!-- <div class="middle-wrap">
+                    <div class="middle">
+                      <div class="checked-kaluli">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="isFoodKaluliChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
+                            <span>卡路里</span>
+                          </button>
+                        </span>
+                      </div>
+                      <div class="checked-score">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="isFoodScoreChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
+                            <span>分数</span>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div> -->
+                <!-- </el-col> -->
+                <div class="flex">
+                  <div class="flex-btn-left" v-show="foodBtnPre">
+                    <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                  <div class="chart-min-width kaluli-wrap">
+                    <div class="kaluli-btn-wrap">
+                      <button class="check-all-btn" @click="isFoodKaluliChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
+                        <span>卡路里</span>
+                      </button>
+                      <button class="check-all-btn" @click="isFoodScoreChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
+                        <span>分数</span>
+                      </button>
+                    </div>
+                    <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
+                  </div>
+                  <div class="flex-btn" v-show="foodBtnNext">
+                    <el-button @click="bloodFoodNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
                 </div>
-                <div class="checked-score">
-                  <span class="check-all-span">
-                    <button class="check-all-btn" @click="isSportScoreChecked()">
-                      <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
-                      <span>分数</span>
-                    </button>
-                  </span>
-                </div>
-              </div>
-            </el-col>
-          </el-row>
+              </el-row>
+            </div>
+          </el-card>
         </div>
-      </el-card>
-    </div>
+
+      </el-col>
+
+      <el-col :span="12">
+        <!-- 血压与运动 -->
+        <div>
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+                <p class="title">血压与运动</p>
+            </div>
+            <div class="check-date" v-show="false">
+              <el-row type="flex" justify="start">
+                <button v-for="(item,index) in bloodsportChecked.date" 
+                :key="item.date" 
+                class="check-date-btn" 
+                :class="{checked:item.isChecked}" 
+                @click="issportChecked(item,index)">
+                  {{item.date}}
+                </button>
+              </el-row>
+            </div>
+            <div>
+              <el-row type="flex">
+                <!-- <el-col>
+                  <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
+                </el-col>
+                <el-col :span="3">
+                  <div class="middle-wrap">
+                    <div class="middle">
+                      <div class="checked-kaluli">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="issSportKaluliChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
+                            <span>卡路里</span>
+                          </button>
+                        </span>
+                      </div>
+                      <div class="checked-score">
+                        <span class="check-all-span">
+                          <button class="check-all-btn" @click="isSportScoreChecked()">
+                            <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
+                            <span>分数</span>
+                          </button>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </el-col> -->
+                <div class="flex">
+                  <div class="flex-btn-left">
+                    <el-button v-show="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                  <div class="chart-min-width kaluli-wrap">
+                    <div class="kaluli-btn-wrap">
+                      <button class="check-all-btn" @click="issSportKaluliChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
+                        <span>卡路里</span>
+                      </button>
+                      <button class="check-all-btn" @click="isSportScoreChecked()">
+                        <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
+                        <span>分数</span>
+                      </button>
+                    </div>
+                    <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
+                  </div>
+                  <div class="flex-btn">
+                    <el-button v-show="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                </div>
+              </el-row>
+            </div>
+          </el-card>
+        </div>
+      </el-col>
+
+    </el-row>
   </div>
 </template>
 
@@ -278,9 +333,13 @@ export default {
         diastolic: [],
         foodScore: [],
         calories: [],
+        bpType: [],
         pages: 1,
-        pageNum: 1
+        pageNum: 1,
+        currentPage: 1
       },
+      foodBtnPre: true,
+      foodBtnNext: true,
       bloodsportChecked: {
         date: [
           {
@@ -312,11 +371,15 @@ export default {
         x: [],
         systolic: [],
         diastolic: [],
+        bpType: [],
         movementScore: [],
         calories: [],
         pages: 1,
-        pageNum: 1
-      }
+        pageNum: 1,
+        currentPage: 1
+      },
+      sportBtnPre: true,
+      sportBtnNext: true
     }
   },
   methods: {
@@ -357,10 +420,11 @@ export default {
       this.$axios(bloodCoverApi(params, dateParams))
       .then(res => {
         if (res.data.data) {
+          this.coverData = []
           for (let data in res.data.data) {
             this.$set(this.coverData, data, res.data.data[data])
           }
-          // console.log(this.coverData)
+          console.log(this.coverData)
           // console.log(1, res.data.data)
         }
         let bloodCover = echarts.init(document.getElementById('bloodCover'))
@@ -373,33 +437,85 @@ export default {
      * @returns Array
      * */
     formatCoverData (data) {
+      let vm = this
+      if (data.length !== 5) {
+        let a = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 1)
+        })
+        let b = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 2)
+        })
+        let c = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 3)
+        })
+        let d = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 4)
+        })
+        let e = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 5)
+        })
+        if (a === -1) {
+          data.splice(0, 0, {
+            'bpType': 1,
+            'countBest': 0
+          })
+        }
+        if (b === -1) {
+          data.splice(1, 0, {
+            'bpType': 2,
+            'countBest': 0
+          })
+        }
+        if (c === -1) {
+          data.splice(2, 0, {
+            'bpType': 3,
+            'countBest': 0
+          })
+        }
+        if (d === -1) {
+          data.splice(3, 0, {
+            'bpType': 4,
+            'countBest': 0
+          })
+        }
+        if (e === -1) {
+          data.splice(4, 0, {
+            'bpType': 5,
+            'countBest': 0
+          })
+        }
+      }
       let arr = []
-      if (data.normal) {
-        arr.push({value: data.normal, name: '正常'})
-      } else {
-        arr.push({value: 0, name: '正常'})
+      data.forEach(item => {
+        if (this._.toNumber(item.bpType) === 1) {
+          arr.push({value: item.countBest, name: '正常'})
+        }
+        if (this._.toNumber(item.bpType) === 2) {
+          arr.push({value: item.countBest, name: '正常高值'})
+        }
+        if (this._.toNumber(item.bpType) === 3) {
+          arr.push({value: item.countBest, name: '轻度'})
+        }
+        if (this._.toNumber(item.bpType) === 4) {
+          arr.push({value: item.countBest, name: '中度'})
+        }
+        if (this._.toNumber(item.bpType) === 5) {
+          arr.push({value: item.countBest, name: '危险'})
+        }
+      })
+      let namearr = ['正常', '正常高值', '轻度', '中度', '危险']
+      if (arr.length !== 5) {
+        arr.forEach(item => {
+          if (item.name === '正常' || '正常高值' || '轻度' || '中度' || '危险') {
+            namearr = this._.filter(namearr, function (val) {
+              return val !== item.name
+            })
+          }
+        })
+        namearr.forEach(item => {
+          arr.push({value: 0, name: item})
+        })
       }
-      if (data.normalHigh) {
-        arr.push({value: data.normalHigh, name: '正常高值'})
-      } else {
-        arr.push({value: 0, name: '正常高值'})
-      }
-      if (data.mildHigh) {
-        arr.push({value: data.mildHigh, name: '轻度'})
-      } else {
-        arr.push({value: 0, name: '轻度'})
-      }
-      if (data.moderateHigh) {
-        arr.push({value: data.moderateHigh, name: '中度'})
-      } else {
-        arr.push({value: 0, name: '中度'})
-      }
-      if (data.danger) {
-        arr.push({value: data.danger, name: '危险'})
-      } else {
-        arr.push({value: 0, name: '危险'})
-      }
-      // console.log('arr', arr)
       return arr
     },
     isHistogramChecked (date, index) {
@@ -475,7 +591,14 @@ export default {
       }
       if (this.bloodfoodChecked.kaluli && !this.bloodfoodChecked.score) {
         let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        bloodFood.setOption(this.bloodFoodOption('kaluli'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        // if (this.bloodfoodChecked.kaluli) {
+        bloodFood.setOption(this.bloodFoodOption('kaluli', position.start, position.end))
+        // }
+        // if (this.bloodfoodChecked.score) {
+        //   bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
+        // }
+        // bloodFood.setOption(this.bloodFoodOption('kaluli'))
         // this.bloodFoodOption()
       }
     },
@@ -486,7 +609,14 @@ export default {
       }
       if (!this.bloodfoodChecked.kaluli && this.bloodfoodChecked.score) {
         let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        bloodFood.setOption(this.bloodFoodOption('score'))
+        // bloodFood.setOption(this.bloodFoodOption('score'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+          // if (vm.bloodfoodChecked.kaluli) {
+            // bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodfoodChecked.score) {
+        bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
+          // }
         // this.bloodFoodOption('score')
       }
     },
@@ -498,7 +628,7 @@ export default {
         'userId': this.sickID,
         'adminHospitalId': this.hospitalId,
         'pageNum': this.bloodfoodData.pageNum,
-        'pageSize': 5
+        'pageSize': 10
       }
       let dateParams = {
         label: '',
@@ -523,44 +653,9 @@ export default {
       this.$axios(bloodfoodApi(params, dateParams))
       .then(res => {
         if (res.data) {
+          this.bloodfoodData.pages = res.data.pages
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              // let data1 = [
-              //   {
-              //     'systolic': 144,
-              //     'diastolic': 82,
-              //     'createTime': '2018-03-08',
-              //     'calories': 0
-              //   },
-              //   {
-              //     'systolic': 122,
-              //     'diastolic': 76,
-              //     'createTime': '2018-02-04',
-              //     'calories': 100,
-              //     'foodScore': 33
-              //   },
-              //   {
-              //     'systolic': 165,
-              //     'diastolic': 106,
-              //     'createTime': '2018-02-03',
-              //     'calories': 23,
-              //     'foodScore': 35
-              //   },
-              //   {
-              //     'systolic': 199,
-              //     'diastolic': 86,
-              //     'createTime': '2018-02-02',
-              //     'calories': 50,
-              //     'foodScore': 20.9
-              //   },
-              //   {
-              //     'systolic': 171,
-              //     'diastolic': 118,
-              //     'createTime': '2018-02-01',
-              //     'calories': 60,
-              //     'foodScore': 35.5
-              //   }
-              // ]
               res.data.data.forEach((item, index) => {
                 if (!item.systolic) {
                   item.systolic = 0
@@ -574,16 +669,15 @@ export default {
                 if (!item.foodScore) {
                   item.foodScore = 0
                 }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
                 this.bloodfoodData.x.push(item.createTime)
                 this.bloodfoodData.systolic.push(item.systolic)
                 this.bloodfoodData.diastolic.push(item.diastolic)
                 this.bloodfoodData.foodScore.push(item.foodScore)
                 this.bloodfoodData.calories.push(item.calories)
-                // this.$set(this.bloodfoodData.x, index, item.createTime)
-                // this.$set(this.bloodfoodData.systolic, index, item.systolic)
-                // this.$set(this.bloodfoodData.diastolic, index, item.diastolic)
-                // this.$set(this.bloodfoodData.foodScore, index, item.foodScore)
-                // this.$set(this.bloodfoodData.calories, index, item.calories)
+                this.bloodfoodData.bpType.push(item.bpType)
               })
             }
           }
@@ -596,7 +690,8 @@ export default {
           state = 'score'
         }
         let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        bloodFood.setOption(this.bloodFoodOption(state))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        bloodFood.setOption(this.bloodFoodOption(state, position.start, position.end))
       })
     },
     issportChecked (date, index) {
@@ -613,7 +708,14 @@ export default {
       }
       if (this.bloodsportChecked.kaluli && !this.bloodsportChecked.score) {
         let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        bloodSport.setOption(this.bloodSportOption('kaluli'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          // if (vm.bloodsportChecked.kaluli) {
+        bloodSport.setOption(this.bloodSportOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodsportChecked.score) {
+            // bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+          // }
+        // bloodSport.setOption(this.bloodSportOption('kaluli'))
       }
     },
     isSportScoreChecked () {
@@ -623,7 +725,14 @@ export default {
       }
       if (!this.bloodsportChecked.kaluli && this.bloodsportChecked.score) {
         let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        bloodSport.setOption(this.bloodSportOption('score'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          // if (vm.bloodsportChecked.kaluli) {
+            // bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodsportChecked.score) {
+        bloodSport.setOption(this.bloodSportOption('score', position.start, position.end))
+          // }
+        // bloodSport.setOption(this.bloodSportOption('score'))
       }
     },
     checkAllHandle () {
@@ -634,7 +743,7 @@ export default {
         'userId': this.sickID,
         'adminHospitalId': this.hospitalId,
         'pageNum': this.bloodsportData.pageNum,
-        'pageSize': 5
+        'pageSize': 10
       }
       let dateParams = {
         label: '',
@@ -675,6 +784,9 @@ export default {
                 if (!item.movementScore) {
                   item.movementScore = 0
                 }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
                 // this.$set(this.bloodsportData.x, index, item.createTime)
                 // this.$set(this.bloodsportData.systolic, index, item.systolic)
                 // this.$set(this.bloodsportData.diastolic, index, item.diastolic)
@@ -685,44 +797,9 @@ export default {
                 this.bloodsportData.diastolic.push(item.diastolic)
                 this.bloodsportData.movementScore.push(item.movementScore)
                 this.bloodsportData.calories.push(item.calories)
+                this.bloodsportData.bpType.push(item.bpType)
               })
             }
-            // let data1 = [
-            //   {
-            //     'systolic': 144,
-            //     'diastolic': 82,
-            //     'createTime': '2018-03-08',
-            //     'calories': 0
-            //   },
-            //   {
-            //     'systolic': 122,
-            //     'diastolic': 76,
-            //     'createTime': '2018-02-04',
-            //     'calories': 100,
-            //     'movementScore': 33
-            //   },
-            //   {
-            //     'systolic': 165,
-            //     'diastolic': 106,
-            //     'createTime': '2018-02-03',
-            //     'calories': 23,
-            //     'movementScore': 35
-            //   },
-            //   {
-            //     'systolic': 199,
-            //     'diastolic': 86,
-            //     'createTime': '2018-02-02',
-            //     'calories': 50,
-            //     'movementScore': 20.9
-            //   },
-            //   {
-            //     'systolic': 171,
-            //     'diastolic': 118,
-            //     'createTime': '2018-02-01',
-            //     'calories': 60,
-            //     'movementScore': 35.5
-            //   }
-            // ]
           }
         }
         let state = ''
@@ -733,7 +810,8 @@ export default {
           state = 'score'
         }
         let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        bloodSport.setOption(this.bloodSportOption(state))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+        bloodSport.setOption(this.bloodSportOption(state, position.start, position.end))
       })
     },
     changeStatus () {
@@ -746,28 +824,45 @@ export default {
       this.checkDate[index].isChecked = true
     },
     bloodCoverOption () {
+      let vm = this
+      let color = []
+      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
+      let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      let count = 0
+      this.formatCoverData(this.coverData).forEach((item) => {
+        if (item.value === 0) {
+          count++
+        }
+      })
+      if (count !== 5) {
+        color = hascolor
+      } else {
+        color = nullcolor
+      }
+      count = 0
+      console.log('coverData', this.formatCoverData(this.coverData))
       return {
-        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252'],
+        color: color,
         legend: {
           orient: 'vertical',
           left: '50%',
           top: 'center',
           data: ['正常', '正常高值', '轻度', '中度', '危险'],
           selectedMode: false,
-          formatter: (name) => {
-            let i = 0
-            let num = ''
-            if (this.coverData) {
-              this.formatCoverData(this.coverData).forEach((item, index) => {
-                if (item.name === name) {
-                  i = index
-                  return i
-                }
-              })
-              num = this.formatCoverData(this.coverData)[i].value
-            }
-            return name + '（共' + num + '次）'
-          },
+          // formatter: (name) => {
+          //   let i = 0
+          //   let num = ''
+          //   if (this.coverData) {
+          //     this.formatCoverData(this.coverData).forEach((item, index) => {
+          //       if (item.name === name) {
+          //         i = index
+          //         return i
+          //       }
+          //     })
+          //     num = this.formatCoverData(this.coverData)[i].value
+          //   }
+          //   return name + '（共' + num + '次）'
+          // },
           itemGap: 10,
           itemWidth: 20,
           itemHeight: 20,
@@ -782,7 +877,7 @@ export default {
             type: 'pie',
             radius: '70%',
             center: ['25%', '50%'],
-            // stillShowZeroSum: false,
+            stillShowZeroSum: true,
             data: this.formatCoverData(this.coverData),
             // data: [
             //     {value: 335, name: '正常'},
@@ -790,8 +885,14 @@ export default {
             label: {
               normal: {
                 position: 'inner',
-                formatter: '{d}%',
-                fontSize: 10
+                formatter: function (params) {
+                  if (vm._.toNumber(params.value) === 0) {
+                    return ''
+                  } else {
+                    return params.value + '%'
+                  }
+                },
+                fontSize: 14
               }
             },
             labelLine: {
@@ -811,6 +912,8 @@ export default {
       }
     },
     bloodHistogramOption () {
+      // let areaColor = ['#33b2f2', '#59D8A1', '#efa13a', '#ff7d43', '#f96767']
+      let areaColor = ['#0099FF', '#59D8A1', '#efa13a', '#ff7d43', '#e21b1b']
       return {
         color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252'],
         tooltip: {
@@ -865,6 +968,7 @@ export default {
             show: false
           },
           min: 60,
+          max: 120,
           minInterval: 10
         }],
         yAxis: [
@@ -880,156 +984,166 @@ export default {
               show: false
             },
             min: 90
-
           }
         ],
-        series: [{
-          type: 'line',
-          name: '正常',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#81cefc'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#81cefc'
-            }
-          },
-          z: 10,
-          connectNulls: true,
-          data: [
-                [0, 130],
-                [85, 130]
-          ]
-        },
-        {
-          type: 'line',
-          name: '正常高值',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#7cedc4'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#7cedc4'
-            }
-          },
-          itemStyle: {},
-          z: 9,
-          connectNulls: true,
-          step: true,
-          data: [
-                [0, 140],
-                [90, 140]
-          ]
-
-        },
-        {
-          type: 'line',
-          name: '轻度',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#f4e07a'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#f4e07a'
-            }
-          },
-          z: 8,
-          data: [
-                [0, 160],
-                [100, 160]
-          ]
-        },
-        {
-          type: 'line',
-          name: '中度',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#ff947b'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#ff947b'
-            }
-          },
-          z: 7,
-          data: [
-                [0, 180],
-                [110, 180]
-          ]
-        },
-        {
-          type: 'line',
-          name: '危险',
-          symbol: 'none',
-          lineStyle: {
-            normal: {
-              width: 0,
-              color: '#e21b1b'
-            }
-          },
-          areaStyle: {
-            normal: {
-              color: '#e21b1b'
-            }
-          },
-          z: 1,
-          data: [
-                [0, 210],
-                [120, 210]
-          ]
-        },
-        {
-          type: 'scatter',
-          symbol: 'circle',
-          symbolSize: 5,
-          itemStyle: {
-            normal: {
-              color: '#fff'
-            }
-          },
-          z: 20,
-          tooltip: {
-            show: true,
-            backgroundColor: 'rgba(50,50,50,0.2)',
-            triggerOn: 'click',
-            formatter: function (a) {
-              let low = ''
-              let heigh = ''
-              let time = ''
-              if (a.data) {
-                if (a.data[0]) {
-                  low = '低压' + a.data[0]
-                }
-                if (a.data[1]) {
-                  heigh = '高压' + a.data[1]
-                }
-                if (a.data[2]) {
-                  time = '时间' + a.data[2] + '<br>'
-                }
+        series: [
+          {
+            type: 'line',
+            name: '正常',
+            symbol: 'none',
+            // stack: '堆叠',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[0]
               }
-              return (
-                time +
-               low + '<br>' +
-               heigh
-              )
-            }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[0]
+              }
+            },
+            z: 10,
+            connectNulls: true,
+            data: [
+                [0, 130],
+                [85, 130],
+                [85, 0]
+            ]
           },
-          data: this.formatHistogram(this.histogramData)
+          {
+            type: 'line',
+            name: '正常高值',
+            symbol: 'none',
+            // stack: '堆叠',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[1]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[1]
+              }
+            },
+            itemStyle: {},
+            z: 9,
+            connectNulls: true,
+            step: true,
+            data: [
+                [0, 140],
+                [90, 140],
+                [90, 0]
+            ]
+
+          },
+          {
+            type: 'line',
+            name: '轻度',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[2]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[2]
+              }
+            },
+            z: 8,
+            data: [
+                [0, 160],
+                [100, 160],
+                [100, 0]
+            ]
+          },
+          {
+            type: 'line',
+            name: '中度',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[3]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[3]
+              }
+            },
+            z: 7,
+            data: [
+                [0, 180],
+                [110, 180],
+                [110, 0]
+            ]
+          },
+          {
+            type: 'line',
+            name: '危险',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[4]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: areaColor[4]
+              }
+            },
+            z: 1,
+            data: [
+                [0, 210],
+                [120, 210],
+                [120, 0]
+            ]
+          },
+          {
+            type: 'scatter',
+            symbol: 'circle',
+            symbolSize: 6,
+            itemStyle: {
+              normal: {
+                color: '#fff'
+              }
+            },
+            z: 20,
+            tooltip: {
+              show: true,
+              backgroundColor: 'rgba(250,250,250,0.7)',
+              textStyle: {
+                color: '#000'
+              },
+              triggerOn: 'click',
+              formatter: function (a) {
+                let low = ''
+                let heigh = ''
+                let time = ''
+                if (a.data) {
+                  if (a.data[0]) {
+                    low = '低压:' + a.data[0]
+                  }
+                  if (a.data[1]) {
+                    heigh = '高压:' + a.data[1]
+                  }
+                  if (a.data[2]) {
+                    time = '时间:' + a.data[2] + '<br>'
+                  }
+                }
+                return (
+                time +
+              low + '<br>' +
+              heigh
+                )
+              }
+            },
+            data: this.formatHistogram(this.histogramData)
 
           // data: [
             //   [145, 119, '2018-01-08 18:48:16'],
@@ -1041,14 +1155,14 @@ export default {
             //   [185, 81, '2018-02-03 16:09:48']
             // ]
 
-        }
+          }
         ]
       }
       // return option
     },
     bloodFoodOption (state, start, end) {
       let vm = this
-
+      let x1 = ''
       let foodSeriesData = []
       let foodSeriesTitle = ''
       if (state === 'kaluli') {
@@ -1059,7 +1173,7 @@ export default {
         foodSeriesTitle = '分数'
       }
       let zoomstart = 0
-      let zoomend = 50
+      let zoomend = 100
       if (start) {
         zoomstart = start
       }
@@ -1073,22 +1187,16 @@ export default {
             type: 'slider',
             xAxisIndex: [0, 1],
             // disabled: false,
-            show: true,
+            show: false,
             realtime: true,
             start: zoomstart,
             end: zoomend,
-            showDetail: false,
-            // minValueSpan: 98,
-            // maxValueSpan: 98,
-            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-            // handleSize: '30%',
-            handleStyle: {
-              color: '#80cbc4'
-            },
-            fillerColor: '#d8faf4',
-            borderColor: '#b1b1b1',
-            right: '60',
-            left: '60'
+            zoomlock: true,
+            minValueSpan: 10,
+            maxValueSpan: 10,
+            throttle: 500,
+            filterMode: 'empty',
+            zoomOnMouseWheel: false
           }
         ],
         tooltip: {
@@ -1096,24 +1204,29 @@ export default {
           axisPointer: {
             animation: false
           },
-          backgroundColor: 'rgba(50,50,50,0.2)',
-          triggerOn: 'click',
+          // backgroundColor: '#B2DAFE',
+          backgroundColor: 'rgba(250,250,250,0.7)',
+          textStyle: {
+            color: '#000'
+          },
+          // triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           formatter: function (a) {
-            return (
-                a[0]['axisValueLabel'] + '<br>' +
-                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-                a[2]['seriesName'] + ': ' + a[2]['value']
-            )
             // return (
             //     a[0]['axisValueLabel'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
             //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[2]['seriesName'] + ': ' + a[2]['value']
             // )
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[2]['seriesName'] + ': ' + a[2]['value']
+            )
           }
         },
         axisPointer: {
@@ -1127,19 +1240,30 @@ export default {
         },
         grid: [
           { // 直角坐标系内绘图网格
-            top: '30px',
-            left: '60px',
-            right: '58%',
+            top: '5%',
+            left: '90px',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '55%',
+            // top: '30px',
+            // left: '60px',
+            right: '80'
+            // width: 'auto',
+            // height: 'auto',
+            // bottom: '90px'
           },
           {
-            top: '30px',
-            left: '50%',
+            top: '55%',
+            left: '90px',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '40px',
+            right: '80'
+            // top: '30px',
+            // left: '50%',
+            // width: 'auto',
+            // height: 'auto',
+            // bottom: '90px'
           }
         ],
         xAxis: [
@@ -1148,11 +1272,34 @@ export default {
             type: 'category',
             boundaryGap: false,
             axisLabel: {
+              show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
+                } else {
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
+                }
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(value)
+                  arr.push(time)
+                  x1 = time
+                  return arr.join('\n')
+                }
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1174,8 +1321,30 @@ export default {
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
+                } else {
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
+                }
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(value)
+                  arr.push(time)
+                  x1 = time
+                  return arr.join('\n')
+                }
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1253,26 +1422,31 @@ export default {
             yAxisIndex: 0,
             name: '舒张压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#32b77a'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodfoodData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: vm.bloodfoodData.diastolic
           },
           {
@@ -1280,26 +1454,31 @@ export default {
             yAxisIndex: 0,
             name: '收缩压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#7cedc4'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#7cedc4'
+                color: function (param) {
+                  let index = vm.bloodfoodData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#def3f2',
-                origin: 'auto',
-                shadowColor: '#def3f2'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#def3f2',
+            //     origin: 'auto',
+            //     shadowColor: '#def3f2'
+            //   }
+            // },
             data: vm.bloodfoodData.systolic
           },
           {
@@ -1307,26 +1486,31 @@ export default {
             yAxisIndex: 1,
             name: foodSeriesTitle,
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodfoodData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: foodSeriesData
           }
         ],
@@ -1339,6 +1523,7 @@ export default {
     },
     bloodSportOption (state, start, end) {
       let vm = this
+      let x1 = ''
       let sportSeriesData = []
       let sportSeriesTitle = ''
       if (state === 'kaluli') {
@@ -1349,7 +1534,7 @@ export default {
         sportSeriesTitle = '分数'
       }
       let zoomstart = 0
-      let zoomend = 50
+      let zoomend = 100
       if (start) {
         zoomstart = start
       }
@@ -1363,22 +1548,16 @@ export default {
             type: 'slider',
             xAxisIndex: [0, 1],
             // disabled: false,
-            show: true,
+            show: false,
             realtime: true,
             start: zoomstart,
             end: zoomend,
-            showDetail: false,
-            // minValueSpan: 98,
-            // maxValueSpan: 98,
-            handleIcon: 'M8.2,13.6V3.9H6.3v9.7H3.1v14.9h3.3v9.7h1.8v-9.7h3.3V13.6H8.2z M9.7,24.4H4.8v-1.4h4.9V24.4z M9.7,19.1H4.8v-1.4h4.9V19.1z',
-            // handleSize: '30%',
-            handleStyle: {
-              color: '#80cbc4'
-            },
-            fillerColor: '#d8faf4',
-            borderColor: '#b1b1b1',
-            right: '60',
-            left: '60'
+            zoomlock: true,
+            minValueSpan: 10,
+            maxValueSpan: 11,
+            throttle: 500,
+            filterMode: 'empty',
+            zoomOnMouseWheel: false
           }
         ],
         tooltip: {
@@ -1386,24 +1565,28 @@ export default {
           axisPointer: {
             animation: false
           },
-          backgroundColor: 'rgba(50,50,50,0.2)',
-          triggerOn: 'click',
+          backgroundColor: 'rgba(250,250,250,0.7)',
+          textStyle: {
+            color: '#000'
+          },
+          // triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           formatter: function (a) {
-            return (
-                a[0]['axisValueLabel'] + '<br>' +
-                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-                a[2]['seriesName'] + ': ' + a[2]['value']
-            )
             // return (
             //     a[0]['axisValueLabel'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
             //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-            //     '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
             //     a[2]['seriesName'] + ': ' + a[2]['value']
             // )
+            return (
+                a[0]['axisValueLabel'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
+                a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
+                '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
+                a[2]['seriesName'] + ': ' + a[2]['value']
+            )
           }
         },
         axisPointer: {
@@ -1417,19 +1600,20 @@ export default {
         },
         grid: [
           { // 直角坐标系内绘图网格
-            top: '30px',
-            left: '60px',
-            right: '58%',
+            top: '5%',
+            left: '90px',
+            right: '80px',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '55%'
           },
           {
-            top: '30px',
-            left: '50%',
+            top: '55%',
+            left: '90px',
+            right: '80px',
             width: 'auto',
             height: 'auto',
-            bottom: '90px'
+            bottom: '40px'
           }
         ],
         xAxis: [
@@ -1438,12 +1622,37 @@ export default {
             type: 'category',
             boundaryGap: false,
             axisLabel: {
+              show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
+                } else {
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
+                }
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(value)
+                  arr.push(time)
+                  x1 = time
+                  return arr.join('\n')
+                }
+              }
+              // rotate: 330
             },
+            symbol: 'circle',
+            symbolSize: 6,
             axisLine: {
               lineStyle: {
                 color: '#999'
@@ -1460,12 +1669,37 @@ export default {
             type: 'category',
             gridIndex: 1,
             boundaryGap: false,
+            symbol: 'circle',
+            symbolSize: 6,
             axisLabel: {
+              // show: false,
               interval: 0, // 显示x轴数据
               showMinLabel: true,
               showMaxLabel: true,
-              align: 'left',
-              rotate: 330
+              align: 'center',
+              rotate: 0,
+              formatter: function (val) {
+                let value
+                let time
+                if (val.length > 11) {
+                  time = val.slice(5, 10)
+                  value = val.slice(11)
+                } else {
+                  time = val.slice(0, 4)
+                  value = val.slice(5)
+                }
+                if (vm._.eq(time, x1)) {
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(value)
+                  arr.push(time)
+                  x1 = time
+                  return arr.join('\n')
+                }
+              }
+              // rotate: 330
             },
             axisLine: {
               lineStyle: {
@@ -1543,26 +1777,31 @@ export default {
             yAxisIndex: 0,
             name: '舒张压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#32b77a'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodsportData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: vm.bloodsportData.diastolic
           },
           {
@@ -1570,26 +1809,31 @@ export default {
             yAxisIndex: 0,
             name: '收缩压',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#7cedc4'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#7cedc4'
+                color: function (param) {
+                  let index = vm.bloodsportData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#def3f2',
-                origin: 'auto',
-                shadowColor: '#def3f2'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#def3f2',
+            //     origin: 'auto',
+            //     shadowColor: '#def3f2'
+            //   }
+            // },
             data: vm.bloodsportData.systolic
           },
           {
@@ -1597,26 +1841,31 @@ export default {
             yAxisIndex: 1,
             name: sportSeriesTitle,
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
-                color: '#8ecefc'
+                color: '#228ec4'
               }
             },
             itemStyle: {
               normal: {
-                color: '#8ecefc'
+                color: function (param) {
+                  let index = vm.bloodsportData.bpType[param.dataIndex]
+                  return vm.computeDanger(index)
+                }
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: sportSeriesData
           }
         ],
@@ -1626,9 +1875,284 @@ export default {
         }
       }
       return option
+    },
+    computeStartend (pageNum, pages) {
+      let page = {
+      }
+      if (pageNum === 1 && pages === 1) {
+        page.start = 0
+        page.end = 100
+      } else if (pageNum === 1) {
+        page.start = 0
+        page.end = parseInt((pageNum / pages) * 100)
+      } else if (pageNum < pages || pageNum === pages) {
+        page.start = parseInt(((pageNum - 1) / pages) * 100)
+        page.end = parseInt((pageNum / pages) * 100)
+      }
+      return page
+    },
+    computeDanger (bptype) {
+      let type = this._.toNumber(bptype)
+      let color = ''
+      switch (type) {
+        case 1:
+          color = '#81cefc'
+          break
+        case 2:
+          color = '#7cedc4'
+          break
+        case 3:
+          color = '#f4e07a'
+          break
+        case 4:
+          color = '#ff947b'
+          break
+        case 5:
+          color = '#ff5252'
+          break
+        case 0:
+          color = '#191918'
+          break
+        default:
+          color = '#191918'
+      }
+      return color
+    },
+    bloodFoodNext () {
+      let vm = this
+      let bloodFood = echarts.init(document.getElementById('bloodFood'))
+      if (vm.bloodfoodData.currentPage > vm.bloodfoodData.pageNum) {
+        vm.bloodfoodData.currentPage = vm.bloodfoodData.pageNum
+      }
+      if (vm.bloodfoodData.currentPage < vm.bloodfoodData.pages) {
+        vm.bloodfoodData.currentPage ++
+      }
+      if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        if (vm.bloodfoodChecked.kaluli) {
+          bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+        }
+        if (vm.bloodfoodChecked.score) {
+          bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
+        }
+        // bloodFood.setOption(this.bloodFoodOption(state, position.start, position.end))
+        return
+      }
+      vm.bloodfoodData.pageNum ++
+      let params = {
+        'userId': vm.sickID,
+        'adminHospitalId': vm.hospitalId,
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': vm.bloodfoodData.pageNum,
+        'pageSize': 5
+      }
+      vm.$axios(bloodfoodApi(params))
+        .then(res => {
+          // let bloodFood = echarts.init(document.getElementById('bloodFood'))
+          bloodFood.showLoading(
+            {
+              text: '加载中...',
+              color: '#1991fc',
+              textColor: '#000',
+              maskColor: 'rgba(255, 255, 255, 0.8)',
+              zlevel: 0
+            }
+          )
+          if (vm.bloodfoodData.pageNum <= res.data.pages) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.foodScore) {
+                  item.foodScore = 0
+                }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
+                vm.bloodfoodData.x.push(item.createTime)
+                vm.bloodfoodData.systolic.push(item.systolic)
+                vm.bloodfoodData.diastolic.push(item.diastolic)
+                vm.bloodfoodData.foodScore.push(item.foodScore)
+                vm.bloodfoodData.calories.push(item.calories)
+                vm.bloodfoodData.bpType.push(item.bpType)
+              })
+            }
+          }
+          let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+          if (vm.bloodfoodChecked.kaluli) {
+            bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+          }
+          if (vm.bloodfoodChecked.score) {
+            bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
+          }
+          // bloodFood.setOption(vm.bloodFoodOption(50, 80))
+          bloodFood.hideLoading()
+        })
+    },
+    bloodFoodPer () {
+      let vm = this
+      let bloodFood = echarts.init(document.getElementById('bloodFood'))
+      this.bloodfoodData.currentPage --
+      if (this.bloodfoodData.currentPage < 1) {
+        this.bloodfoodData.currentPage = 1
+      }
+      let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+      if (vm.bloodfoodChecked.kaluli) {
+        bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+      }
+      if (vm.bloodfoodChecked.score) {
+        bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
+      }
+    },
+    bloodSportPer () {
+      let vm = this
+      let bloodSport = echarts.init(document.getElementById('bloodSport'))
+      this.bloodsportData.currentPage --
+      if (this.bloodsportData.currentPage < 1) {
+        this.bloodsportData.currentPage = 1
+      }
+      let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+      if (vm.bloodsportChecked.kaluli) {
+        bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+      }
+      if (vm.bloodsportChecked.score) {
+        bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+      }
+    },
+    bloodSportNext () {
+      console.log('position1', this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+      console.log('position2', this.bloodsportData.pages, this.bloodsportData.pageNum)
+
+      let vm = this
+      let bloodSport = echarts.init(document.getElementById('bloodSport'))
+      if (vm.bloodsportData.currentPage > vm.bloodsportData.pageNum) {
+        vm.bloodsportData.currentPage = vm.bloodsportData.pageNum
+        // return
+      }
+      if (vm.bloodsportData.currentPage < vm.bloodsportData.pages) {
+        vm.bloodsportData.currentPage ++
+      }
+
+      if (!(vm.bloodsportData.pageNum < vm.bloodsportData.pages)) {
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+        if (vm.bloodsportChecked.kaluli) {
+          bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+        }
+        if (vm.bloodsportChecked.score) {
+          bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+        }
+        return
+      }
+      vm.bloodsportData.pageNum ++
+
+      let params = {
+        'userId': vm.sickID,
+        'adminHospitalId': vm.hospitalId,
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'pageNum': vm.bloodsportData.pageNum,
+        'pageSize': 9
+      }
+      vm.$axios(bloodsportApi(params))
+        .then(res => {
+          // let bloodSport = echarts.init(document.getElementById('bloodSport'))
+          bloodSport.showLoading(
+            {
+              text: '加载中...',
+              color: '#1991fc',
+              textColor: '#000',
+              maskColor: 'rgba(255, 255, 255, 0.8)',
+              zlevel: 0
+            }
+          )
+          if (vm.bloodsportData.pageNum <= res.data.pages) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.foodScore) {
+                  item.foodScore = 0
+                }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
+                vm.bloodsportData.x.push(item.createTime)
+                vm.bloodsportData.systolic.push(item.systolic)
+                vm.bloodsportData.diastolic.push(item.diastolic)
+                vm.bloodsportData.movementScore.push(item.movementScore)
+                vm.bloodsportData.calories.push(item.calories)
+                vm.bloodsportData.bpType.push(item.bpType)
+              })
+            }
+          }
+          console.log('position', this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+
+          let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          if (vm.bloodsportChecked.kaluli) {
+            bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+          }
+          if (vm.bloodsportChecked.score) {
+            bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+          }
+          console.log('positionX', position.start, position.end)
+          bloodSport.hideLoading()
+        })
     }
   },
   watch: {
+    bloodfoodData: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.foodBtnNext = false
+          this.foodBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.foodBtnNext = false
+          } else {
+            this.foodBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.foodBtnPre = true
+          } else {
+            this.foodBtnPre = false
+          }
+        }
+      },
+      deep: true
+    },
+    bloodsportData: {
+      handler: function (val) {
+        if (val.pages < 2) {
+          this.sportBtnNext = false
+          this.sportBtnPre = false
+        } else {
+          if (val.currentPage === val.pages) {
+            this.sportBtnNext = false
+          } else {
+            this.sportBtnNext = true
+          }
+          if (val.currentPage !== 1) {
+            this.sportBtnPre = true
+          } else {
+            this.sportBtnPre = false
+          }
+        }
+      },
+      deep: true
+    }
   },
   mounted () {
     let vm = this
@@ -1648,6 +2172,13 @@ export default {
     this.updateFood(this.bloodfoodChecked.date[0].date)
     let bloodFood = echarts.init(document.getElementById('bloodFood'))
     bloodFood.setOption(this.bloodFoodOption('kaluli'))
+
+    this.bloodsportChecked.date[0].isChecked = true
+    this.bloodsportChecked.kaluli = true
+    this.updateSport(this.bloodsportChecked.date[0].date)
+    let bloodSport = echarts.init(document.getElementById('bloodSport'))
+    bloodSport.setOption(this.bloodSportOption('kaluli'))
+
     bloodFood.on('datazoom', function (chartsparams) {
       if (chartsparams.end === 100) {
         if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
@@ -1688,31 +2219,29 @@ export default {
                   if (!item.foodScore) {
                     item.foodScore = 0
                   }
+                  if (!item.bpType) {
+                    item.bpType = 0
+                  }
                   vm.bloodfoodData.x.push(item.createTime)
                   vm.bloodfoodData.systolic.push(item.systolic)
                   vm.bloodfoodData.diastolic.push(item.diastolic)
                   vm.bloodfoodData.foodScore.push(item.foodScore)
                   vm.bloodfoodData.calories.push(item.calories)
+                  vm.bloodfoodData.bpType.push(item.bpType)
                 })
               }
             }
             if (vm.bloodfoodChecked.kaluli) {
-              bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 80))
+              bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 85))
             }
             if (vm.bloodfoodChecked.score) {
-              bloodFood.setOption(vm.bloodFoodOption('score', 50, 80))
+              bloodFood.setOption(vm.bloodFoodOption('score', 50, 85))
             }
             // bloodFood.setOption(vm.bloodFoodOption(50, 80))
             bloodFood.hideLoading()
           })
       }
     })
-
-    this.bloodsportChecked.date[0].isChecked = true
-    this.bloodsportChecked.kaluli = true
-    this.updateSport(this.bloodsportChecked.date[0].date)
-    let bloodSport = echarts.init(document.getElementById('bloodSport'))
-    bloodSport.setOption(this.bloodSportOption('kaluli'))
     bloodSport.on('datazoom', function (chartsparams) {
       // let vm = this
       // console.log('num', vm.bloodsportData.pageNum)
@@ -1758,19 +2287,23 @@ export default {
                   if (!item.foodScore) {
                     item.foodScore = 0
                   }
+                  if (!item.bpType) {
+                    item.bpType = 0
+                  }
                   vm.bloodsportData.x.push(item.createTime)
                   vm.bloodsportData.systolic.push(item.systolic)
                   vm.bloodsportData.diastolic.push(item.diastolic)
                   vm.bloodsportData.movementScore.push(item.movementScore)
                   vm.bloodsportData.calories.push(item.calories)
+                  vm.bloodsportData.bpType.push(item.bpType)
                 })
               }
             }
             if (vm.bloodsportChecked.kaluli) {
-              bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 80))
+              bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 85))
             }
             if (vm.bloodsportChecked.score) {
-              bloodSport.setOption(vm.bloodSportOption('score', 50, 80))
+              bloodSport.setOption(vm.bloodSportOption('score', 50, 85))
             }
 
             bloodSport.hideLoading()
@@ -1782,12 +2315,12 @@ export default {
 </script>
 
 <style scoped>
-.title{
-  /* margin-left:20px; */
-  margin-top:24px;
-  margin-bottom:2px;
-  font-size:20px;
-  color:#666
+  .title{
+    /* margin-left:20px; */
+    margin-top:24px;
+    margin-bottom:2px;
+    font-size:20px;
+    color:#666
   }
   .card-header{
     margin: 0 20px 0 20px;
@@ -1935,9 +2468,65 @@ export default {
     /* width: 100%; */
   }
   .checked-kaluli{
-    margin-top: 80px;
+    /* margin-top: 80px; */
   }
   .checked-score{
     margin-top:10px;
+  }
+  .middle-wrap{
+    position: relative;
+    height: 100%;
+  }
+  .middle{
+    position: absolute;
+    /* display: table-cell; */
+    /* vertical-align: middle; */
+    top:50%;
+    transform: translateY(-50%)
+  }
+  .margin-bottom{
+    margin-bottom:8px;
+    color: #ffffff1a;
+  }
+  .flex{
+    display: flex;
+    position: relative;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
+  .chart-min-width{
+    min-width: 100%;
+  }
+  .flex-btn{
+    max-width: 55px;
+    min-width: 55px;
+    /* height: 100%; */
+    position: absolute;
+    bottom:50%;
+    right: 0;
+    z-index:999;
+  }
+  .flex-btn-left{
+    max-width: 55px;
+    min-width: 55px;
+    /* height: 100%; */
+    position: absolute;
+    bottom:50%;
+    left: 25px;
+    z-index:999;
+  }
+  .widthone{
+    width: 100%;
+  }
+  .kaluli-wrap{
+    position: relative;
+  }
+  .kaluli-btn-wrap{
+    position: absolute;
+    width: 200px;
+    height: 40px;
+    top: 50%;
+    left: 150px;
+    z-index: 99;
   }
 </style>

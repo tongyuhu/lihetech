@@ -4,7 +4,7 @@
     <div class="workhead">
       <span>工作台</span>
         <el-button type="text" @click="msgTipBtn" class="work-msg">
-          <i class="work-icon" @click="msgTipBtn"></i>
+          <i class="work-icon"></i>
           <i :class="{workMsgtip:showMsgTip}"></i>
         </el-button>
     </div>
@@ -79,7 +79,7 @@
       <div class="bottom-margin" id="bloodbad">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">严重患者({{badsickTotal }})</p>
+            <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p>
           </div>
           <div class="table">
             <el-table 
@@ -169,7 +169,7 @@
       <div class="bottom-margin" id="bloodnolisten">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">未遵医嘱患者({{noListenDoctorRate }})</p>
+            <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p>
           </div>
           <div class="table">
 
@@ -262,7 +262,7 @@
       <div id="bloodunperfect">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">建档不完整患者({{unperfectMsgRate}})</p>
+            <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p>
           </div>
           <div class="table">
 
@@ -622,10 +622,11 @@ export default {
 .work-icon{
   position: relative;
   width: 10px;
+  height: 20px;
   display: block;
 }
 .work-icon::after{
-    top: -18px;
+    /* top: -18px; */
     right: -25px;
     position: absolute;
     content: '';
@@ -634,8 +635,8 @@ export default {
     background: url('~icon/hospital-icon-21.png') no-repeat;
 }
 .workMsgtip::after{
-  top: -10px;
-  right: -30px;
+  top: 5px;
+  right: -20px;
   position: absolute;
   content: '';
   width: 15px;
@@ -705,6 +706,10 @@ export default {
 .table-row td{
   /* background-color:#111; */
   padding:5px;
+}
+.el-button{
+  /* font-size:14px; */
+  padding:7px 10px;
 }
 /* .table-col{
   color:#1991fc;

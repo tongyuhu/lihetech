@@ -5,8 +5,9 @@
           <button v-for="(item,index) in checkDate" 
           :key="item.date" 
           class="check-date-btn" 
-          :class="{checked:item.isChecked}" 
-          @click="updateDate(item,index)">
+          :class="{checked:item.isChecked
+          }" 
+          @click="updateDate(item.value,index)">
             {{item.date}}
           </button>
         </el-row>
@@ -18,7 +19,7 @@
                   <div class="card-header">
                     <p class="title">患者分布</p>
                   </div>
-                  <div id='HBcover'  :style="{width:'auto',height:'250px'}"></div>
+                  <div id='HBcover'  :style="{width:'auto',height:'300px'}"></div>
               </el-card>
             </el-col>
             <el-col :span='12' v-loading="HBtrendLoading">
@@ -27,7 +28,20 @@
                   <div class="card-header">
                     <p class="title">患者走势</p>
                   </div>
-                  <div id='HBtrend' :style="{width:'auto',height:'250px'}"></div>
+
+                <div class="flex widthone">
+                  <div class="flex-btn-left" v-show="showBtn">
+                    <el-button @click="trendPre" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button>
+                  </div>
+                  <div class="chart-min-width">
+                    <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div>
+                  </div>
+                  <div class="flex-btn" v-show="showBtn">
+                    <el-button @click="trendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button>
+                  </div>
+                </div>
+
+                  <!-- <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div> -->
               </el-card>
             </el-col>
         </el-row>
@@ -37,7 +51,8 @@
 
 <script>
 import echarts from 'echarts'
-// import {sickDistributionDataApi, sickTrendDataApi} from './../../../api/views/Hospital/BloodHeigh/H-bloodheightotal'
+import {dateFormat, daybefor} from '@/untils/date.js'
+import {sickDistributionDataApi, sickTrendDataApi} from '@/api/views/Hospital/BloodHeigh/H-bloodheightotal'
 export default {
   name: 'H-bloodheighttotal',
   data () {
@@ -65,22 +80,22 @@ export default {
         }
       ],
       sickDistributionData: [
-        {
-          'value': 36,
-          'name': '正常'
-        },
-        {
-          'value': 38,
-          'name': '偏高'
-        },
-        {
-          'value': 3,
-          'name': '高'
-        },
-        {
-          'value': 83,
-          'name': '危险'
-        }
+        // {
+        //   'value': 36,
+        //   'name': '正常'
+        // },
+        // {
+        //   'value': 38,
+        //   'name': '偏高'
+        // },
+        // {
+        //   'value': 3,
+        //   'name': '高'
+        // },
+        // {
+        //   'value': 83,
+        //   'name': '危险'
+        // }
 
       ],
       sickTrendData: [
@@ -98,27 +113,39 @@ export default {
         86,
         1
       ],
-      heightbloodTotal: 1236,
+      heightbloodTotal: 0,
       sickTrendDataX: [
-        ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
-        ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31],
-        [ '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月' ]
       ],
       clickTime: 0,
       HBcoverLoading: false,
-      HBtrendLoading: false
+      HBtrendLoading: false,
+      showBtn: false
     }
   },
   methods: {
     HBcoverOption () {
+      let vm = this
+      let count = 0
+      let color = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let nocolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      this.sickDistributionData.forEach(item => {
+        if (this._.toNumber(item.value) === 0) {
+          count++
+        }
+      })
+      if (count === 4) {
+        color = nocolor
+      } else {
+        color = hascolor
+      }
       return {
         // 提示框 在饼图上显示数据
         // tooltip: {
         //   trigger: 'item',
         //   formatter: '{a} <br/>{b} : {c}人 <br/> {d}%'
         // },
-        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f'],
+        color: color,
         legend: {
           orient: 'vertical',
           left: '50%',
@@ -155,7 +182,13 @@ export default {
             label: {
               normal: {
                 position: 'inner',
-                formatter: '{d}%',
+                formatter: function (params) {
+                  if (vm._.toNumber(params.value) === 0) {
+                    return ''
+                  } else {
+                    return params.percent + '%'
+                  }
+                },
                 fontSize: 10
               }
             },
@@ -175,7 +208,22 @@ export default {
         }
       }
     },
-    HBtrendOption () {
+    HBtrendOption (start, end) {
+      let vm = this
+      let x1 = ''
+      let zoomstart = 0
+      let zoomend = 100
+      if (start) {
+        zoomstart = start
+      }
+      if (end) {
+        zoomend = end
+      }
+      // if (this.sickTrendDataX.length < 5) {
+      //   zoomend = 100
+      // } else {
+      //   zoomend = 50
+      // }
       return {
         title: {
         // text: '控压走势',
@@ -195,8 +243,8 @@ export default {
         },
         grid: { // 直角坐标系内绘图网格
           show: false,
-          // left: 'auto',
-          // right: 'auto',
+          left: '100',
+          right: '80',
           // left: '10%',
           // top: '40px',
           // bottom: '24px',
@@ -221,6 +269,21 @@ export default {
           itemWidth: 20,
           itemHeight: 20
         },
+        dataZoom: [
+          {
+            type: 'slider',
+            show: false,
+            realtime: true,
+            start: zoomstart,
+            end: zoomend,
+            zoomlock: true,
+            minValueSpan: 15,
+            maxValueSpan: 15,
+            throttle: 500,
+            filterMode: 'empty',
+            zoomOnMouseWheel: false
+          }
+        ],
         xAxis: { // 直角坐标系grid的x轴
           type: 'category',
           // type: 'time',
@@ -237,11 +300,46 @@ export default {
             show: false
           },
           axisLabel: {
-            interval: 0
+            interval: 0, // 显示x轴数据
+            showMinLabel: true,
+            showMaxLabel: true,
+            align: 'center',
+            rotate: 0,
+            formatter: function (val) {
+              let value
+              if (val.length < 11) {
+                let time = val.slice(0, 4)
+                if (vm._.eq(time, x1)) {
+                  value = val.slice(5)
+                  x1 = time
+                  return value
+                } else {
+                  let arr = []
+                  arr.push(val.slice(5))
+                  arr.push(time)
+                  x1 = time
+                  return arr.join('\n')
+                }
+              } else {
+                let start = val.slice(5, 11)
+                if (vm._.eq(start, x1)) {
+                  value = val.slice(11)
+                  x1 = start
+                  return value + '时'
+                } else {
+                  let arr = []
+                  arr.push((val.slice(11) + '时'))
+                  arr.push(start)
+                  x1 = start
+                  return arr.join('\n')
+                }
+              }
+                // return value
+            }
           },
           min: 0,
-          // data: this.sickTrendDataX[this.clickTime]
-          data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+          data: this.sickTrendDataX
+          // data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
         },
         yAxis: { // 直角坐标系grid的y轴
           name: '控制率',
@@ -267,8 +365,9 @@ export default {
           {
             name: '控压走势',
             type: 'line',
-            smooth: true,
-            smoothMonotone: 'x',
+            // smooth: true,
+            // smoothMonotone: 'x',
+            symbol: 'circle',
             lineStyle: {
               normal: {
                 width: 2,
@@ -283,13 +382,13 @@ export default {
                 color: '#8ecefc'
               }
             },
-            areaStyle: {
-              normal: {
-                color: '#e6f5fe',
-                origin: 'auto',
-                shadowColor: '#e6f5fe'
-              }
-            },
+            // areaStyle: {
+            //   normal: {
+            //     color: '#e6f5fe',
+            //     origin: 'auto',
+            //     shadowColor: '#e6f5fe'
+            //   }
+            // },
             data: this.sickTrendData
           }
         ],
@@ -299,24 +398,141 @@ export default {
         }
       }
     },
-
+    startendDate (date) {
+      let obj = {}
+      let now = Date()
+      switch (date) {
+        case 'day':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = dateFormat(now, 0, true)
+          break
+        case 'week':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = daybefor(now, 6, true)
+          break
+        case 'month':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = dateFormat(now, 1, true)
+          break
+        case 'year':
+          obj.endTime = dateFormat(now, 0, true)
+          obj.startTime = dateFormat(now, 12, true)
+          break
+      }
+      return obj
+    },
     updateDate (date, index) {
       this.checkDate.forEach(item => {
         item.isChecked = false
       })
       this.checkDate[index].isChecked = true
-      console.log('更新整体患者分布与走势时间')
+      // console.log(this.startendDate(date))
+      // let time = this.startendDate(date)
+      let trendtime = this.trendcheck(date)
+      this.getCoverData(trendtime)
+      this.getTrendData(trendtime)
+      // console.log('更新整体患者分布与走势时间', this.sickDistributionData)
+    },
+    getCoverData (params) {
+      let obj = {
+        periodTime: params
+      }
+      this.$axios(sickDistributionDataApi(obj))
+      .then(res => {
+        this.sickDistributionData = []
+        if (res.data) {
+          if (res.data.data) {
+            this.heightbloodTotal = res.data.data.count
+            let coverData = res.data.data
+            // let obj = {}
+            this.sickDistributionData.push({
+              'value': coverData.normalCount,
+              'name': '正常'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.normalHighCount,
+              'name': '偏高'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.mildHighCount,
+              'name': '高'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.dangerCount,
+              'name': '危险'
+            })
+          }
+        }
+        let HBcover = echarts.init(document.getElementById('HBcover'))
+        HBcover.setOption(this.HBcoverOption())
+      })
+    },
+    trendcheck (date) {
+      let periodTime = null
+      switch (date) {
+        case 'day':
+          periodTime = 1
+          break
+        case 'week':
+          periodTime = 2
+          break
+        case 'month':
+          periodTime = 3
+          break
+        case 'year':
+          periodTime = 4
+          break
+      }
+      return periodTime
+    },
+    getTrendData (periodTime) {
+      let vm = this
+      let params = {
+        pageNum: 1,
+        pageSize: 31,
+        'periodTime': periodTime
+      }
+      vm.$axios(sickTrendDataApi(params))
+      .then(res => {
+        if (res.data.data) {
+          // let x =[]
+          let HBtrend = echarts.init(document.getElementById('HBtrend'))
+          vm.sickTrendDataX = []
+          vm.sickTrendData = []
+          res.data.data.forEach(item => {
+            if (vm._.has(item, 'normalBase')) {
+              vm.sickTrendDataX.push(item.measureTimeDay)
+              vm.sickTrendData.push(item.normalBase)
+            }
+          })
+          if (vm.sickTrendDataX.length < 16) {
+            vm.showBtn = false
+            HBtrend.setOption(this.HBtrendOption())
+          } else {
+            vm.showBtn = true
+            HBtrend.setOption(this.HBtrendOption(0, 50))
+          }
+        }
+      })
+    },
+    trendPre () {
+      let HBtrend = echarts.init(document.getElementById('HBtrend'))
+      HBtrend.setOption(this.HBtrendOption(0, 50))
+    },
+    trendNext () {
+      let HBtrend = echarts.init(document.getElementById('HBtrend'))
+      HBtrend.setOption(this.HBtrendOption(50, 100))
     }
   },
 
   mounted () {
     // 初始化选择时间为日
-    this.checkDate[0].isChecked = true
+    this.updateDate(this.checkDate[0].value, 0)
 
-    let HBcover = echarts.init(document.getElementById('HBcover'))
-    HBcover.setOption(this.HBcoverOption())
-    let HBtrend = echarts.init(document.getElementById('HBtrend'))
-    HBtrend.setOption(this.HBtrendOption())
+    // let HBcover = echarts.init(document.getElementById('HBcover'))
+    // HBcover.setOption(this.HBcoverOption())
+    // let HBtrend = echarts.init(document.getElementById('HBtrend'))
+    // HBtrend.setOption(this.HBtrendOption())
   }
 }
 </script>
@@ -379,5 +595,34 @@ p {
 }
 .HBtrend{
   z-index: 9;
+}
+.flex{
+  display: flex;
+  position: relative;
+  flex-wrap: nowrap;
+}
+.chart-min-width{
+  min-width: 100%;
+}
+.flex-btn{
+  max-width: 55px;
+  min-width: 55px;
+  /* height: 100%; */
+  position: absolute;
+  bottom:50%;
+  right: 0;
+  z-index:999;
+}
+.flex-btn-left{
+  max-width: 55px;
+  min-width: 55px;
+  /* height: 100%; */
+  position: absolute;
+  bottom:50%;
+  left: 25px;
+  z-index:999;
+}
+.widthone{
+  width: 100%;
 }
 </style>

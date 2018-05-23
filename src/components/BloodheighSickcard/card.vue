@@ -14,7 +14,7 @@
     <div>
       <table>
         <tr>
-          <td colspan="2" class="table-head">用户自述</td>
+          <td colspan="2" class="table-head side-left">用户自述</td>
           <td>
             {{readme}}
             <el-button size="mini" type="text" class="table-btn" @click="play">
@@ -26,7 +26,7 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="table-head">系统分析</td>
+          <td colspan="2" class="table-head side-left">系统分析</td>
           <td>
             <span>
               {{systemAnalysis}}
@@ -34,14 +34,15 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="table-head">医生诊断</td>
+          <td colspan="2" class="table-head side-left">医生诊断</td>
           <td>
             {{doctorDiagnos}}
-            <el-button type="text" size="mini" class="table-btn" @click="sendVoice()" v-if="currentpage === 1">
+            <!-- <el-button type="text" size="mini" class="table-btn" @click="sendVoice()" v-if="currentpage === 1">
               <i class="send"></i>发送语音
-            </el-button>
+            </el-button> -->
           </td>
         </tr>
+
         <tr>
           <td rowspan="3" class="table-head">医治方案</td>
           <td class="table-head">用药</td>
@@ -80,14 +81,14 @@
                 </div>
               </div> -->
               
-              <div>
+              <!-- <div>
                 <el-button type="text" size="mini" class="table-btn" @click.stop="deleteMedicine" v-if="currentpage === 1">
                   <i class="delete"></i>删除
                 </el-button>
                 <el-button type="text" size="mini" class="table-btn" @click="addMedicine" v-if="currentpage === 1">
                   <i class="add"></i>添加
                 </el-button>
-              </div>
+              </div> -->
             </div>
           </td>
         </tr>
@@ -96,12 +97,12 @@
           <td class="table-head">运动</td>
           <td>
             {{movement}}
-            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
+            <!-- <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
             <el-button type="text" size="mini" class="table-btn" @click="addSport()" v-if="currentpage === 1">
               <i class="add"></i>添加
-            </el-button>
+            </el-button> -->
           </td>
         </tr>
         <tr>
@@ -111,16 +112,16 @@
             <span>
               {{diet}}
             </span>
-            <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
+            <!-- <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
             <el-button type="text" size="mini" class="table-btn" @click="addFood()" v-if="currentpage === 1">
               <i class="add"></i>添加
-            </el-button>
+            </el-button> -->
           </td>
         </tr>
         <tr>
-          <td colspan="2" class="table-head">医生信息</td>
+          <td colspan="2" class="table-head side-left">医生信息</td>
           <td>
             <span>
               李那那  上海张江高科诊所  糖尿病慢性病家庭医生
@@ -442,7 +443,9 @@ export default {
     padding-bottom: 24px;
     margin-bottom: 8px;
   }
-
+  /* .side-left{
+    width: 50px;
+  } */
   table{
     margin:0;
     padding:0;
@@ -477,7 +480,8 @@ export default {
   .table-head{
     color: #041421;
     font-weight: bold;
-    min-width: 80px;
+    min-width: 40px;
+    max-width: 40px;
   }
   .table-top{
     height: 62px;

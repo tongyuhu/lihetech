@@ -1,23 +1,23 @@
-export const sickDistributionDataApi = (when) => {
+export const sickDistributionDataApi = (params) => {
   return {
     method: 'post',
-    url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickDistributionData',
+    url: '/wholePoint/blood/countBase',
     data: {
-      sickDistribution: '高血压患者分布',
-      time: when
+      'periodTime': params.periodTime
+      // endMeasureTime: param.endTime
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     timeout: 10000
   }
 }
-export const sickTrendDataApi = (when) => {
+export const sickTrendDataApi = (params) => {
   return {
-
     method: 'post',
-    url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/sickTrendData',
+    url: '/wholePoint/blood/countBase/list',
     data: {
-      sickTrend: '高血压患者走势数据',
-      time: when
+      pageNum: 1,
+      pageSize: 31,
+      'periodTime': params.periodTime
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     timeout: 10000

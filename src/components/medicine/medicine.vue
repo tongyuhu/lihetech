@@ -26,8 +26,7 @@
     </div>
     <div>
       <!-- <div v-if="!(medicineLists.length>0)">暂无数据</div> -->
-      <div 
-     
+      <div
       v-loading="loading"
       element-loading-text="拼命加载中"
       class="medicine-lists"
@@ -48,7 +47,7 @@
               </div>
             </div>
             
-            <img :src="'http://139.196.204.123:80/BPWatch'+item.medicineImgUrl" alt="暂无图片" class="medicine-img">
+            <img :src="process.env.IMG_URL+item.medicineImgUrl" alt="暂无图片" class="medicine-img">
             
             <p class="medicine-name">{{item.medicineName}}</p>
             <p v-if="!item.medicinePrice" class="price">暂无参考价格</p>
@@ -64,7 +63,7 @@
         >
           <div class="dialog-msg clear">
             <div class="dialog-img">
-                <img :src="'http://139.196.204.123:80/BPWatch'+medicineMsg.medicineImgUrl" alt="暂无图片" class="medicine-img-diolog">
+                <img :src="process.env.IMG_URL+medicineMsg.medicineImgUrl" alt="暂无图片" class="medicine-img-diolog">
             </div>
             <div class="dialog-status">
               <div>
