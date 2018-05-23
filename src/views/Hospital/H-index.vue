@@ -374,7 +374,7 @@
     padding: 24px;
     background-color: #f4f6f9;
     height:100% ;
-    margin-bottom: 50px;
+    margin-bottom: 80px;
     /* position: relative; */
     /* left: 250px; */
     /* top:80px; */
