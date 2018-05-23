@@ -78,25 +78,38 @@
       </el-card>
     </div>
 
-    <!-- 历史预约 -->
-    <div v-show="checkOrderBtn">
+    <!-- 历史预约 checkOrderBtn -->
+    <div v-show="false">
       <el-card>
         <table>
           <thead>
             <th class="left-time">日期</th>
-            <th colspan="2">预约详情</th>
+            <th colspan="3">预约详情</th>
           </thead>
-          <tbody v-for="item in 2" :key="item.i">
+          <tbody>
+          <!-- <tbody v-for="item in 2" :key="item.i"> -->
                 <tr>
-                  <th rowspan="2">
+                  <th rowspan="3">
                       <span>2018-5-14 周一</span>
                   </th>
-                  <td class="width">
+                  <td class="width" rowspan="2">
                     <span>上午</span>
+                  </td>
+                  <td class="width">
+                    <span>08:30-09:00</span>
                   </td>
                   <td>
                     <div class="table-details">
-                      <div>08:30-09:00</div>
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
                       <div>张磊</div>
                       <div>高血压并发症</div>
                       <div>已就诊</div>
@@ -107,6 +120,48 @@
                   </td>
                 </tr>
                 <tr>
+                  
+                  <td class="width">
+                    <span>08:30-09:00</span>
+                  </td>
+                  <!-- <td class="width">
+                    <span>08:30-09:00</span>
+                  </td> -->
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="width">
+                    <span>上午</span>
+                  </td>
+                  <td class="width">
+                    <span>08:30-09:00</span>
+                  </td>
+                  <!-- <td class="width">
+                    <span>08:30-09:00</span>
+                  </td> -->
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <!-- <tr>
                   <td class="width">
                     <span>下午</span>
                   </td>
@@ -130,11 +185,176 @@
                       </div>
                     </div>
                   </td>
-                </tr>
+                </tr> -->
           </tbody>
         </table>
       </el-card>
     </div>
+
+    <div>
+      <el-card>
+        <table>
+          <thead>
+            <th class="left-time">日期</th>
+            <th colspan="3">预约详情</th>
+          </thead>
+          <tbody>
+          <!-- <tbody v-for="item in 2" :key="item.i"> -->
+                <tr>
+                  <th :rowspan="dataweek.morninng.length + dataweek.noon.length+3">
+                      <span>2018-5-14 周一</span>
+                  </th>
+                </tr>
+
+                <tr>
+                  <td class="width" :rowspan="dataweek.morninng.length+1">
+                    <span>上午</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="width">
+                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                  </td>
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="width">
+                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                  </td>
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td :rowspan="dataweek.noon.length+1">下午</td>
+                </tr>
+
+                <tr>
+                  <td class="width">
+                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                  </td>
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="width">
+                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                  </td>
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="width">
+                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                  </td>
+                  <td>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                    <div class="table-details">
+                      <!-- <div>08:30-09:00</div> -->
+                      <div>张磊</div>
+                      <div>高血压并发症</div>
+                      <div>已就诊</div>
+                      <div>
+                        <button>联系</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+
+
+
+                
+          </tbody>
+        </table>
+      </el-card>
+    </div>
+
   </div>
 </template>
 
@@ -148,7 +368,68 @@ export default {
   data () {
     return {
       checkOrderBtn: false,
-      currentOrder: []
+      currentOrder: [],
+      dataweek: {
+        morninng: [
+          {
+            orderTime: '08:30-09:00',
+            orderPerson: [
+              {
+                name: 'w0ng'
+              },
+              {
+                name: '123'
+              }
+            ]
+          },
+          {
+            orderTime: '01:30-11:00',
+            orderPerson: [
+              {
+                name: 'w0ng'
+              },
+              {
+                name: '123'
+              }
+            ]
+          }
+        ],
+        noon: [
+          {
+            orderTime: '08:30-09:00',
+            orderPerson: [
+              {
+                name: 'w0ng'
+              },
+              {
+                name: '123'
+              }
+            ]
+          },
+          {
+            orderTime: '08:30-09:00',
+            orderPerson: [
+              {
+                name: 'w0ng'
+              },
+              {
+                name: '123'
+              }
+            ]
+          },
+          {
+            orderTime: '08:30-09:00',
+            orderPerson: [
+              {
+                name: 'w0ng'
+              },
+              {
+                name: '123'
+              }
+            ]
+          }
+        ]
+      }
     }
   },
   methods: {

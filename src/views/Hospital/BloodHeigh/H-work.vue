@@ -3,9 +3,12 @@
     <!-- 工作台 start -->
     <div class="workhead">
       <span>工作台</span>
-        <el-button type="text" @click="msgTipBtn" class="work-msg">
-          <i class="work-icon"></i>
-          <i :class="{workMsgtip:showMsgTip}"></i>
+        <el-button type="text" @click="msgTipBtn"  class="work-msg">
+          <!-- <i class="work-icon"></i> -->
+          <el-badge :is-dot="showMsgTip">
+              <i class="iconfont icon-xin iconfont-tip"></i>
+          </el-badge>
+          <!-- <i :class="{workMsgtip:showMsgTip}"></i> -->
         </el-button>
     </div>
     <el-card :body-style="{padding: '0px'}">
@@ -618,6 +621,11 @@ export default {
 }
 .work-msg{
   position: relative;
+  
+}
+.iconfont-tip{
+  color: #666;
+  font-size: 30px;
 }
 .work-icon{
   position: relative;

@@ -44,7 +44,10 @@ export const store = new Vuex.Store({
         hasMsg: false,
         currentChat: false
       }
-    ]
+    ],
+    // 当前聊天列表
+    history: [],
+    newmsg: false
   },
   getters: {
     // 当前聊天好友  currentChat为true
@@ -97,6 +100,36 @@ export const store = new Vuex.Store({
           item.currentChat = false
         }
       })
+    },
+    // 收到非当前聊天好友消息
+    getFriendMsg (state, obj) {
+      state.friendsList.forEach(item => {
+        if (item.userId === obj.friendId) {
+          item.hasMsg = true
+          state.newmsg = true
+          if (_.has(item, 'history')) {
+            item.history.push(obj.message)
+            console.log('添加消息', obj.message)
+            // console.log('添加消息', message)
+          } else {
+            item.history = []
+            item.history.push(obj.message)
+            console.log('添加消息', obj.message)
+          }
+        }
+      })
+    },
+    // 收到当前聊天好友消息
+    getCurrentFriendMsg (state, message) {
+      state.history.push(message)
+    },
+    // 当前聊天列表
+    history (state, content) {
+      state.history = content
+    },
+    // 关闭聊天动画
+    closeAnimation (state) {
+      state.newmsg = false
     }
   },
   actions: {

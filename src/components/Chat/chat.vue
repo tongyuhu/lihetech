@@ -50,13 +50,13 @@
         ></infinite-loading> -->
         <chartMessageGroup>
           <chartMessage
-          v-for="(item) in historyMsg" :key="item.index"
-          :who="item.senderUserId"
+          v-for="(item,index) in historyMsg" :key="index"
+          :who="item.senderUserId || ''"
           >
           {{historyMsg.length !== 0 ? item.content.content :''}}
+          </chartMessage>
           <!-- <img src=""> -->
             <!-- <img src="" alt=""> -->
-          </chartMessage>
         </chartMessageGroup>
       </div>
       <!-- 工具 -->
@@ -65,7 +65,12 @@
           <span class="smile-icon"></span>
         </button>
         <button>
-          <span class="file-icon"></span>
+          <a href="" class="a-upload">
+            <!-- <input type="text"> -->
+            <input type="file" accept="image/jpg">
+            <!-- <input type="file" accept="image/jpg" @change="changeImg($event)" value="a"> -->
+            <span class="file-icon"></span>
+          </a>
         </button>
         <button>
           <span class="phone-icon"></span>
@@ -163,7 +168,7 @@ export default {
       //   },
       //   {
       //     who: 'other',
-      //     type: 'text',
+      //
       //     content: {
       //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
       //     }
@@ -186,8 +191,8 @@ export default {
         }
       ],
       showList: false,
-      isTriggerFirstLoad: false,
-      historyMsg: []
+      isTriggerFirstLoad: false
+      // historyMsg: []
       // showChart: true
     }
   },
@@ -195,9 +200,10 @@ export default {
     ...mapGetters([
       'currentChat'
     ]),
-    ...mapState([
-      'rongUserId'
-    ])
+    ...mapState({
+      rongUserId: 'rongUserId',
+      historyMsg: 'history'
+    })
     // historyMsg () {
     //   return this.currentChat.history
     // }
@@ -343,9 +349,9 @@ export default {
     Bus.$on('history', (val) => {
       vm.historyMsg = val
     })
-    Bus.$on('hasMessage', (val) => {
-      vm.historyMsg.push(val)
-    })
+    // Bus.$on('hasMessage', (val) => {
+    //   vm.historyMsg.push(val)
+    // })
   }
 }
 </script>
@@ -592,6 +598,40 @@ export default {
   }
   .center{
     text-align:center;
+  }
+
+
+  .a-upload {
+    /* padding: 4px 10px; */
+    height: 20px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    /* background: #fafafa; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 4px; */
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+  .a-upload  input {
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      cursor: pointer
+  }
+
+  .a-upload:hover {
+      /* color: #444; */
+      /* background: #eee; */
+      /* border-color: #ccc; */
+      text-decoration: none
   }
 </style>
 
