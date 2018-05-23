@@ -300,26 +300,26 @@ export default {
     },
     editDoctorConfirm () {
       if (this.doctorId === this.editDoctorMsg.id) {
-        this.doctorId = ''
+        // this.editDoctorMsg.id
       }
       if (this.editDoctorName === this.editDoctorMsg.name) {
-        this.editDoctorName = ''
+        this.editDoctorMsg.name = ''
       }
       if (this.editDoctorPhone === this.editDoctorMsg.mobile) {
-        this.editDoctorPhone = ''
+        this.editDoctorMsg.mobile = ''
       }
       if (this.editDoctorAddress === this.editDoctorMsg.regionId) {
-        this.editDoctorAddress = ''
+        this.editDoctorMsg.regionId = ''
       }
       if (this.roleId === this.editDoctorMsg.roleId) {
-        this.roleId = ''
+        this.editDoctorMsg.roleId = ''
       }
       let params = {
         'id': this.doctorId,
-        'name': this.editDoctorName,
-        'mobile': this.editDoctorPhone,
-        'regionId': this.editDoctorAddress,
-        'roleId': this.roleId
+        'name': this.editDoctorMsg.name,
+        'mobile': this.editDoctorMsg.mobile,
+        'regionId': this.editDoctorMsg.regionId,
+        'roleId': this.editDoctorMsg.roleId
       }
       console.log('params', params)
       this.$axios(editDoctorAPI(params))

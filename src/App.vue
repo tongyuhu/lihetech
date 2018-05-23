@@ -129,7 +129,7 @@ export default {
   }
   /* 解决element table出现横向滚动条 */
   .el-table__body-wrapper, .el-table__footer-wrapper, .el-table__header-wrapper{
-  width: 101%;
+    width: 101% !important; 
   }
 
 </style>

@@ -185,6 +185,7 @@ export default {
     // }
   },
   mounted () {
+    this.$refs.ruleForm.resetFields()
     // console.log(this.$route.params.from)
   }
 }
