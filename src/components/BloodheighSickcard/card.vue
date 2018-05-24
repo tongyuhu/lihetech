@@ -17,7 +17,7 @@
           <td colspan="2" class="table-head side-left">用户自述</td>
           <td>
             {{readme}}
-            <el-button size="mini" type="text" class="table-btn" @click="play">
+            <el-button size="mini" type="text" class="table-btn" @click="play(readme)">
               <i class="play"></i>播放
             </el-button>
             <audio :src="readmeUrl" id="audio">
@@ -340,9 +340,12 @@ export default {
 
       this.$emit('preBtn', this.currentpage)
     },
-    play () {
+    play (msg) {
       this.$nextTick(function () {
-        document.getElementById('audio').play()
+        // document.getElementById('audio').play()
+        var audio = new SpeechSynthesisUtterance(msg)
+        // console.log(msg)
+        window.speechSynthesis.speak(audio)
       })
       console.log('用户自述')
     },

@@ -45,7 +45,7 @@ export const store = new Vuex.Store({
         currentChat: false
       }
     ],
-    // 当前聊天列表
+    // 当前聊天记录
     history: [],
     newmsg: false
   },
@@ -124,7 +124,7 @@ export const store = new Vuex.Store({
       state.history.push(message)
     },
     // 当前聊天列表
-    history (state, content) {
+    sethistory (state, content) {
       state.history = content
     },
     // 关闭聊天动画

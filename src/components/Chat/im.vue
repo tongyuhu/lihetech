@@ -76,7 +76,7 @@
 import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
-import {mapState, mapMutations, mapActions} from 'vuex'
+import {mapState, mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'im',
   components: {
@@ -129,15 +129,19 @@ export default {
   },
   computed: {
     ...mapState({
-      friendsList: 'friendsList'
+      friendsList: 'friendsList',
+      history: 'history'
     })
+    // ...mapGetters([
+    //   'history'
+    // ])
   },
   methods: {
     ...mapMutations([
       'changeChatFriend',
       'addChatFriend',
       'openChatWindow',
-      'history'
+      'sethistory'
     ]),
     closeIM () {
       this.$emit('closeIM')
@@ -145,6 +149,7 @@ export default {
     chartWith (friend) {
       let vm = this
       let history = []
+      vm.sethistory(history)
       friend.hasMsg = false
       if (this._.has(friend, 'history')) {
         history = friend.history
@@ -156,7 +161,7 @@ export default {
         vm.addChatFriend(friend)
         vm.changeChatFriend(friend)
       }
-      vm.history(friend.history)
+      vm.sethistory(friend.history)
       console.log('好友xiaoxi ', friend.history)
       // friend.history = []
       // 获取历史消息

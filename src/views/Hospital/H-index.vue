@@ -148,14 +148,15 @@
               // }
               console.log(message)
               let currentId = ''
-              if (!(vm._.has(vm.currentChat, 'userId'))) {
+  
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
                 currentId = ''
-              } else {
+              } else {  // 当前有聊天窗口
                 currentId = vm.currentChat.userId
               }
-              if (message.senderUserId === currentId) {
+              if (message.senderUserId === currentId) { // 当前聊天用户是否和消息来源一致
                 vm.getCurrentFriendMsg(message)
-              } else {
+              } else {  //
                 vm.friendsList.forEach(function (item) {
                   if (item.userId === message.senderUserId) {
                     console.log('收到的消息', message)
@@ -167,7 +168,15 @@
                   }
                 })
               }
-  
+              vm.$nextTick(() => {
+                setTimeout(function () {
+                  let container = vm.$el.querySelector('#chatWidow')
+                  container.scrollTop = container.scrollHeight
+                  console.log('container.scrollTop', container.scrollTop)
+                  console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+                }, 100)
+              })
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
@@ -175,7 +184,37 @@
                     // message.content.content 格式为 AMR 格式的 base64 码
               break
             case RongIMClient.MessageType.ImageMessage:
+              console.log('图片消息', message)
+              let currentIdImg = ''
   
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentIdImg = ''
+              } else {  // 当前有聊天窗口
+                currentIdImg = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentIdImg) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    console.log('收到的消息', message)
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              vm.$nextTick(() => {
+                setTimeout(function () {
+                  let container = vm.$el.querySelector('#chatWidow')
+                  container.scrollTop = container.scrollHeight
+                  console.log('container.scrollTop', container.scrollTop)
+                  console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+                }, 100)
+              })
                   // message.content.content => 图片缩略图 base64。
                   // message.content.imageUri => 原图 URL。
               break

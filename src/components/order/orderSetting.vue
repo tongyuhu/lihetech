@@ -2,7 +2,7 @@
   <div>
     <div class="order-setting">
       <button @click="setWeektime">周批量设置</button>
-      <span class="title">{{start}} 至 {{end}}</span>
+      <!-- <span class="title">{{start}} 至 {{end}}</span> -->
     </div>
 
     <div>
@@ -341,7 +341,8 @@ export default {
       befortoday = daybefor(today, befor - 1, true)
       week = computeWeekday(befortoday)
       while (day !== 8) {
-        arr.push((befortoday + ' ' + week))
+        arr.push(week)
+        // arr.push((befortoday + ' ' + week))
         befortoday = daybefor(today, befor - (day + 1), true)
         week = computeWeekday(befortoday)
         day++

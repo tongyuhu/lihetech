@@ -128,7 +128,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:30%;
+      top:45%;
       right: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;
@@ -158,7 +158,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:30%;
+      top:45%;
       left: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;

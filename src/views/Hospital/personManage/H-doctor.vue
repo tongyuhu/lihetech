@@ -4,7 +4,7 @@
       <div class="head-title">医生管理</div>
       <div class="head-edit-wrap">
         <button class="head-edit-button margin-right" @click="addDoctor">新增医生</button>
-        <button class="head-edit-button delete" @click="deleteDoctor">删除</button>
+        <!-- <button class="head-edit-button delete" @click="deleteDoctor">删除</button> -->
       </div>
     </div>
     <div>
@@ -17,38 +17,6 @@
             <el-button slot="append" icon="el-icon-search" @click="selectName"></el-button>
           </el-input>
         </div>
-        <!-- <table v-loading="loading">
-          <tr>
-            <th width="40px" class="checked"></th>
-            <th>序号</th>
-            <th>登录账号</th>
-            <th>医生姓名</th>
-            <th>联系电话</th>
-            <th>邮箱</th>
-            <th>备注</th>
-            <th>操作</th>
-          </tr>
-          <tr v-for="(item,index) in doctorList" :key="index">
-            <td class="checked">
-              <el-checkbox  v-model="item.checked" @change="doctorSelectionChange(item,index)"></el-checkbox>
-            </td>
-            <td width="50px">{{index}}</td>
-            <td>{{item.username}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.mobile}}</td>
-            <td>{{item.email}}</td>
-            <td>{{item.adminNote}}</td>
-            <td>
-              <el-button type="text" @click="editDoctor(item)">
-              <span class="action-text"> <i class="el-icon-edit-outline"></i> 
-              编辑</span>
-              </el-button>
-            </td>
-          </tr>
-          <tr v-if="doctorList.length === 0">
-            <td colspan="8">暂无数据</td>
-          </tr>
-        </table> -->
         <el-table
         ref="doctorlist"
         :data="doctorList"
@@ -94,12 +62,21 @@
           <el-table-column
           label="操作"
           align="center"
-          width="100">
+          :width="doctorEditCellWidth">
             <template slot-scope="scope">
               <el-button type="text" @click="editDoctor(scope.row)">
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
               编辑</span>
               </el-button>
+              <el-switch
+              v-if="showEnabled"
+              v-model="scope.row.enabled"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :width="30"
+              @change="doctorEnabled(scope.row)">
+              </el-switch>
+              <span v-if="showEnabled">停/启用</span>
             </template>
           </el-table-column>
         </el-table>
@@ -128,7 +105,7 @@
         status-icon 
         :rules="editDoctorRules" 
         ref="editDoctorFormref" 
-        label-width="70px" 
+        label-width="90px" 
         :label-position="labelPosition"
         >
           <el-form-item label="医生姓名" prop="name">
@@ -195,7 +172,8 @@
 </template>
 
 <script>
-import {getDoctorListAPI, editDoctorAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {getDoctorListAPI, editDoctorAPI, doctorEnabledAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {mapState} from 'vuex'
 export default {
   name: 'accountSetting',
   data () {
@@ -248,6 +226,8 @@ export default {
     }
 
     return {
+      doctorEditCellWidth: 100,
+      showEnabled: false,
       doctorList: [
         // {
         //   loginAccount: '2016-05-03',
@@ -309,7 +289,11 @@ export default {
       }
     }
   },
-
+  computed: {
+    ...mapState([
+      'adminInfo'
+    ])
+  },
   methods: {
     formatterDoctorList (list) {
       if (list.length === 0) {
@@ -398,41 +382,41 @@ export default {
     },
     editDoctorConfirm (formName) {
       let vm = this
-      this.$refs[formName].validate((valid) => {
+      vm.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.editDoctorForm.id === this.editDoctorMsg.id) {
-            // this.editDoctorMsg.id
+          if (vm.editDoctorForm.id === vm.editDoctorMsg.id) {
+            // vm.editDoctorMsg.id
           }
-          if (this.editDoctorForm.name === this.editDoctorMsg.name) {
-            this.editDoctorMsg.name = ''
+          if (vm.editDoctorForm.name === vm.editDoctorMsg.name) {
+            vm.editDoctorMsg.name = ''
           }
-          if (this.editDoctorForm.mobile === this.editDoctorMsg.mobile) {
-            this.editDoctorMsg.mobile = ''
+          if (vm.editDoctorForm.mobile === vm.editDoctorMsg.mobile) {
+            vm.editDoctorMsg.mobile = ''
           }
-          if (this.editDoctorForm.email === this.editDoctorMsg.email) {
-            this.editDoctorMsg.email = ''
+          if (vm.editDoctorForm.email === vm.editDoctorMsg.email) {
+            vm.editDoctorMsg.email = ''
           }
-          if (this.editDoctorForm.adminNote === this.editDoctorMsg.adminNote) {
-            this.editDoctorMsg.adminNote = ''
+          if (vm.editDoctorForm.adminNote === vm.editDoctorMsg.adminNote) {
+            vm.editDoctorMsg.adminNote = ''
           }
           // let params = {
-          //   'id': this.doctorId,
-          //   'name': this.editDoctorMsg.name,
-          //   'mobile': this.editDoctorMsg.mobile,
-          //   'regionId': this.editDoctorMsg.regionId,
-          //   'roleId': this.editDoctorMsg.roleId
+          //   'id': vm.doctorId,
+          //   'name': vm.editDoctorMsg.name,
+          //   'mobile': vm.editDoctorMsg.mobile,
+          //   'regionId': vm.editDoctorMsg.regionId,
+          //   'roleId': vm.editDoctorMsg.roleId
           // }
-          console.log('editDoctorMsg', this.editDoctorMsg)
-          this.$axios(editDoctorAPI(this.editDoctorMsg))
+          console.log('editDoctorMsg', vm.editDoctorMsg)
+          vm.$axios(editDoctorAPI(vm.editDoctorMsg))
           .then(res => {
             if (res.data.code !== '0000') {
-              this.$message({
+              vm.$message({
                 message: res.data.msg,
                 type: 'error'
               })
             }
             if (res.data.code === '0000') {
-              this.modifyDoctor = false
+              vm.modifyDoctor = false
             }
           })
         } else {
@@ -480,11 +464,44 @@ export default {
             this.doctorList.push(item)
           })
         }
+        console.log('doctorList', this.doctorList)
         // this.doctorList = this.formatterDoctorList(this.doctorList)
+      })
+    },
+    doctorEnabled (val, doctor) {
+      console.log('停用', val, doctor)
+      let param = {
+        id: val.id,
+        enabled: val.enabled
+      }
+      let msg = '停用'
+      if (val.enabled) {
+        msg = '启用'
+      }
+      this.$axios(doctorEnabledAPI(param))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: msg + '成功',
+            type: 'success'
+          })
+        } else {
+          // this.doctorList.forEach(item => {
+          //   if (item.id === val.id) {
+          //     item.enabled = !item.enabled
+          //   }
+          // })
+          this.getDoctorList()
+        }
       })
     }
   },
   mounted () {
+    if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
+      this.doctorEditCellWidth = 250
+      this.showEnabled = true
+    }
+    // console.log('adminInfo', this.adminInfo)
     this.getDoctorList()
   },
   updated () {

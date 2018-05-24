@@ -38,7 +38,7 @@
       </div>
 
       <!-- 聊天记录 -->
-      <div class="chart-wrap-box">
+      <div class="chart-wrap-box" id="chatWidow" ref="chatWidow">
         <!-- <span slot="no-more">没有更多数据了</span> -->
         <!-- <div v-if="!isTriggerFirstLoad" class="center">
           <el-button type="text" @click="isTriggerFirstLoad = true" >点击加载更多...</el-button>
@@ -53,7 +53,8 @@
           v-for="(item,index) in historyMsg" :key="index"
           :who="item.senderUserId || ''"
           >
-          {{historyMsg.length !== 0 ? item.content.content :''}}
+            <chatContent :message="item"></chatContent>
+          <!-- {{historyMsg.length !== 0 ? item.content.content :''}} -->
           </chartMessage>
           <!-- <img src=""> -->
             <!-- <img src="" alt=""> -->
@@ -64,14 +65,14 @@
         <button>
           <span class="smile-icon"></span>
         </button>
-        <button>
-          <a href="" class="a-upload">
+        <!-- <button > -->
+          <a class="a-upload">
             <!-- <input type="text"> -->
-            <input type="file" accept="image/jpg">
+            <input type="file" accept="image/jpg" @change="sendImgMsg($event)">
             <!-- <input type="file" accept="image/jpg" @change="changeImg($event)" value="a"> -->
             <span class="file-icon"></span>
           </a>
-        </button>
+        <!-- </button> -->
         <button>
           <span class="phone-icon"></span>
         </button>
@@ -102,6 +103,7 @@
 <script>
 import chartMessage from './chartMessage'
 import chartMessageGroup from './chartMessageGroup'
+import chatContent from './chatContent'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import Bus from '@/bus.js'
 import InfiniteLoading from 'vue-infinite-loading'
@@ -112,7 +114,8 @@ export default {
   components: {
     chartMessage,
     chartMessageGroup,
-    InfiniteLoading
+    InfiniteLoading,
+    chatContent
   },
   data () {
     return {
@@ -191,7 +194,8 @@ export default {
         }
       ],
       showList: false,
-      isTriggerFirstLoad: false
+      isTriggerFirstLoad: false,
+      imgArr: []
       // historyMsg: []
       // showChart: true
     }
@@ -208,13 +212,36 @@ export default {
     //   return this.currentChat.history
     // }
   },
+  watch: {
+    historyMsg: {
+      handler: function (val, oldVal) {
+        let vm = this
+        // if (val !== oldVal) {
+        this.$nextTick(() => {
+          setTimeout(function () {
+            let container = vm.$el.querySelector('#chatWidow')
+            container.scrollTop = container.scrollHeight
+            console.log('container.scrollTop', container.scrollTop)
+            console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+          }, 1500)
+            // document.getElementById('chatMessage').scrollIntoView()
+            // document.getElementById('chatMessage').scrollTop = document.getElementById('chatMessage').scrollHeight
+        })
+        // }
+      },
+      deep: true
+    }
+  },
   methods: {
     ...mapActions([
       'setaddChatFriend'
     ]),
     ...mapMutations([
       'addChatFriend',
-      'closeChatWindow'
+      'closeChatWindow',
+      'getCurrentFriendMsg',
+      'sethistory'
     ]),
     sendMsg () {
       let vm = this
@@ -228,15 +255,18 @@ export default {
             let msgObj = {
               content: {
                 messageName: 'TextMessage',
+                // messageType: 'TextMessage',
                 content: vm.readyMsg
               },
               senderUserId: vm.rongUserId
             }
-            vm.historyMsg = vm.currentChat.history
-            vm.historyMsg.push(msgObj)
+            // vm.historyMsg = vm.currentChat.history
+            vm.sethistory(vm.currentChat.history)
+            vm.getCurrentFriendMsg(msgObj)
+            // vm.historyMsg.push(msgObj)
             // vm.currentChat.history.push(msgObj)
             console.log('urrentChat.history', vm.currentChat.history)
-            console.log('msg', msg)
+            console.log('msgObj', msgObj)
             console.log('currentChat', vm.currentChat)
             console.log('rongUserId', vm.rongUserId)
             let newChat = vm.currentChat
@@ -276,8 +306,150 @@ export default {
           }
         })
       }
+      // vm.$refs.chatWidow.scrollBottom = 0
+      // this.$nextTick(() => {
+      //   document.getElementById('chatWidow').scrollTop = document.getElementById('chatWidow').scrollHeight
+      // })
 
+      this.$nextTick(() => {
+        setTimeout(function () {
+          let container = vm.$el.querySelector('#chatWidow')
+          container.scrollTop = container.scrollHeight
+          console.log('container.scrollTop', container.scrollTop)
+          console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+        }, 100)
+      })
+
+      // console.log('vm.$refs.chatWidow', vm.$refs.chatWidow.scrollTo(0, 0))
       console.log(this.readyMsg)
+    },
+    sendImgMsg: function (e) {
+      var vm = this
+      var imgLimit = 1024
+      var files = e.target.files
+      var image = new Image()
+      console.log(files)
+      if (files.length > 0) {
+        var dd = 0
+            // if(files.item(dd).type !== 'image/jpg'){
+        if (files.item(dd).type !== 'image/png' && files.item(dd).type !== 'image/jpeg' && files.item(dd).type !== 'image/gif') {
+          vm.$message({
+            message: '只能发送jpg格式图片',
+            type: 'warning'
+          })
+        } else if (files.item(dd).size > imgLimit * 100) {
+          vm.$message({
+            message: '图片过大',
+            type: 'warning'
+          })
+                // to do sth
+        } else {
+          image.src = window.URL.createObjectURL(files.item(dd))
+          image.onload = function () {
+                  // 默认按比例压缩
+            var w = image.width
+            var h = image.height
+            var scale = w / h
+            w = 200
+            h = w / scale
+                  // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+            var quality = 0.9
+                  // 生成canvas
+            var canvas = document.createElement('canvas')
+            var ctx = canvas.getContext('2d')
+                  // 创建属性节点
+            var anw = document.createAttribute('width')
+            anw.nodeValue = w
+            var anh = document.createAttribute('height')
+            anh.nodeValue = h
+            canvas.setAttributeNode(anw)
+            canvas.setAttributeNode(anh)
+            ctx.drawImage(image, 0, 0, w, h)
+            var ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
+            // var base64 = canvas.toDataURL('image/' + ext, quality)
+            var base64 = canvas.toDataURL('image/' + ext, quality)
+            let base = base64.split(',')
+            let str = base[1]
+            console.log('base64', base[1])
+            console.log('base64length', base[1].length)
+            // 回调函数返回base64的值
+
+            let targetId = vm.currentChat.userId
+            var base64Str = str
+            var imageUri = '' // 上传到自己服务器的 URL。
+            var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
+            var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
+            // var targetId = 'xxx' // 目标 Id
+            RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+              onSuccess: function (message) {
+              // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+                let msgObj = {
+                  content: {
+                    messageName: 'ImageMessage',
+                    content: base64Str
+                  },
+                  senderUserId: vm.rongUserId
+                }
+            // vm.historyMsg = vm.currentChat.history
+                vm.sethistory(vm.currentChat.history)
+                vm.getCurrentFriendMsg(msgObj)
+            // vm.historyMsg.push(msgObj)
+            // vm.currentChat.history.push(msgObj)
+                // console.log('urrentChat.history', vm.currentChat.history)
+                console.log('msgObjimg', msgObj)
+                // console.log('currentChat', vm.currentChat)
+                // console.log('rongUserId', vm.rongUserId)
+                let newChat = vm.currentChat
+                newChat.history = vm.historyMsg
+                // console.log('newChat', newChat)
+                vm.addChatFriend(newChat)
+            // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+                console.log('Send successfully')
+                vm.readyMsg = ''
+                console.log('Send successfully')
+              },
+              onError: function (errorCode, message) {
+                var info = ''
+                switch (errorCode) {
+                  case RongIMLib.ErrorCode.TIMEOUT:
+                    info = '超时'
+                    break
+                  case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+                    info = '未知错误'
+                    break
+                  case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+                    info = '在黑名单中，无法向对方发送消息'
+                    break
+                  case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+                    info = '不在讨论组中'
+                    break
+                  case RongIMLib.ErrorCode.NOT_IN_GROUP:
+                    info = '不在群组中'
+                    break
+                  case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+                    info = '不在聊天室中'
+                    break
+                  default :
+                    info = x
+                    break
+                }
+                console.log('发送失败:' + info)
+              }
+            }
+        )
+          }
+        }
+      }
+      this.$nextTick(() => {
+        setTimeout(function () {
+          let container = vm.$el.querySelector('#chatWidow')
+          container.scrollTop = container.scrollHeight
+          console.log('container.scrollTop', container.scrollTop)
+          console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+        }, 100)
+      })
     },
     closeChart () {
       // this.$emit('colseChat')
@@ -603,8 +775,8 @@ export default {
 
   .a-upload {
     /* padding: 4px 10px; */
-    height: 20px;
-    line-height: 20px;
+    height: 25px;
+    line-height: 32px;
     position: relative;
     cursor: pointer;
     color: #888;

@@ -119,7 +119,7 @@ axios.interceptors.response.use(
             location.reload()
           })
           break
-        case '1006':
+        case '-1006':
           Message({
             type: 'warning',
             message: '对不起，您没有相关权限',
