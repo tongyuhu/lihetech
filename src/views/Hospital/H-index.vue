@@ -36,7 +36,7 @@
   import chat from '@/components/Chat/chat.vue'
   import im from '@/components/Chat/im.vue'
   import Bus from '@/bus.js'
-  import { mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   export default {
     name: 'H-index',
     components: {

@@ -270,7 +270,7 @@ export default {
         // } else {
         //   param.realName = this.searchSickMsg
         // }
-        param.fields = this.searchSickMsg
+        param.fields = this._.toString(this.searchSickMsg)
         param.pageSize = this.pageSize
         this.$axios(getSickListAPI(param))
         .then(res => {
