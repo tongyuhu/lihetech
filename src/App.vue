@@ -56,7 +56,7 @@ export default {
           if (res.data.data) {
             vm.adminInfo = res.data.data
           }
-          vm.$store.commit('SET_ADMIN_INFO', vm.adminInfo)
+          // vm.$store.commit('SET_ADMIN_INFO', vm.adminInfo)
           // Bus.$emit('adminInfo', vm.adminInfo)
         // 获取 路由信息
         // 若无路由信息 限制访问
@@ -65,9 +65,11 @@ export default {
             switch (res.data.data.adminType) {
               case 1:
                 role = 'admin'
+                vm.adminInfo.adminHospitalId = ''
                 break
               case 2:
                 role = 'hospital'
+                vm.adminInfo.adminHospitalId = 2
                 break
               case 3:
                 role = 'doctor'
@@ -78,6 +80,7 @@ export default {
               default:
                 role = null
             }
+            vm.$store.commit('SET_ADMIN_INFO', vm.adminInfo)
             // let router = routeMatch(res.data.route, fullpath)
             // let router = roleMatch(role, fullpath)
             let router = []
@@ -126,7 +129,7 @@ export default {
   }
   /* 解决element table出现横向滚动条 */
   .el-table__body-wrapper, .el-table__footer-wrapper, .el-table__header-wrapper{
-  width: 101%;
+    width: 101% !important; 
   }
 
 </style>

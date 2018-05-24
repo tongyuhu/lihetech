@@ -495,8 +495,8 @@ export default {
           textStyle: {
             color: '#000'
           },
-          triggerOn: 'click',
-          // triggerOn: 'mousemove|click',
+          // triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           formatter: function (a) {
             if (a[0].dataIndex === vm.dataIndex) {
             } else {
@@ -849,12 +849,12 @@ export default {
           axisPointer: {
             animation: false
           },
-          // alwaysShowContent: true,
+          alwaysShowContent: true,
           backgroundColor: 'rgba(250,250,250,0.7)',
           textStyle: {
             color: '#000'
           },
-          triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           // triggerOn: 'mousemove|click',
           formatter: function (a) {
             // if (a[0].dataIndex === vm.bloodTrendIndex) {

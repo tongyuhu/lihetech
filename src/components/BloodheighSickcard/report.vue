@@ -1204,11 +1204,13 @@ export default {
           axisPointer: {
             animation: false
           },
-          backgroundColor: '#B2DAFE',
+          // backgroundColor: '#B2DAFE',
+          backgroundColor: 'rgba(250,250,250,0.7)',
           textStyle: {
             color: '#000'
           },
-          triggerOn: 'click',
+          // triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           formatter: function (a) {
             // return (
             //     a[0]['axisValueLabel'] + '<br>' +
@@ -1567,7 +1569,8 @@ export default {
           textStyle: {
             color: '#000'
           },
-          triggerOn: 'click',
+          // triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           formatter: function (a) {
             // return (
             //     a[0]['axisValueLabel'] + '<br>' +

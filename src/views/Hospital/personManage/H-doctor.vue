@@ -208,7 +208,14 @@ export default {
       editDoctorAddress: '',
       doctorId: '',
       roleId: '',
-      confirmDelete: false
+      confirmDelete: false,
+      editDoctorMsg: {
+        'id': null,
+        'name': null,
+        'mobile': null,
+        'regionId': null,
+        'roleId': null
+      }
     }
   },
 
@@ -274,8 +281,13 @@ export default {
       this.editDoctorAddress = doctor.address
       this.doctorId = doctor.id
       this.roleId = doctor.roleId
-      this.modifyDoctor = true
 
+      this.editDoctorMsg.id = doctor.id
+      this.editDoctorMsg.name = doctor.name
+      this.editDoctorMsg.mobile = ''
+      this.editDoctorMsg.regionId = doctor.regionId
+      this.editDoctorMsg.roleId = doctor.roleId
+      this.modifyDoctor = true
       console.log(doctor)
     },
     editDoctorCancel () {
@@ -287,12 +299,27 @@ export default {
       this.modifyDoctor = false
     },
     editDoctorConfirm () {
+      if (this.doctorId === this.editDoctorMsg.id) {
+        // this.editDoctorMsg.id
+      }
+      if (this.editDoctorName === this.editDoctorMsg.name) {
+        this.editDoctorMsg.name = ''
+      }
+      if (this.editDoctorPhone === this.editDoctorMsg.mobile) {
+        this.editDoctorMsg.mobile = ''
+      }
+      if (this.editDoctorAddress === this.editDoctorMsg.regionId) {
+        this.editDoctorMsg.regionId = ''
+      }
+      if (this.roleId === this.editDoctorMsg.roleId) {
+        this.editDoctorMsg.roleId = ''
+      }
       let params = {
         'id': this.doctorId,
-        'username': this.editDoctorName,
-        'mobile': this.editDoctorPhone,
-        'regionId': this.editDoctorAddress,
-        'roleId': this.roleId
+        'name': this.editDoctorMsg.name,
+        'mobile': this.editDoctorMsg.mobile,
+        'regionId': this.editDoctorMsg.regionId,
+        'roleId': this.editDoctorMsg.roleId
       }
       console.log('params', params)
       this.$axios(editDoctorAPI(params))
@@ -303,7 +330,9 @@ export default {
             type: 'error'
           })
         }
-        this.modifyDoctor = false
+        if (res.data.code === '0000') {
+          this.modifyDoctor = false
+        }
       })
     },
     // 删除打开弹窗
