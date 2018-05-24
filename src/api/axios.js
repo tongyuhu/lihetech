@@ -98,12 +98,12 @@ axios.interceptors.response.use(
         case '0000':
           break
         case '1001':
-          Message({
-            type: 'error',
-            message: '请求数据失败,请重试',
-            duration: 5000,
-            showClose: true
-          })
+          // Message({
+          //   type: 'error',
+          //   message: '请求数据失败,请重试',
+          //   duration: 5000,
+          //   showClose: true
+          // })
           // setTimeout(() => {
             // location.reload()
             // router.go(-1)
@@ -119,7 +119,7 @@ axios.interceptors.response.use(
             location.reload()
           })
           break
-        case '1006':
+        case '-1006':
           Message({
             type: 'warning',
             message: '对不起，您没有相关权限',
@@ -160,9 +160,12 @@ axios.interceptors.response.use(
           break
 
         case 500:
+          sessionStorage.clear()
+          window.location.href = '/BPWatch/admin/login/page'
+          // router.replace({path: '/login'})
+          location.reload()
           err.message = '服务器内部错误'
           break
-
         case 501:
           err.message = '服务未实现'
           break

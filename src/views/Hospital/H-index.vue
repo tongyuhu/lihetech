@@ -9,11 +9,15 @@
     <div class="container-main">
       <router-view></router-view>
     </div>
-    <div class="container-footer">
-      <button class="chat-icon-btn" @click="showFriendWindow">
-      </button>
+    <!-- <div class="has-message-animation"> -->
+
+    <div :class="{'container-footer':true ,'has-message-animation':newmsg}">
+        <button class="chat-icon-btn" @click="showFriendWindow">
+        </button>
       <!-- <div class="chat-icon"></div> -->
     </div>
+    <!-- </div> -->
+      <!-- <el-badge is-dot class="mark"></el-badge> -->
     <im
     v-show="imStatus"
     @closeIM="closeIMhandle"
@@ -32,7 +36,7 @@
   import chat from '@/components/Chat/chat.vue'
   import im from '@/components/Chat/im.vue'
   import Bus from '@/bus.js'
-  import { mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   export default {
     name: 'H-index',
     components: {
@@ -53,23 +57,28 @@
     computed: {
       ...mapState({
         adminInfo: 'adminInfo',
-        chatStatus: 'chatStatus'
+        chatStatus: 'chatStatus',
+        friendsList: 'friendsList',
+        newmsg: 'newmsg'
       }),
       ...mapGetters([
-        'currentChat',
-        'friendsList'
+        'currentChat'
       ])
     },
     methods: {
       ...mapMutations([
         'setRongUserId',
         'openChatWindow',
-        'closeChatWindow'
+        'closeChatWindow',
+        'getFriendMsg',
+        'getCurrentFriendMsg',
+        'closeAnimation'
       ]),
       ...mapActions([
         'setRongUserIdAction'
       ]),
       showFriendWindow () {
+        this.closeAnimation()
         this.imStatus = true
       },
       closeIMhandle () {
@@ -131,11 +140,43 @@
             case RongIMClient.MessageType.TextMessage:
               // console.log(message.content.content)
               // console.log(message.content)
+              // let msg = {
+              //   who:message.senderUserId,
+              //   content:{
+              //     content:
+              //   }
+              // }
               console.log(message)
-              if (message.senderUserId === vm.currentChat.userId) {
-                Bus.$emit('hasMessage', message)
-              }
+              let currentId = ''
   
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentId = ''
+              } else {  // 当前有聊天窗口
+                currentId = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentId) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    console.log('收到的消息', message)
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              vm.$nextTick(() => {
+                setTimeout(function () {
+                  let container = vm.$el.querySelector('#chatWidow')
+                  container.scrollTop = container.scrollHeight
+                  console.log('container.scrollTop', container.scrollTop)
+                  console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+                }, 100)
+              })
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
@@ -143,6 +184,37 @@
                     // message.content.content 格式为 AMR 格式的 base64 码
               break
             case RongIMClient.MessageType.ImageMessage:
+              console.log('图片消息', message)
+              let currentIdImg = ''
+  
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentIdImg = ''
+              } else {  // 当前有聊天窗口
+                currentIdImg = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentIdImg) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    console.log('收到的消息', message)
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              vm.$nextTick(() => {
+                setTimeout(function () {
+                  let container = vm.$el.querySelector('#chatWidow')
+                  container.scrollTop = container.scrollHeight
+                  console.log('container.scrollTop', container.scrollTop)
+                  console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+                }, 100)
+              })
                   // message.content.content => 图片缩略图 base64。
                   // message.content.imageUri => 原图 URL。
               break
@@ -341,7 +413,7 @@
     padding: 24px;
     background-color: #f4f6f9;
     height:100% ;
-    margin-bottom: 50px;
+    margin-bottom: 80px;
     /* position: relative; */
     /* left: 250px; */
     /* top:80px; */
@@ -359,4 +431,16 @@
     // background: url('~icon/hospital-icon2-05.png') no-repeat;
   }
 </style>
+<style scoped>
+  .has-message-animation{
+    animation: hasmsg 1.5s infinite;
+    /* -webkit-animation:hasmsg .5s infinite; */
+    /* // padding-bottom:100px; */
+  }
+  @keyframes hasmsg {
+    to {transform:none;}50%{transform:scale(1.2)}
+  }
+
+</style>
+
 

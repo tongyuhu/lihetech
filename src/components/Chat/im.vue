@@ -6,7 +6,7 @@
 
     <!-- 头部姓名及关闭按钮 -->
     <div class="im-head clear">
-      <div class="im-head-name">王小二</div>
+      <div class="im-head-name">医生</div>
       <div class="im-head-close">
         <button type="text" @click="closeIM"><i class="el-icon-close"></i></button>
       </div>
@@ -29,10 +29,11 @@
               <div>
                 <ul>
                   <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
-                    <el-badge :is-dot="friend.hasMsg" >
-                      <img  class="friend-icon" :src="friend.userImg.length !==0 ? friend.userId :'/static/user.png'" alt="">
-                    </el-badge>
+                    <!-- <el-badge :is-dot="friend.hasMsg" > -->
+                    <img  class="friend-icon" :src="friend.userImg.length !==0 ? friend.userId :'/static/user.png'" alt="">
                     <span class="im-panes-name">{{friend.userName}}</span>
+                    <el-badge class="mark" :is-dot="friend.hasMsg" />
+                    <!-- </el-badge> -->
                   </li>
                 </ul>
                 <!-- <div v-show="friendList.length === 0">暂无数据</div> -->
@@ -75,7 +76,7 @@
 import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
-import {mapState, mapMutations, mapActions} from 'vuex'
+import {mapState, mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'im',
   components: {
@@ -128,14 +129,19 @@ export default {
   },
   computed: {
     ...mapState({
-      friendsList: 'friendsList'
+      friendsList: 'friendsList',
+      history: 'history'
     })
+    // ...mapGetters([
+    //   'history'
+    // ])
   },
   methods: {
     ...mapMutations([
       'changeChatFriend',
       'addChatFriend',
-      'openChatWindow'
+      'openChatWindow',
+      'sethistory'
     ]),
     closeIM () {
       this.$emit('closeIM')
@@ -143,6 +149,8 @@ export default {
     chartWith (friend) {
       let vm = this
       let history = []
+      vm.sethistory(history)
+      friend.hasMsg = false
       if (this._.has(friend, 'history')) {
         history = friend.history
         vm.addChatFriend(friend)
@@ -153,7 +161,8 @@ export default {
         vm.addChatFriend(friend)
         vm.changeChatFriend(friend)
       }
-      // console.log('好友列表', this.friendsList)
+      vm.sethistory(friend.history)
+      console.log('好友xiaoxi ', friend.history)
       // friend.history = []
       // 获取历史消息
       let timestrap = null
@@ -347,6 +356,12 @@ export default {
         font-size: 18px;
       }
     }
+  }
+  .mark{
+    // margin-bottom: 15px;
+    display: inline-block;
+    margin-bottom: 20px;
+    vertical-align: middle;
   }
 </style>
 

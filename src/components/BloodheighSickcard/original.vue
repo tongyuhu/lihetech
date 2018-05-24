@@ -82,13 +82,17 @@ export default {
     text-align: center;
     vertical-align: middle;
     width: 100%;
+    font-size: 14px;
+  }
+  th{
+    /* font-size: 16px; */
   }
   table th{
     border:1px solid #eaeaea;
     padding: 15px 0;
     text-align: center;
     vertical-align: middle;
-    font-size: 14px;
+  
     color: #041421;
   }
   table td{

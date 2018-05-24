@@ -4,7 +4,7 @@
       <div class="head-title">医生管理</div>
       <div class="head-edit-wrap">
         <button class="head-edit-button margin-right" @click="addDoctor">新增医生</button>
-        <button class="head-edit-button delete" @click="deleteDoctor">删除</button>
+        <!-- <button class="head-edit-button delete" @click="deleteDoctor">删除</button> -->
       </div>
     </div>
     <div>
@@ -17,38 +17,6 @@
             <el-button slot="append" icon="el-icon-search" @click="selectName"></el-button>
           </el-input>
         </div>
-        <!-- <table v-loading="loading">
-          <tr>
-            <th width="40px" class="checked"></th>
-            <th>序号</th>
-            <th>登录账号</th>
-            <th>医生姓名</th>
-            <th>联系电话</th>
-            <th>邮箱</th>
-            <th>备注</th>
-            <th>操作</th>
-          </tr>
-          <tr v-for="(item,index) in doctorList" :key="index">
-            <td class="checked">
-              <el-checkbox  v-model="item.checked" @change="doctorSelectionChange(item,index)"></el-checkbox>
-            </td>
-            <td width="50px">{{index}}</td>
-            <td>{{item.username}}</td>
-            <td>{{item.name}}</td>
-            <td>{{item.mobile}}</td>
-            <td>{{item.email}}</td>
-            <td>{{item.adminNote}}</td>
-            <td>
-              <el-button type="text" @click="editDoctor(item)">
-              <span class="action-text"> <i class="el-icon-edit-outline"></i> 
-              编辑</span>
-              </el-button>
-            </td>
-          </tr>
-          <tr v-if="doctorList.length === 0">
-            <td colspan="8">暂无数据</td>
-          </tr>
-        </table> -->
         <el-table
         ref="doctorlist"
         :data="doctorList"
@@ -94,12 +62,21 @@
           <el-table-column
           label="操作"
           align="center"
-          width="100">
+          :width="doctorEditCellWidth">
             <template slot-scope="scope">
               <el-button type="text" @click="editDoctor(scope.row)">
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
               编辑</span>
               </el-button>
+              <el-switch
+              v-if="showEnabled"
+              v-model="scope.row.enabled"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :width="30"
+              @change="doctorEnabled(scope.row)">
+              </el-switch>
+              <span v-if="showEnabled">停/启用</span>
             </template>
           </el-table-column>
         </el-table>
@@ -122,7 +99,34 @@
         :visible.sync="modifyDoctor"
         width="456px"
         center>
-        <div class="input-wrap">
+
+        <el-form 
+        :model="editDoctorForm" 
+        status-icon 
+        :rules="editDoctorRules" 
+        ref="editDoctorFormref" 
+        label-width="90px" 
+        :label-position="labelPosition"
+        >
+          <el-form-item label="医生姓名" prop="name">
+            <el-input type="text" v-model="editDoctorForm.name" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="联系电话" prop="mobile">
+            <el-input type="text" v-model="editDoctorForm.mobile" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="邮箱" prop="email">
+            <el-input type="email" v-model="editDoctorForm.email" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item label="备注" prop="adminNote">
+            <el-input type="text" v-model="editDoctorForm.adminNote" size="medium"></el-input>
+          </el-form-item>
+          <el-form-item class="submit-btn">
+            <button @click.prevent="editDoctorConfirm('editDoctorFormref')">保存</button>
+            <button @click.prevent="editDoctorCancel('editDoctorFormref')">取消</button>
+          </el-form-item>
+        </el-form>
+
+        <!-- <div class="input-wrap">
           <span>医生姓名:</span>
           <input type="text" v-model="editDoctorName">
         </div>
@@ -131,18 +135,26 @@
           <input type="text" v-model="editDoctorPhone">
         </div>
         <div class="input-wrap">
+          <span>邮箱:</span>
+          <input type="text" v-model="editDoctorEmail">
+        </div>
+        <div class="input-wrap">
+          <span>备注:</span>
+          <input type="text" v-model="editDoctorNote">
+        </div> -->
+        <!-- <div class="input-wrap">
           <span>已绑定居民:</span>
           <input type="text" v-model="editDoctorPerson">
         </div>
         <div class="input-wrap">
           <span>组织站点:</span>
           <input type="text" v-model="editDoctorAddress">
-        </div>
+        </div> -->
         <span slot="title" class="dialog-title">修改医生</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="editDoctorConfirm">确 定</button>
-          <button class="cancel" @click="editDoctorCancel">取 消</button>
-        </span>
+        <!-- <span slot="footer" class="dialog-footer"> -->
+          <!-- <button  type="primary" @click="editDoctorConfirm">确 定</button> -->
+          <!-- <button class="cancel" @click="editDoctorCancel">取 消</button> -->
+        <!-- </span> -->
       </el-dialog>
 
       <el-dialog
@@ -160,11 +172,62 @@
 </template>
 
 <script>
-import {getDoctorListAPI, editDoctorAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {getDoctorListAPI, editDoctorAPI, doctorEnabledAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {mapState} from 'vuex'
 export default {
   name: 'accountSetting',
   data () {
+    var checkEmail = (rule, value, callback) => {
+      let emailrule = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+      if (!value) {
+        callback()
+        // return callback(new Error('请输入邮箱'))
+        // return true
+      } else if (!emailrule.exec(value)) {
+        return callback(new Error('请输入正确的邮箱'))
+        // callback()
+      } else {
+        callback()
+      }
+    }
+    var checkName = (rule, value, callback) => {
+      let namerule = /^.{1,20}$/
+      if (!value) {
+        callback()
+        // return callback(new Error('请输入姓名'))
+      } else if (!namerule.exec(value)) {
+        return callback(new Error('请输入正确的姓名'))
+      } else {
+        callback()
+      }
+    }
+    var checkMobile = (rule, value, callback) => {
+      let mobilerule = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
+      if (!value) {
+        callback()
+        // return callback(new Error('请输入电话'))
+      } else if (!mobilerule.exec(value)) {
+        return callback(new Error('请输入正确的电话'))
+      } else {
+        callback()
+      }
+    }
+    var checkAdminNote = (rule, value, callback) => {
+      // let accountRule = /[a-zA-Z0-9_]{4,15}$/
+      let adminNoteRule = /^.{1,20}$/
+      if (!value) {
+        callback()
+      // return callback(new Error(''))
+      } else if (!adminNoteRule.exec(value)) {
+        return callback(new Error('允许1-20个字符'))
+      } else {
+        callback()
+      }
+    }
+
     return {
+      doctorEditCellWidth: 100,
+      showEnabled: false,
       doctorList: [
         // {
         //   loginAccount: '2016-05-03',
@@ -173,27 +236,6 @@ export default {
         //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
         //   doctorMark: '上海市普陀区金沙江路 1518 弄'
         // },
-        // {
-        //   loginAccount: '2016-059-03',
-        //   doctorName: '王小虎',
-        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
-        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
-        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
-        // }
-        // {
-        //   loginAccount: '2016-05-03',
-        //   doctorName: '王小虎',
-        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
-        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
-        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
-        // },
-        // {
-        //   loginAccount: '2016-05-03',
-        //   doctorName: '王小虎',
-        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
-        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
-        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
-        // }
       ],
       readyDelete: [],
       searchDoctorMsg: null,
@@ -202,23 +244,56 @@ export default {
       totalpage: null,
       loading: false,
       modifyDoctor: false,
-      editDoctorName: '',
-      editDoctorPhone: '',
-      editDoctorPerson: '',
-      editDoctorAddress: '',
+      // editDoctorName: '',
+      // editDoctorPhone: '',
+      // editDoctorPerson: '',
+      // editDoctorEmail: '',
+      // editDoctorAddress: '',
+      // editDoctorNote: '',
       doctorId: '',
       roleId: '',
       confirmDelete: false,
+      labelPosition: 'right',
+      editDoctorForm: {
+        'id': null,
+        'name': null,
+        'mobile': null,
+        // 'regionId': null,
+        // 'roleId': null,
+        'email': null,
+        'adminNote': null
+      },
+      editDoctorRules: {
+        name: [
+          { validator: checkName, trigger: 'blur' }
+        ],
+        mobile: [
+          { validator: checkMobile, trigger: 'blur' }
+          // {required: false}
+        ],
+        email: [
+            { validator: checkEmail, trigger: 'blur' }
+        ],
+        adminNote: [
+          { validator: checkAdminNote, trigger: 'blur' }
+        ]
+      },
       editDoctorMsg: {
         'id': null,
         'name': null,
         'mobile': null,
-        'regionId': null,
-        'roleId': null
+        // 'regionId': null,
+        // 'roleId': null,
+        'email': null,
+        'adminNote': null
       }
     }
   },
-
+  computed: {
+    ...mapState([
+      'adminInfo'
+    ])
+  },
   methods: {
     formatterDoctorList (list) {
       if (list.length === 0) {
@@ -248,7 +323,7 @@ export default {
         // }
 
         param.pageSize = this.pageSize
-        param.fields = this.searchDoctorMsg
+        param.fields = this._.toString(this.searchDoctorMsg)
         this.$axios(getDoctorListAPI(param))
         .then(res => {
           this.doctorList = []
@@ -276,17 +351,24 @@ export default {
     },
     // 编辑医生打开弹窗 信息
     editDoctor (doctor) {
-      this.editDoctorName = doctor.name
-      this.editDoctorPhone = ''
-      this.editDoctorAddress = doctor.address
-      this.doctorId = doctor.id
-      this.roleId = doctor.roleId
+      // this.editDoctorName = doctor.name
+      // this.editDoctorPhone = ''
+      // this.editDoctorAddress = doctor.address
+      // this.doctorId = doctor.id
+      // this.roleId = doctor.roleId
+      this.editDoctorForm.id = doctor.id
+      this.editDoctorForm.name = doctor.name || ''
+      this.editDoctorForm.mobile = doctor.mobile || ''
+      this.editDoctorForm.email = doctor.email || ''
+      this.editDoctorForm.adminNote = doctor.adminNote || ''
 
       this.editDoctorMsg.id = doctor.id
-      this.editDoctorMsg.name = doctor.name
-      this.editDoctorMsg.mobile = ''
-      this.editDoctorMsg.regionId = doctor.regionId
-      this.editDoctorMsg.roleId = doctor.roleId
+      this.editDoctorMsg.name = doctor.name || ''
+      this.editDoctorMsg.mobile = doctor.mobile || ''
+      // this.editDoctorMsg.regionId = doctor.regionId
+      // this.editDoctorMsg.roleId = doctor.roleId
+      this.editDoctorMsg.email = doctor.email || ''
+      this.editDoctorMsg.adminNote = doctor.adminNote || ''
       this.modifyDoctor = true
       console.log(doctor)
     },
@@ -298,40 +380,47 @@ export default {
       this.roleId = ''
       this.modifyDoctor = false
     },
-    editDoctorConfirm () {
-      if (this.doctorId === this.editDoctorMsg.id) {
-        // this.editDoctorMsg.id
-      }
-      if (this.editDoctorName === this.editDoctorMsg.name) {
-        this.editDoctorMsg.name = ''
-      }
-      if (this.editDoctorPhone === this.editDoctorMsg.mobile) {
-        this.editDoctorMsg.mobile = ''
-      }
-      if (this.editDoctorAddress === this.editDoctorMsg.regionId) {
-        this.editDoctorMsg.regionId = ''
-      }
-      if (this.roleId === this.editDoctorMsg.roleId) {
-        this.editDoctorMsg.roleId = ''
-      }
-      let params = {
-        'id': this.doctorId,
-        'name': this.editDoctorMsg.name,
-        'mobile': this.editDoctorMsg.mobile,
-        'regionId': this.editDoctorMsg.regionId,
-        'roleId': this.editDoctorMsg.roleId
-      }
-      console.log('params', params)
-      this.$axios(editDoctorAPI(params))
-      .then(res => {
-        if (res.data.code !== '0000') {
-          this.$message({
-            message: res.data.msg,
-            type: 'error'
+    editDoctorConfirm (formName) {
+      let vm = this
+      vm.$refs[formName].validate((valid) => {
+        if (valid) {
+          if (vm.editDoctorForm.id === vm.editDoctorMsg.id) {
+            // vm.editDoctorMsg.id
+          }
+          if (vm.editDoctorForm.name === vm.editDoctorMsg.name) {
+            vm.editDoctorMsg.name = ''
+          }
+          if (vm.editDoctorForm.mobile === vm.editDoctorMsg.mobile) {
+            vm.editDoctorMsg.mobile = ''
+          }
+          if (vm.editDoctorForm.email === vm.editDoctorMsg.email) {
+            vm.editDoctorMsg.email = ''
+          }
+          if (vm.editDoctorForm.adminNote === vm.editDoctorMsg.adminNote) {
+            vm.editDoctorMsg.adminNote = ''
+          }
+          // let params = {
+          //   'id': vm.doctorId,
+          //   'name': vm.editDoctorMsg.name,
+          //   'mobile': vm.editDoctorMsg.mobile,
+          //   'regionId': vm.editDoctorMsg.regionId,
+          //   'roleId': vm.editDoctorMsg.roleId
+          // }
+          console.log('editDoctorMsg', vm.editDoctorMsg)
+          vm.$axios(editDoctorAPI(vm.editDoctorMsg))
+          .then(res => {
+            if (res.data.code !== '0000') {
+              vm.$message({
+                message: res.data.msg,
+                type: 'error'
+              })
+            }
+            if (res.data.code === '0000') {
+              vm.modifyDoctor = false
+            }
           })
-        }
-        if (res.data.code === '0000') {
-          this.modifyDoctor = false
+        } else {
+          return false
         }
       })
     },
@@ -382,11 +471,44 @@ export default {
             this.doctorList.push(item)
           })
         }
+        console.log('doctorList', this.doctorList)
         // this.doctorList = this.formatterDoctorList(this.doctorList)
+      })
+    },
+    doctorEnabled (val, doctor) {
+      console.log('停用', val, doctor)
+      let param = {
+        id: val.id,
+        enabled: val.enabled
+      }
+      let msg = '停用'
+      if (val.enabled) {
+        msg = '启用'
+      }
+      this.$axios(doctorEnabledAPI(param))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            message: msg + '成功',
+            type: 'success'
+          })
+        } else {
+          // this.doctorList.forEach(item => {
+          //   if (item.id === val.id) {
+          //     item.enabled = !item.enabled
+          //   }
+          // })
+          this.getDoctorList()
+        }
       })
     }
   },
   mounted () {
+    if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
+      this.doctorEditCellWidth = 250
+      this.showEnabled = true
+    }
+    // console.log('adminInfo', this.adminInfo)
     this.getDoctorList()
   },
   updated () {
@@ -594,6 +716,10 @@ button{
 .input{
   width:300px;
   display:flex;
+}
+.submit-btn button{
+  margin-left: 10px;
+  margin-right:10px;
 }
 </style>
 <style>

@@ -3,9 +3,12 @@
     <!-- 工作台 start -->
     <div class="workhead">
       <span>工作台</span>
-        <el-button type="text" @click="msgTipBtn" class="work-msg">
-          <i class="work-icon"></i>
-          <i :class="{workMsgtip:showMsgTip}"></i>
+        <el-button type="text" @click="msgTipBtn"  class="work-msg">
+          <!-- <i class="work-icon"></i> -->
+          <el-badge :is-dot="showMsgTip">
+              <i class="iconfont icon-xin iconfont-tip"></i>
+          </el-badge>
+          <!-- <i :class="{workMsgtip:showMsgTip}"></i> -->
         </el-button>
     </div>
     <el-card :body-style="{padding: '0px'}">
@@ -141,7 +144,11 @@
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
                         :style="{'width':'72px','color':'#fff'}">诊断</el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <!-- <i class="telephone-btn-icon"></i> -->
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                        </button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
                 </el-table-column>
@@ -238,7 +245,10 @@
                         :style="{'width':'72px','color':'#fff'}">
                         诊断
                         </el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                          <!-- <i class="telephone-btn-icon"></i> -->
+                        </button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -323,7 +333,10 @@
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
                         :style="{'width':'72px','color':'#fff'}">去完善</el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                          <!-- <i class="telephone-btn-icon"></i> -->
+                        </button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
                 </el-table-column>
@@ -352,7 +365,7 @@
 
 <script>
 // import from 'icon/hospital-icon-21.png'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 // import {careText, care} from './../../../untils/untils'
 import {
   newsickaskDataApi,
@@ -360,6 +373,7 @@ import {
   noListenDoctorDataApi,
   careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
 import mpages from '@/components/cutpage.vue'
+import {mapMutations, mapState} from 'vuex'
 export default {
   name: 'H-work',
   components: {
@@ -407,6 +421,12 @@ export default {
     })
   },
   methods: {
+    ...mapMutations(
+      ['SET_SICK_CARD',
+        'addChatFriend',
+        'changeChatFriend',
+        'openChatWindow'
+      ]),
     sortSickList (arr) {
       let copyArr = arr
       let topArr = []
@@ -570,7 +590,18 @@ export default {
         }})
     },
     call (row) {
-      console.log(row.mobile)
+      let rongId = 'member_' + row.id
+      let sick = {
+        userId: rongId,
+        userImg: '',
+        userName: row.realName || '患者',
+        hasMsg: false,
+        currentChat: false
+      }
+      this.addChatFriend(sick)
+      this.changeChatFriend(sick)
+      this.openChatWindow()
+      console.log(row)
     },
     handlePersonMsg (row, column, cell, event) {
     }
@@ -622,6 +653,11 @@ export default {
 }
 .work-msg{
   position: relative;
+  
+}
+.iconfont-tip{
+  color: #666;
+  font-size: 30px;
 }
 .work-icon{
   position: relative;
@@ -698,6 +734,11 @@ export default {
   width: 21px;
   height: 21px;
   background: url('~icon/hospital-icon-23.png') no-repeat;
+}
+.icon-msg-color{
+  color: #1991fc;
+  font-size: 20px;
+  margin-left: 8px;
 }
 </style>
 <style>
