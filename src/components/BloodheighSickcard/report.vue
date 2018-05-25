@@ -2504,7 +2504,7 @@ export default {
     position: absolute;
     bottom:50%;
     right: 0;
-    z-index:999;
+    z-index:99;
   }
   .flex-btn-left{
     max-width: 55px;
@@ -2513,7 +2513,7 @@ export default {
     position: absolute;
     bottom:50%;
     left: 25px;
-    z-index:999;
+    z-index:99;
   }
   .widthone{
     width: 100%;

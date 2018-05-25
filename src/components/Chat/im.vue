@@ -222,7 +222,7 @@ export default {
   }
   
   .im{
-    z-index: 998;
+    z-index: 99999999;
     button{
       // opacity: 0;
       background: rgba(255, 255, 255, 0);

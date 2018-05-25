@@ -122,6 +122,11 @@
               console.log('断开连接')
               break
             case RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT:
+              vm.$message({
+                showClose: true,
+                message: '您的账户在其他设备登录，请刷新浏览器恢复聊天系统',
+                type: 'error'
+              })
               console.log('其他设备登录')
               break
             case RongIMLib.ConnectionStatus.DOMAIN_INCORRECT:
@@ -140,14 +145,6 @@
             // 判断消息类型
           switch (message.messageType) {
             case RongIMClient.MessageType.TextMessage:
-              // console.log(message.content.content)
-              // console.log(message.content)
-              // let msg = {
-              //   who:message.senderUserId,
-              //   content:{
-              //     content:
-              //   }
-              // }
               console.log(message)
               let currentId = ''
   
@@ -429,12 +426,13 @@
     // background:#999;
     bottom: 10px;
     right: 25px;
-    z-index: 99;
+    z-index: 999;
     // background: url('~icon/hospital-icon2-05.png') no-repeat;
   }
 </style>
 <style scoped>
   .has-message-animation{
+    z-index: 999;
     animation: hasmsg 1.5s infinite;
     /* -webkit-animation:hasmsg .5s infinite; */
     /* // padding-bottom:100px; */

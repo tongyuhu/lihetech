@@ -212,27 +212,27 @@ export default {
     //   return this.currentChat.history
     // }
   },
-  watch: {
-    historyMsg: {
-      handler: function (val, oldVal) {
-        let vm = this
-        // if (val !== oldVal) {
-        this.$nextTick(() => {
-          setTimeout(function () {
-            let container = vm.$el.querySelector('#chatWidow')
-            container.scrollTop = container.scrollHeight
-            console.log('container.scrollTop', container.scrollTop)
-            console.log('container.scrollHeight', container.scrollHeight)
-            // container.scrollIntoView()
-          }, 1500)
-            // document.getElementById('chatMessage').scrollIntoView()
-            // document.getElementById('chatMessage').scrollTop = document.getElementById('chatMessage').scrollHeight
-        })
-        // }
-      },
-      deep: true
-    }
-  },
+  // watch: {
+  //   historyMsg: {
+  //     handler: function (val, oldVal) {
+  //       let vm = this
+  //       // if (val !== oldVal) {
+  //       this.$nextTick(() => {
+  //         setTimeout(function () {
+  //           let container = vm.$el.querySelector('#chatWidow')
+  //           container.scrollTop = container.scrollHeight
+  //           console.log('container.scrollTop', container.scrollTop)
+  //           console.log('container.scrollHeight', container.scrollHeight)
+  //           // container.scrollIntoView()
+  //         }, 1500)
+  //           // document.getElementById('chatMessage').scrollIntoView()
+  //           // document.getElementById('chatMessage').scrollTop = document.getElementById('chatMessage').scrollHeight
+  //       })
+  //       // }
+  //     },
+  //     deep: true
+  //   }
+  // },
   methods: {
     ...mapActions([
       'setaddChatFriend'
@@ -299,10 +299,15 @@ export default {
                 info = '不在聊天室中'
                 break
               default :
-                info = x
+                info = '发送失败'
                 break
             }
             console.log('发送失败:' + info)
+            vm.$message({
+              showClose: true,
+              message: '发送失败，请刷新浏览器恢复聊天系统',
+              type: 'error'
+            })
           }
         })
       }
@@ -322,7 +327,7 @@ export default {
       })
 
       // console.log('vm.$refs.chatWidow', vm.$refs.chatWidow.scrollTo(0, 0))
-      console.log(this.readyMsg)
+      // console.log(this.readyMsg)
     },
     sendImgMsg: function (e) {
       var vm = this
@@ -556,7 +561,7 @@ export default {
     display: flex;
     top:20%;
     left:30%;
-    z-index: 999;
+    z-index: 999999999;
     box-shadow: 0 0 18px 0px rgba(0, 0, 0, 0.3);
     &-left{
       // float: left;
