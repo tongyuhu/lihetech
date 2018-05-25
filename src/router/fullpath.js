@@ -15,6 +15,7 @@ const personManage = (resolve) => require(['@/views/Hospital/personManage/person
 const order = (resolve) => require(['@/components/order/order.vue'], resolve)
 const orderSick = (resolve) => require(['@/components/order/orderSick.vue'], resolve)
 const orderSetting = (resolve) => require(['@/components/order/orderSetting.vue'], resolve)
+const editAdmin = (resolve) => require(['@/components/editAdmin.vue'], resolve)
 // const addDoctor = (resolve) => require(['@/views/Hospital/personManage/addDoctor.vue'], resolve)
 
 export default[
@@ -201,7 +202,18 @@ export default[
           name: '账户设置',
           role: ['admin', 'doctor', 'hospital', 'nurse']
         }
+      },
+      {
+        path: 'editAdmin',
+        name: 'editAdmin',
+        component: editAdmin,
+        meta: {
+          requireAuth: true,
+          name: '管理员资料编辑',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
       }
+
     ]
   }
   // {

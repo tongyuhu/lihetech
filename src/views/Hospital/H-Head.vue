@@ -185,7 +185,7 @@ export default {
     editDoc () {
       this.isshowshade()
       this.$router.push({
-        name: 'accountSetting'
+        name: 'editAdmin'
       })
     },
     changePasswordDialogHandle () {

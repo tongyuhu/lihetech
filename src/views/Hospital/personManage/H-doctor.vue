@@ -3,7 +3,7 @@
     <div class="head-edit clear">
       <div class="head-title">医生管理</div>
       <div class="head-edit-wrap">
-        <button class="head-edit-button margin-right" @click="addDoctor">新增医生</button>
+        <button v-if="showEnabled" class="head-edit-button margin-right" @click="addDoctor">新增医生</button>
         <!-- <button class="head-edit-button delete" @click="deleteDoctor">删除</button> -->
       </div>
     </div>
@@ -79,6 +79,23 @@
               <span v-if="showEnabled">停/启用</span>
             </template>
           </el-table-column>
+          <el-table-column
+          prop=""
+          label="停/启用"
+          align="center"
+          width="70"
+          v-if="showEnabled">
+            <template slot-scope="scope">
+              <el-switch
+              v-model="scope.row.enabled"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              :width="40"
+              @change="doctorEnabled(scope.row)">
+              </el-switch>
+              <!-- <span>停/启用</span> -->
+            </template>
+          </el-table-column>
         </el-table>
         <div class="page">
           <el-pagination
@@ -117,6 +134,9 @@
           <el-form-item label="邮箱" prop="email">
             <el-input type="email" v-model="editDoctorForm.email" size="medium"></el-input>
           </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input type="password" v-model="editDoctorForm.password" size="medium"></el-input>
+          </el-form-item>
           <el-form-item label="备注" prop="adminNote">
             <el-input type="text" v-model="editDoctorForm.adminNote" size="medium"></el-input>
           </el-form-item>
@@ -126,30 +146,6 @@
           </el-form-item>
         </el-form>
 
-        <!-- <div class="input-wrap">
-          <span>医生姓名:</span>
-          <input type="text" v-model="editDoctorName">
-        </div>
-        <div class="input-wrap">
-          <span>联系电话:</span>
-          <input type="text" v-model="editDoctorPhone">
-        </div>
-        <div class="input-wrap">
-          <span>邮箱:</span>
-          <input type="text" v-model="editDoctorEmail">
-        </div>
-        <div class="input-wrap">
-          <span>备注:</span>
-          <input type="text" v-model="editDoctorNote">
-        </div> -->
-        <!-- <div class="input-wrap">
-          <span>已绑定居民:</span>
-          <input type="text" v-model="editDoctorPerson">
-        </div>
-        <div class="input-wrap">
-          <span>组织站点:</span>
-          <input type="text" v-model="editDoctorAddress">
-        </div> -->
         <span slot="title" class="dialog-title">修改医生</span>
         <!-- <span slot="footer" class="dialog-footer"> -->
           <!-- <button  type="primary" @click="editDoctorConfirm">确 定</button> -->
@@ -224,7 +220,17 @@ export default {
         callback()
       }
     }
-
+    var checkPass = (rule, value, callback) => {
+      let passrule = /^[a-zA-Z]\w{5,8}$/
+      if (!value) {
+        callback()
+        // return callback(new Error('密码不能为空'))
+      } else if (!passrule.exec(value)) {
+        callback(new Error('请输入6~9密码，以字母开头,可包含数字和下划线'))
+      } else {
+        callback()
+      }
+    }
     return {
       doctorEditCellWidth: 100,
       showEnabled: false,
@@ -261,7 +267,8 @@ export default {
         // 'regionId': null,
         // 'roleId': null,
         'email': null,
-        'adminNote': null
+        'adminNote': null,
+        'password': null
       },
       editDoctorRules: {
         name: [
@@ -276,6 +283,11 @@ export default {
         ],
         adminNote: [
           { validator: checkAdminNote, trigger: 'blur' }
+        ],
+        password: [
+          { validator: checkPass, trigger: 'blur' }
+          //  { required: true, message: '请输入密码', trigger: 'blur' },
+          //  {min: 6, max: 9, message: '请输入6-9位密码', trigger: 'blur'}
         ]
       },
       editDoctorMsg: {
@@ -285,7 +297,8 @@ export default {
         // 'regionId': null,
         // 'roleId': null,
         'email': null,
-        'adminNote': null
+        'adminNote': null,
+        'password': null
       }
     }
   },
@@ -361,6 +374,7 @@ export default {
       this.editDoctorForm.mobile = doctor.mobile || ''
       this.editDoctorForm.email = doctor.email || ''
       this.editDoctorForm.adminNote = doctor.adminNote || ''
+      this.editDoctorForm.password = doctor.password || ''
 
       this.editDoctorMsg.id = doctor.id
       this.editDoctorMsg.name = doctor.name || ''
@@ -369,6 +383,7 @@ export default {
       // this.editDoctorMsg.roleId = doctor.roleId
       this.editDoctorMsg.email = doctor.email || ''
       this.editDoctorMsg.adminNote = doctor.adminNote || ''
+      this.editDoctorMsg.password = doctor.password || ''
       this.modifyDoctor = true
       console.log(doctor)
     },
@@ -389,15 +404,23 @@ export default {
           }
           if (vm.editDoctorForm.name === vm.editDoctorMsg.name) {
             vm.editDoctorMsg.name = ''
+          } else {
+            vm.editDoctorMsg.name = vm.editDoctorForm.name
           }
           if (vm.editDoctorForm.mobile === vm.editDoctorMsg.mobile) {
             vm.editDoctorMsg.mobile = ''
+          } else {
+            vm.editDoctorMsg.mobile = vm.editDoctorForm.mobile
           }
           if (vm.editDoctorForm.email === vm.editDoctorMsg.email) {
             vm.editDoctorMsg.email = ''
+          } else {
+            vm.editDoctorMsg.email = vm.editDoctorForm.email
           }
           if (vm.editDoctorForm.adminNote === vm.editDoctorMsg.adminNote) {
             vm.editDoctorMsg.adminNote = ''
+          } else {
+            vm.editDoctorMsg.adminNote = vm.editDoctorForm.adminNote
           }
           // let params = {
           //   'id': vm.doctorId,
@@ -416,6 +439,7 @@ export default {
               })
             }
             if (res.data.code === '0000') {
+              this.getDoctorList()
               vm.modifyDoctor = false
             }
           })
