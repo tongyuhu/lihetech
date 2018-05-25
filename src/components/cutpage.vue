@@ -3,7 +3,7 @@
     <div> 
       <div v-show="show"> 
         <ul class="pagelist"> 
-          <!-- <li v-show="current_page>1" @click="current_page--">上一页</li>  -->
+          <!-- <li v-show="current_page>1" @click="current_page">上一页</li>  -->
           <li class="pre-btn"><button @click="jumpPage(current_page,'front')"  :disabled="prebtn">上一页</button></li> 
           <li v-show="current_page>5" class="page" >
             <button @click="jumpPage(1)">1</button>

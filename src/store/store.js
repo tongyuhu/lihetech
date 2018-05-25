@@ -31,9 +31,9 @@ export const store = new Vuex.Store({
         currentChat: false
       },
       {
-        userId: '4',
+        userId: 'member_12',
         userImg: '',
-        userName: '夏邦为',
+        userName: '向日葵',
         hasMsg: false,
         currentChat: false
       },

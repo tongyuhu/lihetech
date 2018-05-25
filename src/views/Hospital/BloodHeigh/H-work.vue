@@ -104,7 +104,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="sicktype"
+                    prop="bloodPressureType"
                     label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -200,7 +200,7 @@
                       </template>
                 </el-table-column>
                 <el-table-column
-                    prop="sicktype"
+                    prop="bloodPressureType"
                     label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -298,7 +298,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="sicktype"
-                    label="sicktype"
+                    label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
@@ -453,6 +453,26 @@ export default {
     //     return '关注'
     //   }
     // },
+    confirmSickType (val) {
+      let type
+      switch (val) {
+        case 0:
+          type = '未知'
+          break
+        case 1:
+          type = '原发性高血压'
+          break
+        case 2:
+          type = '继发性高血压'
+          break
+        case 3:
+          type = '正常'
+          break
+        default:
+          type = '未知'
+      }
+      return type
+    },
     isCare (val, data) {
       let arr = data
       console.log(arr)
@@ -487,6 +507,7 @@ export default {
         }
       })
     },
+    // 获取最新问诊
     newAskRequest (params) {
       this.newSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -515,7 +536,7 @@ export default {
         pageSize: this.newAskPageSize
       })
     },
-
+    // 获取严重患者
     badsickRequest (params) {
       this.badSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -523,6 +544,13 @@ export default {
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
         if (res.data && res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            if (this._.has(item, 'bloodPressureType')) {
+              item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
+            } else {
+              item.bloodPressureType = '未知'
+            }
+          })
           this.badsickData = res.data.data
         }
         this.badsickTotal = res.data.recordCount
@@ -542,17 +570,26 @@ export default {
         pageSize: this.badsickPageSize
       })
     },
-
+    // 获取未遵医嘱
     nolistenRequest (params) {
       this.noListenTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
       this.$axios(noListenDoctorDataApi(
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
-        this.noListenDoctorData = res.data.data
-        this.nolistenTotal = res.data.recordCount
-        this.nolistenPageSize = res.data.pageSize
-        this.noListenTableLoading = false
+        if (res.data.data.length > 0) {
+          res.data.data.forEach(item => {
+            if (this._.has(item, 'bloodPressureType')) {
+              item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
+            } else {
+              item.bloodPressureType = '未知'
+            }
+          })
+          this.noListenDoctorData = res.data.data
+          this.nolistenTotal = res.data.recordCount
+          this.nolistenPageSize = res.data.pageSize
+          this.noListenTableLoading = false
+        }
       }).catch(err => {
         if (err) this.noListenTableLoading = false
       })
