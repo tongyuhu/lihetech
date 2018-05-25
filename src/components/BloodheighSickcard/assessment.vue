@@ -72,7 +72,7 @@ import buzheng from 'icon/hospital-icon-51.png'
 import truebuzheng from 'icon/hospital-icon-61.png'
 import quexue from 'icon/hospital-icon-52.png'
 import truequexue from 'icon/hospital-icon-62.png'
-import {assessmentApi} from './../../api/components/BloodheighSickcard/assessment'
+import {assessmentApi} from '@/api/components/BloodheighSickcard/assessment'
 export default {
   props: {
     sickID: {

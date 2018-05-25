@@ -65,17 +65,6 @@
             @openSickCard="openHistroyCard"
             :sickID="sickID" 
             :hospitalId="hospitalId"
-            :name="name"
-            :sex="sex"
-            :age="age"
-            :mobile="mobile"
-            :doctorDiagnos="doctorDiagnos"
-            :heigh="height"
-            :weight="weight"
-            :sysIllnessHistoryNameDisease="sysIllnessHistoryNameDisease"
-            :sysIllnessHistoryNameGenetic="sysIllnessHistoryNameGenetic"
-            :habits="habits"
-            :sysIllnessHistoryNameBpConcurrent="sysIllnessHistoryNameBpConcurrent"
             :is="face"></component>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->

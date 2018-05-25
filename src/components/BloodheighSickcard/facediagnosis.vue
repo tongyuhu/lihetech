@@ -11,7 +11,7 @@
 
         <div class="case-left">
           <div class="case-left-img">
-            <img src="~icon/admin.jpg" alt="">
+            <img :src="info.img" alt="">
           </div>
           <div class="case-left-type">
             <span class="case-left-type-name">{{info.name}}</span>
@@ -270,51 +270,6 @@
                       </template>
                     </el-table-column>
                   </el-table>
-
-                  <!-- <table>
-                    <tr>
-                      <th>序号</th>
-                      <th>名称</th>
-                      <th>单次用量</th>
-                      <th>用法</th>
-                      <th>频度</th>
-                      <th>天数</th>
-                      <th>总量</th>
-                      <th>备注</th>
-                      <th>编辑</th>
-                    </tr>
-                    <tr v-for="i in 3" :key="i.id">
-                      <td width="45px">12</td>
-                      <td>名称</td>
-                      <td width="100px">
-                        <input  type="text" class="table-input use-num single-use border">
-                        <select class="use-num">
-                          <option value="rediag">片</option>
-                          <option value="diag">粒</option>
-                          <option value="diag">颗</option>
-                          <option value="diag">支</option>
-                        </select>
-                      </td>
-                      <td width="65px">
-                        <select>
-                          <option value="rediag">口服</option>
-                          <option value="diag">注射</option>
-                          <option value="diag">外涂</option>
-                        </select>
-                      </td>
-                      <td width="80px">
-                        <input type="text" class="table-input times">次/天
-                      </td>
-                      <td width="40px">
-                        <input type="text" class="table-input">
-                      </td>
-                      <td width="60px">
-                        <input type="text" class="table-input total">盒
-                      </td>
-                      <td>备注</td>
-                      <td>编辑</td>
-                    </tr>
-                  </table> -->
                 </div>
                 <div class="case-main-footer clear">
                   <div class="case-main-footer-left">
@@ -498,7 +453,7 @@ import addMedicine from '@/components/addMedicine.vue'
 import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
-import {bloodheighSickDataApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
+import {bloodheighSickDataApi, bloodheighSickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
   components: {
@@ -519,50 +474,6 @@ export default {
       type: [Number, String],
       default: null
     }
-    // name: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // sex: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // age: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // mobile: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // doctorDiagnos: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // heigh: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // weight: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // sysIllnessHistoryNameDisease: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // sysIllnessHistoryNameGenetic: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // habits: {
-    //   type: [Number, String],
-    //   default: null
-    // },
-    // sysIllnessHistoryNameBpConcurrent: {
-    //   type: [Number, String],
-    //   default: null
-    // }
   },
   data () {
     return {
@@ -588,7 +499,8 @@ export default {
         BMI: 2.5,
         tem: 36,
         bloodHeigh: '',
-        pulse: ''
+        pulse: '',
+        img: ''
       },
       copyInfo: {},
       medication: {
@@ -676,6 +588,7 @@ export default {
         }
       ],
       foodlist: []
+      // process.env.IMG_URL
     }
   },
   watch: {
@@ -692,32 +605,22 @@ export default {
       let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId
-        // pageNum: this.currentPage,
-        // pageSize: this.pageSize
       }
-      this.$axios(bloodheighSickDataApi(params))
+      this.$axios(bloodheighSickApi(params))
       .then(res => {
         if (res.data) {
           if (res.data.data) {
-            // this.totalPage = res.data.pages
-            // if (this.totalPage < 1) {
-              // console.log('page', this.totalPage)
-              // this.showcard = false
-              // this.SET_SICK_CARD(true)
-            // }
-              // this.pages =
-            // this.SET_SICK_CARD(false)
-            // if (res.data.data.length !== 0) {
-            this.cardData = Object.assign({}, {})
-            this.cardData = Object.assign({}, res.data.data[0])
+            this.cardData = {}
+            this.cardData = Object.assign({}, res.data.data)
             this.info.name = this.name
+            this.info.img = process.env.IMG_URL + this.img
             this.info.sex = (this.sex === '男' ? 'man' : 'woman')
-            this.info.age = parseInt(this.age)
-            this.info.heigh = parseInt(this.heigh)
+            this.info.age = this.age
+            this.info.heigh = this.heigh
             console.log('name', this.name)
             console.log('heigh1', this.heigh)
             console.log('heigh', this.info.heigh)
-            this.info.weight = parseInt(this.weight)
+            this.info.weight = this.weight
             this.medication.name = this.name
             this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
             this.medication.phone = this.mobile
@@ -726,9 +629,6 @@ export default {
             this.medication.habit = this.habits
             this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
             this.medication.sureSick = this.doctorDiagnos
-              // this.showcard = true
-              // console.log(this.cardData)
-            // }
           }
         }
       })
@@ -864,75 +764,121 @@ export default {
     // 姓名
     name () {
       if (this.cardData) {
-        if (this.cardData.realName) {
+        if (this._.has(this.cardData, 'realName')) {
           return this.cardData.realName
+        } else {
+          return ''
         }
       }
     },
-    // 性别
+    // 头像
+    img () {
+      if (this.cardData) {
+        if (this._.has(this.cardData, 'userImage')) {
+          return this.cardData.userImage
+        } else {
+          return ''
+        }
+      }
+    },
+    // 性别this._.has()
     sex () {
       if (this.cardData) {
-        if (this.cardData.sex === 1) {
+        if (this._.has(this.cardData, 'sex')) {
+          if (this.cardData.sex === 1) {
+            return '男'
+          }
+          if (this.cardData.sex === 0) {
+            return '女'
+          }
+        } else {
           return '男'
-        }
-        if (this.cardData.sex === 0) {
-          return '女'
         }
       }
     },
     // 年龄
     age () {
       if (this.cardData) {
-        if (this.cardData.age) {
-          return this.cardData.age + '岁'
+        if (this._.has(this.cardData, 'age')) {
+          return this.cardData.age
+        } else {
+          return ''
         }
       }
     },
     // 电话
     mobile () {
       if (this.cardData) {
-        if (this.cardData.mobile) {
+        if (this._.has(this.cardData, 'mobile')) {
           return this.cardData.mobile
+        } else {
+          return ''
         }
       }
     },
     // 医生诊断
     doctorDiagnos () {
       if (this.cardData) {
-        if (this.cardData.doctorDiagnos) {
+        if (this._.has(this.cardData, 'doctorDiagnos')) {
           return this.cardData.doctorDiagnos
+        } else {
+          return ''
         }
       }
     },
     // 身高
     height () {
       if (this.cardData) {
-        if (this.cardData.height) {
-          return this.cardData.height + 'cm'
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'height')) {
+            return this.cardData.userBody.height
+          } else {
+            return ''
+          }
+        } else {
+          return ''
         }
       }
     },
     // 体重
     weight () {
       if (this.cardData) {
-        if (this.cardData.weight) {
-          return this.cardData.weight + 'kg'
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'weight')) {
+            return this.cardData.userBody.weight
+          } else {
+            return ''
+          }
+        } else {
+          return ''
         }
       }
     },
     // 疾病史
     sysIllnessHistoryNameDisease () {
       if (this.cardData) {
-        if (this.cardData.sysIllnessHistoryNameDisease) {
-          return this.cardData.sysIllnessHistoryNameDisease
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryNameDisease')) {
+            return this.cardData.userBody.sysIllnessHistoryNameDisease
+          } else {
+            return ''
+          }
+        } else {
+          return ''
         }
       }
     },
     // 家族遗传史
     sysIllnessHistoryNameGenetic () {
       if (this.cardData) {
-        if (this.cardData.sysIllnessHistoryNameGenetic) {
-          return this.cardData.sysIllnessHistoryNameGenetic
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryNameGenetic')) {
+            return this.cardData.userBody.sysIllnessHistoryNameGenetic
+          } else {
+            return ''
+          }
+        } else {
+          return ''
         }
       }
     },
@@ -941,62 +887,80 @@ export default {
       let habits = []
       let str = ''
       if (this.cardData) {
-        if (this.cardData.highSaltStatus === 1) {
-          habits.push('长期膳食高盐')
-        }
-        if (this.cardData.highSaltStatus === 2) {
-          habits.push('无长期膳食高盐')
-        }
-        if (this.cardData.sleepStatus === 1) {
-          habits.push('睡眠规律')
-        }
-        if (this.cardData.sleepStatus === 2) {
-          habits.push('睡眠不规律')
-        }
-        if (this.cardData.smoking === 1) {
-          habits.push('抽烟')
-        }
-        if (this.cardData.smoking === 2) {
-          habits.push('不抽烟')
-        }
-        if (this.cardData.smoking === 3) {
-          habits.push('已戒烟')
-        }
-        if (this.cardData.is23Sleep === 0) {
-          habits.push('23点前睡觉')
-        }
-        if (this.cardData.is23Sleep === 1) {
-          habits.push('没有23点前睡觉')
-        }
-        if (this.cardData.dietStatus === 1) {
-          habits.push('饮食规律')
-        }
-        if (this.cardData.dietStatus === 2) {
-          habits.push('饮食不规律')
-        }
-        if (this.cardData.medicineStatus === 1) {
-          habits.push('长期服用止痛药或镇定催眠药')
-        }
-        if (this.cardData.medicineStatus === 2) {
-          habits.push('没有长期服用止痛药或镇定催眠药')
-        }
-        if (this.cardData.urineStatus === 1) {
-          habits.push('大小便正常')
-        }
-        if (this.cardData.urineStatus === 2) {
-          habits.push('大小便不正常')
-        }
-        if (this.cardData.drinking === 1) {
-          habits.push('从不饮酒')
-        }
-        if (this.cardData.drinking === 2) {
-          habits.push('偶尔饮酒')
-        }
-        if (this.cardData.drinking === 3) {
-          habits.push('经常饮酒')
-        }
-        if (this.cardData.drinking === 4) {
-          habits.push('每天饮酒')
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'highSaltStatus')) {
+            if (this.cardData.userBody.highSaltStatus === 1) {
+              habits.push('长期膳食高盐')
+            }
+            if (this.cardData.userBody.highSaltStatus === 2) {
+              habits.push('无长期膳食高盐')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'sleepStatus')) {
+            if (this.cardData.userBody.sleepStatus === 1) {
+              habits.push('睡眠规律')
+            }
+            if (this.cardData.userBody.sleepStatus === 2) {
+              habits.push('睡眠不规律')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'smoking')) {
+            if (this.cardData.userBody.smoking === 1) {
+              habits.push('抽烟')
+            }
+            if (this.cardData.userBody.smoking === 2) {
+              habits.push('不抽烟')
+            }
+            if (this.cardData.userBody.smoking === 3) {
+              habits.push('已戒烟')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'is23Sleep')) {
+            if (this.cardData.userBody.is23Sleep === 1) {
+              habits.push('23点前睡觉')
+            }
+            if (this.cardData.userBody.is23Sleep === 2) {
+              habits.push('没有23点前睡觉')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'dietStatus')) {
+            if (this.cardData.userBody.dietStatus === 1) {
+              habits.push('饮食规律')
+            }
+            if (this.cardData.userBody.dietStatus === 2) {
+              habits.push('饮食不规律')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'medicineStatus')) {
+            if (this.cardData.userBody.medicineStatus === 1) {
+              habits.push('长期服用止痛药或镇定催眠药')
+            }
+            if (this.cardData.userBody.medicineStatus === 2) {
+              habits.push('没有长期服用止痛药或镇定催眠药')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'urineStatus')) {
+            if (this.cardData.userBody.urineStatus === 1) {
+              habits.push('大小便正常')
+            }
+            if (this.cardData.userBody.urineStatus === 2) {
+              habits.push('大小便不正常')
+            }
+          }
+          if (this._.has(this.cardData.userBody, 'drinking')) {
+            if (this.cardData.userBody.drinking === 1) {
+              habits.push('从不饮酒')
+            }
+            if (this.cardData.userBody.drinking === 2) {
+              habits.push('偶尔饮酒')
+            }
+            if (this.cardData.userBody.drinking === 3) {
+              habits.push('经常饮酒')
+            }
+            if (this.cardData.userBody.drinking === 4) {
+              habits.push('每天饮酒')
+            }
+          }
         }
       }
       if (habits.length !== 0) {
@@ -1007,15 +971,27 @@ export default {
     // 血压并发症
     sysIllnessHistoryNameBpConcurrent () {
       if (this.cardData) {
-        if (this.cardData.sysIllnessHistoryNameBpConcurrent) {
-          return this.cardData.sysIllnessHistoryNameBpConcurrent
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryNameBpConcurrent')) {
+            return this.cardData.userBody.sysIllnessHistoryNameBpConcurrent
+          } else {
+            return ''
+          }
+        } else {
+          return ''
         }
       }
     },
     createTime () {
       if (this.cardData) {
-        if (this.cardData.createTime) {
-          return this.cardData.createTime
+        if (this._.has(this.cardData, 'userBody')) {
+          if (this._.has(this.cardData.userBody, 'createTime')) {
+            return this.cardData.userBody.createTime
+          } else {
+            return ''
+          }
+        } else {
+          return ''
         }
       }
     }

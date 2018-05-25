@@ -355,6 +355,7 @@
 
 <script>
 import {daybefor, computeWeekday} from '@/untils/date.js'
+import {orderApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 // import Bus from '@/bus.js'
 import {mapMutations} from 'vuex'
@@ -424,7 +425,8 @@ export default {
             ]
           }
         ]
-      }
+      },
+      orderList: []
     }
   },
   methods: {
@@ -495,6 +497,93 @@ export default {
       this.addChatFriend(sick)
       this.changeChatFriend(sick)
       this.openChatWindow()
+    },
+    getOrderData (params) {
+      this.$axios(orderApi(params))
+      .then(res => {
+        if (res.data.data) {
+          this.orderList = res.data.data
+          console.log('orderList', this.orderList)
+        }
+      })
+    },
+    week (val) {
+      val = this._.toNumber(val)
+      let week
+      switch (val) {
+        case 1:
+          week = '周一'
+          break
+        case 2:
+          week = '周二'
+          break
+        case 3:
+          week = '周三'
+          break
+        case 4:
+          week = '周四'
+          break
+        case 5:
+          week = '周五'
+          break
+        case 6:
+          week = '周六'
+          break
+        case 7:
+          week = '周日'
+          break
+      }
+      return week
+    },
+    morninngNoon (val) {
+      val = this._.toNumber(val)
+      let time
+      switch (val) {
+        case 1:
+          time = '上午'
+          break
+        case 2:
+          time = '下午'
+          break
+      }
+      return time
+    },
+    oderStutas (val) {
+      val = this._.toNumber(val)
+      let type
+      switch (val) {
+        case 1:
+          type = '已预约'
+          break
+        case 2:
+          type = '已就诊'
+          break
+        case 3:
+          type = '已取消'
+          break
+        case 4:
+          type = '失约'
+          break
+      }
+      return type
+    },
+    formmater (data) {
+      data.forEach(item => {
+        item.weekDay = this.week(item.weekDay)
+        if (item.adminMakeOrderTotalList.length === 0) {
+          item.morninng = []
+          item.noon = []
+        } else {
+          item.forEach(half => {
+            if (half.slotType === 1) {
+              item.morninng = half
+            }
+            if (half.slotType === 2) {
+              item.morninng = half
+            }
+          })
+        }
+      })
     }
   },
   mounted () {
@@ -503,6 +592,7 @@ export default {
       obj.today = item
       this.currentOrder.push(obj)
     })
+    this.getOrderData({type: 0})
     console.log('星期几', this.nextSunday())
   }
 }
