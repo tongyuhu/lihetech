@@ -95,6 +95,11 @@ export const store = new Vuex.Store({
     changeChatFriend (state, friend) {
       state.chatfriend.forEach(item => {
         if (item.userId === friend.userId) {
+          if (_.has(item, 'history')) {
+            state.history = item.history
+          } else {
+            state.history = []
+          }
           item.currentChat = true
         } else {
           item.currentChat = false

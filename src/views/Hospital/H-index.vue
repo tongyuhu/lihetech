@@ -36,6 +36,7 @@
   import chat from '@/components/Chat/chat.vue'
   import im from '@/components/Chat/im.vue'
   import Bus from '@/bus.js'
+  import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   export default {
     name: 'H-index',
@@ -96,12 +97,13 @@
       }
     },
     mounted () {
+      // console.log('ONLINE_STATIC', this.ONLINE_STATIC)
       let vm = this
       this.token = this.adminInfo.rongCloudToken
       // let RongIMLib = RongIMLib
       // console.log('RongIMLib', RongIMLib)
       let config = {
-        protobuf: '/static/protobuf-2.2.8.min.js'
+        protobuf: publicStatic.onlineStatic + '/static/protobuf-2.2.8.min.js'
       }
       // 初始化
       RongIMLib.RongIMClient.init(this.appKey, null, config)

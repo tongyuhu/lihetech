@@ -30,7 +30,8 @@
                 <ul>
                   <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
-                    <img  class="friend-icon" :src="friend.userImg.length !==0 ? friend.userId :'/static/user.png'" alt="">
+                    <img  class="friend-icon" 
+                    :src="friend.userImg.length !==0 ? friend.userId :publicStatic.onlineStatic+ '/static/user.png'" alt="">
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
                     <!-- </el-badge> -->
@@ -76,7 +77,8 @@
 import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
-import {mapState, mapMutations, mapGetters} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
+import publicStatic from '@/publicData/const.js'
 export default {
   name: 'im',
   components: {
@@ -94,7 +96,8 @@ export default {
   },
   data () {
     return {
-      message: ''
+      message: '',
+      publicStatic: publicStatic
       // list: [
         // {
         //   userId: '5277',

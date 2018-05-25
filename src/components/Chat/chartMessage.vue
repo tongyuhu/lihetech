@@ -25,6 +25,7 @@
 
 <script>
 // import img from '~icon/hospital-icon2-04.png'
+import publicStatic from '@/publicData/const.js'
 import {mapState} from 'vuex'
 export default {
   name: 'chartmessage',
@@ -35,7 +36,7 @@ export default {
     },
     userImg: {
       type: [String],
-      default: '/static/user.png'
+      default: publicStatic.onlineStatic + '/static/user.png'
     },
     moreMessage: {
       type: [Boolean],

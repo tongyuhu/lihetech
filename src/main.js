@@ -16,6 +16,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
+import onlinestatic from './install/vueInstall'
+Vue.use(onlinestatic)
 // import InfiniteLoading from 'vue-infinite-loading'
 Vue.prototype._ = _
 
@@ -91,7 +93,6 @@ Vue.directive('drag', {
     }
   }
 })
-
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     // if (session('token')) {
