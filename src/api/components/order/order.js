@@ -12,7 +12,7 @@ export const orderApi = (parmars) => {
 export const orderSettingApi = (parmars) => {
   return {
     method: 'post',
-    url: '/make/order/list',
+    url: '/make/order/setUp',
     data: {
       'weeks': parmars.weeks,
       'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
@@ -20,3 +20,14 @@ export const orderSettingApi = (parmars) => {
     }
   }
 }
+// export const orderSettingApi = (parmars) => {
+//   return {
+//     method: 'post',
+//     url: '/make/order/list',
+//     data: {
+//       'weeks': parmars.weeks,
+//       'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
+//       'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
+//     }
+//   }
+// }

@@ -4,6 +4,17 @@
       <div class="order-sick-head-left">
         <button :class="{'button':checkOrderBtn,'activebutton':!checkOrderBtn}" @click="checkHistory">预约历史</button>
         <button :class="{'button':!checkOrderBtn,'activebutton':checkOrderBtn}" @click="checkOrder">当前预约</button>
+        <el-date-picker
+          v-model="currentOrderTime"
+          type="week"
+          size="small"
+          :clearable="false"
+          format="yyyy 第 WW 周"
+          placeholder="请选择周"
+          :firstDayOfWeek='firstDayOfWeek'
+          @change="checkHistoryTime"
+          v-show="checkOrderBtn">
+        </el-date-picker>
       </div>
       <div class="order-sick-head-right">
         <div class="order-sick-head-right-btn">
@@ -25,161 +36,159 @@
             <th class="left-time">日期</th>
             <th colspan="3">预约详情</th>
           </thead>
-          <tbody class="tbody" v-for="item in 2" :key="item.i">
+          <tbody class="tbody" v-for="(item,index) in orderList" :key="index">
+                <!-- 周数 -->
                 <tr>
-                  <th :rowspan="dataweek.morninng.length + dataweek.noon.length+3">
-                      <span>2018-5-14 周一</span>
+                  <th :rowspan="item.morninng.length + item.noon.length + 5">
+                      <span>{{item.dayTime}} {{item.weekDay}}</span>
                   </th>
                 </tr>
-                <tr>
-                  <td class="width" :rowspan="dataweek.morninng.length+1">
-                    <span>上午</span>
-                  </td>
-                </tr>
-
+                <!-- 上午工作时间 -->
                 <tr>
                   <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
-                  </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button @click="diagnosis">会诊</button>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                    <div class="half-day">
 
-                <tr>
-                  <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                    <span class="span-block">上午</span>
+                    <span class="span-block">{{item.morninngWork}}</span>
+                    </div>
                   </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
+                  <td v-if="item.morninng.length === 0">
+                    <div class="table-content">
+                      <div class="text-center order-time-width">
+                        
+                      </div>
+                      <div class="table-content-border min-height no-order">
+                        <div class="detials-order">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+                              暂无数据
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                          </div>
+                          <!-- 操作 -->
+                          <div class="no-order-action">
+                            <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
+                            <button class="contant-btn">关闭预约</button>
+                          </div>                         
+                        </div>
                       </div>
                     </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
+                  </td>
+                  <td v-else class="table-td-div">
+                    <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
+                      <!-- 预约时间 -->
+                      <div class="text-center order-time-width">
+                        <span>
+                          {{morning.startEndPeriodTime}}
+                        </span>
+                      </div>
+                      <div class="table-content-border min-height ">
+                        <div class="detials-order" v-for="morningPerson in morning.userMakeOrderDoctorList" :key="morningPerson.id">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                            {{morningPerson.name}}
+                            <!-- 15899932665 -->
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+                              {{morningPerson.seeSpecialty}}
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                            <span :class="{'success':computeColor(morningPerson.makeOrderState),'error':!computeColor(morningPerson.makeOrderState)}">{{oderStutas(morningPerson.makeOrderState)}}</span>
+                          </div>
+                          <!-- 操作 -->
+                          <div class="order-action">
+                            <button class="contant-btn" @click="diagnosis(morningPerson.userId)">会诊</button>
+                            <button class="contant-btn" @click="contact(morningPerson.userId,morningPerson.name)">联系</button>
+                          </div>                         
+                        </div>
                       </div>
                     </div>
                   </td>
                 </tr>
                 
-                <tr>
-                  <td :rowspan="dataweek.noon.length+1">下午</td>
-                </tr>
-
+                <!-- 下午工作时间 -->
                 <tr>
                   <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                    <div class="half-day">
+                      <span class="span-block">下午</span>
+                      <span class="span-block">{{item.noonWork}}</span>
+                    </div>
                   </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
+                  <td v-if="item.noon.length === 0">
+                    <div class="table-content">
+                      <div class="text-center order-time-width">
+                        
+                      </div>
+                      <div class="table-content-border min-height no-order">
+                        <div class="detials-order">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+                              暂无数据
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                          </div>
+                          <!-- 操作 -->
+                          <div class="no-order-action">
+                            <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
+                            <button class="contant-btn">关闭预约</button>
+                          </div>                         
+                        </div>
                       </div>
                     </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
+                  </td>
+                  <td v-else class="table-td-div">
+                    <div v-for="noon in item.noon" :key="noon.id" class="table-content">
+                      <!-- 预约时间 -->
+                      <div class="text-center order-time-width">
+                        <span>
+                          {{noon.startEndPeriodTime}}
+                        </span>
+                      </div>
+                      <div class="table-content-border min-height ">
+                        <div class="detials-order" v-for="noonPerson in noon.userMakeOrderDoctorList" :key="noonPerson.id">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                            {{noonPerson.name}}
+                            <!-- 15899932665 -->
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+
+                              {{noonPerson.seeSpecialty}}
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                            <span>{{oderStutas(noonPerson.makeOrderState)}}</span>
+                          </div>
+                          <!-- 操作 -->
+                          <div class="order-action">
+                            <button class="contant-btn" @click="diagnosis(noonPerson.userId)">会诊</button>
+                            <button class="contant-btn" @click="contact(noonPerson.userId,noonPerson.name)">联系</button>
+                          </div>                         
+                        </div>
                       </div>
                     </div>
                   </td>
                 </tr>
 
-                <tr>
-                  <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
-                  </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
-                  </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>会诊</button>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
           </tbody>
             <!-- </tr> -->
         </table>
@@ -194,168 +203,226 @@
             <th class="left-time">日期</th>
             <th colspan="3">预约详情</th>
           </thead>
-          <!-- <tbody> -->
-            <!-- <tr class="tbody" v-for="item in 2" :key="item.i"> -->
-
-          <!-- <tbody> -->
-          <tbody class="tbody" v-for="item in 2" :key="item.i">
+          <tbody class="tbody" v-for="(item,index) in histroyOrderList" :key="index">
+                <!-- 周数 -->
                 <tr>
-                  <th :rowspan="dataweek.morninng.length + dataweek.noon.length+3">
-                      <span>2018-5-14 周一</span>
+                  <th :rowspan="item.morninng.length + item.noon.length + 5">
+                      <span>{{item.dayTime}} {{item.weekDay}}</span>
                   </th>
                 </tr>
-
-                <tr>
-                  <td class="width" :rowspan="dataweek.morninng.length+1">
-                    <span>上午</span>
-                  </td>
-                </tr>
-
+                <!-- 上午工作时间 -->
                 <tr>
                   <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
-                  </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
+                    <div class="half-day">
 
-                <tr>
-                  <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                    <span class="span-block">上午</span>
+                    <span class="span-block">{{item.morninngWork}}</span>
+                    </div>
                   </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
+                  <td v-if="item.morninng.length === 0">
+                    <div class="table-content">
+                      <div class="text-center order-time-width">
+                        
+                      </div>
+                      <div class="table-content-border min-height no-order">
+                        <div class="detials-order">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+                              暂无数据
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                          </div>
+                          <!-- 操作 -->
+                          <div class="no-order-action">
+                            <!-- <button class="contant-btn">编辑时间</button>
+                            <button class="contant-btn">关闭预约</button> -->
+                          </div>                         
+                        </div>
                       </div>
                     </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
+                  </td>
+                  <td v-else class="table-td-div">
+                    <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
+                      <!-- 预约时间 -->
+                      <div class="text-center order-time-width">
+                        <span>
+                          {{morning.startEndPeriodTime}}
+                        </span>
+                      </div>
+                      <div class="table-content-border min-height ">
+                        <div class="detials-order" v-for="morningPerson in morning.userMakeOrderDoctorList" :key="morningPerson.id">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                            {{morningPerson.name}}
+                            <!-- 15899932665 -->
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+                              {{morningPerson.seeSpecialty}}
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                            <span :class="{'success':computeColor(morningPerson.makeOrderState),'error':!computeColor(morningPerson.makeOrderState)}">{{oderStutas(morningPerson.makeOrderState)}}</span>
+                          </div>
+                          <!-- 操作 -->
+                          <div class="order-action">
+                            <!-- <button class="contant-btn" @click="diagnosis(morningPerson.userId)">会诊</button> -->
+                            <button class="contant-btn" @click="contact(morningPerson.userId,morningPerson.name)">联系</button>
+                          </div>                         
+                        </div>
                       </div>
                     </div>
                   </td>
                 </tr>
                 
-                <tr>
-                  <td :rowspan="dataweek.noon.length+1">下午</td>
-                </tr>
-
+                <!-- 下午工作时间 -->
                 <tr>
                   <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
+                    <div class="half-day">
+                      <span class="span-block">下午</span>
+                      <span class="span-block">{{item.noonWork}}</span>
+                    </div>
                   </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
+                  <td v-if="item.noon.length === 0">
+                    <div class="table-content">
+                      <div class="text-center order-time-width">
+                        
+                      </div>
+                      <div class="table-content-border min-height no-order">
+                        <div class="detials-order">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+                              暂无数据
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                          </div>
+                          <!-- 操作 -->
+                          <div class="no-order-action">
+                            <!-- <button class="contant-btn">编辑时间</button>
+                            <button class="contant-btn">关闭预约</button> -->
+                          </div>                         
+                        </div>
                       </div>
                     </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
+                  </td>
+                  <td v-else class="table-td-div">
+                    <div v-for="noon in item.noon" :key="noon.id" class="table-content">
+                      <!-- 预约时间 -->
+                      <div class="text-center order-time-width">
+                        <span>
+                          {{noon.startEndPeriodTime}}
+                        </span>
+                      </div>
+                      <div class="table-content-border min-height ">
+                        <div class="detials-order" v-for="noonPerson in noon.userMakeOrderDoctorList" :key="noonPerson.id">
+                          <!-- 姓名 -->
+                          <div class="oder-name ">
+                            {{noonPerson.name}}
+                            <!-- 15899932665 -->
+                          </div>
+                          <!-- 就诊项目 -->
+                          <div class="flex-item">
+                            <span>
+
+                              {{noonPerson.seeSpecialty}}
+                            </span>
+                          </div>
+                          <!-- 就诊状态 -->
+                          <div class="order-status">
+                            <span>{{oderStutas(noonPerson.makeOrderState)}}</span>
+                          </div>
+                          <!-- 操作 -->
+                          <div class="order-action">
+                            <!-- <button class="contant-btn" @click="diagnosis(noonPerson.userId)">会诊</button> -->
+                            <button class="contant-btn" @click="contact(noonPerson.userId,noonPerson.name)">联系</button>
+                          </div>                         
+                        </div>
                       </div>
                     </div>
                   </td>
                 </tr>
 
-                <tr>
-                  <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
-                  </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td class="width">
-                    <span>{{dataweek.morninng[0].orderTime}}</span>
-                  </td>
-                  <td>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                    <div class="table-details">
-                      <!-- <div>08:30-09:00</div> -->
-                      <div>张磊</div>
-                      <div>高血压并发症</div>
-                      <div>已就诊</div>
-                      <div>
-                        <button>联系</button>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
           </tbody>
             <!-- </tr> -->
         </table>
       </el-card>
     </div>
-
+    <el-dialog
+    center
+    width="500px"
+    :visible.sync="settingSingle">
+      <span slot="title" class="dialog-title">预约时间设置</span>
+      <div class="dialog-main">
+        <div>
+          <span>上午</span>
+          <el-time-select
+          :style="{'width':'150px'}"
+          v-model="settingSingleMorning.start"
+          :picker-options="{
+            start: '00:00',
+            step: '00:30',
+            end: '12:00',
+          }">
+          </el-time-select>
+          至
+          <el-time-select
+          :style="{'width':'150px'}"
+          v-model="settingSingleMorning.end"
+          :picker-options="{
+            start: '00:00',
+            step: '00:30',
+            end: '12:00',
+          }">
+          </el-time-select>
+        </div>
+        <div>
+          <span>下午</span>
+          <el-time-select
+          :style="{'width':'150px'}"
+          v-model="settingSingleNoon.start"
+          :picker-options="{
+            start: '12:00',
+            step: '00:30',
+            end: '24:00',
+          }">
+          </el-time-select>
+          至
+          <el-time-select
+          :style="{'width':'150px'}"
+          v-model="settingSingleNoon.end"
+          :picker-options="{
+            start: '12:00',
+            step: '00:30',
+            end: '24:00',
+          }">
+          </el-time-select>
+        </div>
+      </div>
+      <div slot="footer">
+        <el-button @click="settingSingleCancel" type="primary">取消</el-button>
+        <el-button @click="settingSingleConfirm" type="primary">保存</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {daybefor, computeWeekday} from '@/untils/date.js'
-import {orderApi} from '@/api/components/order/order.js'
+import {daybefor, computeWeekday, dateFormat} from '@/untils/date.js'
+import {orderApi, orderSettingApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 // import Bus from '@/bus.js'
 import {mapMutations} from 'vuex'
@@ -363,8 +430,11 @@ export default {
   name: 'orderSick',
   data () {
     return {
+      index: null,
       checkOrderBtn: false,
       currentOrder: [],
+      firstDayOfWeek: 1,
+      currentOrderTime: '',
       dataweek: {
         morninng: [
           {
@@ -426,7 +496,17 @@ export default {
           }
         ]
       },
-      orderList: []
+      orderList: [],
+      histroyOrderList: [],
+      settingSingle: false,
+      settingSingleMorning: {
+        start: '',
+        end: ''
+      },
+      settingSingleNoon: {
+        start: '',
+        end: ''
+      }
     }
   },
   methods: {
@@ -438,6 +518,9 @@ export default {
       ]),
     checkHistory () {
       this.checkOrderBtn = true
+      let today = new Date()
+      console.log('daybefor(today, 6, true)', daybefor(today, 6, true))
+      this.checkHistoryTime(daybefor(today, 6, true), true)
     },
     checkOrder () {
       this.checkOrderBtn = false
@@ -472,25 +555,43 @@ export default {
       }
       return arr.reverse()
     },
-    computeColor () {
-
+    computeColor (val) {
+      let color
+      switch (val) {
+        case 1:
+          color = true
+          break
+        case 2:
+          color = true
+          break
+        case 3:
+          color = false
+          break
+        case 4:
+          color = false
+          break
+        default:
+          color = false
+          break
+      }
+      return color
     },
-    diagnosis () {
+    diagnosis (id) {
       this.$router.push({
         name: 'bloodheighSick',
         params: {
-          sickID: 12,
+          sickID: id,
           hospitalId: 2
         }})
       // Bus.$emit('huizhen', true)
       this.SET_SICK_CARD(true)
       // console.log('$refs', this.$refs.sickcard)
     },
-    contact () {
+    contact (id, name) {
       let sick = {
-        userId: '5277',
+        userId: 'member_' + id,
         userImg: '',
-        userName: '患者',
+        userName: name,
         hasMsg: false,
         currentChat: false
       }
@@ -498,18 +599,28 @@ export default {
       this.changeChatFriend(sick)
       this.openChatWindow()
     },
-    getOrderData (params) {
+    getOrderData (params, histroy) {
       this.$axios(orderApi(params))
       .then(res => {
         if (res.data.data) {
-          this.orderList = res.data.data
+          console.log(res.data.data.length)
+          if (histroy) {
+            this.histroyOrderList = []
+            this.histroyOrderList = this.formmater(res.data.data)
+          } else {
+            this.orderList = []
+            this.orderList = this.formmater(res.data.data)
+          }
+          // this.formmater(res.data.data)
+          // this.orderList = res.data.data
           console.log('orderList', this.orderList)
         }
       })
     },
     week (val) {
       val = this._.toNumber(val)
-      let week
+      // console.log(val, 'val')
+      let week = ''
       switch (val) {
         case 1:
           week = '周一'
@@ -564,26 +675,149 @@ export default {
         case 4:
           type = '失约'
           break
+        default:
+          type = '未知'
       }
       return type
     },
     formmater (data) {
+      let vm = this
+      // let val = data
       data.forEach(item => {
-        item.weekDay = this.week(item.weekDay)
+        item.weekDay = vm.week(item.weekDay)
         if (item.adminMakeOrderTotalList.length === 0) {
           item.morninng = []
           item.noon = []
-        } else {
-          item.forEach(half => {
+          item.morninngWork = ''
+          item.noonWork = ''
+        } else if (item.adminMakeOrderTotalList.length === 2) {
+          item.adminMakeOrderTotalList.forEach(half => {
             if (half.slotType === 1) {
-              item.morninng = half
+              item.morninng = half.slotTypeList
+              item.morninngWork = half.startEndPeriodTime
             }
             if (half.slotType === 2) {
-              item.morninng = half
+              item.noon = half.slotTypeList
+              item.noonWork = half.startEndPeriodTime
             }
           })
+        } else if (item.adminMakeOrderTotalList.length === 1) {
+          if (item.adminMakeOrderTotalList[0].slotType === 1) {
+            item.morninng = item.adminMakeOrderTotalList[0].slotTypeList
+            item.noon = []
+            item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+            item.noonWork = ''
+          } else {
+            item.noon = item.adminMakeOrderTotalList[0].slotTypeList
+            item.morninng = []
+            item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+            item.morninngWork = ''
+          }
         }
       })
+      return data
+    },
+    checkHistoryTime (val, init) {
+      val = dateFormat(val, 0, true)
+      let nowDay = new Date()
+      let time = {
+      }
+      nowDay = dateFormat(nowDay, 0, true)
+      if (this._.gt(val, nowDay)) {
+        this.$message({
+          showClose: true,
+          message: '请选择小于当前日期的值',
+          type: 'error'
+        })
+        this.currentOrderTime = ''
+      } else {
+        let weekday = daybefor(val, -6, true)
+        if (this._.gt(weekday, nowDay)) {
+          weekday = nowDay
+        }
+        time.start = val
+        time.end = weekday
+      }
+      if (this.currentOrderTime !== '' || init) {
+        this.getOrderData({
+          startTime: time.start,
+          endTime: time.end,
+          type: 1
+        }, true)
+      }
+      console.log('xhou', time)
+      // return time
+    },
+    openEditTime (val) {
+      console.log(val)
+      if (val === '周一') {
+        this.index = 1
+      }
+      if (val === '周二') {
+        this.index = 2
+      }
+      if (val === '周三') {
+        this.index = 3
+      }
+      if (val === '周四') {
+        this.index = 4
+      }
+      if (val === '周五') {
+        this.index = 5
+      }
+      if (val === '周六') {
+        this.index = 6
+      }
+      if (val === '周日') {
+        this.index = 7
+      }
+      this.settingSingle = true
+    },
+    // 取消编辑预约时间
+    settingSingleCancel () {
+      this.settingSingleMorning.start = ''
+      this.settingSingleMorning.end = ''
+      this.settingSingleNoon.start = ''
+      this.settingSingleNoon.end = ''
+      this.settingSingle = false
+    },
+    // 确认编辑时间
+    settingSingleConfirm () {
+      console.log(this.settingSingleMorning)
+      console.log(this.settingSingleNoon)
+      let morning = this._.gt(this.settingSingleMorning.start, this.settingSingleMorning.end)
+      let noon = this._.gt(this.settingSingleNoon.start, this.settingSingleNoon.end)
+      if (morning || noon) {
+        this.$message({
+          message: '起始时间不能大于结束时间,请重新设置',
+          type: 'warning'
+        })
+        this.settingSingleMorning.start = ''
+        this.settingSingleMorning.end = ''
+        this.settingSingleNoon.start = ''
+        this.settingSingleNoon.end = ''
+      } else {
+        // this.order[this.index].morning = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
+        // this.order[this.index].noon = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        let parmars = {
+          'weeks': this.index,
+          'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
+          'startEndPeriodTimeAftn': this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        }
+        this.$axios(orderSettingApi(parmars))
+          .then(res => {
+            if (res.data.code === '1001') {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+              // this.order[this.index].morning = ''
+              // this.order[this.index].noon = ''
+            }
+          })
+        this.settingSingle = false
+      }
     }
   },
   mounted () {
@@ -593,6 +827,9 @@ export default {
       this.currentOrder.push(obj)
     })
     this.getOrderData({type: 0})
+    // let today = new Date()
+    // daybefor(today,6,true)
+    // this.checkHistoryTime(daybefor(today, 6, true))
     console.log('星期几', this.nextSunday())
   }
 }
@@ -600,6 +837,7 @@ export default {
 
 <style lang="scss" scoped>
 .order-sick{
+  font-size: 14px;
   table{
     width: 100%;
     color: #666;
@@ -613,15 +851,23 @@ export default {
   }
   th{
     color: #041421;
+    padding: 20px;
+    font-size: 16px;
   }
   th,td{
     border:1px solid #eaeaea;
-    padding: 10px;
+    // padding: 10px;
     vertical-align: middle;
     text-align: center;
+    box-sizing: border-box;
+    
+  }
+  td{
+    min-height: 60px;
+    height: 45px;
   }
   .width{
-    width: 100px;
+    width: 120px;
   }
   .black{
     color:#041421;
@@ -691,7 +937,111 @@ export default {
   }
   .tbody{
     margin-top:4px;
+    div{
+      box-sizing: border-box;
+    }
   }
+  .span-block{
+    display: block;
+    padding-bottom: 3px;
+    padding-top: 3px;
+    // padding:5px;
+  }
+  .table-content{
+  display:flex;
+  // justify-content: center;
+  align-items: center;
+}
+.half-day{
+  padding:8px;
+  min-height: 65px;
+}
+.table-content-border{
+  border-left:1px solid #eaeaea;
+  // padding-left:10px;
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.table-td-div>div:nth-last-child(n+2){
+  border-bottom:1px solid #eaeaea;
+}
+.table-td-div{
+  text-align: center;
+  // width: 100%;
+}
+.text-center{
+  text-align: center;
+}
+.order-time-width{
+  width: 130px;
+  span{
+    padding:10px;
+    display: inline-block;
+  }
+}
+.no-order{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.min-height{
+  min-height: 65px;
+}
+.detials-order{
+  display: flex;
+  // justify-content: space-around;
+  width: 100%;
+  align-items: center;
+  padding: 5px;
+}
+.oder-name{
+  min-width: 150px;
+}
+.flex-item{
+  flex-grow:1;
+}
+.order-status{
+  min-width: 100px;
+}
+.order-action{
+  min-width: 150px;
+}
+.contant-btn{
+  padding: 5px;
+  background: #1991fc;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #fff;
+  width: 68px;
+  font-size: 14px;
+}
+.no-order-action{
+  min-width: 150px;
+}
+.success{
+  color: #4cc191;
+}
+.error{
+  color:#e87070;
+}
+}
+.dialog-title{
+  display: inline-block;
+  text-align: center;
+  color: #041421;
+}
+.dialog-main{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.dialog-main div{
+  margin-top:10px;
 }
 </style>
 

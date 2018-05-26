@@ -162,6 +162,7 @@
 
 <script>
 import {daybefor, computeWeekday} from '@/untils/date.js'
+import {orderSettingApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 export default {
   name: 'orderSetting',
@@ -265,8 +266,25 @@ export default {
         this.settingSingleNoon.start = ''
         this.settingSingleNoon.end = ''
       } else {
-        this.order[this.index].morning = this.settingSingleMorning.start + '/' + this.settingSingleMorning.end
-        this.order[this.index].noon = this.settingSingleNoon.start + '/' + this.settingSingleNoon.end
+        this.order[this.index].morning = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
+        this.order[this.index].noon = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        let parmars = {
+          'weeks': this.index + 1,
+          'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
+          'startEndPeriodTimeAftn': this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        }
+        this.$axios(orderSettingApi(parmars))
+          .then(res => {
+            if (res.data.code === '1001') {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+              this.order[this.index].morning = ''
+              this.order[this.index].noon = ''
+            }
+          })
         this.settingSingle = false
       }
     },
@@ -300,13 +318,47 @@ export default {
         } else {
           this.cheeckedweek.forEach(item => {
             this.order[item].order = true
-            this.order[item].morning = this.settingGroupMorning.start + '/' + this.settingGroupMorning.end
-            this.order[item].noon = this.settingGroupNoon.start + '/' + this.settingGroupNoon.end
+            this.order[item].morning = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+            this.order[item].noon = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+          })
+          let parmars = {
+            'weeks': this.cheeckedweek.join(','),
+            'startEndPeriodTimeMor': this.settingGroupMorning.start + '-' + this.settingGroupMorning.end,
+            'startEndPeriodTimeAftn': this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+          }
+          this.$axios(orderSettingApi(parmars))
+          .then(res => {
+            if (res.data.code === '1001') {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+              res.data.data.forEach(item => {
+                if (item.weekDay) {
+                  this.order[item.weekDay - 1].order = true
+                  if (item.slotType === 1) {
+                    this.order[item.weekDay - 1].morning = ''
+                  }
+                  if (item.slotType === 2) {
+                    this.order[item.weekDay - 1].noon = ''
+                  }
+                }
+              })
+            }
           })
           this.settingGroup = false
         }
       }
-
+      // orderSettingApi
+      // if () {
+      //   let parmars = {
+      //     'weeks': parmars.weeks,
+      //     'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
+      //     'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
+      //   }
+      // }
+      console.log()
       // this.settingGroup = false
     },
     // 打开编辑时间窗口
