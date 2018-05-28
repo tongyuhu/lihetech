@@ -1,5 +1,5 @@
 <template>
-    <div class="case-wrap clear" v-if="showface">
+    <div class="case-wrap" v-if="showface">
       <div class="case-head clear">
         <div class="case-head-btn">
           <el-button type="primary" @click="complete">完成就诊</el-button>
@@ -7,7 +7,7 @@
         </div>
       </div>
 
-      <div class="face-case clear">
+      <div class="face-case">
 
         <div class="case-left">
           <div class="case-left-img">
@@ -73,9 +73,341 @@
             <el-button type="primary">体检表</el-button>
             <el-button type="primary">体检单</el-button>
           </div>
+
         </div> 
 
-        <div class="case face">  
+        <div class="case face">
+          <div class="case-main">
+            <div class="case-main-content">
+              <div class="case-main-title">
+                <span>上海立阖泰医疗统一处方笺</span>
+              </div>
+              <div>
+                <el-form
+                label-width="45px" 
+                :label-position="labelPosition">
+                <el-row :gutter="10">
+                  <el-col :span="8">
+                    <el-form-item label="姓名">
+                      <el-input v-model="medication.name" size="mini"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="患病时长" label-width="68px">
+                      <el-input v-model="medication.sickDuration" size="mini"></el-input>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-form-item label="电话号码" label-width="68px">
+                      <el-input v-model.number="medication.phone" size="mini"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                  <el-col :span="6">
+                    <el-form-item label="性别" label-width="45px">
+                      <el-select v-model="medication.sex" placeholder="性别" size="mini">
+                        <el-option label="男" value="man"></el-option>
+                        <el-option label="女" value="woman"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="6">
+                    <el-form-item label="" label-width="8px">
+                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                        <el-option label="初诊" value="1"></el-option>
+                        <el-option label="复诊" value="0"></el-option>
+                      </el-select>
+                    </el-form-item>
+
+                  </el-col>
+                  <el-col :span="12">
+                    <div class="time-picker">
+                      <el-form-item label="上次就诊时间" label-width="100px">
+                        <el-date-picker
+                          size="mini"
+                          v-model="medication.lastTime"
+                          type="date"
+                          placeholder="选择日期">
+                        </el-date-picker>
+                      </el-form-item>
+
+                    </div>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <el-form-item label="病史" label-width="60px">
+                      <div class="el-select-wrap">
+                        <el-select size="mini" 
+                        v-model="medication.sickHistroy" 
+                        multiple 
+                        placeholder="请选择病史"
+                        :loading="loading"
+                        @visible-change="searchSick">
+                          <el-option
+                            v-for="item in bingshiList"
+                            :key="item.id"
+                            :label="item.illnessName"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <el-form-item label="遗传史" label-width="60px">
+                      <div class="el-select-wrap">
+                        <el-select size="mini" 
+                        v-model="medication.inhereHistroy" 
+                        multiple 
+                        placeholder="请选择遗传史"
+                        :loading="loading"
+                        @visible-change="searchSick">
+                          <el-option
+                            v-for="item in yichuanshiList"
+                            :key="item.id"
+                            :label="item.illnessName"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <el-form-item label="并发症" label-width="60px">
+                      <div class="el-select-wrap">
+                        <el-select size="mini" 
+                        v-model="medication.complication" 
+                        multiple 
+                        placeholder="请选择并发症"
+                        :loading="loading"
+                        @visible-change="searchSick">
+                          <el-option
+                            v-for="item in gaoxueyabingfazhengList"
+                            :key="item.id"
+                            :label="item.illnessName"
+                            :value="item.id">
+                          </el-option>
+                        </el-select>
+
+                      </div>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+
+                
+                <el-row :gutter="10">
+                  <el-col :span="12">
+                    <el-form-item label="抽烟情况" label-width="68px">
+                      <el-select v-model="medication.smoking" placeholder="抽烟情况" size="mini">
+                        <el-option label="抽烟" value="1"></el-option>
+                        <el-option label="不抽烟" value="2"></el-option>
+                        <el-option label="已戒烟" value="3"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="喝酒情况" label-width="68px">
+                      <el-select v-model="medication.drinking" placeholder="请选择" size="mini">
+                        <el-option label="从不喝酒" value="1"></el-option>
+                        <el-option label="偶尔喝酒" value="2"></el-option>
+                        <el-option label="经常喝酒" value="3"></el-option>
+                        <el-option label="每天喝酒" value="4"></el-option>
+                      </el-select>
+                    </el-form-item>
+
+                  </el-col>
+                </el-row>
+                <el-row :gutter="10">
+                  <el-col :span="12">
+                    <el-form-item label="入寝时间" label-width="68px">
+                      <el-select v-model="medication.is23Sleep" placeholder="请选择" size="mini">
+                        <el-option-group
+                        label="是否23点之前休息">
+                          <el-option label="是" value="1"></el-option>
+                          <el-option label="否" value="0"></el-option>
+
+                        </el-option-group>
+                      </el-select>
+                    </el-form-item>
+
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="睡眠质量" label-width="68px">
+                      <el-select v-model="medication.sleepStatus" placeholder="请选择" size="mini">
+                        <el-option-group
+                        label="睡眠质量如何">
+                          <el-option label="好" value="1"></el-option>
+                          <el-option label="坏" value="2"></el-option>
+                        </el-option-group>
+                      </el-select>
+                    </el-form-item>
+
+                  </el-col>
+
+                </el-row>
+
+                <el-row :gutter="10">
+                  <el-col :span="12">
+                    <el-form-item label="检查项目" label-width="68px">
+                      <el-select
+                        v-model="medication.checkItem"
+                        size="mini"
+                        multiple
+                        filterable
+                        allow-create
+                        default-first-option
+                        placeholder="请添加项目标签">
+                        <!-- <el-option
+                          v-for="item in options5"
+                          :key="item.value"
+                          :label="item.label"
+                          :value="item.value">
+                        </el-option> -->
+                      </el-select>
+                      <!-- <el-select v-model="medication.checkItem" placeholder="抽烟情况" size="mini">
+                        <el-option label="抽烟" value="1"></el-option>
+                        <el-option label="不抽烟" value="2"></el-option>
+                        <el-option label="已戒烟" value="3"></el-option>
+                      </el-select> -->
+                      <!-- <el-input v-model="medication.checkItem" size="mini"></el-input> -->
+                    </el-form-item>
+                  </el-col>
+                  <el-col :span="12">
+                    <el-form-item label="确诊疾病" label-width="68px">
+                      <el-input v-model="medication.sureSick" size="mini"></el-input>
+                    </el-form-item>
+
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <el-form-item label="症状" label-width="68px">
+                      <el-input v-model="medication.symptom" size="mini"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <el-form-item label="诊断信息" label-width="68px">
+                      <el-input v-model="medication.diagnosisMsg" size="mini"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                <el-row>
+                  <el-col>
+                    <el-form-item label="医嘱" label-width="68px">
+                      <el-input v-model="medication.doctorTip" size="mini"></el-input>
+                    </el-form-item>
+                  </el-col>
+                </el-row>
+                </el-form>
+                <div class="case-main-rp">
+                  <div class="case-main-rp-title">
+                    <span>RP</span>
+                  </div>
+                  <el-table
+                  ref="multipleTable"
+                  :data="doctorMedicine"
+                  tooltip-effect="dark"
+                  style="width: 100%"
+                  max-height="400">
+                    <el-table-column
+                      type="index"
+                      label="序号"
+                      width="55">
+                    </el-table-column>
+                    <el-table-column
+                      show-overflow-tooltip
+                      prop="name"
+                      label="名称">
+                    </el-table-column>
+                    <el-table-column
+                      prop="singleuse"
+                      label="单次用量"
+                      width="100">
+                      <template slot-scope="scope">
+                        <input  type="text" v-model="scope.row.singleuse" class="table-input use-num single-use">
+                        <select class="use-num" v-model="scope.row.singleuseUnit">
+                          <option value="pian">片</option>
+                          <option value="li">粒</option>
+                          <option value="ke">颗</option>
+                          <option value="zhi">支</option>
+                        </select>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="usemethod"
+                      label="用法"
+                      width="65">
+                      <template slot-scope="scope">
+                        <select v-model="scope.row.usemethod">
+                          <option value="mouse">口服</option>
+                          <option value="in">注射</option>
+                          <option value="out">外涂</option>
+                        </select>
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="usetimes"
+                      label="频度"
+                      width="80">
+                      <template slot-scope="scope">
+                        <input type="text" v-model="scope.row.usetimes" class="table-input use-num single-use">次/天
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="uselong"
+                      label="天数"
+                      width="50">
+                      <template slot-scope="scope">
+                        <input v-model="scope.row.uselong" type="text" class="table-input use-num single-use">
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="usetotal"
+                      label="总量"
+                      width="65">
+                      <template slot-scope="scope">
+                        <input v-model="scope.row.usetotal" type="text" class="table-input use-num single-use">盒
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="tip"
+                      label="备注">
+                      <template slot-scope="scope">
+                        <input v-model="scope.row.tip" type="text" class="table-input">
+                      </template>
+                    </el-table-column>
+                    <el-table-column
+                      prop="delete"
+                      label="编辑"
+                      width="100">
+                      <template slot-scope="scope">
+                        <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
+                      </template>
+                    </el-table-column>
+                  </el-table>
+                </div>
+                <div>
+                  <div class="case-main-footer">
+                    医生：{{adminInfo.name}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- <div class="case face">  
             <div  class="case-main">
               <div class="case-main-content">
                 <div class="case-main-title">
@@ -112,13 +444,24 @@
 
                   </el-col>
                 </el-row>
+                <div>
+                  <div>病史:</div>
+                  <el-select size="mini" 
+                  v-model="medication.sickHistroy" 
+                  multiple 
+                  placeholder="请选择"
+                  :loading="loading"
+                  @visible-change="searchSick">
+                    <el-option
+                      v-for="item in bingshiList"
+                      :key="item.id"
+                      :label="item.illnessName"
+                      :value="item.id">
+                    </el-option>
+                  </el-select>
+                </div>
                 <el-row :gutter="10">
-                  <el-col :span="6" :lg="6" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">病史:</div>
-                      <input type="text" v-model="medication.sickHistroy">
-                    </div>
-                  </el-col>
+                  
                   <el-col :span="6" :lg="6" :md="12" :sm="24" :sx="24" class="margin-top">
                     <div class="input-group">
                       <div for="name">遗传史:</div>
@@ -297,7 +640,7 @@
                 </div>
               </div>
             </div>  
-        </div>  
+        </div>   -->
         
         <div class="case-right">
           <div class="case-right-main">
@@ -351,7 +694,6 @@
                 <div class="add-sure">
                   <el-button type="primary" @click="addsure">确认添加</el-button>
                 </div>
-                <!-- 1aaaaaa -->
               </pane>
               <pane
               label="运动">
@@ -377,13 +719,11 @@
                 <div class="pane-bg">
                 </div>
                 <div class="pane-bgc">
-                  <!-- <div v-for="(food,index) in addFoodData" :key="index"> -->
                     <addFood
                     v-for="(food,index) in addFoodData" :key="index"
                     :food="food.food"
                     @addfood="addfoods">
                     </addFood>
-                  <!-- </div> -->
                 </div>
               </pane>
             </tabs>
@@ -454,6 +794,7 @@ import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
 import {bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
+import {mapState} from 'vuex'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
@@ -478,6 +819,7 @@ export default {
   },
   data () {
     return {
+      labelPosition: 'left',
       cardData: {},
       activeIndex: 1,
       showEditMsg: false,
@@ -510,16 +852,22 @@ export default {
         phone: '',
         sex: 'man',
         isfirst: 'first',
-        sickHistroy: '',
-        inhereHistroy: '',
+        sickHistroy: [],
+        inhereHistroy: [],
         habit: '',
         checkItem: '',
-        complication: '',
+        complication: [],
         sureSick: '',
         lastTime: '',
         symptom: '',
         hospitalMsg: '',
-        doctorTip: ''
+        doctorTip: '',
+        smoking: '',
+        drinking: '',
+        is23Sleep: '',
+        sleepStatus: '',
+        diagnosisMsg: ''
+
       },
       doctorMedicine: [],
       footerData: {
@@ -588,7 +936,11 @@ export default {
           isChoose: false
         }
       ],
-      foodlist: []
+      foodlist: [],
+      bingshiList: [],
+      yichuanshiList: [],
+      gaoxueyabingfazhengList: [],
+      loading: false
       // process.env.IMG_URL
     }
   },
@@ -651,12 +1003,12 @@ export default {
       let vm = this
       vm.medicineList = []
       this._.forEach(list, (item, index) => {
-        let obj = {}
-        obj.name = item.medicineName
-        obj.spec = item.drugSpec
-        obj.kucun = item.id
-        obj.price = item.medicineId
-        vm.medicineList.push(obj)
+        // let obj = {}
+        item.name = item.medicineName
+        item.spec = item.drugSpec
+        item.kucun = item.id
+        item.price = item.medicineId
+        vm.medicineList.push(item)
       })
       // this.changeMedicineList = list
       console.log('this.changeMedicineList', this.medicineList)
@@ -680,18 +1032,20 @@ export default {
     addsure () {
       if (this.multipleSelection.length !== 0) {
         this.multipleSelection.forEach(item => {
-          let medicine = {}
-          medicine.name = item.name
-          medicine.singleuse = ''
-          medicine.singleuseUnit = 'pian'
-          medicine.usemethod = 'mouse'
-          medicine.usetimes = ''
-          medicine.uselong = ''
-          medicine.usetotal = ''
-          medicine.tip = ''
-          this.doctorMedicine.push(medicine)
+          // let medicine = {}
+          // medicine.name = item.name
+          item.singleuse = ''
+          item.singleuseUnit = 'pian'
+          item.usemethod = 'mouse'
+          item.usetimes = ''
+          item.uselong = ''
+          item.usetotal = ''
+          item.tip = ''
+          this.doctorMedicine.push(item)
+          console.log('this.doctorMedicine', this.doctorMedicine)
         })
       }
+      this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)
       this.$refs.multipleTable.clearSelection()
     },
     // 删除药物
@@ -700,7 +1054,43 @@ export default {
     },
     // 完成就诊
     complete () {
-      this.$emit('complete', '1')
+      let obj = {}
+      obj.userId = this.sickID
+      obj.doctorDiagnos = this.medication.diagnosisMsg
+      obj.lastTime = this.medication.lastTime
+      obj.monthSick = this.medication.sickDuration   // err
+      obj.confirmDisease = this.medication.sureSick
+      obj.isBoth = this.medication.isfirst
+      obj.height = this.copyInfo.heigh
+      obj.weight = this.copyInfo.weight
+      obj.sysIllnessHistoryIdDisease = this.medication.sickHistroy.join(',')
+      obj.sysIllnessHistoryIdGenetic = this.medication.inhereHistroy.join(',')
+      obj.sysIllnessHistoryIdBpConcurrent = this.medication.complication.join(',')
+      obj.smoking = this.medication.smoking
+      obj.drinking = this.medication.drinking
+      obj.is23Sleep = this.medication.is23Sleep
+      obj.sleepStatus = this.medication.sleepStatus
+      console.log('this.doctorMedicine', this.doctorMedicine)
+      let medicine = []
+      this.doctorMedicine.forEach(item => {
+        let obj = {}
+        obj.medicineType = 1
+        obj.medicineName = item.name
+        obj.medicineId = item.id
+        obj.everyDosage = item.singleuse
+        // obj.medicineId =
+        obj.unit = item.singleuseUnit
+
+        obj.usageTimes = item.usetimes
+        obj.remark = item.tip
+        obj.totalNumber = item.usetotal
+        obj.usageOff = item.usemethod
+        medicine.push(obj)
+        // obj.totalNumber
+      })
+      obj.list = JSON.stringify(medicine)
+      // this.$emit('complete', '1')
+
       // this.showface = false
     },
     addsports (obj) {
@@ -722,6 +1112,51 @@ export default {
     },
     histroySickcard () {
       this.$emit('openSickCard')
+    },
+    searchSicktype (type) {
+      this.loading = true
+      let list = []
+      this.$axios(sickApi(type))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          list = res.data.data
+          return list
+        }
+      })
+      // sickApi
+    },
+    searchSick (val) {
+      // if (val) {
+      this.loading = true
+      this.$axios(sickApi(3))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          this.bingshiList = res.data.data
+          this.loading = false
+        }
+      })
+      // }
+      console.log('面诊', val)
+      console.log('bingshiList', this.bingshiList)
+      console.log('sickHistroy', this.medication.sickHistroy)
+    },
+    getyichuanshiList (val) {
+      this.$axios(sickApi(4))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          this.yichuanshiList = res.data.data
+          // this.loading = false
+        }
+      })
+    },
+    getgaoxueyabingfazhengList (val) {
+      this.$axios(sickApi(6))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          this.gaoxueyabingfazhengList = res.data.data
+          // this.loading = false
+        }
+      })
     },
     // 打印病历
     dayin () {
@@ -763,6 +1198,7 @@ export default {
     //   return this.$route.params.hospitalId
     // },
     // 姓名
+    ...mapState(['adminInfo']),
     name () {
       if (this.cardData) {
         if (this._.has(this.cardData, 'realName')) {
@@ -857,15 +1293,25 @@ export default {
     },
     // 疾病史
     sysIllnessHistoryNameDisease () {
+      // this.cardData
+      console.log('this.cardData', this.cardData)
       if (this.cardData) {
         if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryNameDisease')) {
-            return this.cardData.userBody.sysIllnessHistoryNameDisease
+          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdDisease')) {
+            // let list = []
+            // this.
+            let sicklist = this.cardData.userBody.sysIllnessHistoryIdDisease.split(',')
+            // sicklist.forEach(item => {
+            //   let obj ={}
+            //   obj.
+            // })
+            return sicklist
+            // return this.cardData.userBody.sysIllnessHistoryNameDisease
           } else {
-            return ''
+            return []
           }
         } else {
-          return ''
+          return []
         }
       }
     },
@@ -873,13 +1319,13 @@ export default {
     sysIllnessHistoryNameGenetic () {
       if (this.cardData) {
         if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryNameGenetic')) {
-            return this.cardData.userBody.sysIllnessHistoryNameGenetic
+          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdGenetic')) {
+            return this.cardData.userBody.sysIllnessHistoryIdGenetic.split(',')
           } else {
-            return ''
+            return []
           }
         } else {
-          return ''
+          return []
         }
       }
     },
@@ -973,13 +1419,13 @@ export default {
     sysIllnessHistoryNameBpConcurrent () {
       if (this.cardData) {
         if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryNameBpConcurrent')) {
-            return this.cardData.userBody.sysIllnessHistoryNameBpConcurrent
+          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdBpConcurrent')) {
+            return this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
           } else {
-            return ''
+            return []
           }
         } else {
-          return ''
+          return []
         }
       }
     },
@@ -998,7 +1444,11 @@ export default {
     }
   },
   mounted () {
+    this.searchSick()
+    this.getyichuanshiList()
+    this.getgaoxueyabingfazhengList()
     this.getData()
+    console.log('this.adminInfo.name', this.adminInfo.name)
   }
 }
 </script>
@@ -1084,6 +1534,8 @@ export default {
   $right-width:420px;
 
   .case-head{
+    // border-bottom:8px solid #f4f6f9;
+    background: #f4f6f9;
     &-btn{
       float: right;
       margin:15px;
@@ -1091,8 +1543,10 @@ export default {
   }
   .face-case{
     width: 100%;
-    // overflow: hidden;
+    // overflow: auto;
     display: flex;
+    height: 100%;
+    // min-height: 1000px;
     // flex-flow: wrap;
   }
   .case{
@@ -1158,12 +1612,14 @@ export default {
   }
   .case-wrap{
     margin-bottom: 8px;
+    background: #fff;
   }
   .case-left{
     $font-color:#041421;
     $border-color:#a19696;
     text-align: center;
     padding-bottom: 20px;
+    height: inherit;
     input{
       width: 80px;
     }
@@ -1208,11 +1664,17 @@ export default {
     }
   }
   .case-main{
+    height: inherit;
+    .label-width{
+      // width: 100px;
+    }
     &-content{
-      margin:0 8px;
+      // margin:0 8px;
       background-color: #fff;
       padding:15px;
-      min-height: 740px;
+      border-left:8px solid #f4f6f9;
+      border-right:8px solid #f4f6f9;
+      // min-height: 940px;
     }
     &-title{
       text-align: center;
@@ -1264,6 +1726,7 @@ export default {
     }
   }
   .case-right{
+    height: inherit;
     &-main{
       margin: 0 auto;
     }
@@ -1303,10 +1766,6 @@ export default {
   }
   .face{
     position: relative;
-    line-height: 0;
-    height: 0;
-    font-size: 0;
-    box-sizing: border-box; border: 0; margin: 0; padding: 0
   }
   .face::before{
     box-sizing: border-box; border: 0; margin: 0; padding: 0;
@@ -1339,6 +1798,13 @@ export default {
     display: block;
     background: url('~icon/hospital-icon-93.png') no-repeat;
   }
+
+  .el-select-wrap > .el-select{
+    width: 100%;
+  }
+  .time-picker  .el-date-editor.el-input, .el-date-editor.el-input__inner {
+    width: 150px;
+}
 </style>
 <style>
 @media print {

@@ -68,7 +68,7 @@
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
               编辑</span>
               </el-button>
-              <el-switch
+              <!-- <el-switch
               v-if="showEnabled"
               v-model="scope.row.enabled"
               active-color="#13ce66"
@@ -76,7 +76,7 @@
               :width="30"
               @change="doctorEnabled(scope.row)">
               </el-switch>
-              <span v-if="showEnabled">停/启用</span>
+              <span v-if="showEnabled">停/启用</span> -->
             </template>
           </el-table-column>
           <el-table-column

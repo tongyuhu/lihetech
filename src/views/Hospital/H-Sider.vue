@@ -71,78 +71,78 @@ export default {
             }
           ]
         },
-        {
-          id: 2,
-          iconName: 'heigh-suger',
-          title: '糖尿病',
-          routerName: 'sugerheigh',
-          child: [
-            {
-              id: 'sugerTotal',
-              title: '总体趋势'
-            },
-            {
-              id: 'sugerNew',
-              title: '最新问诊'
-            },
-            {
-              id: 'sugerBad',
-              title: '严重患者'
-            },
-            {
-              id: 'sugerNolisten',
-              title: '未遵医嘱'
-            },
-            {
-              id: 'sugerUnperfect',
-              title: '建档不完整'
-            },
-            {
-              id: 'sugerCases',
-              title: '患者列表'
-            }
-          ]
-        },
-        {
-          id: 3,
-          iconName: 'other',
-          title: '其他',
-          routerName: 'other',
-          child: [
-            {
-              id: 'othertotal',
-              title: '整体趋势'
-            },
-            {
-              id: 'respire',
-              title: '呼吸道'
-            },
-            {
-              id: 'cancer',
-              title: '癌症'
-            },
-            {
-              id: 'infection',
-              title: '传染病'
-            },
-            {
-              id: 'tumour',
-              title: '肿瘤'
-            }
-          ]
-        },
+        // {
+        //   id: 2,
+        //   iconName: 'heigh-suger',
+        //   title: '糖尿病',
+        //   routerName: 'sugerheigh',
+        //   child: [
+        //     {
+        //       id: 'sugerTotal',
+        //       title: '总体趋势'
+        //     },
+        //     {
+        //       id: 'sugerNew',
+        //       title: '最新问诊'
+        //     },
+        //     {
+        //       id: 'sugerBad',
+        //       title: '严重患者'
+        //     },
+        //     {
+        //       id: 'sugerNolisten',
+        //       title: '未遵医嘱'
+        //     },
+        //     {
+        //       id: 'sugerUnperfect',
+        //       title: '建档不完整'
+        //     },
+        //     {
+        //       id: 'sugerCases',
+        //       title: '患者列表'
+        //     }
+        //   ]
+        // },
+        // {
+        //   id: 3,
+        //   iconName: 'other',
+        //   title: '其他',
+        //   routerName: 'other',
+        //   child: [
+        //     {
+        //       id: 'othertotal',
+        //       title: '整体趋势'
+        //     },
+        //     {
+        //       id: 'respire',
+        //       title: '呼吸道'
+        //     },
+        //     {
+        //       id: 'cancer',
+        //       title: '癌症'
+        //     },
+        //     {
+        //       id: 'infection',
+        //       title: '传染病'
+        //     },
+        //     {
+        //       id: 'tumour',
+        //       title: '肿瘤'
+        //     }
+        //   ]
+        // },
         {
           // id: 4,
           iconName: 'order',
           title: '预约管理',
           routerName: 'order'
         },
-        {
-          id: 4,
-          iconName: 'cases',
-          title: '病例库',
-          routerName: 'cases'
-        },
+        // {
+        //   id: 4,
+        //   iconName: 'cases',
+        //   title: '病例库',
+        //   routerName: 'cases'
+        // },
         {
           id: 5,
           iconName: 'admin',
@@ -160,14 +160,14 @@ export default {
               title: '患者'
             }
           ]
-        },
-        {
-          id: 6,
-          iconName: 'message',
-          hasMsg: true,
-          title: '我的消息',
-          routerName: 'accountSetting'
         }
+        // {
+        //   id: 6,
+        //   iconName: 'message',
+        //   hasMsg: true,
+        //   title: '我的消息',
+        //   routerName: 'accountSetting'
+        // }
       ]
     }
   },

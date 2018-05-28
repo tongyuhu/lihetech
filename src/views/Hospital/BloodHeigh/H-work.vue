@@ -5,9 +5,9 @@
       <span>工作台</span>
         <el-button type="text" @click="msgTipBtn"  class="work-msg">
           <!-- <i class="work-icon"></i> -->
-          <el-badge :is-dot="showMsgTip">
+          <!-- <el-badge :is-dot="showMsgTip">
               <i class="iconfont icon-xin iconfont-tip"></i>
-          </el-badge>
+          </el-badge> -->
           <!-- <i :class="{workMsgtip:showMsgTip}"></i> -->
         </el-button>
     </div>
@@ -55,7 +55,7 @@
                     label=""
                     width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row,'useUserId')"
+                        <el-button size="mini" type="primary" @click="newdiagnose(scope.row,'useUserId')"
                         :style="{'width':'72px','color':'#fff'}">诊断</el-button>
                     </template>
                 </el-table-column>
@@ -608,6 +608,22 @@ export default {
         name: 'accountSetting'
       })
     },
+    newdiagnose (row, val) {
+      let id
+      if (val) {
+        id = row.userId
+      } else {
+        id = row.id
+      }
+      console.log(row)
+      this.$router.push({name: 'bloodheighSick',
+        params: {
+          sickID: id,
+          hospitalId: row.adminHospitalId
+        }})
+
+      this.SET_SICK_CARD(true)
+    },
     diagnose (row, val) {
       let id
       if (val) {
@@ -743,8 +759,8 @@ export default {
   border: none;
   outline: none;
   background-color: #fff;
-  height: 21px;
-  width: 21px;
+  height: 22px;
+  width: 30px;
   padding: 0;
   margin:0;
   position: relative;
