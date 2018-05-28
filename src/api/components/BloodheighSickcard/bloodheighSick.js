@@ -27,3 +27,21 @@ export const bloodheighSickApi = (params) => {
     outtime: 10000
   }
 }
+/**
+ *
+ * @param {病史3、遗传史4、糖尿病并发症5、高血压并发症6} params
+ */
+export const sickApi = (params) => {
+  return {
+    method: 'post',
+    url: '/user/casesCard/illSelect/list',
+    data: {
+      'illType': params
+      // 'adminHospitalId': params.adminHospitalId,
+      // 'pageNum': params.pageNum,
+      // 'pageSize': params.pageSize || 1
+    },
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    outtime: 10000
+  }
+}

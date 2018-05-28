@@ -20,14 +20,13 @@ export const orderSettingApi = (parmars) => {
     }
   }
 }
-// export const orderSettingApi = (parmars) => {
-//   return {
-//     method: 'post',
-//     url: '/make/order/list',
-//     data: {
-//       'weeks': parmars.weeks,
-//       'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
-//       'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
-//     }
-//   }
-// }
+export const closeorderApi = (parmars) => {
+  return {
+    method: 'post',
+    url: '/make/order/shutDown',
+    data: {
+      'weekDay': parmars.weekDay,
+      'slotType': parmars.slotType
+    }
+  }
+}

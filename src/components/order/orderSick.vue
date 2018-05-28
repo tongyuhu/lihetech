@@ -19,7 +19,6 @@
       <div class="order-sick-head-right">
         <div class="order-sick-head-right-btn">
           <div>
-
             <el-button @click="orderSetting" type="text" icon="el-icon-setting" :style="{'font-size':'18px'}">预约设置</el-button>
           </div>
         </div>
@@ -74,7 +73,7 @@
                           <!-- 操作 -->
                           <div class="no-order-action">
                             <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
-                            <button class="contant-btn">关闭预约</button>
+                            <button v-if="!item.morninngStop" :class="{'open-order':item.morninngStop,'close-order':!item.morninngStop}" @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -146,7 +145,7 @@
                           <!-- 操作 -->
                           <div class="no-order-action">
                             <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
-                            <button class="contant-btn">关闭预约</button>
+                            <button v-if="!item.noonStop" :class="{'open-order':item.noonStop,'close-order':!item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -422,7 +421,7 @@
 
 <script>
 import {daybefor, computeWeekday, dateFormat} from '@/untils/date.js'
-import {orderApi, orderSettingApi} from '@/api/components/order/order.js'
+import {orderApi, orderSettingApi, closeorderApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 // import Bus from '@/bus.js'
 import {mapMutations} from 'vuex'
@@ -685,9 +684,14 @@ export default {
       // let val = data
       data.forEach(item => {
         item.weekDay = vm.week(item.weekDay)
+        if (!(this._.has(item, 'adminMakeOrderTotalList'))) {
+          item.adminMakeOrderTotalList = []
+        }
         if (item.adminMakeOrderTotalList.length === 0) {
           item.morninng = []
           item.noon = []
+          item.morninngStop = true
+          item.noonStop = true
           item.morninngWork = ''
           item.noonWork = ''
         } else if (item.adminMakeOrderTotalList.length === 2) {
@@ -695,10 +699,12 @@ export default {
             if (half.slotType === 1) {
               item.morninng = half.slotTypeList
               item.morninngWork = half.startEndPeriodTime
+              item.morninngStop = half.isStop
             }
             if (half.slotType === 2) {
               item.noon = half.slotTypeList
               item.noonWork = half.startEndPeriodTime
+              item.noonStop = half.isStop
             }
           })
         } else if (item.adminMakeOrderTotalList.length === 1) {
@@ -707,11 +713,15 @@ export default {
             item.noon = []
             item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
             item.noonWork = ''
+            item.morninngStop = item.adminMakeOrderTotalList[0].isStop
+            item.noonStop = true
           } else {
             item.noon = item.adminMakeOrderTotalList[0].slotTypeList
             item.morninng = []
             item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
             item.morninngWork = ''
+            item.noonStop = item.adminMakeOrderTotalList[0].isStop
+            item.morninngStop = true
           }
         }
       })
@@ -809,7 +819,7 @@ export default {
             if (res.data.code === '1001') {
               this.$message({
                 showClose: true,
-                message: res.data.msg,
+                message: '设置失败！',
                 type: 'warning'
               })
               // this.order[this.index].morning = ''
@@ -818,6 +828,63 @@ export default {
           })
         this.settingSingle = false
       }
+    },
+    // 关闭预约
+    closeOrder (day, val, index) {
+      let week
+      if (day === '周一') {
+        week = 1
+      }
+      if (day === '周二') {
+        week = 2
+      }
+      if (day === '周三') {
+        week = 3
+      }
+      if (day === '周四') {
+        week = 4
+      }
+      if (day === '周五') {
+        week = 5
+      }
+      if (day === '周六') {
+        week = 6
+      }
+      if (day === '周日') {
+        week = 7
+      }
+      let params = {
+        'weekDay': week,
+        'slotType': val
+      }
+      this.$axios(closeorderApi(params))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            showClose: true,
+            message: '设置成功',
+            type: 'success'
+          })
+          let list = this.orderList
+          if (val === 1) {
+            list[index].morninngStop = true
+          }
+          if (val === 1) {
+            list[index].noonStop = true
+          }
+          this.getOrderData({type: 0})
+          // this.orderList = Object.assign({}, list)
+          // if()
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.data.msg,
+            type: 'warning'
+          })
+        }
+      })
+      // closeorderApi
+      console.log('close', day, val)
     }
   },
   mounted () {
@@ -955,6 +1022,10 @@ export default {
 .half-day{
   padding:8px;
   min-height: 65px;
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: inherit;
 }
 .table-content-border{
   border-left:1px solid #eaeaea;
@@ -1042,6 +1113,24 @@ export default {
 }
 .dialog-main div{
   margin-top:10px;
+}
+.open-order{
+  padding: 5px;
+  background: #1991fc;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #fff;
+  width: 68px;
+  font-size: 14px;
+}
+.close-order{
+  padding: 5px;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #fff;
+  width: 68px;
+  font-size: 14px;
+  background: #e87070;
 }
 </style>
 

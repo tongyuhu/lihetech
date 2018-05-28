@@ -453,7 +453,8 @@ import addMedicine from '@/components/addMedicine.vue'
 import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
-import {bloodheighSickDataApi, bloodheighSickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
+import {bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
+// import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
   components: {

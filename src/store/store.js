@@ -126,6 +126,10 @@ export const store = new Vuex.Store({
     },
     // 收到当前聊天好友消息
     getCurrentFriendMsg (state, message) {
+      if (!(_.isArray(state.history))) {
+        state.history = []
+      }
+      console.log('message', message, state.history)
       state.history.push(message)
     },
     // 当前聊天列表
