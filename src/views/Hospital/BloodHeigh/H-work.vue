@@ -370,6 +370,7 @@ import {
   careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
 import mpages from '@/components/cutpage.vue'
 import {mapMutations, mapState} from 'vuex'
+import Bus from '@/bus.js'
 export default {
   name: 'H-work',
   components: {
@@ -609,28 +610,30 @@ export default {
       })
     },
     newdiagnose (row, val) {
+      let userId
       let id
-      if (val) {
-        id = row.userId
-      } else {
-        id = row.id
-      }
+      // if (val) {
+      userId = row.userId
+      id = row.id
+      // } else {
+        // userId = row.id
+      // }
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: id,
+          sickID: userId,
           hospitalId: row.adminHospitalId
         }})
-
+      Bus.$emit('modifySickCard', {modify: true, cardid: id})
       this.SET_SICK_CARD(true)
     },
     diagnose (row, val) {
       let id
-      if (val) {
-        id = row.userId
-      } else {
-        id = row.id
-      }
+      // if (val) {
+      id = row.userId
+      // } else {
+        // id = row.id
+      // }
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {

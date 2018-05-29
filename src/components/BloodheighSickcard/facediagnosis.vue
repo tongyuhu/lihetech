@@ -87,18 +87,28 @@
                 label-width="45px" 
                 :label-position="labelPosition">
                 <el-row :gutter="10">
-                  <el-col :span="8">
+                  <el-col :span="6">
                     <el-form-item label="姓名">
                       <el-input v-model="medication.name" size="mini"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
+                  <el-col :span="10">
                     <el-form-item label="患病时长" label-width="68px">
-                      <el-input v-model="medication.sickDuration" size="mini"></el-input>
+                      <div class="pick-date-wrap">
+                        <div>
+                          <el-input placeholder="年" v-model.number="medication.year" size="mini"></el-input>
+                        </div>
+                        <div>
+                          <el-input placeholder="月" v-model.number="medication.month" size="mini"></el-input>
+                        </div>
+                        <div>
+                          <el-input placeholder="天数" v-model.number="medication.day" size="mini"></el-input>
+                        </div>
+                      </div>
                     </el-form-item>
                   </el-col>
                   <el-col :span="8">
-                    <el-form-item label="电话号码" label-width="68px">
+                    <el-form-item label="电话" label-width="45px">
                       <el-input v-model.number="medication.phone" size="mini"></el-input>
                     </el-form-item>
                   </el-col>
@@ -144,10 +154,11 @@
                         multiple 
                         placeholder="请选择病史"
                         :loading="loading"
-                        @visible-change="searchSick">
+                        >                
+                        <!-- @visible-change="getbingshiList" -->
                           <el-option
-                            v-for="item in bingshiList"
-                            :key="item.id"
+                            v-for="(item,index) in bingshiList"
+                            :key="index"
                             :label="item.illnessName"
                             :value="item.id">
                           </el-option>
@@ -165,11 +176,10 @@
                         v-model="medication.inhereHistroy" 
                         multiple 
                         placeholder="请选择遗传史"
-                        :loading="loading"
-                        @visible-change="searchSick">
+                        :loading="loading">
                           <el-option
-                            v-for="item in yichuanshiList"
-                            :key="item.id"
+                            v-for="(item,index) in yichuanshiList"
+                            :key="index"
                             :label="item.illnessName"
                             :value="item.id">
                           </el-option>
@@ -187,8 +197,7 @@
                         v-model="medication.complication" 
                         multiple 
                         placeholder="请选择并发症"
-                        :loading="loading"
-                        @visible-change="searchSick">
+                        :loading="loading">
                           <el-option
                             v-for="item in gaoxueyabingfazhengList"
                             :key="item.id"
@@ -240,12 +249,12 @@
 
                   </el-col>
                   <el-col :span="12">
-                    <el-form-item label="睡眠质量" label-width="68px">
+                    <el-form-item label="睡眠规律" label-width="68px">
                       <el-select v-model="medication.sleepStatus" placeholder="请选择" size="mini">
                         <el-option-group
-                        label="睡眠质量如何">
-                          <el-option label="好" value="1"></el-option>
-                          <el-option label="坏" value="2"></el-option>
+                        label="睡眠规律不规律">
+                          <el-option label="规律" value="1"></el-option>
+                          <el-option label="不规律" value="2"></el-option>
                         </el-option-group>
                       </el-select>
                     </el-form-item>
@@ -264,7 +273,7 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请添加项目标签">
+                        placeholder="请添写项目标签">
                         <!-- <el-option
                           v-for="item in options5"
                           :key="item.value"
@@ -695,7 +704,7 @@
                   <el-button type="primary" @click="addsure">确认添加</el-button>
                 </div>
               </pane>
-              <pane
+              <!-- <pane
               label="运动">
                 <div class="pane-bg">
                 </div>
@@ -713,8 +722,8 @@
                     ></addSport>
                   </div>
                 </div>
-              </pane>
-              <pane
+              </pane> -->
+              <!-- <pane
               label="饮食">
                 <div class="pane-bg">
                 </div>
@@ -725,7 +734,7 @@
                     @addfood="addfoods">
                     </addFood>
                 </div>
-              </pane>
+              </pane> -->
             </tabs>
           </div>
         </div>  
@@ -745,16 +754,16 @@
             <span>姓名：{{info.name}}</span>
             <span>性别：{{info.sex === 'man' ? '男':'女'}}</span>
             <span>年龄：{{info.age}}</span>
-            <span>科室：{{footerData.type}}</span>
-            <span>费别：{{footerData.total}}</span>
+            <!-- <span>科室：{{footerData.type}}</span> -->
+            <!-- <span>费别：{{footerData.total}}</span> -->
           </div>
           <div class="info-card">
-            <span>病历号：</span>
-            <span>住址/电话：</span>
+            <!-- <span>病历号：</span> -->
+            <span>电话：{{medication.phone}}</span>
           </div>
           <div class="info-card">
             <span>诊断：{{medication.sureSick}}</span>
-            <span>开具时间：</span>
+            <span>开具时间：{{currentDate}}</span>
           </div>
         </div>
         <div class="bottom-boder diagnos">
@@ -762,16 +771,16 @@
             <span>主诉：{{medication.symptom}}</span>
           </p>
           <p>
-            <span>现病史：</span>
+            <span>病史：{{bingshiStr}}</span>
           </p>
           <p>
-            <span>既往病史：</span>
+            <span>遗传史：{{yichuanshiStr}}</span>
           </p>
-          <p>
+          <!-- <p>
             <span>过敏史：</span>
-          </p>
+          </p> -->
           <p>
-            <span>体格检查：</span>
+            <span>检查项目：{{jianchaxiangmu}}</span>
           </p>
           <p>
             <span>处理意见：{{medication.doctorTip}}</span>
@@ -793,8 +802,10 @@ import addMedicine from '@/components/addMedicine.vue'
 import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
-import {bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
+import {bloodheighSickApi, sickApi, modifyCardApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 import {mapState} from 'vuex'
+import Bus from '@/bus.js'
+import {dateFormat} from './../../untils/date.js'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
@@ -819,6 +830,7 @@ export default {
   },
   data () {
     return {
+      currentDate: '',
       labelPosition: 'left',
       cardData: {},
       activeIndex: 1,
@@ -849,13 +861,16 @@ export default {
       medication: {
         name: '',
         sickDuration: '',
+        year: null,
+        month: null,
+        day: null,
         phone: '',
         sex: 'man',
-        isfirst: 'first',
+        isfirst: '1',
         sickHistroy: [],
         inhereHistroy: [],
         habit: '',
-        checkItem: '',
+        checkItem: [],
         complication: [],
         sureSick: '',
         lastTime: '',
@@ -937,17 +952,64 @@ export default {
         }
       ],
       foodlist: [],
-      bingshiList: [],
+      bingshiList: [
+      ],
       yichuanshiList: [],
       gaoxueyabingfazhengList: [],
-      loading: false
-      // process.env.IMG_URL
+      bingshi: [],
+      yichuanshi: [],
+      bingshiStr: '',
+      yichuanshiStr: '',
+      jianchaxiangmu: '',
+      loading: false,
+      // 添加或修改病历
+      modify: false,
+      // 病历卡id
+      id: null,
+      year: [],
+      month: [],
+      day: []
     }
   },
   watch: {
     info: {
       handler: function () {
 
+      },
+      deep: true,
+      immediate: true
+    },
+    medication: {
+      handler: function (val) {
+        if (this.medication.sickHistroy.length !== 0) {
+          this.medication.sickHistroy.forEach(item => {
+            if (item) {
+              let i = this._.findIndex(this.bingshiList, function (o) {
+                return o.id === item
+              })
+              if (i !== -1) {
+                this.bingshi.push(this.bingshiList[i].illnessName)
+              }
+            }
+          })
+        }
+        if (this.medication.inhereHistroy.length !== 0) {
+          this.medication.inhereHistroy.forEach(item => {
+            if (item) {
+              let i = this._.findIndex(this.yichuanshiList, function (o) {
+                return o.id === item
+              })
+              if (i !== -1) {
+                this.yichuanshi.push(this.yichuanshiList[i].illnessName)
+              }
+            }
+          })
+        }
+        if (this.medication.checkItem.length !== 0) {
+          this.jianchaxiangmu = this.medication.checkItem.join(',')
+        }
+        this.bingshiStr = this.bingshi.join(',')
+        this.yichuanshiStr = this.yichuanshi.join(',')
       },
       deep: true,
       immediate: true
@@ -1057,8 +1119,10 @@ export default {
       let obj = {}
       obj.userId = this.sickID
       obj.doctorDiagnos = this.medication.diagnosisMsg
-      obj.lastTime = this.medication.lastTime
-      obj.monthSick = this.medication.sickDuration   // err
+      obj.lastTime = dateFormat(this.medication.lastTime, 0, true)
+      obj.yearsSick = this._.isNaN(parseInt(this.medication.year)) ? null : parseInt(this.medication.year)
+      obj.monthSick = this._.isNaN(parseInt(this.medication.month)) ? null : parseInt(this.medication.month)
+      obj.daySick = this._.isNaN(parseInt(this.medication.day)) ? null : parseInt(this.medication.day)
       obj.confirmDisease = this.medication.sureSick
       obj.isBoth = this.medication.isfirst
       obj.height = this.copyInfo.heigh
@@ -1070,6 +1134,7 @@ export default {
       obj.drinking = this.medication.drinking
       obj.is23Sleep = this.medication.is23Sleep
       obj.sleepStatus = this.medication.sleepStatus
+      obj.checkItem = this.medication.checkItem.join(',')
       console.log('this.doctorMedicine', this.doctorMedicine)
       let medicine = []
       this.doctorMedicine.forEach(item => {
@@ -1089,8 +1154,23 @@ export default {
         // obj.totalNumber
       })
       obj.list = JSON.stringify(medicine)
-      // this.$emit('complete', '1')
+      if (this.modify) {
+        obj.id = this.id
+      }
+      this.$axios(modifyCardApi(obj))
+      .then(res => {
+        if (res.data.code === '0000') {
 
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.data.msg,
+            type: 'warning'
+          })
+        }
+      })
+      // this.$emit('complete', '1')
+      console.log('面诊数据', obj)
       // this.showface = false
     },
     addsports (obj) {
@@ -1120,17 +1200,23 @@ export default {
       .then(res => {
         if (res.data.data.length !== 0) {
           list = res.data.data
+          list.forEach(item => {
+            item = this._.toString(item)
+          })
           return list
         }
       })
       // sickApi
     },
-    searchSick (val) {
+    getbingshiList (val) {
       // if (val) {
       this.loading = true
       this.$axios(sickApi(3))
       .then(res => {
         if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = this._.toString(item.id)
+          })
           this.bingshiList = res.data.data
           this.loading = false
         }
@@ -1144,6 +1230,9 @@ export default {
       this.$axios(sickApi(4))
       .then(res => {
         if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = this._.toString(item.id)
+          })
           this.yichuanshiList = res.data.data
           // this.loading = false
         }
@@ -1153,6 +1242,9 @@ export default {
       this.$axios(sickApi(6))
       .then(res => {
         if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = this._.toString(item.id)
+          })
           this.gaoxueyabingfazhengList = res.data.data
           // this.loading = false
         }
@@ -1160,6 +1252,11 @@ export default {
     },
     // 打印病历
     dayin () {
+      // console.log('this.bingshi', this.bingshi)
+      // console.log('this.bingshi', this.yichuanshi)
+      // console.log('this.bingshi', this.jianchaxiangmu)
+      // this.bingshi
+
       var headhtml = '<html><head></head><body>'
       var foothtml = '</body>'
       // 获取div中的html内容
@@ -1179,15 +1276,6 @@ export default {
       // 将原来窗口body的html值回填展示
       document.body.innerHTML = oldhtml
       return false
-      // let subOutputRankPrint = document.getElementById('print')
-      // console.log(subOutputRankPrint.innerHTML)
-      // let newContent = subOutputRankPrint.innerHTML
-      // let oldContent = document.body.innerHTML
-      // document.body.innerHTML = newContent
-      // window.print()
-      // window.location.reload()
-      // document.body.innerHTML = oldContent
-      // return false
     }
   },
   computed: {
@@ -1204,7 +1292,7 @@ export default {
         if (this._.has(this.cardData, 'realName')) {
           return this.cardData.realName
         } else {
-          return ''
+          return null
         }
       }
     },
@@ -1239,7 +1327,7 @@ export default {
         if (this._.has(this.cardData, 'age')) {
           return this.cardData.age
         } else {
-          return ''
+          return null
         }
       }
     },
@@ -1249,7 +1337,7 @@ export default {
         if (this._.has(this.cardData, 'mobile')) {
           return this.cardData.mobile
         } else {
-          return ''
+          return null
         }
       }
     },
@@ -1259,7 +1347,7 @@ export default {
         if (this._.has(this.cardData, 'doctorDiagnos')) {
           return this.cardData.doctorDiagnos
         } else {
-          return ''
+          return null
         }
       }
     },
@@ -1270,10 +1358,10 @@ export default {
           if (this._.has(this.cardData.userBody, 'height')) {
             return this.cardData.userBody.height
           } else {
-            return ''
+            return null
           }
         } else {
-          return ''
+          return null
         }
       }
     },
@@ -1284,10 +1372,10 @@ export default {
           if (this._.has(this.cardData.userBody, 'weight')) {
             return this.cardData.userBody.weight
           } else {
-            return ''
+            return null
           }
         } else {
-          return ''
+          return null
         }
       }
     },
@@ -1301,10 +1389,17 @@ export default {
             // let list = []
             // this.
             let sicklist = this.cardData.userBody.sysIllnessHistoryIdDisease.split(',')
+            console.log('sysIllnessHistoryIdDisease', sicklist)
+            // if(sicklist.length !==0){
+            // sicklist.forEach(item => {
+            //   item = parseInt(item)
+            // })
+            // }
             // sicklist.forEach(item => {
             //   let obj ={}
             //   obj.
             // })
+            sicklist = this._.uniqWith(sicklist, this._.isEqual)
             return sicklist
             // return this.cardData.userBody.sysIllnessHistoryNameDisease
           } else {
@@ -1320,7 +1415,9 @@ export default {
       if (this.cardData) {
         if (this._.has(this.cardData, 'userBody')) {
           if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdGenetic')) {
-            return this.cardData.userBody.sysIllnessHistoryIdGenetic.split(',')
+            let sicklist = this.cardData.userBody.sysIllnessHistoryIdGenetic.split(',')
+            sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            return sicklist
           } else {
             return []
           }
@@ -1345,28 +1442,35 @@ export default {
           }
           if (this._.has(this.cardData.userBody, 'sleepStatus')) {
             if (this.cardData.userBody.sleepStatus === 1) {
+              this.medication.sleepStatus = '1'
               habits.push('睡眠规律')
             }
             if (this.cardData.userBody.sleepStatus === 2) {
+              this.medication.sleepStatus = '2'
               habits.push('睡眠不规律')
             }
           }
           if (this._.has(this.cardData.userBody, 'smoking')) {
             if (this.cardData.userBody.smoking === 1) {
+              this.medication.smoking = '1'
               habits.push('抽烟')
             }
             if (this.cardData.userBody.smoking === 2) {
+              this.medication.smoking = '2'
               habits.push('不抽烟')
             }
             if (this.cardData.userBody.smoking === 3) {
+              this.medication.smoking = '3'
               habits.push('已戒烟')
             }
           }
           if (this._.has(this.cardData.userBody, 'is23Sleep')) {
             if (this.cardData.userBody.is23Sleep === 1) {
+              this.medication.is23Sleep = '1'
               habits.push('23点前睡觉')
             }
             if (this.cardData.userBody.is23Sleep === 2) {
+              this.medication.is23Sleep = '0'
               habits.push('没有23点前睡觉')
             }
           }
@@ -1396,15 +1500,19 @@ export default {
           }
           if (this._.has(this.cardData.userBody, 'drinking')) {
             if (this.cardData.userBody.drinking === 1) {
+              this.medication.drinking = '1'
               habits.push('从不饮酒')
             }
             if (this.cardData.userBody.drinking === 2) {
+              this.medication.drinking = '2'
               habits.push('偶尔饮酒')
             }
             if (this.cardData.userBody.drinking === 3) {
+              this.medication.drinking = '3'
               habits.push('经常饮酒')
             }
             if (this.cardData.userBody.drinking === 4) {
+              this.medication.drinking = '4'
               habits.push('每天饮酒')
             }
           }
@@ -1420,7 +1528,9 @@ export default {
       if (this.cardData) {
         if (this._.has(this.cardData, 'userBody')) {
           if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdBpConcurrent')) {
-            return this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            return sicklist
           } else {
             return []
           }
@@ -1444,10 +1554,59 @@ export default {
     }
   },
   mounted () {
-    this.searchSick()
-    this.getyichuanshiList()
-    this.getgaoxueyabingfazhengList()
-    this.getData()
+    this.currentDate = dateFormat(new Date(), 0, true)
+    let vm = this
+    Bus.$on('modifySickCard', function (val) {
+      if (val.modify) {
+        this.modify = true
+        this.id = val.cardid
+      }
+    })
+    let promise1 = new Promise(function (resolve, reject) {
+      vm.$axios(sickApi(3))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = vm._.toString(item.id)
+          })
+          vm.bingshiList = res.data.data
+          console.log('bingshiList', vm.bingshiList)
+          resolve('1')
+        }
+      })
+    })
+    let promise2 = new Promise(function (resolve, reject) {
+      vm.$axios(sickApi(4))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = vm._.toString(item.id)
+          })
+          vm.yichuanshiList = res.data.data
+          resolve('2')
+        }
+      })
+    })
+    let promise3 = new Promise(function (resolve, reject) {
+      vm.$axios(sickApi(6))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = vm._.toString(item.id)
+          })
+          vm.gaoxueyabingfazhengList = res.data.data
+          resolve('3')
+        }
+      })
+    })
+
+    Promise.all([promise1, promise2, promise3]).then(function (results) {
+      vm.getData()
+    })
+    // this.getbingshiList()
+    // this.getyichuanshiList()
+    // this.getgaoxueyabingfazhengList()
+    // this.getData()
     console.log('this.adminInfo.name', this.adminInfo.name)
   }
 }
@@ -1550,8 +1709,9 @@ export default {
     // flex-flow: wrap;
   }
   .case{
-    min-width: 600px;
-    // width: 100%;height:100%; float: left;
+    min-width: 630px;
+    width: 100%;
+    height:100%;
   }
   .pane-bg{
     height: 8px;
@@ -1584,6 +1744,7 @@ export default {
     text-align: center;
     // max-width: 60px;
     display: inline-block;
+
   }
   .use-num{
     display: inline-block;
@@ -1855,6 +2016,16 @@ export default {
     display: inline-block;
     width: 40%;
   }
+}
+.pick-date-wrap{
+  display: flex;
+  
+  /* justify-content: space-around; */
+}
+.pick-date-wrap div{
+  width: 56px;
+  padding-right: 5px;
+  /* justify-content: space-around; */
 }
 </style>
 

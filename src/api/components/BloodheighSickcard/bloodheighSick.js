@@ -45,3 +45,12 @@ export const sickApi = (params) => {
     outtime: 10000
   }
 }
+export const modifyCardApi = (params) => {
+  return {
+    method: 'post',
+    url: '/user/casesCard/add',
+    data: params,
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    outtime: 10000
+  }
+}
