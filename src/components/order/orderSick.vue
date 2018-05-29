@@ -62,9 +62,14 @@
                           <div class="oder-name ">
                           </div>
                           <!-- 就诊项目 -->
-                          <div class="flex-item">
+                          <div class="flex-item" v-show="item.morninngWork">
                             <span>
-                              暂无数据
+                              暂无预约
+                            </span>
+                          </div>
+                          <div class="flex-item error" v-show="!item.morninngWork">
+                            <span>
+                              没有设置预约
                             </span>
                           </div>
                           <!-- 就诊状态 -->
@@ -135,9 +140,14 @@
                           <div class="oder-name ">
                           </div>
                           <!-- 就诊项目 -->
-                          <div class="flex-item">
+                          <div class="flex-item" v-show="item.noonWork">
                             <span>
-                              暂无数据
+                              暂无预约
+                            </span>
+                          </div>
+                          <div class="flex-item error" v-show="!item.noonWork">
+                            <span>
+                              没有设置预约
                             </span>
                           </div>
                           <!-- 就诊状态 -->
@@ -176,7 +186,7 @@
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span>{{oderStutas(noonPerson.makeOrderState)}}</span>
+                            <span :class="{'success':computeColor(noonPerson.makeOrderState),'error':!computeColor(noonPerson.makeOrderState)}">{{oderStutas(noonPerson.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
@@ -826,6 +836,7 @@ export default {
               // this.order[this.index].morning = ''
               // this.order[this.index].noon = ''
             }
+            this.getOrderData({type: 0})
           })
         this.settingSingle = false
       }

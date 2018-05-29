@@ -52,6 +52,7 @@
           <chartMessage
           v-for="(item,index) in historyMsg" :key="index"
           :who="item.senderUserId || ''"
+          :type="item.content.messageName"
           >
             <chatContent :message="item"></chatContent>
           <!-- {{historyMsg.length !== 0 ? item.content.content :''}} -->
@@ -244,6 +245,7 @@ export default {
       'sethistory'
     ]),
     sendMsg () {
+      console.log('historyMsg', this.historyMsg)
       let vm = this
       // vm.historyMsg = []
       if (this.readyMsg !== '') {

@@ -76,10 +76,12 @@
         'closeAnimation'
       ]),
       ...mapActions([
-        'setRongUserIdAction'
+        'setRongUserIdAction',
+        'setFriendsListActon'
       ]),
       showFriendWindow () {
         this.closeAnimation()
+        this.setFriendsListActon()
         this.imStatus = true
       },
       closeIMhandle () {
@@ -97,6 +99,7 @@
       }
     },
     mounted () {
+      this.setFriendsListActon()
       // console.log('ONLINE_STATIC', this.ONLINE_STATIC)
       let vm = this
       this.token = this.adminInfo.rongCloudToken

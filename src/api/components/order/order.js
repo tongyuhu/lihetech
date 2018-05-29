@@ -31,3 +31,13 @@ export const closeorderApi = (parmars) => {
     }
   }
 }
+export const settingDataApi = (parmars) => {
+  return {
+    method: 'post',
+    url: '/make/order/details',
+    data: {
+      'weekDay': parmars.weekDay,
+      'slotType': parmars.slotType
+    }
+  }
+}

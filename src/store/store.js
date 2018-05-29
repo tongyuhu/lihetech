@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { SET_ADMIN_INFO, SET_SICK_CARD } from './mutationstypes'
 import _ from 'lodash'
+import axios from '@/api/axios'
+import {rongFriendApi} from '@/api/views/rong'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -139,6 +141,9 @@ export const store = new Vuex.Store({
     // 关闭聊天动画
     closeAnimation (state) {
       state.newmsg = false
+    },
+    setFriendsList (state, list) {
+      state.friendsList = list
     }
   },
   actions: {
@@ -150,6 +155,33 @@ export const store = new Vuex.Store({
     },
     setaddChatFriend (context) {
       context.commit('addChatFriend')
+    },
+    setFriendsListActon (content) {
+      axios(rongFriendApi())
+      .then(res => {
+        let list = []
+        console.log('rongyun', res.data)
+        if (_.isArray(res.data.data)) {
+          if (res.data.data.length > 0) {
+            res.data.data.forEach(item => {
+              let obj = {}
+              obj.userId = 'member_' + item.userId
+              obj.userName = item.userRealName
+              obj.hasMsg = false
+              obj.currentChat = false
+              if (_.has(item, 'userImage')) {
+                if (item.userImage.length !== 0) {
+                  obj.userImg = process.env.IMG_URL + item.userImage
+                }
+                // process.env.IMG_URL
+              }
+              list.push(obj)
+            })
+          }
+        }
+        content.commit('setFriendsList', list)
+        // content.commit('setFriendsList')
+      })
     }
   }
 })

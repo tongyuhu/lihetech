@@ -1,7 +1,20 @@
 <template>
   <div>
     <span v-if="isTextMsg">{{textMsg}}</span>
-    <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
+    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
+    <el-dialog 
+    :visible.sync="showBigImg"
+    width="100%"
+    center>
+    <div class="center">
+      <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
+
+    </div>
+    
+    </el-dialog>
+    <!-- <div class="img-chat">
+      <vue-preview :slides="slide1" @close="handleClose"></vue-preview>
+    </div> -->
   </div>
 </template>
 
@@ -23,7 +36,18 @@ export default {
       textMsg: '',
       isTextMsg: false,
       isImgMsg: false,
-      imgsrc: ''
+      imgsrc: '',
+      showBigImg: false
+      // slide1: [
+      //   {
+      //     src: 'https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg',
+      //     msrc: 'https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg',
+      //     alt: 'picture1',
+      //     title: 'Image Caption 1',
+      //     w: 600,
+      //     h: 400
+      //   }
+      // ]
       // isTextMsg:true,
 
     }
@@ -56,6 +80,9 @@ export default {
 
   },
   methods: {
+    showBig () {
+      this.showBigImg = true
+    },
     showmsg () {
       let vm = this
       switch (vm.message.content.messageName) {
@@ -87,6 +114,13 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.img-chat{
+  max-width: 100px;
+  cursor: pointer;
+}
+.center{
+  margin: 0 auto;
+  text-align: center;
+}
 </style>

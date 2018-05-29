@@ -5,8 +5,11 @@
           <div>
             <img class="avatar" :src="userImg" alt="头像">
           </div>
-          <div :class="['message-wrap',cls ? 'left-angle':'right-angle']">
+          <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
+            <div :class="[nobg?'no-bg':'']">
               <slot></slot>
+            </div>
+          <!-- <div :class="['message-wrap',cls ? 'left-angle':'right-angle',nobg?'no-bg':'']"> -->
           </div>
         </div>
       </div>
@@ -41,11 +44,17 @@ export default {
     moreMessage: {
       type: [Boolean],
       default: false
+    },
+    type: {
+      type: [String],
+      default: 'TextMessage'
     }
   },
   data () {
     return {
-      cls: false
+      cls: false,
+      nobg: false,
+      chatclass: ''
     }
   },
   computed: {
@@ -67,12 +76,40 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted () {
+    if (this.type === 'ImageMessage') {
+      this.nobg = true
+      this.chatclass = ''
+      // this.cls = '0000'
+    } else {
+      if (this.cls) {
+        this.chatclass = 'left-angle'
+      } else {
+        this.chatclass = 'right-angle'
+      }
+    }
   }
 
 }
 </script>
 
 <style lang="scss" scoped>
+.no-bg{
+  background: rgba(255, 255, 255, 0) !important;
+}
+.no-bg .left-angle::before{
+  background: rgba(255, 255, 255, 0) !important;
+  content: "";
+  width:0;
+  height:0;
+}
+.no-bg .right-angle::before{
+  background: rgba(255, 255, 255, 0) !important;
+  content: "";
+  width:0;
+  height:0;
+}
   .center{
     text-align: center;
   }

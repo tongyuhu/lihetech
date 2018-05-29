@@ -48,7 +48,7 @@
           align="center">
           </el-table-column>
           <el-table-column
-          :prop="sicktype"
+          prop="sicktype"
           label="患者类型"
           align="center">
           </el-table-column>
@@ -57,16 +57,16 @@
           label="联系电话"
           align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
           prop="email"
           label="严重比例 暂无"
           align="center">
-          </el-table-column>
-          <el-table-column
+          </el-table-column> -->
+          <!-- <el-table-column
           prop="adminNote"
           label="病情 无"
           align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           prop="joinHospitalTime"
           label="加入时间"
@@ -159,7 +159,7 @@ export default {
   data () {
     return {
       checkblood: true,
-      sicktype: 'bloodPressureType',
+      // sicktype: 'bloodPressureType',
       sickList: [
       ],
       readyDelete: [],
@@ -181,13 +181,13 @@ export default {
 
   methods: {
     checkedblood () {
-      this.sicktype = 'bloodPressureType'
+      // this.sicktype = 'bloodPressureType'
       this.checkblood = true
       this.currentPage = 1
       this.getSickList()
     },
     checkedsuger () {
-      this.sicktype = 'diabetesType'
+      // this.sicktype = 'diabetesType'
       this.checkblood = false
       this.currentPage = 1
       this.getSickList()
@@ -197,60 +197,60 @@ export default {
         return list
       } else {
         list.forEach(item => {
-          if (item.bloodPressureType) {
-            switch (item.bloodPressureType) {
-              case 0: {
-                item.bloodPressureType = '未知'
-                break
-              }
-              case 1: {
-                item.bloodPressureType = '原发性高血压'
-                break
-              }
-              case 2: {
-                item.bloodPressureType = '继发性高血压'
-                break
-              }
-              case 3: {
-                item.bloodPressureType = '正常'
-                break
-              }
-              default: {
-                item.bloodPressureType = '未知'
-              }
+          // if (item.bloodPressureType) {
+          switch (item.bloodPressureType) {
+            case 0: {
+              item.sicktype = '未知'
+              break
+            }
+            case 1: {
+              item.sicktype = '原发性高血压'
+              break
+            }
+            case 2: {
+              item.sicktype = '继发性高血压'
+              break
+            }
+            case 3: {
+              item.sicktype = '正常'
+              break
+            }
+            default: {
+              item.sicktype = '未知'
             }
           }
-          if (item.diabetesType) {
-            switch (item.diabetesType) {
-              case 0: {
-                item.diabetesType = '未知'
-                break
-              }
-              case 1: {
-                item.diabetesType = '1型糖尿病'
-                break
-              }
-              case 2: {
-                item.diabetesType = '2型糖尿病'
-                break
-              }
-              case 3: {
-                item.diabetesType = '妊娠型糖尿病'
-                break
-              }
-              case 4: {
-                item.diabetesType = '特殊型糖尿病'
-                break
-              }
-              case 5: {
-                item.diabetesType = '正常'
-                break
-              }
-              default: {
-                item.diabetesType = '未知'
-              }
+          // }
+          // if (item.diabetesType) {
+          switch (item.diabetesType) {
+            case 0: {
+              item.sicktype = '未知'
+              break
+            }
+            case 1: {
+              item.sicktype = '1型糖尿病'
+              break
+            }
+            case 2: {
+              item.sicktype = '2型糖尿病'
+              break
+            }
+            case 3: {
+              item.sicktype = '妊娠型糖尿病'
+              break
+            }
+            case 4: {
+              item.sicktype = '特殊型糖尿病'
+              break
+            }
+            case 5: {
+              item.sicktype = '正常'
+              break
+            }
+            default: {
+              item.sicktype = '未知'
             }
           }
+          // }
         })
       }
       return list
@@ -283,6 +283,7 @@ export default {
             })
           }
           this.sickList = this.formatterSickList(this.sickList)
+          console.log('sickList', this.sickList)
         })
       }
       console.log(this.searchSickMsg)
@@ -345,12 +346,14 @@ export default {
           })
         }
         this.sickList = this.formatterSickList(this.sickList)
+        console.log('sickList', this.sickList)
       })
     }
 
   },
   mounted () {
     this.getSickList()
+    // console.log('sickList', this.sickList)
   }
 }
 </script>
