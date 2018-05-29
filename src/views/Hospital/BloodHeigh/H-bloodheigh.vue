@@ -6,7 +6,7 @@
             <Hhospitalmsg></Hhospitalmsg>
             <HBloodheightotal></HBloodheightotal>
             <HWork></HWork>
-            <bloodSicklist></bloodSicklist>
+            <!-- <bloodSicklist></bloodSicklist> -->
           </el-col>
       </el-row>
   </div>

@@ -26,15 +26,15 @@ export default {
       admin: state => state.adminInfo
     }),
     hospitalName () {
-      if (this.admin && this.admin.department) {
-        return this.admin.department
+      if (this.admin && this.admin.hospital.department) {
+        return this.admin.hospital.department
       } else {
         return '暂无数据'
       }
     },
     hospitalAddress () {
-      if (this.admin && this.admin.hospital.address && this.admin.address) {
-        return this.admin.hospital.address + this.admin.address
+      if (this.admin && this.admin.address) {
+        return this.admin.address
       } else {
         return '暂无数据'
       }

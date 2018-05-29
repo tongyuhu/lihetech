@@ -96,6 +96,25 @@
               <!-- <span>停/启用</span> -->
             </template>
           </el-table-column>
+          <el-table-column
+          v-if="locked"
+          prop=""
+          label="锁定提示"
+          align="center"
+          width="70"
+          >
+            <template slot-scope="scope">
+              <el-popover
+                ref="popoverTip"
+                placement="top-start"
+                width="200"
+                trigger="hover"
+                content="请修改密码以解除锁定状态">
+              </el-popover>
+              <el-button type="text" :style="{color:'#e87070'}" v-popover:popoverTip>查看</el-button>
+              <!-- <span>停/启用</span> -->
+            </template>
+          </el-table-column>
         </el-table>
         <div class="page">
           <el-pagination
@@ -234,6 +253,8 @@ export default {
     return {
       doctorEditCellWidth: 100,
       showEnabled: false,
+      // 是否有账户锁定
+      locked: false,
       doctorList: [
         // {
         //   loginAccount: '2016-05-03',
@@ -488,6 +509,13 @@ export default {
             this.doctorList.push(item)
           })
         }
+        this.doctorList.forEach(item => {
+          if (this._.has(item, 'locked')) {
+            if (item.locked) {
+              this.locked = true
+            }
+          }
+        })
         console.log('doctorList', this.doctorList)
         // this.doctorList = this.formatterDoctorList(this.doctorList)
       })

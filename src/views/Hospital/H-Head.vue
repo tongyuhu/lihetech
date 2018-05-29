@@ -8,7 +8,7 @@
           <span @click.self="show" class="setting"><i class="el-icon-setting setting"></i>账户设置</span>
           <div class="shade" v-show="showshade" @click="isshowshade"></div>
           <div class="dropdown-content" :class="{show:isshow}">
-            <button class="setting-btn" @click="lookMsg">查看消息</button>
+            <button class="setting-btn" @click="lookMsg">我的二维码</button>
             <button class="setting-btn" @click="editDoc">编辑资料</button>
             <button class="setting-btn" @click="changePasswordDialogHandle">密码修改</button>
             <button class="setting-btn" @click="exit">退出</button>
@@ -21,15 +21,15 @@
         </div>
         <div class="head-right">
           <!-- <div class="admin-icon-wrap"> -->
-
-            <img :src="adminIcon" alt="暂无头像"  class="admin-icon" width="34px" height="34px">
+<!-- E:\LIHETECH.WEB\lihetech.dev\lihetech\static\admin.jpg -->
+            <img :src="adminIcon ? adminIcon :'./static/admin.jpg'" alt="暂无头像"  class="admin-icon" width="34px" height="34px">
           <!-- </div> -->
         </div>
   
       <el-dialog
         title="修改密码"
         :visible.sync="changePasswordDialog"
-        width="30%"
+        width="50%"
         center>
         <el-form
         :model="changePasswordForm" 
@@ -44,7 +44,7 @@
               :autofocus="true"
               placeholder="原始密码"
               v-model="changePasswordForm.oldPassword">
-              <template slot="prepend"><i class="el-icon-info"></i></template>
+              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
           <el-form-item prop="newPassword1">
@@ -52,7 +52,7 @@
               :autofocus="true"
               placeholder="请输入密码"
               v-model="changePasswordForm.newPassword1">
-              <template slot="prepend"><i class="el-icon-info"></i></template>
+              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
           <el-form-item prop="newPassword2">
@@ -60,14 +60,14 @@
               :autofocus="true"
               placeholder="请再次输入密码"
               v-model="changePasswordForm.newPassword2">
-              <template slot="prepend"><i class="el-icon-info"></i></template>
+              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
         </el-form>
         <!-- <span>需要注意的是内容是默认不居中的</span> -->
         <span slot="footer">
           <el-button @click="changePasswordDialog = false">取 消</el-button>
-          <el-button type="primary" @click="changePasswordDialog = false">确 定</el-button>
+          <el-button type="primary" @click="changePassword('changpasswordRef')">确 定</el-button>
         </span>
       </el-dialog>
 
@@ -76,6 +76,8 @@
 
 <script>
 import adminicon from 'icon/admin.jpg'
+import {mapState} from 'vuex'
+import {editAdminApi} from '@/api/components/editAdmin.js'
 export default {
   name: 'H-Head',
   data () {
@@ -90,7 +92,7 @@ export default {
       // let reg = new RegExp()
       let patrn = /^[a-zA-Z]\w{5,8}$/
       if (patrn.exec(value) === null) {
-        callback(new Error('请输入6~9密码，以字母开头,可包含数字和下划线'))
+        callback(new Error('请输入6~9密码,以字母开头,可包含数字和下划线'))
       } else {
         callback()
       }
@@ -98,7 +100,7 @@ export default {
     var checkNewPassword2 = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
-      } else if (value !== this.changePasswordForm.checkNewPassword1) {
+      } else if (value !== this.changePasswordForm.newPassword1) {
         callback(new Error('两次输入密码不一致'))
       } else {
         callback()
@@ -136,11 +138,12 @@ export default {
     }
   },
   computed: {
+    ...mapState(['adminInfo']),
     adminName () {
       if (!this.$store.state.adminInfo.address) {
         return '暂无用户名'
       } else {
-        return this.$store.state.adminInfo.address
+        return this.$store.state.adminInfo.name
       }
     },
     adminRoot () {
@@ -196,8 +199,34 @@ export default {
       }, 50)
       // changpasswordRef
     },
-    changePassword () {
-
+    changePassword (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let obj = {}
+          obj.id = this.adminInfo.id
+          obj.password = this.changePasswordForm.newPassword1
+          this.$axios(editAdminApi(obj))
+          .then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                showClose: true,
+                message: '修改成功',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+            }
+          })
+          alert('submit!')
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     },
     exit () {
       this.isshowshade()
@@ -219,6 +248,16 @@ export default {
       sessionStorage.clear()
     },
     adminAccount () {
+    }
+  },
+  mounted () {
+    console.log('headPortraitUrl', this.adminInfo.headPortraitUrl)
+    if (this._.has(this.adminInfo, 'headPortraitUrl')) {
+      if (this.adminInfo.headPortraitUrl.length !== 0) {
+        this.adminIcon = process.env.IMG_URL + this.adminInfo.headPortraitUrl
+      }
+    } else {
+      this.adminIcon = null
     }
   }
 }

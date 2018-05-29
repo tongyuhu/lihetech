@@ -73,7 +73,8 @@
                           <!-- 操作 -->
                           <div class="no-order-action">
                             <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
-                            <button v-if="!item.morninngStop" :class="{'open-order':item.morninngStop,'close-order':!item.morninngStop}" @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button>
+                            <button  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
+                            @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -145,7 +146,7 @@
                           <!-- 操作 -->
                           <div class="no-order-action">
                             <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
-                            <button v-if="!item.noonStop" :class="{'open-order':item.noonStop,'close-order':!item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
+                            <button :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -853,9 +854,18 @@ export default {
       if (day === '周日') {
         week = 7
       }
+      let stop
+      if (val === 1) {
+        stop = !this.orderList[index].morninngStop
+      }
+      if (val === 2) {
+        stop = !this.orderList[index].noonStop
+      }
+
       let params = {
         'weekDay': week,
-        'slotType': val
+        'slotType': val,
+        'isStop': stop
       }
       this.$axios(closeorderApi(params))
       .then(res => {
@@ -867,10 +877,10 @@ export default {
           })
           let list = this.orderList
           if (val === 1) {
-            list[index].morninngStop = true
+            list[index].morninngStop = !list[index].morninngStop
           }
-          if (val === 1) {
-            list[index].noonStop = true
+          if (val === 2) {
+            list[index].noonStop = !list[index].noonStop
           }
           this.getOrderData({type: 0})
           // this.orderList = Object.assign({}, list)

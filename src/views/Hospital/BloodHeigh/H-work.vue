@@ -82,7 +82,8 @@
       <div class="bottom-margin" id="bloodbad">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p>
+            <!-- <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p> -->
+            <p class="title">严重患者</p>
           </div>
           <div class="table">
             <el-table 
@@ -176,7 +177,8 @@
       <div class="bottom-margin" id="bloodnolisten">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p>
+            <p class="title">未遵医嘱患者</p>
+            <!-- <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p> -->
           </div>
           <div class="table">
 
@@ -269,10 +271,11 @@
       <!-- 未遵医嘱患者 end -->
 
       <!-- 建档不完整患者 start -->
-      <div id="bloodunperfect">
+      <div id="bloodunperfect" v-if="false">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p>
+            <p class="title">建档不完整患者</p>
+            <!-- <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p> -->
           </div>
           <div class="table">
 

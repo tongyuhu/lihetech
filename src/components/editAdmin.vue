@@ -13,7 +13,7 @@
 
                   <img class="img-photo" src="~/icon/hospital-icon2-16.png" alt="">
                 </div>
-                <img src="~/icon/admin.jpg">
+                <img :src="imgSrc ? imgSrc :'./static/admin.jpg'" >
               </a>
             </div>
           </div>
@@ -25,12 +25,12 @@
                   <el-form-item label="姓名" prop="name">
                     <el-input v-model="form.name"></el-input>
                   </el-form-item>
-                  <el-form-item label="性别" prop="sex">
+                  <!-- <el-form-item label="性别" prop="sex">
                     <el-select v-model="form.sex" placeholder="请选择性别" >
                       <el-option label="男" value="man"></el-option>
                       <el-option label="女" value="woman"></el-option>
                     </el-select>
-                  </el-form-item>
+                  </el-form-item> -->
                   <el-form-item label="登录账号" prop="account">
                     <el-input v-model="form.account"></el-input>
                   </el-form-item>
@@ -43,18 +43,18 @@
                 </div>
                 <el-form-item label="职称" prop="type">
                   <el-checkbox-group v-model="form.type">
-                    <el-checkbox label="内分泌教授" name="type"></el-checkbox>
-                    <el-checkbox label="副主任医师" name="type"></el-checkbox>
-                    <el-checkbox label="高血压专家" name="type"></el-checkbox>
-                    <el-checkbox label="糖尿病专家" name="type"></el-checkbox>
+                    <el-checkbox label="内分泌教授" name="1"></el-checkbox>
+                    <el-checkbox label="副主任医师" name="2"></el-checkbox>
+                    <el-checkbox label="高血压专家" name="3"></el-checkbox>
+                    <el-checkbox label="糖尿病专家" name="4"></el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
                 <el-form-item label="可预约项目" prop="order">
                   <el-checkbox-group v-model="form.order">
-                    <el-checkbox label="内分泌科" name="type"></el-checkbox>
-                    <el-checkbox label="心血管疾病" name="type"></el-checkbox>
-                    <el-checkbox label="高血压诊断" name="type"></el-checkbox>
-                    <el-checkbox label="糖尿病管理" name="type"></el-checkbox>
+                    <el-checkbox label="内分泌科" name="1"></el-checkbox>
+                    <el-checkbox label="心血管疾病" name="2"></el-checkbox>
+                    <el-checkbox label="高血压诊断" name="3"></el-checkbox>
+                    <el-checkbox label="糖尿病管理" name="4"></el-checkbox>
                   </el-checkbox-group>
                 </el-form-item>
                 <div class="right-form-wrap">
@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import {editAdminApi, uploadFileApi} from '@/api/components/editAdmin.js'
 export default {
   name: 'editAdmin',
   data () {
@@ -185,15 +187,53 @@ export default {
         introduction: [
             { validator: checkIntroduction, trigger: 'blur' }
         ]
-      }
+      },
+      imgSrc: '',
+      uploadSrc: null
     }
+  },
+  computed: {
+    ...mapState(['adminInfo'])
   },
   methods: {
     onSubmit (formName) {
+      console.log('submit', this.adminInfo)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert('submit!')
-          console.log(' submit!!')
+          // console.log(' submit!!')
+
+          console.log('submit', this.form)
+          let obj = {}
+          obj.id = this.adminInfo.id
+          obj.mobile = this.form.mobile
+          obj.email = this.form.email
+          obj.adminNote = this.form.introduction
+          obj.specialty = this.form.order.join('、')
+          obj.department = this.form.type.join('、')
+          obj.username = this.form.account
+          obj.name = this.form.name
+          if (this.uploadSrc) {
+            obj.headPortraitUrl = this.uploadSrc
+          }
+
+          this.axios(editAdminApi(obj))
+          .then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                showClose: true,
+                message: '修改成功',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+            }
+          })
+          // obj.sex = this.form.name
         } else {
           console.log('error submit!!')
           return false
@@ -202,8 +242,29 @@ export default {
       // console.log('submit!')
     },
     submitPhoto: function (e) {
-      let files = e.target.files
+      let files = e.target.files[0]
+      let obj = {}
+      if (this.imgSrc) {
+        obj.saveFile = this.imgSrc
+      }
+      obj.files = files
+      this.$axios(uploadFileApi(obj))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.imgSrc = res.data.seeFile
+          this.uploadSrc = res.data.saveFile
+        }
+      })
       console.log(files)
+    }
+  },
+  mounted () {
+    if (this._.has(this.adminInfo, 'headPortraitUrl')) {
+      if (this.adminInfo.headPortraitUrl.length !== 0) {
+        this.imgSrc = process.env.IMG_URL + this.adminInfo.headPortraitUrl
+      } else {
+        this.imgSrc = null
+      }
     }
   }
 }

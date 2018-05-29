@@ -4,16 +4,16 @@
       <div class="head-title">患者管理</div>
       <div class="head-edit-wrap">
         <button class="head-edit-button margin-right" @click="addSick">新增患者</button>
-        <button class="head-edit-button delete" @click="deleteSick">删除</button>
+        <!-- <button class="head-edit-button delete" @click="deleteSick">删除</button> -->
       </div>
     </div>
     <div>
       <el-card>
         <div class="card-head clear">
-          <div class="card-head-left sick-type-btn">
+          <!-- <div class="card-head-left sick-type-btn">
             <button :class="{'sick-type-checked':checkblood}" @click="checkedblood">高血压</button>
             <button :class="{'sick-type-checked':!checkblood}" @click="checkedsuger">糖尿病</button>
-          </div>
+          </div> -->
           <div class="search card-head-left">
             <el-input placeholder="账号 \ 姓名 \ 电话" v-model="searchSickMsg" size="small"
             :style="{'padding':'0'}"

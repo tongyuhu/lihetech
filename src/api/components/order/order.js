@@ -23,10 +23,11 @@ export const orderSettingApi = (parmars) => {
 export const closeorderApi = (parmars) => {
   return {
     method: 'post',
-    url: '/make/order/shutDown',
+    url: '/make/order/openOrGuan',
     data: {
       'weekDay': parmars.weekDay,
-      'slotType': parmars.slotType
+      'slotType': parmars.slotType,
+      'isStop': parmars.isStop
     }
   }
 }
