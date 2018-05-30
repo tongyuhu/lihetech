@@ -13,7 +13,7 @@ export const uploadFileApi = (parmas) => {
     url: '/file/upload/commons',
     data: parmas,
     // headers: { 'Content-type': 'form-data' }
-    headers: { 'Content-type': 'multipart/form-data' }
+    headers: { 'Content-type': 'multipart/form-data', 'Access-Control-Allow-Origin': '*' }
     // timeout: 10000
   }
 }

@@ -1134,8 +1134,8 @@ export default {
       obj.daySick = this._.isNaN(parseInt(this.medication.day)) ? null : parseInt(this.medication.day)
       obj.confirmDisease = this.medication.sureSick
       obj.isBoth = this.medication.isfirst
-      obj.height = this.copyInfo.heigh
-      obj.weight = this.copyInfo.weight
+      obj.height = this.copyInfo.heigh || this.info.weight
+      obj.weight = this.copyInfo.weight || this.info.heigh
       obj.sysIllnessHistoryIdDisease = this.medication.sickHistroy.join(',')
       obj.sysIllnessHistoryIdGenetic = this.medication.inhereHistroy.join(',')
       obj.sysIllnessHistoryIdBpConcurrent = this.medication.complication.join(',')
