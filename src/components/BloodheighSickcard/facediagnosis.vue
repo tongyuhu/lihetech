@@ -1035,10 +1035,10 @@ export default {
             this.info.img = process.env.IMG_URL + this.img
             this.info.sex = (this.sex === '男' ? 'man' : 'woman')
             this.info.age = this.age
-            this.info.heigh = this.heigh
+            this.info.heigh = this.height
             console.log('name', this.name)
-            console.log('heigh1', this.heigh)
-            console.log('heigh', this.info.heigh)
+            console.log('heigh1', this.height)
+            console.log('heigh', this.info.height)
             this.info.weight = this.weight
             this.medication.name = this.name
             this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
@@ -1162,6 +1162,13 @@ export default {
         medicine.push(obj)
         // obj.totalNumber
       })
+      let sort = this._.sortBy(this.doctorMedicine, function (i) {
+        return i.uselong
+      })
+
+      console.log('sortme', sort)
+      // this.doctorMedicine.
+      obj.days = sort[sort.length - 1].uselong
       obj.list = JSON.stringify(medicine)
       if (this.modify) {
         obj.id = this.id
@@ -1333,8 +1340,14 @@ export default {
     // 年龄
     age () {
       if (this.cardData) {
-        if (this._.has(this.cardData, 'age')) {
-          return this.cardData.age
+        if (this._.has(this.cardData, 'birthDate')) {
+          let b = dateFormat(new Date())
+          let a = dateFormat(this.cardData.birthDate, 0, true)
+          b = parseInt(b.slice(0, 4))
+          a = parseInt(a.slice(0, 4))
+          console.log('age', b - a)
+          // return this.cardData.age
+          return b - a
         } else {
           return null
         }

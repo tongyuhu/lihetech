@@ -644,7 +644,7 @@ export default {
     diagnose (row, val) {
       let id
       // if (val) {
-      id = row.userId
+      id = row.id
       // } else {
         // id = row.id
       // }

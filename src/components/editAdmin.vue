@@ -2,10 +2,10 @@
   <div >
     <el-card>
       <div class="clear flex">
-        <div class="left">
+        <div class="left" v-if="false">
           <div class="left-img">
 
-            <div class="left-img-wrap" v-if="false">
+            <div class="left-img-wrap" >
               <a class="a-upload">
                 <!-- <el-upload
                   class="avatar-uploader"
@@ -448,6 +448,7 @@ export default {
             // var base64 = canvas.toDataURL('image/' + ext, quality)
           var base64 = canvas.toDataURL('image/' + ext, quality)
           console.log('base64', base64)
+          console.log('files[0]', files[0])
           let base = base64.split(',')
           let obj = {}
             // obj.saveFile = ''
@@ -456,17 +457,25 @@ export default {
           }
           var formdata = new FormData()
           formdata.append('files', files[0], files[0].name)
-          console.log('formdata', formdata)
+          formdata.append('saveFile', vm.imgSrc)
+          formdata.append('saveFiless', 'vm.imgSrc')
+          console.log('formdata', formdata.get('files'))
           let config = {
-            headers: {'Content-Type': 'multipart/form-data'}
+            headers: {'Content-Type': 'multipart/form-data',
+              'Access-Control-Allow-Origin': '*'}
           }
-          vm.$axios.post('http://192.168.2.131:80/BPWatch/admin/file/upload/commons', formdata, config)
+      //     headers: {
+      //   'Content-Disposition': 'form-data',
+      //   'Content-Type': 'application/x-www-form-urlencoded',
+      //   'Access-Control-Allow-Origin': '*'
+      // }
+          // vm.$axios.post('http://192.168.2.131:80/BPWatch/admin/file/upload/commons', formdata, config)
           // obj.files = formdata
           // console.log('file', files)
           // console.log('file', files)
           // console.log('files.item(dd)', files.item(dd))
           // console.log('base', base)
-          // vm.$axios(uploadFileApi(formdata))
+          vm.$axios(uploadFileApi(formdata))
           .then(res => {
             if (res.data.code === '0000') {
               vm.imgSrc = res.data.seeFile
@@ -474,7 +483,7 @@ export default {
             } else {
               // alert('error')
             }
-            return false
+            // return false
           })
           console.log(files)
         }

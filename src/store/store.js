@@ -166,7 +166,7 @@ export const store = new Vuex.Store({
             res.data.data.forEach(item => {
               let obj = {}
               obj.userId = 'member_' + item.userId
-              obj.userName = item.userRealName || item.adminName || '用户'
+              obj.userName = item.userRealName || item.userMobile || '用户'
               obj.hasMsg = false
               obj.currentChat = false
               if (_.has(item, 'userImage')) {

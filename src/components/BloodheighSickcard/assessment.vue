@@ -174,6 +174,8 @@ export default {
           if (res.data.data.ICVDRisk) {
             if (res.data.data.ICVDRisk === '年龄要大于35！') {
               this.dangerRate = '年龄要大于35！'
+            } else if (res.data.data.ICVDRisk === '请先完善个人档案！') {
+              this.dangerRate = '请先完善个人档案！'
             } else {
               this.dangerRate = res.data.data.ICVDRisk + '%' || ''
             }
