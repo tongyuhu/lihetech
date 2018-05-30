@@ -1174,7 +1174,8 @@ export default {
       obj.days = sort[sort.length - 1].uselong
       // obj.list = JSON.stringify(JSON.stri ngify(medicine))
       // obj.list = 'json' + ':' + JSON.stringify(JSON.stringify(medicine))
-      obj.json = JSON.stringify(JSON.stringify(medicine))
+      obj.json = JSON.stringify(medicine)
+      // obj.json = JSON.stringify(JSON.stringify(medicine))
       console.log('JSON.stringify(medicine)', obj.list)
       // obj.list = JSON.stringify(medicine)
       // if (this.modify) {
