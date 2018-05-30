@@ -1006,8 +1006,12 @@ export default {
           })
         }
         if (this.medication.checkItem.length !== 0) {
+          // this._.ui
+          // this.jianchaxiangmu = this._.uniqWith(this.jianchaxiangmu, this._.isEqual)
           this.jianchaxiangmu = this.medication.checkItem.join(',')
         }
+        this.bingshi = this._.uniqWith(this.bingshi, this._.isEqual)
+        this.yichuanshi = this._.uniqWith(this.yichuanshi, this._.isEqual)
         this.bingshiStr = this.bingshi.join(',')
         this.yichuanshiStr = this.yichuanshi.join(',')
       },
