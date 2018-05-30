@@ -9,7 +9,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     adminInfo: {},
-    userCasesCardId: 5,
+    userCasesCardId: null,
+    userMakeOrderDoctorId: null,
     showSickCard: false,
     // 聊天窗口状态
     chatStatus: false,
@@ -69,6 +70,9 @@ export const store = new Vuex.Store({
     },
     setuserCasesCardId (state, id) {
       state.userCasesCardId = id
+    },
+    setuserMakeOrderDoctorId (state, id) {
+      state.userMakeOrderDoctorId = id
     },
     // 打开聊天窗口
     openChatWindow (state) {

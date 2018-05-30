@@ -112,7 +112,7 @@
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
-                            <button class="contant-btn" @click="diagnosis(morningPerson.userId)">会诊</button>
+                            <button class="contant-btn" @click="diagnosis(morningPerson)">会诊</button>
                             <button class="contant-btn" @click="contact(morningPerson.userId,morningPerson.name)">联系</button>
                           </div>                         
                         </div>
@@ -190,7 +190,7 @@
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
-                            <button class="contant-btn" @click="diagnosis(noonPerson.userId)">会诊</button>
+                            <button class="contant-btn" @click="diagnosis(noonPerson)">会诊</button>
                             <button class="contant-btn" @click="contact(noonPerson.userId,noonPerson.name)">联系</button>
                           </div>                         
                         </div>
@@ -524,7 +524,8 @@ export default {
       ['SET_SICK_CARD',
         'addChatFriend',
         'changeChatFriend',
-        'openChatWindow'
+        'openChatWindow',
+        'setuserMakeOrderDoctorId'
       ]),
     checkHistory () {
       this.checkOrderBtn = true
@@ -586,16 +587,17 @@ export default {
       }
       return color
     },
-    diagnosis (id) {
+    diagnosis (val) {
       this.$router.push({
         name: 'bloodheighSick',
         params: {
-          sickID: id,
+          sickID: val.userId,
           hospitalId: 2
         }})
+      this.setuserMakeOrderDoctorId(val.adminIdMainDoctor)
       // Bus.$emit('huizhen', true)
       this.SET_SICK_CARD(true)
-      // console.log('$refs', this.$refs.sickcard)
+      console.log('$refs', this.$refs.sickcard)
     },
     contact (id, name) {
       let sick = {

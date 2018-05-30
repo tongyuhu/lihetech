@@ -1163,23 +1163,34 @@ export default {
         obj.totalNumber = item.usetotal
         obj.usageOff = item.usemethod
         medicine.push(obj)
+        if (this._.has(item, 'uselong')) {
+          item.uselong = 0
+        }
         // obj.totalNumber
       })
+
       let sort = this._.sortBy(this.doctorMedicine, function (i) {
-        return i.uselong
+        if (this._.has(i, 'uselong')) {
+          return i.uselong
+        }
       })
 
       console.log('sortme', sort)
       // this.doctorMedicine.
-      obj.days = sort[sort.length - 1].uselong
+      if (this._.has(sort[sort.length - 1], 'uselong')) {
+        obj.days = sort[sort.length - 1].uselong || 0
+      } else {
+        obj.days = 0
+      }
       // obj.list = JSON.stringify(JSON.stri ngify(medicine))
       // obj.list = 'json' + ':' + JSON.stringify(JSON.stringify(medicine))
       obj.json = JSON.stringify(medicine)
+      obj.userMakeOrderDoctorId = this.userMakeOrderDoctorId || ''
       // obj.json = JSON.stringify(JSON.stringify(medicine))
       console.log('JSON.stringify(medicine)', obj.list)
       // obj.list = JSON.stringify(medicine)
       // if (this.modify) {
-      obj.userCasesCardId = this.userCasesCardId
+      obj.userCasesCardId = this.userCasesCardId || ''
       console.log('userCasesCardId', this.$route.params.userCasesCardId)
       // obj.userMakeOrderDoctorId =
       // }
@@ -1312,7 +1323,7 @@ export default {
     //   return this.$route.params.hospitalId
     // },
     // 姓名
-    ...mapState(['adminInfo', 'userCasesCardId']),
+    ...mapState(['adminInfo', 'userCasesCardId', 'userMakeOrderDoctorId']),
     name () {
       if (this.cardData) {
         if (this._.has(this.cardData, 'realName')) {
