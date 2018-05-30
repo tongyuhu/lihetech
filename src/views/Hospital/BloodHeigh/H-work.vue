@@ -577,7 +577,7 @@ export default {
       this.$axios(noListenDoctorDataApi(
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
-        if (res.data.data.length > 0) {
+        if (res.data && res.data.data.length !== 0) {
           res.data.data.forEach(item => {
             if (this._.has(item, 'bloodPressureType')) {
               item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
@@ -585,11 +585,22 @@ export default {
               item.bloodPressureType = '未知'
             }
           })
+          // this.badsickData = res.data.data
           this.noListenDoctorData = res.data.data
           this.nolistenTotal = res.data.recordCount
           this.nolistenPageSize = res.data.pageSize
           this.noListenTableLoading = false
+          console.log('this.noListenDoctorData', this.noListenDoctorData)
         }
+        // if (res.data.data.length > 0) {
+        //   res.data.data.forEach(item => {
+        //     if (this._.has(item, 'bloodPressureType')) {
+        //       item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
+        //     } else {
+        //       item.bloodPressureType = '未知'
+        //     }
+        //   })
+        // }
       }).catch(err => {
         if (err) this.noListenTableLoading = false
       })

@@ -25,13 +25,13 @@
           <div class="im-panes">
             <flod
             title="我的好友"
-            :total="friendList.length">
+            :total="friendsList.length">
               <div>
                 <ul>
                   <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
-                    :src="friend.userImg.length !==0 ? friend.userId :publicStatic.onlineStatic+ '/static/user.png'" alt="">
+                    :src="friend.userImg ? friend.userId :publicStatic.onlineStatic+ '/static/user.png'" alt="">
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
                     <!-- </el-badge> -->
@@ -87,12 +87,12 @@ export default {
     chatPane
   },
   props: {
-    friendList: {
-      type: [Array],
-      default: function () {
-        return []
-      }
-    }
+    // friendList: {
+    //   type: [Array],
+    //   default: function () {
+    //     return []
+    //   }
+    // }
   },
   data () {
     return {

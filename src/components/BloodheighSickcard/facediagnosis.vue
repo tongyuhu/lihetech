@@ -298,7 +298,7 @@
                 </el-row>
                 <el-row>
                   <el-col>
-                    <el-form-item label="症状" label-width="68px">
+                    <el-form-item label="自述" label-width="68px">
                       <el-input v-model="medication.symptom" size="mini"></el-input>
                     </el-form-item>
                   </el-col>
@@ -1017,9 +1017,13 @@ export default {
   },
   methods: {
     getData () {
+      // if()
       let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId
+      }
+      if (this.id) {
+        params.userCasesCardId = this.id
       }
       this.$axios(bloodheighSickApi(params))
       .then(res => {
@@ -1044,6 +1048,11 @@ export default {
             this.medication.habit = this.habits
             this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
             this.medication.sureSick = this.doctorDiagnos
+            this.medication.symptom = this.readme
+            this.medication.year = this.longtimeyear
+            this.medication.month = this.longtimemonth
+            this.medication.day = this.longtimeday
+            this.medication.lastTime = this.lastDate
           }
         }
       })
@@ -1549,6 +1558,86 @@ export default {
           }
         } else {
           return ''
+        }
+      }
+    },
+    readme () {
+      if (this.cardData) {
+        if (this._.has(this.cardData, 'userCasesCard')) {
+          if (this._.has(this.cardData.userCasesCard, 'readme')) {
+            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            // return sicklist
+            return this.cardData.userCasesCard.readme
+          } else {
+            return null
+          }
+        } else {
+          return null
+        }
+      }
+    },
+    longtimeyear () {
+      if (this.cardData) {
+        if (this._.has(this.cardData, 'userCasesCard')) {
+          if (this._.has(this.cardData.userCasesCard, 'yearsSick')) {
+            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            // return sicklist
+            return this.cardData.userCasesCard.yearsSick
+          } else {
+            return null
+          }
+        } else {
+          return null
+        }
+      }
+    },
+    longtimemonth () {
+      if (this.cardData) {
+        if (this._.has(this.cardData, 'userCasesCard')) {
+          if (this._.has(this.cardData.userCasesCard, 'monthSick')) {
+            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            // return sicklist
+            return this.cardData.userCasesCard.monthSick
+          } else {
+            return null
+          }
+        } else {
+          return null
+        }
+      }
+    },
+    longtimeday () {
+      if (this.cardData) {
+        if (this._.has(this.cardData, 'userCasesCard')) {
+          if (this._.has(this.cardData.userCasesCard, 'daySick')) {
+            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            // return sicklist
+            return this.cardData.userCasesCard.daySick
+          } else {
+            return null
+          }
+        } else {
+          return null
+        }
+      }
+    },
+    lastDate () {
+      if (this.cardData) {
+        if (this._.has(this.cardData, 'userCasesCard')) {
+          if (this._.has(this.cardData.userCasesCard, 'lastTime')) {
+            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+            // return sicklist
+            return this.cardData.userCasesCard.lastTime
+          } else {
+            return null
+          }
+        } else {
+          return null
         }
       }
     }

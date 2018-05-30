@@ -5,10 +5,32 @@
         <div class="left">
           <div class="left-img">
 
-            <div class="left-img-wrap">
+            <div class="left-img-wrap" v-if="false">
               <a class="a-upload">
-
-                <input type="file" accept="image/jpg" @change="submitPhoto($event)">
+                <!-- <el-upload
+                  class="avatar-uploader"
+                  action="http://192.168.2.131:80/BPWatch/admin/file/upload/commons"
+                  :on-success="handleAvatarSuccess"
+                  :headers='headers'
+                  :before-upload="handleAvatarbefore"
+                  :http-request="uploadImg"> -->
+                  
+                  <!-- <el-button size="small" type="primary"></el-button> -->
+                  <!-- <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div> -->
+                <!-- </el-upload> -->
+                <!-- <el-upload
+                  class="avatar-uploader"
+                  action="http://192.168.2.131:80/BPWatch/admin/file/upload/commons"
+                  :show-file-list="false"
+                  :data="uploadImgdata"
+                  :on-success="handleAvatarSuccess"
+                  :before-upload="handleAvatarbefore">
+                  <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                  <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload> -->
+                <form action="" enctype="multipart/form-data">
+                  <input type="file" accept="image/jpg" @change="submitPhoto($event)">
+                </form>
                 <div class="img-photo-wrap">
 
                   <img class="img-photo" src="~/icon/hospital-icon2-16.png" alt="">
@@ -77,6 +99,7 @@
 <script>
 import {mapState} from 'vuex'
 import {editAdminApi, uploadFileApi} from '@/api/components/editAdmin.js'
+import axios from 'axios'
 export default {
   name: 'editAdmin',
   data () {
@@ -189,13 +212,29 @@ export default {
         ]
       },
       imgSrc: '',
-      uploadSrc: null
+      uploadSrc: null,
+      uploadImgdata: {},
+      headers: {
+        'Content-Disposition': 'form-data',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Access-Control-Allow-Origin': '*'
+      }
     }
   },
   computed: {
     ...mapState(['adminInfo'])
   },
   methods: {
+    uploadImg (obj) {
+      this.$axios(uploadFileApi(obj))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.imgSrc = res.data.seeFile
+          this.uploadSrc = res.data.saveFile
+        }
+        return false
+      })
+    },
     onSubmit (formName) {
       console.log('submit', this.adminInfo)
       this.$refs[formName].validate((valid) => {
@@ -217,7 +256,7 @@ export default {
             obj.headPortraitUrl = this.uploadSrc
           }
 
-          this.axios(editAdminApi(obj))
+          this.$axios(editAdminApi(obj))
           .then(res => {
             if (res.data.code === '0000') {
               this.$message({
@@ -241,21 +280,211 @@ export default {
       })
       // console.log('submit!')
     },
-    submitPhoto: function (e) {
-      let files = e.target.files[0]
-      let obj = {}
+    handleAvatarbefore (file) {
       if (this.imgSrc) {
-        obj.saveFile = this.imgSrc
+        this.uploadImgdata.saveFile = this.imgSrc
       }
-      obj.files = files
-      this.$axios(uploadFileApi(obj))
-      .then(res => {
-        if (res.data.code === '0000') {
-          this.imgSrc = res.data.seeFile
-          this.uploadSrc = res.data.saveFile
+      this.uploadImgdata.files = file
+    },
+    handleAvatarSuccess (res, file) {
+      var vm = this
+      var imgLimit = 1024
+      var files = e.target.files
+      var image = new Image()
+      if (files.length > 0) {
+        var dd = 0
+            // if(files.item(dd).type !== 'image/jpg'){
+        if (files.item(dd).type !== 'image/png' && files.item(dd).type !== 'image/jpeg' && files.item(dd).type !== 'image/gif') {
+          vm.$message({
+            message: '只能发送jpg格式图片',
+            type: 'warning'
+          })
+        } else if (files.item(dd).size > imgLimit * 100) {
+          vm.$message({
+            message: '图片过大',
+            type: 'warning'
+          })
+                // to do sth
+        } else {
+          image.src = window.URL.createObjectURL(files.item(dd))
+          image.onload = function () {
+                  // 默认按比例压缩
+            var w = image.width
+            var h = image.height
+            var scale = w / h
+            w = 200
+            h = w / scale
+                  // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+            var quality = 0.9
+                  // 生成canvas
+            var canvas = document.createElement('canvas')
+            var ctx = canvas.getContext('2d')
+                  // 创建属性节点
+            var anw = document.createAttribute('width')
+            anw.nodeValue = w
+            var anh = document.createAttribute('height')
+            anh.nodeValue = h
+            canvas.setAttributeNode(anw)
+            canvas.setAttributeNode(anh)
+            ctx.drawImage(image, 0, 0, w, h)
+            var ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
+            // var base64 = canvas.toDataURL('image/' + ext, quality)
+            var base64 = canvas.toDataURL('image/' + ext, quality)
+            let base = base64.split(',')
+            let str = base[1]
+            console.log('base64', base[1])
+            console.log('base64length', base[1].length)
+            // 回调函数返回base64的值
+
+            let targetId = vm.currentChat.userId
+            var base64Str = str
+            var imageUri = '' // 上传到自己服务器的 URL。
+            var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
+            var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
+            // var targetId = 'xxx' // 目标 Id
+            RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+              onSuccess: function (message) {
+              // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+                let msgObj = {
+                  content: {
+                    messageName: 'ImageMessage',
+                    content: base64Str
+                  },
+                  senderUserId: vm.rongUserId
+                }
+            // vm.historyMsg = vm.currentChat.history
+                vm.sethistory(vm.currentChat.history)
+                vm.getCurrentFriendMsg(msgObj)
+            // vm.historyMsg.push(msgObj)
+            // vm.currentChat.history.push(msgObj)
+                // console.log('urrentChat.history', vm.currentChat.history)
+                console.log('msgObjimg', msgObj)
+                // console.log('currentChat', vm.currentChat)
+                // console.log('rongUserId', vm.rongUserId)
+                let newChat = vm.currentChat
+                newChat.history = vm.historyMsg
+                // console.log('newChat', newChat)
+                vm.addChatFriend(newChat)
+            // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+                console.log('Send successfully')
+                vm.readyMsg = ''
+                console.log('Send successfully')
+              },
+              onError: function (errorCode, message) {
+                var info = ''
+                switch (errorCode) {
+                  case RongIMLib.ErrorCode.TIMEOUT:
+                    info = '超时'
+                    break
+                  case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+                    info = '未知错误'
+                    break
+                  case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+                    info = '在黑名单中，无法向对方发送消息'
+                    break
+                  case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+                    info = '不在讨论组中'
+                    break
+                  case RongIMLib.ErrorCode.NOT_IN_GROUP:
+                    info = '不在群组中'
+                    break
+                  case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+                    info = '不在聊天室中'
+                    break
+                  default :
+                    info = x
+                    break
+                }
+                console.log('发送失败:' + info)
+              }
+            }
+        )
+          }
         }
-      })
-      console.log(files)
+      }
+
+      // console.log('imgupload', res)
+      // this.imgSrc = res.data.seeFile
+      // this.uploadSrc = res.data.saveFile
+    },
+    submitPhoto: function (e) {
+        // 如果提供了事件对象，则这是一个非IE浏览器
+      if (e && e.preventDefault) {
+        // 阻止默认浏览器动作(W3C)
+        e.preventDefault()
+      } else {
+        // IE中阻止函数器默认动作的方式
+        window.event.returnValue = false
+      }
+      var vm = this
+      // var imgLimit = 1024
+      var files = e.target.files
+      var image = new Image()
+      let dd
+      // let base64
+      if (files.length > 0) {
+        dd = 0
+        image.src = window.URL.createObjectURL(files.item(dd))
+        image.onload = function () {
+          var w = image.width
+          var h = image.height
+          var scale = w / h
+          w = 200
+          h = w / scale
+                  // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+          var quality = 0.9
+                  // 生成canvas
+          var canvas = document.createElement('canvas')
+          var ctx = canvas.getContext('2d')
+                  // 创建属性节点
+          var anw = document.createAttribute('width')
+          anw.nodeValue = w
+          var anh = document.createAttribute('height')
+          anh.nodeValue = h
+          canvas.setAttributeNode(anw)
+          canvas.setAttributeNode(anh)
+          ctx.drawImage(image, 0, 0, w, h)
+          var ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
+            // var base64 = canvas.toDataURL('image/' + ext, quality)
+          var base64 = canvas.toDataURL('image/' + ext, quality)
+          console.log('base64', base64)
+          let base = base64.split(',')
+          let obj = {}
+            // obj.saveFile = ''
+          if (vm.imgSrc) {
+            obj.saveFile = vm.imgSrc
+          }
+          var formdata = new FormData()
+          formdata.append('files', files[0], files[0].name)
+          console.log('formdata', formdata)
+          let config = {
+            headers: {'Content-Type': 'multipart/form-data'}
+          }
+          vm.$axios.post('http://192.168.2.131:80/BPWatch/admin/file/upload/commons', formdata, config)
+          // obj.files = formdata
+          // console.log('file', files)
+          // console.log('file', files)
+          // console.log('files.item(dd)', files.item(dd))
+          // console.log('base', base)
+          // vm.$axios(uploadFileApi(formdata))
+          .then(res => {
+            if (res.data.code === '0000') {
+              vm.imgSrc = res.data.seeFile
+              vm.uploadSrc = res.data.saveFile
+            } else {
+              // alert('error')
+            }
+            return false
+          })
+          console.log(files)
+        }
+      }
+
+      var formdata = new FormData()
+      formdata.append('file', files[0])
+      // let files = e.target.files[0]
+
+      return false
     }
   },
   mounted () {
@@ -364,6 +593,14 @@ export default {
   }
   .from{
     // width: 460px;
+  }
+  .avatar-uploader{
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    z-index: 66;
+    // top:50px;
+    // left: 50px;
   }
 </style>
 

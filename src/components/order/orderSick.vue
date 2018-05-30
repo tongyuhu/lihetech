@@ -78,7 +78,7 @@
                           <!-- 操作 -->
                           <div class="no-order-action">
                             <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
-                            <button  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
+                            <button v-if="!item.morninngStop"  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
                             @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
@@ -156,7 +156,7 @@
                           <!-- 操作 -->
                           <div class="no-order-action">
                             <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
-                            <button :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
+                            <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -804,6 +804,7 @@ export default {
     },
     // 确认编辑时间
     settingSingleConfirm () {
+      let parmars = {}
       console.log(this.settingSingleMorning)
       console.log(this.settingSingleNoon)
       let morning = this._.gt(this.settingSingleMorning.start, this.settingSingleMorning.end)
@@ -820,11 +821,38 @@ export default {
       } else {
         // this.order[this.index].morning = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
         // this.order[this.index].noon = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
-        let parmars = {
-          'weeks': this.index,
-          'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
-          'startEndPeriodTimeAftn': this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        let noon = null
+        if (!this.settingSingleNoon.start && !this.settingSingleNoon.end) {
+          noon = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        } else {
+          noon = null
         }
+        let morning = null
+        if (!this.settingSingleMorning.start && !this.settingSingleMorning.end) {
+          morning = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
+        } else {
+          morning = null
+        }
+        parmars.weekDay = this.index
+        if (morning) {
+          parmars.startEndPeriodTimeMor = morning
+        }
+        if (noon) {
+          parmars.startEndPeriodTimeAftn = noon
+        }
+        // if(morning){
+
+        // }
+        // let parmars = {
+        //   'weeks': this.index,
+        //   'startEndPeriodTimeMor': morning
+        //   // 'startEndPeriodTimeAftn': noon
+        // }
+        // let parmars = {
+        //   'weeks': this.index,
+        //   'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
+        //   'startEndPeriodTimeAftn': this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        // }
         this.$axios(orderSettingApi(parmars))
           .then(res => {
             if (res.data.code === '1001') {

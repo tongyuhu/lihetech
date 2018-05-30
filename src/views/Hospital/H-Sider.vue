@@ -60,15 +60,15 @@ export default {
             {
               id: 'bloodnolisten',
               title: '未遵医嘱'
-            },
-            {
-              id: 'bloodunperfect',
-              title: '建档不完善'
-            },
-            {
-              id: 'bloodcases',
-              title: '患者列表'
             }
+            // {
+            //   id: 'bloodunperfect',
+            //   title: '建档不完善'
+            // },
+            // {
+            //   id: 'bloodcases',
+            //   title: '患者列表'
+            // }
           ]
         },
         // {

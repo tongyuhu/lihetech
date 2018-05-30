@@ -11,6 +11,9 @@ export const uploadFileApi = (parmas) => {
   return {
     method: 'post',
     url: '/file/upload/commons',
-    data: parmas
+    data: parmas,
+    // headers: { 'Content-type': 'form-data' }
+    headers: { 'Content-type': 'multipart/form-data' }
+    // timeout: 10000
   }
 }
