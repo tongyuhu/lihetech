@@ -1020,11 +1020,12 @@ export default {
       // if()
       let params = {
         userId: this.sickID,
-        adminHospitalId: this.hospitalId
+        adminHospitalId: this.hospitalId,
+        userCasesCardId: this.userCasesCardId
       }
       // if (this.id) {
       console.log('this.id', this.id)
-      params.userCasesCardId = this.id
+      // params.userCasesCardId = this.$route.params.userCasesCardId
       // }
       this.$axios(bloodheighSickApi(params))
       .then(res => {
@@ -1144,6 +1145,7 @@ export default {
       obj.drinking = this.medication.drinking
       obj.is23Sleep = this.medication.is23Sleep
       obj.sleepStatus = this.medication.sleepStatus
+      // obj.sleepStatus = this.medication.sleepStatus
       obj.checkItem = this.medication.checkItem.join(',')
       console.log('this.doctorMedicine', this.doctorMedicine)
       let medicine = []
@@ -1171,12 +1173,15 @@ export default {
       // this.doctorMedicine.
       obj.days = sort[sort.length - 1].uselong
       // obj.list = JSON.stringify(JSON.stri ngify(medicine))
-      obj.list = 'json' + ':' + JSON.stringify(JSON.stringify(medicine))
+      // obj.list = 'json' + ':' + JSON.stringify(JSON.stringify(medicine))
+      obj.json = JSON.stringify(JSON.stringify(medicine))
       console.log('JSON.stringify(medicine)', obj.list)
       // obj.list = JSON.stringify(medicine)
-      if (this.modify) {
-        obj.id = this.id
-      }
+      // if (this.modify) {
+      obj.userCasesCardId = this.userCasesCardId
+      console.log('userCasesCardId', this.$route.params.userCasesCardId)
+      // obj.userMakeOrderDoctorId =
+      // }
       this.$axios(modifyCardApi(obj))
       .then(res => {
         if (res.data.code === '0000') {
@@ -1306,7 +1311,7 @@ export default {
     //   return this.$route.params.hospitalId
     // },
     // 姓名
-    ...mapState(['adminInfo']),
+    ...mapState(['adminInfo', 'userCasesCardId']),
     name () {
       if (this.cardData) {
         if (this._.has(this.cardData, 'realName')) {
@@ -1661,7 +1666,7 @@ export default {
   },
   mounted () {
     console.log('this.router', this.$route)
-    this.id = this.$route.params.id
+    this.id = this.$route.params.userCasesCardId
     this.currentDate = dateFormat(new Date(), 0, true)
     let vm = this
     Bus.$on('modifySickCard', function (val) {

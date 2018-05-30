@@ -417,7 +417,9 @@ export default {
   },
   computed: {
     ...mapState({
-      admin: state => state.adminInfo
+      admin: state => state.adminInfo,
+      userCasesCardId: state => state.userCasesCardId
+
     })
   },
   methods: {
@@ -425,7 +427,8 @@ export default {
       ['SET_SICK_CARD',
         'addChatFriend',
         'changeChatFriend',
-        'openChatWindow'
+        'openChatWindow',
+        'setuserCasesCardId'
       ]),
     sortSickList (arr) {
       let copyArr = arr
@@ -519,6 +522,7 @@ export default {
             this.newsickaskData = res.data.data
           }
         }
+
         this.newAskTotal = res.data.recordCount
         this.newAskPageSize = res.data.pageSize
         this.newSickTableLoading = false
@@ -637,8 +641,9 @@ export default {
         params: {
           sickID: userId,
           hospitalId: row.adminHospitalId,
-          id: row.id
+          userCasesCardId: row.id
         }})
+      this.setuserCasesCardId(row.id)
       Bus.$emit('modifySickCard', {modify: true, cardid: id})
       this.SET_SICK_CARD(true)
     },
