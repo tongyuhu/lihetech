@@ -1022,9 +1022,10 @@ export default {
         userId: this.sickID,
         adminHospitalId: this.hospitalId
       }
-      if (this.id) {
-        params.userCasesCardId = this.id
-      }
+      // if (this.id) {
+      console.log('this.id', this.id)
+      params.userCasesCardId = this.id
+      // }
       this.$axios(bloodheighSickApi(params))
       .then(res => {
         if (res.data) {
@@ -1169,7 +1170,10 @@ export default {
       console.log('sortme', sort)
       // this.doctorMedicine.
       obj.days = sort[sort.length - 1].uselong
-      obj.list = JSON.stringify(medicine)
+      // obj.list = JSON.stringify(JSON.stri ngify(medicine))
+      obj.list = 'json' + ':' + JSON.stringify(JSON.stringify(medicine))
+      console.log('JSON.stringify(medicine)', obj.list)
+      // obj.list = JSON.stringify(medicine)
       if (this.modify) {
         obj.id = this.id
       }
@@ -1656,12 +1660,16 @@ export default {
     }
   },
   mounted () {
+    console.log('this.router', this.$route)
+    this.id = this.$route.params.id
     this.currentDate = dateFormat(new Date(), 0, true)
     let vm = this
     Bus.$on('modifySickCard', function (val) {
+      this.id = val.cardid || this.$route.params.id
+
       if (val.modify) {
         this.modify = true
-        this.id = val.cardid
+        // this.id = val.cardid
       }
     })
     let promise1 = new Promise(function (resolve, reject) {

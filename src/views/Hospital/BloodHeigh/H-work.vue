@@ -632,11 +632,12 @@ export default {
       // } else {
         // userId = row.id
       // }
-      console.log(row)
+      console.log('carssdadd', row)
       this.$router.push({name: 'bloodheighSick',
         params: {
           sickID: userId,
-          hospitalId: row.adminHospitalId
+          hospitalId: row.adminHospitalId,
+          id: row.id
         }})
       Bus.$emit('modifySickCard', {modify: true, cardid: id})
       this.SET_SICK_CARD(true)
