@@ -140,10 +140,10 @@ export default {
   computed: {
     ...mapState(['adminInfo']),
     adminName () {
-      if (!this.$store.state.adminInfo.address) {
+      if (!this.$store.state.adminInfo.username) {
         return '暂无用户名'
       } else {
-        return this.$store.state.adminInfo.name
+        return this.$store.state.adminInfo.username
       }
     },
     adminRoot () {
