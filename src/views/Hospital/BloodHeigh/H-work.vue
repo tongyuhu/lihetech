@@ -33,7 +33,7 @@
                     class-name="table-col"
                     width="200">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row,'useUserId')"
+                      <el-button type="text" @click="newdiagnose(scope.row,'useUserId')"
                       :style="{'color':'#1991fc'}">
                         {{scope.row.realName}}
                       </el-button>
