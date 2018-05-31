@@ -286,7 +286,8 @@
                         filterable
                         allow-create
                         default-first-option
-                        placeholder="请添写项目标签">
+                        placeholder="请添写项目标签"
+                        no-data-text="填写标签按Enter确认">
                         <!-- <el-option
                           v-for="item in options5"
                           :key="item.value"
@@ -946,7 +947,7 @@ export default {
 
         obj.usageTimes = this.tonumber(item.usetimes) ? this.tonumber(item.usetimes) + '次/天' : null
         obj.remark = item.tip
-        obj.totalNumber = this.tonumber(item.usetotal) ? this.tonumber(item.usetotal) + '盒':null
+        obj.totalNumber = this.tonumber(item.usetotal) ? this.tonumber(item.usetotal) + '盒' : null
         obj.usageOff = this.medicineUnit(item.usemethod)
         medicine.push(obj)
         if (this._.has(item, 'uselong')) {

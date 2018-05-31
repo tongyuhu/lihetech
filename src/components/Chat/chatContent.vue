@@ -54,13 +54,13 @@ export default {
           case 'TextMessage':
             this.isTextMsg = true
           // if (this.this.message.content.content) {
-            this.textMsg = this.this.message.content.content
+            this.textMsg = this.message.content.content
           // }
             break
           case 'ImageMessage':
             this.isImgMsg = true
-            if (this.this.message.content.content) {
-              this.imgsrc = 'image/jpg;base64,' + this.this.message.content.content
+            if (this.message.content.content) {
+              this.imgsrc = 'image/jpg;base64,' + this.message.content.content
             }
             if (this.message.content.imageUri) {
               this.imgsrc = this.message.content.imageUri

@@ -1,6 +1,6 @@
 <template>
   <div class="chart-window clear" v-drag="'chart'">
-    <div class="chart-window-left" v-if="false">
+    <div class="chart-window-left" v-show="false">
       <!-- 左侧聊天好友列表 -->
       <ul>
         <li v-for="item in chartList" :key="item.id">
@@ -130,7 +130,7 @@ export default {
       //     }
       //   },
       // ],
-      readyMsg: '',
+      readyMsg: null,
       chartList: [
       ],
       showList: false,
@@ -181,13 +181,22 @@ export default {
       'addChatFriend',
       'closeChatWindow',
       'getCurrentFriendMsg',
-      'sethistory'
+      'sethistory',
+      'clearCurrentChat'
     ]),
     sendMsg () {
-      console.log('historyMsg', this.historyMsg)
+      // console.log('historyMsg', this.historyMsg)
       let vm = this
       // vm.historyMsg = []
-      if (this.readyMsg !== '') {
+      let canSend = false
+      vm.readyMsg = this._.trim(vm.readyMsg)
+      if (vm.readyMsg === '') {
+        canSend = false
+      } else {
+        canSend = true
+      }
+      if (canSend) {
+        console.log('当前聊天', vm.currentChat)
         let targetId = vm.currentChat.userId
         let conversationtype = RongIMLib.ConversationType.PRIVATE
         let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
@@ -461,6 +470,7 @@ export default {
     closeChart () {
       // this.$emit('colseChat')
       // this.showChart = false
+      this.clearCurrentChat()
       this.closeChatWindow()
     },
     infiniteHandler ($state) {

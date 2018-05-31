@@ -152,6 +152,22 @@ export const store = new Vuex.Store({
     },
     setFriendsList (state, list) {
       state.friendsList = list
+    },
+    clearCurrentChat (state) {
+      if (state.friendsList.length > 0) {
+        state.friendsList.forEach(item => {
+          item.currentChat = false
+        })
+      }
+      if (state.chatfriend.length > 0) {
+        state.chatfriend.forEach(item => {
+          item.currentChat = false
+        })
+      }
+      console.log('是否清除当前聊天', state.chatfriend, state.friendsList)
+    },
+    clearNewmsg (state) {
+      state.newmsg = false
     }
   },
   actions: {
@@ -172,21 +188,29 @@ export const store = new Vuex.Store({
         if (_.isArray(res.data.data)) {
           if (res.data.data.length > 0) {
             res.data.data.forEach(item => {
-              let obj = {}
-              obj.userId = 'member_' + item.userId
-              obj.userName = item.userRealName || item.userMobile || '用户'
-              obj.hasMsg = false
-              obj.currentChat = false
-              if (_.has(item, 'userImage')) {
-                if (item.userImage.length !== 0) {
-                  obj.userImg = process.env.IMG_URL + item.userImage
+              let hasFriendIndex = _.findIndex(content.state.friendsList, function (o) {
+                return o.userId === 'member_' + item.userId
+              })
+              if (hasFriendIndex !== -1) {
+                list.push(content.state.friendsList[hasFriendIndex])
+              } else {
+                let obj = {}
+                obj.userId = 'member_' + item.userId
+                obj.userName = item.userRealName || item.userMobile || '用户'
+                obj.hasMsg = false
+                obj.currentChat = false
+                if (_.has(item, 'userImage')) {
+                  if (item.userImage.length !== 0) {
+                    obj.userImg = process.env.IMG_URL + item.userImage
+                  }
+                  // process.env.IMG_URL
                 }
-                // process.env.IMG_URL
+                list.push(obj)
               }
-              list.push(obj)
             })
           }
         }
+        // _.merge(list, content.state.friendsList)
         content.commit('setFriendsList', list)
         // content.commit('setFriendsList')
       })

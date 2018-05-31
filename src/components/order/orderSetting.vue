@@ -19,8 +19,8 @@
               <td>该日预约
                 <el-switch
                   v-model="item.order"
-                  active-color="#1991fc"
-                  inactive-color="#f1f1f1">
+                  active-color="#f1f1f1"
+                  inactive-color="#1991fc">
                 </el-switch>
               </td>
               <td>

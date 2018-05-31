@@ -835,13 +835,13 @@ export default {
         } else {
           morning = null
         }
-        parmars.weekDay = this.index
         if (morning) {
           parmars.startEndPeriodTimeMor = morning
         }
         if (noon) {
           parmars.startEndPeriodTimeAftn = noon
         }
+        parmars.weeks = this.index
         // if(morning){
 
         // }

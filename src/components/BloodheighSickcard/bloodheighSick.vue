@@ -57,10 +57,10 @@
             @preBtn="changePage"
             :sickData="cardData"
             :totalPage="totalPage"
-            v-show="showcard">
+            v-if="showcard">
             </card>
             <component
-            v-show="!showcard"
+            v-if="!showcard"
             @complete="completeDiag"
             @openSickCard="openHistroyCard"
             :sickID="sickID" 

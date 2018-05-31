@@ -35,9 +35,9 @@
                       <el-option label="女" value="woman"></el-option>
                     </el-select>
                   </el-form-item> -->
-                  <el-form-item label="登录账号" prop="account">
+                  <!-- <el-form-item label="登录账号" prop="account">
                     <el-input v-model="form.account"></el-input>
-                  </el-form-item>
+                  </el-form-item> -->
                   <el-form-item label="电话" prop="mobile">
                     <el-input v-model="form.mobile"></el-input>
                   </el-form-item>
@@ -45,7 +45,29 @@
                     <el-input v-model="form.email"></el-input>
                   </el-form-item>
                 </div>
-                <el-form-item label="职称" prop="type">
+                <el-form-item label="职称">
+                  <el-select
+                    v-model="form.type"
+                    multiple
+                    filterable
+                    allow-create
+                    default-first-option
+                    placeholder="请添写职称标签"
+                    no-data-text="填写标签按Enter确认">
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="可预约项目">
+                  <el-select
+                    v-model="form.order"
+                    multiple
+                    filterable
+                    allow-create
+                    default-first-option
+                    placeholder="请添写职称标签"
+                    no-data-text="填写标签按Enter确认">
+                  </el-select>
+                </el-form-item>
+                <!-- <el-form-item label="职称" prop="type">
                   <el-checkbox-group v-model="form.type">
                     <el-checkbox label="内分泌教授" name="1"></el-checkbox>
                     <el-checkbox label="副主任医师" name="2"></el-checkbox>
@@ -60,7 +82,7 @@
                     <el-checkbox label="高血压诊断" name="3"></el-checkbox>
                     <el-checkbox label="糖尿病管理" name="4"></el-checkbox>
                   </el-checkbox-group>
-                </el-form-item>
+                </el-form-item> -->
                 <div class="right-form-wrap">
                   <el-form-item label="医生简介" prop="introduction">
                     <el-input type="textarea" v-model="form.introduction"></el-input>
@@ -133,14 +155,15 @@ export default {
     }
     var checkType = (rule, value, callback) => {
       if (value.length === 0) {
-        return callback(new Error('请选择职称'))
+        return callback(new Error('请填写职称'))
       } else {
         callback()
       }
     }
     var checkOrder = (rule, value, callback) => {
+      console.log('检测项', value)
       if (value.length === 0) {
-        return callback(new Error('请选择预约项目'))
+        return callback(new Error('请填写预约项目'))
       } else {
         callback()
       }
@@ -148,8 +171,8 @@ export default {
     var checkIntroduction = (rule, value, callback) => {
       // let emailrule = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
       if (!value) {
-        // callback()
-        return callback(new Error('请填写医生信息'))
+        callback()
+        // return callback(new Error('请填写医生信息'))
         // return true
       } else {
         callback()
@@ -233,13 +256,12 @@ export default {
       })
     },
     onSubmit (formName) {
-      console.log('submit', this.adminInfo)
+      // console.log('submit', this.adminInfo)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert('submit!')
           // console.log(' submit!!')
 
-          console.log('submit', this.form)
           let obj = {}
           obj.id = this.adminInfo.id
           obj.mobile = this.form.mobile
@@ -252,23 +274,24 @@ export default {
           if (this.uploadSrc) {
             obj.headPortraitUrl = this.uploadSrc
           }
+          console.log('修改的医生信息', this.form)
 
-          this.$axios(editAdminApi(obj))
-          .then(res => {
-            if (res.data.code === '0000') {
-              this.$message({
-                showClose: true,
-                message: '修改成功',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                showClose: true,
-                message: res.data.msg,
-                type: 'warning'
-              })
-            }
-          })
+          // this.$axios(editAdminApi(obj))
+          // .then(res => {
+          //   if (res.data.code === '0000') {
+          //     this.$message({
+          //       showClose: true,
+          //       message: '修改成功',
+          //       type: 'success'
+          //     })
+          //   } else {
+          //     this.$message({
+          //       showClose: true,
+          //       message: res.data.msg,
+          //       type: 'warning'
+          //     })
+          //   }
+          // })
           // obj.sex = this.form.name
         } else {
           console.log('error submit!!')

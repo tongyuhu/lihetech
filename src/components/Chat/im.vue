@@ -31,7 +31,7 @@
                   <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
-                    :src="friend.userImg ? friend.userId :publicStatic.onlineStatic+ '/static/user.png'" alt="">
+                    :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt="">
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
                     <!-- </el-badge> -->
@@ -144,28 +144,33 @@ export default {
       'changeChatFriend',
       'addChatFriend',
       'openChatWindow',
-      'sethistory'
+      'sethistory',
+      'clearNewmsg'
     ]),
     closeIM () {
       this.$emit('closeIM')
     },
     chartWith (friend) {
       let vm = this
-      let history = []
-      vm.sethistory(history)
       friend.hasMsg = false
-      if (this._.has(friend, 'history')) {
-        history = friend.history
-        vm.addChatFriend(friend)
-        vm.changeChatFriend(friend)
-      } else {
-        // let historys = []
-        friend.history = []
-        vm.addChatFriend(friend)
-        vm.changeChatFriend(friend)
-      }
-      vm.sethistory(friend.history)
-      console.log('好友xiaoxi ', friend.history)
+      this.clearNewmsg()
+      this.addChatFriend(friend)
+      this.changeChatFriend(friend)
+      this.openChatWindow()
+      // let history = []
+      // vm.sethistory(history)
+      // friend.hasMsg = false
+      // if (this._.has(friend, 'history')) {
+      //   history = friend.history
+      //   vm.addChatFriend(friend)
+      //   vm.changeChatFriend(friend)
+      // } else {
+      //   friend.history = []
+      //   vm.addChatFriend(friend)
+      //   vm.changeChatFriend(friend)
+      // }
+      // vm.sethistory(history)
+      // console.log('好友xiaoxi ', friend)
       // friend.history = []
       // 获取历史消息
       let timestrap = null
