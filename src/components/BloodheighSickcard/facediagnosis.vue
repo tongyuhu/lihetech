@@ -22,52 +22,65 @@
             <el-button type="primary" @click="completeInfo">完善信息</el-button>
           </div>
           <div class="case-left-msg">
-            <div class="case-left-msg-single">
+            <!-- <div class="case-left-msg-single">
               <span class="label">性别：</span>
               <span v-if="!showEditMsg">{{info.sex === 'man' ? '男' : '女'}}</span>
-              <select v-if="showEditMsg" v-model="copyInfo.sex">
+
+              <el-select class="el-input-cls" v-if="showEditMsg" v-model="copyInfo.sex" size="mini">
+                <el-option label="男" value="man"></el-option>
+                <el-option label="女" value="woman"></el-option>
+              </el-select> -->
+              <!-- <select v-if="showEditMsg" v-model="copyInfo.sex">
                 <option value="man">男</option>
                 <option value="woman">女</option>
-              </select>
+              </select> -->
               <!-- <input type="text" v-if="showEditMsg" v-model="info.sex"> -->
-            </div>
+            <!-- </div> -->
             <div class="case-left-msg-single">
               <span class="label">年龄：</span>
               <span v-if="!showEditMsg">{{info.age ? info.age+'岁':''}}</span>
-              <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding">
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.age" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
               <span class="label">身高：</span>
               <span v-if="!showEditMsg">{{info.heigh ? info.heigh+'cm':''}}</span>
-              <input type="text" v-if="showEditMsg" v-model.number="copyInfo.heigh" class="padding">
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.heigh" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.heigh" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
               <span class="label">体重：</span>
               <span v-if="!showEditMsg">{{info.weight ? info.weight+'kg':''}}</span>
-              <input type="text" v-if="showEditMsg" v-model.number="copyInfo.weight" class="padding">
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.weight" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.weight" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
               <span class="label"> BMI： </span>
               <span v-if="!showEditMsg">{{info.BMI}}</span>
-              <input type="text" v-if="showEditMsg" v-model.number="copyInfo.BMI" class="padding">
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.BMI" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.BMI" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
               <span class="label">体温：</span>
               <span v-if="!showEditMsg">{{info.tem ? info.tem+'℃':''}}</span>
-              <input type="text" v-if="showEditMsg" v-model.number="copyInfo.tem" class="padding">
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.tem" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.tem" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
               <span class="label">血压：</span>
               <span v-if="!showEditMsg">{{info.bloodHeigh}}</span>
-              <input type="text" v-if="showEditMsg" v-model.lazy="copyInfo.bloodHeigh" class="padding">
+              <el-input class="el-input-cls-xueya" placeholder="高压" v-if="showEditMsg" v-model.number="copyInfo.bloodHeighBlood" size="mini"></el-input>
+              <el-input class="el-input-cls-xueya" placeholder="低压" v-if="showEditMsg" v-model.number="copyInfo.bloodLowBlood" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.lazy="copyInfo.bloodHeigh" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
               <span class="label">脉搏：</span>
               <span v-if="!showEditMsg">{{info.pulse ? info.pulse+'/min':''}}</span>
-              <input type="text" v-if="showEditMsg" v-model.number="copyInfo.pulse" class="padding">
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.pulse" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.pulse" class="padding"> -->
             </div>
-            <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button>
-            <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button>
+            <!-- <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button> -->
+            <!-- <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button> -->
           </div>
           <div>
             <el-button type="primary">体检表</el-button>
@@ -240,8 +253,8 @@
                       <el-select v-model="medication.is23Sleep" placeholder="请选择" size="mini">
                         <el-option-group
                         label="是否23点之前休息">
-                          <el-option label="是" value="1"></el-option>
-                          <el-option label="否" value="0"></el-option>
+                          <el-option label="23点之前" value="1"></el-option>
+                          <el-option label="23点之后" value="0"></el-option>
 
                         </el-option-group>
                       </el-select>
@@ -415,242 +428,6 @@
           </div>
         </div>
 
-
-        <!-- <div class="case face">  
-            <div  class="case-main">
-              <div class="case-main-content">
-                <div class="case-main-title">
-                  <span>上海立阖泰医疗统一处方笺</span>
-                </div>
-                <el-row :gutter="10">
-                  <el-col :span="6" :lg="6" :md="24" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">姓名:</div>
-                      <input type="text" v-model="medication.name">
-                    </div>
-                  </el-col>
-                  <el-col :span="6" :lg="6" :md="24" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div>患病时长:</div>
-                      <input type="text" v-model="medication.sickDuration">
-                    </div>
-                  </el-col>
-                  <el-col :span="7" :lg="7" :md="24" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div>电话号码:</div>
-                      <input type="text" v-model="medication.phone">
-                    </div>
-                  </el-col>
-                  <el-col :span="5" :lg="5" :md="24" :sm="24" :sx="24" class="margin-top">
-                    <select v-model="medication.sex">
-                      <option value="man">男</option>
-                      <option value="woman">女</option>
-                    </select>
-                    <select style="{'width':'40px'}" v-model="medication.isfirst">
-                      <option value="first">初诊</option>
-                      <option value="nofirst">复诊</option>
-                    </select>
-
-                  </el-col>
-                </el-row>
-                <div>
-                  <div>病史:</div>
-                  <el-select size="mini" 
-                  v-model="medication.sickHistroy" 
-                  multiple 
-                  placeholder="请选择"
-                  :loading="loading"
-                  @visible-change="searchSick">
-                    <el-option
-                      v-for="item in bingshiList"
-                      :key="item.id"
-                      :label="item.illnessName"
-                      :value="item.id">
-                    </el-option>
-                  </el-select>
-                </div>
-                <el-row :gutter="10">
-                  
-                  <el-col :span="6" :lg="6" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">遗传史:</div>
-                      <input type="text" v-model="medication.inhereHistroy">
-                    </div>
-                  </el-col>
-                  <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">生活习惯:</div>
-                      <input type="text" v-model="medication.habit">
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">检查项目:</div>
-                      <input type="text" v-model="medication.checkItem">
-                    </div>
-                  </el-col>
-                  <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">并发症:</div>
-                      <input type="text" v-model="medication.complication">
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group">
-                      <div for="name">确诊疾病:</div>
-                      <input type="text" v-model="medication.sureSick">
-                    </div>
-                  </el-col>
-                  <el-col :span="12" :lg="12" :md="12" :sm="24" :sx="24" class="margin-top">
-                    <div class="input-group" >
-                      <div for="name">上次就诊时间:</div>
-                      <input type="text" v-model="medication.lastTime">
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10" class="margin-top">
-                  <el-col>
-                    <div class="input-group">
-                      <div for="name">症状:</div>
-                      <input type="text" v-model="medication.symptom">
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10" class="margin-top">
-                  <el-col>
-                    <div class="input-group">
-                      <div for="name">诊所信息:</div>
-                      <input type="text" v-model="medication.hospitalMsg">
-                    </div>
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10" class="margin-top">
-                  <el-col>
-                    <div class="input-group">
-                      <div for="name">医嘱:</div>
-                      <input type="text" v-model="medication.doctorTip">
-                    </div>
-                  </el-col>
-                </el-row>
-                <div class="case-main-rp">
-                  <div class="case-main-rp-title">
-                    <span>RP</span>
-                  </div>
-                  <el-table
-                  ref="multipleTable"
-                  :data="doctorMedicine"
-                  tooltip-effect="dark"
-                  style="width: 100%"
-                  max-height="400">
-                    <el-table-column
-                      type="index"
-                      label="序号"
-                      width="55">
-                    </el-table-column>
-                    <el-table-column
-                      show-overflow-tooltip
-                      prop="name"
-                      label="名称">
-                    </el-table-column>
-                    <el-table-column
-                      prop="singleuse"
-                      label="单次用量"
-                      width="100">
-                      <template slot-scope="scope">
-                        <input  type="text" class="table-input use-num single-use">
-                        <select class="use-num">
-                          <option value="pian">片</option>
-                          <option value="li">粒</option>
-                          <option value="ke">颗</option>
-                          <option value="zhi">支</option>
-                        </select>
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="usemethod"
-                      label="用法"
-                      width="65">
-                      <template slot-scope="scope">
-                        <select>
-                          <option value="mouse">口服</option>
-                          <option value="in">注射</option>
-                          <option value="out">外涂</option>
-                        </select>
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="usetimes"
-                      label="频度"
-                      width="80">
-                      <template slot-scope="scope">
-                        <input type="text" class="table-input use-num single-use">次/天
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="uselong"
-                      label="天数"
-                      width="50">
-                      <template slot-scope="scope">
-                        <input type="text" class="table-input use-num single-use">
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="usetotal"
-                      label="总量"
-                      width="65">
-                      <template slot-scope="scope">
-                        <input type="text" class="table-input use-num single-use">盒
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="tip"
-                      label="备注">
-                      <template slot-scope="scope">
-                        <input type="text" class="table-input">
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="delete"
-                      label="编辑"
-                      width="100">
-                      <template slot-scope="scope">
-                        <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <div class="case-main-footer clear">
-                  <div class="case-main-footer-left">
-                    <div>
-                      <span>医生</span>
-                      <select name="" id="">
-                        <option value="">周医生</option>
-                        <option value="">王医生</option>
-                        <option value="">赵医生</option>
-                      </select>
-                    </div>
-                    <div>
-                      <span>科室</span>
-                      <select name="" id="">
-                        <option value="">内科</option>
-                        <option value="">外科</option>
-                        <option value="">心脑血管</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="case-main-footer-right">
-                    <span class="case-main-footer-right-total">总计：</span>
-                    <span class="case-main-footer-right-money">89元</span>
-                  </div>
-                </div>
-              </div>
-            </div>  
-        </div>   -->
-        
         <div class="case-right">
           <div class="case-right-main">
             <tabs
@@ -803,8 +580,8 @@ import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
 import {bloodheighSickApi, sickApi, modifyCardApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
-import {mapState} from 'vuex'
-import Bus from '@/bus.js'
+import {mapState, mapMutations} from 'vuex'
+// import Bus from '@/bus.js'
 import {dateFormat} from './../../untils/date.js'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
@@ -849,13 +626,15 @@ export default {
         name: '',
         sex: 'man',
         age: '',
-        heigh: 172,
-        weight: '65',
-        BMI: 2.5,
-        tem: 36,
-        bloodHeigh: '',
+        heigh: null,
+        weight: null,
+        BMI: null,
+        tem: null,
+        // bloodHeigh: '',
         pulse: '',
-        img: ''
+        img: '',
+        bloodHeighBlood: null,
+        bloodLowBlood: null
       },
       copyInfo: {},
       medication: {
@@ -962,8 +741,8 @@ export default {
       yichuanshiStr: '',
       jianchaxiangmu: '',
       loading: false,
-      // 添加或修改病历
-      modify: false,
+      // // 添加或修改病历
+      // modify: false,
       // 病历卡id
       id: null,
       year: [],
@@ -1020,6 +799,8 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setuserCasesCardId', 'setuserMakeOrderDoctorId']),
+    // 获取病历卡信息
     getData () {
       // if()
       let params = {
@@ -1055,10 +836,11 @@ export default {
             this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
             this.medication.sureSick = this.doctorDiagnos
             this.medication.symptom = this.readme
-            this.medication.year = this.longtimeyear
-            this.medication.month = this.longtimemonth
-            this.medication.day = this.longtimeday
+            this.medication.year = this.longtimeyear + '年'
+            this.medication.month = this.longtimemonth + '月'
+            this.medication.day = this.longtimeday + '天'
             this.medication.lastTime = this.lastDate
+            // this.medication.lastTime = this.lastDate
           }
         }
       })
@@ -1131,6 +913,7 @@ export default {
     },
     // 完成就诊
     complete () {
+      let vm = this
       let obj = {}
       obj.userId = this.sickID
       obj.doctorDiagnos = this.medication.diagnosisMsg
@@ -1140,32 +923,31 @@ export default {
       obj.daySick = this._.isNaN(parseInt(this.medication.day)) ? null : parseInt(this.medication.day)
       obj.confirmDisease = this.medication.sureSick
       obj.isBoth = this.medication.isfirst
-      obj.height = this.copyInfo.heigh || this.info.weight
-      obj.weight = this.copyInfo.weight || this.info.heigh
+      obj.height = this.tonumber(this.copyInfo.heigh) || this.info.weight
+      obj.weight = this.tonumber(this.copyInfo.weight) || this.info.heigh
       obj.sysIllnessHistoryIdDisease = this.medication.sickHistroy.join(',')
       obj.sysIllnessHistoryIdGenetic = this.medication.inhereHistroy.join(',')
       obj.sysIllnessHistoryIdBpConcurrent = this.medication.complication.join(',')
-      obj.smoking = this.medication.smoking
-      obj.drinking = this.medication.drinking
-      obj.is23Sleep = this.medication.is23Sleep
-      obj.sleepStatus = this.medication.sleepStatus
+      obj.smoking = this.tonumber(this.medication.smoking)
+      obj.drinking = this.tonumber(this.medication.drinking)
+      obj.is23Sleep = this.tonumber(this.medication.is23Sleep)
+      obj.sleepStatus = this.tonumber(this.medication.sleepStatus)
       // obj.sleepStatus = this.medication.sleepStatus
       obj.checkItem = this.medication.checkItem.join(',')
-      console.log('this.doctorMedicine', this.doctorMedicine)
       let medicine = []
       this.doctorMedicine.forEach(item => {
         let obj = {}
         obj.medicineType = 1
         obj.medicineName = item.name
         obj.medicineId = item.id
-        obj.everyDosage = item.singleuse
+        obj.everyDosage = this.tonumber(item.singleuse)
         // obj.medicineId =
-        obj.unit = item.singleuseUnit
+        obj.unit = this.medicineUnit(item.singleuseUnit)
 
-        obj.usageTimes = item.usetimes
+        obj.usageTimes = this.tonumber(item.usetimes) ? this.tonumber(item.usetimes) + '次/天' : null
         obj.remark = item.tip
-        obj.totalNumber = item.usetotal
-        obj.usageOff = item.usemethod
+        obj.totalNumber = this.tonumber(item.usetotal) ? this.tonumber(item.usetotal) + '盒':null
+        obj.usageOff = this.medicineUnit(item.usemethod)
         medicine.push(obj)
         if (this._.has(item, 'uselong')) {
           item.uselong = 0
@@ -1174,43 +956,37 @@ export default {
       })
 
       let sort = this._.sortBy(this.doctorMedicine, function (i) {
-        if (this._.has(i, 'uselong')) {
+        if (vm._.has(i, 'uselong')) {
           return i.uselong
         }
       })
 
-      console.log('sortme', sort)
-      // this.doctorMedicine.
       if (this._.has(sort[sort.length - 1], 'uselong')) {
         obj.days = sort[sort.length - 1].uselong || 0
       } else {
         obj.days = 0
       }
-      // obj.list = JSON.stringify(JSON.stri ngify(medicine))
-      // obj.list = 'json' + ':' + JSON.stringify(JSON.stringify(medicine))
       obj.json = JSON.stringify(medicine)
-      obj.userMakeOrderDoctorId = this.userMakeOrderDoctorId || ''
-      // obj.json = JSON.stringify(JSON.stringify(medicine))
       console.log('JSON.stringify(medicine)', obj.list)
-      // obj.list = JSON.stringify(medicine)
-      // if (this.modify) {
-      obj.userCasesCardId = this.userCasesCardId || ''
+      obj.userMakeOrderDoctorId = this.userMakeOrderDoctorId || null
+      obj.userCasesCardId = this.userCasesCardId || null
       console.log('userCasesCardId', this.$route.params.userCasesCardId)
-      // obj.userMakeOrderDoctorId =
-      // }
       this.$axios(modifyCardApi(obj))
       .then(res => {
         if (res.data.code === '0000') {
-
+          this.$emit('complete', '1')
         } else {
+          let errmsg = res.data.msg
+          if (res.data.msg === '失败！') {
+            errmsg = '请填写完整信息'
+          }
           this.$message({
             showClose: true,
-            message: res.data.msg,
+            message: errmsg,
             type: 'warning'
           })
         }
       })
-      // this.$emit('complete', '1')
       console.log('面诊数据', obj)
       // this.showface = false
     },
@@ -1317,6 +1093,45 @@ export default {
       // 将原来窗口body的html值回填展示
       document.body.innerHTML = oldhtml
       return false
+    },
+    tonumber (val) {
+      if (val) {
+        if (this._.isNaN(parseInt(val))) {
+          return parseInt(val)
+        } else {
+          return null
+        }
+      } else return null
+    },
+    medicineUnit (val) {
+      let unit
+      switch (val) {
+        case 'pian':
+          unit = '片'
+          break
+        case 'li':
+          unit = '粒'
+          break
+        case 'ke':
+          unit = '颗'
+          break
+        case 'zhi':
+          unit = '支'
+          break
+        case 'mouse':
+          unit = '口服'
+          break
+        case 'in':
+          unit = '注射'
+          break
+        case 'out':
+          unit = '外涂'
+          break
+        default:
+          unit = null
+          break
+      }
+      return unit
     }
   },
   computed: {
@@ -1326,8 +1141,8 @@ export default {
     // hospitalId () {
     //   return this.$route.params.hospitalId
     // },
-    // 姓名
     ...mapState(['adminInfo', 'userCasesCardId', 'userMakeOrderDoctorId']),
+    // 姓名
     name () {
       if (this.cardData) {
         if (this._.has(this.cardData, 'realName')) {
@@ -1372,7 +1187,7 @@ export default {
           a = parseInt(a.slice(0, 4))
           console.log('age', b - a)
           // return this.cardData.age
-          return b - a
+          return (b - a) + ''
         } else {
           return null
         }
@@ -1479,14 +1294,14 @@ export default {
       let str = ''
       if (this.cardData) {
         if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'highSaltStatus')) {
-            if (this.cardData.userBody.highSaltStatus === 1) {
-              habits.push('长期膳食高盐')
-            }
-            if (this.cardData.userBody.highSaltStatus === 2) {
-              habits.push('无长期膳食高盐')
-            }
-          }
+          // if (this._.has(this.cardData.userBody, 'highSaltStatus')) {
+          //   if (this.cardData.userBody.highSaltStatus === 1) {
+          //     habits.push('长期膳食高盐')
+          //   }
+          //   if (this.cardData.userBody.highSaltStatus === 2) {
+          //     habits.push('无长期膳食高盐')
+          //   }
+          // }
           if (this._.has(this.cardData.userBody, 'sleepStatus')) {
             if (this.cardData.userBody.sleepStatus === 1) {
               this.medication.sleepStatus = '1'
@@ -1512,39 +1327,39 @@ export default {
             }
           }
           if (this._.has(this.cardData.userBody, 'is23Sleep')) {
-            if (this.cardData.userBody.is23Sleep === 1) {
+            if (this.cardData.userBody.is23Sleep) {
               this.medication.is23Sleep = '1'
               habits.push('23点前睡觉')
             }
-            if (this.cardData.userBody.is23Sleep === 2) {
+            if (!this.cardData.userBody.is23Sleep) {
               this.medication.is23Sleep = '0'
               habits.push('没有23点前睡觉')
             }
           }
-          if (this._.has(this.cardData.userBody, 'dietStatus')) {
-            if (this.cardData.userBody.dietStatus === 1) {
-              habits.push('饮食规律')
-            }
-            if (this.cardData.userBody.dietStatus === 2) {
-              habits.push('饮食不规律')
-            }
-          }
-          if (this._.has(this.cardData.userBody, 'medicineStatus')) {
-            if (this.cardData.userBody.medicineStatus === 1) {
-              habits.push('长期服用止痛药或镇定催眠药')
-            }
-            if (this.cardData.userBody.medicineStatus === 2) {
-              habits.push('没有长期服用止痛药或镇定催眠药')
-            }
-          }
-          if (this._.has(this.cardData.userBody, 'urineStatus')) {
-            if (this.cardData.userBody.urineStatus === 1) {
-              habits.push('大小便正常')
-            }
-            if (this.cardData.userBody.urineStatus === 2) {
-              habits.push('大小便不正常')
-            }
-          }
+          // if (this._.has(this.cardData.userBody, 'dietStatus')) {
+          //   if (this.cardData.userBody.dietStatus === 1) {
+          //     habits.push('饮食规律')
+          //   }
+          //   if (this.cardData.userBody.dietStatus === 2) {
+          //     habits.push('饮食不规律')
+          //   }
+          // }
+          // if (this._.has(this.cardData.userBody, 'medicineStatus')) {
+          //   if (this.cardData.userBody.medicineStatus === 1) {
+          //     habits.push('长期服用止痛药或镇定催眠药')
+          //   }
+          //   if (this.cardData.userBody.medicineStatus === 2) {
+          //     habits.push('没有长期服用止痛药或镇定催眠药')
+          //   }
+          // }
+          // if (this._.has(this.cardData.userBody, 'urineStatus')) {
+          //   if (this.cardData.userBody.urineStatus === 1) {
+          //     habits.push('大小便正常')
+          //   }
+          //   if (this.cardData.userBody.urineStatus === 2) {
+          //     habits.push('大小便不正常')
+          //   }
+          // }
           if (this._.has(this.cardData.userBody, 'drinking')) {
             if (this.cardData.userBody.drinking === 1) {
               this.medication.drinking = '1'
@@ -1685,14 +1500,12 @@ export default {
     this.id = this.$route.params.userCasesCardId
     this.currentDate = dateFormat(new Date(), 0, true)
     let vm = this
-    Bus.$on('modifySickCard', function (val) {
-      this.id = val.cardid || this.$route.params.id
-
-      if (val.modify) {
-        this.modify = true
-        // this.id = val.cardid
-      }
-    })
+    // 从最新问诊过来
+    // Bus.$on('modifySickCard', function (val) {
+    //   if (val.modify) {
+    //     this.modify = true
+    //   }
+    // })
     let promise1 = new Promise(function (resolve, reject) {
       vm.$axios(sickApi(3))
       .then(res => {
@@ -1739,7 +1552,18 @@ export default {
     // this.getgaoxueyabingfazhengList()
     // this.getData()
     console.log('this.adminInfo.name', this.adminInfo.name)
+  },
+  beforeDestroy () {
+    // console.log('销毁前', this.info)
+  },
+  destroyed () {
+    // console.log('销毁后', this.info)
+    this.setuserCasesCardId(null)
+    this.setuserMakeOrderDoctorId(null)
+    // console.log('销毁后', this.userCasesCardId)
+    // console.log('销毁后', this.userMakeOrderDoctorId)
   }
+
 }
 </script>
 
@@ -1912,6 +1736,7 @@ export default {
     text-align: center;
     padding-bottom: 20px;
     height: inherit;
+    color: #666;
     input{
       width: 80px;
     }
@@ -2097,7 +1922,17 @@ export default {
   .time-picker  .el-date-editor.el-input, .el-date-editor.el-input__inner {
     width: 150px;
 }
+.el-input-cls{
+  display: inline-block;
+  width: 90px;
+}
+.el-input-cls-xueya{
+  display: inline-block;
+  width: 45px;
+}
 </style>
+
+
 <style>
 @media print {
     /* .print{ */

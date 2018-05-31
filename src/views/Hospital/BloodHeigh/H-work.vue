@@ -526,6 +526,7 @@ export default {
         this.newAskTotal = res.data.recordCount
         this.newAskPageSize = res.data.pageSize
         this.newSickTableLoading = false
+        console.log('获取最新问诊成功', this.newsickaskData)
       }).catch(err => {
         if (err) this.newSickTableLoading = false
       })

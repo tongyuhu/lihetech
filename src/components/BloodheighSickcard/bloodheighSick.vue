@@ -243,7 +243,6 @@ export default {
     changePage (currentpage) {
       this.currentPage = currentpage
       this.getCardData()
-      console.log(currentpage)
     },
     getCardData () {
       // let vm = this
@@ -276,6 +275,7 @@ export default {
       })
     },
     completeDiag () {
+      this.getCardData()
       this.showcard = true
     },
     openHistroyCard () {
