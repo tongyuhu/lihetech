@@ -837,9 +837,9 @@ export default {
             this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
             this.medication.sureSick = this.doctorDiagnos
             this.medication.symptom = this.readme
-            this.medication.year = this.longtimeyear + '年'
-            this.medication.month = this.longtimemonth + '月'
-            this.medication.day = this.longtimeday + '天'
+            this.medication.year = this.longtimeyear ? this.longtimeyear + '年' : null
+            this.medication.month = this.longtimemonth ? this.longtimemonth + '月' : null
+            this.medication.day = this.longtimeday ? this.longtimeday + '天' : null
             this.medication.lastTime = this.lastDate
             // this.medication.lastTime = this.lastDate
           }

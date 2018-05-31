@@ -77,7 +77,7 @@
                           </div>
                           <!-- 操作 -->
                           <div class="no-order-action">
-                            <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
+                            <button class="contant-btn" @click="openEditTime(item.weekDay,'morning')">编辑时间</button>
                             <button v-if="!item.morninngStop"  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
                             @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button>
                           </div>                         
@@ -155,7 +155,7 @@
                           </div>
                           <!-- 操作 -->
                           <div class="no-order-action">
-                            <button class="contant-btn" @click="openEditTime(item.weekDay)">编辑时间</button>
+                            <button class="contant-btn" @click="openEditTime(item.weekDay,'noon')">编辑时间</button>
                             <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
                           </div>                         
                         </div>
@@ -377,7 +377,7 @@
     :visible.sync="settingSingle">
       <span slot="title" class="dialog-title">预约时间设置</span>
       <div class="dialog-main">
-        <div>
+        <div v-show="showMorningEdit">
           <span>上午</span>
           <el-time-select
           :style="{'width':'150px'}"
@@ -399,7 +399,7 @@
           }">
           </el-time-select>
         </div>
-        <div>
+        <div v-show="showNoonEdit">
           <span>下午</span>
           <el-time-select
           :style="{'width':'150px'}"
@@ -440,6 +440,8 @@ export default {
   name: 'orderSick',
   data () {
     return {
+      showMorningEdit: true,
+      showNoonEdit: true,
       index: null,
       checkOrderBtn: false,
       currentOrder: [],
@@ -771,7 +773,7 @@ export default {
       console.log('xhou', time)
       // return time
     },
-    openEditTime (val) {
+    openEditTime (val, MN) {
       console.log(val)
       if (val === '周一') {
         this.index = 1
@@ -793,6 +795,14 @@ export default {
       }
       if (val === '周日') {
         this.index = 7
+      }
+      if (MN === 'morning') {
+        this.showMorningEdit = true
+        this.showNoonEdit = false
+      }
+      if (MN === 'noon') {
+        this.showMorningEdit = false
+        this.showNoonEdit = true
       }
       this.settingSingle = true
     },
@@ -824,13 +834,13 @@ export default {
         // this.order[this.index].morning = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
         // this.order[this.index].noon = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
         let noon = null
-        if (!this.settingSingleNoon.start && !this.settingSingleNoon.end) {
+        if (this.settingSingleNoon.start && this.settingSingleNoon.end) {
           noon = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
         } else {
           noon = null
         }
         let morning = null
-        if (!this.settingSingleMorning.start && !this.settingSingleMorning.end) {
+        if (this.settingSingleMorning.start && this.settingSingleMorning.end) {
           morning = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
         } else {
           morning = null
