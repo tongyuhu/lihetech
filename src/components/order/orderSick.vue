@@ -1129,7 +1129,7 @@ export default {
   min-width: 100px;
 }
 .order-action{
-  min-width: 150px;
+  min-width: 155px;
 }
 .contant-btn{
   padding: 5px;
@@ -1137,11 +1137,14 @@ export default {
   border-radius: 2px;
   cursor: pointer;
   color: #fff;
-  width: 68px;
+  width: 70px;
   font-size: 14px;
 }
 .no-order-action{
-  min-width: 150px;
+  min-width: 155px;
+  text-align: left;
+  padding:0 5px;
+
 }
 .success{
   color: #4cc191;

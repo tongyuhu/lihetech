@@ -2,16 +2,11 @@
   <div>
     <span v-if="isTextMsg">{{textMsg}}</span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
-    <el-dialog 
-    :visible.sync="showBigImg"
-    width="100%"
-    center>
-    <div class="center">
-      <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
-
+    <div class="img-message-wrap" v-if="showBigImg">
+      <div v-on:click.self.prevent="closeBig()">
+        <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
+      </div>
     </div>
-    
-    </el-dialog>
     <!-- <div class="img-chat">
       <vue-preview :slides="slide1" @close="handleClose"></vue-preview>
     </div> -->
@@ -83,6 +78,9 @@ export default {
     showBig () {
       this.showBigImg = true
     },
+    closeBig () {
+      this.showBigImg = false
+    },
     showmsg () {
       let vm = this
       switch (vm.message.content.messageName) {
@@ -114,13 +112,30 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .img-chat{
-  max-width: 100px;
+  max-width: 200px;
   cursor: pointer;
 }
 .center{
   margin: 0 auto;
   text-align: center;
+}
+.img-message-wrap{
+  position: fixed;
+  // margin-top: 80px;
+  top:0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 9999999999;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.315);
+  img{
+    width: 80%;
+  }
 }
 </style>

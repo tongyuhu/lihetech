@@ -2,7 +2,7 @@
   <div >
     <el-card>
       <div class="clear flex">
-        <div class="left" v-if="false">
+        <div class="left">
         <!-- <div class="left"> -->
           <div class="left-img">
 
@@ -81,7 +81,6 @@
 <script>
 import {mapState} from 'vuex'
 import {editAdminApi, uploadFileApi} from '@/api/components/editAdmin.js'
-import axios from 'axios'
 export default {
   name: 'editAdmin',
   data () {
@@ -217,23 +216,18 @@ export default {
       //   window.event.returnValue = false
       // }
       var vm = this
-      // var imgLimit = 1024
       let file = e.target.files[0]
       var formdata = new FormData()
-      formdata.append('files', file, file.name)
+      formdata.append('files', file)
       formdata.append('saveFile', vm.imgSrc)
-      formdata.append('saveFiless', 'vm.imgSrc')
       console.log('formdata', formdata.get('files'))
       console.log('saveFile', formdata.get('saveFile'))
-          // let config = {
-          //   headers: {'Content-Type': 'multipart/form-data',
-          //     'Access-Control-Allow-Origin': '*'}
-          // }
       this.$axios(uploadFileApi(formdata))
       .then(res => {
         if (res.data.code === '0000') {
-          this.imgSrc = res.data.seeFile
-          this.uploadSrc = res.data.saveFile
+          this.imgSrc = res.data.data.seeFile
+          this.uploadSrc = res.data.data.saveFile
+          console.log('上传图片', res.data.data.saveFile, res.data.data.seeFile)
         }
         return false
       })

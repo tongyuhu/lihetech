@@ -107,6 +107,7 @@ import chartMessageGroup from './chartMessageGroup'
 import chatContent from './chatContent'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import Bus from '@/bus.js'
+import {uploadFileApi} from '@/api/components/editAdmin.js'
 import InfiniteLoading from 'vue-infinite-loading'
 export default {
   name: 'chart',
@@ -128,71 +129,9 @@ export default {
       //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
       //     }
       //   },
-      //   {
-      //     who: 'other',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'other',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'other',
-      //
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   }
       // ],
       readyMsg: '',
       chartList: [
-        {
-          name: '夏邦为',
-          historyMsg: [],
-          userImg: ''
-        },
-        {
-          name: '夏良凯',
-          historyMsg: []
-        },
-        {
-          name: '夏良开',
-          historyMsg: []
-        }
       ],
       showList: false,
       isTriggerFirstLoad: false,
@@ -332,122 +271,183 @@ export default {
       // console.log(this.readyMsg)
     },
     sendImgMsg: function (e) {
-      var vm = this
-      var imgLimit = 1024
-      var files = e.target.files
-      var image = new Image()
-      console.log(files)
-      if (files.length > 0) {
-        var dd = 0
-            // if(files.item(dd).type !== 'image/jpg'){
-        if (files.item(dd).type !== 'image/png' && files.item(dd).type !== 'image/jpeg' && files.item(dd).type !== 'image/gif') {
-          vm.$message({
-            message: '只能发送jpg格式图片',
-            type: 'warning'
-          })
-        } else if (files.item(dd).size > imgLimit * 100) {
-          vm.$message({
-            message: '图片过大',
-            type: 'warning'
-          })
-                // to do sth
-        } else {
-          image.src = window.URL.createObjectURL(files.item(dd))
-          image.onload = function () {
-                  // 默认按比例压缩
-            var w = image.width
-            var h = image.height
-            var scale = w / h
-            w = 200
-            h = w / scale
-                  // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
-            var quality = 0.9
-                  // 生成canvas
-            var canvas = document.createElement('canvas')
-            var ctx = canvas.getContext('2d')
-                  // 创建属性节点
-            var anw = document.createAttribute('width')
-            anw.nodeValue = w
-            var anh = document.createAttribute('height')
-            anh.nodeValue = h
-            canvas.setAttributeNode(anw)
-            canvas.setAttributeNode(anh)
-            ctx.drawImage(image, 0, 0, w, h)
-            var ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
-            // var base64 = canvas.toDataURL('image/' + ext, quality)
-            var base64 = canvas.toDataURL('image/' + ext, quality)
-            let base = base64.split(',')
-            let str = base[1]
-            console.log('base64', base[1])
-            console.log('base64length', base[1].length)
-            // 回调函数返回base64的值
+      // uploadFileApi
+      let vm = this
+      let file = e.target.files[0]
+      let formdata = new FormData()
+      formdata.append('files', file)
+      console.log('formdata', formdata.get('files'))
+      this.$axios(uploadFileApi(formdata))
+      .then(res => {
+        if (res.data.code === '0000') {
+          let targetId = vm.currentChat.userId
+          var imageUri = res.data.data.seeFile // 上传到自己服务器的 URL。
+          var msg = new RongIMLib.ImageMessage({imageUri: imageUri})
+          // var msg = new RongIMLib.ImageMessage({content: '', imageUri: imageUri})
+          var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
 
-            let targetId = vm.currentChat.userId
-            var base64Str = str
-            var imageUri = '' // 上传到自己服务器的 URL。
-            var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
-            var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
-            // var targetId = 'xxx' // 目标 Id
-            RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
-              onSuccess: function (message) {
-              // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
-                let msgObj = {
-                  content: {
-                    messageName: 'ImageMessage',
-                    content: base64Str
-                  },
-                  senderUserId: vm.rongUserId
-                }
-            // vm.historyMsg = vm.currentChat.history
-                vm.sethistory(vm.currentChat.history)
-                vm.getCurrentFriendMsg(msgObj)
-            // vm.historyMsg.push(msgObj)
-            // vm.currentChat.history.push(msgObj)
-                // console.log('urrentChat.history', vm.currentChat.history)
-                console.log('msgObjimg', msgObj)
-                // console.log('currentChat', vm.currentChat)
-                // console.log('rongUserId', vm.rongUserId)
-                let newChat = vm.currentChat
-                newChat.history = vm.historyMsg
-                // console.log('newChat', newChat)
-                vm.addChatFriend(newChat)
-            // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
-                console.log('Send successfully')
-                vm.readyMsg = ''
-                console.log('Send successfully')
-              },
-              onError: function (errorCode, message) {
-                var info = ''
-                switch (errorCode) {
-                  case RongIMLib.ErrorCode.TIMEOUT:
-                    info = '超时'
-                    break
-                  case RongIMLib.ErrorCode.UNKNOWN_ERROR:
-                    info = '未知错误'
-                    break
-                  case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
-                    info = '在黑名单中，无法向对方发送消息'
-                    break
-                  case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
-                    info = '不在讨论组中'
-                    break
-                  case RongIMLib.ErrorCode.NOT_IN_GROUP:
-                    info = '不在群组中'
-                    break
-                  case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
-                    info = '不在聊天室中'
-                    break
-                  default :
-                    info = x
-                    break
-                }
-                console.log('发送失败:' + info)
+          RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+            onSuccess: function (message) {
+                // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+              let msgObj = {
+                content: {
+                  messageName: 'ImageMessage',
+                  // content: imageUri
+                  'imageUri': imageUri
+                },
+                senderUserId: vm.rongUserId
               }
+                // vm.historyMsg = vm.currentChat.history
+              vm.sethistory(vm.currentChat.history)
+              vm.getCurrentFriendMsg(msgObj)
+              console.log('msgObjimg', msgObj)
+              let newChat = vm.currentChat
+              newChat.history = vm.historyMsg
+              vm.addChatFriend(newChat)
+              console.log('Send successfully')
+              vm.readyMsg = ''
+              console.log('Send successfully')
+            },
+            onError: function (errorCode, message) {
+              var info = ''
+              switch (errorCode) {
+                case RongIMLib.ErrorCode.TIMEOUT:
+                  info = '超时'
+                  break
+                case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+                  info = '未知错误'
+                  break
+                case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+                  info = '在黑名单中，无法向对方发送消息'
+                  break
+                case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+                  info = '不在讨论组中'
+                  break
+                case RongIMLib.ErrorCode.NOT_IN_GROUP:
+                  info = '不在群组中'
+                  break
+                case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+                  info = '不在聊天室中'
+                  break
+                default :
+                  info = x
+                  break
+              }
+              console.log('发送失败:' + info)
             }
-        )
-          }
+          })
         }
-      }
+        return false
+      })
+
+      // var vm = this
+      // var imgLimit = 1024
+      // var files = e.target.files
+      // var image = new Image()
+      // console.log(files)
+      // if (files.length > 0) {
+      //   var dd = 0
+      //   // if(files.item(dd).type !== 'image/jpg'){
+      //   if (files.item(dd).type !== 'image/png' && files.item(dd).type !== 'image/jpeg' && files.item(dd).type !== 'image/gif') {
+      //     vm.$message({
+      //       message: '只能发送jpg格式图片',
+      //       type: 'warning'
+      //     })
+      //   } else if (files.item(dd).size > imgLimit * 100) {
+      //     vm.$message({
+      //       message: '图片过大',
+      //       type: 'warning'
+      //     })
+      //           // to do sth
+      //   } else {
+      //     image.src = window.URL.createObjectURL(files.item(dd))
+      //     image.onload = function () {
+      //             // 默认按比例压缩
+      //       var w = image.width
+      //       var h = image.height
+      //       var scale = w / h
+      //       w = 200
+      //       h = w / scale
+      //             // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+      //       var quality = 0.9
+      //             // 生成canvas
+      //       var canvas = document.createElement('canvas')
+      //       var ctx = canvas.getContext('2d')
+      //             // 创建属性节点
+      //       var anw = document.createAttribute('width')
+      //       anw.nodeValue = w
+      //       var anh = document.createAttribute('height')
+      //       anh.nodeValue = h
+      //       canvas.setAttributeNode(anw)
+      //       canvas.setAttributeNode(anh)
+      //       ctx.drawImage(image, 0, 0, w, h)
+      //       var ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
+      //       // var base64 = canvas.toDataURL('image/' + ext, quality)
+      //       var base64 = canvas.toDataURL('image/' + ext, quality)
+      //       let base = base64.split(',')
+      //       let str = base[1]
+      //       console.log('base64', base[1])
+      //       console.log('base64length', base[1].length)
+      //       // 回调函数返回base64的值
+
+      //       let targetId = vm.currentChat.userId
+      //       var base64Str = str
+      //       var imageUri = '' // 上传到自己服务器的 URL。
+      //       var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
+      //       var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
+      //       // var targetId = 'xxx' // 目标 Id
+      //       RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+      //         onSuccess: function (message) {
+      //           // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+      //           let msgObj = {
+      //             content: {
+      //               messageName: 'ImageMessage',
+      //               content: base64Str
+      //             },
+      //             senderUserId: vm.rongUserId
+      //           }
+      //           // vm.historyMsg = vm.currentChat.history
+      //           vm.sethistory(vm.currentChat.history)
+      //           vm.getCurrentFriendMsg(msgObj)
+      //           console.log('msgObjimg', msgObj)
+      //           let newChat = vm.currentChat
+      //           newChat.history = vm.historyMsg
+      //           vm.addChatFriend(newChat)
+      //           console.log('Send successfully')
+      //           vm.readyMsg = ''
+      //           console.log('Send successfully')
+      //         },
+      //         onError: function (errorCode, message) {
+      //           var info = ''
+      //           switch (errorCode) {
+      //             case RongIMLib.ErrorCode.TIMEOUT:
+      //               info = '超时'
+      //               break
+      //             case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+      //               info = '未知错误'
+      //               break
+      //             case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+      //               info = '在黑名单中，无法向对方发送消息'
+      //               break
+      //             case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+      //               info = '不在讨论组中'
+      //               break
+      //             case RongIMLib.ErrorCode.NOT_IN_GROUP:
+      //               info = '不在群组中'
+      //               break
+      //             case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+      //               info = '不在聊天室中'
+      //               break
+      //             default :
+      //               info = x
+      //               break
+      //           }
+      //           console.log('发送失败:' + info)
+      //         }
+      //       })
+      //     }
+      //   }
+      // }
       this.$nextTick(() => {
         setTimeout(function () {
           let container = vm.$el.querySelector('#chatWidow')

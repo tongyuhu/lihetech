@@ -12,7 +12,7 @@ axios.defaults.baseURL = process.env.API_HOST // api的base_url // api接口地�
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use((config) => {
   if (config.method === 'post') {
-    config.data = qs.stringify(config.data)
+    // config.data = qs.stringify(config.data)
   }
   return config
 })
