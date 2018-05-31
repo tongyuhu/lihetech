@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="meeeage-content">
     <span v-if="isTextMsg">{{textMsg}}</span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
     <div class="img-message-wrap" v-if="showBigImg">
@@ -113,6 +113,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.meeeage-content{
+  min-width: 15px;
+}
 .img-chat{
   max-width: 200px;
   cursor: pointer;

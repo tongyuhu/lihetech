@@ -54,6 +54,7 @@
           :who="item.senderUserId || ''"
           :type="item.content.messageName"
           >
+          <!-- userImg -->
             <chatContent :message="item"></chatContent>
           <!-- {{historyMsg.length !== 0 ? item.content.content :''}} -->
           </chartMessage>
@@ -146,7 +147,8 @@ export default {
     ]),
     ...mapState({
       rongUserId: 'rongUserId',
-      historyMsg: 'history'
+      historyMsg: 'history',
+      adminInfo: 'adminInfo'
     })
     // historyMsg () {
     //   return this.currentChat.history
@@ -209,6 +211,9 @@ export default {
                 content: vm.readyMsg
               },
               senderUserId: vm.rongUserId
+            }
+            if (vm._.has(vm.adminInfo, 'headPortraitUrl')) {
+              msgObj.userImg = vm.adminInfo.headPortraitUrl
             }
             // vm.historyMsg = vm.currentChat.history
             vm.sethistory(vm.currentChat.history)
@@ -538,6 +543,8 @@ export default {
     Bus.$on('history', (val) => {
       vm.historyMsg = val
     })
+
+    console.log('historyMsg', vm.historyMsg)
     // Bus.$on('hasMessage', (val) => {
     //   vm.historyMsg.push(val)
     // })

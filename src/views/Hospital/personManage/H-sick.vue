@@ -144,8 +144,8 @@
           <img width="200px" :src="addSickImg" alt="二维码">
         </div>
         <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="showAddSick = false">确 定</button>
-          <button class="cancel" @click="showAddSick = false">取 消</button>
+          <button  type="primary" @click="confirmAddSick">确 定</button>
+          <!-- <button class="cancel" @click="showAddSick = false">取 消</button> -->
         </span>
       </el-dialog>
     </div>
@@ -180,6 +180,9 @@ export default {
   },
 
   methods: {
+    confirmAddSick () {
+      this.showAddSick = false
+    },
     checkedblood () {
       // this.sicktype = 'bloodPressureType'
       this.checkblood = true

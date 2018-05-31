@@ -276,22 +276,22 @@ export default {
           }
           console.log('修改的医生信息', this.form)
 
-          // this.$axios(editAdminApi(obj))
-          // .then(res => {
-          //   if (res.data.code === '0000') {
-          //     this.$message({
-          //       showClose: true,
-          //       message: '修改成功',
-          //       type: 'success'
-          //     })
-          //   } else {
-          //     this.$message({
-          //       showClose: true,
-          //       message: res.data.msg,
-          //       type: 'warning'
-          //     })
-          //   }
-          // })
+          this.$axios(editAdminApi(obj))
+          .then(res => {
+            if (res.data.code === '0000') {
+              this.$message({
+                showClose: true,
+                message: '修改成功',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+            }
+          })
           // obj.sex = this.form.name
         } else {
           console.log('error submit!!')
@@ -396,6 +396,15 @@ export default {
       } else {
         this.imgSrc = null
       }
+    }
+    if (this._.has(this.adminInfo, 'name')) {
+      this.form.name = this.adminInfo.name
+    }
+    if (this._.has(this.adminInfo, 'mobile')) {
+      this.form.mobile = this.adminInfo.mobile
+    }
+    if (this._.has(this.adminInfo, 'email')) {
+      this.form.email = this.adminInfo.email
     }
   }
 }

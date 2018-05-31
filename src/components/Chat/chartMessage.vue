@@ -119,10 +119,11 @@ export default {
   .left{
     width: 100%;
     justify-content: flex-start;
+    min-width: 10px;
   }
   .right{
     width: 100%;
-
+    min-width: 10px;
   }
   // $bagcolor:#fff;
   // .clear::after{
