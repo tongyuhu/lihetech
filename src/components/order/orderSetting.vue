@@ -8,12 +8,12 @@
     <div>
       <el-card>
         <table>
-          <thead>
+          <thead class="thead">
             <th>日期</th>
             <th>编辑</th>
             <th>编辑</th>
           </thead>
-          <tbody v-for="(item,index) in orderlist" :key="item.time">
+          <tbody class="tbody" v-for="(item,index) in orderlist" :key="item.time">
             <tr>
               <td rowspan="2">{{item.time}}</td>
               <td>上午预约
@@ -299,8 +299,6 @@ export default {
     },
     // 确认编辑时间
     settingSingleConfirm () {
-      console.log(this.settingSingleMorning)
-      console.log(this.settingSingleNoon)
       let morning = this._.gt(this.settingSingleMorning.start, this.settingSingleMorning.end)
       let noon = this._.gt(this.settingSingleNoon.start, this.settingSingleNoon.end)
       if (morning || noon) {
@@ -410,7 +408,6 @@ export default {
       //     'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
       //   }
       // }
-      console.log()
       // this.settingGroup = false
     },
     // 打开编辑时间窗口
@@ -421,6 +418,10 @@ export default {
           this.showMorningEdit = true
           this.showNoonEdit = false
           this.settingSingle = true
+          this.settingSingleNoon = {
+            start: '',
+            end: ''
+          }
         } else {
           this.$message({
             message: '请先开启预约',
@@ -433,6 +434,10 @@ export default {
           this.showMorningEdit = false
           this.showNoonEdit = true
           this.settingSingle = true
+          this.settingSingleMorning = {
+            start: '',
+            end: ''
+          }
         } else {
           this.$message({
             message: '请先开启预约',
@@ -440,7 +445,6 @@ export default {
           })
         }
       }
-      console.log(this.openOrder)
     },
     nextSunday () {
       let arr = []
@@ -462,7 +466,6 @@ export default {
       week = computeWeekday(befortoday)
       while (day !== 8) {
         arr.push(week)
-        // arr.push((befortoday + ' ' + week))
         befortoday = daybefor(today, befor - (day + 1), true)
         week = computeWeekday(befortoday)
         day++
@@ -480,105 +483,7 @@ export default {
         }
       }
       this.cheeckedweek = this._.uniq(this.cheeckedweek)
-      console.log('this.cheeckedweek', this.cheeckedweek)
     },
-    // init () {
-    //   this.$axios(settingDataApi({
-    //     weekDay: null,
-    //     slotType: null
-    //   }))
-    //   .then(res => {
-    //     if (res.data.code === '0000') {
-    //       // let list =[]
-    //       res.data.data.forEach(item => {
-    //         // let obj ={}
-    //         if (item.weekDay === 1) {
-    //           if (item.isStop) {
-    //             this.order[0].order = item.isStop
-    //           }
-    //           if (item.slotType === 1) {
-    //             this.order[0].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[0].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //         if (item.weekDay === 2) {
-    //           if (item.isStop) {
-    //             this.order[1].order = item.isStop
-    //           }
-    //           if (item.slotType === 1) {
-    //             this.order[1].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[1].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //         if (item.weekDay === 3) {
-    //           if (item.isStop) {
-    //             this.order[2].order = item.isStop
-    //           }
-    //           // this.order[2].order = item.isStop
-    //           if (item.slotType === 1) {
-    //             this.order[2].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[2].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //         if (item.weekDay === 4) {
-    //           if (item.isStop) {
-    //             this.order[3].order = item.isStop
-    //           }
-    //           // this.order[3].order = item.isStop
-    //           if (item.slotType === 1) {
-    //             this.order[3].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[3].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //         if (item.weekDay === 5) {
-    //           // this.order[4].order = item.isStop
-    //           if (item.isStop) {
-    //             this.order[4].order = item.isStop
-    //           }
-    //           if (item.slotType === 1) {
-    //             this.order[4].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[4].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //         if (item.weekDay === 1) {
-    //           if (item.isStop) {
-    //             this.order[5].order = item.isStop
-    //           }
-    //           // this.order[6].order = item.isStop
-    //           if (item.slotType === 1) {
-    //             this.order[5].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[5].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //         if (item.weekDay === 1) {
-    //           if (item.isStop) {
-    //             this.order[6].order = item.isStop
-    //           }
-    //           // this.order[7].order = item.isStop
-    //           if (item.slotType === 1) {
-    //             this.order[6].morning = item.startEndPeriodTime
-    //           }
-    //           if (item.slotType === 2) {
-    //             this.order[6].noon = item.startEndPeriodTime
-    //           }
-    //         }
-    //       })
-    //     }
-    //     console.log(res.data.data)
-    //   })
-    // },
     initlist () {
       this.$axios(settingDataApi({
         weekDay: null,
@@ -666,8 +571,6 @@ export default {
     }
   },
   mounted () {
-    console.log(this.settingSingleMorning)
-    console.log(this.settingSingleNoon)
     let data = this.nextSunday()
     this.start = data[0]
     this.end = data[6]
@@ -697,13 +600,17 @@ export default {
       this.orderlist.push(order)
     })
     this.initlist()
-    // parmars.weekDay,
-    //   'slotType': parmars.slotType
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .tbody:nth-last-child(n+2){
+    box-shadow: 0 4px #eaeaea;
+  }
+  .thead{
+    box-shadow: 0 4px #eaeaea;
+  }
   .title{
     font-size: 14px;
   }
@@ -719,6 +626,8 @@ export default {
   }
   th{
     color: #041421;
+    height: 40px;
+    font-size: 16px;
   }
   th,td{
     border:1px solid #eaeaea;

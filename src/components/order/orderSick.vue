@@ -431,7 +431,7 @@
 </template>
 
 <script>
-import {daybefor, computeWeekday, dateFormat} from '@/untils/date.js'
+import {daybefor, dateFormat} from '@/untils/date.js'
 import {orderApi, orderSettingApi, closeorderApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 // import Bus from '@/bus.js'
@@ -525,9 +525,7 @@ export default {
           hospitalId: 2
         }})
       this.setuserMakeOrderDoctorId(val.adminIdMainDoctor)
-      // Bus.$emit('huizhen', true)
       this.SET_SICK_CARD(true)
-      console.log('$refs', this.$refs.sickcard)
     },
     // 联系
     contact (id, name) {
@@ -547,14 +545,12 @@ export default {
       this.$axios(orderApi(params))
       .then(res => {
         if (res.data.data) {
-          console.log(res.data.data.length)
           if (histroy) {
             this.histroyOrderList = []
             this.histroyOrderList = this.formmater(res.data.data)
           } else {
             this.orderList = []
             this.orderList = this.formmater(res.data.data)
-            console.log('当前预约数据', this.orderList)
           }
         }
       })
@@ -701,8 +697,8 @@ export default {
         }, true)
       }
     },
+    // 打开预约编辑
     openEditTime (val, MN) {
-      console.log(val)
       if (val === '周一') {
         this.index = 1
       }
@@ -727,8 +723,18 @@ export default {
       if (MN === 'morning') {
         this.showMorningEdit = true
         this.showNoonEdit = false
+        // 下午预约时间
+        this.settingSingleNoon = {
+          start: '',
+          end: ''
+        }
       }
       if (MN === 'noon') {
+        // 设置的上午预约时间
+        this.settingSingleMorning = {
+          start: '',
+          end: ''
+        }
         this.showMorningEdit = false
         this.showNoonEdit = true
       }
@@ -745,8 +751,6 @@ export default {
     // 确认编辑时间
     settingSingleConfirm () {
       let parmars = {}
-      console.log(this.settingSingleMorning)
-      console.log(this.settingSingleNoon)
       let morning = this._.gt(this.settingSingleMorning.start, this.settingSingleMorning.end)
       let noon = this._.gt(this.settingSingleNoon.start, this.settingSingleNoon.end)
       if (morning || noon) {
@@ -780,19 +784,6 @@ export default {
           parmars.startEndPeriodTimeAftn = noon
         }
         parmars.weeks = this.index
-        // if(morning){
-
-        // }
-        // let parmars = {
-        //   'weeks': this.index,
-        //   'startEndPeriodTimeMor': morning
-        //   // 'startEndPeriodTimeAftn': noon
-        // }
-        // let parmars = {
-        //   'weeks': this.index,
-        //   'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
-        //   'startEndPeriodTimeAftn': this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
-        // }
         this.$axios(orderSettingApi(parmars))
           .then(res => {
             if (res.data.code === '1001') {
@@ -801,10 +792,15 @@ export default {
                 message: '设置失败！',
                 type: 'warning'
               })
-              // this.order[this.index].morning = ''
-              // this.order[this.index].noon = ''
             }
-            this.getOrderData({type: 0})
+            if (res.data.code === '0000') {
+              this.$message({
+                showClose: true,
+                message: '设置成功！',
+                type: 'success'
+              })
+              this.getOrderData({type: 0})
+            }
           })
         this.settingSingle = false
       }
@@ -862,8 +858,6 @@ export default {
             list[index].noonStop = !list[index].noonStop
           }
           this.getOrderData({type: 0})
-          // this.orderList = Object.assign({}, list)
-          // if()
         } else {
           this.$message({
             showClose: true,
@@ -873,7 +867,6 @@ export default {
         }
       })
       // closeorderApi
-      console.log('close', day, val)
     }
   },
   mounted () {
@@ -886,7 +879,6 @@ export default {
     // let today = new Date()
     // daybefor(today,6,true)
     // this.checkHistoryTime(daybefor(today, 6, true))
-    // console.log('星期几', this.nextSunday())
   }
 }
 </script>
