@@ -440,81 +440,32 @@ export default {
   name: 'orderSick',
   data () {
     return {
+      // 显示上午预约
       showMorningEdit: true,
+      // 显示下午预约
       showNoonEdit: true,
+      // 当前编辑周数 index+1
       index: null,
+      // 当前预约/预约历史
       checkOrderBtn: false,
-      currentOrder: [],
+
+      // currentOrder: [],
+      // 预约历史选择周
       firstDayOfWeek: 1,
+      // 预约历史选择的周一时间
       currentOrderTime: '',
-      dataweek: {
-        morninng: [
-          {
-            orderTime: '08:30-09:00',
-            orderPerson: [
-              {
-                name: 'w0ng'
-              },
-              {
-                name: '123'
-              }
-            ]
-          },
-          {
-            orderTime: '01:30-11:00',
-            orderPerson: [
-              {
-                name: 'w0ng'
-              },
-              {
-                name: '123'
-              }
-            ]
-          }
-        ],
-        noon: [
-          {
-            orderTime: '08:30-09:00',
-            orderPerson: [
-              {
-                name: 'w0ng'
-              },
-              {
-                name: '123'
-              }
-            ]
-          },
-          {
-            orderTime: '08:30-09:00',
-            orderPerson: [
-              {
-                name: 'w0ng'
-              },
-              {
-                name: '123'
-              }
-            ]
-          },
-          {
-            orderTime: '08:30-09:00',
-            orderPerson: [
-              {
-                name: 'w0ng'
-              },
-              {
-                name: '123'
-              }
-            ]
-          }
-        ]
-      },
+      // 当前预约列表
       orderList: [],
+      // 历史预约列表
       histroyOrderList: [],
+      // 是否打开编辑时间窗口
       settingSingle: false,
+      // 设置的上午预约时间
       settingSingleMorning: {
         start: '',
         end: ''
       },
+      // 下午预约时间
       settingSingleNoon: {
         start: '',
         end: ''
@@ -532,42 +483,18 @@ export default {
     checkHistory () {
       this.checkOrderBtn = true
       let today = new Date()
-      console.log('daybefor(today, 6, true)', daybefor(today, 6, true))
+      // 初始化历史预约时间选择
       this.checkHistoryTime(daybefor(today, 6, true), true)
     },
-    checkOrder () {
+    checkOrder () {  // 选择当前预约
       this.checkOrderBtn = false
     },
-    orderSetting () {
+    orderSetting () {  // 预约设置
       this.$router.push({
         name: 'orderSetting'
       })
     },
-    nextSunday () {
-      let today = new Date()
-      let befor = -7
-      let arr = []
-      let befortoday = daybefor(today, befor, true)
-      let week = computeWeekday(befortoday)
-      if (week === '周日') {
-        return today
-      } else {
-        while (week !== '周日') {
-          befor--
-          befortoday = daybefor(today, befor, true)
-          week = computeWeekday(befortoday)
-        }
-      }
-      // return [befortoday, week]
-      while (!(befor > 0)) {
-        // console.log(befor)
-        arr.push(befortoday + ' ' + week)
-        befor++
-        befortoday = daybefor(today, befor, true)
-        week = computeWeekday(befortoday)
-      }
-      return arr.reverse()
-    },
+    // 预约状态颜色设置
     computeColor (val) {
       let color
       switch (val) {
@@ -589,6 +516,7 @@ export default {
       }
       return color
     },
+    // 会诊
     diagnosis (val) {
       this.$router.push({
         name: 'bloodheighSick',
@@ -601,6 +529,7 @@ export default {
       this.SET_SICK_CARD(true)
       console.log('$refs', this.$refs.sickcard)
     },
+    // 联系
     contact (id, name) {
       let sick = {
         userId: 'member_' + id,
@@ -613,6 +542,7 @@ export default {
       this.changeChatFriend(sick)
       this.openChatWindow()
     },
+    // 获取当前预约数据
     getOrderData (params, histroy) {
       this.$axios(orderApi(params))
       .then(res => {
@@ -624,16 +554,14 @@ export default {
           } else {
             this.orderList = []
             this.orderList = this.formmater(res.data.data)
+            console.log('当前预约数据', this.orderList)
           }
-          // this.formmater(res.data.data)
-          // this.orderList = res.data.data
-          console.log('orderList', this.orderList)
         }
       })
     },
+    // 计算周几
     week (val) {
       val = this._.toNumber(val)
-      // console.log(val, 'val')
       let week = ''
       switch (val) {
         case 1:
@@ -660,6 +588,7 @@ export default {
       }
       return week
     },
+    // 上下午？
     morninngNoon (val) {
       val = this._.toNumber(val)
       let time
@@ -673,6 +602,7 @@ export default {
       }
       return time
     },
+    // 判断预约状态
     oderStutas (val) {
       val = this._.toNumber(val)
       let type
@@ -694,9 +624,9 @@ export default {
       }
       return type
     },
+    // 将返回数据格式化为表格数据
     formmater (data) {
       let vm = this
-      // let val = data
       data.forEach(item => {
         item.weekDay = vm.week(item.weekDay)
         if (!(this._.has(item, 'adminMakeOrderTotalList'))) {
@@ -770,8 +700,6 @@ export default {
           type: 1
         }, true)
       }
-      console.log('xhou', time)
-      // return time
     },
     openEditTime (val, MN) {
       console.log(val)
@@ -949,16 +877,16 @@ export default {
     }
   },
   mounted () {
-    this.nextSunday().forEach(item => {
-      let obj = {}
-      obj.today = item
-      this.currentOrder.push(obj)
-    })
+    // this.nextSunday().forEach(item => {
+    //   let obj = {}
+    //   obj.today = item
+    //   this.currentOrder.push(obj)
+    // })
     this.getOrderData({type: 0})
     // let today = new Date()
     // daybefor(today,6,true)
     // this.checkHistoryTime(daybefor(today, 6, true))
-    console.log('星期几', this.nextSunday())
+    // console.log('星期几', this.nextSunday())
   }
 }
 </script>

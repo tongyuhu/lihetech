@@ -94,6 +94,7 @@ Vue.directive('drag', {
     }
   }
 })
+
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth) {
     // if (session('token')) {

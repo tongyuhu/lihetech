@@ -16,16 +16,12 @@
         </button>
       <!-- <div class="chat-icon"></div> -->
     </div>
-    <!-- </div> -->
-      <!-- <el-badge is-dot class="mark"></el-badge> -->
     <im
     v-show="imStatus"
     @closeIM="closeIMhandle"
     @chat="chatWith"></im>
     <chat
     v-if="chatStatus"
-    @colseChat="closeChatWindows"
-    :friend="whichFriend"
     ></chat>
   </div>
 
@@ -49,10 +45,8 @@
     data () {
       return {
         imStatus: false,
-        // chatStatus: false,
         appKey: 'pwe86ga5pv726',
-        token: '',
-        whichFriend: {}
+        token: ''
       }
     },
     computed: {
@@ -87,12 +81,6 @@
       },
       closeIMhandle () {
         this.imStatus = false
-      },
-      closeChatWindows () {
-        console.log('关闭窗口')
-        this.clearCurrentChat()
-        this.closeChatWindow()
-        // this.chatStatus = false
       },
       chatWith (history) {
         Bus.$emit('history', history)

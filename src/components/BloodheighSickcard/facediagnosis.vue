@@ -70,6 +70,7 @@
               <span class="label">血压：</span>
               <span v-if="!showEditMsg">{{info.bloodHeigh}}</span>
               <el-input class="el-input-cls-xueya" placeholder="高压" v-if="showEditMsg" v-model.number="copyInfo.bloodHeighBlood" size="mini"></el-input>
+              <span v-if="showEditMsg">/</span>
               <el-input class="el-input-cls-xueya" placeholder="低压" v-if="showEditMsg" v-model.number="copyInfo.bloodLowBlood" size="mini"></el-input>
               <!-- <input type="text" v-if="showEditMsg" v-model.lazy="copyInfo.bloodHeigh" class="padding"> -->
             </div>
@@ -105,23 +106,39 @@
                       <el-input v-model="medication.name" size="mini"></el-input>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="10">
-                    <el-form-item label="患病时长" label-width="68px">
+                  <el-col :span="11">
+                    <el-form-item label="患病时长" label-width="68px"
+                    >
                       <div class="pick-date-wrap">
-                        <div>
-                          <el-input placeholder="年" v-model.number="medication.year" size="mini"></el-input>
-                        </div>
-                        <div>
-                          <el-input placeholder="月" v-model.number="medication.month" size="mini"></el-input>
-                        </div>
-                        <div>
-                          <el-input placeholder="天数" v-model.number="medication.day" size="mini"></el-input>
-                        </div>
+                        <!-- <div> -->
+                          <!-- <el-form-item label="年"> -->
+                            <!-- <el-input inline v-number-only  v-model.number="medication.year" size="mini"></el-input> -->
+                            <!-- <input v-number-only type="text" v-model.number="medication.year"/> -->
+                            <input v-number-only v-model.number="medication.year" type="text">
+                            <span>年</span>
+                          <!-- </el-form-item> -->
+                        <!-- </div> -->
+                        <!-- <div> -->
+                          <input v-number-only v-model.number="medication.month" type="text">
+                          <!-- <input v-number-only type="text" v-model.number="medication.month"/> -->
+                          <!-- <el-input inline  v-model.number="medication.month" size="mini"></el-input> -->
+                          <span>月</span>
+                        <!-- </div> -->
+                        <!-- <div> -->
+                          <input v-number-only v-model.number="medication.day" type="text">
+                          <!-- <input v-number-only type="text" v-model.number="medication.day"/> -->
+                          <!-- <el-input inline  v-model.number="medication.day" size="mini"></el-input> -->
+                          <span>天</span>
+                        <!-- </div> -->
                       </div>
                     </el-form-item>
                   </el-col>
-                  <el-col :span="8">
+                  <el-col :span="7">
                     <el-form-item label="电话" label-width="45px">
+                      <!-- <div class="pick-date-wrap"> -->
+                        <!-- <span>电话</span> -->
+                        <!-- <input v-number-only v-model.number="medication.phone" type="text"> -->
+                      <!-- </div> -->
                       <el-input v-model.number="medication.phone" size="mini"></el-input>
                     </el-form-item>
                   </el-col>
@@ -357,7 +374,10 @@
                       label="单次用量"
                       width="100">
                       <template slot-scope="scope">
-                        <input  type="text" v-model="scope.row.singleuse" class="table-input use-num single-use">
+                        <!-- <input  type="text"  v-model.number="scope.row.singleuse" 
+                        class="table-input use-num single-use"> -->
+                        <!-- <el-input v-model="scope.row.singleuse" placeholder="" class="table-input use-num single-use"></el-input> -->
+                        <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
                         <select class="use-num" v-model="scope.row.singleuseUnit">
                           <option value="pian">片</option>
                           <option value="li">粒</option>
@@ -383,7 +403,7 @@
                       label="频度"
                       width="80">
                       <template slot-scope="scope">
-                        <input type="text" v-model="scope.row.usetimes" class="table-input use-num single-use">次/天
+                        <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天
                       </template>
                     </el-table-column>
                     <el-table-column
@@ -391,7 +411,7 @@
                       label="天数"
                       width="50">
                       <template slot-scope="scope">
-                        <input v-model="scope.row.uselong" type="text" class="table-input use-num single-use">
+                        <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use">
                       </template>
                     </el-table-column>
                     <el-table-column
@@ -399,14 +419,14 @@
                       label="总量"
                       width="65">
                       <template slot-scope="scope">
-                        <input v-model="scope.row.usetotal" type="text" class="table-input use-num single-use">盒
+                        <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒
                       </template>
                     </el-table-column>
                     <el-table-column
                       prop="tip"
                       label="备注">
                       <template slot-scope="scope">
-                        <input v-model="scope.row.tip" type="text" class="table-input">
+                        <input v-model="scope.row.tip" type="text" class="table-input  width-tip" >
                       </template>
                     </el-table-column>
                     <el-table-column
@@ -587,6 +607,25 @@ import {dateFormat} from './../../untils/date.js'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
+  directives: {
+    numberOnly: {
+      bind: function (el) {
+        el.handler = function () {
+          el.value = el.value.replace(/\D+/, '')
+        }
+        el.addEventListener('input', el.handler)
+      },
+      // update: function (el) {
+      //   el.handler = function () {
+      //     el.value = el.value.replace(/\D+/, '')
+      //   }
+      //   el.addEventListener('input', el.handler)
+      // }
+      unbind: function (el) {
+        el.removeEventListener('input', el.handler)
+      }
+    }
+  },
   components: {
     tabs,
     pane,
@@ -610,6 +649,7 @@ export default {
     return {
       currentDate: '',
       labelPosition: 'left',
+      rightlabel: 'right',
       cardData: {},
       activeIndex: 1,
       showEditMsg: false,
@@ -797,10 +837,30 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    doctorMedicine: {
+      handler: function (val) {
+        if (val.length > 0) {
+          val.forEach(item => {
+            console.log('item.singleuse', item.singleuse)
+            let a = parseInt(item.singleuse)
+            if (this._.isNaN(a)) {
+              item.singleuse = ''
+            } else {
+              item.singleuse = a
+            }
+          })
+        }
+      },
+      deep: true
     }
   },
   methods: {
     ...mapMutations(['setuserCasesCardId', 'setuserMakeOrderDoctorId']),
+    handleInput (e) {
+      this.val = e.target.value.replace(/-?[1-9]\d*/g, '')
+      // e.target.value = e.target.value.replace(/-?[1-9]\d*/g, '')
+    },
     // 获取病历卡信息
     getData () {
       // if()
@@ -837,10 +897,10 @@ export default {
             this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
             this.medication.sureSick = this.doctorDiagnos
             this.medication.symptom = this.readme
-            this.medication.year = this.longtimeyear ? this.longtimeyear + '年' : null
-            this.medication.month = this.longtimemonth ? this.longtimemonth + '月' : null
-            this.medication.day = this.longtimeday ? this.longtimeday + '天' : null
             this.medication.lastTime = this.lastDate
+            this.medication.year = this.longtimeyear ? this.longtimeyear : null
+            this.medication.month = this.longtimemonth ? this.longtimemonth : null
+            this.medication.day = this.longtimeday ? this.longtimeday : null
             // this.medication.lastTime = this.lastDate
           }
         }
@@ -929,10 +989,10 @@ export default {
       obj.sysIllnessHistoryIdDisease = this.medication.sickHistroy.join(',')
       obj.sysIllnessHistoryIdGenetic = this.medication.inhereHistroy.join(',')
       obj.sysIllnessHistoryIdBpConcurrent = this.medication.complication.join(',')
-      obj.smoking = this.tonumber(this.medication.smoking)
-      obj.drinking = this.tonumber(this.medication.drinking)
-      obj.is23Sleep = this.tonumber(this.medication.is23Sleep)
-      obj.sleepStatus = this.tonumber(this.medication.sleepStatus)
+      obj.smoking = this.medication.smoking
+      obj.drinking = this.medication.drinking
+      obj.is23Sleep = this.medication.is23Sleep
+      obj.sleepStatus = this.medication.sleepStatus
       // obj.sleepStatus = this.medication.sleepStatus
       obj.checkItem = this.medication.checkItem.join(',')
       let medicine = []
@@ -941,18 +1001,30 @@ export default {
         obj.medicineType = 1
         obj.medicineName = item.name
         obj.medicineId = item.id
-        obj.everyDosage = this.tonumber(item.singleuse)
         // obj.medicineId =
         obj.unit = this.medicineUnit(item.singleuseUnit)
 
-        obj.usageTimes = this.tonumber(item.usetimes) ? this.tonumber(item.usetimes) + '次/天' : null
         obj.remark = item.tip
-        obj.totalNumber = this.tonumber(item.usetotal) ? this.tonumber(item.usetotal) + '盒' : null
-        obj.usageOff = this.medicineUnit(item.usemethod)
-        medicine.push(obj)
         if (this._.has(item, 'uselong')) {
+        } else {
           item.uselong = 0
         }
+        // item.use
+        // item.singleuse = item.singleuse.replace(/-?[1-9]\d*/g, '')
+        // item.usetimes = item.usetimes.replace(/-?[1-9]\d*/g, '')
+        // item.totalNumber = item.totalNumber.replace(/-?[1-9]\d*/g, '')
+        // item.uselong = item.uselong.replace(/-?[1-9]\d*/g, '')
+        //  item.uselong
+        obj.everyDosage = item.singleuse
+        obj.usageTimes = item.usetimes + '次/天'
+        obj.totalNumber = item.usetotal + '盒'
+
+        item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
+        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
+        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes) + '次/天'
+        obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
+        obj.usageOff = this.medicineUnit(item.usemethod)
+        medicine.push(obj)
         // obj.totalNumber
       })
 
@@ -1096,13 +1168,9 @@ export default {
       return false
     },
     tonumber (val) {
-      if (val) {
-        if (this._.isNaN(parseInt(val))) {
-          return parseInt(val)
-        } else {
-          return null
-        }
-      } else return null
+      if (this._.isNaN(parseInt(val))) {
+        return parseInt(val)
+      }
     },
     medicineUnit (val) {
       let unit
@@ -1704,12 +1772,54 @@ export default {
   }
   .use-num{
     display: inline-block;
-    width: 40px;
+    // width: 40px;
     // height: 20px;
+    
+  }
+  .width-tip{
+    width: 100%;
+      -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #666;
+    display: inline-block;
+    font-size: inherit;
+    line-height: 1;
+    outline: none;
+    -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    // width: 100%;
+    &:focus{
+      outline: none;
+      border-color: #1991fc;
+    }
   }
   .single-use{
     width: 25px;
-    height: 25px;
+    height: 28px;
+      -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #666;
+    display: inline-block;
+    font-size: inherit;
+    line-height: 1;
+    outline: none;
+    -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    // width: 100%;
+    &:focus{
+      outline: none;
+      border-color: #1991fc;
+    }
   }
   .total{
     width: 25px;
@@ -1931,6 +2041,40 @@ export default {
   display: inline-block;
   width: 45px;
 }
+.pick-date-wrap{
+  display: flex;
+  align-items: center;
+  input{
+    -webkit-appearance: none;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #606266;
+    display: inline-block;
+    font-size: inherit;
+    height: 28px;
+    line-height: 1;
+    outline: none;
+    padding: 0 15px;
+    -webkit-transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    width: 100%;
+    &:focus{
+      outline: none;
+      border-color: #1991fc;
+    }
+  }
+  /* justify-content: space-around; */
+}
+.pick-date-wrap div{
+  width: 56px;
+  padding-right: 5px;
+  /* justify-content: space-around; */
+}
+
 </style>
 
 
@@ -1984,16 +2128,7 @@ export default {
     width: 40%;
   }
 }
-.pick-date-wrap{
-  display: flex;
-  
-  /* justify-content: space-around; */
-}
-.pick-date-wrap div{
-  width: 56px;
-  padding-right: 5px;
-  /* justify-content: space-around; */
-}
+
 </style>
 
 

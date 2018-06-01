@@ -72,7 +72,7 @@
           label="加入时间"
           align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
           label="操作"
           align="center"
           width="100">
@@ -82,7 +82,7 @@
               编辑</span>
               </el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <div class="page">
           <el-pagination
@@ -200,59 +200,76 @@ export default {
         return list
       } else {
         list.forEach(item => {
+          let sickTypelist1 = []
+          let sickTypelist2 = []
           // if (item.bloodPressureType) {
           switch (item.bloodPressureType) {
             case 0: {
-              item.sicktype = '未知'
+              sickTypelist1.push('未知')
               break
             }
             case 1: {
-              item.sicktype = '原发性高血压'
+              sickTypelist1.push('原发性高血压')
+              // item.sicktype = '原发性高血压'
               break
             }
             case 2: {
-              item.sicktype = '继发性高血压'
+              sickTypelist1.push('继发性高血压')
+              // item.sicktype = '继发性高血压'
               break
             }
             case 3: {
-              item.sicktype = '正常'
+              sickTypelist1.push('正常')
+              // item.sicktype = '正常'
               break
             }
             default: {
-              item.sicktype = '未知'
+              sickTypelist1.push('未知')
+              // item.sicktype = '未知'
             }
           }
           // }
           // if (item.diabetesType) {
           switch (item.diabetesType) {
             case 0: {
-              item.sicktype = '未知'
+              sickTypelist2.push('未知')
+              // item.sicktype = '未知'
               break
             }
             case 1: {
-              item.sicktype = '1型糖尿病'
+              sickTypelist2.push('1型糖尿病')
+              // item.sicktype = '1型糖尿病'
               break
             }
             case 2: {
-              item.sicktype = '2型糖尿病'
+              sickTypelist2.push('2型糖尿病')
+              // item.sicktype = '2型糖尿病'
               break
             }
             case 3: {
-              item.sicktype = '妊娠型糖尿病'
+              sickTypelist2.push('妊娠型糖尿病')
+              // item.sicktype = '妊娠型糖尿病'
               break
             }
             case 4: {
-              item.sicktype = '特殊型糖尿病'
+              sickTypelist2.push('特殊型糖尿病')
+              // item.sicktype = '特殊型糖尿病'
               break
             }
             case 5: {
-              item.sicktype = '正常'
+              sickTypelist2.push('正常')
+              // item.sicktype = '正常'
               break
             }
             default: {
-              item.sicktype = '未知'
+              sickTypelist2.push('未知')
+              // item.sicktype = '未知'
             }
           }
+          sickTypelist1 = this._.uniqWith(sickTypelist1, this._.isEqual)
+          sickTypelist2 = this._.uniqWith(sickTypelist2, this._.isEqual)
+          item.sicktype = '高血压：' + sickTypelist1.join('、') + '；糖尿病：' + sickTypelist2.join('、')
+
           // }
         })
       }
