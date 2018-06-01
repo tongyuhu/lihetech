@@ -524,7 +524,7 @@ export default {
           sickID: val.userId,
           hospitalId: 2
         }})
-      this.setuserMakeOrderDoctorId(val.adminIdMainDoctor)
+      this.setuserMakeOrderDoctorId(val.id)
       this.SET_SICK_CARD(true)
     },
     // 联系

@@ -30,6 +30,7 @@
 
 import wmenu from '@/components/wmenu.vue'
 import wmenuitem from '@/components/wmenuitem.vue'
+import {mapState} from 'vuex'
 export default {
   name: 'H-Sider',
   components: {
@@ -38,29 +39,28 @@ export default {
   },
   data () {
     return {
-      menu: [
-        {
-          iconName: 'heigh-blood',
-          title: '高血压',
-          routerName: 'booldheigh',
-          open: true,
-          child: [
-            {
-              id: 'bloodtotal',
-              title: '总体趋势'
-            },
-            {
-              id: 'bloodnew',
-              title: '最新问诊'
-            },
-            {
-              id: 'bloodbad',
-              title: '严重患者'
-            },
-            {
-              id: 'bloodnolisten',
-              title: '未遵医嘱'
-            }
+      bloodHeighMenu: {
+        iconName: 'heigh-blood',
+        title: '高血压',
+        routerName: 'booldheigh',
+        open: true,
+        child: [
+          {
+            id: 'bloodtotal',
+            title: '总体趋势'
+          },
+          {
+            id: 'bloodnew',
+            title: '最新问诊'
+          },
+          {
+            id: 'bloodbad',
+            title: '严重患者'
+          },
+          {
+            id: 'bloodnolisten',
+            title: '未遵医嘱'
+          }
             // {
             //   id: 'bloodunperfect',
             //   title: '建档不完善'
@@ -69,111 +69,171 @@ export default {
             //   id: 'bloodcases',
             //   title: '患者列表'
             // }
-          ]
-        },
-        // {
-        //   id: 2,
-        //   iconName: 'heigh-suger',
-        //   title: '糖尿病',
-        //   routerName: 'sugerheigh',
-        //   child: [
-        //     {
-        //       id: 'sugerTotal',
-        //       title: '总体趋势'
-        //     },
-        //     {
-        //       id: 'sugerNew',
-        //       title: '最新问诊'
-        //     },
-        //     {
-        //       id: 'sugerBad',
-        //       title: '严重患者'
-        //     },
-        //     {
-        //       id: 'sugerNolisten',
-        //       title: '未遵医嘱'
-        //     },
-        //     {
-        //       id: 'sugerUnperfect',
-        //       title: '建档不完整'
-        //     },
-        //     {
-        //       id: 'sugerCases',
-        //       title: '患者列表'
-        //     }
-        //   ]
-        // },
-        // {
-        //   id: 3,
-        //   iconName: 'other',
-        //   title: '其他',
-        //   routerName: 'other',
-        //   child: [
-        //     {
-        //       id: 'othertotal',
-        //       title: '整体趋势'
-        //     },
-        //     {
-        //       id: 'respire',
-        //       title: '呼吸道'
-        //     },
-        //     {
-        //       id: 'cancer',
-        //       title: '癌症'
-        //     },
-        //     {
-        //       id: 'infection',
-        //       title: '传染病'
-        //     },
-        //     {
-        //       id: 'tumour',
-        //       title: '肿瘤'
-        //     }
-        //   ]
-        // },
-        {
+        ]
+      },
+      orderMenu: {
           // id: 4,
-          iconName: 'order',
-          title: '预约管理',
-          routerName: 'order'
-        },
-        // {
-        //   id: 4,
-        //   iconName: 'cases',
-        //   title: '病例库',
-        //   routerName: 'cases'
-        // },
-        {
-          id: 5,
-          iconName: 'admin',
-          title: '人员管理',
-          routerName: 'personManage',
-          child: [
-            {
+        iconName: 'order',
+        title: '预约管理',
+        routerName: 'order'
+      },
+      personManage: {
+        id: 5,
+        iconName: 'admin',
+        title: '人员管理',
+        routerName: 'personManage',
+        child: [
+          {
               // id: 'sugerCases',
-              routerName: 'doctorManage',
-              title: '医生'
-            },
-            {
+            routerName: 'doctorManage',
+            title: '医生'
+          },
+          {
               // id: 'sugerCases',
-              routerName: 'sickManage',
-              title: '患者'
-            }
-          ]
-        }
-        // {
-        //   id: 6,
-        //   iconName: 'message',
-        //   hasMsg: true,
-        //   title: '我的消息',
-        //   routerName: 'accountSetting'
-        // }
-      ]
+            routerName: 'sickManage',
+            title: '患者'
+          }
+        ]
+      },
+      menu: []
+      // menu: [
+      //   {
+      //     iconName: 'heigh-blood',
+      //     title: '高血压',
+      //     routerName: 'booldheigh',
+      //     open: true,
+      //     child: [
+      //       {
+      //         id: 'bloodtotal',
+      //         title: '总体趋势'
+      //       },
+      //       {
+      //         id: 'bloodnew',
+      //         title: '最新问诊'
+      //       },
+      //       {
+      //         id: 'bloodbad',
+      //         title: '严重患者'
+      //       },
+      //       {
+      //         id: 'bloodnolisten',
+      //         title: '未遵医嘱'
+      //       }
+      //       // {
+      //       //   id: 'bloodunperfect',
+      //       //   title: '建档不完善'
+      //       // },
+      //       // {
+      //       //   id: 'bloodcases',
+      //       //   title: '患者列表'
+      //       // }
+      //     ]
+      //   },
+      //   // {
+      //   //   id: 2,
+      //   //   iconName: 'heigh-suger',
+      //   //   title: '糖尿病',
+      //   //   routerName: 'sugerheigh',
+      //   //   child: [
+      //   //     {
+      //   //       id: 'sugerTotal',
+      //   //       title: '总体趋势'
+      //   //     },
+      //   //     {
+      //   //       id: 'sugerNew',
+      //   //       title: '最新问诊'
+      //   //     },
+      //   //     {
+      //   //       id: 'sugerBad',
+      //   //       title: '严重患者'
+      //   //     },
+      //   //     {
+      //   //       id: 'sugerNolisten',
+      //   //       title: '未遵医嘱'
+      //   //     },
+      //   //     {
+      //   //       id: 'sugerUnperfect',
+      //   //       title: '建档不完整'
+      //   //     },
+      //   //     {
+      //   //       id: 'sugerCases',
+      //   //       title: '患者列表'
+      //   //     }
+      //   //   ]
+      //   // },
+      //   // {
+      //   //   id: 3,
+      //   //   iconName: 'other',
+      //   //   title: '其他',
+      //   //   routerName: 'other',
+      //   //   child: [
+      //   //     {
+      //   //       id: 'othertotal',
+      //   //       title: '整体趋势'
+      //   //     },
+      //   //     {
+      //   //       id: 'respire',
+      //   //       title: '呼吸道'
+      //   //     },
+      //   //     {
+      //   //       id: 'cancer',
+      //   //       title: '癌症'
+      //   //     },
+      //   //     {
+      //   //       id: 'infection',
+      //   //       title: '传染病'
+      //   //     },
+      //   //     {
+      //   //       id: 'tumour',
+      //   //       title: '肿瘤'
+      //   //     }
+      //   //   ]
+      //   // },
+      //   {
+      //     // id: 4,
+      //     iconName: 'order',
+      //     title: '预约管理',
+      //     routerName: 'order'
+      //   },
+      //   // {
+      //   //   id: 4,
+      //   //   iconName: 'cases',
+      //   //   title: '病例库',
+      //   //   routerName: 'cases'
+      //   // },
+      //   {
+      //     id: 5,
+      //     iconName: 'admin',
+      //     title: '人员管理',
+      //     routerName: 'personManage',
+      //     child: [
+      //       {
+      //         // id: 'sugerCases',
+      //         routerName: 'doctorManage',
+      //         title: '医生'
+      //       },
+      //       {
+      //         // id: 'sugerCases',
+      //         routerName: 'sickManage',
+      //         title: '患者'
+      //       }
+      //     ]
+      //   }
+      //   // {
+      //   //   id: 6,
+      //   //   iconName: 'message',
+      //   //   hasMsg: true,
+      //   //   title: '我的消息',
+      //   //   routerName: 'accountSetting'
+      //   // }
+      // ]
     }
+  },
+  computed: {
+    ...mapState(['adminInfo'])
   },
   methods: {
     goanchor (id) {
-      // console.log(id)
       this.$nextTick(function () {
         let anchor = document.getElementById(id)
         let scrollrange = anchor.offsetTop
@@ -200,6 +260,20 @@ export default {
         }
       })
       // console.log(step)
+    }
+  },
+  mounted () {
+    // if(this.adminInfo)
+    console.log('医生信息', this.adminInfo)
+    if (this._.has(this.adminInfo, 'adminType')) {
+      if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
+        this.menu.push(this.bloodHeighMenu)
+        this.menu.push(this.personManage)
+      } else {
+        this.menu.push(this.bloodHeighMenu)
+        this.menu.push(this.orderMenu)
+        this.menu.push(this.personManage)
+      }
     }
   }
 }
