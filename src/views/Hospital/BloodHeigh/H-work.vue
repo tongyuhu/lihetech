@@ -441,21 +441,8 @@ export default {
           topArr.unshift(item)
         }
       })
-      // topArr.forEach(item => {
-      //   copyArr.unshift(item)
-      // })
-      return copyArr
+      return topArr
     },
-    // jumppage (page) {
-    //   // console.log(page, 266)
-    // },
-    // careText (boolean) {
-    //   if (boolean) {
-    //     return '取消关注'
-    //   } else {
-    //     return '关注'
-    //   }
-    // },
     confirmSickType (val) {
       let type
       switch (val) {
@@ -505,6 +492,9 @@ export default {
       .then(res => {
         if (res.data.code === '0000') {
           val.isDocusOn = !val.isDocusOn
+          this.newsickaskData = this.sortSickList(this.newsickaskData)
+          this.badsickData = this.sortSickList(this.badsickData)
+          this.noListenDoctorData = this.sortSickList(this.noListenDoctorData)
         }
         if (res.data.code === '1001') {
         }
