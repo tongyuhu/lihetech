@@ -293,9 +293,9 @@ export default {
         let scale = w / h
         w = 200
         h = w / scale
-              // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
-        let quality = 0.9
-              // 生成canvas
+        // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+        let quality = 0.7
+        // 生成canvas
         let canvas = document.createElement('canvas')
         let ctx = canvas.getContext('2d')
               // 创建属性节点

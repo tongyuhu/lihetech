@@ -3,9 +3,9 @@
     <span v-if="isTextMsg">{{textMsg}}</span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
     <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
-      <div>
+      <!-- <div> -->
         <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
-      </div>
+      <!-- </div> -->
     </div>
     <!-- <div class="img-chat">
       <vue-preview :slides="slide1" @close="handleClose"></vue-preview>
@@ -125,6 +125,7 @@ export default {
   text-align: center;
 }
 .img-message-wrap{
+  
   position: fixed;
   // margin-top: 80px;
   top:0;
@@ -138,7 +139,8 @@ export default {
   height: 100%;
   background: rgba(0, 0, 0, 0.315);
   img{
-    width: 80%;
+    max-width: 80%;
+    // width: 80%;
   }
 }
 </style>
