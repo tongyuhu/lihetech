@@ -145,12 +145,10 @@ export default {
           let theX = vm.axisX(copydata)
           vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
           vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
-
-          console.log('copydata', copydata)
-          console.log('useDrugData', useDrugData)
-          console.log('theX', theX)
-          console.log('optionData', this.optionData)
+          vm.optionData = vm.optionData.reverse()
+          vm.xasis = vm.xasis.reverse()
         }
+
         vm.loading = false
         let position = this.computeStartend(vm.page.currentPage, vm.page.pageNum)
         let useDrug = echarts.init(document.getElementById('useDrug'))
@@ -681,12 +679,12 @@ export default {
       if (pageNum === 1 && pages === 1) {
         page.start = 0
         page.end = 100
-      } else if (pageNum === 1) {
+      } else if (pageNum === pages) {
         page.start = 0
-        page.end = parseInt((pageNum / pages) * 100)
-      } else if (pageNum < pages || pageNum === pages) {
-        page.start = parseInt(((pageNum - 1) / pages) * 100)
-        page.end = parseInt((pageNum / pages) * 100)
+        page.end = parseInt((1 / pages) * 100)
+      } else if (pageNum < pages) {
+        page.start = parseInt(((pages - pageNum) / pages) * 100)
+        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
       }
       return page
     },

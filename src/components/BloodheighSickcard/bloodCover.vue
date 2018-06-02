@@ -41,13 +41,14 @@
               <div class="flex">
                 <div class="flex widthone">
                   <div class="flex-btn-left">
-                    <el-button v-show="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
+                    <el-button v-show="showtrendBtn" :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
                   </div>
                   <div class="chart-min-width">
                     <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
                   </div>
                   <div class="flex-btn">
-                    <el-button v-show="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <!-- <el-button :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
+                    <el-button v-show="showtrendBtn" :disabled="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                   </div>
                 </div>
 
@@ -141,13 +142,16 @@
             <el-col>
               <div class="flex">
                 <div class="flex-btn-left">
-                  <el-button v-show="behaviourBtnPre" icon="el-icon-arrow-left" @click="bloodBehaviorPer" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <el-button :disabled="behaviourBtnNext" @click="bloodBehaviorNext" type="text" icon="el-icon-arrow-left" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <!-- <el-button  :disabled="behaviourBtnNext" icon="el-icon-arrow-left" @click="bloodBehaviorNext" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                 </div>
                 <div class="chart-min-width">
                   <div id='bloodBehaviourBlood' :style="{width:'auto',height:'600px'}"></div>
                 </div>
                 <div class="flex-btn">
-                  <el-button v-show="behaviourBtnNext" icon="el-icon-arrow-right" @click="bloodBehaviorNext" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <el-button :disabled="behaviourBtnPre" @click="bloodBehaviorPer" type="text" icon="el-icon-arrow-right" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <!-- <el-button  :disabled="behaviourBtnPre" icon="el-icon-arrow-right" @click="bloodBehaviorPer" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
+                  <!-- <el-button :disabled="behaviourBtnNext" icon="el-icon-arrow-right" @click="bloodBehaviorNext" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                 </div>
               </div>
             </el-col>
@@ -217,6 +221,7 @@ export default {
   },
   data () {
     return {
+      showtrendBtn: true,
       // 是否全选状态
       ischeckAll: true,
       // 血压趋势 状态 按钮数据
@@ -612,8 +617,8 @@ export default {
                   return value
                 } else {
                   let arr = []
-                  arr.push(time)
                   arr.push(val.slice(5))
+                  arr.push(time)
                   x1 = time
                   return arr.join('\n')
                 }
@@ -1091,7 +1096,8 @@ export default {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
         'bpMeasureTime': vm.bpMeasureTime || '',
-        'pageNum': pageNum
+        'pageNum': pageNum,
+        'pageSize': 10
       }
       this.bloodAndBehaviourData.date = []
       this.bloodAndBehaviourData.week = []
@@ -1114,21 +1120,26 @@ export default {
             } else {
               this.$set(this.bloodAndBehaviourData.bpType, index, 0)
             }
-            this.bloodAndBehaviourData.pages = res.data.pages
-            this.bloodAndBehaviourData.pageNum = res.data.pageNum
-            this.bloodAndBehaviourData.currentPage = 1
             // if (index === 0) {
-            //   this.$set(this.chartA, 'date', item.description)
+              //   this.$set(this.chartA, 'date', item.description)
             // }
             if (!item.avgBehaveScore) {
               item.avgBehaveScore = 0
             }
             this.$set(this.bloodAndBehaviourData.avgBehaveScore, index, item.avgBehaveScore)
-            this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
-            let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-            let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
-            bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
           })
+          this.bloodAndBehaviourData.date = this.bloodAndBehaviourData.date.reverse()
+          // this.bloodAndBehaviourData.week = this.bloodAndBehaviourData.week.reverse()
+          this.bloodAndBehaviourData.avgSystolic = this.bloodAndBehaviourData.avgSystolic.reverse()
+          this.bloodAndBehaviourData.avgDiastolic = this.bloodAndBehaviourData.avgDiastolic.reverse()
+          this.bloodAndBehaviourData.pages = res.data.pages
+          this.bloodAndBehaviourData.pageNum = res.data.pageNum
+          this.bloodAndBehaviourData.currentPage = 1
+          this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
+          let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
+          let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
+          bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
+          this.bpType = this.bpType.reverse()
           if (res.data.data) {
             if (res.data.data.length !== 0) {
               this.updateBehaviourRateDate(res.data.data[0].description)
@@ -1158,9 +1169,15 @@ export default {
               this.$set(this.bloodAndBehaviourData.bpType, index, 0)
             }
           })
+          this.bloodAndBehaviourData.date = this.bloodAndBehaviourData.date.reverse()
+          this.bloodAndBehaviourData.week = this.bloodAndBehaviourData.week.reverse()
+          this.bloodAndBehaviourData.avgSystolic = this.bloodAndBehaviourData.avgSystolic.reverse()
+          this.bloodAndBehaviourData.avgDiastolic = this.bloodAndBehaviourData.avgDiastolic.reverse()
+          this.bpType = this.bpType.reverse()
           this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
           this.bloodAndBehaviourData.currentPage = 1
-          let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
+          let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
+          // let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
           let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
           bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
             // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
@@ -1189,13 +1206,19 @@ export default {
               this.$set(this.bloodAndBehaviourData.bpType, index, 0)
             }
             this.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
-            let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-            this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
-            this.bloodAndBehaviourData.currentPage = 1
-            let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
-            bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
             // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
           })
+          this.bloodAndBehaviourData.date = this.bloodAndBehaviourData.date.reverse()
+          // this.bloodAndBehaviourData.week = this.bloodAndBehaviourData.week.reverse()
+          this.bloodAndBehaviourData.avgSystolic = this.bloodAndBehaviourData.avgSystolic.reverse()
+          this.bloodAndBehaviourData.avgDiastolic = this.bloodAndBehaviourData.avgDiastolic.reverse()
+          this.bpType = this.bpType.reverse()
+          let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
+          this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
+          this.bloodAndBehaviourData.currentPage = 1
+          let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
+            // let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
+          bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
           if (res.data.data) {
             if (res.data.data.length !== 0) {
               this.updateBehaviourRateDate(res.data.data[0].description)
@@ -1203,6 +1226,7 @@ export default {
           }
         })
       }
+      console.log(this.bloodAndBehaviourData)
     },
     updateBehaviourRateDate (date, index) {
       if (this.behaviourChecked === 1) {
@@ -1223,6 +1247,11 @@ export default {
       })
     },
     updatebloodTrendChecked (index) {
+      if (index === 0) {
+        this.showtrendBtn = false
+      } else {
+        this.showtrendBtn = true
+      }
       this.bloodTrendDate.forEach(item => {
         item.isChecked = false
       })
@@ -1262,11 +1291,23 @@ export default {
           this.bloodTrendData.bptype = []
 
           res.data.data.forEach((item, index) => {
-            this.$set(this.bloodTrendData.date, index, dateFormat(item.measureTime, 0))
-            this.$set(this.bloodTrendData.systolic, index, item.systolic)
-            this.$set(this.bloodTrendData.diastolic, index, item.diastolic)
-            this.$set(this.bloodTrendData.bptype, index, item.bpType)
+            this.bloodTrendData.date.push(dateFormat(item.measureTime, 0))
+            this.bloodTrendData.systolic.push(item.systolic)
+            this.bloodTrendData.diastolic.push(item.diastolic)
+            this.bloodTrendData.bptype.push(item.bpType)
+            // this.$set(this.bloodTrendData.date, index, dateFormat(item.measureTime, 0))
+            // this.$set(this.bloodTrendData.systolic, index, item.systolic)
+            // this.$set(this.bloodTrendData.diastolic, index, item.diastolic)
+            // this.$set(this.bloodTrendData.bptype, index, item.bpType)
+
+            // this.bloodTrendData.date = vm._.sortBy(this.bloodTrendData.date, function (item) {
+            //   return item.measureTime
+            // })
           })
+          this.bloodTrendData.date = this.bloodTrendData.date.reverse()
+          this.bloodTrendData.systolic = this.bloodTrendData.systolic.reverse()
+          this.bloodTrendData.diastolic = this.bloodTrendData.diastolic.reverse()
+          this.bloodTrendData.bptype = this.bloodTrendData.bptype.reverse()
           this.bloodTrendData.pages = 1
           this.bloodTrendData.currentPage = 1
           // this.bloodAndBehaviourData.pages = res.data.pages
@@ -1324,6 +1365,10 @@ export default {
             //   this.bloodAndBehaviourData.bpType.push(0)
             // }
           })
+          this.bloodTrendData.date = this.bloodTrendData.date.reverse()
+          this.bloodTrendData.systolic = this.bloodTrendData.systolic.reverse()
+          this.bloodTrendData.diastolic = this.bloodTrendData.diastolic.reverse()
+          this.bloodTrendData.bptype = this.bloodTrendData.bptype.reverse()
           this.bloodTrendData.currentPage = 1
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
           console.log('bloodTrendData', this.bloodTrendData)
@@ -1363,6 +1408,11 @@ export default {
             this.$set(this.bloodTrendData.systolic, index, item.avgSystolic)
             this.$set(this.bloodTrendData.diastolic, index, item.avgDiastolic)
           })
+          this.bloodTrendData.date = this.bloodTrendData.date.reverse()
+          this.bloodTrendData.systolic = this.bloodTrendData.systolic.reverse()
+          this.bloodTrendData.diastolic = this.bloodTrendData.diastolic.reverse()
+          this.bloodTrendData.bptype = this.bloodTrendData.bptype.reverse()
+          this.bloodTrendData.week = this.bloodTrendData.week.reverse()
           this.bloodTrendData.currentPage = 1
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
           console.log('bloodTrendData', this.bloodTrendData)
@@ -1397,6 +1447,10 @@ export default {
             // }
             this.$set(this.bloodTrendData.bptype, index, item.bpType)
           })
+          this.bloodTrendData.date = this.bloodTrendData.date.reverse()
+          this.bloodTrendData.systolic = this.bloodTrendData.systolic.reverse()
+          this.bloodTrendData.diastolic = this.bloodTrendData.diastolic.reverse()
+          this.bloodTrendData.bptype = this.bloodTrendData.bptype.reverse()
           this.bloodTrendData.currentPage = 1
           this.$set(this.bloodTrendData, 'pages', res.data.pages)
           console.log('bloodTrendData', this.bloodTrendData)
@@ -1506,15 +1560,30 @@ export default {
       if (pageNum === 1 && pages === 1) {
         page.start = 0
         page.end = 100
-      } else if (pageNum === 1) {
+      } else if (pageNum === pages) {
         page.start = 0
-        page.end = parseInt((pageNum / pages) * 100)
-      } else if (pageNum < pages || pageNum === pages) {
-        page.start = parseInt(((pageNum - 1) / pages) * 100)
-        page.end = parseInt((pageNum / pages) * 100)
+        page.end = parseInt((1 / pages) * 100)
+      } else if (pageNum < pages) {
+        page.start = parseInt(((pages - pageNum) / pages) * 100)
+        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
       }
       return page
     },
+    // computeStartend (pageNum, pages) {
+    //   let page = {
+    //   }
+    //   if (pageNum === 1 && pages === 1) {
+    //     page.start = 0
+    //     page.end = 100
+    //   } else if (pageNum === 1) {
+    //     page.start = 0
+    //     page.end = parseInt((pageNum / pages) * 100)
+    //   } else if (pageNum < pages || pageNum === pages) {
+    //     page.start = parseInt(((pageNum - 1) / pages) * 100)
+    //     page.end = parseInt((pageNum / pages) * 100)
+    //   }
+    //   return page
+    // },
     computeDanger (bptype) {
       let type = this._.toNumber(bptype)
       let color = ''
@@ -1552,7 +1621,8 @@ export default {
         vm.bloodAndBehaviourData.currentPage ++
       }
       if (vm.bloodAndBehaviourData.pageNum >= vm.bloodAndBehaviourData.pages) {
-        let position = this.computeStartend(vm.bloodAndBehaviourData.pageNum, this.bloodAndBehaviourData.pageNum)
+        let position = this.computeStartend(vm.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
+        // console.log()
         let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
         bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
         return
@@ -1583,25 +1653,25 @@ export default {
                     item.description = 0
                   }
                   if (vm.behaviourChecked === 0 || vm.behaviourChecked === 2) {
-                    vm.bloodAndBehaviourData.date.push(item.description)
+                    vm.bloodAndBehaviourData.date.unshift(item.description)
                   }
                   if (vm.behaviourChecked === 1) {
                     vm.computeYearWeek(this._.toString(item.yearWeek))
                     let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
-                    vm.bloodAndBehaviourData.date.push(week)
-                    vm.bloodAndBehaviourData.week.push(this._.toString(item.yearWeek))
-                    // vm.bloodAndBehaviourData.date.push(item.description)
+                    vm.bloodAndBehaviourData.date.unshift(week)
+                    vm.bloodAndBehaviourData.week.unshift(this._.toString(item.yearWeek))
+                    // vm.bloodAndBehaviourData.date.unshift(item.description)
                   }
-                  vm.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
-                  vm.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
+                  vm.bloodAndBehaviourData.avgSystolic.unshift(item.avgSystolic)
+                  vm.bloodAndBehaviourData.avgDiastolic.unshift(item.avgDiastolic)
                   if (!item.avgBehaveScore) {
                     item.avgBehaveScore = 0
                   }
-                  vm.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
+                  vm.bloodAndBehaviourData.avgBehaveScore.unshift(item.avgBehaveScore)
                   if (item.bpType) {
-                    vm.bloodAndBehaviourData.bpType.push(item.bpType)
+                    vm.bloodAndBehaviourData.bpType.unshift(item.bpType)
                   } else {
-                    vm.bloodAndBehaviourData.bpType.push(0)
+                    vm.bloodAndBehaviourData.bpType.unshift(0)
                   }
                   vm.bloodAndBehaviourData.pages = res.data.pages
                   vm.bloodAndBehaviourData.pageNum = res.data.pageNum
@@ -1614,6 +1684,7 @@ export default {
             bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
             // bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 85))
             bloodBehaviourBlood.hideLoading()
+            console.log('nextbloodAndBehaviourData', this.bloodAndBehaviourData)
           })
     },
     bloodBehaviorPer () {
@@ -1659,6 +1730,7 @@ export default {
             )
         if (vm.bloodTrendData.pageNum <= res.data.pages) {
           if (res.data.data.length !== 0) {
+            // res.data.data = res.data.data.reverse()
             res.data.data.forEach((item, index) => {
               if (!item.description) {
                 item.description = 0
@@ -1669,32 +1741,47 @@ export default {
                 // vm.bloodTrendData.diastolic.push(item.diastolic)
               }
               if (vm.bloodTrendChecked === 1 || vm.bloodTrendChecked === 3) {
-                vm.bloodTrendData.date.push(item.description)
-                vm.bloodTrendData.systolic.push(item.avgSystolic)
-                vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+                vm.bloodTrendData.date.unshift(item.description)
+                vm.bloodTrendData.systolic.unshift(item.avgSystolic)
+                vm.bloodTrendData.diastolic.unshift(item.avgDiastolic)
+                vm.bloodTrendData.bptype.unshift(item.bpType)
+                // vm.bloodTrendData.date.push(item.description)
+                // vm.bloodTrendData.systolic.push(item.avgSystolic)
+                // vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+                // vm.bloodTrendData.bptype.push(item.bpType)
+
+                // this.bloodTrendData.date = this.bloodTrendData.date.reverse()
+                // this.bloodTrendData.systolic = this.bloodTrendData.systolic.reverse()
+                // this.bloodTrendData.diastolic = this.bloodTrendData.diastolic.reverse()
+                // this.bloodTrendData.bptype = this.bloodTrendData.bptype.reverse()
                 // if (item.bpType) {
                 //   this.bloodAndBehaviourData.bpType.push(item.bpType)
                 // } else {
                 //   this.bloodAndBehaviourData.bpType.push(0)
                 // }
-                vm.bloodTrendData.bptype.push(item.bpType)
               }
               if (vm.bloodTrendChecked === 2) {
                 vm.computeYearWeek(this._.toString(item.yearWeek))
                 let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
-                vm.bloodTrendData.date.push(week)
-                vm.bloodTrendData.week.push(this._.toString(item.yearWeek))
-                vm.bloodTrendData.systolic.push(item.avgSystolic)
-                vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+                vm.bloodTrendData.date.unshift(week)
+                vm.bloodTrendData.week.unshift(this._.toString(item.yearWeek))
+                vm.bloodTrendData.systolic.unshift(item.avgSystolic)
+                vm.bloodTrendData.diastolic.unshift(item.avgDiastolic)
+                vm.bloodTrendData.bptype.unshift(item.bpType)
+
+          //         this.bloodTrendData.date = this.bloodTrendData.date.reverse()
+          // this.bloodTrendData.systolic = this.bloodTrendData.systolic.reverse()
+          // this.bloodTrendData.diastolic = this.bloodTrendData.diastolic.reverse()
+          // this.bloodTrendData.bptype = this.bloodTrendData.bptype.reverse()
                 // if (item.bpType) {
                 //   this.bloodAndBehaviourData.bpType.push(item.bpType)
                 // } else {
                 //   this.bloodAndBehaviourData.bpType.push(0)
                 // }
-                vm.bloodTrendData.bptype.push(item.bpType)
               }
               let position = vm.computeStartend(vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
               console.log('soureposition', vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
+              // bloodTrend.setOption(vm.bloodTrendOption(0, position.start))
               bloodTrend.setOption(vm.bloodTrendOption(position.start, position.end))
               console.log('position', position.start, position.end)
               vm.bloodTrendData.pages = res.data.pages
@@ -1714,6 +1801,7 @@ export default {
         this.bloodTrendData.currentPage = 1
       }
       let position = vm.computeStartend(vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
+      console.log(position, vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
       bloodTrend.setOption(vm.bloodTrendOption(position.start, position.end))
       // console.log('soureposition', vm.bloodTrendData.currentPage, vm.bloodTrendData.pageNum)
       // console.log('position', position.start, position.end)
@@ -1743,18 +1831,18 @@ export default {
     bloodAndBehaviourData: {
       handler: function (val) {
         if (val.pages < 2) {
-          this.behaviourBtnNext = false
-          this.behaviourBtnPre = false
+          this.behaviourBtnNext = true
+          this.behaviourBtnPre = true
         } else {
           if (val.currentPage === val.pages) {
-            this.behaviourBtnNext = false
-          } else {
             this.behaviourBtnNext = true
+          } else {
+            this.behaviourBtnNext = false
           }
           if (val.currentPage !== 1) {
-            this.behaviourBtnPre = true
-          } else {
             this.behaviourBtnPre = false
+          } else {
+            this.behaviourBtnPre = true
           }
         }
       },
@@ -1764,18 +1852,18 @@ export default {
     bloodTrendData: {
       handler: function (val) {
         if (val.pages < 2) {
-          this.trendBtnNext = false
-          this.trendBtnPre = false
+          this.trendBtnNext = true
+          this.trendBtnPre = true
         } else {
           if (val.currentPage === val.pages) {
-            this.trendBtnNext = false
-          } else {
             this.trendBtnNext = true
+          } else {
+            this.trendBtnNext = false
           }
           if (val.currentPage !== 1) {
-            this.trendBtnPre = true
-          } else {
             this.trendBtnPre = false
+          } else {
+            this.trendBtnPre = true
           }
         }
       },
@@ -1784,128 +1872,128 @@ export default {
     }
   },
   mounted () {
-    let vm = this
+    // let vm = this
     this.updatebloodTrendChecked(0)
     this.dataIndex = 0
     this.updateBehaviourChecked(0)
     this.updateBehaviourData(0)
-    let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
-    bloodBehaviourBlood.on('datazoom', function (chartsparams) {
-      if (chartsparams.end === 100) {
-        if (vm.bloodAndBehaviourData.pageNum >= vm.bloodAndBehaviourData.pages) {
-          return
-        }
-        vm.bloodAndBehaviourData.pageNum ++
-        let params = {
-          'userId': vm.sickID,
-          'adminHospitalId': vm.hospitalId,
-          'bpMeasureTime': vm.bpMeasureTime || '',
-          'pageNum': vm.bloodAndBehaviourData.pageNum
-        }
-        vm.$axios(bloodheighSickDataApi(params, vm.behaviourChecked + 1))
-          .then(res => {
-            let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-            bloodBehaviourBlood.showLoading(
-              {
-                text: '加载中...',
-                color: '#1991fc',
-                textColor: '#000',
-                maskColor: 'rgba(255, 255, 255, 0.8)',
-                zlevel: 0
-              }
-            )
-            if (vm.bloodAndBehaviourData.pageNum <= res.data.pages) {
-              if (res.data.data.length !== 0) {
-                res.data.data.forEach((item, index) => {
-                  if (!item.description) {
-                    item.description = 0
-                  }
-                  if (vm.behaviourChecked === 0 || vm.behaviourChecked === 2) {
-                    vm.bloodAndBehaviourData.date.push(item.description)
-                  }
-                  if (vm.behaviourChecked === 1) {
-                    vm.computeYearWeek(this._.toString(item.yearWeek))
-                    let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '年' + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
-                    vm.bloodAndBehaviourData.date.push(week)
-                    vm.bloodAndBehaviourData.week.push(this._.toString(item.yearWeek))
-                    // vm.bloodAndBehaviourData.date.push(item.description)
-                  }
-                  vm.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
-                  vm.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
-                  if (!item.avgBehaveScore) {
-                    item.avgBehaveScore = 0
-                  }
-                  vm.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
-                  vm.bloodAndBehaviourData.pages = res.data.pages
-                  vm.bloodAndBehaviourData.pageNum = res.data.pageNum
-                })
-              }
-            }
-            bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 85))
-            bloodBehaviourBlood.hideLoading()
-          })
-      }
-    })
-    let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
-    bloodTrend.setOption(this.bloodTrendOption())
-    bloodTrend.on('datazoom', function (chartsparams) {
-      if (chartsparams.end === 100) {
-        if (vm.bloodTrendData.pageNum >= vm.bloodTrendData.pages) {
-          return
-        }
-        vm.bloodTrendData.pageNum ++
-        let params = {
-          'userId': vm.sickID,
-          'adminHospitalId': vm.hospitalId,
-          'bpMeasureTime': vm.bpMeasureTime || '',
-          'pageNum': vm.bloodTrendData.pageNum
-        }
-        vm.$axios(bloodheighSickDataApi(params, vm.bloodTrendChecked))
-          .then(res => {
-            bloodTrend.showLoading(
-              {
-                text: '加载中...',
-                color: '#1991fc',
-                textColor: '#000',
-                maskColor: 'rgba(255, 255, 255, 0.8)',
-                zlevel: 0
-              }
-                )
-            if (vm.bloodTrendData.pageNum <= res.data.pages) {
-              if (res.data.data.length !== 0) {
-                res.data.data.forEach((item, index) => {
-                  if (!item.description) {
-                    item.description = 0
-                  }
-                  if (vm.bloodTrendChecked === 0) {
-                    // vm.bloodTrendData.date.push(item.measureTime)
-                    // vm.bloodTrendData.systolic.push(item.systolic)
-                    // vm.bloodTrendData.diastolic.push(item.diastolic)
-                  }
-                  if (vm.bloodTrendChecked === 1 || vm.bloodTrendChecked === 3) {
-                    vm.bloodTrendData.date.push(item.description)
-                    vm.bloodTrendData.systolic.push(item.avgSystolic)
-                    vm.bloodTrendData.diastolic.push(item.avgDiastolic)
-                  }
-                  if (vm.bloodTrendChecked === 2) {
-                    vm.computeYearWeek(this._.toString(item.yearWeek))
-                    let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
-                    vm.bloodTrendData.date.push(week)
-                    vm.bloodTrendData.week.push(this._.toString(item.yearWeek))
-                    vm.bloodTrendData.systolic.push(item.avgSystolic)
-                    vm.bloodTrendData.diastolic.push(item.avgDiastolic)
-                  }
-                  vm.bloodTrendData.pages = res.data.pages
-                  vm.bloodTrendData.pageNum = res.data.pageNum
-                })
-              }
-            }
-            bloodTrend.setOption(vm.bloodTrendOption(50, 85))
-            bloodTrend.hideLoading()
-          })
-      }
-    })
+    // let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
+    // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
+    // bloodBehaviourBlood.on('datazoom', function (chartsparams) {
+    //   if (chartsparams.end === 100) {
+    //     if (vm.bloodAndBehaviourData.pageNum >= vm.bloodAndBehaviourData.pages) {
+    //       return
+    //     }
+    //     vm.bloodAndBehaviourData.pageNum ++
+    //     let params = {
+    //       'userId': vm.sickID,
+    //       'adminHospitalId': vm.hospitalId,
+    //       'bpMeasureTime': vm.bpMeasureTime || '',
+    //       'pageNum': vm.bloodAndBehaviourData.pageNum
+    //     }
+    //     vm.$axios(bloodheighSickDataApi(params, vm.behaviourChecked + 1))
+    //       .then(res => {
+    //         let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
+    //         bloodBehaviourBlood.showLoading(
+    //           {
+    //             text: '加载中...',
+    //             color: '#1991fc',
+    //             textColor: '#000',
+    //             maskColor: 'rgba(255, 255, 255, 0.8)',
+    //             zlevel: 0
+    //           }
+    //         )
+    //         if (vm.bloodAndBehaviourData.pageNum <= res.data.pages) {
+    //           if (res.data.data.length !== 0) {
+    //             res.data.data.forEach((item, index) => {
+    //               if (!item.description) {
+    //                 item.description = 0
+    //               }
+    //               if (vm.behaviourChecked === 0 || vm.behaviourChecked === 2) {
+    //                 vm.bloodAndBehaviourData.date.push(item.description)
+    //               }
+    //               if (vm.behaviourChecked === 1) {
+    //                 vm.computeYearWeek(this._.toString(item.yearWeek))
+    //                 let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '年' + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
+    //                 vm.bloodAndBehaviourData.date.push(week)
+    //                 vm.bloodAndBehaviourData.week.push(this._.toString(item.yearWeek))
+    //                 // vm.bloodAndBehaviourData.date.push(item.description)
+    //               }
+    //               vm.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
+    //               vm.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
+    //               if (!item.avgBehaveScore) {
+    //                 item.avgBehaveScore = 0
+    //               }
+    //               vm.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
+    //               vm.bloodAndBehaviourData.pages = res.data.pages
+    //               vm.bloodAndBehaviourData.pageNum = res.data.pageNum
+    //             })
+    //           }
+    //         }
+    //         bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 85))
+    //         bloodBehaviourBlood.hideLoading()
+    //       })
+    //   }
+    // })
+    // let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
+    // bloodTrend.setOption(this.bloodTrendOption())
+    // bloodTrend.on('datazoom', function (chartsparams) {
+    //   if (chartsparams.end === 100) {
+    //     if (vm.bloodTrendData.pageNum >= vm.bloodTrendData.pages) {
+    //       return
+    //     }
+    //     vm.bloodTrendData.pageNum ++
+    //     let params = {
+    //       'userId': vm.sickID,
+    //       'adminHospitalId': vm.hospitalId,
+    //       'bpMeasureTime': vm.bpMeasureTime || '',
+    //       'pageNum': vm.bloodTrendData.pageNum
+    //     }
+    //     vm.$axios(bloodheighSickDataApi(params, vm.bloodTrendChecked))
+    //       .then(res => {
+    //         bloodTrend.showLoading(
+    //           {
+    //             text: '加载中...',
+    //             color: '#1991fc',
+    //             textColor: '#000',
+    //             maskColor: 'rgba(255, 255, 255, 0.8)',
+    //             zlevel: 0
+    //           }
+    //             )
+    //         if (vm.bloodTrendData.pageNum <= res.data.pages) {
+    //           if (res.data.data.length !== 0) {
+    //             res.data.data.forEach((item, index) => {
+    //               if (!item.description) {
+    //                 item.description = 0
+    //               }
+    //               if (vm.bloodTrendChecked === 0) {
+    //                 // vm.bloodTrendData.date.push(item.measureTime)
+    //                 // vm.bloodTrendData.systolic.push(item.systolic)
+    //                 // vm.bloodTrendData.diastolic.push(item.diastolic)
+    //               }
+    //               if (vm.bloodTrendChecked === 1 || vm.bloodTrendChecked === 3) {
+    //                 vm.bloodTrendData.date.push(item.description)
+    //                 vm.bloodTrendData.systolic.push(item.avgSystolic)
+    //                 vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+    //               }
+    //               if (vm.bloodTrendChecked === 2) {
+    //                 vm.computeYearWeek(this._.toString(item.yearWeek))
+    //                 let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
+    //                 vm.bloodTrendData.date.push(week)
+    //                 vm.bloodTrendData.week.push(this._.toString(item.yearWeek))
+    //                 vm.bloodTrendData.systolic.push(item.avgSystolic)
+    //                 vm.bloodTrendData.diastolic.push(item.avgDiastolic)
+    //               }
+    //               vm.bloodTrendData.pages = res.data.pages
+    //               vm.bloodTrendData.pageNum = res.data.pageNum
+    //             })
+    //           }
+    //         }
+    //         bloodTrend.setOption(vm.bloodTrendOption(50, 85))
+    //         bloodTrend.hideLoading()
+    //       })
+    //   }
+    // })
   }
 }
 </script>

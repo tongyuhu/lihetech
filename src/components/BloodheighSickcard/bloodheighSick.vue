@@ -151,6 +151,14 @@
       >
       </card>
     </el-dialog>
+    <!-- <el-dialog
+    width="80%"
+    :visible.sync="showchecklist">
+      <checkList
+      :list="checklist" :row="true">
+
+      </checkList>
+    </el-dialog>  -->
   </div>
 </template>
 
@@ -169,6 +177,7 @@ import original from './original'
 import card from './card'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
+import checkList from '@/components/checklist'
 // import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
@@ -185,10 +194,35 @@ export default {
     original,
     card,
     healthForm,
-    face
+    face,
+    checkList
   },
   data () {
     return {
+      // 体检单
+      showchecklist: true,
+      checklist: [
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-01.png', height: 800, width: 1280},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-03.png', height: 800, width: 1280},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-02.png', height: 1134, width: 808},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-05.png', height: 509, width: 800},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-04.png', height: 1000, width: 660},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-06.png', height: 750, width: 500},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-07.png', height: 1050, width: 1680},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-08.png', height: 3548, width: 440},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-09.png', height: 519, width: 800},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-01.png', height: 800, width: 1280},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-02.png', height: 1134, width: 808},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-03.png', height: 800, width: 1280},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-04.png', height: 1000, width: 660},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-05.png', height: 509, width: 800},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-06.png', height: 750, width: 500},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-07.png', height: 1050, width: 1680},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-03.png', height: 800, width: 1280},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-04.png', height: 1000, width: 660},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-05.png', height: 509, width: 800},
+        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-06.png', height: 750, width: 500}
+      ],
       cardArr: [],
       cardData: {},
       activeIndex: 1,
@@ -268,7 +302,7 @@ export default {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
               // this.showcard = true
-              console.log(this.cardData)
+              console.log('病历卡信息', this.cardData)
             }
           }
         }
@@ -473,7 +507,7 @@ export default {
   },
   mounted () {
     let vm = this
-    this.face = face
+    vm.face = face
     // this.SET_SICK_CARD(false)
     // Bus.$on('huizhen', function () {
     //   vm.huizhen = true
