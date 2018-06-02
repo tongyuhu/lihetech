@@ -47,7 +47,8 @@
               </div>
               <div class="sick-history-bottom">
                 <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
-                <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button>
+                <button><span>体检表</span></button>
+                <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button> -->
                 <button @click="openChecklist"><span>检查单</span></button>
               </div>
             </div>

@@ -585,7 +585,7 @@
           </p>
         </div>
         <div class="print-footer">
-          <p>签字医生：{{footerData.doctor}}</p>
+          <p>签字医生：{{adminInfo.name}}</p>
         </div>
       </div>
     </div>
@@ -604,6 +604,7 @@ import {bloodheighSickApi, sickApi, modifyCardApi} from '@/api/components/Bloodh
 import {mapState, mapMutations} from 'vuex'
 // import Bus from '@/bus.js'
 import {dateFormat} from './../../untils/date.js'
+import { print } from '@/untils/print.js'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
   name: 'facediag',
@@ -788,7 +789,8 @@ export default {
       id: null,
       year: [],
       month: [],
-      day: []
+      day: [],
+      canPrint: false
     }
   },
   watch: {
@@ -1048,6 +1050,7 @@ export default {
       .then(res => {
         if (res.data.code === '0000') {
           this.$emit('complete', '1')
+          this.canPrint = true
         } else {
           let errmsg = res.data.msg
           if (res.data.msg === '失败！') {
@@ -1142,30 +1145,35 @@ export default {
     },
     // 打印病历
     dayin () {
-      // console.log('this.bingshi', this.bingshi)
-      // console.log('this.bingshi', this.yichuanshi)
-      // console.log('this.bingshi', this.jianchaxiangmu)
-      // this.bingshi
+      var windows = print(document.getElementById('print').innerHTML)
+      windows.close()
+      // // this.complete()
+      // // if (this.canPrint) {
+      // var headhtml = '<html><head></head><body>'
+      // var foothtml = '</body>'
+      //   // 获取div中的html内容
+      //   // var newhtml = document.all.item(printpage).innerHTML;
+      // var newhtml = document.getElementById('print').innerHTML
+      //   // 获取div中的html内容，jquery写法如下
+      //   // var newhtml= $("#" + printpage).html();
 
-      var headhtml = '<html><head></head><body>'
-      var foothtml = '</body>'
-      // 获取div中的html内容
-      // var newhtml = document.all.item(printpage).innerHTML;
-      var newhtml = document.getElementById('print').innerHTML
-      // 获取div中的html内容，jquery写法如下
-      // var newhtml= $("#" + printpage).html();
+      //   // 获取原来的窗口界面body的html内容，并保存起来
+      // var oldhtml = document.body.innerHTML
 
-      // 获取原来的窗口界面body的html内容，并保存起来
-      var oldhtml = document.body.innerHTML
-
-      // 给窗口界面重新赋值，赋自己拼接起来的html内容
-      document.body.innerHTML = headhtml + newhtml + foothtml
-      // 调用window.print方法打印新窗口
-      window.print()
-      window.location.reload()
-      // 将原来窗口body的html值回填展示
-      document.body.innerHTML = oldhtml
-      return false
+      //   // 给窗口界面重新赋值，赋自己拼接起来的html内容
+      // document.body.innerHTML = headhtml + newhtml + foothtml
+      //   // 调用window.print方法打印新窗口
+      // window.print()
+      // window.location.reload()
+      //   // this.$router.push({name: 'bloodheighSick',
+      //   //   params: {
+      //   //     sickID: this.sickID,
+      //   //     hospitalId: this.adminHospitalId
+      //   //   }})
+      //   // 将原来窗口body的html值回填展示
+      // document.body.innerHTML = oldhtml
+      // return false
+      // // }
     },
     tonumber (val) {
       if (this._.isNaN(parseInt(val))) {
@@ -2133,5 +2141,4 @@ export default {
 }
 
 </style>
-
 
