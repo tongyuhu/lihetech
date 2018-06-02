@@ -282,14 +282,46 @@ export default {
       let file = e.target.files[0]
       let formdata = new FormData()
       formdata.append('files', file)
-      console.log('formdata', formdata.get('files'))
+      let base64Str
+      let image = new Image()
+      image.src = window.URL.createObjectURL(file)
+      // image.src = window.URL.createObjectURL(files.item(dd))
+      image.onload = function () {
+              // 默认按比例压缩
+        let w = image.width
+        let h = image.height
+        let scale = w / h
+        w = 200
+        h = w / scale
+              // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+        let quality = 0.9
+              // 生成canvas
+        let canvas = document.createElement('canvas')
+        let ctx = canvas.getContext('2d')
+              // 创建属性节点
+        let anw = document.createAttribute('width')
+        anw.nodeValue = w
+        let anh = document.createAttribute('height')
+        anh.nodeValue = h
+        canvas.setAttributeNode(anw)
+        canvas.setAttributeNode(anh)
+        ctx.drawImage(image, 0, 0, w, h)
+        let ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
+        // let base64 = canvas.toDataURL('image/' + ext, quality)
+        let base64 = canvas.toDataURL('image/' + ext, quality)
+        let base = base64.split(',')
+        let str = base[1]
+        base64Str = str
+        // 回调函数返回base64的值
+      }
+
       this.$axios(uploadFileApi(formdata))
       .then(res => {
         if (res.data.code === '0000') {
           let targetId = vm.currentChat.userId
           var imageUri = res.data.data.seeFile // 上传到自己服务器的 URL。
-          var msg = new RongIMLib.ImageMessage({imageUri: imageUri})
-          // var msg = new RongIMLib.ImageMessage({content: '', imageUri: imageUri})
+          // var msg = new RongIMLib.ImageMessage({imageUri: imageUri})
+          var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
           var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
 
           RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {

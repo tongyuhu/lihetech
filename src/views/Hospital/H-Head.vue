@@ -141,9 +141,11 @@ export default {
     ...mapState(['adminInfo']),
     adminName () {
       if (!this.$store.state.adminInfo.username) {
-        return '暂无用户名'
+        if (!this.$store.state.adminInfo.name) {
+          return '暂无用户名'
+        }
       } else {
-        return this.$store.state.adminInfo.username
+        return this.$store.state.adminInfo.name || this.$store.state.adminInfo.username
       }
     },
     adminRoot () {

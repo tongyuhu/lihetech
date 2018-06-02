@@ -85,7 +85,7 @@
           </div>
           <div>
             <el-button type="primary">体检表</el-button>
-            <el-button type="primary">体检单</el-button>
+            <el-button @click="openChecklist" type="primary">体检单</el-button>
           </div>
 
         </div> 
@@ -1201,6 +1201,9 @@ export default {
           break
       }
       return unit
+    },
+    openChecklist () {
+      this.$emit('openchecklist')
     }
   },
   computed: {

@@ -2,8 +2,8 @@
   <div class="meeeage-content">
     <span v-if="isTextMsg">{{textMsg}}</span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
-    <div class="img-message-wrap" v-if="showBigImg">
-      <div v-on:click.self.prevent="closeBig()">
+    <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
+      <div>
         <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
       </div>
     </div>

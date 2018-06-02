@@ -48,7 +48,7 @@
               <div class="sick-history-bottom">
                 <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
                 <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button>
-                <button><span>检查单</span></button>
+                <button @click="openChecklist"><span>检查单</span></button>
               </div>
             </div>
             <!-- 病人简历 end  -->
@@ -63,6 +63,7 @@
             v-if="!showcard"
             @complete="completeDiag"
             @openSickCard="openHistroyCard"
+            @openchecklist="openChecklist"
             :sickID="sickID" 
             :hospitalId="hospitalId"
             :is="face"></component>
@@ -151,14 +152,27 @@
       >
       </card>
     </el-dialog>
-    <!-- <el-dialog
+    <el-dialog
     width="80%"
-    :visible.sync="showchecklist">
-      <checkList
+    :visible.sync="showchecklist"
+    center>
+
+    <span slot="title" class="dialog-title">
+        检查单
+    </span>
+    <span slot="footer" v-if="checklist.length === 0">
+      暂无检查单
+    </span>
+    <div class="check-list">
+      <div v-for="(img,index) in checklist" :key="index">
+        <img :src="img.url" alt="">
+      </div>
+    </div>
+      <!-- <checkList
       :list="checklist" :row="true">
 
-      </checkList>
-    </el-dialog>  -->
+      </checkList> -->
+    </el-dialog> 
   </div>
 </template>
 
@@ -200,29 +214,8 @@ export default {
   data () {
     return {
       // 体检单
-      showchecklist: true,
-      checklist: [
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-01.png', height: 800, width: 1280},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-03.png', height: 800, width: 1280},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-02.png', height: 1134, width: 808},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-05.png', height: 509, width: 800},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-04.png', height: 1000, width: 660},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-06.png', height: 750, width: 500},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-07.png', height: 1050, width: 1680},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-08.png', height: 3548, width: 440},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-09.png', height: 519, width: 800},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-01.png', height: 800, width: 1280},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-02.png', height: 1134, width: 808},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-03.png', height: 800, width: 1280},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-04.png', height: 1000, width: 660},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-05.png', height: 509, width: 800},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-06.png', height: 750, width: 500},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-07.png', height: 1050, width: 1680},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-03.png', height: 800, width: 1280},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-04.png', height: 1000, width: 660},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-05.png', height: 509, width: 800},
-        {url: './../../../hospitalImage/hospitalIcon/hospital-icon-06.png', height: 750, width: 500}
-      ],
+      showchecklist: false,
+      checklist: [],
       cardArr: [],
       cardData: {},
       activeIndex: 1,
@@ -280,6 +273,7 @@ export default {
     },
     getCardData () {
       // let vm = this
+      this.checklist = []
       let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId,
@@ -304,6 +298,17 @@ export default {
               // this.showcard = true
               console.log('病历卡信息', this.cardData)
             }
+            if (this._.has(res.data.data, 'userDetectReportList')) {
+              if (res.data.data.userDetectReportList > 0) {
+                // let list = []
+                res.data.data.userDetectReportList.forEach(item => {
+                  let obj = {}
+                  obj.url = process.env.IMG_URL + item.reportUrl
+                  obj.id = item.id
+                  this.checklist.push(obj)
+                })
+              }
+            }
           }
         }
       })
@@ -317,6 +322,9 @@ export default {
     },
     handleClose () {
       this.histroyCard = false
+    },
+    openChecklist () {
+      this.showchecklist = true
     }
   },
   computed: {
@@ -695,5 +703,11 @@ export default {
     left:-16px;
     top:1px;
   }
-
+  .check-list{
+    display: flex;
+    flex-wrap:wrap;
+  }
+  .check-list div{
+    padding: 15px;
+  }
 </style>

@@ -350,24 +350,67 @@ export default {
           type: 'warning'
         })
       } else {
+        let edit = true
         let morning = this._.gt(this.settingGroupMorning.start, this.settingGroupMorning.end)
         let noon = this._.gt(this.settingGroupNoon.start, this.settingGroupNoon.end)
+        if (this.settingGroupMorning.start) {
+          if (!this.settingGroupMorning.end) {
+            // this.settingGroupMorning.start = ''
+            edit = false
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
+        if (!this.settingGroupMorning.start) {
+          if (this.settingGroupMorning.end) {
+            // this.settingGroupMorning.end = ''
+            edit = false
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
+        if (!this.settingGroupNoon.start) {
+          if (this.settingGroupNoon.end) {
+            // this.settingGroupNoon.end = ''
+            edit = false
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
+        if (this.settingGroupNoon.start) {
+          if (!this.settingGroupNoon.end) {
+            edit = false
+            // this.settingGroupNoon.start = ''
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
         if (morning || noon) {
+          edit = false
           this.$message({
             message: '起始时间不能大于结束时间,请重新设置',
             type: 'warning'
           })
-          this.settingGroupMorning.start = ''
-          this.settingGroupMorning.end = ''
-          this.settingGroupNoon.start = ''
-          this.settingGroupNoon.end = ''
-        } else {
-          this.cheeckedweek.forEach(item => {
-            this.orderlist[item].morning.order = true
-            this.orderlist[item].noon.order = true
-            this.orderlist[item].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
-            this.orderlist[item].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
-          })
+          // this.settingGroupMorning.start = ''
+          // this.settingGroupMorning.end = ''
+          // this.settingGroupNoon.start = ''
+          // this.settingGroupNoon.end = ''
+        }
+        if (edit) {
+          // this.cheeckedweek.forEach(item => {
+          //   this.orderlist[item].morning.order = true
+          //   this.orderlist[item].noon.order = true
+          //   this.orderlist[item].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+          //   this.orderlist[item].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+          // })
           let parmars = {
             'weeks': this.cheeckedweek.join(','),
             'startEndPeriodTimeMor': this.settingGroupMorning.start + '-' + this.settingGroupMorning.end,
@@ -381,21 +424,21 @@ export default {
                 message: res.data.msg,
                 type: 'warning'
               })
-              res.data.data.forEach(item => {
-                if (item.weekDay) {
-                  // this.orderlist[item.weekDay - 1].order = true
-                  this.orderlist[item.weekDay - 1].noon.order = true
-                  this.orderlist[item.weekDay - 1].morning.order = true
-                  if (item.slotType === 1) {
-                    this.orderlist[item.weekDay - 1].morning = ''
-                  }
-                  if (item.slotType === 2) {
-                    this.orderlist[item.weekDay - 1].noon = ''
-                  }
-                }
-              })
-              this.initlist()
+              // res.data.data.forEach(item => {
+              //   if (item.weekDay) {
+              //     // this.orderlist[item.weekDay - 1].order = true
+              //     this.orderlist[item.weekDay - 1].noon.order = true
+              //     this.orderlist[item.weekDay - 1].morning.order = true
+              //     if (item.slotType === 1) {
+              //       this.orderlist[item.weekDay - 1].morning = ''
+              //     }
+              //     if (item.slotType === 2) {
+              //       this.orderlist[item.weekDay - 1].noon = ''
+              //     }
+              //   }
+              // })
             }
+            this.initlist()
           })
           this.settingGroup = false
         }
@@ -588,11 +631,11 @@ export default {
     data.forEach(item => {
       let order = {
         morning: {
-          order: false,
+          order: true,
           time: ''
         },
         noon: {
-          order: false,
+          order: true,
           time: ''
         },
         time: item
