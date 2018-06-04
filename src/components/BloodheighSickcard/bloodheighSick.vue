@@ -313,10 +313,10 @@ export default {
               // this.showcard = true
               console.log('病历卡信息', this.cardData)
             }
-            if (this._.has(res.data.data, 'userDetectReportList')) {
+            if (this._.has(res.data.data[0], 'userDetectReportList')) {
               if (res.data.data.userDetectReportList > 0) {
                 // let list = []
-                res.data.data.userDetectReportList.forEach(item => {
+                res.data.data[0].userDetectReportList.forEach(item => {
                   let obj = {}
                   obj.url = process.env.IMG_URL + item.reportUrl
                   obj.id = item.id
