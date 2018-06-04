@@ -5,7 +5,7 @@
     </div>
     <el-card :body-style="{ padding: '0px' }">
       <div>
-        <div class="add-sick-img">
+        <div class="add-sick-img" v-loading="ercodeimg">
           <img width="250px" :src="addSickImg" alt="二维码">
         </div>
         <!-- <img src="" alt=""> -->
@@ -52,7 +52,8 @@ export default {
       deleteTipsArr: [],
       showEdit: true,
       tipData: [{'checked': false}, {'checked': false}, {'checked': false}],
-      addSickImg: ''
+      addSickImg: '',
+      ercodeimg: false
     }
   },
   methods: {
@@ -119,13 +120,15 @@ export default {
     }
   },
   mounted () {
+    // this.ercodeimg = true
     this.$axios({
       method: 'post',
       url: 'qrcode/url'
     })
-      .then(res => {
-        this.addSickImg = res.data.data
-      })
+    .then(res => {
+      this.addSickImg = res.data.data
+      // this.ercodeimg = false
+    })
   }
   // data () {
   //   var checkEmail = (rule, value, callback) => {

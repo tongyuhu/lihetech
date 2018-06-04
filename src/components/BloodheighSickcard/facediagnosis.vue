@@ -607,7 +607,7 @@ import {dateFormat} from './../../untils/date.js'
 import { print } from '@/untils/print.js'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
-  name: 'facediag',
+  name: 'facediagnosis',
   directives: {
     numberOnly: {
       bind: function (el) {
@@ -886,9 +886,9 @@ export default {
             this.info.sex = (this.sex === '男' ? 'man' : 'woman')
             this.info.age = this.age
             this.info.heigh = this.height
-            console.log('name', this.name)
-            console.log('heigh1', this.height)
-            console.log('heigh', this.info.height)
+            // console.log('name', this.name)
+            // console.log('heigh1', this.height)
+            // console.log('heigh', this.info.height)
             this.info.weight = this.weight
             this.medication.name = this.name
             this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
@@ -903,6 +903,19 @@ export default {
             this.medication.year = this.longtimeyear ? this.longtimeyear : null
             this.medication.month = this.longtimemonth ? this.longtimemonth : null
             this.medication.day = this.longtimeday ? this.longtimeday : null
+            let userDetectReportList = []
+            this.cardData.userDetectReportList.forEach(item => {
+              let obj = {}
+              obj.url = process.env.IMG_URL + item.reportUrl
+              obj.id = item.id
+              userDetectReportList.push(obj)
+            })
+            this.$emit('faceData', {
+              sex: this.sex,
+              age: this.age,
+              mobile: this.mobile,
+              'userDetectReportList': userDetectReportList
+            })
             // this.medication.lastTime = this.lastDate
           }
         }

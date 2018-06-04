@@ -6,9 +6,9 @@
       <div class="sick-card-head-left">
         <p class="name">{{name}}</p>
         <div class="sick-card-head-left-msg">
-          <span>性别:{{sex}}</span>
-          <span>年龄:{{age}}</span>
-          <span>电话:{{mobile}}</span>
+          <span>性别:{{sex ? sex :faceDATA.sex}}</span>
+          <span>年龄:{{age ? age:faceDATA.age}}</span>
+          <span>电话:{{mobile?mobile :faceDATA.mobile}}</span>
           <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
         </div>
       </div>
@@ -61,10 +61,12 @@
             v-if="showcard">
             </card>
             <component
+            ref="facediagnosis"
             v-if="!showcard"
             @complete="completeDiag"
             @openSickCard="openHistroyCard"
             @openchecklist="openChecklist"
+            @faceData="setfaceData"
             :sickID="sickID" 
             :hospitalId="hospitalId"
             :is="face"></component>
@@ -161,10 +163,16 @@
     <span slot="title" class="dialog-title">
         检查单
     </span>
-    <span slot="footer" v-if="checklist.length === 0">
+    <span slot="footer" v-if="checklist.length === 0 && faceDATA.userDetectReportList.length===0">
       暂无检查单
     </span>
-    <div class="check-list">
+
+    <div class="check-list" v-if="faceDATA.userDetectReportList.length !==0">
+      <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
+        <img :src="img.url" alt="">
+      </div>
+    </div>
+    <div class="check-list" v-else>
       <div v-for="(img,index) in checklist" :key="index">
         <img :src="img.url" alt="">
       </div>
@@ -214,6 +222,12 @@ export default {
   },
   data () {
     return {
+      faceDATA: {
+        sex: null,
+        age: null,
+        mobile: null,
+        userDetectReportList: []
+      },
       // 体检单
       showchecklist: false,
       checklist: [],
@@ -314,6 +328,12 @@ export default {
         }
       })
     },
+    setfaceData (val) {
+      // this.sex = val.sex
+      // this.age = val.age
+      // this.mobile = val.mobile
+      this.faceDATA = val
+    },
     completeDiag () {
       this.getCardData()
       this.showcard = true
@@ -345,30 +365,49 @@ export default {
       }
     },
     // 性别
-    sex () {
-      if (this.cardData) {
-        if (this.cardData.sex === 1) {
-          return '男'
+    sex: {
+
+      get: function () {
+        if (this.cardData) {
+          if (this.cardData.sex === 1) {
+            return '男'
+          }
+          if (this.cardData.sex === 0) {
+            return '女'
+          }
         }
-        if (this.cardData.sex === 0) {
-          return '女'
-        }
+      },
+      set: function (newval) {
+        return newval
       }
     },
     // 年龄
-    age () {
-      if (this.cardData) {
-        if (this.cardData.age) {
-          return this.cardData.age + '岁'
+    age: {
+
+      get: function () {
+        if (this.cardData) {
+          if (this.cardData.age) {
+            return this.cardData.age + '岁'
+          }
         }
+      },
+      set: function (newval) {
+        return newval
       }
     },
     // 电话
-    mobile () {
-      if (this.cardData) {
-        if (this.cardData.mobile) {
-          return this.cardData.mobile
+    mobile: {
+      get: function () {
+        if (this.cardData) {
+          if (this.cardData.mobile) {
+            return this.cardData.mobile
+          }
         }
+      },
+      set: function (newval) {
+        console.log('newvalmobile', newval)
+        // this.mobile = newval
+        return newval
       }
     },
     // 医生诊断

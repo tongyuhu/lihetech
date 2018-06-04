@@ -397,7 +397,7 @@ export default {
             end: zoomend,
             zoomlock: true,
             minValueSpan: 10,
-            maxValueSpan: 10,
+            maxValueSpan: 15,
             throttle: 500,
             filterMode: 'empty',
             zoomOnMouseWheel: false
