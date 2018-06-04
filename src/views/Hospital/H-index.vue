@@ -424,7 +424,7 @@
     // background:#999;
     bottom: 10px;
     right: 25px;
-    z-index: 999;
+    z-index: 999999;
     // background: url('~icon/hospital-icon2-05.png') no-repeat;
   }
 </style>

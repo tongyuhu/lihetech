@@ -145,8 +145,8 @@ export default {
           let theX = vm.axisX(copydata)
           vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
           vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
-          vm.optionData = vm.optionData.reverse()
-          vm.xasis = vm.xasis.reverse()
+          vm.optionData = vm.optionData
+          vm.xasis = vm.xasis
         }
 
         vm.loading = false
