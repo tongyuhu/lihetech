@@ -171,12 +171,28 @@
       <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
         <img :src="img.url" alt="">
       </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
     </div>
     <div class="check-list" v-else>
       <div v-for="(img,index) in checklist" :key="index">
-        <img :src="img.url" alt="">
+        <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
       </div>
     </div>
+    <imgfloat
+    :imgsrc="checklistimgUrl"
+    ref="checklistimg">
+    </imgfloat>
       <!-- <checkList
       :list="checklist" :row="true">
 
@@ -201,6 +217,7 @@ import card from './card'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 import checkList from '@/components/checklist'
+import imgfloat from '@/components/imgFloat'
 // import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
@@ -218,7 +235,8 @@ export default {
     card,
     healthForm,
     face,
-    checkList
+    checkList,
+    imgfloat
   },
   data () {
     return {
@@ -228,6 +246,7 @@ export default {
         mobile: null,
         userDetectReportList: []
       },
+      checklistimgUrl: '',
       // 体检单
       showchecklist: false,
       checklist: [],
@@ -314,7 +333,7 @@ export default {
               console.log('病历卡信息', this.cardData)
             }
             if (this._.has(res.data.data[0], 'userDetectReportList')) {
-              if (res.data.data.userDetectReportList > 0) {
+              if (res.data.data[0].userDetectReportList > 0) {
                 // let list = []
                 res.data.data[0].userDetectReportList.forEach(item => {
                   let obj = {}
@@ -346,6 +365,10 @@ export default {
     },
     openChecklist () {
       this.showchecklist = true
+    },
+    showchecklistimg (url) {
+      this.checklistimgUrl = url
+      this.$refs.checklistimg.showBig()
     }
   },
   computed: {
@@ -718,7 +741,7 @@ export default {
     outline:none;
   }
   .sick-history-bottom button:nth-child(1) span{
-     position: relative;
+    position: relative;
   }
   .sick-history-bottom button:nth-child(1) span:before{
     position: absolute;
@@ -731,7 +754,7 @@ export default {
     top:1px;
   }
   .sick-history-bottom button:nth-child(2) span{
-     position: relative;
+    position: relative;
   }
   .sick-history-bottom button:nth-child(2) span:before{
     position: absolute;
@@ -746,8 +769,17 @@ export default {
   .check-list{
     display: flex;
     flex-wrap:wrap;
+    justify-content: space-between;
   }
   .check-list div{
     padding: 15px;
+  }
+  .check-img{
+    width: 20%;
+    cursor: pointer;
+  }
+  .empty-div{
+    width: 20%;
+    height: 0;
   }
 </style>

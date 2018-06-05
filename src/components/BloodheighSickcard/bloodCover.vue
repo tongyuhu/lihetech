@@ -44,7 +44,7 @@
                     <el-button v-show="showtrendBtn" :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
                   </div>
                   <div class="chart-min-width">
-                    <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
+                    <div id='bloodTrend' :style="{width:'auto',height:'300px'}"></div>
                   </div>
                   <div class="flex-btn">
                     <!-- <el-button :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
@@ -375,7 +375,8 @@ export default {
         pageNum: 1,
         index: 0,
         bpType: [],
-        currentPage: 1
+        currentPage: 1,
+        pageSize: 15
       },
       // 血压与行为分数 选择按钮
       bloodAndBehaviourDate: [
@@ -484,7 +485,7 @@ export default {
             end: zoomend,
             zoomlock: true,
             minValueSpan: 10,
-            maxValueSpan: 10,
+            maxValueSpan: 15,
             throttle: 500,
             filterMode: 'empty',
             zoomOnMouseWheel: false
@@ -1097,7 +1098,7 @@ export default {
         'adminHospitalId': vm.hospitalId,
         'bpMeasureTime': vm.bpMeasureTime || '',
         'pageNum': pageNum,
-        'pageSize': 10
+        pageSize: this.bloodAndBehaviourData.pageSize
       }
       this.bloodAndBehaviourData.date = []
       this.bloodAndBehaviourData.week = []
@@ -1632,7 +1633,8 @@ export default {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
         'bpMeasureTime': vm.bpMeasureTime || '',
-        'pageNum': vm.bloodAndBehaviourData.pageNum
+        'pageNum': vm.bloodAndBehaviourData.pageNum,
+        pageSize: this.bloodAndBehaviourData.pageSize
       }
       vm.$axios(bloodheighSickDataApi(params, vm.behaviourChecked + 1))
           .then(res => {
@@ -1716,6 +1718,7 @@ export default {
         'adminHospitalId': vm.hospitalId,
         'bpMeasureTime': vm.bpMeasureTime || '',
         'pageNum': vm.bloodTrendData.pageNum
+
       }
       vm.$axios(bloodheighSickDataApi(params, vm.bloodTrendChecked))
       .then(res => {

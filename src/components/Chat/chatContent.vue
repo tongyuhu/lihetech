@@ -2,11 +2,13 @@
   <div class="meeeage-content">
     <span v-if="isTextMsg">{{textMsg}}</span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
-    <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
-      <!-- <div> -->
+    <imgfloat
+    :imgsrc="imgsrc"
+    ref="chatimg">
+    </imgfloat>
+    <!-- <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
         <img v-if="isImgMsg" :src="imgsrc" alt="图片消息">
-      <!-- </div> -->
-    </div>
+    </div> -->
     <!-- <div class="img-chat">
       <vue-preview :slides="slide1" @close="handleClose"></vue-preview>
     </div> -->
@@ -14,8 +16,12 @@
 </template>
 
 <script>
+import imgfloat from '@/components/imgFloat'
 export default {
   name: 'chatcontent',
+  components: {
+    imgfloat
+  },
   props: {
     message: {
       type: Object,
@@ -76,11 +82,12 @@ export default {
   },
   methods: {
     showBig () {
-      this.showBigImg = true
+      this.$refs.chatimg.showBig()
+      // this.showBigImg = true
     },
-    closeBig () {
-      this.showBigImg = false
-    },
+    // closeBig () {
+    //   this.showBigImg = false
+    // },
     showmsg () {
       let vm = this
       switch (vm.message.content.messageName) {

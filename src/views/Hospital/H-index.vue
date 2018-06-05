@@ -7,7 +7,7 @@
       <H-Sider></H-Sider>
     </div>
     <div class="container-main">
-      <router-view></router-view>
+      <router-view v-cloak></router-view>
     </div>
     <!-- <div class="has-message-animation"> -->
 
