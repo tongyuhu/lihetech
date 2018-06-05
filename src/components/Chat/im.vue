@@ -98,36 +98,6 @@ export default {
     return {
       message: '',
       publicStatic: publicStatic
-      // list: [
-        // {
-        //   userId: '5277',
-        //   userImg: '',
-        //   userName: '夏良开',
-        //   hasMsg: false,
-        //   currentChat: false
-        // },
-        // {
-        //   userId: 3,
-        //   userImg: '',
-        //   userName: '夏良凯',
-        //   hasMsg: false,
-        //   currentChat: false
-        // },
-        // {
-        //   userId: 3,
-        //   userImg: '',
-        //   userName: '夏邦为',
-        //   hasMsg: false,
-        //   currentChat: false
-        // },
-        // {
-        //   userId: 3,
-        //   userImg: '',
-        //   userName: '夏利坚',
-        //   hasMsg: false,
-        //   currentChat: false
-        // }
-      // ]
     }
   },
   computed: {
@@ -173,25 +143,6 @@ export default {
       // console.log('好友xiaoxi ', friend)
       // friend.history = []
       // 获取历史消息
-      let timestrap = null
-      let count = 20
-      let userId = friend.userId
-      // console.log('RongIMLib.ConversationType.PRIVATE', RongIMLib.ConversationType.PRIVATE)
-      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
-      RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
-        onSuccess: function (list, hasMsg) {
-        // hasMsg为boolean值，如果为true则表示还有剩余历史消息可拉取，为false的话表示没有剩余历史消息可供拉取。
-        // list 为拉取到的历史消息列表
-          // let history = list
-          // friend.history = history
-          console.log('历史消息', list, hasMsg)
-        },
-        onError: function (error) {
-          console.log('历史消息获取失败', error)
-        // APP未开启消息漫游或处理异常
-        // throw new ERROR ......
-        }
-      })
 
       vm.openChatWindow()
     }

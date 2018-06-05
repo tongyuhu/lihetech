@@ -39,27 +39,26 @@
 
       <!-- 聊天记录 -->
       <div class="chart-wrap-box" id="chatWidow" ref="chatWidow">
-        <!-- <span slot="no-more">没有更多数据了</span> -->
-        <!-- <div v-if="!isTriggerFirstLoad" class="center">
-          <el-button type="text" @click="isTriggerFirstLoad = true" >点击加载更多...</el-button>
+        <div v-if="!currentChat.hasHistroy" class="center">
+          <span>没有更多聊天记录了</span>
+        </div>
+        <div v-else-if="!isTriggerFirstLoad" class="center">
+          <el-button type="text" @click="isTriggerFirstLoad = true" >点击查看聊天记录...</el-button>
         </div>
         <infinite-loading v-else  @infinite="infiniteHandler" 
         direction="top"  
         spinner="circles"
-        :distance="10"
-        ></infinite-loading> -->
+        >
+          <span slot="no-more">没有更多数据了</span>
+        </infinite-loading>
         <chartMessageGroup>
           <chartMessage
           v-for="(item,index) in historyMsg" :key="index"
-          :who="item.senderUserId || ''"
+          :who="item.senderUserId ? item.senderUserId:''"
           :type="item.content.messageName"
           >
-          <!-- userImg -->
             <chatContent :message="item"></chatContent>
-          <!-- {{historyMsg.length !== 0 ? item.content.content :''}} -->
           </chartMessage>
-          <!-- <img src=""> -->
-            <!-- <img src="" alt=""> -->
         </chartMessageGroup>
       </div>
       <!-- 工具 -->
@@ -107,7 +106,7 @@ import chartMessage from './chartMessage'
 import chartMessageGroup from './chartMessageGroup'
 import chatContent from './chatContent'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
-import Bus from '@/bus.js'
+// import Bus from '@/bus.js'
 import {uploadFileApi} from '@/api/components/editAdmin.js'
 import InfiniteLoading from 'vue-infinite-loading'
 export default {
@@ -122,23 +121,13 @@ export default {
   },
   data () {
     return {
-      // historyMsg: [
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      // ],
       readyMsg: null,
       chartList: [
       ],
       showList: false,
       isTriggerFirstLoad: false,
-      imgArr: []
-      // historyMsg: []
-      // showChart: true
+      imgArr: [],
+      noMoreHistroy: false
     }
   },
   computed: {
@@ -218,15 +207,8 @@ export default {
             // vm.historyMsg = vm.currentChat.history
             vm.sethistory(vm.currentChat.history)
             vm.getCurrentFriendMsg(msgObj)
-            // vm.historyMsg.push(msgObj)
-            // vm.currentChat.history.push(msgObj)
-            console.log('urrentChat.history', vm.currentChat.history)
-            console.log('msgObj', msgObj)
-            console.log('currentChat', vm.currentChat)
-            console.log('rongUserId', vm.rongUserId)
             let newChat = vm.currentChat
             newChat.history = vm.historyMsg
-            console.log('newChat', newChat)
             vm.addChatFriend(newChat)
             // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
             console.log('Send successfully')
@@ -270,8 +252,8 @@ export default {
         setTimeout(function () {
           let container = vm.$el.querySelector('#chatWidow')
           container.scrollTop = container.scrollHeight
-          console.log('container.scrollTop', container.scrollTop)
-          console.log('container.scrollHeight', container.scrollHeight)
+          // console.log('container.scrollTop', container.scrollTop)
+          // console.log('container.scrollHeight', container.scrollHeight)
             // container.scrollIntoView()
         }, 100)
       })
@@ -394,49 +376,57 @@ export default {
     },
     infiniteHandler ($state) {
       let vm = this
-      let state = $state
-
-      let arr = [
-        {
-          who: 'self',
-          type: 'text',
-          msg: '1111111111111111111'
-        },
-        {
-          who: 'other',
-          type: 'text',
-          msg: '2222222222222222222222222'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '3333333333333333333333333333'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '44444444444444444444444444444444'
-        }
-      ]
       new Promise(function (resolve, reject) {
-        setTimeout(function () {
-          vm.isTriggerFirstLoad = false
-          resolve('success')
-          console.log('1')
-        }, 1500)
+        vm.getHistroyMsgRong(vm.currentChat.userId)
+        resolve('success')
       }).then(function (resolve) {
         if (resolve === 'success') {
           if (!vm.isTriggerFirstLoad) {
-            vm.$refs.infiniteLoading.scrollTop = 400
             vm.isTriggerFirstLoad = false
-            state.loaded()
-            // $state.reset()
-            state.complete()
-            console.log('2')
+            if (!vm.currentChat.hasHistroy) {
+              $state.complete()
+            } else {
+              $state.loaded()
+            }
           }
         }
       })
-      // $state.complete()
+    },
+    getHistroyMsgRong (targetuserId) {
+      let vm = this
+      let timestrap = null
+      let count = 20
+      let userId = targetuserId
+      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+      RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
+        onSuccess: function (list, hasMsg) {
+          vm.sethistory(vm.currentChat.history)
+            // vm.getCurrentFriendMsg(msgObj)
+          console.log('历史消息VM', vm.currentChat)
+          if (vm._.has(vm.currentChat, 'history')) {
+            if (vm.currentChat.history.length === 0) {
+              vm.sethistory(list)
+            } else {
+              vm.sethistory(vm._.concat(list, vm.currentChat.history))
+            }
+          }
+          let newChat = vm.currentChat
+          newChat.history = vm.historyMsg
+          newChat.hasHistroy = hasMsg
+          vm.addChatFriend(newChat)
+          console.log('历史消息', list, hasMsg)
+          console.log('历史消息bend', vm.historyMsg)
+          vm.isTriggerFirstLoad = false
+          // if (!hasMsg) {
+          //   vm.noMoreHistroy = true
+          // }
+        },
+        onError: function (error) {
+          console.log('历史消息获取失败', error)
+        // APP未开启消息漫游或处理异常
+        // throw new ERROR ......
+        }
+      })
     }
   },
   watch: {
@@ -453,14 +443,9 @@ export default {
     }
   },
   mounted () {
-    let vm = this
-    Bus.$on('history', (val) => {
-      vm.historyMsg = val
-    })
-
-    console.log('historyMsg', vm.historyMsg)
-    // Bus.$on('hasMessage', (val) => {
-    //   vm.historyMsg.push(val)
+    // let vm = this
+    // Bus.$on('history', (val) => {
+    //   vm.historyMsg = val
     // })
   }
 }
@@ -708,6 +693,8 @@ export default {
   }
   .center{
     text-align:center;
+    font-size: 14px;
+    color: #666;
   }
 
 

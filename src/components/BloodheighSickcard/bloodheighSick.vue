@@ -775,11 +775,11 @@ export default {
     padding: 15px;
   }
   .check-img{
-    width: 20%;
+    width: 25%;
     cursor: pointer;
   }
   .empty-div{
-    width: 20%;
+    width: 25%;
     height: 0;
   }
 </style>
