@@ -169,7 +169,7 @@
 
     <div class="check-list" v-if="faceDATA.userDetectReportList.length !==0">
       <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
-        <img :src="img.url" alt="">
+        <img class="check-img" :src="img.url" alt="">
       </div>
       <div class="empty-div">
       </div>
@@ -307,7 +307,7 @@ export default {
     },
     getCardData () {
       // let vm = this
-      this.checklist = []
+
       let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId,
@@ -316,6 +316,7 @@ export default {
       }
       this.$axios(bloodheighSickDataApi(params))
       .then(res => {
+        this.checklist = []
         if (res.data) {
           if (res.data.data) {
             this.totalPage = res.data.pages
@@ -333,7 +334,7 @@ export default {
               console.log('病历卡信息', this.cardData)
             }
             if (this._.has(res.data.data[0], 'userDetectReportList')) {
-              if (res.data.data[0].userDetectReportList > 0) {
+              if (res.data.data[0].userDetectReportList.length > 0) {
                 // let list = []
                 res.data.data[0].userDetectReportList.forEach(item => {
                   let obj = {}
@@ -343,6 +344,8 @@ export default {
                 })
               }
             }
+            // console.log('病历卡体检单', res.data.data[0])
+            console.log('病历卡体检单', this.checklist)
           }
         }
       })
@@ -773,9 +776,10 @@ export default {
   }
   .check-list div{
     padding: 15px;
+    width: 25%;
   }
   .check-img{
-    width: 25%;
+    width: 100%;
     cursor: pointer;
   }
   .empty-div{

@@ -3,7 +3,7 @@
       <div :class="[cls ? 'left' : 'right']">
         <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
           <div>
-            <img class="avatar" :src="userImg" alt="头像">
+            <img class="avatar" :src="userImgChat" alt="头像" ref="onerrorimg">
           </div>
           <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
             <div :class="[nobg?'no-bg':'']">
@@ -54,7 +54,8 @@ export default {
     return {
       cls: false,
       nobg: false,
-      chatclass: ''
+      chatclass: '',
+      userImgChat: this.userImg
     }
   },
   computed: {
@@ -64,6 +65,24 @@ export default {
     ...mapGetters(['adminImg', 'currentChatImg'])
   },
   methods: {
+    imgExists () {
+      let vm = this
+      this.$nextTick(function () {
+        vm.$refs.onerrorimg.onerror = (e) => {
+          // 默认图片
+          let imgUrl = publicStatic.onlineStatic + '/static/user.png'
+          let img = new Image()
+          img.src = imgUrl
+            // 判断图片大小是否大于0 或者 图片高度与宽度都大于0
+          if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
+            e.src = imgUrl
+          } else {
+            // e.src = imgUrl
+            // 默认图片也不存在的时候
+          }
+        }
+      })
+    }
   },
   watch: {
     who: {
@@ -71,13 +90,13 @@ export default {
         if (this.who === this.rongUserId) {
           this.cls = false
           if (this.adminImg) {
-            this.userImg = this.adminImg
+            this.userImgChat = this.adminImg
           }
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
           if (this.currentChatImg) {
-            this.userImg = this.currentChatImg
+            this.userImgChat = this.currentChatImg
           }
         }
       },
@@ -96,6 +115,7 @@ export default {
         this.chatclass = 'right-angle'
       }
     }
+    this.imgExists()
   }
 
 }
@@ -144,6 +164,7 @@ export default {
   .avatar{
     width: 46px;
     height: 46px;
+    border-radius: 50%;
   }
   li{
     display: block;

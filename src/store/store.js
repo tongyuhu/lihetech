@@ -5,6 +5,7 @@ import _ from 'lodash'
 import axios from '@/api/axios'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
+import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -21,34 +22,34 @@ export const store = new Vuex.Store({
     chatfriend: [],
     // 好友列表
     friendsList: [
-      {
-        userId: '5277',
-        userImg: '',
-        userName: '夏良开',
-        hasMsg: false,
-        currentChat: false
-      },
-      {
-        userId: 'member_5',
-        userImg: '',
-        userName: '测试',
-        hasMsg: false,
-        currentChat: false
-      },
-      {
-        userId: 'member_12',
-        userImg: '',
-        userName: '向日葵',
-        hasMsg: false,
-        currentChat: false
-      },
-      {
-        userId: '5',
-        userImg: '',
-        userName: '夏利坚',
-        hasMsg: false,
-        currentChat: false
-      }
+      // {
+      //   userId: '5277',
+      //   userImg: '',
+      //   userName: '夏良开',
+      //   hasMsg: false,
+      //   currentChat: false
+      // },
+      // {
+      //   userId: 'member_5',
+      //   userImg: '',
+      //   userName: '测试',
+      //   hasMsg: false,
+      //   currentChat: false
+      // },
+      // {
+      //   userId: 'member_12',
+      //   userImg: '',
+      //   userName: '向日葵',
+      //   hasMsg: false,
+      //   currentChat: false
+      // },
+      // {
+      //   userId: '5',
+      //   userImg: '',
+      //   userName: '夏利坚',
+      //   hasMsg: false,
+      //   currentChat: false
+      // }
     ],
     // 当前聊天记录
     history: [],
@@ -57,34 +58,20 @@ export const store = new Vuex.Store({
   getters: {
     adminImg: state => {
       if (_.has(state.adminInfo, 'headPortraitUrl')) {
-        let validateImage = function (url) {
-          // var xmlHttp
-          // if (window.ActiveXObject) {
-          //   xmlHttp = new ActiveXObject('Microsoft.XMLHTTP')
-          // } else if (window.XMLHttpRequest) {
-          //   xmlHttp = new XMLHttpRequest()
-          // }
-          // xmlHttp.open('Get', url, false)
-          // xmlHttp.send()
-          // if (xmlHttp.status === 404) { return false } else { return true }
-          axios({
-            method: 'get',
-            'url': url
-          }).then(res => {
-            return true
-          })
-          .catch(function (error) {
-            if (error.response === 404) {
-              return false
-            }
-            return false
-          })
-        }
-        if (validateImage(process.env.IMG_URL + state.adminInfo.headPortraitUrl)) {
-          return process.env.IMG_URL + state.adminInfo.headPortraitUrl
-        } else {
-          return null
-        }
+        // axios(checkimgApi(process.env.IMG_URL + state.adminInfo.headPortraitUrl))
+        // .then(res => {
+        //   console.log('获取医生头像成功')
+        return process.env.IMG_URL + state.adminInfo.headPortraitUrl
+        // })
+        // .catch(error => {
+        //   if (error.response === 404) {
+        //     return null
+        //   }
+        //   console.log('获取医生头像失败')
+        //   return null
+        // })
+      } else {
+        return null
       }
     },
     // 当前聊天好友  currentChat为true
@@ -97,34 +84,19 @@ export const store = new Vuex.Store({
       let current = _.find(state.chatfriend, function (item) {
         return item.currentChat === true
       })
-      let validateImage = function (url) {
-        // var xmlHttp
-        // if (window.ActiveXObject) {
-        //   xmlHttp = new ActiveXObject('Microsoft.XMLHTTP')
-        // } else if (window.XMLHttpRequest) {
-        //   xmlHttp = new XMLHttpRequest()
-        // }
-        // xmlHttp.open('Get', url, false)
-        // xmlHttp.send()
-        // if (xmlHttp.status === 404) { return false } else { return true }
-        axios({
-          method: 'get',
-          'url': url
-        }).then(res => {
-          return true
-        })
-        .catch(function (error) {
-          if (error.response === 404) {
-            return false
-          }
-          return false
-        })
-      }
-      if (validateImage(current.userImg)) {
+      // axios(checkimgApi(current.userImg)).then(res => {
+      if (_.has(current, 'userImg')) {
         return current.userImg
       } else {
         return null
       }
+      // })
+      // .catch(error => {
+      //   if (error.response === 404) {
+      //     return null
+      //   }
+      //   return null
+      // })
     }
   },
   mutations: {
