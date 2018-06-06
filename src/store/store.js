@@ -5,7 +5,7 @@ import _ from 'lodash'
 import axios from '@/api/axios'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
-import {checkimgApi} from './../api/components/checkimg'
+// import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({

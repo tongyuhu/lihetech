@@ -75,8 +75,9 @@ export default {
           img.src = imgUrl
             // 判断图片大小是否大于0 或者 图片高度与宽度都大于0
           if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
-            e.src = imgUrl
+            vm.userImgChat = imgUrl
           } else {
+            vm.userImgChat = imgUrl
             // e.src = imgUrl
             // 默认图片也不存在的时候
           }
