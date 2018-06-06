@@ -68,7 +68,8 @@ export default {
       this.$router.push({
         name: this.routerName
       })
-      this.isopen = true
+      // this.isopen = true
+      this.isopen = !this.isopen
       this.openChild()
       let arr = this.findBrothersComponents(this, 'wmenu')
       arr.forEach(item => {

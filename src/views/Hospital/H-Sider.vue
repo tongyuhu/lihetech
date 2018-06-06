@@ -233,32 +233,59 @@ export default {
     ...mapState(['adminInfo'])
   },
   methods: {
-    goanchor (id) {
-      this.$nextTick(function () {
-        let anchor = document.getElementById(id)
-        let scrollrange = anchor.offsetTop
-        let currentanchor = document.documentElement.scrollTop
-        let i = currentanchor
-        let step = Math.abs((scrollrange - currentanchor) / 50)
-        if (scrollrange > currentanchor) {
-          let scroll = setInterval(() => {
-            i += step
-            window.scrollTo(0, i)
-            if (i >= scrollrange) {
-              clearInterval(scroll)
-            }
-          }, 10)
+    goanchor (obj) {
+      if (this._.has(obj, 'id')) {
+        let id = obj.id
+        let fatherRoutername
+        this.menu.forEach((item, index) => {
+          if (this._.has(item, 'child')) {
+            item.child.forEach((child, i) => {
+              if (this._.has(child, 'id')) {
+                if (child.id === id) {
+                  fatherRoutername = this.menu[index].routerName
+                }
+              }
+            })
+          }
+        })
+        if (fatherRoutername) {
+          this.$router.push({
+            name: fatherRoutername
+          })
         }
-        if (scrollrange < currentanchor) {
-          let scroll = setInterval(() => {
-            i -= step
-            window.scrollTo(0, i)
-            if (i <= scrollrange) {
-              clearInterval(scroll)
-            }
-          }, 10)
-        }
-      })
+        console.log('父级路由', fatherRoutername)
+        this.$nextTick(function () {
+          let anchor = document.getElementById(id)
+          let scrollrange = anchor.offsetTop
+          let currentanchor = document.documentElement.scrollTop
+          let i = currentanchor
+          let step = Math.abs((scrollrange - currentanchor) / 50)
+          if (scrollrange > currentanchor) {
+            let scroll = setInterval(() => {
+              i += step
+              window.scrollTo(0, i)
+              if (i >= scrollrange) {
+                clearInterval(scroll)
+              }
+            }, 10)
+          }
+          if (scrollrange < currentanchor) {
+            let scroll = setInterval(() => {
+              i -= step
+              window.scrollTo(0, i)
+              if (i <= scrollrange) {
+                clearInterval(scroll)
+              }
+            }, 10)
+          }
+        })
+      }
+      if (this._.has(obj, 'routerName')) {
+        let routerName = obj.routerName
+        this.$router.push({
+          name: routerName
+        })
+      }
       // console.log(step)
     }
   },

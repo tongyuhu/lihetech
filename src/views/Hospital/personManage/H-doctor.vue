@@ -81,7 +81,7 @@
           </el-table-column>
           <el-table-column
           prop=""
-          label="停/启用"
+          label="启/停用"
           align="center"
           width="70"
           v-if="showEnabled">
