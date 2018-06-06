@@ -904,12 +904,16 @@ export default {
             this.medication.month = this.longtimemonth ? this.longtimemonth : null
             this.medication.day = this.longtimeday ? this.longtimeday : null
             let userDetectReportList = []
-            this.cardData.userDetectReportList.forEach(item => {
-              let obj = {}
-              obj.url = process.env.IMG_URL + item.reportUrl
-              obj.id = item.id
-              userDetectReportList.push(obj)
-            })
+            if (this._.has(this.cardData, 'userDetectReportList')) {
+              if (this.cardData.userDetectReportList.length > 0) {
+                this.cardData.userDetectReportList.forEach(item => {
+                  let obj = {}
+                  obj.url = process.env.IMG_URL + item.reportUrl
+                  obj.id = item.id
+                  userDetectReportList.push(obj)
+                })
+              }
+            }
             this.$emit('faceData', {
               sex: this.sex,
               age: this.age,

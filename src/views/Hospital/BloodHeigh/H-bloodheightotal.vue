@@ -239,7 +239,7 @@ export default {
         },
         tooltip: { // 提示框组件
           backgroundColor: 'rgba(50,50,50,0.2)',
-          triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           snap: true,
           formatter: '{b} : {c}%'
         },
@@ -370,6 +370,7 @@ export default {
             // smooth: true,
             // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
