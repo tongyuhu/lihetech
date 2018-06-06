@@ -218,7 +218,7 @@ import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 import checkList from '@/components/checklist'
 import imgfloat from '@/components/imgFloat'
-// import Bus from '@/bus.js'
+import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
   components: {
@@ -371,7 +371,12 @@ export default {
     },
     showchecklistimg (url) {
       this.checklistimgUrl = url
-      this.$refs.checklistimg.showBig()
+      Bus.$emit('showbigimg')
+      let vm = this
+      this.$nextTick(function () {
+        vm.$refs.checklistimg.showBig()
+      })
+      // this.$refs.checklistimg.showBig()
     }
   },
   computed: {

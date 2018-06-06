@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Bus from '@/bus.js'
 export default {
   name: 'imgfloat',
   props: {
@@ -25,14 +26,20 @@ export default {
     showBig () {
       this.showBigImg = true
     }
+  },
+  mounted () {
+    let vm = this
+    Bus.$on('showbigimg', () => {
+      vm.showBig()
+    })
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .img-message-wrap{
-  
   position: fixed;
+  z-index: 9999999999999;
   // margin-top: 80px;
   top:0;
   left: 0;
@@ -43,9 +50,10 @@ export default {
   z-index: 9999999999;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.315);
+  background: rgba(0, 0, 0, 0.4);
   img{
     max-width: 80%;
+    max-height: 90%;
     // width: 80%;
   }
 }

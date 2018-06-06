@@ -17,6 +17,7 @@
 
 <script>
 import imgfloat from '@/components/imgFloat'
+// import Bus from '@/bus.js'
 export default {
   name: 'chatcontent',
   components: {
@@ -82,7 +83,11 @@ export default {
   },
   methods: {
     showBig () {
-      this.$refs.chatimg.showBig()
+      let vm = this
+      this.$nextTick(function () {
+        vm.$refs.chatimg.showBig()
+      })
+      // Bus.$emit('showbigimg')
       // this.showBigImg = true
     },
     // closeBig () {
