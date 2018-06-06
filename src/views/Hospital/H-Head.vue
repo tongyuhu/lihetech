@@ -22,7 +22,7 @@
         <div class="head-right">
           <!-- <div class="admin-icon-wrap"> -->
 <!-- E:\LIHETECH.WEB\lihetech.dev\lihetech\static\admin.jpg -->
-            <img :src="adminIcon ? adminIcon :'./static/admin.jpg'" alt="暂无头像"  class="admin-icon" width="34px" height="34px">
+            <img :src="adminIcon ? adminIcon :'./static/admin.jpg'" alt=""  class="admin-icon" width="34px" height="34px">
           <!-- </div> -->
         </div>
   
