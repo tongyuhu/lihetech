@@ -929,18 +929,18 @@ export default {
     .button{
       background-color: #1991fc;
       color: #fff;
-      padding: 5px;
-      border-radius: 2px;
-      font-size: 18px;
+      padding: 6px 8px;
+      border-radius: 3px;
+      font-size: 16px;
       cursor: pointer;
       margin-right: 10px;
     }
     .activebutton{
       background-color: transparent;
       color: #666;
-      padding: 5px;
-      border-radius: 2px;
-      font-size: 18px;
+      padding: 6px 8px;
+      border-radius: 3px;
+      font-size: 16px;
       cursor: pointer;
       margin-right: 10px;
     }
@@ -1058,22 +1058,23 @@ export default {
 .order-status{
   min-width: 100px;
 }
-.order-action{
-  min-width: 155px;
-}
 .contant-btn{
-  padding: 5px;
+  padding: 3px 5px;
   background: #1991fc;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
   color: #fff;
-  width: 70px;
+  width: 72px;
   font-size: 14px;
+}
+.order-action{
+  min-width: 155px;
+  text-align: left;
 }
 .no-order-action{
   min-width: 155px;
   text-align: left;
-  padding:0 5px;
+  // padding:0 5px;
 
 }
 .success{
@@ -1099,20 +1100,20 @@ export default {
   margin-top:10px;
 }
 .open-order{
-  padding: 5px;
+  padding: 3px 5px;
   background: #1991fc;
-  border-radius: 2px;
+  border-radius: 3px;
   cursor: pointer;
   color: #fff;
-  width: 68px;
+  width: 72px;
   font-size: 14px;
 }
 .close-order{
-  padding: 5px;
-  border-radius: 2px;
+  padding: 3px 5px;
+  border-radius: 3px;
   cursor: pointer;
   color: #fff;
-  width: 68px;
+  width: 72px;
   font-size: 14px;
   background: #e87070;
 }

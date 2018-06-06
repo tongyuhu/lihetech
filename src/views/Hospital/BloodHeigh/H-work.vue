@@ -174,7 +174,7 @@
       <!-- 严重患者结束 end -->
 
       <!-- 未遵医嘱患者 start -->
-      <div class="bottom-margin" id="bloodnolisten">
+      <div id="bloodnolisten">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
             <p class="title">未遵医嘱患者</p>

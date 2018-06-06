@@ -683,11 +683,12 @@ export default {
   button{
     border: none;
     background: #1991fc;
-    padding: 5px;
+    padding: 6px 8px;
     color: #fff;
-    border-radius: 2px;
+    border-radius: 3px;
     cursor: pointer;
     margin-right: 15px;
+    font-size: 14px;
   }
 }
 .dialog-title{
