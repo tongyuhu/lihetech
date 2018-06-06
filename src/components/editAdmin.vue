@@ -17,7 +17,11 @@
 
                   <img class="img-photo" src="~/icon/hospital-icon2-16.png" alt="">
                 </div>
-                <img :src="imgSrc ? imgSrc :'./static/admin.jpg'" >
+                <div class="img-wrap">
+                  <div>
+                    <img :src="imgSrc ? imgSrc :'./static/admin.jpg'" >
+                  </div>
+                </div>
               </a>
             </div>
           </div>
@@ -101,7 +105,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+import {mapState, mapActions} from 'vuex'
 import {editAdminApi, uploadFileApi} from '@/api/components/editAdmin.js'
 export default {
   name: 'editAdmin',
@@ -229,6 +233,7 @@ export default {
     ...mapState(['adminInfo'])
   },
   methods: {
+    ...mapActions(['updateAdminInfo']),
     uploadImg (e) {
       //   // 如果提供了事件对象，则这是一个非IE浏览器
       // if (e && e.preventDefault) {
@@ -284,6 +289,7 @@ export default {
                 message: '修改成功',
                 type: 'success'
               })
+              this.updateAdminInfo()
             } else {
               this.$message({
                 showClose: true,
@@ -442,6 +448,23 @@ export default {
       filter: alpha(opacity=0);
       cursor: pointer
     }
+    .img-wrap{
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        text-align: center;
+        // vertical-align: middle;
+        // line-height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+          // width: 150px;
+          min-width: 90px;
+          max-width: 150px;
+          max-height: 150px;
+        }
+    }
     .img-photo-wrap{
         width: 150px;
         height: 150px;
@@ -471,6 +494,14 @@ export default {
         left: 50px;
         width: 50px;
       }
+      .img-wrap{
+        z-index: -1;
+        // width: 150px;
+        // width: 150px;
+        // height: 150px;
+        // background: rgba(0, 0, 0, 0.4);
+        // position: absolute;
+      }
     }
   }
   .left{
@@ -489,10 +520,6 @@ export default {
         // background: rgb(172, 81, 81); 
         z-index: 10;
       }
-    }
-    img{
-      width: 150px;
-      
     }
   }
   .right-form-wrap{

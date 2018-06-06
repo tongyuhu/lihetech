@@ -29,7 +29,7 @@
 <script>
 // import img from '~icon/hospital-icon2-04.png'
 import publicStatic from '@/publicData/const.js'
-import {mapState} from 'vuex'
+import {mapState, mapGetters} from 'vuex'
 export default {
   name: 'chartmessage',
   props: {
@@ -60,7 +60,8 @@ export default {
   computed: {
     ...mapState([
       'rongUserId'
-    ])
+    ]),
+    ...mapGetters(['adminImg', 'currentChatImg'])
   },
   methods: {
   },
@@ -69,9 +70,15 @@ export default {
       handler: function (val) {
         if (this.who === this.rongUserId) {
           this.cls = false
+          if (this.adminImg) {
+            this.userImg = this.adminImg
+          }
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
+          if (this.currentChatImg) {
+            this.userImg = this.currentChatImg
+          }
         }
       },
       immediate: true

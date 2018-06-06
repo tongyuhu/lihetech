@@ -4,6 +4,7 @@ import { SET_ADMIN_INFO, SET_SICK_CARD } from './mutationstypes'
 import _ from 'lodash'
 import axios from '@/api/axios'
 import {rongFriendApi} from '@/api/views/rong'
+import {getAdminInfo} from '@/api/components/login'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
@@ -54,11 +55,76 @@ export const store = new Vuex.Store({
     newmsg: false
   },
   getters: {
+    adminImg: state => {
+      if (_.has(state.adminInfo, 'headPortraitUrl')) {
+        let validateImage = function (url) {
+          // var xmlHttp
+          // if (window.ActiveXObject) {
+          //   xmlHttp = new ActiveXObject('Microsoft.XMLHTTP')
+          // } else if (window.XMLHttpRequest) {
+          //   xmlHttp = new XMLHttpRequest()
+          // }
+          // xmlHttp.open('Get', url, false)
+          // xmlHttp.send()
+          // if (xmlHttp.status === 404) { return false } else { return true }
+          axios({
+            method: 'get',
+            'url': url
+          }).then(res => {
+            return true
+          })
+          .catch(function (error) {
+            if (error.response === 404) {
+              return false
+            }
+            return false
+          })
+        }
+        if (validateImage(process.env.IMG_URL + state.adminInfo.headPortraitUrl)) {
+          return process.env.IMG_URL + state.adminInfo.headPortraitUrl
+        } else {
+          return null
+        }
+      }
+    },
     // 当前聊天好友  currentChat为true
     currentChat: state => {
       return _.find(state.chatfriend, function (item) {
         return item.currentChat === true
       })
+    },
+    currentChatImg: state => {
+      let current = _.find(state.chatfriend, function (item) {
+        return item.currentChat === true
+      })
+      let validateImage = function (url) {
+        // var xmlHttp
+        // if (window.ActiveXObject) {
+        //   xmlHttp = new ActiveXObject('Microsoft.XMLHTTP')
+        // } else if (window.XMLHttpRequest) {
+        //   xmlHttp = new XMLHttpRequest()
+        // }
+        // xmlHttp.open('Get', url, false)
+        // xmlHttp.send()
+        // if (xmlHttp.status === 404) { return false } else { return true }
+        axios({
+          method: 'get',
+          'url': url
+        }).then(res => {
+          return true
+        })
+        .catch(function (error) {
+          if (error.response === 404) {
+            return false
+          }
+          return false
+        })
+      }
+      if (validateImage(current.userImg)) {
+        return current.userImg
+      } else {
+        return null
+      }
     }
   },
   mutations: {
@@ -215,6 +281,14 @@ export const store = new Vuex.Store({
         // _.merge(list, content.state.friendsList)
         content.commit('setFriendsList', list)
         // content.commit('setFriendsList')
+      })
+    },
+    updateAdminInfo (content) {
+      axios(getAdminInfo())
+      .then(res => {
+        if (res.data.data) {
+          content.commit('SET_ADMIN_INFO', res.data.data)
+        }
       })
     }
   }

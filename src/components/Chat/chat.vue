@@ -40,7 +40,7 @@
       <!-- 聊天记录 -->
       <div class="chart-wrap-box" id="chatWidow" ref="chatWidow">
         <div v-if="!currentChat.hasHistroy" class="center">
-          <span>没有更多聊天记录了</span>
+          <!-- <span>没有更多聊天记录了</span> -->
         </div>
         <div v-else-if="!isTriggerFirstLoad" class="center">
           <el-button type="text" @click="isTriggerFirstLoad = true" >点击查看聊天记录...</el-button>
