@@ -1,7 +1,7 @@
 <template>
   <div class="sider">
     <div class="head-logo">
-      <img src="~icon/hospital-icon-01.png" alt="logo" class="head-logo-img">
+      <img src="~icon/hospital-icon-01.png" alt="logo" class="head-logo-img" @click="goHome">
     </div>
     <div
     v-for="item in menu"
@@ -287,6 +287,11 @@ export default {
         })
       }
       // console.log(step)
+    },
+    goHome () {
+      this.$router.push({
+        name: 'Home'
+      })
     }
   },
   mounted () {
@@ -332,6 +337,7 @@ export default {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    cursor: pointer;
   }
 </style>
 

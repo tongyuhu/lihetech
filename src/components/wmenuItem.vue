@@ -45,6 +45,7 @@ export default {
       if (this.id) {
         this.$emit('activeitemmenu', {id: this.id})
       }
+      console.log('执行子路由')
     },
     findBrothersComponents (context, componentName) {
       let res = context.$parent.$children.filter(item => {

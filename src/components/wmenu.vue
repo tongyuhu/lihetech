@@ -80,6 +80,7 @@ export default {
       childs.forEach(item => {
         item.isChecked = false
       })
+      console.log('执行父级')
     },
     completeIconName (name, type) {
       if (type) {
