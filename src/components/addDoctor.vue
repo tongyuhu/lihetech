@@ -10,7 +10,7 @@
         :model="addDoctorForm" 
         status-icon 
         :rules="rules" 
-        ref="ruleForm" 
+        ref="addDoctorFormRef" 
         label-width="70px" 
         :label-position="labelPosition"
         >
@@ -30,8 +30,8 @@
             <el-input type="password" v-model="addDoctorForm.password" size="medium"></el-input>
           </el-form-item>
           <el-form-item class="submit-btn">
-            <button @click.prevent="submitForm('ruleForm')">保存</button>
-            <button @click.prevent="resetForm('ruleForm')">取消</button>
+            <button @click.prevent="submitForm('addDoctorFormRef')">保存</button>
+            <button @click.prevent="resetForm('addDoctorFormRef')">取消</button>
             <!-- <el-button type="primary" @click="submitForm('ruleForm')">保存</el-button> -->
             <!-- <el-button @click="resetForm('ruleForm')">取消</el-button> -->
           </el-form-item>
@@ -43,8 +43,9 @@
 
 <script>
 import {addDoctorApi} from '@/api/components/addDoctor'
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 export default {
+  name: 'addDoctor',
   data () {
     var checkEmail = (rule, value, callback) => {
       let emailrule = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
@@ -132,13 +133,13 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'adminInfo'
-    ])
+    // ...mapState([
+    //   'adminInfo'
+    // ])
   },
   methods: {
     submitForm (formName) {
-      let vm = this
+      // let vm = this
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // console.log(this.addDoctorForm, 'submit!')
@@ -185,7 +186,9 @@ export default {
     // }
   },
   mounted () {
-    this.$refs.ruleForm.resetFields()
+    // this.resetForm()
+    this.$refs.addDoctorFormRef.resetFields()
+    // this.$refs.ruleForm.resetFields()
     // console.log(this.$route.params.from)
   }
 }

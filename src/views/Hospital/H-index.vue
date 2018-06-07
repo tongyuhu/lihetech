@@ -102,6 +102,7 @@
       // 初始化
       RongIMLib.RongIMClient.init(this.appKey, null, config)
       // 设置连接监听状态 （ status 标识当前连接状态 ）
+
       // 连接状态监听器
       RongIMLib.RongIMClient.setConnectionStatusListener({
         onChanged: function (status) {
@@ -131,7 +132,7 @@
               break
           }
         }})
-
+  
       // 消息监听器
       RongIMLib.RongIMClient.setOnReceiveMessageListener({
         // 接收到的消息
@@ -151,7 +152,7 @@
                 console.log('是当前聊天对象？', vm.currentChat)
                 vm.getCurrentFriendMsg(message)
               } else {  //
-                console.log('zhixing')
+                // console.log('zhixing')
                 vm.friendsList.forEach(function (item) {
                   if (item.userId === message.senderUserId) {
                     console.log('收到的消息', message)
@@ -168,8 +169,8 @@
                   setTimeout(function () {
                     let container = vm.$el.querySelector('#chatWidow')
                     container.scrollTop = container.scrollHeight
-                    console.log('container.scrollTop', container.scrollTop)
-                    console.log('container.scrollHeight', container.scrollHeight)
+                    // console.log('container.scrollTop', container.scrollTop)
+                    // console.log('container.scrollHeight', container.scrollHeight)
                     // container.scrollIntoView()
                   }, 100)
                 })
@@ -177,6 +178,7 @@
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
+              console.log('收到语音消息')
                     // 对声音进行预加载
                     // message.content.content 格式为 AMR 格式的 base64 码
               break
@@ -209,7 +211,7 @@
                   container.scrollTop = container.scrollHeight
                   console.log('container.scrollTop', container.scrollTop)
                   console.log('container.scrollHeight', container.scrollHeight)
-            // container.scrollIntoView()
+                  // container.scrollIntoView()
                 }, 100)
               })
                   // message.content.content => 图片缩略图 base64。
@@ -254,7 +256,7 @@
       // 登录
       RongIMLib.RongIMClient.connect(this.token, {
         onSuccess: function (userId) {
-          console.log('C融云管理员id是' + userId)
+          console.log('融云管理员id是' + userId)
           vm.setRongUserId(userId)
           // 获取消息列表
           RongIMLib.RongIMClient.getInstance().getConversationList({
@@ -321,6 +323,27 @@
           console.log(errorCode)
         }
       })
+
+      let callconfig = {
+        // 发起音视频超时时间, 默认 15000 毫秒
+        timeout: 15000,
+        // 视频分辨率, 默认 640*480
+        width: 320,
+        height: 240,
+        // 视频码率, 默认 600*450
+        maxRate: 600,
+        minRate: 50,
+        // 视频帧率, 默认 15
+        frameRate: 15,
+        RongIMLib: RongIMLib
+      }
+      RongCallLib = RongCallLib.init(callconfig)
+      let watcher = function (result) {
+        console.log('监听语音视频')
+      // result => {type: 'added', data: ''}
+      }
+      // console.log('RongCallLib2', RongCallLib)
+      RongCallLib.videoWatch(watcher)
     }
   }
 </script>

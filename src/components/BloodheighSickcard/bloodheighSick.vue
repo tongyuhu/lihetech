@@ -169,7 +169,7 @@
 
     <div class="check-list" v-if="faceDATA.userDetectReportList.length !==0">
       <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
-        <img class="check-img" :src="img.url" alt="">
+        <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
       </div>
       <div class="empty-div">
       </div>
@@ -218,7 +218,7 @@ import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 import checkList from '@/components/checklist'
 import imgfloat from '@/components/imgFloat'
-import Bus from '@/bus.js'
+// import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
   components: {
@@ -371,7 +371,7 @@ export default {
     },
     showchecklistimg (url) {
       this.checklistimgUrl = url
-      Bus.$emit('showbigimg')
+      // Bus.$emit('showbigimg')
       let vm = this
       this.$nextTick(function () {
         vm.$refs.checklistimg.showBig()

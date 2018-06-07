@@ -75,10 +75,10 @@
           </a>
         <!-- </button> -->
         <button>
-          <span class="phone-icon"></span>
+          <span class="phone-icon" ></span>
         </button>
-        <button>
-          <span class="video-icon"></span>
+        <button @click="shipin">
+          <span class="video-icon" ></span>
         </button>
         <!-- <span class="iconfont icon-wenjian"></span>
         <span class="iconfont icon-31yuyinxuanzhong"></span>
@@ -205,7 +205,8 @@ export default {
               msgObj.userImg = vm.adminInfo.headPortraitUrl
             }
             // vm.historyMsg = vm.currentChat.history
-            vm.sethistory(vm.currentChat.history)
+            vm.sethistory(vm.historyMsg)
+            // vm.sethistory(vm.currentChat.history)
             vm.getCurrentFriendMsg(msgObj)
             let newChat = vm.currentChat
             newChat.history = vm.historyMsg
@@ -318,7 +319,7 @@ export default {
                 senderUserId: vm.rongUserId
               }
                 // vm.historyMsg = vm.currentChat.history
-              vm.sethistory(vm.currentChat.history)
+              vm.sethistory(vm.historyMsg)
               vm.getCurrentFriendMsg(msgObj)
               console.log('msgObjimg', msgObj)
               let newChat = vm.currentChat
@@ -426,6 +427,47 @@ export default {
         // APP未开启消息漫游或处理异常
         // throw new ERROR ......
         }
+      })
+    },
+    shipin () {
+      let vm = this
+      // let callconfig = {
+      //   // 发起音视频超时时间, 默认 15000 毫秒
+      //   timeout: 15000,
+      //   // 视频分辨率, 默认 640*480
+      //   width: 320,
+      //   height: 240,
+      //   // 视频码率, 默认 600*450
+      //   maxRate: 600,
+      //   minRate: 50,
+      //   // 视频帧率, 默认 15
+      //   frameRate: 15,
+      //   RongIMLib: RongIMLib
+      // }
+      // RongCallLib = RongCallLib.init(callconfig)
+      // // 注册视频节点监听,监控视频流，当有人加入、离开会触发此监听。
+      // let watcher = function (result) {
+      // // result => {type: 'added', data: ''}
+      // }
+      // console.log('RongCallLib2', RongCallLib)
+      // RongCallLib.videoWatch(watcher)
+      var CallType = RongIMLib.VoIPMediaType
+      var params = {
+    // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+        conversationType: RongIMLib.ConversationType.PRIVATE,
+    // 会话目标 Id，群 Id 或者 userId。
+        targetId: vm.currentChat.userId,
+        // targetId: '',
+    // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
+        // inviteUserIds: inviteUserIds,
+    // 音频类型
+    // CallType.MEDIA_VEDIO
+    // CallType.MEDIA_AUDIO
+        mediaType: CallType.MEDIA_AUDIO
+      }
+      RongCallLib.call(params, function (error) {
+        console.log('发送视频失败', error)
+      // do something...
       })
     }
   },

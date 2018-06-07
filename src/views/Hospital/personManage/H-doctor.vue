@@ -553,6 +553,7 @@ export default {
       this.doctorEditCellWidth = 250
       this.showEnabled = true
     }
+    // this.showEnabled = true
     // console.log('adminInfo', this.adminInfo)
     this.getDoctorList()
   },

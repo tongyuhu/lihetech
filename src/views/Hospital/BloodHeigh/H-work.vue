@@ -587,6 +587,7 @@ export default {
           this.noListenTableLoading = false
           console.log('this.noListenDoctorData', this.noListenDoctorData)
         }
+        this.noListenTableLoading = false
         // if (res.data.data.length > 0) {
         //   res.data.data.forEach(item => {
         //     if (this._.has(item, 'bloodPressureType')) {
