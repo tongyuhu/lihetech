@@ -77,12 +77,9 @@
         <button>
           <span class="phone-icon" ></span>
         </button>
-        <button @click="shipin">
+        <button @click="callVideo">
           <span class="video-icon" ></span>
         </button>
-        <!-- <span class="iconfont icon-wenjian"></span>
-        <span class="iconfont icon-31yuyinxuanzhong"></span>
-        <span class="iconfont icon-shipin"></span> -->
       </div>
 
       <!-- 写信息 -->
@@ -98,6 +95,13 @@
         </div>
       </div>
     </div>
+
+
+
+
+    <!-- <div>
+      <video src=""></video>
+    </div> -->
   </div>
 </template>
 
@@ -429,7 +433,7 @@ export default {
         }
       })
     },
-    shipin () {
+    callVideo () {
       let vm = this
       // let callconfig = {
       //   // 发起音视频超时时间, 默认 15000 毫秒
@@ -453,21 +457,21 @@ export default {
       // RongCallLib.videoWatch(watcher)
       var CallType = RongIMLib.VoIPMediaType
       var params = {
-    // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+      // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,
-    // 会话目标 Id，群 Id 或者 userId。
-        targetId: vm.currentChat.userId,
-        // targetId: '',
-    // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
+      // 会话目标 Id，群 Id 或者 userId。
+        // targetId: vm.currentChat.userId,
+        targetId: 'admin_3',
+      // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
         // inviteUserIds: inviteUserIds,
-    // 音频类型
-    // CallType.MEDIA_VEDIO
-    // CallType.MEDIA_AUDIO
+      // 音频类型
+      // CallType.MEDIA_VEDIO
+      // CallType.MEDIA_AUDIO
         mediaType: CallType.MEDIA_AUDIO
       }
       RongCallLib.call(params, function (error) {
         console.log('发送视频失败', error)
-      // do something...
+        // do something...
       })
     }
   },

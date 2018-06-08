@@ -339,7 +339,11 @@
       }
       RongCallLib = RongCallLib.init(callconfig)
       let watcher = function (result) {
-        console.log('监听语音视频')
+        console.log('监听语音视频', result)
+        // result.type === added 加入
+        // result.type === removed 加入
+        // result.data 是要添加/移除的dom节点
+
       // result => {type: 'added', data: ''}
       }
       // console.log('RongCallLib2', RongCallLib)
