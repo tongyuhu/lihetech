@@ -177,7 +177,8 @@ export default {
       'closeChatWindow',
       'getCurrentFriendMsg',
       'sethistory',
-      'clearCurrentChat'
+      'clearCurrentChat',
+      'openVideo'
     ]),
     sendMsg () {
       // console.log('historyMsg', this.historyMsg)
@@ -379,6 +380,7 @@ export default {
       this.clearCurrentChat()
       this.closeChatWindow()
     },
+    // 加载更多
     infiniteHandler ($state) {
       let vm = this
       new Promise(function (resolve, reject) {
@@ -397,6 +399,7 @@ export default {
         }
       })
     },
+    // 获取历史消息
     getHistroyMsgRong (targetuserId) {
       let vm = this
       let timestrap = null
@@ -434,27 +437,8 @@ export default {
       })
     },
     callVideo () {
+      this.openVideo()
       let vm = this
-      // let callconfig = {
-      //   // 发起音视频超时时间, 默认 15000 毫秒
-      //   timeout: 15000,
-      //   // 视频分辨率, 默认 640*480
-      //   width: 320,
-      //   height: 240,
-      //   // 视频码率, 默认 600*450
-      //   maxRate: 600,
-      //   minRate: 50,
-      //   // 视频帧率, 默认 15
-      //   frameRate: 15,
-      //   RongIMLib: RongIMLib
-      // }
-      // RongCallLib = RongCallLib.init(callconfig)
-      // // 注册视频节点监听,监控视频流，当有人加入、离开会触发此监听。
-      // let watcher = function (result) {
-      // // result => {type: 'added', data: ''}
-      // }
-      // console.log('RongCallLib2', RongCallLib)
-      // RongCallLib.videoWatch(watcher)
       var CallType = RongIMLib.VoIPMediaType
       var params = {
       // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type

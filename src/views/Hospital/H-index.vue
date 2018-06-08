@@ -23,6 +23,13 @@
     <chat
     v-if="chatStatus"
     ></chat>
+    <videoChat
+    v-if="video"
+    @close="closeVideoChat"></videoChat>
+    <connectBtn
+    v-if="hasVideoMsg"
+    @connect="connectCall"
+    @reject="rejectCall"></connectBtn>
   </div>
 
 </template>
@@ -31,6 +38,8 @@
   import HSider from './../Hospital/H-Sider.vue'
   import chat from '@/components/Chat/chat.vue'
   import im from '@/components/Chat/im.vue'
+  import videoChat from '@/components/Chat/video.vue'
+  import connectBtn from '@/components/Chat/connectBtn.vue'
   import Bus from '@/bus.js'
   import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
@@ -40,7 +49,9 @@
       HHead,
       HSider,
       chat,
-      im
+      im,
+      videoChat,
+      connectBtn
     },
     data () {
       return {
@@ -54,7 +65,9 @@
         adminInfo: 'adminInfo',
         chatStatus: 'chatStatus',
         friendsList: 'friendsList',
-        newmsg: 'newmsg'
+        newmsg: 'newmsg',
+        video: 'video',
+        hasVideoMsg: 'hasVideoMsg'
       }),
       ...mapGetters([
         'currentChat'
@@ -68,7 +81,11 @@
         'getFriendMsg',
         'getCurrentFriendMsg',
         'closeAnimation',
-        'clearCurrentChat'
+        'clearCurrentChat',
+        'openVideo',
+        'closeVideo',
+        'closeVideoMsg',
+        'getVideoMsg'
       ]),
       ...mapActions([
         'setRongUserIdAction',
@@ -87,6 +104,32 @@
   
         this.openChatWindow()
         this.chatStatus = true
+      },
+      closeVideoChat () {
+        this.closeVideo()
+      },
+      connectCall () {
+        var CallType = RongIMLib.VoIPMediaType
+        let params = {
+          // conversationType: RongIMLib.ConversationType.PRIVATE, //单聊
+          // targetId: targetId,
+          // 音频类型
+          // CallType.MEDIA_VEDIO
+          // CallType.MEDIA_AUDIO
+          // mediaType: mediaType
+        }
+        // RongCallLib.accept(params)
+        this.closeVideoMsg()
+      },
+      rejectCall () {
+        var params = {
+          conversationType: RongIMLib.ConversationType.PRIVATE // 单聊,
+          // targetId: targetId
+        }
+        // RongCallLib.hungup(params, function (error, summary) {
+        //   console.log(summary)
+        // })
+        this.closeVideoMsg()
       }
     },
     mounted () {
@@ -348,6 +391,10 @@
       }
       // console.log('RongCallLib2', RongCallLib)
       RongCallLib.videoWatch(watcher)
+      RongCallLib.commandWatch(function (command) {
+        console.log('命令监听', command)
+      // command => 消息指令;
+      })
     }
   }
 </script>

@@ -3,11 +3,21 @@ import Vuex from 'vuex'
 import { SET_ADMIN_INFO, SET_SICK_CARD } from './mutationstypes'
 import _ from 'lodash'
 import axios from '@/api/axios'
+import publicStatic from '@/publicData/const.js'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
 // import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
-
+const imgExists = function (checkimg) {
+  let ImgObj = new Image() // 判断图片是否存在
+  ImgObj.src = process.env.IMG_URL + checkimg
+  // 没有图片，则返回-1
+  if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+    return process.env.IMG_URL + checkimg
+  } else {
+    return publicStatic.onlineStatic + '/static/user.png'
+  }
+}
 export const store = new Vuex.Store({
   state: {
     adminInfo: {},
@@ -29,31 +39,13 @@ export const store = new Vuex.Store({
       //   hasMsg: false,
       //   currentChat: false
       // },
-      // {
-      //   userId: 'member_5',
-      //   userImg: '',
-      //   userName: '测试',
-      //   hasMsg: false,
-      //   currentChat: false
-      // },
-      // {
-      //   userId: 'member_12',
-      //   userImg: '',
-      //   userName: '向日葵',
-      //   hasMsg: false,
-      //   currentChat: false
-      // },
-      // {
-      //   userId: '5',
-      //   userImg: '',
-      //   userName: '夏利坚',
-      //   hasMsg: false,
-      //   currentChat: false
-      // }
     ],
     // 当前聊天记录
     history: [],
-    newmsg: false
+    newmsg: false,
+    // 视频通话窗口
+    video: false,
+    hasVideoMsg: true
   },
   getters: {
     adminImg: state => {
@@ -206,6 +198,18 @@ export const store = new Vuex.Store({
     },
     clearNewmsg (state) {
       state.newmsg = false
+    },
+    openVideo (state) {
+      state.video = true
+    },
+    closeVideo (state) {
+      state.video = false
+    },
+    getVideoMsg (state) {
+      state.hasVideoMsg = true
+    },
+    closeVideoMsg (state) {
+      state.hasVideoMsg = false
     }
   },
   actions: {
@@ -241,7 +245,8 @@ export const store = new Vuex.Store({
                 obj.hasHistroy = true
                 if (_.has(item, 'userImage')) {
                   if (item.userImage.length !== 0) {
-                    obj.userImg = process.env.IMG_URL + item.userImage
+                    obj.userImg = imgExists(item.userImage)
+                    // obj.userImg = process.env.IMG_URL + item.userImage
                   }
                   // process.env.IMG_URL
                 }

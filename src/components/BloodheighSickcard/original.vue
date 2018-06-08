@@ -216,7 +216,6 @@ export default {
     checkTime () {
       let date = new Date()
       date = dateFormat(date, 0, true)
-
       if (this.month) {
         if (this._.gt(this.month, date)) {
           this.$message({
