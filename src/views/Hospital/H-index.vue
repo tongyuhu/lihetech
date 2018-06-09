@@ -24,7 +24,7 @@
     v-if="chatStatus"
     ></chat>
     <videoChat
-    v-if="video"
+    v-show="video"
     @close="closeVideoChat"></videoChat>
     <connectBtn
     v-if="hasVideoMsg"
@@ -67,7 +67,8 @@
         friendsList: 'friendsList',
         newmsg: 'newmsg',
         video: 'video',
-        hasVideoMsg: 'hasVideoMsg'
+        hasVideoMsg: 'hasVideoMsg',
+        currentVideo: 'currentVideo'
       }),
       ...mapGetters([
         'currentChat'
@@ -85,7 +86,8 @@
         'openVideo',
         'closeVideo',
         'closeVideoMsg',
-        'getVideoMsg'
+        'getVideoMsg',
+        'changeCurrentVideo'
       ]),
       ...mapActions([
         'setRongUserIdAction',
@@ -101,7 +103,6 @@
       },
       chatWith (history) {
         Bus.$emit('history', history)
-  
         this.openChatWindow()
         this.chatStatus = true
       },
@@ -109,26 +110,37 @@
         this.closeVideo()
       },
       connectCall () {
+        let targetId
+        if (this.currentVideo) {
+          targetId = this.currentVideo.senderUserId
+        }
         var CallType = RongIMLib.VoIPMediaType
         let params = {
-          // conversationType: RongIMLib.ConversationType.PRIVATE, //单聊
-          // targetId: targetId,
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊
+          targetId: targetId,
           // 音频类型
           // CallType.MEDIA_VEDIO
           // CallType.MEDIA_AUDIO
-          // mediaType: mediaType
+          mediaType: CallType.MEDIA_VEDIO
+          // mediaType: CallType.MEDIA_VEDIO
         }
-        // RongCallLib.accept(params)
+        // }
+        RongCallLib.accept(params)
+        this.openVideo()
         this.closeVideoMsg()
       },
       rejectCall () {
-        var params = {
-          conversationType: RongIMLib.ConversationType.PRIVATE // 单聊,
-          // targetId: targetId
+        let targetId
+        if (this.currentVideo) {
+          targetId = this.currentVideo.senderUserId
         }
-        // RongCallLib.hungup(params, function (error, summary) {
-        //   console.log(summary)
-        // })
+        var params = {
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
+          'targetId': targetId
+        }
+        RongCallLib.hungup(params, function (error, summary) {
+          console.log('挂断', summary)
+        })
         this.closeVideoMsg()
       }
     },
@@ -383,6 +395,11 @@
       RongCallLib = RongCallLib.init(callconfig)
       let watcher = function (result) {
         console.log('监听语音视频', result)
+        vm.openVideo()
+        if (result.type === 'added') {
+          let selfNode = document.getElementById('videoChat')
+          selfNode.appendChild(result.data)
+        }
         // result.type === added 加入
         // result.type === removed 加入
         // result.data 是要添加/移除的dom节点
@@ -393,6 +410,12 @@
       RongCallLib.videoWatch(watcher)
       RongCallLib.commandWatch(function (command) {
         console.log('命令监听', command)
+        if (command) {
+          if (command.messageType === 'InviteMessage') {
+            vm.getVideoMsg()
+            vm.changeCurrentVideo(command)
+          }
+        }
       // command => 消息指令;
       })
     }

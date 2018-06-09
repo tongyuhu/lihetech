@@ -451,7 +451,8 @@ export default {
       // 音频类型
       // CallType.MEDIA_VEDIO
       // CallType.MEDIA_AUDIO
-        mediaType: CallType.MEDIA_AUDIO
+        // mediaType: CallType.MEDIA_AUDIO
+        mediaType: CallType.MEDIA_VEDIO
       }
       RongCallLib.call(params, function (error) {
         console.log('发送视频失败', error)

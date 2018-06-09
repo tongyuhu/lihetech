@@ -45,7 +45,9 @@ export const store = new Vuex.Store({
     newmsg: false,
     // 视频通话窗口
     video: false,
-    hasVideoMsg: true
+    // 有视频请求
+    hasVideoMsg: false,
+    currentVideo: {}
   },
   getters: {
     adminImg: state => {
@@ -199,17 +201,24 @@ export const store = new Vuex.Store({
     clearNewmsg (state) {
       state.newmsg = false
     },
+    // 打开视频窗口
     openVideo (state) {
       state.video = true
     },
+    // 关闭视频窗口
     closeVideo (state) {
       state.video = false
     },
+    // 收到音视频消息
     getVideoMsg (state) {
       state.hasVideoMsg = true
     },
+    // 关闭音视频提醒
     closeVideoMsg (state) {
       state.hasVideoMsg = false
+    },
+    changeCurrentVideo (state, val) {
+      state.currentVideo = val
     }
   },
   actions: {
