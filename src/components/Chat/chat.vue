@@ -445,7 +445,7 @@ export default {
         conversationType: RongIMLib.ConversationType.PRIVATE,
       // 会话目标 Id，群 Id 或者 userId。
         // targetId: vm.currentChat.userId,
-        targetId: 'admin_12',
+        targetId: 'admin_3',
       // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
         // inviteUserIds: inviteUserIds,
       // 音频类型
