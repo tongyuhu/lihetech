@@ -31,13 +31,15 @@
 
                 <div class="flex widthone">
                   <div class="flex-btn-left" v-show="showBtn">
-                    <el-button @click="trendPre" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button>
+                    <el-button @click="trendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button>
+                    <!-- <el-button @click="trendPre" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button> -->
                   </div>
                   <div class="chart-min-width">
                     <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div>
                   </div>
                   <div class="flex-btn" v-show="showBtn">
-                    <el-button @click="trendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button @click="trendPre" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <!-- <el-button @click="trendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                 </div>
 
@@ -237,7 +239,7 @@ export default {
         },
         tooltip: { // 提示框组件
           backgroundColor: 'rgba(50,50,50,0.2)',
-          triggerOn: 'click',
+          triggerOn: 'mousemove|click',
           snap: true,
           formatter: '{b} : {c}%'
         },
@@ -368,6 +370,7 @@ export default {
             // smooth: true,
             // smoothMonotone: 'x',
             symbol: 'circle',
+            symbolSize: 6,
             lineStyle: {
               normal: {
                 width: 2,
@@ -505,6 +508,8 @@ export default {
               vm.sickTrendData.push(item.normalBase)
             }
           })
+          vm.sickTrendDataX = vm.sickTrendDataX.reverse()
+          vm.sickTrendData = vm.sickTrendData.reverse()
           if (vm.sickTrendDataX.length < 16) {
             vm.showBtn = false
             HBtrend.setOption(this.HBtrendOption())
@@ -517,11 +522,11 @@ export default {
     },
     trendPre () {
       let HBtrend = echarts.init(document.getElementById('HBtrend'))
-      HBtrend.setOption(this.HBtrendOption(0, 50))
+      HBtrend.setOption(this.HBtrendOption(50, 100))
     },
     trendNext () {
       let HBtrend = echarts.init(document.getElementById('HBtrend'))
-      HBtrend.setOption(this.HBtrendOption(50, 100))
+      HBtrend.setOption(this.HBtrendOption(0, 50))
     }
   },
 
@@ -611,7 +616,7 @@ p {
   position: absolute;
   bottom:50%;
   right: 0;
-  z-index:999;
+  z-index:99;
 }
 .flex-btn-left{
   max-width: 55px;
@@ -620,7 +625,7 @@ p {
   position: absolute;
   bottom:50%;
   left: 25px;
-  z-index:999;
+  z-index:99;
 }
 .widthone{
   width: 100%;

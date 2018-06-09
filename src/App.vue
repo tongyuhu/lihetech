@@ -104,6 +104,15 @@ export default {
     }
   },
   mounted () {
+    // window.addEventListener('beforeunload', onbeforeunload)
+    // window.onbeforeunload = function () {
+    //   return '您确定本页的操作完成了吗？页面将关闭或刷新。'
+    // }
+    // function onbeforeunload (e) {
+    //   console.log('>>>> onbeforeunload called')
+    //   alert('>>>> onbeforeunload called')
+    //   e.returnValue = 'false'
+    // };
   },
   created () {
     this.loginDirect()

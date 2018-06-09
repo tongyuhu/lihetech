@@ -3,9 +3,12 @@
     <!-- 工作台 start -->
     <div class="workhead">
       <span>工作台</span>
-        <el-button type="text" @click="msgTipBtn" class="work-msg">
-          <i class="work-icon"></i>
-          <i :class="{workMsgtip:showMsgTip}"></i>
+        <el-button type="text" @click="msgTipBtn"  class="work-msg">
+          <!-- <i class="work-icon"></i> -->
+          <!-- <el-badge :is-dot="showMsgTip">
+              <i class="iconfont icon-xin iconfont-tip"></i>
+          </el-badge> -->
+          <!-- <i :class="{workMsgtip:showMsgTip}"></i> -->
         </el-button>
     </div>
     <el-card :body-style="{padding: '0px'}">
@@ -30,7 +33,7 @@
                     class-name="table-col"
                     width="200">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row,'useUserId')"
+                      <el-button type="text" @click="newdiagnose(scope.row,'useUserId')"
                       :style="{'color':'#1991fc'}">
                         {{scope.row.realName}}
                       </el-button>
@@ -52,7 +55,7 @@
                     label=""
                     width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row,'useUserId')"
+                        <el-button size="mini" type="primary" @click="newdiagnose(scope.row,'useUserId')"
                         :style="{'width':'72px','color':'#fff'}">诊断</el-button>
                     </template>
                 </el-table-column>
@@ -79,7 +82,8 @@
       <div class="bottom-margin" id="bloodbad">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p>
+            <!-- <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p> -->
+            <p class="title">严重患者</p>
           </div>
           <div class="table">
             <el-table 
@@ -99,7 +103,7 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="sicktype"
+                    prop="bloodPressureType"
                     label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -139,7 +143,11 @@
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
                         :style="{'width':'72px','color':'#fff'}">诊断</el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <!-- <i class="telephone-btn-icon"></i> -->
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                        </button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
                 </el-table-column>
@@ -166,10 +174,11 @@
       <!-- 严重患者结束 end -->
 
       <!-- 未遵医嘱患者 start -->
-      <div class="bottom-margin" id="bloodnolisten">
+      <div id="bloodnolisten">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p>
+            <p class="title">未遵医嘱患者</p>
+            <!-- <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p> -->
           </div>
           <div class="table">
 
@@ -190,7 +199,7 @@
                       </template>
                 </el-table-column>
                 <el-table-column
-                    prop="sicktype"
+                    prop="bloodPressureType"
                     label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -235,7 +244,10 @@
                         :style="{'width':'72px','color':'#fff'}">
                         诊断
                         </el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                          <!-- <i class="telephone-btn-icon"></i> -->
+                        </button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -259,10 +271,11 @@
       <!-- 未遵医嘱患者 end -->
 
       <!-- 建档不完整患者 start -->
-      <div id="bloodunperfect">
+      <div id="bloodunperfect" v-if="false">
         <el-card :body-style="{ padding: '0px' }">
           <div class="card-header">
-            <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p>
+            <p class="title">建档不完整患者</p>
+            <!-- <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p> -->
           </div>
           <div class="table">
 
@@ -284,7 +297,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="sicktype"
-                    label="sicktype"
+                    label="患者类型"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
@@ -319,7 +332,10 @@
                         </el-button>
                         <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
                         :style="{'width':'72px','color':'#fff'}">去完善</el-button>
-                        <button class="telephone-btn" @click="call(scope.row)"><i class="telephone-btn-icon"></i></button>
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                          <!-- <i class="telephone-btn-icon"></i> -->
+                        </button>
                         <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
                     </template>
                 </el-table-column>
@@ -348,7 +364,7 @@
 
 <script>
 // import from 'icon/hospital-icon-21.png'
-import { mapState } from 'vuex'
+// import { mapState } from 'vuex'
 // import {careText, care} from './../../../untils/untils'
 import {
   newsickaskDataApi,
@@ -356,6 +372,8 @@ import {
   noListenDoctorDataApi,
   careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
 import mpages from '@/components/cutpage.vue'
+import {mapMutations, mapState} from 'vuex'
+import Bus from '@/bus.js'
 export default {
   name: 'H-work',
   components: {
@@ -399,10 +417,19 @@ export default {
   },
   computed: {
     ...mapState({
-      admin: state => state.adminInfo
+      admin: state => state.adminInfo,
+      userCasesCardId: state => state.userCasesCardId
+
     })
   },
   methods: {
+    ...mapMutations(
+      ['SET_SICK_CARD',
+        'addChatFriend',
+        'changeChatFriend',
+        'openChatWindow',
+        'setuserCasesCardId'
+      ]),
     sortSickList (arr) {
       let copyArr = arr
       let topArr = []
@@ -414,21 +441,28 @@ export default {
           topArr.unshift(item)
         }
       })
-      // topArr.forEach(item => {
-      //   copyArr.unshift(item)
-      // })
-      return copyArr
+      return topArr
     },
-    // jumppage (page) {
-    //   // console.log(page, 266)
-    // },
-    // careText (boolean) {
-    //   if (boolean) {
-    //     return '取消关注'
-    //   } else {
-    //     return '关注'
-    //   }
-    // },
+    confirmSickType (val) {
+      let type
+      switch (val) {
+        case 0:
+          type = '未知'
+          break
+        case 1:
+          type = '原发性高血压'
+          break
+        case 2:
+          type = '继发性高血压'
+          break
+        case 3:
+          type = '正常'
+          break
+        default:
+          type = '未知'
+      }
+      return type
+    },
     isCare (val, data) {
       let arr = data
       console.log(arr)
@@ -458,11 +492,15 @@ export default {
       .then(res => {
         if (res.data.code === '0000') {
           val.isDocusOn = !val.isDocusOn
+          this.newsickaskData = this.sortSickList(this.newsickaskData)
+          this.badsickData = this.sortSickList(this.badsickData)
+          this.noListenDoctorData = this.sortSickList(this.noListenDoctorData)
         }
         if (res.data.code === '1001') {
         }
       })
     },
+    // 获取最新问诊
     newAskRequest (params) {
       this.newSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -474,9 +512,11 @@ export default {
             this.newsickaskData = res.data.data
           }
         }
+
         this.newAskTotal = res.data.recordCount
         this.newAskPageSize = res.data.pageSize
         this.newSickTableLoading = false
+        console.log('获取最新问诊成功', this.newsickaskData)
       }).catch(err => {
         if (err) this.newSickTableLoading = false
       })
@@ -491,7 +531,7 @@ export default {
         pageSize: this.newAskPageSize
       })
     },
-
+    // 获取严重患者
     badsickRequest (params) {
       this.badSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -499,6 +539,13 @@ export default {
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
         if (res.data && res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            if (this._.has(item, 'bloodPressureType')) {
+              item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
+            } else {
+              item.bloodPressureType = '未知'
+            }
+          })
           this.badsickData = res.data.data
         }
         this.badsickTotal = res.data.recordCount
@@ -518,17 +565,38 @@ export default {
         pageSize: this.badsickPageSize
       })
     },
-
+    // 获取未遵医嘱
     nolistenRequest (params) {
       this.noListenTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
       this.$axios(noListenDoctorDataApi(
         params.hospitalId, params.currentPage, params.pageSize
       )).then(res => {
-        this.noListenDoctorData = res.data.data
-        this.nolistenTotal = res.data.recordCount
-        this.nolistenPageSize = res.data.pageSize
+        if (res.data && res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            if (this._.has(item, 'bloodPressureType')) {
+              item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
+            } else {
+              item.bloodPressureType = '未知'
+            }
+          })
+          // this.badsickData = res.data.data
+          this.noListenDoctorData = res.data.data
+          this.nolistenTotal = res.data.recordCount
+          this.nolistenPageSize = res.data.pageSize
+          this.noListenTableLoading = false
+          console.log('this.noListenDoctorData', this.noListenDoctorData)
+        }
         this.noListenTableLoading = false
+        // if (res.data.data.length > 0) {
+        //   res.data.data.forEach(item => {
+        //     if (this._.has(item, 'bloodPressureType')) {
+        //       item.bloodPressureType = this.confirmSickType(item.bloodPressureType)
+        //     } else {
+        //       item.bloodPressureType = '未知'
+        //     }
+        //   })
+        // }
       }).catch(err => {
         if (err) this.noListenTableLoading = false
       })
@@ -551,13 +619,33 @@ export default {
         name: 'accountSetting'
       })
     },
+    newdiagnose (row, val) {
+      let userId
+      let id
+      // if (val) {
+      userId = row.userId
+      id = row.id
+      // } else {
+        // userId = row.id
+      // }
+      console.log('carssdadd', row)
+      this.$router.push({name: 'bloodheighSick',
+        params: {
+          sickID: userId,
+          hospitalId: row.adminHospitalId,
+          userCasesCardId: row.id
+        }})
+      this.setuserCasesCardId(row.id)
+      Bus.$emit('modifySickCard', {modify: true, cardid: id})
+      this.SET_SICK_CARD(true)
+    },
     diagnose (row, val) {
       let id
-      if (val) {
-        id = row.userId
-      } else {
-        id = row.id
-      }
+      // if (val) {
+      id = row.id
+      // } else {
+        // id = row.id
+      // }
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
@@ -566,7 +654,18 @@ export default {
         }})
     },
     call (row) {
-      console.log(row.mobile)
+      let rongId = 'member_' + row.id
+      let sick = {
+        userId: rongId,
+        userImg: '',
+        userName: row.realName || '患者',
+        hasMsg: false,
+        currentChat: false
+      }
+      this.addChatFriend(sick)
+      this.changeChatFriend(sick)
+      this.openChatWindow()
+      console.log(row)
     },
     handlePersonMsg (row, column, cell, event) {
     }
@@ -618,6 +717,11 @@ export default {
 }
 .work-msg{
   position: relative;
+  
+}
+.iconfont-tip{
+  color: #666;
+  font-size: 30px;
 }
 .work-icon{
   position: relative;
@@ -670,8 +774,8 @@ export default {
   border: none;
   outline: none;
   background-color: #fff;
-  height: 21px;
-  width: 21px;
+  height: 22px;
+  width: 30px;
   padding: 0;
   margin:0;
   position: relative;
@@ -694,6 +798,11 @@ export default {
   width: 21px;
   height: 21px;
   background: url('~icon/hospital-icon-23.png') no-repeat;
+}
+.icon-msg-color{
+  color: #1991fc;
+  font-size: 20px;
+  margin-left: 8px;
 }
 </style>
 <style>

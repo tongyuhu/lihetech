@@ -6,7 +6,7 @@
             <Hhospitalmsg></Hhospitalmsg>
             <HBloodheightotal></HBloodheightotal>
             <HWork></HWork>
-            <bloodSicklist></bloodSicklist>
+            <!-- <bloodSicklist></bloodSicklist> -->
           </el-col>
       </el-row>
   </div>
@@ -17,7 +17,7 @@ import Hhospitalmsg from '@/views/Hospital/H-hospitalMsg.vue'
 import HBloodheightotal from './H-bloodheightotal'
 import HWork from './H-work'
 import bloodSicklist from './H-bloodSicklist.vue'
-import Bus from '@/bus'
+// import Bus from '@/bus'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 // import {cookie} from './../../../untils/cookie'
 export default {
@@ -42,13 +42,13 @@ export default {
     //  domain: 'localhost', // 有效域名
     //   secure: true // 加密数据传输
     // })
-  },
-  beforeRouteLeave (to, from, next) {
+  }
+  // beforeRouteLeave (to, from, next) {
     // 离开当前页面关闭导航
     // Bus.$emit('closemenu', 1)
-    Bus.$emit('closemenu', this.$route.name)
-    next()
-  }
+    // Bus.$emit('closemenu', this.$route.name)
+    // next()
+  // }
 }
 </script>
 

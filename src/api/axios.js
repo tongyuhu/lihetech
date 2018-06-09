@@ -11,9 +11,16 @@ axios.defaults.timeout = 5000
 axios.defaults.baseURL = process.env.API_HOST // api的base_url // api接口地址
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use((config) => {
-  if (config.method === 'post') {
-    config.data = qs.stringify(config.data)
+  if (config.url === '/file/upload/commons') {
+
+  } else {
+    if (config.method === 'post') {
+      config.data = qs.stringify(config.data)
+    }
   }
+  // if (config.method === 'post') {
+  //   config.data = qs.stringify(config.data)
+  // }
   return config
 })
 
@@ -98,12 +105,12 @@ axios.interceptors.response.use(
         case '0000':
           break
         case '1001':
-          Message({
-            type: 'error',
-            message: '请求数据失败,请重试',
-            duration: 5000,
-            showClose: true
-          })
+          // Message({
+          //   type: 'error',
+          //   message: '请求数据失败,请重试',
+          //   duration: 5000,
+          //   showClose: true
+          // })
           // setTimeout(() => {
             // location.reload()
             // router.go(-1)
@@ -119,7 +126,7 @@ axios.interceptors.response.use(
             location.reload()
           })
           break
-        case '1006':
+        case '-1006':
           Message({
             type: 'warning',
             message: '对不起，您没有相关权限',
@@ -160,9 +167,12 @@ axios.interceptors.response.use(
           break
 
         case 500:
+          sessionStorage.clear()
+          // window.location.href = '/BPWatch/admin/login/page'
+          // location.reload()
+          // router.replace({path: '/login'})
           err.message = '服务器内部错误'
           break
-
         case 501:
           err.message = '服务未实现'
           break

@@ -1,6 +1,17 @@
 <template>
   <div  class="accountsetting">
     <div class="head">
+      <span>我的二维码</span>
+    </div>
+    <el-card :body-style="{ padding: '0px' }">
+      <div>
+        <div class="add-sick-img" v-loading="ercodeimg">
+          <img width="250px" :src="addSickImg" alt="二维码">
+        </div>
+        <!-- <img src="" alt=""> -->
+      </div>
+    </el-card>
+    <!-- <div class="head">
       <span>张江高科诊所</span>
     </div>
     <el-card class="msg" :body-style="{ padding: '0px' }">
@@ -26,20 +37,23 @@
         </div>
         <p class="no-tip" v-if="tipData.length===0">暂无消息</p>
       </div>
-    </el-card>
+    </el-card> -->
   </div>
 </template>
 
 <script>
 // import {deepcopy} from '@/untils/untils'
 // import {tipsApi} from './../api/components/accountSetting'
+// import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
   name: 'accountSetting',
   data () {
     return {
       deleteTipsArr: [],
       showEdit: true,
-      tipData: [{'checked': false}, {'checked': false}, {'checked': false}]
+      tipData: [{'checked': false}, {'checked': false}, {'checked': false}],
+      addSickImg: '',
+      ercodeimg: false
     }
   },
   methods: {
@@ -106,6 +120,15 @@ export default {
     }
   },
   mounted () {
+    // this.ercodeimg = true
+    this.$axios({
+      method: 'post',
+      url: 'qrcode/url'
+    })
+    .then(res => {
+      this.addSickImg = res.data.data
+      // this.ercodeimg = false
+    })
   }
   // data () {
   //   var checkEmail = (rule, value, callback) => {
@@ -486,4 +509,9 @@ $url:'./../../hospitalImage/hospitalIcon/';
   //   border-right: 10px solid #f78989;
   //   border-bottom: 10px solid #f78989;
   // }
+  .add-sick-img{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+  }
 </style>

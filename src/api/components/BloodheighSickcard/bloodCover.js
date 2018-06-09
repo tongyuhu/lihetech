@@ -10,7 +10,7 @@ export const bloodheighSickDataApi = (params, data) => {
         'adminHospitalId': params.adminHospitalId,
         'bpMeasureTime': params.bpMeasureTime,
         'pageNum': params.pageNum || 1,
-        'pageSize': params.pageSize || 7
+        'pageSize': params.pageSize || 10
       },
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       outtime: 10000

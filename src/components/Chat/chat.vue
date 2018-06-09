@@ -1,6 +1,6 @@
 <template>
   <div class="chart-window clear" v-drag="'chart'">
-    <div class="chart-window-left" v-if="false">
+    <div class="chart-window-left" v-show="false">
       <!-- 左侧聊天好友列表 -->
       <ul>
         <li v-for="item in chartList" :key="item.id">
@@ -38,24 +38,26 @@
       </div>
 
       <!-- 聊天记录 -->
-      <div class="chart-wrap-box">
-        <!-- <span slot="no-more">没有更多数据了</span> -->
-        <!-- <div v-if="!isTriggerFirstLoad" class="center">
-          <el-button type="text" @click="isTriggerFirstLoad = true" >点击加载更多...</el-button>
+      <div class="chart-wrap-box" id="chatWidow" ref="chatWidow">
+        <div v-if="!currentChat.hasHistroy" class="center">
+          <!-- <span>没有更多聊天记录了</span> -->
+        </div>
+        <div v-else-if="!isTriggerFirstLoad" class="center">
+          <el-button type="text" @click="isTriggerFirstLoad = true" >点击查看聊天记录...</el-button>
         </div>
         <infinite-loading v-else  @infinite="infiniteHandler" 
         direction="top"  
         spinner="circles"
-        :distance="10"
-        ></infinite-loading> -->
+        >
+          <span slot="no-more">没有更多数据了</span>
+        </infinite-loading>
         <chartMessageGroup>
           <chartMessage
-          v-for="(item) in historyMsg" :key="item.index"
-          :who="item.senderUserId"
+          v-for="(item,index) in historyMsg" :key="index"
+          :who="item.senderUserId ? item.senderUserId:''"
+          :type="item.content.messageName"
           >
-          {{historyMsg.length !== 0 ? item.content.content :''}}
-          <!-- <img src=""> -->
-            <!-- <img src="" alt=""> -->
+            <chatContent :message="item"></chatContent>
           </chartMessage>
         </chartMessageGroup>
       </div>
@@ -64,18 +66,20 @@
         <button>
           <span class="smile-icon"></span>
         </button>
+        <!-- <button > -->
+          <a class="a-upload">
+            <!-- <input type="text"> -->
+            <input type="file" accept="image/jpg" @change="sendImgMsg($event)">
+            <!-- <input type="file" accept="image/jpg" @change="changeImg($event)" value="a"> -->
+            <span class="file-icon"></span>
+          </a>
+        <!-- </button> -->
         <button>
-          <span class="file-icon"></span>
+          <span class="phone-icon" ></span>
         </button>
-        <button>
-          <span class="phone-icon"></span>
+        <button @click="callVideo">
+          <span class="video-icon" ></span>
         </button>
-        <button>
-          <span class="video-icon"></span>
-        </button>
-        <!-- <span class="iconfont icon-wenjian"></span>
-        <span class="iconfont icon-31yuyinxuanzhong"></span>
-        <span class="iconfont icon-shipin"></span> -->
       </div>
 
       <!-- 写信息 -->
@@ -91,14 +95,23 @@
         </div>
       </div>
     </div>
+
+
+
+
+    <!-- <div>
+      <video src=""></video>
+    </div> -->
   </div>
 </template>
 
 <script>
 import chartMessage from './chartMessage'
 import chartMessageGroup from './chartMessageGroup'
+import chatContent from './chatContent'
 import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
-import Bus from '@/bus.js'
+// import Bus from '@/bus.js'
+import {uploadFileApi} from '@/api/components/editAdmin.js'
 import InfiniteLoading from 'vue-infinite-loading'
 export default {
   name: 'chart',
@@ -107,113 +120,79 @@ export default {
   components: {
     chartMessage,
     chartMessageGroup,
-    InfiniteLoading
+    InfiniteLoading,
+    chatContent
   },
   data () {
     return {
-      // historyMsg: [
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'other',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'other',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'self',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   },
-      //   {
-      //     who: 'other',
-      //     type: 'text',
-      //     content: {
-      //       content: '1容联云通讯国内领先的云通讯平台容联云通讯国内领先的云通讯平台'
-      //     }
-      //   }
-      // ],
-      readyMsg: '',
+      readyMsg: null,
       chartList: [
-        {
-          name: '夏邦为',
-          historyMsg: [],
-          userImg: ''
-        },
-        {
-          name: '夏良凯',
-          historyMsg: []
-        },
-        {
-          name: '夏良开',
-          historyMsg: []
-        }
       ],
       showList: false,
       isTriggerFirstLoad: false,
-      historyMsg: []
-      // showChart: true
+      imgArr: [],
+      noMoreHistroy: false
     }
   },
   computed: {
     ...mapGetters([
       'currentChat'
     ]),
-    ...mapState([
-      'rongUserId'
-    ])
+    ...mapState({
+      rongUserId: 'rongUserId',
+      historyMsg: 'history',
+      adminInfo: 'adminInfo'
+    })
     // historyMsg () {
     //   return this.currentChat.history
     // }
   },
+  // watch: {
+  //   historyMsg: {
+  //     handler: function (val, oldVal) {
+  //       let vm = this
+  //       // if (val !== oldVal) {
+  //       this.$nextTick(() => {
+  //         setTimeout(function () {
+  //           let container = vm.$el.querySelector('#chatWidow')
+  //           container.scrollTop = container.scrollHeight
+  //           console.log('container.scrollTop', container.scrollTop)
+  //           console.log('container.scrollHeight', container.scrollHeight)
+  //           // container.scrollIntoView()
+  //         }, 1500)
+  //           // document.getElementById('chatMessage').scrollIntoView()
+  //           // document.getElementById('chatMessage').scrollTop = document.getElementById('chatMessage').scrollHeight
+  //       })
+  //       // }
+  //     },
+  //     deep: true
+  //   }
+  // },
   methods: {
     ...mapActions([
       'setaddChatFriend'
     ]),
     ...mapMutations([
       'addChatFriend',
-      'closeChatWindow'
+      'closeChatWindow',
+      'getCurrentFriendMsg',
+      'sethistory',
+      'clearCurrentChat',
+      'openVideo'
     ]),
     sendMsg () {
+      // console.log('historyMsg', this.historyMsg)
       let vm = this
       // vm.historyMsg = []
-      if (this.readyMsg !== '') {
+      let canSend = false
+      vm.readyMsg = this._.trim(vm.readyMsg)
+      if (vm.readyMsg === '') {
+        canSend = false
+      } else {
+        canSend = true
+      }
+      if (canSend) {
+        console.log('当前聊天', vm.currentChat)
         let targetId = vm.currentChat.userId
         let conversationtype = RongIMLib.ConversationType.PRIVATE
         let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
@@ -222,20 +201,20 @@ export default {
             let msgObj = {
               content: {
                 messageName: 'TextMessage',
+                // messageType: 'TextMessage',
                 content: vm.readyMsg
               },
               senderUserId: vm.rongUserId
             }
-            vm.historyMsg = vm.currentChat.history
-            vm.historyMsg.push(msgObj)
-            // vm.currentChat.history.push(msgObj)
-            console.log('urrentChat.history', vm.currentChat.history)
-            console.log('msg', msg)
-            console.log('currentChat', vm.currentChat)
-            console.log('rongUserId', vm.rongUserId)
+            if (vm._.has(vm.adminInfo, 'headPortraitUrl')) {
+              msgObj.userImg = vm.adminInfo.headPortraitUrl
+            }
+            // vm.historyMsg = vm.currentChat.history
+            vm.sethistory(vm.historyMsg)
+            // vm.sethistory(vm.currentChat.history)
+            vm.getCurrentFriendMsg(msgObj)
             let newChat = vm.currentChat
             newChat.history = vm.historyMsg
-            console.log('newChat', newChat)
             vm.addChatFriend(newChat)
             // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
             console.log('Send successfully')
@@ -263,66 +242,221 @@ export default {
                 info = '不在聊天室中'
                 break
               default :
-                info = x
+                info = '发送失败'
                 break
             }
             console.log('发送失败:' + info)
+            vm.$message({
+              showClose: true,
+              message: '发送失败，请刷新浏览器恢复聊天系统',
+              type: 'error'
+            })
           }
         })
       }
+      this.$nextTick(() => {
+        setTimeout(function () {
+          let container = vm.$el.querySelector('#chatWidow')
+          container.scrollTop = container.scrollHeight
+          // console.log('container.scrollTop', container.scrollTop)
+          // console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+        }, 100)
+      })
+    },
+    sendImgMsg: function (e) {
+      // uploadFileApi
+      let vm = this
+      let file = e.target.files[0]
+      let formdata = new FormData()
+      formdata.append('files', file)
+      let base64Str
+      let image = new Image()
+      image.src = window.URL.createObjectURL(file)
+      // image.src = window.URL.createObjectURL(files.item(dd))
+      image.onload = function () {
+              // 默认按比例压缩
+        let w = image.width
+        let h = image.height
+        let scale = w / h
+        w = 200
+        h = w / scale
+        // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
+        let quality = 0.7
+        // 生成canvas
+        let canvas = document.createElement('canvas')
+        let ctx = canvas.getContext('2d')
+              // 创建属性节点
+        let anw = document.createAttribute('width')
+        anw.nodeValue = w
+        let anh = document.createAttribute('height')
+        anh.nodeValue = h
+        canvas.setAttributeNode(anw)
+        canvas.setAttributeNode(anh)
+        ctx.drawImage(image, 0, 0, w, h)
+        let ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
+        // let base64 = canvas.toDataURL('image/' + ext, quality)
+        let base64 = canvas.toDataURL('image/' + ext, quality)
+        let base = base64.split(',')
+        let str = base[1]
+        base64Str = str
+        // 回调函数返回base64的值
+      }
 
-      console.log(this.readyMsg)
+      this.$axios(uploadFileApi(formdata))
+      .then(res => {
+        if (res.data.code === '0000') {
+          let targetId = vm.currentChat.userId
+          var imageUri = res.data.data.seeFile // 上传到自己服务器的 URL。
+          // var msg = new RongIMLib.ImageMessage({imageUri: imageUri})
+          var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
+          var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
+
+          RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
+            onSuccess: function (message) {
+                // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
+              let msgObj = {
+                content: {
+                  messageName: 'ImageMessage',
+                  // content: imageUri
+                  'imageUri': imageUri
+                },
+                senderUserId: vm.rongUserId
+              }
+                // vm.historyMsg = vm.currentChat.history
+              vm.sethistory(vm.historyMsg)
+              vm.getCurrentFriendMsg(msgObj)
+              console.log('msgObjimg', msgObj)
+              let newChat = vm.currentChat
+              newChat.history = vm.historyMsg
+              vm.addChatFriend(newChat)
+              console.log('Send successfully')
+              vm.readyMsg = ''
+              console.log('Send successfully')
+            },
+            onError: function (errorCode, message) {
+              var info = ''
+              switch (errorCode) {
+                case RongIMLib.ErrorCode.TIMEOUT:
+                  info = '超时'
+                  break
+                case RongIMLib.ErrorCode.UNKNOWN_ERROR:
+                  info = '未知错误'
+                  break
+                case RongIMLib.ErrorCode.REJECTED_BY_BLACKLIST:
+                  info = '在黑名单中，无法向对方发送消息'
+                  break
+                case RongIMLib.ErrorCode.NOT_IN_DISCUSSION:
+                  info = '不在讨论组中'
+                  break
+                case RongIMLib.ErrorCode.NOT_IN_GROUP:
+                  info = '不在群组中'
+                  break
+                case RongIMLib.ErrorCode.NOT_IN_CHATROOM:
+                  info = '不在聊天室中'
+                  break
+                default :
+                  info = x
+                  break
+              }
+              console.log('发送失败:' + info)
+            }
+          })
+        }
+        return false
+      })
+
+      this.$nextTick(() => {
+        setTimeout(function () {
+          let container = vm.$el.querySelector('#chatWidow')
+          container.scrollTop = container.scrollHeight
+          console.log('container.scrollTop', container.scrollTop)
+          console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+        }, 100)
+      })
     },
     closeChart () {
-      // this.$emit('colseChat')
-      // this.showChart = false
+      this.clearCurrentChat()
       this.closeChatWindow()
     },
+    // 加载更多
     infiniteHandler ($state) {
       let vm = this
-      let state = $state
-
-      let arr = [
-        {
-          who: 'self',
-          type: 'text',
-          msg: '1111111111111111111'
-        },
-        {
-          who: 'other',
-          type: 'text',
-          msg: '2222222222222222222222222'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '3333333333333333333333333333'
-        },
-        {
-          who: 'self',
-          type: 'text',
-          msg: '44444444444444444444444444444444'
-        }
-      ]
       new Promise(function (resolve, reject) {
-        setTimeout(function () {
-          vm.isTriggerFirstLoad = false
-          resolve('success')
-          console.log('1')
-        }, 1500)
+        vm.getHistroyMsgRong(vm.currentChat.userId)
+        resolve('success')
       }).then(function (resolve) {
         if (resolve === 'success') {
           if (!vm.isTriggerFirstLoad) {
-            vm.$refs.infiniteLoading.scrollTop = 400
             vm.isTriggerFirstLoad = false
-            state.loaded()
-            // $state.reset()
-            state.complete()
-            console.log('2')
+            if (!vm.currentChat.hasHistroy) {
+              $state.complete()
+            } else {
+              $state.loaded()
+            }
           }
         }
       })
-      // $state.complete()
+    },
+    // 获取历史消息
+    getHistroyMsgRong (targetuserId) {
+      let vm = this
+      let timestrap = null
+      let count = 20
+      let userId = targetuserId
+      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+      RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
+        onSuccess: function (list, hasMsg) {
+          vm.sethistory(vm.currentChat.history)
+            // vm.getCurrentFriendMsg(msgObj)
+          console.log('历史消息VM', vm.currentChat)
+          if (vm._.has(vm.currentChat, 'history')) {
+            if (vm.currentChat.history.length === 0) {
+              vm.sethistory(list)
+            } else {
+              vm.sethistory(vm._.concat(list, vm.currentChat.history))
+            }
+          }
+          let newChat = vm.currentChat
+          newChat.history = vm.historyMsg
+          newChat.hasHistroy = hasMsg
+          vm.addChatFriend(newChat)
+          console.log('历史消息', list, hasMsg)
+          console.log('历史消息bend', vm.historyMsg)
+          vm.isTriggerFirstLoad = false
+          // if (!hasMsg) {
+          //   vm.noMoreHistroy = true
+          // }
+        },
+        onError: function (error) {
+          console.log('历史消息获取失败', error)
+        // APP未开启消息漫游或处理异常
+        // throw new ERROR ......
+        }
+      })
+    },
+    callVideo () {
+      this.openVideo()
+      let vm = this
+      var CallType = RongIMLib.VoIPMediaType
+      var params = {
+      // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+        conversationType: RongIMLib.ConversationType.PRIVATE,
+      // 会话目标 Id，群 Id 或者 userId。
+        // targetId: vm.currentChat.userId,
+        targetId: 'admin_3',
+      // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
+        // inviteUserIds: inviteUserIds,
+      // 音频类型
+      // CallType.MEDIA_VEDIO
+      // CallType.MEDIA_AUDIO
+        mediaType: CallType.MEDIA_AUDIO
+      }
+      RongCallLib.call(params, function (error) {
+        console.log('发送视频失败', error)
+        // do something...
+      })
     }
   },
   watch: {
@@ -339,13 +473,10 @@ export default {
     }
   },
   mounted () {
-    let vm = this
-    Bus.$on('history', (val) => {
-      vm.historyMsg = val
-    })
-    Bus.$on('hasMessage', (val) => {
-      vm.historyMsg.push(val)
-    })
+    // let vm = this
+    // Bus.$on('history', (val) => {
+    //   vm.historyMsg = val
+    // })
   }
 }
 </script>
@@ -378,7 +509,7 @@ export default {
     display: flex;
     top:20%;
     left:30%;
-    z-index: 999;
+    z-index: 999999999;
     box-shadow: 0 0 18px 0px rgba(0, 0, 0, 0.3);
     &-left{
       // float: left;
@@ -592,6 +723,42 @@ export default {
   }
   .center{
     text-align:center;
+    font-size: 14px;
+    color: #666;
+  }
+
+
+  .a-upload {
+    /* padding: 4px 10px; */
+    height: 25px;
+    line-height: 32px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    /* background: #fafafa; */
+    /* border: 1px solid #ddd; */
+    /* border-radius: 4px; */
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+  .a-upload  input {
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+      filter: alpha(opacity=0);
+      cursor: pointer
+  }
+
+  .a-upload:hover {
+      /* color: #444; */
+      /* background: #eee; */
+      /* border-color: #ccc; */
+      text-decoration: none
   }
 </style>
 

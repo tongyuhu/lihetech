@@ -17,7 +17,7 @@
           <td colspan="2" class="table-head side-left">用户自述</td>
           <td>
             {{readme}}
-            <el-button size="mini" type="text" class="table-btn" @click="play">
+            <el-button size="mini" type="text" class="table-btn" @click="play(readme)">
               <i class="play"></i>播放
             </el-button>
             <audio :src="readmeUrl" id="audio">
@@ -44,11 +44,26 @@
         </tr>
 
         <tr>
-          <td rowspan="3" class="table-head">医治方案</td>
+          <td class="table-head">医治方案</td>
+          <!-- <td rowspan="3" class="table-head">医治方案</td> -->
           <td class="table-head">用药</td>
           <td>
             <div class="use-medicine">
-              <div class="use-medicine-item" v-for="(item,index) in medicineData.data" :key="index">
+              <!-- {{medicine}} -->
+
+
+              <div v-if="medicine.length !==0" class="use-medicine-item" v-for="(item,index) in medicine" :key="index">
+                <div>
+                  <div>
+                    <div>{{item.medicineName}}</div>
+                    <div>
+                      <span>{{item.everyDosage ?item.everyDosage+ item.unit+'/次':""}}</span>
+                      <span>{{ item.usageTimes ? item.usageTimes :''}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="use-medicine-item" v-for="(item,index) in medicineData.data" :key="index">
                 <div>
                   <div>
                     <button class="delete-medicine-btn" v-if="item.showDelete" @click.stop="deleteMedicineHandle(item,index)">
@@ -63,7 +78,7 @@
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> -->
               <!-- <div class="use-medicine-item">
                 <div>
                   <div>
@@ -92,7 +107,7 @@
             </div>
           </td>
         </tr>
-        <tr>
+        <tr v-show="false">
           <!-- <td>3</td> -->
           <td class="table-head">运动</td>
           <td>
@@ -105,7 +120,7 @@
             </el-button> -->
           </td>
         </tr>
-        <tr>
+        <tr v-show="false">
           <!-- <td>4</td> -->
           <td class="table-head">饮食</td>
           <td>
@@ -340,9 +355,12 @@ export default {
 
       this.$emit('preBtn', this.currentpage)
     },
-    play () {
+    play (msg) {
       this.$nextTick(function () {
-        document.getElementById('audio').play()
+        // document.getElementById('audio').play()
+        var audio = new SpeechSynthesisUtterance(msg)
+        // console.log(msg)
+        window.speechSynthesis.speak(audio)
       })
       console.log('用户自述')
     },

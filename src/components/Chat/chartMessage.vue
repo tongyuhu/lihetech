@@ -3,10 +3,13 @@
       <div :class="[cls ? 'left' : 'right']">
         <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
           <div>
-            <img class="avatar" :src="userImg" alt="头像">
+            <img class="avatar" :src="userImgChat" alt="头像" ref="onerrorimg">
           </div>
-          <div :class="['message-wrap',cls ? 'left-angle':'right-angle']">
+          <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
+            <div :class="[nobg?'no-bg':'']">
               <slot></slot>
+            </div>
+          <!-- <div :class="['message-wrap',cls ? 'left-angle':'right-angle',nobg?'no-bg':'']"> -->
           </div>
         </div>
       </div>
@@ -25,7 +28,8 @@
 
 <script>
 // import img from '~icon/hospital-icon2-04.png'
-import {mapState} from 'vuex'
+import publicStatic from '@/publicData/const.js'
+import {mapState, mapGetters} from 'vuex'
 export default {
   name: 'chartmessage',
   props: {
@@ -35,43 +39,105 @@ export default {
     },
     userImg: {
       type: [String],
-      default: '/static/user.png'
+      default: publicStatic.onlineStatic + '/static/user.png'
     },
     moreMessage: {
       type: [Boolean],
       default: false
+    },
+    type: {
+      type: [String],
+      default: 'TextMessage'
     }
   },
   data () {
     return {
-      cls: false
+      cls: false,
+      nobg: false,
+      chatclass: '',
+      userImgChat: this.userImg
     }
   },
   computed: {
     ...mapState([
       'rongUserId'
-    ])
+    ]),
+    ...mapGetters(['adminImg', 'currentChatImg'])
   },
   methods: {
+    imgExists () {
+      let vm = this
+      this.$nextTick(function () {
+        vm.$refs.onerrorimg.onerror = (e) => {
+          // 默认图片
+          let imgUrl = publicStatic.onlineStatic + '/static/user.png'
+          let img = new Image()
+          img.src = imgUrl
+            // 判断图片大小是否大于0 或者 图片高度与宽度都大于0
+          if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
+            vm.userImgChat = imgUrl
+          } else {
+            vm.userImgChat = imgUrl
+            // e.src = imgUrl
+            // 默认图片也不存在的时候
+          }
+        }
+      })
+    }
   },
   watch: {
     who: {
       handler: function (val) {
         if (this.who === this.rongUserId) {
           this.cls = false
+          if (this.adminImg) {
+            this.userImgChat = this.adminImg
+          }
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
+          if (this.currentChatImg) {
+            this.userImgChat = this.currentChatImg
+          }
         }
       },
       immediate: true
     }
+  },
+  mounted () {
+    if (this.type === 'ImageMessage') {
+      this.nobg = true
+      this.chatclass = ''
+      // this.cls = '0000'
+    } else {
+      if (this.cls) {
+        this.chatclass = 'left-angle'
+      } else {
+        this.chatclass = 'right-angle'
+      }
+    }
+    this.imgExists()
   }
 
 }
 </script>
 
 <style lang="scss" scoped>
+.no-bg{
+  background: rgba(255, 255, 255, 0) !important;
+}
+.no-bg .left-angle::before{
+  background: rgba(255, 255, 255, 0) !important;
+  content: "";
+  width:0;
+  height:0;
+}
+.no-bg .right-angle::before{
+  background: rgba(255, 255, 255, 0) !important;
+  content: "";
+  width:0;
+  height:0;
+}
   .center{
     text-align: center;
   }
@@ -81,10 +147,11 @@ export default {
   .left{
     width: 100%;
     justify-content: flex-start;
+    min-width: 10px;
   }
   .right{
     width: 100%;
-
+    min-width: 10px;
   }
   // $bagcolor:#fff;
   // .clear::after{
@@ -98,6 +165,7 @@ export default {
   .avatar{
     width: 46px;
     height: 46px;
+    border-radius: 50%;
   }
   li{
     display: block;
@@ -128,7 +196,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:30%;
+      top:45%;
       right: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;
@@ -158,7 +226,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:30%;
+      top:45%;
       left: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;

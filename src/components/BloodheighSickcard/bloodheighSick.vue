@@ -6,9 +6,9 @@
       <div class="sick-card-head-left">
         <p class="name">{{name}}</p>
         <div class="sick-card-head-left-msg">
-          <span>性别:{{sex}}</span>
-          <span>年龄:{{age}}</span>
-          <span>电话:{{mobile}}</span>
+          <span>性别:{{sex ? sex :faceDATA.sex}}</span>
+          <span>年龄:{{age ? age:faceDATA.age}}</span>
+          <span>电话:{{mobile?mobile :faceDATA.mobile}}</span>
           <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
         </div>
       </div>
@@ -47,8 +47,9 @@
               </div>
               <div class="sick-history-bottom">
                 <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
-                <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button>
-                <button><span>检查单</span></button>
+                <button><span>体检表</span></button>
+                <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button> -->
+                <button @click="openChecklist"><span>检查单</span></button>
               </div>
             </div>
             <!-- 病人简历 end  -->
@@ -57,25 +58,17 @@
             @preBtn="changePage"
             :sickData="cardData"
             :totalPage="totalPage"
-            v-show="showcard">
+            v-if="showcard">
             </card>
             <component
-            v-show="!showcard"
+            ref="facediagnosis"
+            v-if="!showcard"
             @complete="completeDiag"
             @openSickCard="openHistroyCard"
+            @openchecklist="openChecklist"
+            @faceData="setfaceData"
             :sickID="sickID" 
             :hospitalId="hospitalId"
-            :name="name"
-            :sex="sex"
-            :age="age"
-            :mobile="mobile"
-            :doctorDiagnos="doctorDiagnos"
-            :heigh="height"
-            :weight="weight"
-            :sysIllnessHistoryNameDisease="sysIllnessHistoryNameDisease"
-            :sysIllnessHistoryNameGenetic="sysIllnessHistoryNameGenetic"
-            :habits="habits"
-            :sysIllnessHistoryNameBpConcurrent="sysIllnessHistoryNameBpConcurrent"
             :is="face"></component>
             <!-- 病历卡 end-->
             <!-- 今日笔记 -->
@@ -162,6 +155,49 @@
       >
       </card>
     </el-dialog>
+    <el-dialog
+    width="80%"
+    :visible.sync="showchecklist"
+    center>
+
+    <span slot="title" class="dialog-title">
+        检查单
+    </span>
+    <span slot="footer" v-if="checklist.length === 0 && faceDATA.userDetectReportList.length===0">
+      暂无检查单
+    </span>
+
+    <div class="check-list" v-if="faceDATA.userDetectReportList.length !==0">
+      <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
+        <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
+    </div>
+    <div class="check-list" v-else>
+      <div v-for="(img,index) in checklist" :key="index">
+        <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
+      <div class="empty-div">
+      </div>
+    </div>
+    <imgfloat
+    :imgsrc="checklistimgUrl"
+    ref="checklistimg">
+    </imgfloat>
+      <!-- <checkList
+      :list="checklist" :row="true">
+
+      </checkList> -->
+    </el-dialog> 
   </div>
 </template>
 
@@ -180,6 +216,8 @@ import original from './original'
 import card from './card'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
+import checkList from '@/components/checklist'
+import imgfloat from '@/components/imgFloat'
 // import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
@@ -196,10 +234,22 @@ export default {
     original,
     card,
     healthForm,
-    face
+    face,
+    checkList,
+    imgfloat
   },
   data () {
     return {
+      faceDATA: {
+        sex: null,
+        age: null,
+        mobile: null,
+        userDetectReportList: []
+      },
+      checklistimgUrl: '',
+      // 体检单
+      showchecklist: false,
+      checklist: [],
       cardArr: [],
       cardData: {},
       activeIndex: 1,
@@ -254,10 +304,10 @@ export default {
     changePage (currentpage) {
       this.currentPage = currentpage
       this.getCardData()
-      console.log(currentpage)
     },
     getCardData () {
       // let vm = this
+
       let params = {
         userId: this.sickID,
         adminHospitalId: this.hospitalId,
@@ -266,6 +316,7 @@ export default {
       }
       this.$axios(bloodheighSickDataApi(params))
       .then(res => {
+        this.checklist = []
         if (res.data) {
           if (res.data.data) {
             this.totalPage = res.data.pages
@@ -280,13 +331,33 @@ export default {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
               // this.showcard = true
-              console.log(this.cardData)
+              console.log('病历卡信息', this.cardData)
             }
+            if (this._.has(res.data.data[0], 'userDetectReportList')) {
+              if (res.data.data[0].userDetectReportList.length > 0) {
+                // let list = []
+                res.data.data[0].userDetectReportList.forEach(item => {
+                  let obj = {}
+                  obj.url = process.env.IMG_URL + item.reportUrl
+                  obj.id = item.id
+                  this.checklist.push(obj)
+                })
+              }
+            }
+            // console.log('病历卡体检单', res.data.data[0])
+            console.log('病历卡体检单', this.checklist)
           }
         }
       })
     },
+    setfaceData (val) {
+      // this.sex = val.sex
+      // this.age = val.age
+      // this.mobile = val.mobile
+      this.faceDATA = val
+    },
     completeDiag () {
+      this.getCardData()
       this.showcard = true
     },
     openHistroyCard () {
@@ -294,6 +365,18 @@ export default {
     },
     handleClose () {
       this.histroyCard = false
+    },
+    openChecklist () {
+      this.showchecklist = true
+    },
+    showchecklistimg (url) {
+      this.checklistimgUrl = url
+      // Bus.$emit('showbigimg')
+      let vm = this
+      this.$nextTick(function () {
+        vm.$refs.checklistimg.showBig()
+      })
+      // this.$refs.checklistimg.showBig()
     }
   },
   computed: {
@@ -313,30 +396,49 @@ export default {
       }
     },
     // 性别
-    sex () {
-      if (this.cardData) {
-        if (this.cardData.sex === 1) {
-          return '男'
+    sex: {
+
+      get: function () {
+        if (this.cardData) {
+          if (this.cardData.sex === 1) {
+            return '男'
+          }
+          if (this.cardData.sex === 0) {
+            return '女'
+          }
         }
-        if (this.cardData.sex === 0) {
-          return '女'
-        }
+      },
+      set: function (newval) {
+        return newval
       }
     },
     // 年龄
-    age () {
-      if (this.cardData) {
-        if (this.cardData.age) {
-          return this.cardData.age + '岁'
+    age: {
+
+      get: function () {
+        if (this.cardData) {
+          if (this.cardData.age) {
+            return this.cardData.age + '岁'
+          }
         }
+      },
+      set: function (newval) {
+        return newval
       }
     },
     // 电话
-    mobile () {
-      if (this.cardData) {
-        if (this.cardData.mobile) {
-          return this.cardData.mobile
+    mobile: {
+      get: function () {
+        if (this.cardData) {
+          if (this.cardData.mobile) {
+            return this.cardData.mobile
+          }
         }
+      },
+      set: function (newval) {
+        console.log('newvalmobile', newval)
+        // this.mobile = newval
+        return newval
       }
     },
     // 医生诊断
@@ -484,7 +586,7 @@ export default {
   },
   mounted () {
     let vm = this
-    this.face = face
+    vm.face = face
     // this.SET_SICK_CARD(false)
     // Bus.$on('huizhen', function () {
     //   vm.huizhen = true
@@ -647,7 +749,7 @@ export default {
     outline:none;
   }
   .sick-history-bottom button:nth-child(1) span{
-     position: relative;
+    position: relative;
   }
   .sick-history-bottom button:nth-child(1) span:before{
     position: absolute;
@@ -660,7 +762,7 @@ export default {
     top:1px;
   }
   .sick-history-bottom button:nth-child(2) span{
-     position: relative;
+    position: relative;
   }
   .sick-history-bottom button:nth-child(2) span:before{
     position: absolute;
@@ -672,5 +774,21 @@ export default {
     left:-16px;
     top:1px;
   }
-
+  .check-list{
+    display: flex;
+    flex-wrap:wrap;
+    justify-content: space-between;
+  }
+  .check-list div{
+    padding: 15px;
+    width: 25%;
+  }
+  .check-img{
+    width: 100%;
+    cursor: pointer;
+  }
+  .empty-div{
+    width: 25%;
+    height: 0;
+  }
 </style>

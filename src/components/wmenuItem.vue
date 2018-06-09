@@ -32,9 +32,10 @@ export default {
   methods: {
     checkMenuItem () {
       if (this.routerName) {
-        this.$router.push({
-          name: this.routerName
-        })
+        // this.$router.push({
+        //   name: this.routerName
+        // })
+        this.$emit('activeitemmenu', {routerName: this.routerName})
       }
       this.isChecked = true
       let arr = this.findBrothersComponents(this, 'wmenuitem')
@@ -42,8 +43,9 @@ export default {
         item.isChecked = false
       })
       if (this.id) {
-        this.$emit('activeitemmenu', this.id)
+        this.$emit('activeitemmenu', {id: this.id})
       }
+      console.log('执行子路由')
     },
     findBrothersComponents (context, componentName) {
       let res = context.$parent.$children.filter(item => {

@@ -31,13 +31,15 @@
       <div class="chart" >
         <div class="flex">
           <div class="flex-btn-left">
-            <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-left" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+            <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-left" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+            <!-- <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-left" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
           </div>
           <div class="chart-min-width">
             <div v-loading="loading" id='useDrug'  :style="{width:'auto',height:'650px'}"></div>
           </div>
           <div class="flex-btn">
-            <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-right" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+            <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-right" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+            <!-- <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-right" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
           </div>
         </div>
       </div>
@@ -66,6 +68,7 @@ export default {
     return {
       // data: [
       // ],
+      sourData: [],
       // 图表数据
       optionData: [],
       // 图表X轴
@@ -140,17 +143,19 @@ export default {
           copydata = vm._.sortBy(copydata, function (item) {
             return item.takeMedicineTime
           })
-          copydata = copydata.reverse()
-          let useDrugData = vm.formatter(copydata)
+          // copydata = copydata.reverse()
+          this.sourData = vm._.concat(copydata, this.sourData)
+          let useDrugData = vm.formatter(this.sourData)
           let theX = vm.axisX(copydata)
-          vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
-          vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
-
-          console.log('copydata', copydata)
-          console.log('useDrugData', useDrugData)
-          console.log('theX', theX)
-          console.log('optionData', this.optionData)
+          vm.optionData = vm.seriesItem(useDrugData)
+          // vm.optionData = vm._.concat(vm.seriesItem(useDrugData), vm.optionData)
+          vm.xasis = vm._.uniq(vm._.concat(theX, vm.xasis))
+          // vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
+          // vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
+          vm.optionData = vm.optionData
+          vm.xasis = vm.xasis
         }
+
         vm.loading = false
         let position = this.computeStartend(vm.page.currentPage, vm.page.pageNum)
         let useDrug = echarts.init(document.getElementById('useDrug'))
@@ -163,25 +168,26 @@ export default {
     formatter (arr) {
       let vm = this
       let readyarr = []
-      // let befor = {
-      //   takeMedicineTime: '00000000000'
-      // }
+      let befor = {
+        takeMedicineTime: '00000000000'
+      }
+      let initX = -1
       vm._(arr).forEach(function (value, index) {
         // if (index === 0) {
           // value.x = 0
         // } else {
         let time = value.takeMedicineTime.slice(0, 10)
-        let befortime = vm.befor.takeMedicineTime.slice(0, 10)
+        let befortime = befor.takeMedicineTime.slice(0, 10)
         if (vm._.eq(time, befortime)) {
-          value.x = vm.initX
+          value.x = initX
         } else {
-          vm.initX++
-          value.x = vm.initX
+          initX++
+          value.x = initX
         }
         // }
         value.y = vm.axisY(value.takeMedicineTime)
         readyarr.push(value)
-        vm.befor = value
+        befor = value
       })
       return readyarr
     },
@@ -391,7 +397,7 @@ export default {
             end: zoomend,
             zoomlock: true,
             minValueSpan: 10,
-            maxValueSpan: 10,
+            maxValueSpan: 15,
             throttle: 500,
             filterMode: 'empty',
             zoomOnMouseWheel: false
@@ -681,12 +687,12 @@ export default {
       if (pageNum === 1 && pages === 1) {
         page.start = 0
         page.end = 100
-      } else if (pageNum === 1) {
+      } else if (pageNum === pages) {
         page.start = 0
-        page.end = parseInt((pageNum / pages) * 100)
-      } else if (pageNum < pages || pageNum === pages) {
-        page.start = parseInt(((pageNum - 1) / pages) * 100)
-        page.end = parseInt((pageNum / pages) * 100)
+        page.end = parseInt((1 / pages) * 100)
+      } else if (pageNum < pages) {
+        page.start = parseInt(((pages - pageNum) / pages) * 100)
+        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
       }
       return page
     },
@@ -805,7 +811,7 @@ export default {
     position: absolute;
     bottom:50%;
     right: 0;
-    z-index:999;
+    z-index:99;
   }
   .flex-btn-left{
     max-width: 55px;
@@ -815,7 +821,7 @@ export default {
     position: absolute;
     bottom:50%;
     left: 25px;
-    z-index:999;
+    z-index:99;
   }
   .widthone{
     width: 100%;
