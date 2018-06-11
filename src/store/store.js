@@ -6,18 +6,11 @@ import axios from '@/api/axios'
 import publicStatic from '@/publicData/const.js'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
+import {imgExists} from './../untils/untils'
 // import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
-const imgExists = function (checkimg) {
-  let ImgObj = new Image() // 判断图片是否存在
-  ImgObj.src = process.env.IMG_URL + checkimg
-  // 没有图片，则返回-1
-  if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
-    return process.env.IMG_URL + checkimg
-  } else {
-    return publicStatic.onlineStatic + '/static/user.png'
-  }
-}
+
+// return publicStatic.onlineStatic + '/static/user.png'
 export const store = new Vuex.Store({
   state: {
     adminInfo: {},
@@ -254,10 +247,12 @@ export const store = new Vuex.Store({
                 obj.hasHistroy = true
                 if (_.has(item, 'userImage')) {
                   if (item.userImage.length !== 0) {
-                    obj.userImg = imgExists(item.userImage)
+                    obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
                     // obj.userImg = process.env.IMG_URL + item.userImage
                   }
                   // process.env.IMG_URL
+                } else {
+                  obj.userImg = imgExists(null, publicStatic.onlineStatic + '/static/user.png')
                 }
                 list.push(obj)
               }

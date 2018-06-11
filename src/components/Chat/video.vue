@@ -5,13 +5,14 @@
     <div class="close">
       <el-button @click="close" :style="{'color':'#041421','font-size':'24px'}" type="text" icon="el-icon-close"></el-button>
     </div>
-    <div class="video-chat" id="videoChat">
-      <div>
+    <div class="video-chat">
+      <div id="videoChat">
 
       </div>
-      <div>
-        <el-button>挂断</el-button>
-        <el-button>静音</el-button>
+      <div class="btn-wrap">
+        <el-button @click="hungCall">挂断</el-button>
+        <el-button v-if="voice" @click="noVoice">静音</el-button>
+        <el-button v-if="!voice" @click="hasVoice">取消静音</el-button>
       </div>
     </div>
   </div>
@@ -25,12 +26,30 @@ export default {
   },
   data () {
     return {
-
+      voice: true
     }
   },
   methods: {
     close () {
+      document.getElementById('videoChat').innerHTML = ''
       this.$emit('close')
+    },
+    hung () {
+      this.$nextTick(function () {
+        document.getElementById('videoChat').innerHTML = ''
+      })
+    },
+    hungCall () {
+      document.getElementById('videoChat').innerHTML = ''
+      this.$emit('hungcall')
+    },
+    noVoice () {
+      this.$emit('mute')
+      this.voice = false
+    },
+    hasVoice () {
+      this.$emit('unmute')
+      this.voice = true
     }
   }
 
@@ -54,7 +73,7 @@ export default {
   .video-chat{
     width: 800px;
     height: 600px;
-    background: rgb(102, 60, 60);
+    // background: rgb(102, 60, 60);
     padding:20px;
     margin: 0 auto;
     margin-bottom: 20px;
@@ -68,6 +87,19 @@ export default {
   .close{
     text-align: right;
     padding-right: 20px;
+  }
+  #videoChat{
+    max-width: 1280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    border:1px solid #666;
+  }
+  .btn-wrap{
+    text-align: center;
+    padding-top: 20px;
   }
 </style>
 

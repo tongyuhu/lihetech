@@ -32,7 +32,8 @@
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
                     ref="friendImg"
-                    :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt="">
+                    :src="friend.userImg" alt="">
+                    <!-- :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt=""> -->
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
                     <!-- </el-badge> -->

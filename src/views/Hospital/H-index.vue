@@ -24,8 +24,12 @@
     v-if="chatStatus"
     ></chat>
     <videoChat
+    ref="videochatref"
     v-show="video"
-    @close="closeVideoChat"></videoChat>
+    @close="closeVideoChat"
+    @hungcall="hungup"
+    @mute="muteChat"
+    @unmute="unmuteChat"></videoChat>
     <connectBtn
     v-if="hasVideoMsg"
     @connect="connectCall"
@@ -107,12 +111,15 @@
         this.chatStatus = true
       },
       closeVideoChat () {
+        // if (this.currentVideo) {
+          // this.hungup()
+        // }
         this.closeVideo()
       },
       connectCall () {
         let targetId
         if (this.currentVideo) {
-          targetId = this.currentVideo.senderUserId
+          targetId = this.currentVideo.targetId
         }
         var CallType = RongIMLib.VoIPMediaType
         let params = {
@@ -132,7 +139,23 @@
       rejectCall () {
         let targetId
         if (this.currentVideo) {
-          targetId = this.currentVideo.senderUserId
+          targetId = this.currentVideo.targetId
+        }
+        var params = {
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
+          'targetId': targetId
+        }
+        // RongCallLib.hungup(params, function (error, summary) {
+        //   console.log('挂断', summary)
+        // })
+
+        RongCallLib.reject(params)
+        this.closeVideoMsg()
+      },
+      hungup () {
+        let targetId
+        if (this.currentVideo) {
+          targetId = this.currentVideo.targetId
         }
         var params = {
           conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
@@ -141,12 +164,18 @@
         RongCallLib.hungup(params, function (error, summary) {
           console.log('挂断', summary)
         })
-        this.closeVideoMsg()
+      },
+      muteChat () {
+        RongCallLib.mute()
+      },
+      unmuteChat () {
+        RongCallLib.unmute()
       }
     },
     mounted () {
       this.setFriendsListActon()
       // console.log('ONLINE_STATIC', this.ONLINE_STATIC)
+      // window['SCHEMETYPE'] = 'http'
       let vm = this
       this.token = this.adminInfo.rongCloudToken
       // let RongIMLib = RongIMLib
@@ -155,7 +184,8 @@
         protobuf: publicStatic.onlineStatic + '/static/protobuf-2.2.8.min.js'
       }
       // 初始化
-      RongIMLib.RongIMClient.init(this.appKey, null, config)
+      RongIMLib.RongIMClient.init(this.appKey)
+      // RongIMLib.RongIMClient.init(this.appKey, null, config)
       // 设置连接监听状态 （ status 标识当前连接状态 ）
 
       // 连接状态监听器
@@ -414,6 +444,16 @@
           if (command.messageType === 'InviteMessage') {
             vm.getVideoMsg()
             vm.changeCurrentVideo(command)
+          }
+          if (command.messageType === 'HungupMessage') {
+            vm.$refs.videochatref.hung()
+            vm.hungup()
+            vm.$message({
+              showClose: true,
+              message: '对方挂断了视频通话',
+              type: 'warning'
+            })
+            console.log('对方挂断')
           }
         }
       // command => 消息指令;

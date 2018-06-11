@@ -67,22 +67,15 @@ export default {
   methods: {
     imgExists () {
       let vm = this
-      this.$nextTick(function () {
-        vm.$refs.onerrorimg.onerror = (e) => {
-          // 默认图片
-          let imgUrl = publicStatic.onlineStatic + '/static/user.png'
-          let img = new Image()
-          img.src = imgUrl
+      let imgUrl = publicStatic.onlineStatic + '/static/user.png'
+      let img = new Image()
+      img.src = vm.userImgChat
             // 判断图片大小是否大于0 或者 图片高度与宽度都大于0
-          if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
-            vm.userImgChat = imgUrl
-          } else {
-            vm.userImgChat = imgUrl
-            // e.src = imgUrl
-            // 默认图片也不存在的时候
-          }
-        }
-      })
+      if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
+        vm.userImgChat = vm.userImgChat
+      } else {
+        vm.userImgChat = imgUrl
+      }
     }
   },
   watch: {
