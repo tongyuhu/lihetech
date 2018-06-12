@@ -178,7 +178,11 @@ export default {
       'getCurrentFriendMsg',
       'sethistory',
       'clearCurrentChat',
-      'openVideo'
+      'openVideo',
+      'getInvite',
+      'closeVideoMsg',
+      'changeCurrentVideo',
+      'getVideoMsg'
     ]),
     sendMsg () {
       // console.log('historyMsg', this.historyMsg)
@@ -437,26 +441,30 @@ export default {
       })
     },
     callVideo () {
-      this.openVideo()
+      // this.openVideo()
       let vm = this
       var CallType = RongIMLib.VoIPMediaType
       var params = {
-      // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
+        // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,
-      // 会话目标 Id，群 Id 或者 userId。
+        // 会话目标 Id，群 Id 或者 userId。
         // targetId: vm.currentChat.userId,
-        targetId: 'admin_3',
-        // targetId: 'admin_2',
-      // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
+        // targetId: 'admin_3',
+        targetId: 'admin_2',
+        // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
         // inviteUserIds: inviteUserIds,
-      // 音频类型
-      // CallType.MEDIA_VEDIO
-      // CallType.MEDIA_AUDIO
+        // 音频类型
+        // CallType.MEDIA_VEDIO
+        // CallType.MEDIA_AUDIO
         // mediaType: CallType.MEDIA_AUDIO
         mediaType: CallType.MEDIA_VEDIO
       }
+      vm.getInvite(true) // 改变状态显示接收消息
+      vm.getVideoMsg() // 打开显示接收消息窗口
+      vm.changeCurrentVideo(params)
       RongCallLib.call(params, function (error) {
         console.log('发送视频失败', error)
+        this.closeVideoMsg()  // 关闭提醒窗口
         if (error.code === 4) {
           vm.$message({
             showClose: true,

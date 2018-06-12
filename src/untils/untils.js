@@ -207,7 +207,7 @@ export function imgExists (checkimgsrc, errorsrc) {
   let ImgObj = new Image() // 判断图片是否存在
   ImgObj.src = process.env.IMG_URL + checkimgsrc
   // 没有图片，则返回
-  // console.log('sssssssssssssssss', checkimgsrc)
+  console.log('sssssssssssssssss', checkimgsrc)
   if (!checkimgsrc) {
     return errorsrc
   }

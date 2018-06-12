@@ -40,7 +40,9 @@ export const store = new Vuex.Store({
     video: false,
     // 有视频请求
     hasVideoMsg: false,
-    currentVideo: {}
+    currentVideo: {},
+    // 邀请音视频
+    invite: true
   },
   getters: {
     adminImg: state => {
@@ -202,16 +204,24 @@ export const store = new Vuex.Store({
     closeVideo (state) {
       state.video = false
     },
-    // 收到音视频消息
+    // 收到音视频消息  打开提醒
     getVideoMsg (state) {
       state.hasVideoMsg = true
     },
-    // 关闭音视频提醒
+    // 关闭音视频提醒 关闭提醒
     closeVideoMsg (state) {
       state.hasVideoMsg = false
     },
     changeCurrentVideo (state, val) {
       state.currentVideo = val
+    },
+    // 发出邀请or接收邀请
+    getInvite (state, val) {
+      if (val) {
+        state.invite = true
+      } else {
+        state.invite = false
+      }
     }
   },
   actions: {

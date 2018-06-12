@@ -33,7 +33,8 @@
     <connectBtn
     v-if="hasVideoMsg"
     @connect="connectCall"
-    @reject="rejectCall"></connectBtn>
+    @reject="rejectCall"
+    @cancel="cancelCall"></connectBtn>
   </div>
 
 </template>
@@ -91,7 +92,8 @@
         'closeVideo',
         'closeVideoMsg',
         'getVideoMsg',
-        'changeCurrentVideo'
+        'changeCurrentVideo',
+        'getInvite'
       ]),
       ...mapActions([
         'setRongUserIdAction',
@@ -133,9 +135,10 @@
         }
         // }
         RongCallLib.accept(params)
-        this.openVideo()
-        this.closeVideoMsg()
+        // this.openVideo() // 打开视频窗口
+        this.closeVideoMsg()  // 关闭提醒窗口
       },
+      // 拒绝通话
       rejectCall () {
         let targetId
         if (this.currentVideo) {
@@ -145,10 +148,6 @@
           conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
           'targetId': targetId
         }
-        // RongCallLib.hungup(params, function (error, summary) {
-        //   console.log('挂断', summary)
-        // })
-
         RongCallLib.reject(params)
         this.closeVideoMsg()
       },
@@ -164,6 +163,21 @@
         RongCallLib.hungup(params, function (error, summary) {
           console.log('挂断', summary)
         })
+        // this.closeVideoChat()
+      },
+      cancelCall () {
+        let targetId
+        if (this.currentVideo) {
+          targetId = this.currentVideo.targetId
+        }
+        var params = {
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
+          'targetId': targetId
+        }
+        RongCallLib.hungup(params, function (error, summary) {
+          console.log('挂断', summary)
+        })
+        this.closeVideoMsg() // 收到接收命令关闭提醒窗口
       },
       muteChat () {
         RongCallLib.mute()
@@ -413,8 +427,8 @@
         // 发起音视频超时时间, 默认 15000 毫秒
         timeout: 15000,
         // 视频分辨率, 默认 640*480
-        width: 320,
-        height: 240,
+        width: 640,
+        height: 480,
         // 视频码率, 默认 600*450
         maxRate: 600,
         minRate: 50,
@@ -425,11 +439,27 @@
       RongCallLib = RongCallLib.init(callconfig)
       let watcher = function (result) {
         console.log('监听语音视频', result)
-        vm.openVideo()
+        // vm.openVideo()
         if (result.type === 'added') {
-          let selfNode = document.getElementById('videoChat')
-          selfNode.appendChild(result.data)
+          if (result.isLocal) {
+            let selfNode = document.getElementById('selfVideo')
+            // result.data.style.width = '128px'
+            selfNode.appendChild(result.data)
+            document.getElementById(result.userId).style.cssText = 'width:128px;'
+            // console.log('视频idzhixng')
+            // console.log('视频id', result.data.id)
+            // console.log('视频dom', document.getElementById(result.userId))
+          } else {
+            let friendNode = document.getElementById('videoChat')
+            console.log('视频id', result.data.id)
+            // result.data.style.width = '128px'
+            friendNode.appendChild(result.data)
+            document.getElementById(result.userId).style.cssText = 'width:640px;'
+            // document.getElementById(result.userId).style.width = '128px'
+          }
         }
+  
+        // result.userId  //大窗口
         // result.type === added 加入
         // result.type === removed 加入
         // result.data 是要添加/移除的dom节点
@@ -441,19 +471,37 @@
       RongCallLib.commandWatch(function (command) {
         console.log('命令监听', command)
         if (command) {
+          // 接收到邀请视频信息
           if (command.messageType === 'InviteMessage') {
-            vm.getVideoMsg()
+            vm.getInvite() // 改变状态显示接收消息
+            vm.getVideoMsg() // 打开显示接收消息窗口
             vm.changeCurrentVideo(command)
           }
+          // 对方挂断通话
           if (command.messageType === 'HungupMessage') {
-            vm.$refs.videochatref.hung()
+            // vm.$refs.videochatref.hung()
             vm.hungup()
-            vm.$message({
-              showClose: true,
-              message: '对方挂断了视频通话',
-              type: 'warning'
-            })
+            vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+            // vm.$message({
+            //   showClose: true,
+            //   message: '对方挂断了视频通话',
+            //   type: 'warning'
+            // })
             console.log('对方挂断')
+          }
+          // 对方拒绝通话
+          if (command.messageType === 'SummaryMessage') {
+            // vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+            // vm.$message({
+            //   showClose: true,
+            //   message: '对方挂断了视频通话',
+            //   type: 'warning'
+            // })
+            // console.log('对方拒绝')
+          }
+          if (command.messageType === 'AcceptMessage') {
+            vm.openVideo()
+            vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
           }
         }
       // command => 消息指令;
