@@ -135,7 +135,7 @@
         }
         // }
         RongCallLib.accept(params)
-        // this.openVideo() // 打开视频窗口
+        this.openVideo() // 打开视频窗口
         this.closeVideoMsg()  // 关闭提醒窗口
       },
       // 拒绝通话
@@ -458,6 +458,10 @@
             // document.getElementById(result.userId).style.width = '128px'
           }
         }
+        if (result.type === 'leave') {
+          document.getElementById('selfVideo').innerHTML = ''
+          document.getElementById('videoChat').innerHTML = ''
+        }
   
         // result.userId  //大窗口
         // result.type === added 加入
@@ -481,6 +485,7 @@
           if (command.messageType === 'HungupMessage') {
             // vm.$refs.videochatref.hung()
             vm.hungup()
+            vm.closeVideo()
             vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
             // vm.$message({
             //   showClose: true,
