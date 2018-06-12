@@ -147,20 +147,9 @@ export default {
       // 获取历史消息
 
       vm.openChatWindow()
-    },
-    imgExists (checkimg) {
-      let ImgObj = new Image() // 判断图片是否存在
-      ImgObj.src = checkimg
-      // 没有图片，则返回-1
-      if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
-        return checkimg
-      } else {
-        return publicStatic.onlineStatic + '/static/user.png'
-      }
     }
   },
   mounted () {
-    this.imgExists()
   }
 }
 </script>

@@ -270,6 +270,7 @@ export const store = new Vuex.Store({
           }
         }
         // _.merge(list, content.state.friendsList)
+        console.log('整理后的融云好友', list)
         content.commit('setFriendsList', list)
         // content.commit('setFriendsList')
       })
