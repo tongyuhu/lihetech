@@ -13,13 +13,12 @@
       </div>
       <div class="audio-to-video-wrap">
         <div>
-
-        <button  class="audio-to-video" @click="toVideo"><span class="iconfont icon-shipin1 span"></span>
-        </button> 
+          <button  class="audio-to-video" @click="toVideo">
+            <span class="iconfont icon-shipin1 span"></span>
+          </button> 
         </div>
         <div>
           <span class="audio-to-video-text">打开摄像头</span>
-
         </div>
       </div>
     </div>
@@ -33,9 +32,16 @@
       <div class="btn-wrap" v-if="currentIsVideo">
         <div class="voice-btn">
 
-          <button v-if="voice" @click="noVoice"><span class="iconfont icon-hf_maikefeng tofff"></span></button>
-          <button v-if="!voice" @click="hasVoice" type="text"><span class="iconfont icon-guanbimaikefeng tofff"></span></button>
-          <button  @click="toAudio"><span class="iconfont icon-shipin1 tofff"></span></button> 
+          <button v-if="voice" @click="noVoice" title="静音">
+            <span class="iconfont icon-hf_maikefeng tofff"></span>
+          </button>
+
+          <button v-if="!voice" @click="hasVoice" title="取消静音">
+            <span class="iconfont icon-guanbimaikefeng tofff"></span>
+          </button>
+          <button  @click="toAudio" title="关闭摄像头">
+            <span class="iconfont icon-shipin1 tofff"></span>
+          </button> 
         </div>
         <div class="hung-btn">
 
@@ -200,6 +206,7 @@ export default {
     button{
       background: transparent;
       font-size: 18px;
+      cursor: pointer;
       span{
       font-size: 18px;
 
