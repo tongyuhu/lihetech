@@ -34,13 +34,8 @@
                     width="100"
                     align="left">
                     <template slot-scope="scope">
-<<<<<<< HEAD
-                      <el-button type="text" @click="diagnose(scope.row,'useUserId')"
-                      :style="{'color':'#1991fc','padding':0}">
-=======
                       <el-button type="text" @click="newdiagnose(scope.row,'useUserId')"
                       :style="{'color':'#1991fc'}">
->>>>>>> origin/dev
                         {{scope.row.realName}}
                       </el-button>
                     </template>

@@ -303,11 +303,7 @@ export default {
             })
           }
           this.sickList = this.formatterSickList(this.sickList)
-<<<<<<< HEAD
-          console.log('param', param)
-=======
           console.log('sickList', this.sickList)
->>>>>>> origin/dev
         })
       }
       console.log('sickList', this.sickList)
