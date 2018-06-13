@@ -15,17 +15,16 @@
         <div>
           <button class="ok" @click="connect">接通</button>
         </div>
-
       </div>
     </div>
     <div v-if="invite">
       <div class="user-img-wrap">
-        <div class="dot invite-video"></div>
+        <div :class="['dot',currentIsVideo? 'invite-video':'invite-voice']"></div>
         <!-- invite-voice -->
         <div class="pulse"></div>
         <!-- <img class="user-img" src="/static/user.png" alt=""> -->
       </div>
-      <div class="tip">视频聊天邀请中...</div>
+      <div class="tip">{{currentIsVideo? tip:voicetip}}</div>
       <div class="btn-wrap">
         <div>
           <button class="no" @click="cancel">取消</button>
@@ -41,13 +40,15 @@ export default {
   name: 'connectbtn',
   data () {
     return {
-
+      tip: '视频聊天邀请中...',
+      voicetip: '语音聊天邀请中...'
     }
   },
   computed: {
     ...mapState([
       'hasVideoMsg',
-      'invite'
+      'invite',
+      'currentIsVideo'
     ])
   },
   methods: {
@@ -190,7 +191,7 @@ export default {
 .invite-voice{
   // background-color: #6fbafd;
   background: url(~icon/hospital-icon2-22.png) no-repeat center;
-  background-size:28px 18px;
+  background-size:18px 18px;
 }
 </style>
 

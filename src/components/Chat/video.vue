@@ -1,34 +1,57 @@
 <template>
   <div class="video-chat-wrap" v-drag="'video-drag'">
-    <div id="video-drag">
+    <div id="video-drag"></div>
+    <div v-if="!currentIsVideo" class="audio-wrap">
+      <div>
+        <img class="user-img" src="/static/user.png" alt="">
+      </div>
+      <div class="audio-tip">
+        <span>语音通话中...</span>
+      </div>
+      <div>
+        <button  @click="hungCall" class="audio-hung">挂断</button>
+      </div>
+      <div class="audio-to-video-wrap">
+        <div>
+
+        <button  class="audio-to-video" @click="toVideo"><span class="iconfont icon-shipin1 span"></span>
+        </button> 
+        </div>
+        <div>
+          <span class="audio-to-video-text">打开摄像头</span>
+
+        </div>
+      </div>
     </div>
-    <!-- <div class="close">
-      <el-button @click="close" :style="{'color':'#041421','font-size':'24px'}" type="text" icon="el-icon-close"></el-button>
-    </div> -->
-    <!-- <div class="video-chat"> -->
+    <div class="video-wrap" id="video-wrap">
       <div id="videoChat">
 
       </div>
       <div id="selfVideo">
 
       </div>
-      <div class="btn-wrap">
+      <div class="btn-wrap" v-if="currentIsVideo">
         <div class="voice-btn">
 
-          <button v-if="voice" @click="noVoice" type="text" :style="{'color':'#fff','font-size':'20px'}"><span class="iconfont icon-hf_maikefeng"></span></button>
-          <button v-if="!voice" @click="hasVoice" type="text" :style="{'color':'#fff','font-size':'20px'}"><span class="iconfont icon-guanbimaikefeng"></span></button>
+          <button v-if="voice" @click="noVoice"><span class="iconfont icon-hf_maikefeng tofff"></span></button>
+          <button v-if="!voice" @click="hasVoice" type="text"><span class="iconfont icon-guanbimaikefeng tofff"></span></button>
+          <button  @click="toAudio"><span class="iconfont icon-shipin1 tofff"></span></button> 
         </div>
         <div class="hung-btn">
 
-          <button :style="{'width':'100px'}" type="danger" @click="hungCall">挂断</button>
+          <button  @click="hungCall">挂断</button>
+          <!-- <button  @click="toVideo">toVideo</button>  -->
+          <!-- <button :disabled="currentIsVideo"  @click="toAudio">toAudio</button> 
+          <button :disabled="!currentIsVideo" @click="toVideo">toVideo</button>  -->
         </div>
       </div>
+    </div>
     <!-- </div> -->
   </div>
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import {mapMutations, mapState} from 'vuex'
 export default {
   name: 'videochat',
   props: {
@@ -38,6 +61,11 @@ export default {
     return {
       voice: true
     }
+  },
+  computed: {
+    ...mapState([
+      'currentIsVideo'
+    ])
   },
   methods: {
     ...mapMutations(['closeVideo']),
@@ -67,6 +95,12 @@ export default {
     hasVoice () {
       this.$emit('unmute')
       this.voice = true
+    },
+    toAudio () {
+      this.$emit('toAudio')
+    },
+    toVideo () {
+      this.$emit('toVideo')
     }
   }
 
@@ -78,8 +112,8 @@ export default {
     z-index: 9999999999;
     // width: 900px;
     max-width:1350px;
-    min-width: 640px;
-    min-height: 480px;
+    min-width: 340px;
+    // min-height: 480px;
     // height: 700px;
     background: #fff;
     position: fixed;
@@ -88,17 +122,18 @@ export default {
     box-shadow: 0 0 18px 0px rgba(0, 0, 0, 0.3);
     // padding:20px;
   }
+  .video-wrap{
+    // min-width: 640px;
+    // min-height: 480px;
+  }
   .video-chat{
-    // width: 800px;
-    // height: 600px;
-    // background: rgb(102, 60, 60);
-    // padding:20px;
     margin: 0 auto;
     margin-bottom: 20px;
     position: relative;
   }
   #video-drag{
     width: 100%;
+    // width: inherit;
     height: 15px;
     background: transparent;
     cursor: move;
@@ -117,16 +152,13 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // min-height: 400px;
-    min-height: 480px;
-    min-width: 640px;
-    // border:1px solid #666;
+    // min-height: 480px;
+    // min-width: 640px;
   }
   
   #selfVideo{
-    // max-width: 1280px;
-    width: 128px;
-    height: 96px;
+    // width: 128px;
+    // height: 96px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -174,7 +206,7 @@ export default {
       }
     }
   }
-  .video-chat-wrap:hover .btn-wrap{
+  .video-wrap:hover .btn-wrap{
     text-align: center;
     height: 56px;
     position: absolute;
@@ -223,6 +255,58 @@ export default {
     height: 0;}
     to{opacity: 100%;
     height: 36px;}
+  }
+  .audio-wrap{
+    width: 336px;
+    height: 208px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .user-img{
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+    }
+    button{
+      span{
+        color: #1991fc;
+      }
+    }
+  }
+  .tofff{
+    color: #fff;
+  }
+  .audio-hung{
+    width: 100px;
+    height: 36px;
+    color: #fff;
+    background-color: #e87070;
+    border-radius: 2px;
+    margin:10px 0;
+  }
+  .audio-to-video-wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .audio-to-video{
+    background: #fff;
+    .span{
+    color:#1991fc;
+      font-size: 28px;
+    }
+  }
+  .audio-to-video-text{
+    display: inline-block;
+    font-size: 12px;
+    color: #041421;
+    // line-height: 34px;
+    // height: 34px;
+  }
+  .audio-tip{
+    margin-top:10px;
+    color: #041421;
   }
 </style>
 

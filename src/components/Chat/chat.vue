@@ -74,10 +74,10 @@
             <span class="file-icon"></span>
           </a>
         <!-- </button> -->
-        <button>
+        <button @click="callVoice">
           <span class="phone-icon" ></span>
         </button>
-        <button @click="callVideo">
+        <button @click="callVideo(false)">
           <span class="video-icon" ></span>
         </button>
       </div>
@@ -182,7 +182,8 @@ export default {
       'getInvite',
       'closeVideoMsg',
       'changeCurrentVideo',
-      'getVideoMsg'
+      'getVideoMsg',
+      'changeCurrentIsVideo'
     ]),
     sendMsg () {
       // console.log('historyMsg', this.historyMsg)
@@ -440,10 +441,17 @@ export default {
         }
       })
     },
-    callVideo () {
-      // this.openVideo()
+    callVideo (isvoice) {
       let vm = this
+      let isCallVideo
       var CallType = RongIMLib.VoIPMediaType
+      if (isvoice) {
+        isCallVideo = CallType.MEDIA_AUDIO
+        vm.changeCurrentIsVideo(false)
+      } else {
+        isCallVideo = CallType.MEDIA_VEDIO
+        vm.changeCurrentIsVideo(true)
+      }
       var params = {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,
@@ -457,14 +465,14 @@ export default {
         // CallType.MEDIA_VEDIO
         // CallType.MEDIA_AUDIO
         // mediaType: CallType.MEDIA_AUDIO
-        mediaType: CallType.MEDIA_VEDIO
+        mediaType: isCallVideo
       }
       vm.getInvite(true) // 改变状态显示接收消息
       vm.getVideoMsg() // 打开显示接收消息窗口
       vm.changeCurrentVideo(params)
       RongCallLib.call(params, function (error) {
         console.log('发送视频失败', error)
-        this.closeVideoMsg()  // 关闭提醒窗口
+        vm.closeVideoMsg()  // 关闭提醒窗口
         if (error.code === 4) {
           vm.$message({
             showClose: true,
@@ -472,8 +480,109 @@ export default {
             type: 'warning'
           })
         }
+        if (error.code === 1 || error.code === 2) {
+          vm.$message({
+            showClose: true,
+            message: '对方取消了通话',
+            type: 'warning'
+          })
+        }
+        if (error.code === 3) {
+          vm.$message({
+            showClose: true,
+            message: '对方挂断了通话',
+            type: 'warning'
+          })
+        }
+        if (error.code === 5) {
+          vm.$message({
+            showClose: true,
+            message: '对方未接听',
+            type: 'warning'
+          })
+        }
+        if (error.code === 6) {
+          vm.$message({
+            showClose: true,
+            message: '己方不支持当前引擎',
+            type: 'warning'
+          })
+        }
+        if (error.code === 7) {
+          vm.$message({
+            showClose: true,
+            message: '对方网络出错',
+            type: 'warning'
+          })
+        }
+        if (error.code === 8) {
+          vm.$message({
+            showClose: true,
+            message: '其他设备已处理',
+            type: 'warning'
+          })
+        }
+        if (error.code === 11) {
+          vm.$message({
+            showClose: true,
+            message: '对方取消已发出的通话请求',
+            type: 'warning'
+          })
+        }
+        if (error.code === 12) {
+          vm.$message({
+            showClose: true,
+            message: '对方拒绝收到的通话请求',
+            type: 'warning'
+          })
+        }
+        if (error.code === 13) {
+          vm.$message({
+            showClose: true,
+            message: '对方挂断通话',
+            type: 'warning'
+          })
+        }
+        if (error.code === 14) {
+          vm.$message({
+            showClose: true,
+            message: '对方忙碌',
+            type: 'warning'
+          })
+        }
+        if (error.code === 15) {
+          vm.$message({
+            showClose: true,
+            message: '对方未接听',
+            type: 'warning'
+          })
+        }
+        if (error.code === 16) {
+          vm.$message({
+            showClose: true,
+            message: '对方不支持当前引擎',
+            type: 'warning'
+          })
+        }
+        if (error.code === 17) {
+          vm.$message({
+            showClose: true,
+            message: '对方网络错误',
+            type: 'warning'
+          })
+        }
+        if (error.code === 18) {
+          vm.$message({
+            showClose: true,
+            message: 'CallLib 不可以用',
+            type: 'warning'
+          })
+        }
         // do something...
       })
+    },
+    callVoice () {
+      this.callVideo(true)
     }
   },
   watch: {

@@ -29,7 +29,9 @@
     @close="closeVideoChat"
     @hungcall="hungup"
     @mute="muteChat"
-    @unmute="unmuteChat"></videoChat>
+    @unmute="unmuteChat"
+    @toAudio="videoToAudio"
+    @toVideo="audioToVideo"></videoChat>
     <connectBtn
     v-if="hasVideoMsg"
     @connect="connectCall"
@@ -62,7 +64,10 @@
       return {
         imStatus: false,
         appKey: 'pwe86ga5pv726',
-        token: ''
+        token: '',
+        selfVideoDomID: null,
+        friendVideoDomID: null
+
       }
     },
     computed: {
@@ -73,7 +78,8 @@
         newmsg: 'newmsg',
         video: 'video',
         hasVideoMsg: 'hasVideoMsg',
-        currentVideo: 'currentVideo'
+        currentVideo: 'currentVideo',
+        currentIsVideo: 'currentIsVideo'
       }),
       ...mapGetters([
         'currentChat'
@@ -93,7 +99,8 @@
         'closeVideoMsg',
         'getVideoMsg',
         'changeCurrentVideo',
-        'getInvite'
+        'getInvite',
+        'changeCurrentIsVideo'
       ]),
       ...mapActions([
         'setRongUserIdAction',
@@ -123,14 +130,20 @@
         if (this.currentVideo) {
           targetId = this.currentVideo.targetId
         }
+        let isCallVideo
         var CallType = RongIMLib.VoIPMediaType
+        if (this.currentIsVideo) {
+          isCallVideo = CallType.MEDIA_VEDIO
+        } else {
+          isCallVideo = CallType.MEDIA_AUDIO
+        }
         let params = {
           conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊
           targetId: targetId,
           // 音频类型
           // CallType.MEDIA_VEDIO
           // CallType.MEDIA_AUDIO
-          mediaType: CallType.MEDIA_VEDIO
+          mediaType: isCallVideo
           // mediaType: CallType.MEDIA_VEDIO
         }
         // }
@@ -179,26 +192,67 @@
         })
         this.closeVideoMsg() // 收到接收命令关闭提醒窗口
       },
+      // 静音
       muteChat () {
         RongCallLib.mute()
       },
+      // 取消静音
       unmuteChat () {
         RongCallLib.unmute()
+      },
+      videoToAudio () {
+        this.changeCurrentIsVideo(false)
+        RongCallLib.videoToAudio()
+      },
+      audioToVideo () {
+        this.changeCurrentIsVideo(true)
+        RongCallLib.audioToVideo()
+      }
+    },
+    watch: {
+      currentIsVideo: {
+        handler: function (val) {
+          let cssTextVideoSelf = 'opacity: 1;width: 128px;height: 96px;'
+          let cssTextAudioSelf = 'opacity: 0;width: 0;height: 0;'
+          let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
+          let cssTextAudio = 'opacity: 0;width: 0;height: 0;'
+          let cssText = 'min-width:640px;min-height: 480px;'
+          if (val) {
+            if (this.selfVideoDomID) {
+              document.getElementById('video-wrap').style.cssText = cssText
+              document.getElementById(this.selfVideoDomID).style.cssText = cssTextVideoSelf
+            }
+            if (this.friendVideoDomID) {
+              document.getElementById('video-wrap').style.cssText = cssText
+              document.getElementById(this.friendVideoDomID).style.cssText = cssTextVideo
+            }
+          } else {
+            if (this.selfVideoDomID) {
+              document.getElementById('video-wrap').style.cssText = 'min-width:0;min-height: 0;'
+              document.getElementById(this.selfVideoDomID).style.cssText = cssTextAudioSelf
+            }
+            if (this.friendVideoDomID) {
+              document.getElementById('video-wrap').style.cssText = 'min-width:0;min-height: 0;'
+              document.getElementById(this.friendVideoDomID).style.cssText = cssTextAudio
+            }
+          }
+        },
+        immediate: true
       }
     },
     mounted () {
-      this.setFriendsListActon()
       // console.log('ONLINE_STATIC', this.ONLINE_STATIC)
       // window['SCHEMETYPE'] = 'http'
       let vm = this
-      this.token = this.adminInfo.rongCloudToken
+      vm.setFriendsListActon() // 获取好友列表
+      vm.token = vm.adminInfo.rongCloudToken
       // let RongIMLib = RongIMLib
       // console.log('RongIMLib', RongIMLib)
       let config = {
         protobuf: publicStatic.onlineStatic + '/static/protobuf-2.2.8.min.js'
       }
       // 初始化
-      RongIMLib.RongIMClient.init(this.appKey)
+      RongIMLib.RongIMClient.init(vm.appKey)
       // RongIMLib.RongIMClient.init(this.appKey, null, config)
       // 设置连接监听状态 （ status 标识当前连接状态 ）
 
@@ -439,26 +493,43 @@
       RongCallLib = RongCallLib.init(callconfig)
       let watcher = function (result) {
         console.log('监听语音视频', result)
-        // vm.openVideo()
         if (result.type === 'added') {
+          let cssText = 'min-width:640px;min-height: 480px;'
           if (result.isLocal) {
             let selfNode = document.getElementById('selfVideo')
-            // result.data.style.width = '128px'
             selfNode.appendChild(result.data)
-            document.getElementById(result.userId).style.cssText = 'width:128px;'
-            // console.log('视频idzhixng')
-            // console.log('视频id', result.data.id)
-            // console.log('视频dom', document.getElementById(result.userId))
+            let cssTextVideoSelf = 'opacity: 1;width: 128px;height: 96px;'
+            let cssTextAudioSelf = 'opacity: 0;width: 0;height: 0;'
+            // if()
+            vm.selfVideoDomID = result.userId
+            if (vm.currentIsVideo) {
+              document.getElementById('video-wrap').style.cssText = cssText
+              document.getElementById(result.userId).style.cssText = cssTextVideoSelf
+            }
+            if (!vm.currentIsVideo) {
+              document.getElementById('video-wrap').style.cssText = 'min-width:0;min-height: 0;'
+              document.getElementById(result.userId).style.cssText = cssTextAudioSelf
+            }
+            // document.getElementById(result.userId).style.cssText = 'width:128px;'
           } else {
             let friendNode = document.getElementById('videoChat')
-            console.log('视频id', result.data.id)
-            // result.data.style.width = '128px'
             friendNode.appendChild(result.data)
-            document.getElementById(result.userId).style.cssText = 'width:640px;'
-            // document.getElementById(result.userId).style.width = '128px'
+            let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
+            let cssTextAudio = 'opacity: 0;width: 0;height: 0;'
+            vm.friendVideoDomID = result.userId
+            if (vm.currentIsVideo) {
+              document.getElementById('video-wrap').style.cssText = cssText
+              document.getElementById(result.userId).style.cssText = cssTextVideo
+            }
+            if (!vm.currentIsVideo) {
+              document.getElementById('video-wrap').style.cssText = 'min-width:0;min-height: 0;'
+              document.getElementById(result.userId).style.cssText = cssTextAudio
+            }
           }
         }
         if (result.type === 'leave') {
+          vm.selfVideoDomID = null
+          vm.friendVideoDomID = null
           document.getElementById('selfVideo').innerHTML = ''
           document.getElementById('videoChat').innerHTML = ''
         }
@@ -477,22 +548,29 @@
         if (command) {
           // 接收到邀请视频信息
           if (command.messageType === 'InviteMessage') {
+            // 音频
+            if (command.content.mediaType === 1) {
+              vm.changeCurrentIsVideo(false)
+            }
+            // 视频
+            if (command.content.mediaType === 2) {
+              vm.changeCurrentIsVideo(true)
+            }
             vm.getInvite() // 改变状态显示接收消息
             vm.getVideoMsg() // 打开显示接收消息窗口
             vm.changeCurrentVideo(command)
           }
           // 对方挂断通话
           if (command.messageType === 'HungupMessage') {
-            // vm.$refs.videochatref.hung()
             vm.hungup()
             vm.closeVideo()
             vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
-            // vm.$message({
-            //   showClose: true,
-            //   message: '对方挂断了视频通话',
-            //   type: 'warning'
-            // })
-            console.log('对方挂断')
+            vm.$message({
+              showClose: true,
+              message: '对方挂断了视频通话',
+              type: 'warning'
+            })
+            console.log('对方挂断', command)
           }
           // 对方拒绝通话
           if (command.messageType === 'SummaryMessage') {

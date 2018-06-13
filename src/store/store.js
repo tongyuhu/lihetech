@@ -40,7 +40,10 @@ export const store = new Vuex.Store({
     video: false,
     // 有视频请求
     hasVideoMsg: false,
+    // 当前视频对象信息
     currentVideo: {},
+    // 当前是视频聊天
+    currentIsVideo: true,
     // 邀请音视频
     invite: true
   },
@@ -221,6 +224,13 @@ export const store = new Vuex.Store({
         state.invite = true
       } else {
         state.invite = false
+      }
+    },
+    changeCurrentIsVideo (state, val) {
+      if (val) {
+        state.currentIsVideo = true
+      } else {
+        state.currentIsVideo = false
       }
     }
   },
