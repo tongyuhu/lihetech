@@ -11,9 +11,16 @@ axios.defaults.timeout = 5000
 axios.defaults.baseURL = process.env.API_HOST // api的base_url // api接口地址
 axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 axios.interceptors.request.use((config) => {
-  if (config.method === 'post') {
-    config.data = qs.stringify(config.data)
+  if (config.url === '/file/upload/commons') {
+
+  } else {
+    if (config.method === 'post') {
+      config.data = qs.stringify(config.data)
+    }
   }
+  // if (config.method === 'post') {
+  //   config.data = qs.stringify(config.data)
+  // }
   return config
 })
 
@@ -161,9 +168,9 @@ axios.interceptors.response.use(
 
         case 500:
           sessionStorage.clear()
-          window.location.href = '/BPWatch/admin/login/page'
+          // window.location.href = '/BPWatch/admin/login/page'
+          // location.reload()
           // router.replace({path: '/login'})
-          location.reload()
           err.message = '服务器内部错误'
           break
         case 501:

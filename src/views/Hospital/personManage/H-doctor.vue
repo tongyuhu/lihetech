@@ -68,7 +68,7 @@
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
               编辑</span>
               </el-button>
-              <el-switch
+              <!-- <el-switch
               v-if="showEnabled"
               v-model="scope.row.enabled"
               active-color="#13ce66"
@@ -76,12 +76,12 @@
               :width="30"
               @change="doctorEnabled(scope.row)">
               </el-switch>
-              <span v-if="showEnabled">停/启用</span>
+              <span v-if="showEnabled">停/启用</span> -->
             </template>
           </el-table-column>
           <el-table-column
           prop=""
-          label="停/启用"
+          label="启/停用"
           align="center"
           width="70"
           v-if="showEnabled">
@@ -93,6 +93,25 @@
               :width="40"
               @change="doctorEnabled(scope.row)">
               </el-switch>
+              <!-- <span>停/启用</span> -->
+            </template>
+          </el-table-column>
+          <el-table-column
+          v-if="locked"
+          prop=""
+          label="锁定提示"
+          align="center"
+          width="70"
+          >
+            <template slot-scope="scope">
+              <el-popover
+                ref="popoverTip"
+                placement="top-start"
+                width="200"
+                trigger="hover"
+                content="请修改密码以解除锁定状态">
+              </el-popover>
+              <el-button type="text" :style="{color:'#e87070'}" v-popover:popoverTip>查看</el-button>
               <!-- <span>停/启用</span> -->
             </template>
           </el-table-column>
@@ -234,6 +253,8 @@ export default {
     return {
       doctorEditCellWidth: 100,
       showEnabled: false,
+      // 是否有账户锁定
+      locked: false,
       doctorList: [
         // {
         //   loginAccount: '2016-05-03',
@@ -495,6 +516,13 @@ export default {
             this.doctorList.push(item)
           })
         }
+        this.doctorList.forEach(item => {
+          if (this._.has(item, 'locked')) {
+            if (item.locked) {
+              this.locked = true
+            }
+          }
+        })
         console.log('doctorList', this.doctorList)
         // this.doctorList = this.formatterDoctorList(this.doctorList)
       })
@@ -532,6 +560,7 @@ export default {
       this.doctorEditCellWidth = 250
       this.showEnabled = true
     }
+    // this.showEnabled = true
     // console.log('adminInfo', this.adminInfo)
     this.getDoctorList()
   },

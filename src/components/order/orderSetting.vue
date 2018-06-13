@@ -8,6 +8,50 @@
     <div>
       <el-card>
         <table>
+          <thead class="thead">
+            <th>日期</th>
+            <th>编辑</th>
+            <th>编辑</th>
+          </thead>
+          <tbody class="tbody" v-for="(item,index) in orderlist" :key="item.time">
+            <tr>
+              <td rowspan="2">{{item.time}}</td>
+              <td>上午预约
+                <el-switch
+                  v-model="item.morning.order"
+                  active-color="#f1f1f1"
+                  inactive-color="#1991fc">
+                </el-switch>
+              </td>
+              <td>
+                <span>上午：{{item.morning.time ? item.morning.time:'/'}}</span>
+                <!-- <span>下午：{{item.noon ? item.noon:'/'}}</span> -->
+                <el-button @click="editTime(index,'morning')" type="text" icon="el-icon-edit-outline">编辑</el-button>
+              </td>
+            </tr>
+            <tr>
+              <td>下午预约
+                <el-switch
+                  v-model="item.noon.order"
+                  active-color="#f1f1f1"
+                  inactive-color="#1991fc">
+                </el-switch>
+              </td>
+              <td>
+                <!-- <span>上午：{{item.morning ? item.morning:'/'}}</span> -->
+                <span>下午：{{item.noon.time ? item.noon.time:'/'}}</span>
+                <el-button @click="editTime(index,'noon')" type="text" icon="el-icon-edit-outline">编辑</el-button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </el-card>
+    </div>
+
+
+    <!-- <div v-if="false">
+      <el-card>
+        <table>
           <thead>
             <th>日期</th>
             <th>编辑</th>
@@ -19,8 +63,8 @@
               <td>该日预约
                 <el-switch
                   v-model="item.order"
-                  active-color="#1991fc"
-                  inactive-color="#f1f1f1">
+                  active-color="#f1f1f1"
+                  inactive-color="#1991fc">
                 </el-switch>
               </td>
               <td>
@@ -32,7 +76,7 @@
           </tbody>
         </table>
       </el-card>
-    </div>
+    </div> -->
 
     <el-dialog
     center
@@ -40,7 +84,7 @@
     :visible.sync="settingSingle">
       <span slot="title" class="dialog-title">预约时间设置</span>
       <div class="dialog-main">
-        <div>
+        <div v-show="showMorningEdit">
           <span>上午</span>
           <el-time-select
           :style="{'width':'150px'}"
@@ -62,7 +106,7 @@
           }">
           </el-time-select>
         </div>
-        <div>
+        <div v-show="showNoonEdit">
           <span>下午</span>
           <el-time-select
           :style="{'width':'150px'}"
@@ -162,11 +206,14 @@
 
 <script>
 import {daybefor, computeWeekday} from '@/untils/date.js'
+import {orderSettingApi, settingDataApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 export default {
   name: 'orderSetting',
   data () {
     return {
+      showMorningEdit: true,
+      showNoonEdit: true,
       start: '',
       end: '',
       settingSingle: false,
@@ -193,7 +240,7 @@ export default {
       },
       openOrder: '',
       defaultvalue: null,
-      order: [],
+      // order: [],
       index: null,
       // week: [, '周二', '周三', '周四', '周五', '周六', '周日']
       week: [
@@ -233,7 +280,8 @@ export default {
           value: 7
         }
       ],
-      cheeckedweek: []
+      cheeckedweek: [],
+      orderlist: []
     }
   },
   methods: {
@@ -251,8 +299,6 @@ export default {
     },
     // 确认编辑时间
     settingSingleConfirm () {
-      console.log(this.settingSingleMorning)
-      console.log(this.settingSingleNoon)
       let morning = this._.gt(this.settingSingleMorning.start, this.settingSingleMorning.end)
       let noon = this._.gt(this.settingSingleNoon.start, this.settingSingleNoon.end)
       if (morning || noon) {
@@ -265,8 +311,26 @@ export default {
         this.settingSingleNoon.start = ''
         this.settingSingleNoon.end = ''
       } else {
-        this.order[this.index].morning = this.settingSingleMorning.start + '/' + this.settingSingleMorning.end
-        this.order[this.index].noon = this.settingSingleNoon.start + '/' + this.settingSingleNoon.end
+        this.orderlist[this.index].morning.time = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
+        this.orderlist[this.index].noon.time = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        let parmars = {
+          'weeks': this.index + 1,
+          'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
+          'startEndPeriodTimeAftn': this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+        }
+        this.$axios(orderSettingApi(parmars))
+          .then(res => {
+            if (res.data.code === '1001') {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+              this.orderlist[this.index].morning.time = ''
+              this.orderlist[this.index].noon.time = ''
+            }
+          })
+        this.initlist()
         this.settingSingle = false
       }
     },
@@ -286,40 +350,143 @@ export default {
           type: 'warning'
         })
       } else {
+        let edit = true
         let morning = this._.gt(this.settingGroupMorning.start, this.settingGroupMorning.end)
         let noon = this._.gt(this.settingGroupNoon.start, this.settingGroupNoon.end)
+        if (this.settingGroupMorning.start) {
+          if (!this.settingGroupMorning.end) {
+            // this.settingGroupMorning.start = ''
+            edit = false
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
+        if (!this.settingGroupMorning.start) {
+          if (this.settingGroupMorning.end) {
+            // this.settingGroupMorning.end = ''
+            edit = false
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
+        if (!this.settingGroupNoon.start) {
+          if (this.settingGroupNoon.end) {
+            // this.settingGroupNoon.end = ''
+            edit = false
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
+        if (this.settingGroupNoon.start) {
+          if (!this.settingGroupNoon.end) {
+            edit = false
+            // this.settingGroupNoon.start = ''
+            this.$message({
+              message: '请完善设置',
+              type: 'warning'
+            })
+          }
+        }
         if (morning || noon) {
+          edit = false
           this.$message({
             message: '起始时间不能大于结束时间,请重新设置',
             type: 'warning'
           })
-          this.settingGroupMorning.start = ''
-          this.settingGroupMorning.end = ''
-          this.settingGroupNoon.start = ''
-          this.settingGroupNoon.end = ''
-        } else {
-          this.cheeckedweek.forEach(item => {
-            this.order[item].order = true
-            this.order[item].morning = this.settingGroupMorning.start + '/' + this.settingGroupMorning.end
-            this.order[item].noon = this.settingGroupNoon.start + '/' + this.settingGroupNoon.end
+          // this.settingGroupMorning.start = ''
+          // this.settingGroupMorning.end = ''
+          // this.settingGroupNoon.start = ''
+          // this.settingGroupNoon.end = ''
+        }
+        if (edit) {
+          // this.cheeckedweek.forEach(item => {
+          //   this.orderlist[item].morning.order = true
+          //   this.orderlist[item].noon.order = true
+          //   this.orderlist[item].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+          //   this.orderlist[item].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+          // })
+          let parmars = {
+            'weeks': this.cheeckedweek.join(','),
+            'startEndPeriodTimeMor': this.settingGroupMorning.start + '-' + this.settingGroupMorning.end,
+            'startEndPeriodTimeAftn': this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+          }
+          this.$axios(orderSettingApi(parmars))
+          .then(res => {
+            if (res.data.code === '1001') {
+              this.$message({
+                showClose: true,
+                message: res.data.msg,
+                type: 'warning'
+              })
+              // res.data.data.forEach(item => {
+              //   if (item.weekDay) {
+              //     // this.orderlist[item.weekDay - 1].order = true
+              //     this.orderlist[item.weekDay - 1].noon.order = true
+              //     this.orderlist[item.weekDay - 1].morning.order = true
+              //     if (item.slotType === 1) {
+              //       this.orderlist[item.weekDay - 1].morning = ''
+              //     }
+              //     if (item.slotType === 2) {
+              //       this.orderlist[item.weekDay - 1].noon = ''
+              //     }
+              //   }
+              // })
+            }
+            this.initlist()
           })
           this.settingGroup = false
         }
       }
-
+      // orderSettingApi
+      // if () {
+      //   let parmars = {
+      //     'weeks': parmars.weeks,
+      //     'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
+      //     'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
+      //   }
+      // }
       // this.settingGroup = false
     },
     // 打开编辑时间窗口
-    editTime (index) {
+    editTime (index, val) {
       this.index = index
-      console.log(this.openOrder)
-      if (this.order[index].order) {
-        this.settingSingle = true
-      } else {
-        this.$message({
-          message: '请先开启预约',
-          type: 'warning'
-        })
+      if (val === 'morning') {
+        if (!this.orderlist[index].morning.order) {
+          this.showMorningEdit = true
+          this.showNoonEdit = false
+          this.settingSingle = true
+          this.settingSingleNoon = {
+            start: '',
+            end: ''
+          }
+        } else {
+          this.$message({
+            message: '请先开启预约',
+            type: 'warning'
+          })
+        }
+      }
+      if (val === 'noon') {
+        if (!this.orderlist[index].noon.order) {
+          this.showMorningEdit = false
+          this.showNoonEdit = true
+          this.settingSingle = true
+          this.settingSingleMorning = {
+            start: '',
+            end: ''
+          }
+        } else {
+          this.$message({
+            message: '请先开启预约',
+            type: 'warning'
+          })
+        }
       }
     },
     nextSunday () {
@@ -342,7 +509,6 @@ export default {
       week = computeWeekday(befortoday)
       while (day !== 8) {
         arr.push(week)
-        // arr.push((befortoday + ' ' + week))
         befortoday = daybefor(today, befor - (day + 1), true)
         week = computeWeekday(befortoday)
         day++
@@ -360,29 +526,134 @@ export default {
         }
       }
       this.cheeckedweek = this._.uniq(this.cheeckedweek)
-      console.log('this.cheeckedweek', this.cheeckedweek)
+    },
+    initlist () {
+      this.$axios(settingDataApi({
+        weekDay: null,
+        slotType: null
+      }))
+      .then(res => {
+        if (res.data.code === '0000') {
+          // let list =[]
+          res.data.data.forEach(item => {
+            // let obj ={}
+            if (item.weekDay === 1) {
+              if (item.slotType === 1) {
+                this.orderlist[0].morning.time = item.startEndPeriodTime
+                this.orderlist[0].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[0].noon.time = item.startEndPeriodTime
+                this.orderlist[0].noon.order = item.isStop
+              }
+            }
+            if (item.weekDay === 2) {
+              if (item.slotType === 1) {
+                this.orderlist[1].morning.time = item.startEndPeriodTime
+                this.orderlist[1].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[1].noon.time = item.startEndPeriodTime
+                this.orderlist[1].noon.order = item.isStop
+              }
+            }
+            if (item.weekDay === 3) {
+              if (item.slotType === 1) {
+                this.orderlist[2].morning.time = item.startEndPeriodTime
+                this.orderlist[2].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[2].noon.time = item.startEndPeriodTime
+                this.orderlist[2].noon.order = item.isStop
+              }
+            }
+            if (item.weekDay === 4) {
+              if (item.slotType === 1) {
+                this.orderlist[3].morning.time = item.startEndPeriodTime
+                this.orderlist[3].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[3].noon.time = item.startEndPeriodTime
+                this.orderlist[3].noon.order = item.isStop
+              }
+            }
+            if (item.weekDay === 5) {
+              if (item.slotType === 1) {
+                this.orderlist[4].morning.time = item.startEndPeriodTime
+                this.orderlist[4].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[4].noon.time = item.startEndPeriodTime
+                this.orderlist[4].noon.order = item.isStop
+              }
+            }
+            if (item.weekDay === 6) {
+              if (item.slotType === 1) {
+                this.orderlist[5].morning.time = item.startEndPeriodTime
+                this.orderlist[5].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[5].noon.time = item.startEndPeriodTime
+                this.orderlist[5].noon.order = item.isStop
+              }
+            }
+            if (item.weekDay === 7) {
+              if (item.slotType === 1) {
+                this.orderlist[6].morning.time = item.startEndPeriodTime
+                this.orderlist[6].morning.order = item.isStop
+              }
+              if (item.slotType === 2) {
+                this.orderlist[6].noon.time = item.startEndPeriodTime
+                this.orderlist[6].noon.order = item.isStop
+              }
+            }
+          })
+        }
+        console.log('周批量预约时间表', this.orderlist)
+      })
     }
   },
   mounted () {
-    console.log(this.settingSingleMorning)
-    console.log(this.settingSingleNoon)
     let data = this.nextSunday()
     this.start = data[0]
     this.end = data[6]
+    // data.forEach(item => {
+    //   let order = {
+    //     order: false,
+    //     morning: '',
+    //     noon: '',
+    //     time: item
+    //   }
+    //   this.order.push(order)
+    // })
+    // this.init()
+    // let orderlist = []
     data.forEach(item => {
       let order = {
-        order: false,
-        morning: '',
-        noon: '',
+        morning: {
+          order: true,
+          time: ''
+        },
+        noon: {
+          order: true,
+          time: ''
+        },
         time: item
       }
-      this.order.push(order)
+      this.orderlist.push(order)
     })
+    this.initlist()
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  .tbody:nth-last-child(n+2){
+    box-shadow: 0 4px #eaeaea;
+  }
+  .thead{
+    box-shadow: 0 4px #eaeaea;
+  }
   .title{
     font-size: 14px;
   }
@@ -398,6 +669,8 @@ export default {
   }
   th{
     color: #041421;
+    height: 40px;
+    font-size: 16px;
   }
   th,td{
     border:1px solid #eaeaea;
@@ -410,11 +683,12 @@ export default {
   button{
     border: none;
     background: #1991fc;
-    padding: 5px;
+    padding: 6px 8px;
     color: #fff;
-    border-radius: 2px;
+    border-radius: 3px;
     cursor: pointer;
     margin-right: 15px;
+    font-size: 14px;
   }
 }
 .dialog-title{

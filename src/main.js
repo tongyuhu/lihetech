@@ -16,9 +16,13 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
+
+// import onlinestatic from './install/vueInstall'
+// import VuePreview from 'vue-preview'
+// Vue.use(onlinestatic)
 // import InfiniteLoading from 'vue-infinite-loading'
 Vue.prototype._ = _
-
+// Vue.use(VuePreview)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
@@ -91,9 +95,20 @@ Vue.directive('drag', {
     }
   }
 })
+// window.onbeforeunload = function (e) {
+//   e = e || window.event
 
-router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
+//   // 兼容IE8和Firefox 4之前的版本
+//   if (e) {
+//     e.returnValue = '关闭提示'
+//   }
+//   console.log('刷新浏览器')
+//   // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
+//   return '关闭提示'
+// }
+
+// router.beforeEach((to, from, next) => {
+  // if (to.meta.requireAuth) {
     // if (session('token')) {
       // next()
     // } else {
@@ -103,11 +118,11 @@ router.beforeEach((to, from, next) => {
       //   query: {redirect: to.fullPath}
       // })
     // }
-    next()
-  } else {
-    next()
-  }
-})
+    // next()
+  // } else {
+    // next()
+  // }
+// })
 new Vue({
   router,
   store,

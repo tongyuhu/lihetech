@@ -4,16 +4,16 @@
       <div class="head-title">患者管理</div>
       <div class="head-edit-wrap">
         <button class="head-edit-button margin-right" @click="addSick">新增患者</button>
-        <button class="head-edit-button delete" @click="deleteSick">删除</button>
+        <!-- <button class="head-edit-button delete" @click="deleteSick">删除</button> -->
       </div>
     </div>
     <div>
       <el-card>
         <div class="card-head clear">
-          <div class="card-head-left sick-type-btn">
+          <!-- <div class="card-head-left sick-type-btn">
             <button :class="{'sick-type-checked':checkblood}" @click="checkedblood">高血压</button>
             <button :class="{'sick-type-checked':!checkblood}" @click="checkedsuger">糖尿病</button>
-          </div>
+          </div> -->
           <div class="search card-head-left">
             <el-input placeholder="账号 \ 姓名 \ 电话" v-model="searchSickMsg" size="small"
             :style="{'padding':'0'}"
@@ -48,7 +48,7 @@
           align="center">
           </el-table-column>
           <el-table-column
-          :prop="sicktype"
+          prop="sicktype"
           label="患者类型"
           align="center">
           </el-table-column>
@@ -57,22 +57,22 @@
           label="联系电话"
           align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
           prop="email"
           label="严重比例 暂无"
           align="center">
-          </el-table-column>
-          <el-table-column
+          </el-table-column> -->
+          <!-- <el-table-column
           prop="adminNote"
           label="病情 无"
           align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           prop="joinHospitalTime"
           label="加入时间"
           align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
           label="操作"
           align="center"
           width="100">
@@ -82,7 +82,7 @@
               编辑</span>
               </el-button>
             </template>
-          </el-table-column>
+          </el-table-column> -->
         </el-table>
         <div class="page">
           <el-pagination
@@ -144,8 +144,8 @@
           <img width="200px" :src="addSickImg" alt="二维码">
         </div>
         <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="showAddSick = false">确 定</button>
-          <button class="cancel" @click="showAddSick = false">取 消</button>
+          <button  type="primary" @click="confirmAddSick">确 定</button>
+          <!-- <button class="cancel" @click="showAddSick = false">取 消</button> -->
         </span>
       </el-dialog>
     </div>
@@ -159,7 +159,7 @@ export default {
   data () {
     return {
       checkblood: true,
-      sicktype: 'bloodPressureType',
+      // sicktype: 'bloodPressureType',
       sickList: [
       ],
       readyDelete: [],
@@ -180,14 +180,17 @@ export default {
   },
 
   methods: {
+    confirmAddSick () {
+      this.showAddSick = false
+    },
     checkedblood () {
-      this.sicktype = 'bloodPressureType'
+      // this.sicktype = 'bloodPressureType'
       this.checkblood = true
       this.currentPage = 1
       this.getSickList()
     },
     checkedsuger () {
-      this.sicktype = 'diabetesType'
+      // this.sicktype = 'diabetesType'
       this.checkblood = false
       this.currentPage = 1
       this.getSickList()
@@ -197,60 +200,77 @@ export default {
         return list
       } else {
         list.forEach(item => {
-          if (item.bloodPressureType) {
-            switch (item.bloodPressureType) {
-              case 0: {
-                item.bloodPressureType = '未知'
-                break
-              }
-              case 1: {
-                item.bloodPressureType = '原发性高血压'
-                break
-              }
-              case 2: {
-                item.bloodPressureType = '继发性高血压'
-                break
-              }
-              case 3: {
-                item.bloodPressureType = '正常'
-                break
-              }
-              default: {
-                item.bloodPressureType = '未知'
-              }
+          let sickTypelist1 = []
+          let sickTypelist2 = []
+          // if (item.bloodPressureType) {
+          switch (item.bloodPressureType) {
+            case 0: {
+              sickTypelist1.push('未知')
+              break
+            }
+            case 1: {
+              sickTypelist1.push('原发性高血压')
+              // item.sicktype = '原发性高血压'
+              break
+            }
+            case 2: {
+              sickTypelist1.push('继发性高血压')
+              // item.sicktype = '继发性高血压'
+              break
+            }
+            case 3: {
+              sickTypelist1.push('正常')
+              // item.sicktype = '正常'
+              break
+            }
+            default: {
+              sickTypelist1.push('未知')
+              // item.sicktype = '未知'
             }
           }
-          if (item.diabetesType) {
-            switch (item.diabetesType) {
-              case 0: {
-                item.diabetesType = '未知'
-                break
-              }
-              case 1: {
-                item.diabetesType = '1型糖尿病'
-                break
-              }
-              case 2: {
-                item.diabetesType = '2型糖尿病'
-                break
-              }
-              case 3: {
-                item.diabetesType = '妊娠型糖尿病'
-                break
-              }
-              case 4: {
-                item.diabetesType = '特殊型糖尿病'
-                break
-              }
-              case 5: {
-                item.diabetesType = '正常'
-                break
-              }
-              default: {
-                item.diabetesType = '未知'
-              }
+          // }
+          // if (item.diabetesType) {
+          switch (item.diabetesType) {
+            case 0: {
+              sickTypelist2.push('未知')
+              // item.sicktype = '未知'
+              break
+            }
+            case 1: {
+              sickTypelist2.push('1型糖尿病')
+              // item.sicktype = '1型糖尿病'
+              break
+            }
+            case 2: {
+              sickTypelist2.push('2型糖尿病')
+              // item.sicktype = '2型糖尿病'
+              break
+            }
+            case 3: {
+              sickTypelist2.push('妊娠型糖尿病')
+              // item.sicktype = '妊娠型糖尿病'
+              break
+            }
+            case 4: {
+              sickTypelist2.push('特殊型糖尿病')
+              // item.sicktype = '特殊型糖尿病'
+              break
+            }
+            case 5: {
+              sickTypelist2.push('正常')
+              // item.sicktype = '正常'
+              break
+            }
+            default: {
+              sickTypelist2.push('未知')
+              // item.sicktype = '未知'
             }
           }
+          sickTypelist1 = this._.uniqWith(sickTypelist1, this._.isEqual)
+          sickTypelist2 = this._.uniqWith(sickTypelist2, this._.isEqual)
+          item.sicktype = '高血压：' + sickTypelist1.join('、') + '；糖尿病：' + sickTypelist2.join('、')
+
+          // }
         })
       }
       return list
@@ -283,7 +303,11 @@ export default {
             })
           }
           this.sickList = this.formatterSickList(this.sickList)
+<<<<<<< HEAD
           console.log('param', param)
+=======
+          console.log('sickList', this.sickList)
+>>>>>>> origin/dev
         })
       }
       console.log('sickList', this.sickList)
@@ -350,12 +374,14 @@ export default {
           })
         }
         this.sickList = this.formatterSickList(this.sickList)
+        console.log('sickList', this.sickList)
       })
     }
 
   },
   mounted () {
     this.getSickList()
+    // console.log('sickList', this.sickList)
   }
 }
 </script>

@@ -34,6 +34,7 @@ const scrollBehavior = (to, from, savedPosition) => {
 //   }
 // }
 const RouterConfig = {
+  mode: 'hash',
   // mode: 'history',
   scrollBehavior,
   routes: baseroutes

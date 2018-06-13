@@ -97,8 +97,9 @@
                   </div> -->
                 <!-- </el-col> -->
                 <div class="flex">
-                  <div class="flex-btn-left" v-show="foodBtnPre">
-                    <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <div class="flex-btn-left">
+                    <el-button :disabled="foodBtnNext" @click="bloodFoodNext" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <!-- <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                   <div class="chart-min-width kaluli-wrap">
                     <div class="kaluli-btn-wrap">
@@ -113,8 +114,9 @@
                     </div>
                     <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
                   </div>
-                  <div class="flex-btn" v-show="foodBtnNext">
-                    <el-button @click="bloodFoodNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                  <div class="flex-btn" >
+                    <el-button :disabled="foodBtnPre" @click="bloodFoodPer" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <!-- <el-button @click="bloodFoodNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                 </div>
               </el-row>
@@ -171,7 +173,8 @@
                 </el-col> -->
                 <div class="flex">
                   <div class="flex-btn-left">
-                    <el-button v-show="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button :disabled="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <!-- <el-button v-show="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                   <div class="chart-min-width kaluli-wrap">
                     <div class="kaluli-btn-wrap">
@@ -187,7 +190,8 @@
                     <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
                   </div>
                   <div class="flex-btn">
-                    <el-button v-show="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <el-button :disabled="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                    <!-- <el-button v-show="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                 </div>
               </el-row>
@@ -681,6 +685,12 @@ export default {
               })
             }
           }
+          this.bloodfoodData.x = this.bloodfoodData.x.reverse()
+          this.bloodfoodData.systolic = this.bloodfoodData.systolic.reverse()
+          this.bloodfoodData.diastolic = this.bloodfoodData.diastolic.reverse()
+          this.bloodfoodData.foodScore = this.bloodfoodData.foodScore.reverse()
+          this.bloodfoodData.calories = this.bloodfoodData.calories.reverse()
+          this.bloodfoodData.bpType = this.bloodfoodData.bpType.reverse()
         }
         let state = ''
         if (this.bloodfoodChecked.kaluli) {
@@ -801,6 +811,12 @@ export default {
               })
             }
           }
+          this.bloodsportData.x = this.bloodsportData.x.reverse()
+          this.bloodsportData.systolic = this.bloodsportData.systolic.reverse()
+          this.bloodsportData.diastolic = this.bloodsportData.diastolic.reverse()
+          this.bloodsportData.movementScore = this.bloodsportData.movementScore.reverse()
+          this.bloodsportData.calories = this.bloodsportData.calories.reverse()
+          this.bloodsportData.bpType = this.bloodsportData.bpType.reverse()
         }
         let state = ''
         if (this.bloodsportChecked.kaluli) {
@@ -1882,12 +1898,12 @@ export default {
       if (pageNum === 1 && pages === 1) {
         page.start = 0
         page.end = 100
-      } else if (pageNum === 1) {
+      } else if (pageNum === pages) {
         page.start = 0
-        page.end = parseInt((pageNum / pages) * 100)
-      } else if (pageNum < pages || pageNum === pages) {
-        page.start = parseInt(((pageNum - 1) / pages) * 100)
-        page.end = parseInt((pageNum / pages) * 100)
+        page.end = parseInt((1 / pages) * 100)
+      } else if (pageNum < pages) {
+        page.start = parseInt(((pages - pageNum) / pages) * 100)
+        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
       }
       return page
     },
@@ -1976,12 +1992,12 @@ export default {
                 if (!item.bpType) {
                   item.bpType = 0
                 }
-                vm.bloodfoodData.x.push(item.createTime)
-                vm.bloodfoodData.systolic.push(item.systolic)
-                vm.bloodfoodData.diastolic.push(item.diastolic)
-                vm.bloodfoodData.foodScore.push(item.foodScore)
-                vm.bloodfoodData.calories.push(item.calories)
-                vm.bloodfoodData.bpType.push(item.bpType)
+                vm.bloodfoodData.x.unshift(item.createTime)
+                vm.bloodfoodData.systolic.unshift(item.systolic)
+                vm.bloodfoodData.diastolic.unshift(item.diastolic)
+                vm.bloodfoodData.foodScore.unshift(item.foodScore)
+                vm.bloodfoodData.calories.unshift(item.calories)
+                vm.bloodfoodData.bpType.unshift(item.bpType)
               })
             }
           }
@@ -2089,12 +2105,12 @@ export default {
                 if (!item.bpType) {
                   item.bpType = 0
                 }
-                vm.bloodsportData.x.push(item.createTime)
-                vm.bloodsportData.systolic.push(item.systolic)
-                vm.bloodsportData.diastolic.push(item.diastolic)
-                vm.bloodsportData.movementScore.push(item.movementScore)
-                vm.bloodsportData.calories.push(item.calories)
-                vm.bloodsportData.bpType.push(item.bpType)
+                vm.bloodsportData.x.unshift(item.createTime)
+                vm.bloodsportData.systolic.unshift(item.systolic)
+                vm.bloodsportData.diastolic.unshift(item.diastolic)
+                vm.bloodsportData.movementScore.unshift(item.movementScore)
+                vm.bloodsportData.calories.unshift(item.calories)
+                vm.bloodsportData.bpType.unshift(item.bpType)
               })
             }
           }
@@ -2116,18 +2132,18 @@ export default {
     bloodfoodData: {
       handler: function (val) {
         if (val.pages < 2) {
-          this.foodBtnNext = false
-          this.foodBtnPre = false
+          this.foodBtnNext = true
+          this.foodBtnPre = true
         } else {
           if (val.currentPage === val.pages) {
-            this.foodBtnNext = false
-          } else {
             this.foodBtnNext = true
+          } else {
+            this.foodBtnNext = false
           }
           if (val.currentPage !== 1) {
-            this.foodBtnPre = true
-          } else {
             this.foodBtnPre = false
+          } else {
+            this.foodBtnPre = true
           }
         }
       },
@@ -2136,18 +2152,18 @@ export default {
     bloodsportData: {
       handler: function (val) {
         if (val.pages < 2) {
-          this.sportBtnNext = false
-          this.sportBtnPre = false
+          this.sportBtnNext = true
+          this.sportBtnPre = true
         } else {
           if (val.currentPage === val.pages) {
-            this.sportBtnNext = false
-          } else {
             this.sportBtnNext = true
+          } else {
+            this.sportBtnNext = false
           }
           if (val.currentPage !== 1) {
-            this.sportBtnPre = true
-          } else {
             this.sportBtnPre = false
+          } else {
+            this.sportBtnPre = true
           }
         }
       },
@@ -2504,7 +2520,7 @@ export default {
     position: absolute;
     bottom:50%;
     right: 0;
-    z-index:999;
+    z-index:99;
   }
   .flex-btn-left{
     max-width: 55px;
@@ -2513,7 +2529,7 @@ export default {
     position: absolute;
     bottom:50%;
     left: 25px;
-    z-index:999;
+    z-index:99;
   }
   .widthone{
     width: 100%;

@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Bus from '@/bus'
+// import Bus from '@/bus'
 import HSugerheightotal from './H-sugerheightotal'
 import HsugerWork from './H-sugerWork'
 import sugerSicklist from './H-sugerSicklist.vue'
@@ -29,12 +29,12 @@ export default {
     return {
 
     }
-  },
-  beforeRouteLeave (to, from, next) {
-    // 离开当前页面关闭导航
-    Bus.$emit('closemenu', this.$route.name)
-    next()
   }
+  // beforeRouteLeave (to, from, next) {
+  //   // 离开当前页面关闭导航
+  //   Bus.$emit('closemenu', this.$route.name)
+  //   next()
+  // }
 }
 </script>
 

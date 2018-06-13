@@ -25,12 +25,15 @@
           <div class="im-panes">
             <flod
             title="我的好友"
-            :total="friendList.length">
+            :total="friendsList.length">
               <div>
                 <ul>
                   <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
-                    <img  class="friend-icon" :src="friend.userImg.length !==0 ? friend.userId :'/static/user.png'" alt="">
+                    <img  class="friend-icon" 
+                    ref="friendImg"
+                    :src="friend.userImg" alt="">
+                    <!-- :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt=""> -->
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
                     <!-- </el-badge> -->
@@ -76,7 +79,8 @@
 import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
-import {mapState, mapMutations, mapGetters} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
+import publicStatic from '@/publicData/const.js'
 export default {
   name: 'im',
   components: {
@@ -85,46 +89,17 @@ export default {
     chatPane
   },
   props: {
-    friendList: {
-      type: [Array],
-      default: function () {
-        return []
-      }
-    }
+    // friendList: {
+    //   type: [Array],
+    //   default: function () {
+    //     return []
+    //   }
+    // }
   },
   data () {
     return {
-      message: ''
-      // list: [
-        // {
-        //   userId: '5277',
-        //   userImg: '',
-        //   userName: '夏良开',
-        //   hasMsg: false,
-        //   currentChat: false
-        // },
-        // {
-        //   userId: 3,
-        //   userImg: '',
-        //   userName: '夏良凯',
-        //   hasMsg: false,
-        //   currentChat: false
-        // },
-        // {
-        //   userId: 3,
-        //   userImg: '',
-        //   userName: '夏邦为',
-        //   hasMsg: false,
-        //   currentChat: false
-        // },
-        // {
-        //   userId: 3,
-        //   userImg: '',
-        //   userName: '夏利坚',
-        //   hasMsg: false,
-        //   currentChat: false
-        // }
-      // ]
+      message: '',
+      publicStatic: publicStatic
     }
   },
   computed: {
@@ -141,55 +116,40 @@ export default {
       'changeChatFriend',
       'addChatFriend',
       'openChatWindow',
-      'sethistory'
+      'sethistory',
+      'clearNewmsg'
     ]),
     closeIM () {
       this.$emit('closeIM')
     },
     chartWith (friend) {
       let vm = this
-      let history = []
-      vm.sethistory(history)
       friend.hasMsg = false
-      if (this._.has(friend, 'history')) {
-        history = friend.history
-        vm.addChatFriend(friend)
-        vm.changeChatFriend(friend)
-      } else {
-        // let historys = []
-        friend.history = []
-        vm.addChatFriend(friend)
-        vm.changeChatFriend(friend)
-      }
-      vm.sethistory(friend.history)
-      console.log('好友xiaoxi ', friend.history)
+      this.clearNewmsg()
+      this.addChatFriend(friend)
+      this.changeChatFriend(friend)
+      this.openChatWindow()
+      // let history = []
+      // vm.sethistory(history)
+      // friend.hasMsg = false
+      // if (this._.has(friend, 'history')) {
+      //   history = friend.history
+      //   vm.addChatFriend(friend)
+      //   vm.changeChatFriend(friend)
+      // } else {
+      //   friend.history = []
+      //   vm.addChatFriend(friend)
+      //   vm.changeChatFriend(friend)
+      // }
+      // vm.sethistory(history)
+      // console.log('好友xiaoxi ', friend)
       // friend.history = []
       // 获取历史消息
-      let timestrap = null
-      let count = 20
-      let userId = friend.userId
-      // console.log('RongIMLib.ConversationType.PRIVATE', RongIMLib.ConversationType.PRIVATE)
-      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
-      RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
-        onSuccess: function (list, hasMsg) {
-        // hasMsg为boolean值，如果为true则表示还有剩余历史消息可拉取，为false的话表示没有剩余历史消息可供拉取。
-        // list 为拉取到的历史消息列表
-          // let history = list
-          // friend.history = history
-          console.log('历史消息', list, hasMsg)
-        },
-        onError: function (error) {
-          console.log('历史消息获取失败', error)
-        // APP未开启消息漫游或处理异常
-        // throw new ERROR ......
-        }
-      })
 
       vm.openChatWindow()
     }
   },
   mounted () {
-
   }
 }
 </script>
@@ -219,7 +179,7 @@ export default {
   }
   
   .im{
-    z-index: 998;
+    z-index: 99999999;
     button{
       // opacity: 0;
       background: rgba(255, 255, 255, 0);
