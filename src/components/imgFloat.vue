@@ -1,6 +1,6 @@
 <template>
   <div class="img-message-wrap"  v-if="showBigImg" v-on:click.self.stop="closeBig()">
-    <img :src="imgsrc" alt="图片消息">
+    <img :src="imgsrc" alt="无法获取图片">
   </div>
 </template>
 

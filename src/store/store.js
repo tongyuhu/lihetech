@@ -256,11 +256,7 @@ export const store = new Vuex.Store({
                 obj.history = []
                 obj.hasHistroy = true
                 if (_.has(item, 'userImage')) {
-                  // if (item.userImage.length !== 0) {
                   obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
-                    // obj.userImg = process.env.IMG_URL + item.userImage
-                  // }
-                  // process.env.IMG_URL
                 } else {
                   obj.userImg = imgExists(null, publicStatic.onlineStatic + '/static/user.png')
                 }

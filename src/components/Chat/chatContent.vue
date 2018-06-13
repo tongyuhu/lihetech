@@ -1,7 +1,7 @@
 <template>
   <div class="meeeage-content">
     <span v-if="isTextMsg">{{textMsg}}</span>
-    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
+    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="无法获取图片">
     <imgfloat
     :imgsrc="imgsrc"
     ref="chatimg">
@@ -127,10 +127,12 @@ export default {
 <style lang="scss" scoped>
 .meeeage-content{
   min-width: 15px;
+  min-height:20px;
 }
 .img-chat{
   max-width: 200px;
   cursor: pointer;
+  color: #666;
 }
 .center{
   margin: 0 auto;

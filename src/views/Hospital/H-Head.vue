@@ -20,10 +20,7 @@
           <span class="head-right">{{ adminName }}</span>
         </div>
         <div class="head-right">
-          <!-- <div class="admin-icon-wrap"> -->
-<!-- E:\LIHETECH.WEB\lihetech.dev\lihetech\static\admin.jpg -->
-            <img :src="adminIcon ? adminIcon :'./static/admin.jpg'" alt=""  class="admin-icon" width="34px" height="34px">
-          <!-- </div> -->
+            <img :src="imgExists(adminIcon,'./static/admin.jpg')" alt=""  class="admin-icon" width="34px" height="34px">
         </div>
   
       <el-dialog
@@ -60,7 +57,6 @@
               :autofocus="true"
               placeholder="请再次输入密码"
               v-model="changePasswordForm.newPassword2">
-              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
         </el-form>
@@ -78,6 +74,7 @@
 import adminicon from 'icon/admin.jpg'
 import {mapState} from 'vuex'
 import {editAdminApi} from '@/api/components/editAdmin.js'
+import {imgExists} from '@/untils/untils.js'
 export default {
   name: 'H-Head',
   data () {
@@ -170,6 +167,9 @@ export default {
     }
   },
   methods: {
+    imgExists (url, errurl) {
+      return imgExists(url, errurl)
+    },
     show () {
       this.isshow = !this.isshow
       this.showshade = true

@@ -2,7 +2,7 @@
   <div>
       <div :class="[cls ? 'left' : 'right']">
         <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
-          <div>
+          <div class="avatar-wrap">
             <img class="avatar" :src="userImgChat" alt="头像" ref="onerrorimg">
           </div>
           <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
@@ -30,6 +30,7 @@
 // import img from '~icon/hospital-icon2-04.png'
 import publicStatic from '@/publicData/const.js'
 import {mapState, mapGetters} from 'vuex'
+import {imgExists} from '@/untils/untils.js'
 export default {
   name: 'chartmessage',
   props: {
@@ -65,18 +66,6 @@ export default {
     ...mapGetters(['adminImg', 'currentChatImg'])
   },
   methods: {
-    imgExists () {
-      let vm = this
-      let imgUrl = publicStatic.onlineStatic + '/static/user.png'
-      let img = new Image()
-      img.src = vm.userImgChat
-            // 判断图片大小是否大于0 或者 图片高度与宽度都大于0
-      if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
-        vm.userImgChat = vm.userImgChat
-      } else {
-        vm.userImgChat = imgUrl
-      }
-    }
   },
   watch: {
     who: {
@@ -84,13 +73,13 @@ export default {
         if (this.who === this.rongUserId) {
           this.cls = false
           if (this.adminImg) {
-            this.userImgChat = this.adminImg
+            this.userImgChat = imgExists(this.adminImg, publicStatic.onlineStatic + '/static/user.png')
           }
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
           if (this.currentChatImg) {
-            this.userImgChat = this.currentChatImg
+            this.userImgChat = imgExists(this.currentChatImg, publicStatic.onlineStatic + '/static/user.png')
           }
         }
       },
@@ -109,7 +98,7 @@ export default {
         this.chatclass = 'right-angle'
       }
     }
-    this.imgExists()
+    this.userImgChat = imgExists(this.userImgChat, publicStatic.onlineStatic + '/static/user.png')
   }
 
 }
@@ -155,6 +144,9 @@ export default {
   //   display: block;
   //   clear: both;
   // }
+  .avatar-wrap{
+    align-self: flex-start;
+  }
   .avatar{
     width: 46px;
     height: 46px;
@@ -174,11 +166,7 @@ export default {
     max-width: 60%;
     .message-wrap{
       background-color: $bagcolor;
-      border-radius: 5px;
-      padding:5px;
-      font-size: 14px;
       color: #041421;
-      line-height: 20px;
     }
     .left-angle{
       position: relative;
@@ -189,12 +177,20 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:45%;
+      top:40%;
       right: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;
       border-right:10px solid $bagcolor;
     }
+  }
+  .message-wrap{
+    align-self: flex-start;
+    margin-top: 8px;
+    border-radius: 2px;
+    padding:5px;
+    font-size: 14px;
+    line-height: 20px;
   }
   .right{
     margin-top:15px;
@@ -203,11 +199,7 @@ export default {
     $bagcolor:#1991fc;
     .message-wrap{
       background-color: $bagcolor;
-      border-radius: 5px;
-      padding:5px;
       color: #fff;
-      font-size: 14px;
-      line-height: 20px;
     }
 
     .right-angle{
@@ -219,7 +211,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:45%;
+      top:12px;
       left: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;
