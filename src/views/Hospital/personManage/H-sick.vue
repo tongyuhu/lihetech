@@ -7,7 +7,7 @@
         <!-- <button class="head-edit-button delete" @click="deleteSick">删除</button> -->
       </div>
     </div>
-    <div>
+    <div class="loading-min-height" v-loading="loading">
       <el-card>
         <div class="card-head clear">
           <!-- <div class="card-head-left sick-type-btn">
@@ -158,6 +158,7 @@ export default {
   name: 'sick-manage',
   data () {
     return {
+      loading: false,
       checkblood: true,
       // sicktype: 'bloodPressureType',
       sickList: [
@@ -351,6 +352,7 @@ export default {
       })
     },
     getSickList () {
+      this.loading = true
       let param = {
         pageNum: this.currentPage,
         pageSize: this.pageSize
@@ -366,7 +368,12 @@ export default {
           })
         }
         this.sickList = this.formatterSickList(this.sickList)
+        this.loading = false
         console.log('sickList', this.sickList)
+      })
+      .catch(err => {
+        console.log('获取患者列表失败', err)
+        this.loading = false
       })
     }
 
@@ -556,5 +563,9 @@ input{
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+  }
+  .loading-min-height{
+    min-height: 400px;
+    width: 100%;
   }
 </style>
