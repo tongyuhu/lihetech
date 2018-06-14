@@ -28,7 +28,7 @@
       </div>
     </div>
     <!-- 当前预约 -->
-    <div v-show="!checkOrderBtn">
+    <div v-show="!checkOrderBtn" v-loading="currentOrderLoading" class="loading-min-height">
       <el-card>
         <table>
           <thead>
@@ -206,7 +206,7 @@
     </div>
 
     <!-- 历史预约 checkOrderBtn -->
-    <div v-show="checkOrderBtn">
+    <div v-show="checkOrderBtn" v-loading="histroyOrdedrLoading" class="loading-min-height">
       <el-card>
         <table>
           <thead>
@@ -440,6 +440,8 @@ export default {
   name: 'orderSick',
   data () {
     return {
+      currentOrderLoading: false,
+      histroyOrdedrLoading: false,
       // 显示上午预约
       showMorningEdit: true,
       // 显示下午预约
@@ -540,19 +542,32 @@ export default {
       this.changeChatFriend(sick)
       this.openChatWindow()
     },
-    // 获取当前预约数据
+    // 获取预约数据
     getOrderData (params, histroy) {
+      this.currentOrderLoading = true
+      this.histroyOrdedrLoading = false
+      if (histroy) {
+        this.histroyOrdedrLoading = true
+        this.currentOrderLoading = false
+      }
       this.$axios(orderApi(params))
       .then(res => {
         if (res.data.data) {
           if (histroy) {
             this.histroyOrderList = []
             this.histroyOrderList = this.formmater(res.data.data)
+            this.histroyOrdedrLoading = false
           } else {
             this.orderList = []
             this.orderList = this.formmater(res.data.data)
+            this.currentOrderLoading = false
           }
         }
+      })
+      .catch(err => {
+        console.log(err)
+        this.currentOrderLoading = false
+        this.histroyOrdedrLoading = false
       })
     },
     // 计算周几
@@ -1116,6 +1131,10 @@ export default {
   width: 72px;
   font-size: 14px;
   background: #e87070;
+}
+.loading-min-height{
+  min-height: 700px;
+  width: 100%;
 }
 </style>
 

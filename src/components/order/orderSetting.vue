@@ -5,7 +5,7 @@
       <!-- <span class="title">{{start}} 至 {{end}}</span> -->
     </div>
 
-    <div>
+    <div v-loading="loading" class="loading-min-height">
       <el-card>
         <table>
           <thead class="thead">
@@ -212,6 +212,7 @@ export default {
   name: 'orderSetting',
   data () {
     return {
+      loading: false,
       showMorningEdit: true,
       showNoonEdit: true,
       start: '',
@@ -528,6 +529,7 @@ export default {
       this.cheeckedweek = this._.uniq(this.cheeckedweek)
     },
     initlist () {
+      this.loading = true
       this.$axios(settingDataApi({
         weekDay: null,
         slotType: null
@@ -608,8 +610,13 @@ export default {
               }
             }
           })
+          this.loading = false
         }
         console.log('周批量预约时间表', this.orderlist)
+      })
+      .catch(err => {
+        console.log(err)
+        this.loading = false
       })
     }
   },
@@ -727,6 +734,10 @@ export default {
   cursor: pointer;
   margin-left: 3px;
   margin-right: 3px;
+}
+.loading-min-height{
+  min-height: 700px;
+  width: 100%;
 }
 </style>
 
