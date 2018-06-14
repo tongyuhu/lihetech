@@ -6,7 +6,7 @@
     <el-card :body-style="{ padding: '0px' }">
       <div>
         <div class="add-sick-img" v-loading="ercodeimg">
-          <img width="250px" :src="addSickImg" alt="二维码">
+          <img width="250px" :src="addSickImg" alt="二维码图片加载失败">
         </div>
         <!-- <img src="" alt=""> -->
       </div>
@@ -120,14 +120,19 @@ export default {
     }
   },
   mounted () {
-    // this.ercodeimg = true
+    this.ercodeimg = true
     this.$axios({
       method: 'post',
       url: 'qrcode/url'
     })
     .then(res => {
       this.addSickImg = res.data.data
-      // this.ercodeimg = false
+      this.ercodeimg = false
+    })
+    .catch(err => {
+      // if (err) {
+      this.ercodeimg = false
+      // }
     })
   }
   // data () {
@@ -342,11 +347,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$url:'./../../hospitalImage/hospitalIcon/';
-    button{
-      border:none;
-      outline: none;
-    }
+  button{
+    border:none;
+    outline: none;
+  }
   .accountsetting{
     height: 100%;
   }
@@ -513,5 +517,7 @@ $url:'./../../hospitalImage/hospitalIcon/';
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+    min-height: 250px;
+    width: 100%;
   }
 </style>
