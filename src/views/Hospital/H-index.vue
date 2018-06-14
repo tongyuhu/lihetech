@@ -295,7 +295,6 @@
             case RongIMClient.MessageType.TextMessage:
               console.log(message)
               let currentId = ''
-  
               if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
                 currentId = ''
               } else {  // 当前有聊天窗口
@@ -331,9 +330,37 @@
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
-              console.log('收到语音消息')
+              console.log('收到语音消息', message)
                     // 对声音进行预加载
                     // message.content.content 格式为 AMR 格式的 base64 码
+
+              let currentvoiceId = ''
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentvoiceId = ''
+              } else {  // 当前有聊天窗口
+                currentvoiceId = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentvoiceId) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              if (vm.chatStatus) {
+                vm.$nextTick(() => {
+                  setTimeout(function () {
+                    let container = vm.$el.querySelector('#chatWidow')
+                    container.scrollTop = container.scrollHeight
+                  }, 100)
+                })
+              }
               break
             case RongIMClient.MessageType.ImageMessage:
               console.log('图片消息', message)
@@ -374,6 +401,35 @@
                   // message.content.extension => 讨论组中的人员。
               break
             case RongIMClient.MessageType.LocationMessage:
+              console.log('收到位置信息', message)
+
+              let currentlocationId = ''
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentlocationId = ''
+              } else {  // 当前有聊天窗口
+                currentlocationId = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentlocationId) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              if (vm.chatStatus) {
+                vm.$nextTick(() => {
+                  setTimeout(function () {
+                    let container = vm.$el.querySelector('#chatWidow')
+                    container.scrollTop = container.scrollHeight
+                  }, 100)
+                })
+              }
                   // message.content.latiude => 纬度。
                   // message.content.longitude => 经度。
                   // message.content.content => 位置图片 base64。
@@ -591,6 +647,12 @@
         }
       // command => 消息指令;
       })
+
+      RongIMLib.RongIMEmoji.init({
+        size: 18
+      })
+      RongIMLib.RongIMVoice.init()
+      // console.log('表情库', vm.emojiList)
     }
   }
 </script>

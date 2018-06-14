@@ -1,9 +1,19 @@
 <template>
   <div class="meeeage-content">
-    <span v-if="isTextMsg">{{textMsg}}</span>
-    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="无法获取图片">
+    <!-- <span v-if="isTextMsg">{{textMsg}}</span> -->
+    <span v-if="isTextMsg" v-html="textMsg"></span>
+    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig(imgsrc)" alt="无法获取图片">
+    <button class="voice-msg" v-if="isVoiceMsg" @click="playVoice"><span class="iconfont icon-yuyin"></span></button>
+    <div class="location-img-wrap">
+      <!-- <img class="location-img" v-if="isLocationMsg" :src="locationMsg" @click="showBig(locationMsg)" alt="无法获取图片">
+      <span class="location-name">{{locationName}}</span> -->
+      <position
+      :position="locationMsg"
+      :title="locationName">
+      </position>
+    </div>
     <imgfloat
-    :imgsrc="imgsrc"
+    :imgsrc="bigImgsrc"
     ref="chatimg">
     </imgfloat>
     <!-- <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
@@ -17,11 +27,13 @@
 
 <script>
 import imgfloat from '@/components/imgFloat'
+import position from '@/components/Chat/postion.vue'
 // import Bus from '@/bus.js'
 export default {
   name: 'chatcontent',
   components: {
-    imgfloat
+    imgfloat,
+    position
   },
   props: {
     message: {
@@ -36,21 +48,16 @@ export default {
   data () {
     return {
       textMsg: '',
+      isLocationMsg: false,
       isTextMsg: false,
       isImgMsg: false,
+      isVoiceMsg: false,
       imgsrc: '',
-      showBigImg: false
-      // slide1: [
-      //   {
-      //     src: 'https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg',
-      //     msrc: 'https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg',
-      //     alt: 'picture1',
-      //     title: 'Image Caption 1',
-      //     w: 600,
-      //     h: 400
-      //   }
-      // ]
-      // isTextMsg:true,
+      showBigImg: false,
+      voiceFile: '',
+      locationMsg: [],
+      locationName: '',
+      bigImgsrc: ''
 
     }
   },
@@ -67,23 +74,35 @@ export default {
           case 'ImageMessage':
             this.isImgMsg = true
             if (this.message.content.content) {
-              this.imgsrc = 'image/jpg;base64,' + this.message.content.content
+              this.imgsrc = 'data:image/jpg;base64,' + this.message.content.content
             }
             if (this.message.content.imageUri) {
               this.imgsrc = this.message.content.imageUri
             }
             break
+          case 'VoiceMessage':
+            this.isVoiceMsg = true
+            this.voiceFile = this.message.content.content
+            break
+          case 'LocationMessage':
+            this.isLocationMsg = true
+            this.locationMsg.push(this.message.content.latiude)
+            this.locationMsg.push(this.message.content.longitude)
+            this.locationName = this.message.content.poi
+            break
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   computed: {
 
   },
   methods: {
-    showBig () {
+    showBig (src) {
       let vm = this
+      this.bigImgsrc = src
       this.$nextTick(function () {
         vm.$refs.chatimg.showBig()
       })
@@ -99,7 +118,8 @@ export default {
         case 'TextMessage':
           vm.isTextMsg = true
           // if (vm.vm.message.content.content) {
-          vm.textMsg = vm.message.content.content
+          // vm.textMsg = vm.message.content.content
+          vm.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(vm.message.content.content)
           // }
           break
         case 'ImageMessage':
@@ -111,8 +131,27 @@ export default {
             vm.imgsrc = vm.message.content.imageUri
           }
           break
+        case 'VoiceMessage':
+          vm.isVoiceMsg = true
+          vm.voiceFile = vm.message.content.content
+          break
+        case 'LocationMessage':
+          vm.isLocationMsg = true
+          vm.locationMsg.push(vm.message.content.latiude)
+          vm.locationMsg.push(vm.message.content.longitude)
+          vm.locationName = vm.message.content.poi
+          break
       }
       // if(message.messageType)
+    },
+    playVoice () {
+      let vm = this
+      let duration = vm.voiceFile.length / 1024
+      // 预加载
+      RongIMLib.RongIMVoice.preLoaded(vm.voiceFile, function () {
+        // 播放声音
+        RongIMLib.RongIMVoice.play(vm.voiceFile, duration)
+      })
     }
   },
   mounted () {
@@ -156,5 +195,32 @@ export default {
     max-width: 80%;
     // width: 80%;
   }
+}
+.voice-msg{
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 18px;
+  width: 50px;
+}
+.location-img-wrap{
+  position: relative;
+  display: inline-block;
+}
+.location-img{
+  max-width: 200px;
+  cursor: pointer;
+  color: #666;
+}
+.location-name{
+  position: absolute;
+  bottom:0;
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
 }
 </style>

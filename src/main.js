@@ -16,7 +16,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
-
+import VueAMap from 'vue-amap'
 // import onlinestatic from './install/vueInstall'
 // import VuePreview from 'vue-preview'
 // Vue.use(onlinestatic)
@@ -25,12 +25,17 @@ Vue.prototype._ = _
 // Vue.use(VuePreview)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
+Vue.use(VueAMap)
 Vue.component('f-button', Fbutton)
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
-
+VueAMap.initAMapApiLoader({
+  key: '2cfe1d4f0a4041df6e7e3635c9b25f52',
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+  // 默认高德 sdk 版本为 1.4.4
+  v: '1.4.4'
+})
 // 自定义判断权限指令 为true时显示 false时不显示
 Vue.directive('hasRoot', {
   bind: function (el, binding) {
