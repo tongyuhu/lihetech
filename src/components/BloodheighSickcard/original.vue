@@ -18,7 +18,7 @@
               @change="checkTime">
             </el-date-picker>
           </div>
-          <div class="original-table">
+          <div class="original-table" v-loading="loading">
             <table>
               <tr>
                 <th>日期</th>
@@ -67,6 +67,7 @@ export default {
   },
   data () {
     return {
+      loading: false,
       month: '',
       pageSize: 10,
       pageNum: 1,
@@ -77,6 +78,7 @@ export default {
   },
   methods: {
     getOriginalData () {
+      this.loading = true
       let params = {
         userId: this.sickID,
         pageSize: this.pageSize,
@@ -108,8 +110,13 @@ export default {
           this.recordCount = res.data.recordCount
           this.pageSize = res.data.pageSize
           this.pageNum = res.data.pageNum
+          this.loading = false
           console.log('原始数据', this.original)
         }
+      })
+      .catch(err => {
+        console.log('获取原始数据失败', err)
+        this.loading = false
       })
     },
     bpMeasureTime (val) {
@@ -292,6 +299,7 @@ export default {
   }
   .original-table{
     margin-top:20px;
+    /* min-height: 200px; */
   }
   .page {
   margin-top:26px;

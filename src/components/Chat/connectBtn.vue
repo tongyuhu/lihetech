@@ -7,7 +7,9 @@
         <div class="pulse"></div>
         <img class="user-img" src="/static/user.png" alt="">
       </div>
-      <div class="tip">xxx邀请您进行视频聊天...</div>
+      <div class="tip">
+        xxx邀请您进行{{currentIsVideo?'视频':'语音'}}聊天...
+      </div>
       <div class="btn-wrap">
         <div>
           <button class="no" @click="reject">拒绝</button>
