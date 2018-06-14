@@ -497,6 +497,7 @@
           let cssText = 'min-width:640px;min-height: 480px;'
           if (result.isLocal) {
             let selfNode = document.getElementById('selfVideo')
+            selfNode.innerHTML = ''
             selfNode.appendChild(result.data)
             let cssTextVideoSelf = 'opacity: 1;width: 128px;height: 96px;'
             let cssTextAudioSelf = 'opacity: 0;width: 0;height: 0;'
@@ -513,6 +514,7 @@
             // document.getElementById(result.userId).style.cssText = 'width:128px;'
           } else {
             let friendNode = document.getElementById('videoChat')
+            friendNode.innerHTML = ''
             friendNode.appendChild(result.data)
             let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
             let cssTextAudio = 'opacity: 0;width: 0;height: 0;'

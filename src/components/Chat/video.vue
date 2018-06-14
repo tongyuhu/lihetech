@@ -27,8 +27,8 @@
 
       </div>
       <div id="selfVideo">
-
       </div>
+
       <div class="btn-wrap" v-if="currentIsVideo">
         <div class="voice-btn">
 
@@ -129,6 +129,7 @@ export default {
     // padding:20px;
   }
   .video-wrap{
+    position: relative;
     // min-width: 640px;
     // min-height: 480px;
   }
