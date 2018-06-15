@@ -32,7 +32,7 @@
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
                     ref="friendImg"
-                    :src="friend.userImg" alt="">
+                    :src="imgExist(friend.userImg,publicStatic.onlineStatic + '/static/user.png')" alt="">
                     <!-- :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt=""> -->
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
@@ -81,6 +81,7 @@ import chatTabs from './chatTabs'
 import chatPane from './chatPane'
 import {mapState, mapMutations} from 'vuex'
 import publicStatic from '@/publicData/const.js'
+import {imgExists} from '@/untils/untils'
 export default {
   name: 'im',
   components: {
@@ -119,6 +120,9 @@ export default {
       'sethistory',
       'clearNewmsg'
     ]),
+    imgExist (url, err) {
+      return imgExists(url, err)
+    },
     closeIM () {
       this.$emit('closeIM')
     },

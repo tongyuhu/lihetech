@@ -204,10 +204,15 @@ export function findBrothersComponents (context, componentName) {
  * @param {图片不存在时的默认路径} errorsrc
  */
 export function imgExists (checkimgsrc, errorsrc) {
+  // var myWindow = window.open('', '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no')
+  // let html = ' <div id="image-test"></div>'
+  // myWindow.document.write(html)
   let ImgObj = new Image() // 判断图片是否存在
   ImgObj.src = checkimgsrc
+  // myWindow.getElementById('image-test').appendChild(ImgObj)
   console.log('用户头像地址', checkimgsrc)
   console.log('用户头像', ImgObj, ImgObj.fileSize, ImgObj.width, ImgObj.height)
+
   // 没有图片，则返回
   if (!checkimgsrc) {
     return errorsrc
