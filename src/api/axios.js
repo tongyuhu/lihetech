@@ -120,7 +120,7 @@ axios.interceptors.response.use(
           MessageBox.alert('登录超时,请重新登录', '提示信息', {
             'confirmButtonText': '确定'
           }).then(() => {
-            sessionStorage.clear()
+            // sessionStorage.clear()
             window.location.href = '/BPWatch/admin/login/page'
             // router.push({path: '/login'})
             location.reload()
@@ -147,7 +147,7 @@ axios.interceptors.response.use(
           break
 
         case 401:
-          sessionStorage.clear()
+          // sessionStorage.clear()
           window.location.href = '/BPWatch/admin/login/page'
           // router.replace({path: '/login'})
           location.reload()
@@ -167,7 +167,7 @@ axios.interceptors.response.use(
           break
 
         case 500:
-          sessionStorage.clear()
+          // sessionStorage.clear()
           // window.location.href = '/BPWatch/admin/login/page'
           // location.reload()
           // router.replace({path: '/login'})

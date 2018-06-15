@@ -89,16 +89,16 @@ export const buildMenu = (array, ckey) => {
  * @param {session的值} value
  * @description sessionStorage 两个参数设置session,传入key获取session
  */
-export const session = (key, value) => {
+export const session = function (key, value) {
   if (value === void (0)) {
-    let lsVal = sessionStorage.getItem(key)
+    var lsVal = sessionStorage.getItem(key)
     if (lsVal && lsVal.indexOf('autostringify-') === 0) {
       return JSON.parse(lsVal.split('autostringify-')[1])
     } else {
       return lsVal
     }
   } else {
-    if (typeof (val) === 'object' || Array.isArray(value)) {
+    if (typeof (value) === 'object' || Array.isArray(value)) {
       value = 'autostringify-' + JSON.stringify(value)
     }
     return sessionStorage.setItem(key, value)

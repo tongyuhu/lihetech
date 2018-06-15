@@ -16,6 +16,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
+import {session} from '@/untils/untils'
 // import VueAMap from 'vue-amap'
 // import onlinestatic from './install/vueInstall'
 // import VuePreview from 'vue-preview'
@@ -112,22 +113,36 @@ Vue.directive('drag', {
 //   return '关闭提示'
 // }
 
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   // if (to.meta.requireAuth) {
-    // if (session('token')) {
-      // next()
-    // } else {
-      // window.location.href = '/BPWatch/admin/login/page'
-      // next({
-      //   path: '/login',
-      //   query: {redirect: to.fullPath}
-      // })
-    // }
-    // next()
+  //   if (session('token')) {
+  //     next()
+  //   } else {
+  //     window.location.href = '/BPWatch/admin/login/page'
+  //     next({
+  //       path: '/login',
+  //       query: {redirect: to.fullPath}
+  //     })
+  //   }
+  //   next()
   // } else {
-    // next()
+  //   next()
   // }
-// })
+  // let route = session(router)
+  // if(route){
+  if (to.name) {
+    let ssss = {
+      name: to.name,
+      params: to.params
+    }
+      // session('router', '')
+    session('router', ssss)
+    let s = session('router')
+    console.log('前往路由', to, 'session', s)
+  }
+  // }
+  next()
+})
 new Vue({
   router,
   store,

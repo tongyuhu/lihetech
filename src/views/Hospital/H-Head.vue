@@ -248,7 +248,7 @@ export default {
       //     from: this.$router.currentRoute.path
       //   }
       // })
-      sessionStorage.clear()
+      // sessionStorage.clear()
     },
     adminAccount () {
     }
