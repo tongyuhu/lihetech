@@ -13,13 +13,20 @@
       </div>
       <div class="audio-to-video-wrap">
         <div>
-          <button  class="audio-to-video" @click="toVideo">
+          <button v-if="voice" @click="noVoice" title="静音">
+            <span class="iconfont icon-hf_maikefeng 1991fc"></span>
+          </button>
+
+          <button v-if="!voice" @click="hasVoice" title="取消静音">
+            <span class="iconfont icon-guanbimaikefeng 1991fc"></span>
+          </button>
+          <!-- <button  class="audio-to-video" @click="toVideo">
             <span class="iconfont icon-shipin1 span"></span>
-          </button> 
+          </button>  -->
         </div>
-        <!-- <div>
-          <span class="audio-to-video-text">打开摄像头</span>
-        </div> -->
+        <!-- <div> -->
+          <!-- <span class="audio-to-video-text">{{静音}}</span> -->
+        <!-- </div> -->
       </div>
     </div>
     <div class="video-wrap" id="video-wrap">
@@ -320,6 +327,9 @@ export default {
   .audio-tip{
     margin-top:10px;
     color: #041421;
+  }
+  .1991fc{
+    color:#1991fc;
   }
 </style>
 

@@ -89,7 +89,7 @@ export default {
           case 'LocationMessage':
             this.isLocationMsg = true
             this.locationMsg.push(this.message.content.longitude)
-            this.locationMsg.push(this.message.content.latiude)
+            this.locationMsg.push(this.message.content.latitude)
             this.locationName = this.message.content.poi
             this.locationid = this.message.messageId
             break
