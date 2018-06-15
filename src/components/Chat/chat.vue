@@ -240,7 +240,7 @@ export default {
               content: {
                 messageName: 'TextMessage',
                 // messageType: 'TextMessage',
-                content: vm.readyMsg
+                content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg)
               },
               senderUserId: vm.rongUserId
             }
