@@ -141,6 +141,7 @@ export default {
   data () {
     return {
       readyMsg: null,
+      // readySendMsg:null,
       chartList: [
       ],
       showList: false,
@@ -210,8 +211,10 @@ export default {
     addEmoji (emoji) {
       if (this.readyMsg) {
         this.readyMsg += RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
+        // this.sendMsg += emoji.emoji
       } else {
         this.readyMsg = RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
+        // this.sendMsg = emoji.emoji
       }
     },
     sendMsg () {
@@ -229,7 +232,8 @@ export default {
         console.log('当前聊天', vm.currentChat)
         let targetId = vm.currentChat.userId
         let conversationtype = RongIMLib.ConversationType.PRIVATE
-        let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
+        let msg = new RongIMLib.TextMessage({content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg), extra: '附加信息'})
+        // let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
         RongIMLib.RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
           onSuccess: function (message) {
             let msgObj = {
