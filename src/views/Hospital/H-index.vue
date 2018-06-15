@@ -223,9 +223,9 @@
         handler: function (val) {
           let cssTextVideoSelf = 'opacity: 1;width: 128px;height: 96px;'
           let cssTextAudioSelf = 'opacity: 0;width: 0;height: 0;'
-          let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
+          let cssTextVideo = 'opacity: 1;height: 480px;'
           let cssTextAudio = 'opacity: 0;width: 0;height: 0;'
-          let cssText = 'min-width:640px;min-height: 480px;'
+          let cssText = 'min-height: 480px;'
           if (val) {
             if (this.selfVideoDomID) {
               document.getElementById('video-wrap').style.cssText = cssText
@@ -559,7 +559,7 @@
       let watcher = function (result) {
         console.log('监听语音视频', result)
         if (result.type === 'added') {
-          let cssText = 'min-width:640px;min-height: 480px;'
+          let cssText = 'min-height: 480px;'
           if (result.isLocal) {
             let selfNode = document.getElementById('selfVideo')
             selfNode.innerHTML = ''
@@ -581,7 +581,7 @@
             let friendNode = document.getElementById('videoChat')
             friendNode.innerHTML = ''
             friendNode.appendChild(result.data)
-            let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
+            let cssTextVideo = 'opacity: 1;height: 480px;'
             let cssTextAudio = 'opacity: 0;width: 0;height: 0;'
             vm.friendVideoDomID = result.userId
             if (vm.currentIsVideo) {
