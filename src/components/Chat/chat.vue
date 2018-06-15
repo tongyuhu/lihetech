@@ -72,7 +72,8 @@
           <div>
             <div class="emoji-wrap">
               <span v-for="(emoji,index) in emojiList" :key="index" @click="addEmoji(emoji)">
-                {{emoji.emoji}}
+                <span v-html="emoji.html"></span>
+                <!-- {{emoji.emoji}} -->
               </span>
             </div>
           </div>
@@ -208,9 +209,9 @@ export default {
     },
     addEmoji (emoji) {
       if (this.readyMsg) {
-        this.readyMsg += emoji.emoji
+        this.readyMsg += RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
       } else {
-        this.readyMsg = emoji.emoji
+        this.readyMsg = RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
       }
     },
     sendMsg () {
@@ -639,6 +640,9 @@ export default {
   },
   mounted () {
     this.emojiList = RongIMLib.RongIMEmoji.list
+    this.emojiList.forEach(item => {
+      item.html = RongIMLib.RongIMEmoji.symbolToHTML(item.symbol)
+    })
     // let vm = this
     // Bus.$on('history', (val) => {
     //   vm.historyMsg = val
