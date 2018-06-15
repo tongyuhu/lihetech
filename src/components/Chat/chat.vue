@@ -77,21 +77,21 @@
             </div>
           </div>
         </el-popover>
-        <button @click="showEmojiHandle">
+        <button @click="showEmojiHandle" title="发送表情">
           <span class="smile-icon"></span>
         </button>
         <!-- <button > -->
-          <a class="a-upload">
+          <a class="a-upload" title="发送图片信息"> 
             <!-- <input type="text"> -->
             <input type="file" accept="image/jpg" @change="sendImgMsg($event)">
             <!-- <input type="file" accept="image/jpg" @change="changeImg($event)" value="a"> -->
             <span class="file-icon"></span>
           </a>
         <!-- </button> -->
-        <button @click="callVoice">
+        <button @click="callVoice" title="语音聊天">
           <span class="phone-icon" ></span>
         </button>
-        <button @click="callVideo(false)">
+        <button @click="callVideo(false)" title="视频聊天">
           <span class="video-icon" ></span>
         </button>
       </div>

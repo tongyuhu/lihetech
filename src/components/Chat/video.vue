@@ -309,6 +309,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    button{
+      background: #fff;
+    }
   }
   .audio-to-video{
     background: #fff;
