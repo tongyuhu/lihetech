@@ -74,9 +74,7 @@
         appKey: 'pwe86ga5pv726',
         token: '',
         selfVideoDomID: null,
-        friendVideoDomID: null,
-        locationMsg: [ 121.59398421938947, 31.204490925981105 ],
-        locationName: '111111'
+        friendVideoDomID: null
       }
     },
     computed: {
@@ -625,6 +623,17 @@
             }
             vm.getInvite() // 改变状态显示接收消息
             vm.getVideoMsg() // 打开显示接收消息窗口
+  
+            let index = vm._.findLastIndex(vm.friendsList, function (item) {
+              return item.userId === command.senderUserId
+            })
+            if (index !== -1) {
+              command.userImg = vm.friendsList[index].userImg
+              command.userName = vm.friendsList[index].userName
+            } else {
+              command.userImg = null
+              command.userName = null
+            }
             vm.changeCurrentVideo(command)
           }
           // 对方挂断通话
@@ -641,6 +650,16 @@
           }
           // 对方拒绝通话
           if (command.messageType === 'SummaryMessage') {
+            if (command.content.status === 5) {
+              vm.hungup()
+              vm.closeVideo()
+              vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+              vm.$message({
+                showClose: true,
+                message: '未接通',
+                type: 'warning'
+              })
+            }
             // vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
             // vm.$message({
             //   showClose: true,

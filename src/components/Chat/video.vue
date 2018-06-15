@@ -3,7 +3,7 @@
     <div id="video-drag"></div>
     <div v-if="!currentIsVideo" class="audio-wrap">
       <div>
-        <img class="user-img" src="/static/user.png" alt="">
+        <img class="user-img" :src="imgExist(currentVideo.userImg)" alt="">
       </div>
       <div class="audio-tip">
         <span>语音通话中...</span>
@@ -17,9 +17,9 @@
             <span class="iconfont icon-shipin1 span"></span>
           </button> 
         </div>
-        <div>
+        <!-- <div>
           <span class="audio-to-video-text">打开摄像头</span>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="video-wrap" id="video-wrap">
@@ -39,12 +39,11 @@
           <button v-if="!voice" @click="hasVoice" title="取消静音">
             <span class="iconfont icon-guanbimaikefeng tofff"></span>
           </button>
-          <button  @click="toAudio" title="关闭摄像头">
+          <button  @click="toAudio" title="转换为语音聊天">
             <span class="iconfont icon-shipin1 tofff"></span>
           </button> 
         </div>
         <div class="hung-btn">
-
           <button  @click="hungCall">挂断</button>
           <!-- <button  @click="toVideo">toVideo</button>  -->
           <!-- <button :disabled="currentIsVideo"  @click="toAudio">toAudio</button> 
@@ -58,6 +57,8 @@
 
 <script>
 import {mapMutations, mapState} from 'vuex'
+import {imgExists} from '@/untils/untils'
+import publicStatic from '@/publicData/const.js'
 export default {
   name: 'videochat',
   props: {
@@ -70,11 +71,15 @@ export default {
   },
   computed: {
     ...mapState([
-      'currentIsVideo'
+      'currentIsVideo',
+      'currentVideo'
     ])
   },
   methods: {
     ...mapMutations(['closeVideo']),
+    imgExist (url) {
+      return imgExists(url, publicStatic.onlineStatic + '/static/user.png')
+    },
     close () {
       document.getElementById('videoChat').innerHTML = ''
       document.getElementById('selfVideo').innerHTML = ''
@@ -118,7 +123,7 @@ export default {
     z-index: 9999999999;
     // width: 900px;
     max-width:1350px;
-    min-width: 340px;
+    // min-width: 340px;
     // min-height: 480px;
     // height: 700px;
     background: #fff;

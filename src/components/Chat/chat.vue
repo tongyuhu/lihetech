@@ -497,7 +497,18 @@ export default {
       }
       vm.getInvite(true) // 改变状态显示接收消息
       vm.getVideoMsg() // 打开显示接收消息窗口
-      vm.changeCurrentVideo(params)
+      let targetUser = params
+      let index = vm._.findLastIndex(vm.friendsList, function (item) {
+        return item.userId === targetUser.targetId
+      })
+      if (index !== -1) {
+        targetUser.userImg = vm.friendsList[index].userImg
+        targetUser.userName = vm.friendsList[index].userName
+      } else {
+        targetUser.userImg = null
+        targetUser.userName = null
+      }
+      vm.changeCurrentVideo(targetUser)
       RongCallLib.call(params, function (error) {
         console.log('发送视频失败', error)
         vm.closeVideoMsg()  // 关闭提醒窗口
