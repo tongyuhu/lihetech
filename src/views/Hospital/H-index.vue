@@ -7,6 +7,12 @@
       <H-Sider></H-Sider>
     </div>
     <div class="container-main">
+      <!-- 11111111
+      <position
+      :position="locationMsg"
+      :tip="locationName"
+      mapId='ssss'>
+      </position> -->
       <router-view v-cloak></router-view>
     </div>
     <!-- <div class="has-message-animation"> -->
@@ -50,6 +56,7 @@
   import Bus from '@/bus.js'
   import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import position from '@/components/Chat/postion.vue'
   export default {
     name: 'H-index',
     components: {
@@ -58,7 +65,8 @@
       chat,
       im,
       videoChat,
-      connectBtn
+      connectBtn,
+      position
     },
     data () {
       return {
@@ -66,8 +74,9 @@
         appKey: 'pwe86ga5pv726',
         token: '',
         selfVideoDomID: null,
-        friendVideoDomID: null
-
+        friendVideoDomID: null,
+        locationMsg: [ 121.59398421938947, 31.204490925981105 ],
+        locationName: '111111'
       }
     },
     computed: {

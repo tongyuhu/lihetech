@@ -4,12 +4,13 @@
     <span v-if="isTextMsg" v-html="textMsg"></span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig(imgsrc)" alt="无法获取图片">
     <button class="voice-msg" v-if="isVoiceMsg" @click="playVoice"><span class="iconfont icon-yuyin"></span></button>
-    <div class="location-img-wrap">
+    <div v-if="isLocationMsg" class="location-img-wrap">
       <!-- <img class="location-img" v-if="isLocationMsg" :src="locationMsg" @click="showBig(locationMsg)" alt="无法获取图片">
       <span class="location-name">{{locationName}}</span> -->
       <position
       :position="locationMsg"
-      :title="locationName">
+      :tip="locationName"
+      :mapId='locationid'>
       </position>
     </div>
     <imgfloat
@@ -57,6 +58,7 @@ export default {
       voiceFile: '',
       locationMsg: [],
       locationName: '',
+      locationid: '',
       bigImgsrc: ''
 
     }
@@ -68,7 +70,7 @@ export default {
           case 'TextMessage':
             this.isTextMsg = true
           // if (this.this.message.content.content) {
-            this.textMsg = this.message.content.content
+            this.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(this.message.content.content)
           // }
             break
           case 'ImageMessage':
@@ -86,9 +88,10 @@ export default {
             break
           case 'LocationMessage':
             this.isLocationMsg = true
-            this.locationMsg.push(this.message.content.latiude)
             this.locationMsg.push(this.message.content.longitude)
+            this.locationMsg.push(this.message.content.latiude)
             this.locationName = this.message.content.poi
+            this.locationid = this.message.messageId
             break
         }
       },

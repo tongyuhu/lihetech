@@ -484,9 +484,9 @@ export default {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,
         // 会话目标 Id，群 Id 或者 userId。
-        // targetId: vm.currentChat.userId,
+        targetId: vm.currentChat.userId,
         // targetId: 'admin_3',
-        targetId: 'admin_2',
+        // targetId: 'admin_2',
         // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
         // inviteUserIds: inviteUserIds,
         // 音频类型
