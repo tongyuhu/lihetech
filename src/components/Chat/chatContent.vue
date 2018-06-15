@@ -140,7 +140,7 @@ export default {
           break
         case 'LocationMessage':
           vm.isLocationMsg = true
-          vm.locationMsg.push(vm.message.content.latiude)
+          vm.locationMsg.push(vm.message.content.latitude)
           vm.locationMsg.push(vm.message.content.longitude)
           vm.locationName = vm.message.content.poi
           break

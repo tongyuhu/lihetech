@@ -3,10 +3,10 @@ import Vuex from 'vuex'
 import { SET_ADMIN_INFO, SET_SICK_CARD } from './mutationstypes'
 import _ from 'lodash'
 import axios from '@/api/axios'
-import publicStatic from '@/publicData/const.js'
+// import publicStatic from '@/publicData/const.js'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
-import {imgExists} from '@/untils/untils'
+// import {imgExists} from '@/untils/untils'
 // import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
 
