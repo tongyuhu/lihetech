@@ -6,7 +6,7 @@ import axios from '@/api/axios'
 import publicStatic from '@/publicData/const.js'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
-import {imgExists} from './../untils/untils'
+import {imgExists} from '@/untils/untils'
 // import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
 
@@ -266,9 +266,11 @@ export const store = new Vuex.Store({
                 obj.history = []
                 obj.hasHistroy = true
                 if (_.has(item, 'userImage')) {
-                  obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
+                  obj.userImg = process.env.IMG_URL + item.userImage
+                  // obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
                 } else {
-                  obj.userImg = imgExists(null, publicStatic.onlineStatic + '/static/user.png')
+                  obj.userImg = null
+                  // obj.userImg = imgExists(null, publicStatic.onlineStatic + '/static/user.png')
                 }
                 list.push(obj)
               }
