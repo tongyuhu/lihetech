@@ -20,7 +20,7 @@
           <span class="head-right">{{ adminName }}</span>
         </div>
         <div class="head-right">
-            <img :src="imgExists(adminImg,adminIcon)" alt=""  class="admin-icon" width="34px" height="34px">
+            <img :src="imgExists(adminImg,'./static/admin.jpg')" alt=""  class="admin-icon" width="34px" height="34px">
         </div>
   
       <el-dialog
@@ -71,7 +71,6 @@
 </template>
 
 <script>
-import adminicon from 'icon/admin.jpg'
 import {mapState} from 'vuex'
 import {editAdminApi} from '@/api/components/editAdmin.js'
 import {imgExists} from '@/untils/untils.js'
@@ -109,7 +108,7 @@ export default {
       // adminRoot: '管理员',
       isshow: false,
       showshade: false,
-      adminIcon: adminicon,
+      adminIcon: null,
       labelPosition: 'center',
       changePasswordForm: {
         oldPassword: '',
