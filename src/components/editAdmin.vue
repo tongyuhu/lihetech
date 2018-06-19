@@ -290,6 +290,7 @@ export default {
                 type: 'success'
               })
               this.updateAdminInfo()
+              this.$router.push({name: 'Home'})
             } else {
               this.$message({
                 showClose: true,
