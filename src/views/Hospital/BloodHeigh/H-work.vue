@@ -633,9 +633,7 @@ export default {
       console.log('carssdadd', row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: userId,
-          hospitalId: row.adminHospitalId,
-          userCasesCardId: row.id
+          sickID: userId
         }})
       this.SET_CURRENT_SICK_DATA({
         sickID: userId,
@@ -656,8 +654,7 @@ export default {
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: id,
-          hospitalId: row.adminHospitalId
+          sickID: id
         }})
       this.SET_CURRENT_SICK_DATA({
         sickID: id,

@@ -180,7 +180,6 @@
                           <!-- 就诊项目 -->
                           <div class="flex-item">
                             <span>
-
                               {{noonPerson.seeSpecialty}}
                             </span>
                           </div>
@@ -480,7 +479,8 @@ export default {
         'addChatFriend',
         'changeChatFriend',
         'openChatWindow',
-        'setuserMakeOrderDoctorId'
+        'setuserMakeOrderDoctorId',
+        'SET_CURRENT_SICK_DATA'
       ]),
     checkHistory () {
       this.checkOrderBtn = true
@@ -520,14 +520,22 @@ export default {
     },
     // 会诊
     diagnosis (val) {
+      console.log('会诊信息', val)
+
+      this.SET_CURRENT_SICK_DATA({
+        sickID: val.userId,
+        hospitalId: val.adminHospitalId
+      })
       this.$router.push({
         name: 'bloodheighSick',
         params: {
           sickID: val.userId,
-          hospitalId: 2
+          hospitalId: val.adminHospitalId
         }})
       this.setuserMakeOrderDoctorId(val.id)
-      this.SET_SICK_CARD(true)
+      if (val.makeOrderState === 1) {
+        this.SET_SICK_CARD(true)
+      }
     },
     // 联系
     contact (id, name) {
