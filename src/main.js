@@ -17,6 +17,7 @@ import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
 import {session} from '@/untils/untils'
+
 // import VueAMap from 'vue-amap'
 // import onlinestatic from './install/vueInstall'
 // import VuePreview from 'vue-preview'
@@ -130,7 +131,7 @@ router.beforeEach((to, from, next) => {
   // }
   // let route = session(router)
   // if(route){
-  if (to.name) {
+  if (to.params !== {}) {
     let ssss = {
       name: to.name,
       params: to.params

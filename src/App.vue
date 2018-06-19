@@ -90,23 +90,23 @@ export default {
             console.log(router)
             this.$router.addRoutes(router)
             console.log('session路由', session('router'))
-            // this.$router.push(session('router'))
-            // if (session('router')) {
-            //   // this.$router.replace({
-            //   //   name: session('router').name
-            //   // })
-            //   // console.log('本地路由', session('router'))
-            //   // this.$router.replace(session('router'))
-            //   this.$router.replace({
-            //     name: 'Home'
-            //   })
-            //   // this.$router.push(session('router'))
-            //   // this.$router.go(0)
-            // } else {
-            this.$router.replace({
-              name: 'Home'
-            })
-            // }
+            if (session('router')) {
+              this.$router.push(session('router'))
+              // this.$router.replace({
+              //   name: session('router').name
+              // })
+              // console.log('本地路由', session('router'))
+              // this.$router.replace(session('router'))
+              // this.$router.replace({
+              //   name: 'Home'
+              // })
+              // this.$router.push(session('router'))
+              // this.$router.go(0)
+            } else {
+              this.$router.replace({
+                name: 'Home'
+              })
+            }
           } else {
             window.location.href = '/BPWatch/admin/login/page'
             // this.$router.replace({

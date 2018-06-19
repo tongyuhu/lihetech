@@ -380,12 +380,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['showSickCard']),
+    ...mapState(['showSickCard', 'currentSickData']),
     sickID () {
-      return this.$route.params.sickID
+      return this.currentSickData.sickID
+      // return this.$route.params.sickID
     },
     hospitalId () {
-      return this.$route.params.hospitalId
+      return this.currentSickData.hospitalId
+      // return this.$route.params.hospitalId
     },
     // 姓名
     name () {

@@ -366,6 +366,7 @@
 // import from 'icon/hospital-icon-21.png'
 // import { mapState } from 'vuex'
 // import {careText, care} from './../../../untils/untils'
+// import {mapMutations} from 'vuex'
 import {
   newsickaskDataApi,
   badsickDataApi,
@@ -428,7 +429,8 @@ export default {
         'addChatFriend',
         'changeChatFriend',
         'openChatWindow',
-        'setuserCasesCardId'
+        'setuserCasesCardId',
+        'SET_CURRENT_SICK_DATA'
       ]),
     sortSickList (arr) {
       let copyArr = arr
@@ -635,6 +637,11 @@ export default {
           hospitalId: row.adminHospitalId,
           userCasesCardId: row.id
         }})
+      this.SET_CURRENT_SICK_DATA({
+        sickID: userId,
+        hospitalId: row.adminHospitalId,
+        userCasesCardId: row.id
+      })
       this.setuserCasesCardId(row.id)
       Bus.$emit('modifySickCard', {modify: true, cardid: id})
       this.SET_SICK_CARD(true)
@@ -652,6 +659,10 @@ export default {
           sickID: id,
           hospitalId: row.adminHospitalId
         }})
+      this.SET_CURRENT_SICK_DATA({
+        sickID: id,
+        hospitalId: row.adminHospitalId
+      })
     },
     call (row) {
       let rongId = 'member_' + row.id
