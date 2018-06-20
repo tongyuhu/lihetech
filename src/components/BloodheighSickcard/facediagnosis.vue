@@ -1035,7 +1035,7 @@ export default {
         // item.uselong = item.uselong.replace(/-?[1-9]\d*/g, '')
         //  item.uselong
         obj.everyDosage = item.singleuse
-        obj.usageTimes = item.usetimes + '次/天'
+        obj.usageTimes = item.usetimes
         obj.totalNumber = item.usetotal + '盒'
 
         item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
