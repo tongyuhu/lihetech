@@ -90,30 +90,31 @@
                       <!-- 预约时间 -->
                       <div class="text-center order-time-width">
                         <span>
-                          {{morning.startEndPeriodTime}}
+                          {{morning.makeOrderDate.slice(10,16)}}
                         </span>
                       </div>
                       <div class="table-content-border min-height ">
-                        <div class="detials-order" v-for="morningPerson in morning.userMakeOrderDoctorList" :key="morningPerson.id">
+                        <div class="detials-order">
+                        <!-- <div class="detials-order" v-for="(morningPerson,index) in item.morninng" :key="index"> -->
                           <!-- 姓名 -->
                           <div class="oder-name ">
-                            {{morningPerson.name}}
+                            {{morning.name}}
                             <!-- 15899932665 -->
                           </div>
                           <!-- 就诊项目 -->
                           <div class="flex-item">
                             <span>
-                              {{morningPerson.seeSpecialty}}
+                              {{morning.seeSpecialty}}
                             </span>
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span :class="{'success':computeColor(morningPerson.makeOrderState),'error':!computeColor(morningPerson.makeOrderState)}">{{oderStutas(morningPerson.makeOrderState)}}</span>
+                            <span :class="{'success':computeColor(morning.makeOrderState),'error':!computeColor(morning.makeOrderState)}">{{oderStutas(morning.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
-                            <button class="contant-btn" @click="diagnosis(morningPerson)">会诊</button>
-                            <button class="contant-btn" @click="contact(morningPerson.userId,morningPerson.name)">联系</button>
+                            <button class="contant-btn" @click="diagnosis(morning)">会诊</button>
+                            <button class="contant-btn" @click="contact(morning.userId,morning.name)">联系</button>
                           </div>                         
                         </div>
                       </div>
@@ -171,26 +172,27 @@
                         </span>
                       </div>
                       <div class="table-content-border min-height ">
-                        <div class="detials-order" v-for="noonPerson in noon.userMakeOrderDoctorList" :key="noonPerson.id">
+                        <div class="detials-order">
+                        <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->
                           <!-- 姓名 -->
                           <div class="oder-name ">
-                            {{noonPerson.name}}
+                            {{noon.name}}
                             <!-- 15899932665 -->
                           </div>
                           <!-- 就诊项目 -->
                           <div class="flex-item">
                             <span>
-                              {{noonPerson.seeSpecialty}}
+                              {{noon.makeOrderDate.slice(10,16)}}
                             </span>
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span :class="{'success':computeColor(noonPerson.makeOrderState),'error':!computeColor(noonPerson.makeOrderState)}">{{oderStutas(noonPerson.makeOrderState)}}</span>
+                            <span :class="{'success':computeColor(noon.makeOrderState),'error':!computeColor(noon.makeOrderState)}">{{oderStutas(noon.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
-                            <button class="contant-btn" @click="diagnosis(noonPerson)">会诊</button>
-                            <button class="contant-btn" @click="contact(noonPerson.userId,noonPerson.name)">联系</button>
+                            <button class="contant-btn" @click="diagnosis(noon)">会诊</button>
+                            <button class="contant-btn" @click="contact(noon.userId,noon.name)">联系</button>
                           </div>                         
                         </div>
                       </div>
@@ -261,30 +263,31 @@
                       <!-- 预约时间 -->
                       <div class="text-center order-time-width">
                         <span>
-                          {{morning.startEndPeriodTime}}
+                          {{morning.makeOrderDate.slice(10,16)}}
                         </span>
                       </div>
                       <div class="table-content-border min-height ">
-                        <div class="detials-order" v-for="morningPerson in morning.userMakeOrderDoctorList" :key="morningPerson.id">
+                        <div class="detials-order">
+                        <!-- <div class="detials-order" v-for="morningPerson in item.morninng" :key="morningPerson.id"> -->
                           <!-- 姓名 -->
                           <div class="oder-name ">
-                            {{morningPerson.name}}
+                            {{morning.name}}
                             <!-- 15899932665 -->
                           </div>
                           <!-- 就诊项目 -->
                           <div class="flex-item">
                             <span>
-                              {{morningPerson.seeSpecialty}}
+                              {{morning.seeSpecialty}}
                             </span>
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span :class="{'success':computeColor(morningPerson.makeOrderState),'error':!computeColor(morningPerson.makeOrderState)}">{{oderStutas(morningPerson.makeOrderState)}}</span>
+                            <span :class="{'success':computeColor(morning.makeOrderState),'error':!computeColor(morning.makeOrderState)}">{{oderStutas(morning.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
-                            <!-- <button class="contant-btn" @click="diagnosis(morningPerson.userId)">会诊</button> -->
-                            <button class="contant-btn" @click="contact(morningPerson.userId,morningPerson.name)">联系</button>
+                            <!-- <button class="contant-btn" @click="diagnosis(morning.userId)">会诊</button> -->
+                            <button class="contant-btn" @click="contact(morning.userId,morning.name)">联系</button>
                           </div>                         
                         </div>
                       </div>
@@ -333,31 +336,32 @@
                       <!-- 预约时间 -->
                       <div class="text-center order-time-width">
                         <span>
-                          {{noon.startEndPeriodTime}}
+                          {{noon.makeOrderDate.slice(10,16)}}
                         </span>
                       </div>
                       <div class="table-content-border min-height ">
-                        <div class="detials-order" v-for="noonPerson in noon.userMakeOrderDoctorList" :key="noonPerson.id">
+                        <div class="detials-order">
+                        <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->
                           <!-- 姓名 -->
                           <div class="oder-name ">
-                            {{noonPerson.name}}
+                            {{noon.name}}
                             <!-- 15899932665 -->
                           </div>
                           <!-- 就诊项目 -->
                           <div class="flex-item">
                             <span>
 
-                              {{noonPerson.seeSpecialty}}
+                              {{noon.seeSpecialty}}
                             </span>
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span>{{oderStutas(noonPerson.makeOrderState)}}</span>
+                            <span>{{oderStutas(noon.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
-                            <!-- <button class="contant-btn" @click="diagnosis(noonPerson.userId)">会诊</button> -->
-                            <button class="contant-btn" @click="contact(noonPerson.userId,noonPerson.name)">联系</button>
+                            <!-- <button class="contant-btn" @click="diagnosis(noon.userId)">会诊</button> -->
+                            <button class="contant-btn" @click="contact(noon.userId,noon.name)">联系</button>
                           </div>                         
                         </div>
                       </div>
@@ -565,9 +569,11 @@ export default {
             this.histroyOrderList = []
             this.histroyOrderList = this.formmater(res.data.data)
             this.histroyOrdedrLoading = false
+            console.log('历史预约列表', this.histroyOrderList)
           } else {
             this.orderList = []
             this.orderList = this.formmater(res.data.data)
+            console.log('预约列表', this.orderList)
             this.currentOrderLoading = false
           }
         }
@@ -735,10 +741,10 @@ export default {
               item.morninng = []
             }
             // item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
-            item.noon = []
             item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
-            item.noonWork = ''
             item.morninngStop = item.adminMakeOrderTotalList[0].isStop
+            item.noon = []
+            item.noonWork = ''
             item.noonStop = true
           } else {
             // item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
@@ -746,11 +752,15 @@ export default {
               item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
             } else {
               item.noon = []
+              // item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+              // item.morninngWork = ''
+              // item.noonStop = item.adminMakeOrderTotalList[0].isStop
+              // item.morninngStop = true
             }
-            item.morninng = []
             item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
-            item.morninngWork = ''
             item.noonStop = item.adminMakeOrderTotalList[0].isStop
+            item.morninng = []
+            item.morninngWork = ''
             item.morninngStop = true
           }
         }
