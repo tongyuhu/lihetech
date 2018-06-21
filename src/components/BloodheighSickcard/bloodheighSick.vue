@@ -84,6 +84,7 @@
             <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
             <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
           </pane>
           <pane
           label="用药">
@@ -279,6 +280,7 @@ export default {
         case 1:
           this.bloodCover = 'bloodCover'
           this.report = 'report'
+          this.alldayheighblood = 'alldayheighblood'
           break
         case 2:
           this.useDrug = 'useDrug'

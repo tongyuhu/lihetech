@@ -644,6 +644,53 @@ export default {
       return type
     },
     // 将返回数据格式化为表格数据
+    // formmater (data) {
+      //   let vm = this
+      //   data.forEach(item => {
+      //     item.weekDay = vm.week(item.weekDay)
+      //     if (!(this._.has(item, 'adminMakeOrderTotalList'))) {
+      //       item.adminMakeOrderTotalList = []
+      //     }
+      //     if (item.adminMakeOrderTotalList.length === 0) {
+      //       item.morninng = []
+      //       item.noon = []
+      //       item.morninngStop = true
+      //       item.noonStop = true
+      //       item.morninngWork = ''
+      //       item.noonWork = ''
+      //     } else if (item.adminMakeOrderTotalList.length === 2) {
+      //       item.adminMakeOrderTotalList.forEach(half => {
+      //         if (half.slotType === 1) {
+      //           item.morninng = half.slotTypeList
+      //           item.morninngWork = half.startEndPeriodTime
+      //           item.morninngStop = half.isStop
+      //         }
+      //         if (half.slotType === 2) {
+      //           item.noon = half.slotTypeList
+      //           item.noonWork = half.startEndPeriodTime
+      //           item.noonStop = half.isStop
+      //         }
+      //       })
+      //     } else if (item.adminMakeOrderTotalList.length === 1) {
+      //       if (item.adminMakeOrderTotalList[0].slotType === 1) {
+      //         item.morninng = item.adminMakeOrderTotalList[0].slotTypeList
+      //         item.noon = []
+      //         item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+      //         item.noonWork = ''
+      //         item.morninngStop = item.adminMakeOrderTotalList[0].isStop
+      //         item.noonStop = true
+      //       } else {
+      //         item.noon = item.adminMakeOrderTotalList[0].slotTypeList
+      //         item.morninng = []
+      //         item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+      //         item.morninngWork = ''
+      //         item.noonStop = item.adminMakeOrderTotalList[0].isStop
+      //         item.morninngStop = true
+      //       }
+      //     }
+      //   })
+      //   return data
+    // },
     formmater (data) {
       let vm = this
       data.forEach(item => {
@@ -661,26 +708,45 @@ export default {
         } else if (item.adminMakeOrderTotalList.length === 2) {
           item.adminMakeOrderTotalList.forEach(half => {
             if (half.slotType === 1) {
-              item.morninng = half.slotTypeList
+              if (this._.has(half, 'userMakeOrderDoctorList')) {
+                item.morninng = half.userMakeOrderDoctorList
+              } else {
+                item.morninng = []
+              }
               item.morninngWork = half.startEndPeriodTime
               item.morninngStop = half.isStop
             }
             if (half.slotType === 2) {
-              item.noon = half.slotTypeList
+              if (this._.has(half, 'userMakeOrderDoctorList')) {
+                item.noon = half.userMakeOrderDoctorList
+              } else {
+                item.noon = []
+              }
+              // item.noon = half.userMakeOrderDoctorList
               item.noonWork = half.startEndPeriodTime
               item.noonStop = half.isStop
             }
           })
         } else if (item.adminMakeOrderTotalList.length === 1) {
           if (item.adminMakeOrderTotalList[0].slotType === 1) {
-            item.morninng = item.adminMakeOrderTotalList[0].slotTypeList
+            if (this._.has(item.adminMakeOrderTotalList[0], 'userMakeOrderDoctorList')) {
+              item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
+            } else {
+              item.morninng = []
+            }
+            // item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
             item.noon = []
             item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
             item.noonWork = ''
             item.morninngStop = item.adminMakeOrderTotalList[0].isStop
             item.noonStop = true
           } else {
-            item.noon = item.adminMakeOrderTotalList[0].slotTypeList
+            // item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
+            if (this._.has(item.adminMakeOrderTotalList[0], 'userMakeOrderDoctorList')) {
+              item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
+            } else {
+              item.noon = []
+            }
             item.morninng = []
             item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
             item.morninngWork = ''

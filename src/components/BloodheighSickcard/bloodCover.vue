@@ -120,7 +120,7 @@
     </div>
 
     <!-- 血压与行为分数 -->
-    <div class="blood-cover">
+    <div class="blood-cover" v-if="false">
       <el-card :body-style="{ 'padding': '0px' ,'padding-bottom':'20px'}">
         <div class="card-header">
           <p class="title">血压与行为分数</p>

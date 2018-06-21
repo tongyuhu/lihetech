@@ -50,7 +50,7 @@
       </el-row>
     </div>
 
-    <el-row :gutter="8">
+    <el-row :gutter="8" v-if="false">
       <el-col :span="12">
         <!-- 血压与饮食 -->
         <div>
