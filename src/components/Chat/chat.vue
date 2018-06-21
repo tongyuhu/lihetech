@@ -159,11 +159,24 @@ export default {
     ...mapState({
       rongUserId: 'rongUserId',
       historyMsg: 'history',
-      adminInfo: 'adminInfo'
+      adminInfo: 'adminInfo',
+      chatfriend: 'chatfriend',
+      friendsList: 'friendsList'
     })
     // historyMsg () {
     //   return this.currentChat.history
     // }
+  },
+  watch: {
+    friendsList: {
+      handler: function (val) {
+        let current = this._.find(this.friendsList, function (item) {
+          return item.currentChat === true
+        })
+        this.sethistory(current.history)
+      },
+      deep: true
+    }
   },
   // watch: {
   //   historyMsg: {
@@ -201,7 +214,8 @@ export default {
       'closeVideoMsg',
       'changeCurrentVideo',
       'getVideoMsg',
-      'changeCurrentIsVideo'
+      'changeCurrentIsVideo',
+      'sendcurrentMsg'
     ]),
     showEmojiHandle () {
       // this.emojiList = RongIMLib.RongIMEmoji.list
@@ -242,20 +256,24 @@ export default {
                 // messageType: 'TextMessage',
                 content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg)
               },
-              senderUserId: vm.rongUserId
+              senderUserId: vm.rongUserId,
+              'targetId': targetId
             }
             if (vm._.has(vm.adminInfo, 'headPortraitUrl')) {
               msgObj.userImg = vm.adminInfo.headPortraitUrl
             }
             // vm.historyMsg = vm.currentChat.history
-            vm.sethistory(vm.historyMsg)
-            // vm.sethistory(vm.currentChat.history)
-            vm.getCurrentFriendMsg(msgObj)
-            let newChat = vm.currentChat
-            newChat.history = vm.historyMsg
-            vm.addChatFriend(newChat)
+            // vm.sethistory(vm.historyMsg)
+            // vm.getCurrentFriendMsg(msgObj)
+            vm.sendcurrentMsg(msgObj)
+            // let newChat = vm.currentChat
+            // newChat.history = vm.historyMsg
+            // vm.addChatFriend(newChat)
             // message 为发送的消息对象并且包含服务器返回的消息唯一Id和发送消息时间戳
-            console.log('Send successfully')
+            // vm.sethistory(vm.currentChat.history)
+            console.log('Send successfully', msgObj)
+            console.log('聊天记录', vm.historyMsg)
+            // console.log('聊天', newChat)
             vm.readyMsg = ''
           },
           onError: function (errorCode, message) {
@@ -359,16 +377,18 @@ export default {
                   // content: imageUri
                   'imageUri': imageUri
                 },
-                senderUserId: vm.rongUserId
+                senderUserId: vm.rongUserId,
+                'targetId': targetId
               }
-                // vm.historyMsg = vm.currentChat.history
-              vm.sethistory(vm.historyMsg)
-              vm.getCurrentFriendMsg(msgObj)
+              // vm.getCurrentFriendMsg(msgObj)
               console.log('msgObjimg', msgObj)
-              let newChat = vm.currentChat
-              newChat.history = vm.historyMsg
-              vm.addChatFriend(newChat)
+              vm.sendcurrentMsg(msgObj)
+              // let newChat = vm.currentChat
+              // newChat.history = vm.historyMsg
+              // vm.addChatFriend(newChat)
               console.log('Send successfully')
+              // vm.historyMsg = vm.currentChat.history
+              // vm.sethistory(vm.historyMsg)
               vm.readyMsg = ''
               console.log('Send successfully')
             },

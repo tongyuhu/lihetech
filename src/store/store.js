@@ -73,12 +73,12 @@ export const store = new Vuex.Store({
     },
     // 当前聊天好友  currentChat为true
     currentChat: state => {
-      return _.find(state.chatfriend, function (item) {
+      return _.find(state.friendsList, function (item) {
         return item.currentChat === true
       })
     },
     currentChatImg: state => {
-      let current = _.find(state.chatfriend, function (item) {
+      let current = _.find(state.friendsList, function (item) {
         return item.currentChat === true
       })
       // axios(checkimgApi(current.userImg)).then(res => {
@@ -128,10 +128,10 @@ export const store = new Vuex.Store({
     addChatFriend (state, friend) {
       let i = 0
       state.chatfriend.forEach(item => {
-        if (state.chatfriend[i].userId !== friend.userId) {
+        if (item.userId !== friend.userId) {
           i++
         } else {
-          _.merge(state.chatfriend[i], friend)
+          _.merge(item, friend)
         }
       })
       if (i < state.chatfriend.length) {
@@ -141,7 +141,7 @@ export const store = new Vuex.Store({
     },
     // 改变聊天对象
     changeChatFriend (state, friend) {
-      state.chatfriend.forEach(item => {
+      state.friendsList.forEach(item => {
         if (item.userId === friend.userId) {
           if (_.has(item, 'history')) {
             state.history = item.history
@@ -171,14 +171,44 @@ export const store = new Vuex.Store({
           }
         }
       })
+      // Object.assign({}, obj)
     },
     // 收到当前聊天好友消息
     getCurrentFriendMsg (state, message) {
-      if (!(_.isArray(state.history))) {
-        state.history = []
-      }
+      state.friendsList.forEach(item => {
+        if (item.userId === message.senderUserId) {
+          if (_.has(item, 'history')) {
+            item.history.push(message)
+            console.log('添加消息', message)
+            // console.log('添加消息', message)
+          } else {
+            item.history = []
+            item.history.push(message)
+            console.log('添加消息', message)
+          }
+        }
+      })
+
+      // if (!(_.isArray(state.history))) {
+      //   state.history = []
+      // }
       // console.log('message', message, state.history)
-      state.history.push(message)
+      // state.history.push(message)
+    },
+    sendcurrentMsg (state, message) {
+      state.friendsList.forEach(item => {
+        if (item.userId === message.targetId) {
+          if (_.has(item, 'history')) {
+            item.history.push(message)
+            console.log('添加消息', message)
+            // console.log('添加消息', message)
+          } else {
+            item.history = []
+            item.history.push(message)
+            console.log('添加消息', message)
+          }
+        }
+      })
     },
     // 当前聊天列表
     sethistory (state, content) {
@@ -300,5 +330,14 @@ export const store = new Vuex.Store({
       })
     }
   },
-  plugins: [createPersistedState()]
+  plugins: [createPersistedState({
+    paths: [
+      'adminInfo',
+      'userCasesCardId',
+      'userMakeOrderDoctorId',
+      'showSickCard',
+      'currentSickData',
+      'rongUserId'
+    ]
+  })]
 })
