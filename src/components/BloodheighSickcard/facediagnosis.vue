@@ -1028,19 +1028,18 @@ export default {
         } else {
           item.uselong = 0
         }
-        // item.use
         // item.singleuse = item.singleuse.replace(/-?[1-9]\d*/g, '')
         // item.usetimes = item.usetimes.replace(/-?[1-9]\d*/g, '')
         // item.totalNumber = item.totalNumber.replace(/-?[1-9]\d*/g, '')
         // item.uselong = item.uselong.replace(/-?[1-9]\d*/g, '')
         //  item.uselong
         obj.everyDosage = item.singleuse
-        obj.usageTimes = item.usetimes + '次/天'
+        obj.usageTimes = item.usetimes
         obj.totalNumber = item.usetotal + '盒'
 
         item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
         obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
-        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes) + '次/天'
+        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes)
         obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
         obj.usageOff = this.medicineUnit(item.usemethod)
         medicine.push(obj)
