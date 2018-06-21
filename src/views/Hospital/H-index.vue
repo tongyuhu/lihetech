@@ -7,6 +7,12 @@
       <H-Sider></H-Sider>
     </div>
     <div class="container-main">
+      <!-- 11111111
+      <position
+      :position="locationMsg"
+      :tip="locationName"
+      mapId='ssss'>
+      </position> -->
       <router-view v-cloak></router-view>
     </div>
     <!-- <div class="has-message-animation"> -->
@@ -50,6 +56,7 @@
   import Bus from '@/bus.js'
   import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
+  import position from '@/components/Chat/postion.vue'
   export default {
     name: 'H-index',
     components: {
@@ -58,7 +65,8 @@
       chat,
       im,
       videoChat,
-      connectBtn
+      connectBtn,
+      position
     },
     data () {
       return {
@@ -67,7 +75,6 @@
         token: '',
         selfVideoDomID: null,
         friendVideoDomID: null
-
       }
     },
     computed: {
@@ -214,9 +221,9 @@
         handler: function (val) {
           let cssTextVideoSelf = 'opacity: 1;width: 128px;height: 96px;'
           let cssTextAudioSelf = 'opacity: 0;width: 0;height: 0;'
-          let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
+          let cssTextVideo = 'opacity: 1;height: 480px;'
           let cssTextAudio = 'opacity: 0;width: 0;height: 0;'
-          let cssText = 'min-width:640px;min-height: 480px;'
+          let cssText = 'min-height: 480px;'
           if (val) {
             if (this.selfVideoDomID) {
               document.getElementById('video-wrap').style.cssText = cssText
@@ -295,7 +302,6 @@
             case RongIMClient.MessageType.TextMessage:
               console.log(message)
               let currentId = ''
-  
               if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
                 currentId = ''
               } else {  // 当前有聊天窗口
@@ -331,9 +337,37 @@
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
-              console.log('收到语音消息')
+              console.log('收到语音消息', message)
                     // 对声音进行预加载
                     // message.content.content 格式为 AMR 格式的 base64 码
+
+              let currentvoiceId = ''
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentvoiceId = ''
+              } else {  // 当前有聊天窗口
+                currentvoiceId = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentvoiceId) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              if (vm.chatStatus) {
+                vm.$nextTick(() => {
+                  setTimeout(function () {
+                    let container = vm.$el.querySelector('#chatWidow')
+                    container.scrollTop = container.scrollHeight
+                  }, 100)
+                })
+              }
               break
             case RongIMClient.MessageType.ImageMessage:
               console.log('图片消息', message)
@@ -374,6 +408,35 @@
                   // message.content.extension => 讨论组中的人员。
               break
             case RongIMClient.MessageType.LocationMessage:
+              console.log('收到位置信息', message)
+
+              let currentlocationId = ''
+              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+                currentlocationId = ''
+              } else {  // 当前有聊天窗口
+                currentlocationId = vm.currentChat.userId
+              }
+              if (message.senderUserId === currentlocationId) { // 当前聊天用户是否和消息来源一致
+                vm.getCurrentFriendMsg(message)
+              } else {  //
+                vm.friendsList.forEach(function (item) {
+                  if (item.userId === message.senderUserId) {
+                    let obj = {
+                      'friendId': message.senderUserId,
+                      'message': message
+                    }
+                    vm.getFriendMsg(obj)
+                  }
+                })
+              }
+              if (vm.chatStatus) {
+                vm.$nextTick(() => {
+                  setTimeout(function () {
+                    let container = vm.$el.querySelector('#chatWidow')
+                    container.scrollTop = container.scrollHeight
+                  }, 100)
+                })
+              }
                   // message.content.latiude => 纬度。
                   // message.content.longitude => 经度。
                   // message.content.content => 位置图片 base64。
@@ -494,9 +557,10 @@
       let watcher = function (result) {
         console.log('监听语音视频', result)
         if (result.type === 'added') {
-          let cssText = 'min-width:640px;min-height: 480px;'
+          let cssText = 'min-height: 480px;'
           if (result.isLocal) {
             let selfNode = document.getElementById('selfVideo')
+            selfNode.innerHTML = ''
             selfNode.appendChild(result.data)
             let cssTextVideoSelf = 'opacity: 1;width: 128px;height: 96px;'
             let cssTextAudioSelf = 'opacity: 0;width: 0;height: 0;'
@@ -513,8 +577,9 @@
             // document.getElementById(result.userId).style.cssText = 'width:128px;'
           } else {
             let friendNode = document.getElementById('videoChat')
+            friendNode.innerHTML = ''
             friendNode.appendChild(result.data)
-            let cssTextVideo = 'opacity: 1;width: 640px;height: 480px;'
+            let cssTextVideo = 'opacity: 1;height: 480px;'
             let cssTextAudio = 'opacity: 0;width: 0;height: 0;'
             vm.friendVideoDomID = result.userId
             if (vm.currentIsVideo) {
@@ -558,6 +623,17 @@
             }
             vm.getInvite() // 改变状态显示接收消息
             vm.getVideoMsg() // 打开显示接收消息窗口
+  
+            let index = vm._.findLastIndex(vm.friendsList, function (item) {
+              return item.userId === command.senderUserId
+            })
+            if (index !== -1) {
+              command.userImg = vm.friendsList[index].userImg
+              command.userName = vm.friendsList[index].userName
+            } else {
+              command.userImg = null
+              command.userName = null
+            }
             vm.changeCurrentVideo(command)
           }
           // 对方挂断通话
@@ -574,6 +650,16 @@
           }
           // 对方拒绝通话
           if (command.messageType === 'SummaryMessage') {
+            if (command.content.status === 5) {
+              vm.hungup()
+              vm.closeVideo()
+              vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+              vm.$message({
+                showClose: true,
+                message: '未接通',
+                type: 'warning'
+              })
+            }
             // vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
             // vm.$message({
             //   showClose: true,
@@ -589,6 +675,12 @@
         }
       // command => 消息指令;
       })
+
+      RongIMLib.RongIMEmoji.init({
+        size: 18
+      })
+      RongIMLib.RongIMVoice.init()
+      // console.log('表情库', vm.emojiList)
     }
   }
 </script>

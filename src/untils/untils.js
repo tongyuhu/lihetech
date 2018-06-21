@@ -89,16 +89,16 @@ export const buildMenu = (array, ckey) => {
  * @param {session的值} value
  * @description sessionStorage 两个参数设置session,传入key获取session
  */
-export const session = (key, value) => {
+export const session = function (key, value) {
   if (value === void (0)) {
-    let lsVal = sessionStorage.getItem(key)
+    var lsVal = sessionStorage.getItem(key)
     if (lsVal && lsVal.indexOf('autostringify-') === 0) {
       return JSON.parse(lsVal.split('autostringify-')[1])
     } else {
       return lsVal
     }
   } else {
-    if (typeof (val) === 'object' || Array.isArray(value)) {
+    if (typeof (value) === 'object' || Array.isArray(value)) {
       value = 'autostringify-' + JSON.stringify(value)
     }
     return sessionStorage.setItem(key, value)
@@ -204,8 +204,15 @@ export function findBrothersComponents (context, componentName) {
  * @param {图片不存在时的默认路径} errorsrc
  */
 export function imgExists (checkimgsrc, errorsrc) {
+  // var myWindow = window.open('', '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no')
+  // let html = ' <div id="image-test"></div>'
+  // myWindow.document.write(html)
   let ImgObj = new Image() // 判断图片是否存在
   ImgObj.src = checkimgsrc
+  // myWindow.getElementById('image-test').appendChild(ImgObj)
+  console.log('用户头像地址', checkimgsrc)
+  console.log('用户头像', ImgObj, ImgObj.fileSize, ImgObj.width, ImgObj.height)
+
   // 没有图片，则返回
   if (!checkimgsrc) {
     return errorsrc

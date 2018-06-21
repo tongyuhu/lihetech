@@ -5,9 +5,11 @@
       <div class="user-img-wrap">
         <div class="dot"></div>
         <div class="pulse"></div>
-        <img class="user-img" src="/static/user.png" alt="">
+        <img class="user-img" :src="imgExist(currentVideo.userImg)" alt="">
       </div>
-      <div class="tip">xxx邀请您进行视频聊天...</div>
+      <div class="tip">
+        {{currentVideo.userName?currentVideo.userName:'患者'}}邀请您进行{{currentIsVideo?'视频':'语音'}}聊天...
+      </div>
       <div class="btn-wrap">
         <div>
           <button class="no" @click="reject">拒绝</button>
@@ -36,6 +38,8 @@
 
 <script>
 import {mapState, mapMutations} from 'vuex'
+import {imgExists} from '@/untils/untils'
+import publicStatic from '@/publicData/const.js'
 export default {
   name: 'connectbtn',
   data () {
@@ -48,7 +52,8 @@ export default {
     ...mapState([
       'hasVideoMsg',
       'invite',
-      'currentIsVideo'
+      'currentIsVideo',
+      'currentVideo'
     ])
   },
   methods: {
@@ -56,6 +61,9 @@ export default {
       'closeVideoMsg',
       'getVideoMsg'
     ]),
+    imgExist (url) {
+      return imgExists(url, publicStatic.onlineStatic + '/static/user.png')
+    },
     connect () {
       this.$emit('connect')
     },

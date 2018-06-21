@@ -7,7 +7,7 @@
         <!-- <button class="head-edit-button delete" @click="deleteDoctor">删除</button> -->
       </div>
     </div>
-    <div>
+    <div class="loading-min-height" v-loading="loading">
       <el-card>
         <div class="search">
           <el-input placeholder="账号 \ 姓名 \ 电话" v-model="searchDoctorMsg" size="small"
@@ -251,6 +251,7 @@ export default {
       }
     }
     return {
+      // loading:false,
       doctorEditCellWidth: 100,
       showEnabled: false,
       // 是否有账户锁定
@@ -495,6 +496,7 @@ export default {
     },
     // 获取医生列表
     getDoctorList () {
+      this.loading = true
       let param = {
         pageNum: this.currentPage,
         pageSize: this.pageSize
@@ -523,8 +525,13 @@ export default {
             }
           }
         })
+        this.loading = false
         console.log('doctorList', this.doctorList)
         // this.doctorList = this.formatterDoctorList(this.doctorList)
+      })
+      .catch(err => {
+        console.log(err, '获取医生列表失败')
+        this.loading = false
       })
     },
     doctorEnabled (val, doctor) {
@@ -773,6 +780,10 @@ button{
 .submit-btn button{
   margin-left: 10px;
   margin-right:10px;
+}
+.loading-min-height{
+  min-height: 400px;
+  width: 100%;
 }
 </style>
 <style>

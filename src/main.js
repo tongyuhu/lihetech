@@ -16,7 +16,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
+import {session} from '@/untils/untils'
 
+// import VueAMap from 'vue-amap'
 // import onlinestatic from './install/vueInstall'
 // import VuePreview from 'vue-preview'
 // Vue.use(onlinestatic)
@@ -25,12 +27,17 @@ Vue.prototype._ = _
 // Vue.use(VuePreview)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
+// Vue.use(VueAMap)
 Vue.component('f-button', Fbutton)
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
-
+// VueAMap.initAMapApiLoader({
+//   key: '2cfe1d4f0a4041df6e7e3635c9b25f52',
+//   plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+//   // 默认高德 sdk 版本为 1.4.4
+//   v: '1.4.7'
+// })
 // 自定义判断权限指令 为true时显示 false时不显示
 Vue.directive('hasRoot', {
   bind: function (el, binding) {
@@ -107,22 +114,36 @@ Vue.directive('drag', {
 //   return '关闭提示'
 // }
 
-// router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => {
   // if (to.meta.requireAuth) {
-    // if (session('token')) {
-      // next()
-    // } else {
-      // window.location.href = '/BPWatch/admin/login/page'
-      // next({
-      //   path: '/login',
-      //   query: {redirect: to.fullPath}
-      // })
-    // }
-    // next()
+  //   if (session('token')) {
+  //     next()
+  //   } else {
+  //     window.location.href = '/BPWatch/admin/login/page'
+  //     next({
+  //       path: '/login',
+  //       query: {redirect: to.fullPath}
+  //     })
+  //   }
+  //   next()
   // } else {
-    // next()
+  //   next()
   // }
-// })
+  // let route = session(router)
+  // if(route){
+  if (to.params !== {}) {
+    let ssss = {
+      name: to.name,
+      params: to.params
+    }
+      // session('router', '')
+    session('router', ssss)
+    let s = session('router')
+    console.log('前往路由', to, 'session', s)
+  }
+  // }
+  next()
+})
 new Vue({
   router,
   store,

@@ -3,7 +3,7 @@
     <div id="video-drag"></div>
     <div v-if="!currentIsVideo" class="audio-wrap">
       <div>
-        <img class="user-img" src="/static/user.png" alt="">
+        <img class="user-img" :src="imgExist(currentVideo.userImg)" alt="">
       </div>
       <div class="audio-tip">
         <span>语音通话中...</span>
@@ -13,13 +13,20 @@
       </div>
       <div class="audio-to-video-wrap">
         <div>
-          <button  class="audio-to-video" @click="toVideo">
+          <button v-if="voice" @click="noVoice" title="静音">
+            <span class="iconfont icon-hf_maikefeng 1991fc"></span>
+          </button>
+
+          <button v-if="!voice" @click="hasVoice" title="取消静音">
+            <span class="iconfont icon-guanbimaikefeng 1991fc"></span>
+          </button>
+          <!-- <button  class="audio-to-video" @click="toVideo">
             <span class="iconfont icon-shipin1 span"></span>
-          </button> 
+          </button>  -->
         </div>
-        <div>
-          <span class="audio-to-video-text">打开摄像头</span>
-        </div>
+        <!-- <div> -->
+          <!-- <span class="audio-to-video-text">{{静音}}</span> -->
+        <!-- </div> -->
       </div>
     </div>
     <div class="video-wrap" id="video-wrap">
@@ -27,8 +34,8 @@
 
       </div>
       <div id="selfVideo">
-
       </div>
+
       <div class="btn-wrap" v-if="currentIsVideo">
         <div class="voice-btn">
 
@@ -39,12 +46,11 @@
           <button v-if="!voice" @click="hasVoice" title="取消静音">
             <span class="iconfont icon-guanbimaikefeng tofff"></span>
           </button>
-          <button  @click="toAudio" title="关闭摄像头">
+          <button  @click="toAudio" title="转换为语音聊天">
             <span class="iconfont icon-shipin1 tofff"></span>
           </button> 
         </div>
         <div class="hung-btn">
-
           <button  @click="hungCall">挂断</button>
           <!-- <button  @click="toVideo">toVideo</button>  -->
           <!-- <button :disabled="currentIsVideo"  @click="toAudio">toAudio</button> 
@@ -58,6 +64,8 @@
 
 <script>
 import {mapMutations, mapState} from 'vuex'
+import {imgExists} from '@/untils/untils'
+import publicStatic from '@/publicData/const.js'
 export default {
   name: 'videochat',
   props: {
@@ -70,11 +78,15 @@ export default {
   },
   computed: {
     ...mapState([
-      'currentIsVideo'
+      'currentIsVideo',
+      'currentVideo'
     ])
   },
   methods: {
     ...mapMutations(['closeVideo']),
+    imgExist (url) {
+      return imgExists(url, publicStatic.onlineStatic + '/static/user.png')
+    },
     close () {
       document.getElementById('videoChat').innerHTML = ''
       document.getElementById('selfVideo').innerHTML = ''
@@ -118,7 +130,7 @@ export default {
     z-index: 9999999999;
     // width: 900px;
     max-width:1350px;
-    min-width: 340px;
+    // min-width: 340px;
     // min-height: 480px;
     // height: 700px;
     background: #fff;
@@ -129,6 +141,7 @@ export default {
     // padding:20px;
   }
   .video-wrap{
+    position: relative;
     // min-width: 640px;
     // min-height: 480px;
   }
@@ -296,6 +309,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    button{
+      background: #fff;
+    }
   }
   .audio-to-video{
     background: #fff;
@@ -314,6 +330,9 @@ export default {
   .audio-tip{
     margin-top:10px;
     color: #041421;
+  }
+  .1991fc{
+    color:#1991fc;
   }
 </style>
 

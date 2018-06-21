@@ -1,17 +1,20 @@
 <template>
   <div class="clear box" @click.prevent="cancelDelet">
-    <div class="left-arrow">
+    <div class="left-arrow" v-if="hasCard">
       <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
     </div>
-    <div class="right-arrow">
+    <div class="right-arrow" v-if="hasCard">
       <el-button @click="next()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
     </div>
-    <i :class="{'new':isnew}"></i>
+    <i :class="{'new':isnew}" v-if="hasCard"></i>
     <div class="table-top">
-      <span class="table-top-span">病历卡  {{currentpage}}/{{cardtotalPage}}</span>
-      <span>{{createTime}}</span>
+      <span class="table-top-span">病历卡 <span v-if="hasCard">{{currentpage}}/{{cardtotalPage}}</span> </span>
+      <span v-if="hasCard">{{createTime}}</span>
     </div>
-    <div>
+    <div class="no-card" v-if="!hasCard">
+      暂无病历卡
+    </div>
+    <div v-if="hasCard">
       <table>
         <tr>
           <td colspan="2" class="table-head side-left">用户自述</td>
@@ -200,7 +203,7 @@ export default {
   props: {
     totalPage: {
       // type: [Number, String],
-      default: 1
+      default: 0
     },
     sickData: {}
     // sickID: {
@@ -231,7 +234,8 @@ export default {
         delete: false,
         data: []
 
-      }
+      },
+      hasCard: true
       // totalPage: ''
     }
   },
@@ -311,10 +315,21 @@ export default {
     },
     totalPage (val) {
       this.cardtotalPage = val
-      if (val === 0) {
-        this.cardtotalPage = 1
-      }
+      // if (val === 0) {
+      //   this.cardtotalPage = 1
+      // }
       // return val
+    },
+    cardtotalPage: {
+      handler: function (val) {
+        console.log('ddd', val)
+        if (val > 0) {
+          this.hasCard = true
+        } else {
+          this.hasCard = false
+        }
+      },
+      immediate: true
     },
     sickData: {
       handler (curVal, oldVal) {
@@ -434,9 +449,13 @@ export default {
     }
   },
   mounted () {
-    if (!this.cardtotalPage || this.cardtotalPage === 0) {
-      this.cardtotalPage = 1
-    }
+    // console.log('cardtotalPage', this.cardtotalPage)
+    // if (this.cardtotalPage > 0) {
+    //   // this.cardtotalPage = 1
+    //   this.hasCard = true
+    // } else {
+    //   this.hasCard = false
+    // }
   }
 }
 </script>
@@ -452,6 +471,13 @@ export default {
   display:block;
   visibility:hidden;
   clear:both;
+  }
+  .no-card{
+    min-height: 300px;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 300px;
   }
   .box{
     position: relative;

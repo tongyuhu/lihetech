@@ -1062,7 +1062,7 @@ export default {
       console.log('JSON.stringify(medicine)', obj.list)
       obj.userMakeOrderDoctorId = this.userMakeOrderDoctorId || null
       obj.userCasesCardId = this.userCasesCardId || null
-      console.log('userCasesCardId', this.$route.params.userCasesCardId)
+      // console.log('userCasesCardId', this.$route.params.userCasesCardId)
       this.$axios(modifyCardApi(obj))
       .then(res => {
         if (res.data.code === '0000') {
@@ -1594,7 +1594,7 @@ export default {
   },
   mounted () {
     console.log('this.router', this.$route)
-    this.id = this.$route.params.userCasesCardId
+    this.id = this.userCasesCardId
     this.currentDate = dateFormat(new Date(), 0, true)
     let vm = this
     // 从最新问诊过来

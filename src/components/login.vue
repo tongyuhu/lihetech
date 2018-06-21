@@ -99,7 +99,7 @@ export default {
   //   Window.sessionStorage.clear()
   // },
   mounted () {
-    sessionStorage.clear()
+    // sessionStorage.clear()
   }
 }
 </script>

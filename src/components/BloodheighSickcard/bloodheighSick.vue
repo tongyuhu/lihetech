@@ -320,10 +320,11 @@ export default {
         if (res.data) {
           if (res.data.data) {
             this.totalPage = res.data.pages
+            console.log('病历卡总页数', this.totalPage)
             if (this.totalPage < 1) {
               // console.log('page', this.totalPage)
-              this.showcard = false
-              this.SET_SICK_CARD(true)
+              // this.showcard = false
+              // this.SET_SICK_CARD(true)
             }
               // this.pages =
             this.SET_SICK_CARD(false)
@@ -380,12 +381,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['showSickCard']),
+    ...mapState(['showSickCard', 'currentSickData']),
     sickID () {
-      return this.$route.params.sickID
+      return this.currentSickData.sickID
+      // return this.$route.params.sickID
     },
     hospitalId () {
-      return this.$route.params.hospitalId
+      return this.currentSickData.hospitalId
+      // return this.$route.params.hospitalId
     },
     // 姓名
     name () {

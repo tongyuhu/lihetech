@@ -6,7 +6,7 @@
 </template>
 
 <script>
-// import session from './untils/session'
+import session from '@/untils/session'
 import {getAdminInfo} from '@/api/components/login'
 import {routerRoleMatch} from './untils/routerMatch'
 // import {routeMatch, roleMatch, routerRoleMatch} from './untils/routerMatch'
@@ -89,9 +89,24 @@ export default {
             // this.$router = baseroutes
             console.log(router)
             this.$router.addRoutes(router)
-            this.$router.replace({
-              name: 'Home'
-            })
+            console.log('session路由', session('router'))
+            if (session('router')) {
+              this.$router.push(session('router'))
+              // this.$router.replace({
+              //   name: session('router').name
+              // })
+              // console.log('本地路由', session('router'))
+              // this.$router.replace(session('router'))
+              // this.$router.replace({
+              //   name: 'Home'
+              // })
+              // this.$router.push(session('router'))
+              // this.$router.go(0)
+            } else {
+              this.$router.replace({
+                name: 'Home'
+              })
+            }
           } else {
             window.location.href = '/BPWatch/admin/login/page'
             // this.$router.replace({
@@ -104,9 +119,26 @@ export default {
     }
   },
   mounted () {
+    // let vm = this
     // window.addEventListener('beforeunload', onbeforeunload)
-    // window.onbeforeunload = function () {
-    //   return '您确定本页的操作完成了吗？页面将关闭或刷新。'
+    // window.onbeforeunload = function (e) {
+    //   vm.$router.go(0)
+    //   // confirm('刷新将丢失数据')
+    //   // e.returnValue = false
+    //   // return false
+    // }
+    // document.onkeydown = function (e) {
+    //   vm.$router.go(0)
+    //   e = window.event || e
+    //   var keycode = e.keyCode || e.which
+    //   if (keycode === 116) {
+    //     if (window.event) { // ie
+    //       try { e.keyCode = 0 } catch (e) {}
+    //       e.returnValue = false
+    //     } else { // firefox
+    //       e.preventDefault()
+    //     }
+    //   }
     // }
     // function onbeforeunload (e) {
     //   console.log('>>>> onbeforeunload called')

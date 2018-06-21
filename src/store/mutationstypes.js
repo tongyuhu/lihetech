@@ -1,3 +1,4 @@
 
 export const SET_ADMIN_INFO = 'SET_ADMIN_INFO'
 export const SET_SICK_CARD = 'SET_SICK_CARD'
+export const SET_CURRENT_SICK_DATA = 'SET_CURRENT_SICK_DATA'

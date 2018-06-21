@@ -177,7 +177,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:40%;
+      top:12px;
       right: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;

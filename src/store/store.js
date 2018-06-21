@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { SET_ADMIN_INFO, SET_SICK_CARD } from './mutationstypes'
+import { SET_ADMIN_INFO, SET_SICK_CARD, SET_CURRENT_SICK_DATA } from './mutationstypes'
 import _ from 'lodash'
+import createPersistedState from 'vuex-persistedstate'
 import axios from '@/api/axios'
-import publicStatic from '@/publicData/const.js'
+// import publicStatic from '@/publicData/const.js'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
-import {imgExists} from './../untils/untils'
+// import {imgExists} from '@/untils/untils'
 // import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
 
@@ -14,9 +15,13 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     adminInfo: {},
+    // 病历卡id
     userCasesCardId: null,
+    // 预约医生id
     userMakeOrderDoctorId: null,
+    // 是否显示面诊
     showSickCard: false,
+    currentSickData: {},
     // 聊天窗口状态
     chatStatus: false,
     // 用户融云id
@@ -97,6 +102,9 @@ export const store = new Vuex.Store({
     },
     [SET_SICK_CARD] (state, type) {
       state.showSickCard = type
+    },
+    [SET_CURRENT_SICK_DATA] (state, obj) {
+      state.currentSickData = obj
     },
     setuserCasesCardId (state, id) {
       state.userCasesCardId = id
@@ -266,9 +274,11 @@ export const store = new Vuex.Store({
                 obj.history = []
                 obj.hasHistroy = true
                 if (_.has(item, 'userImage')) {
-                  obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
+                  obj.userImg = process.env.IMG_URL + item.userImage
+                  // obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
                 } else {
-                  obj.userImg = imgExists(null, publicStatic.onlineStatic + '/static/user.png')
+                  obj.userImg = null
+                  // obj.userImg = imgExists(null, publicStatic.onlineStatic + '/static/user.png')
                 }
                 list.push(obj)
               }
@@ -289,5 +299,6 @@ export const store = new Vuex.Store({
         }
       })
     }
-  }
+  },
+  plugins: [createPersistedState()]
 })

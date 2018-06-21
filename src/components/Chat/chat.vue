@@ -1,5 +1,6 @@
 <template>
   <div class="chart-window clear" v-drag="'chart'">
+    <!-- <video src="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"></video> -->
     <div class="chart-window-left" v-show="false">
       <!-- 左侧聊天好友列表 -->
       <ul>
@@ -63,21 +64,35 @@
       </div>
       <!-- 工具 -->
       <div class="chart-wrap-tool">
-        <button>
+        <el-popover
+        ref="emojiRef"
+        width="320"
+        popper-class="emoji-popper"
+        v-model="showEmoji">
+          <div>
+            <div class="emoji-wrap">
+              <span v-for="(emoji,index) in emojiList" :key="index" @click="addEmoji(emoji)">
+                <span v-html="emoji.html"></span>
+                <!-- {{emoji.emoji}} -->
+              </span>
+            </div>
+          </div>
+        </el-popover>
+        <button @click="showEmojiHandle" title="发送表情">
           <span class="smile-icon"></span>
         </button>
         <!-- <button > -->
-          <a class="a-upload">
+          <a class="a-upload" title="发送图片信息"> 
             <!-- <input type="text"> -->
             <input type="file" accept="image/jpg" @change="sendImgMsg($event)">
             <!-- <input type="file" accept="image/jpg" @change="changeImg($event)" value="a"> -->
             <span class="file-icon"></span>
           </a>
         <!-- </button> -->
-        <button @click="callVoice">
+        <button @click="callVoice" title="语音聊天">
           <span class="phone-icon" ></span>
         </button>
-        <button @click="callVideo(false)">
+        <button @click="callVideo(false)" title="视频聊天">
           <span class="video-icon" ></span>
         </button>
       </div>
@@ -96,7 +111,7 @@
       </div>
     </div>
 
-
+    
 
 
     <!-- <div>
@@ -126,12 +141,15 @@ export default {
   data () {
     return {
       readyMsg: null,
+      // readySendMsg:null,
       chartList: [
       ],
       showList: false,
       isTriggerFirstLoad: false,
       imgArr: [],
-      noMoreHistroy: false
+      noMoreHistroy: false,
+      showEmoji: false,
+      emojiList: []
     }
   },
   computed: {
@@ -185,6 +203,20 @@ export default {
       'getVideoMsg',
       'changeCurrentIsVideo'
     ]),
+    showEmojiHandle () {
+      // this.emojiList = RongIMLib.RongIMEmoji.list
+      console.log('打开表情', this.emojiList)
+      this.showEmoji = !this.showEmoji
+    },
+    addEmoji (emoji) {
+      if (this.readyMsg) {
+        this.readyMsg += RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
+        // this.sendMsg += emoji.emoji
+      } else {
+        this.readyMsg = RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
+        // this.sendMsg = emoji.emoji
+      }
+    },
     sendMsg () {
       // console.log('historyMsg', this.historyMsg)
       let vm = this
@@ -200,14 +232,15 @@ export default {
         console.log('当前聊天', vm.currentChat)
         let targetId = vm.currentChat.userId
         let conversationtype = RongIMLib.ConversationType.PRIVATE
-        let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
+        let msg = new RongIMLib.TextMessage({content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg), extra: '附加信息'})
+        // let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
         RongIMLib.RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
           onSuccess: function (message) {
             let msgObj = {
               content: {
                 messageName: 'TextMessage',
                 // messageType: 'TextMessage',
-                content: vm.readyMsg
+                content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg)
               },
               senderUserId: vm.rongUserId
             }
@@ -456,9 +489,9 @@ export default {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,
         // 会话目标 Id，群 Id 或者 userId。
-        // targetId: vm.currentChat.userId,
+        targetId: vm.currentChat.userId,
         // targetId: 'admin_3',
-        targetId: 'admin_2',
+        // targetId: 'admin_2',
         // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
         // inviteUserIds: inviteUserIds,
         // 音频类型
@@ -469,7 +502,18 @@ export default {
       }
       vm.getInvite(true) // 改变状态显示接收消息
       vm.getVideoMsg() // 打开显示接收消息窗口
-      vm.changeCurrentVideo(params)
+      let targetUser = params
+      let index = vm._.findLastIndex(vm.friendsList, function (item) {
+        return item.userId === targetUser.targetId
+      })
+      if (index !== -1) {
+        targetUser.userImg = vm.friendsList[index].userImg
+        targetUser.userName = vm.friendsList[index].userName
+      } else {
+        targetUser.userImg = null
+        targetUser.userName = null
+      }
+      vm.changeCurrentVideo(targetUser)
       RongCallLib.call(params, function (error) {
         console.log('发送视频失败', error)
         vm.closeVideoMsg()  // 关闭提醒窗口
@@ -599,6 +643,10 @@ export default {
     }
   },
   mounted () {
+    this.emojiList = RongIMLib.RongIMEmoji.list
+    this.emojiList.forEach(item => {
+      item.html = RongIMLib.RongIMEmoji.symbolToHTML(item.symbol)
+    })
     // let vm = this
     // Bus.$on('history', (val) => {
     //   vm.historyMsg = val
@@ -750,6 +798,7 @@ export default {
       } 
     }
     &-tool{
+      position: relative;
       padding-top:10px;
       height: 25px;
       // border-top:1px solid #fff;
@@ -886,5 +935,18 @@ export default {
       /* border-color: #ccc; */
       text-decoration: none
   }
+  .emoji-wrap{
+    span{
+      cursor: pointer;
+      padding:1px;
+    }
+  }
 </style>
+<style>
+.emoji-popper{
+    position: absolute;
+    bottom:35px;
+  }
+</style>
+
 
