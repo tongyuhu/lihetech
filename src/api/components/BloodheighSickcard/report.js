@@ -1,4 +1,4 @@
-import {dateFormat, daybefor} from './../../../untils/date'
+import {dateFormat, daybefor} from '@/untils/date'
 export const bloodCoverApi = (params, date) => {
   date.value = dateFormat(date.value, 0, 1)
   let req = {}

@@ -85,6 +85,7 @@
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
             <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
+            
           </pane>
           <pane
           label="用药">
@@ -219,6 +220,7 @@ import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 import checkList from '@/components/checklist'
 import imgfloat from '@/components/imgFloat'
+
 // import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {

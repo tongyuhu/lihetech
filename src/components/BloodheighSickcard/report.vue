@@ -3,7 +3,7 @@
     <div class="margin-bottom">
       <el-row :gutter="8">
         <!-- 血压分布  -->
-        <el-col :span="12">
+        <el-col :span="10">
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
                 <p class="title">血压分布</p>
@@ -27,7 +27,7 @@
           </el-card>
         </el-col>
         <!-- 血压直方图 -->
-        <el-col :span="12">
+        <el-col :span="12" v-if="false">
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
                 <p class="title">血压直方图</p>
@@ -47,59 +47,25 @@
             <div id='bloodHistogram'  :style="{width:'auto',height:'300px'}"></div>
           </el-card>
         </el-col>
+        <el-col :span="14">
+          <bloodHeighAverage :sickID="sickID" :hospitalId="hospitalId"></bloodHeighAverage>
+        </el-col>
       </el-row>
     </div>
 
-    <el-row :gutter="8" v-if="false">
-      <el-col :span="12">
+    <el-row :gutter="8" class="margin-bottom">
+      <el-col :span="12" v-show="false">
         <!-- 血压与饮食 -->
         <div>
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
                 <p class="title">血压与饮食</p>
             </div>
-            <!-- <div class="check-date" v-show="false">
-              <el-row type="flex" justify="start">
-                <button v-for="(item,index) in bloodfoodChecked.date" 
-                :key="item.date" 
-                class="check-date-btn" 
-                :class="{checked:item.isChecked}" 
-                @click="isfoodChecked(item,index)">
-                  {{item.date}}
-                </button>
-              </el-row>
-            </div> -->
             <div>
               <el-row type="flex">
-                <!-- <el-col >
-                  <div id='bloodFood' :style="{width:'auto',height:'700px'}"></div>
-                </el-col> -->
-                <!-- <el-col :span="3"> -->
-                  <!-- <div class="middle-wrap">
-                    <div class="middle">
-                      <div class="checked-kaluli">
-                        <span class="check-all-span">
-                          <button class="check-all-btn" @click="isFoodKaluliChecked()">
-                            <span :class="{'check-all-btn-icon':!bloodfoodChecked.kaluli,'check-all-btn-icon-active':bloodfoodChecked.kaluli}"></span>
-                            <span>卡路里</span>
-                          </button>
-                        </span>
-                      </div>
-                      <div class="checked-score">
-                        <span class="check-all-span">
-                          <button class="check-all-btn" @click="isFoodScoreChecked()">
-                            <span :class="{'check-all-btn-icon':!bloodfoodChecked.score,'check-all-btn-icon-active':bloodfoodChecked.score}"></span>
-                            <span>分数</span>
-                          </button>
-                        </span>
-                      </div>
-                    </div>
-                  </div> -->
-                <!-- </el-col> -->
                 <div class="flex">
                   <div class="flex-btn-left">
                     <el-button :disabled="foodBtnNext" @click="bloodFoodNext" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                    <!-- <el-button @click="bloodFoodPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                   <div class="chart-min-width kaluli-wrap">
                     <div class="kaluli-btn-wrap">
@@ -123,10 +89,31 @@
             </div>
           </el-card>
         </div>
-
       </el-col>
-
-      <el-col :span="12">
+      <el-col :span="10">
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+                <p class="title">血压直方图</p>
+            </div>
+            <div class="check-date">
+              <el-row type="flex" justify="start">
+                <button v-for="(item,index) in histogramChecked.date" 
+                :key="item.date" 
+                class="check-date-btn" 
+                :class="{checked:item.isChecked}" 
+                @click="isHistogramChecked(item,index)">
+                  {{item.date}}
+                </button>
+              </el-row>
+            </div>
+            <!-- <div id='bloodAverage'  :style="{width:'auto',height:'250px'}"></div> -->
+            <div id='bloodHistogram'  :style="{width:'auto',height:'425px'}"></div>
+          </el-card>
+      </el-col>
+      <el-col :span="14">
+        <BMI :sickID="sickID" :hospitalId="hospitalId"></BMI>
+      </el-col>
+      <el-col :span="14" v-show="false">
         <!-- 血压与运动 -->
         <div>
           <el-card :body-style="{ padding: '0px' }">
@@ -187,7 +174,7 @@
                         <span>分数</span>
                       </button>
                     </div>
-                    <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
+                    <div id='bloodSport' :style="{width:'auto',height:'500px'}"></div>
                   </div>
                   <div class="flex-btn">
                     <el-button :disabled="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
@@ -206,7 +193,9 @@
 
 <script>
 import echarts from 'echarts'
-import {bloodCoverApi, histogramApi, bloodfoodApi, bloodsportApi} from './../../api/components/BloodheighSickcard/report'
+import {bloodCoverApi, histogramApi, bloodfoodApi, bloodsportApi} from '@/api/components/BloodheighSickcard/report'
+import bloodHeighAverage from './bloodHeighAverage'
+import BMI from './BMI'
 export default {
   props: {
     sickID: {
@@ -215,6 +204,10 @@ export default {
     hospitalId: {
       default: 0
     }
+  },
+  components: {
+    bloodHeighAverage,
+    BMI
   },
   data () {
     return {
@@ -1616,7 +1609,7 @@ export default {
         },
         grid: [
           { // 直角坐标系内绘图网格
-            top: '5%',
+            top: '8%',
             left: '90px',
             right: '80px',
             width: 'auto',

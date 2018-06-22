@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 血压趋势 -->
-    <div>
+    <div class="margin-bottom">
       <el-card :body-style="{ padding: '0px' }">
         <div class="card-header">
             <p class="title">血压趋势</p>
@@ -120,7 +120,7 @@
     </div>
 
     <!-- 血压与行为分数 -->
-    <div class="blood-cover" v-if="false">
+    <div class="blood-cover" v-show="false">
       <el-card :body-style="{ 'padding': '0px' ,'padding-bottom':'20px'}">
         <div class="card-header">
           <p class="title">血压与行为分数</p>
@@ -2244,5 +2244,8 @@ export default {
   }
   .dangerbg{
     background-color: #f96767;
+  }
+  .margin-bottom{
+    margin-bottom: 8px;
   }
 </style>
