@@ -6,7 +6,9 @@ export const useDrugApi = (params) => {
       'userId': params.userId,
       'adminHospitalId': params.adminHospitalId,
       'pageNum': params.pageNum || 1,
-      'pageSize': params.pageSize || 5
+      'pageSize': params.pageSize || 5,
+      'startTime': params.startTime,
+      'endTime': params.endTime
     },
     headers: { 'Content-type': 'application/x-www-form-urlencoded' },
     outtime: 10000
