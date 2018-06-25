@@ -75,7 +75,7 @@ export default {
       xasis: [],
       page: {
         pageNum: 1,
-        pageSize: 15,
+        pageSize: 24,
         pages: 1,
         currentPage: 1
       },
@@ -90,7 +90,8 @@ export default {
       initX: -1,
       // 计算Y轴坐标
       // befor: {
-      takeMedicineTime: '00000000000'
+      takeMedicineTime: '00000000000',
+      comporeTime: ''
       // }
 
     }
@@ -107,71 +108,150 @@ export default {
         'pageNum': pagenum,
         'pageSize': this.page.pageSize,
         'startTime': '2018-05-20',
-        'endTime': '2018-05-26'
+        'endTime': '2018-06-26'
       }
       vm.$axios(useDrugApi(params))
       .then(res => {
         if (res.data.data) {
           let data = res.data.data
           let computData = []
-          if (this._.has(data, 'userMedicationTotalplanList')) {
-            if (data.userMedicationTotalplanList.length > 0) {
-              data.userMedicationTotalplanList.forEach(item => {
-                if (this._.has(item, 'userMedicationPlanList')) {
-                  if (item.userMedicationPlanList.length > 0) {
-                    item.userMedicationPlanList.forEach(medicinelist => {
-                      if (this._.has(medicinelist, 'userMedicationList')) {
-                        if (medicinelist.userMedicationList.length > 0) {
-                          let M = []
-                          let list = []
-                          M.push((medicinelist.modifyTime || medicinelist.createTime).slice(0, 10))// x
-                          M.push(this.transformtime(medicinelist.time)) // y
-                          M.push([])// blod
+          // if (this._.has(data, 'userMedicationTotalplanList')) {
+            //   if (data.userMedicationTotalplanList.length > 0) {
+            //     data.userMedicationTotalplanList.forEach(item => {
+            //       if (this._.has(item, 'userMedicationPlanList')) {
+            //         if (item.userMedicationPlanList.length > 0) {
+            //           item.userMedicationPlanList.forEach(medicinelist => {
+            //             if (this._.has(medicinelist, 'userMedicationList')) {
+            //               if (medicinelist.userMedicationList.length > 0) {
+            //                 let M = []
+            //                 let list = []
+            //                 M.push((medicinelist.modifyTime || medicinelist.createTime).slice(0, 10))// x
+            //                 M.push(this.transformtime(medicinelist.time)) // y
+            //                 M.push([])// blod
 
-                          medicinelist.userMedicationList.forEach(medicine => {
-                            if (this._.has(medicine, 'sysMedicineId')) {
-                              list.push(medicine.sysMedicineId)
-                            }
-                          })
-                          list = this._.uniq(list)
-                          M.push(list) // medicine
-                          M.push((medicinelist.modifyTime || medicinelist.createTime).slice(0, 10))// x
-                          M.push(medicinelist.time) // y
-                          computData.push(M)
-                        }
-                      }
-                    })
-                  }
-                }
-              })
-            }
-          }
+            //                 medicinelist.userMedicationList.forEach(medicine => {
+            //                   if (this._.has(medicine, 'sysMedicineId')) {
+            //                     list.push(medicine.sysMedicineId)
+            //                   }
+            //                 })
+            //                 list = this._.uniq(list)
+            //                 M.push(list) // medicine
+            //                 M.push((medicinelist.modifyTime || medicinelist.createTime).slice(0, 10))// x
+            //                 M.push(medicinelist.time) // y
+            //                 computData.push(M)
+            //               }
+            //             }
+            //           })
+            //         }
+            //       }
+            //     })
+            //   }
+          // }
+          // if (this._.has(data, 'userMedicationTotalplanList')) {
+            //   if (data.userMedicationTotalplanList.length > 0) {
+            //     data.userMedicationTotalplanList.forEach(item => {
+            //       if (this._.has(item, 'userMedicationPlanList')) {
+            //         if (item.userMedicationPlanList.length > 0) {
+            //           item.userMedicationPlanList.forEach(medicinelist => {
+            //             if (this._.has(medicinelist, 'userMedicationList')) {
+            //               if (medicinelist.userMedicationList.length > 0) {
+            //                 let list = []
+            //                 // medicinelist.time
+
+            //                 medicinelist.userMedicationList.forEach(medicine => {
+            //                   if (this._.has(medicine, 'sysMedicineId')) {
+            //                     list.push(medicine.sysMedicineId)
+            //                   }
+            //                 })
+            //                 list = this._.uniq(list)
+            //                 computData.push(list)
+            //               }
+            //             }
+            //           })
+            //         }
+            //       }
+            //     })
+            //   }
+          // }
+          // let comporeTime = ''
           if (this._.has(data, 'userBloodPressureList')) {
             if (data.userBloodPressureList.length > 0) {
               data.userBloodPressureList.forEach(item => {
                 let bloodlist = []
                 let blood = []
-                bloodlist.push(item.measureTime.slice(0, 10))
-                bloodlist.push(this.transformtime(item.measureTime.slice(11) + ':00'))
-                blood.push(item.avgSystolic)
-                blood.push(item.avgDiastolic)
-                blood.push(item.bpTypeAvg)
-                bloodlist.push(blood)
-                bloodlist.push([])
-                bloodlist.push(item.measureTime.slice(0, 10))
-                bloodlist.push(item.measureTime.slice(11) + ':00')
-                computData.push(bloodlist)
+                if (this._.has(item, 'measureTime')) {
+                  let date = item.measureTime.slice(0, 10)
+
+                  let hours = item.measureTime.slice(11) + ':00'
+                  bloodlist.push(date)
+                  bloodlist.push(this.transformtime(hours))
+                  blood.push(item.avgSystolic)
+                  blood.push(item.avgDiastolic)
+                  blood.push(item.bpTypeAvg)
+                  bloodlist.push(blood)
+                  if (date !== this.comporeTime) {
+                    if (this._.has(data, 'userMedicationTotalplanList')) {
+                      if (data.userMedicationTotalplanList.length > 0) {
+                        data.userMedicationTotalplanList.forEach(item => {
+                          // new Date(date.replace(/-/g,"\/"))
+                          let start = item.startTime
+                          let end = item.endTime
+                          if (this._.gte(new Date(date.replace(/-/g, '\/')), new Date(start.replace(/-/g, '\/'))) && this._.gte(new Date(end.replace(/-/g, '\/')), new Date(date.replace(/-/g, '\/')))) {
+                            this.comporeTime = date
+                            if (this._.has(item, 'userMedicationPlanList')) {
+                              if (item.userMedicationPlanList.length > 0) {
+                                item.userMedicationPlanList.forEach(medicinelist => {
+                                  if (this._.has(medicinelist, 'userMedicationList')) {
+                                    if (medicinelist.userMedicationList.length > 0) {
+                                      let M = []
+                                      let list = []
+                                      M.push(date)// x
+                                      M.push(this.transformtime(medicinelist.time)) // y
+                                      M.push([])// blod
+
+                                      medicinelist.userMedicationList.forEach(medicine => {
+                                        if (this._.has(medicine, 'sysMedicineId')) {
+                                          list.push(medicine.sysMedicineId)
+                                        }
+                                      })
+                                      list = this._.uniq(list)
+                                      M.push(list) // medicine
+                                      M.push(date)// x
+                                      M.push(medicinelist.time) // y
+                                      computData.push(M)
+                                    }
+                                  }
+                                })
+                              }
+                            }
+                          }
+                        })
+                      }
+                    }
+                  }
+
+                  bloodlist.push([])
+                  bloodlist.push(date)
+                  bloodlist.push(hours)
+                  computData.push(bloodlist)
+                }
               })
             }
           }
+          computData = this._.uniq(computData)
           computData = this._.sortBy(computData, function (item) {
             return item[0]
           })
+          console.log('用药', computData)
           // this.xasis = this.axisX(computData)
           // this.optionData = this.seriesItem(this.formatterX(computData))
           // vm.xasis = vm._.uniq(vm._.concat(this.axisX(computData), this.xasis))
           vm.xasis = vm._.uniq(vm._.concat(this.xasis, this.axisX(computData)))
-          this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
+          // vm.xasis = (vm._.concat(this.axisX(computData), this.xasis))
+          // this.optionData = this._.concat(this.seriesItem(computData, this.optionData))
+          this.optionData = this._.concat(this.seriesItem(this.formatterX(computData)), this.optionData)
+          // vm.xasis = vm._.concat(this.xasis, this.axisX(computData))
+          // this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
           // vm.xasis = vm.xasis.reverse()
           // this.optionData = this._.concat(this.seriesItem(this.formatterX(computData).reverse(), this.optionData))
 
@@ -242,7 +322,7 @@ export default {
         let time = value[0]
         let befortime = vm.takeMedicineTime
         // console.log('用药befortime', vm.takeMedicineTime)
-        console.log('initX', vm.initX)
+        // console.log('initX', vm.initX)
         let copytime = value[0]
         if (vm._.eq(time, befortime)) {
           value[0] = vm.initX
@@ -250,7 +330,7 @@ export default {
           vm.initX++
           value[0] = vm.initX
         }
-        console.log('用药befortime', vm.initX)
+        // console.log('用药befortime', vm.initX)
         // value.y = vm.axisY(value.takeMedicineTime)
         // readyarr.push(value)
         vm.takeMedicineTime = copytime
@@ -389,7 +469,7 @@ export default {
               }
             }
           }
-          console.log('wenben', obj)
+          // console.log('wenben', obj)
           arr.push(obj)
         })
       }
@@ -408,7 +488,7 @@ export default {
       if (end) {
         zoomend = end
       }
-      let hours = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
+      let hours = ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00', '24:00']
       let days = this.xasis
       let Icons = {
         'li': LI,
@@ -431,7 +511,7 @@ export default {
           backgroundColor: 'rgba(50,50,50,0.2)',
 
           formatter: function (a) {
-            console.log(a)
+            // console.log(a)
             // let befor = ''
             // let after = ''
             // let time = ''
@@ -445,6 +525,7 @@ export default {
             //   time = a.data.value[4]
             // }
             return (a.data.value[5] + '<br>' + a.data.value[4])
+            // return (a.data.value[5])
             // console.log(a)
             // let befor = ''
             // let after = ''
@@ -477,10 +558,12 @@ export default {
           }
         ],
         xAxis: {
+          // type: 'time',
           type: 'category',
-          inverse: true,
+          // inverse: true,
           data: days,
           boundaryGap: true,
+          // boundaryGap: ['20%', '20%'],
           // padding: 2,
           splitLine: {
             // x轴网格线
@@ -501,6 +584,15 @@ export default {
             showMaxLabel: true,
             align: 'center',
             rotate: 0,
+            // formatter: function (value, index) {
+            //   // 格式化成月/日，只在第一个刻度显示年份
+            //   var date = new Date(value)
+            //   var texts = [(date.getMonth() + 1), date.getDate()]
+            //   if (index === 0) {
+            //     texts.unshift(date.getFullYear())
+            //   }
+            //   return texts.join('-')
+            // }
             formatter: function (val) {
               let value
               let time = val.slice(0, 4)
@@ -533,7 +625,7 @@ export default {
             },
             show: false,
             min: 0,
-            max: 60 * 22
+            max: 60 * 24
           },
           {
             splitLine: {
