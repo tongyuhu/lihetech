@@ -74,7 +74,8 @@
             <!-- 今日笔记 -->
             <note
             :sickID="sickID" 
-            :hospitalId="hospitalId"></note>
+            :hospitalId="hospitalId"
+            v-show="false"></note>
             <!-- 今日笔记 end-->
 
           </pane>
