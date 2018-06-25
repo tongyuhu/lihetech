@@ -20,7 +20,8 @@
                 <el-switch
                   v-model="item.morning.order"
                   active-color="#f1f1f1"
-                  inactive-color="#1991fc">
+                  inactive-color="#1991fc"
+                  @change="morningStateChange(item.time,item.morning.order)">
                 </el-switch>
               </td>
               <td>
@@ -34,7 +35,8 @@
                 <el-switch
                   v-model="item.noon.order"
                   active-color="#f1f1f1"
-                  inactive-color="#1991fc">
+                  inactive-color="#1991fc"
+                  @change="noonStateChange(item.time,item.noon.order)">
                 </el-switch>
               </td>
               <td>
@@ -206,7 +208,7 @@
 
 <script>
 import {daybefor, computeWeekday} from '@/untils/date.js'
-import {orderSettingApi, settingDataApi} from '@/api/components/order/order.js'
+import {orderSettingApi, settingDataApi, closeorderApi} from '@/api/components/order/order.js'
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 export default {
   name: 'orderSetting',
@@ -617,6 +619,104 @@ export default {
       .catch(err => {
         console.log(err)
         this.loading = false
+      })
+    },
+    morningStateChange (day, state) {
+      let week = null
+      if (day === '周一') {
+        week = 1
+      }
+      if (day === '周二') {
+        week = 2
+      }
+      if (day === '周三') {
+        week = 3
+      }
+      if (day === '周四') {
+        week = 4
+      }
+      if (day === '周五') {
+        week = 5
+      }
+      if (day === '周六') {
+        week = 6
+      }
+      if (day === '周日') {
+        week = 7
+      }
+      // console.log('orderstate', week, this.orderlist[week])
+      let obj = {
+        'weekDay': week,
+        'slotType': 1,
+        'isStop': this.orderlist[week - 1].morning.order
+      }
+      this.$axios(closeorderApi(obj))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            showClose: true,
+            message: '设置成功',
+            type: 'success'
+          })
+          this.initlist()
+        } else {
+          // this.orderlist[week].morning.order = !this.orderlist[week].morning.order
+          this.initlist()
+          this.$message({
+            showClose: true,
+            message: res.data.msg,
+            type: 'warning'
+          })
+        }
+      })
+    },
+    noonStateChange (day, state) {
+      let week = null
+      if (day === '周一') {
+        week = 1
+      }
+      if (day === '周二') {
+        week = 2
+      }
+      if (day === '周三') {
+        week = 3
+      }
+      if (day === '周四') {
+        week = 4
+      }
+      if (day === '周五') {
+        week = 5
+      }
+      if (day === '周六') {
+        week = 6
+      }
+      if (day === '周日') {
+        week = 7
+      }
+      let obj = {
+        'weekDay': week,
+        'slotType': 2,
+        'isStop': this.orderlist[week - 1].noon.order
+      }
+      console.log('this.orderlist[week]', this.orderlist[week - 1].noon.order)
+      this.$axios(closeorderApi(obj))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            showClose: true,
+            message: '设置成功',
+            type: 'success'
+          })
+          this.initlist()
+        } else {
+          // this.orderlist[week].morning.order = !this.orderlist[week].morning.order
+          this.initlist()
+          this.$message({
+            showClose: true,
+            message: res.data.msg,
+            type: 'warning'
+          })
+        }
       })
     }
   },

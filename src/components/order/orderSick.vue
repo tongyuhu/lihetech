@@ -182,7 +182,7 @@
                           <!-- 就诊项目 -->
                           <div class="flex-item">
                             <span>
-                              {{noon.makeOrderDate.slice(10,16)}}
+                              {{noon.seeSpecialty}}
                             </span>
                           </div>
                           <!-- 就诊状态 -->
@@ -643,6 +643,9 @@ export default {
           break
         case 4:
           type = '失约'
+          break
+        case 5:
+          type = '已评论'
           break
         default:
           type = '未知'
