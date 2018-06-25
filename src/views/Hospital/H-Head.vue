@@ -33,10 +33,10 @@
         status-icon 
         :rules="changePasswordRules" 
         ref="changpasswordRef" 
-        label-width="50px" 
+        label-width="90px" 
         :label-position="labelPosition"
         >
-          <el-form-item prop="oldPassword">
+          <el-form-item prop="oldPassword" label="原始密码">
             <el-input
               :autofocus="true"
               placeholder="原始密码"
@@ -44,7 +44,7 @@
               <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
-          <el-form-item prop="newPassword1">
+          <el-form-item prop="newPassword1" label="新密码">
             <el-input
               :autofocus="true"
               placeholder="请输入密码"
@@ -52,7 +52,7 @@
               <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
-          <el-form-item prop="newPassword2">
+          <el-form-item prop="newPassword2" label="确认密码">
             <el-input
               :autofocus="true"
               placeholder="请再次输入密码"
@@ -223,7 +223,7 @@ export default {
               })
             }
           })
-          alert('submit!')
+          // alert('submit!')
         } else {
           console.log('error submit!!')
           return false
