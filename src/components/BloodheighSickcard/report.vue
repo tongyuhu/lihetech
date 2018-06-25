@@ -835,7 +835,7 @@ export default {
     bloodCoverOption () {
       let vm = this
       let color = []
-      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252']
+      let hascolor = ['#33b2f2', '#59d8a1', '#efa13a', '#ff7d43', '#f96767']
       let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
       let count = 0
       this.formatCoverData(this.coverData).forEach((item) => {
@@ -922,9 +922,9 @@ export default {
     },
     bloodHistogramOption () {
       // let areaColor = ['#33b2f2', '#59D8A1', '#efa13a', '#ff7d43', '#f96767']
-      let areaColor = ['#0099FF', '#59D8A1', '#efa13a', '#ff7d43', '#e21b1b']
+      let areaColor = ['#0099FF', '#59D8A2', '#efa13a', '#ff7d43', '#e21b1b']
       return {
-        color: ['#81cefc', '#7cedc4', '#f4e07a', '#ff947b', '#ff5252'],
+        color: ['#33b2f2', '#59d8a1', '#efa13a', '#ff7d43', '#f96767'],
         tooltip: {
           show: false
         },
@@ -1905,19 +1905,19 @@ export default {
       let color = ''
       switch (type) {
         case 1:
-          color = '#81cefc'
+          color = '#33b2f2'// 正常
           break
         case 2:
-          color = '#7cedc4'
+          color = '#59d8a1'// 正常高值
           break
         case 3:
-          color = '#f4e07a'
+          color = '#efa13a'// 轻度
           break
         case 4:
-          color = '#ff947b'
+          color = '#ff7d43' // 中度
           break
         case 5:
-          color = '#ff5252'
+          color = '#f96767' // 危险
           break
         case 0:
           color = '#191918'

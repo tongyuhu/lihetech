@@ -540,19 +540,19 @@ export default {
       let color = ''
       switch (type) {
         case 1:
-          color = '#81cefc'
+          color = '#33b2f2'// 正常
           break
         case 2:
-          color = '#7cedc4'
+          color = '#59d8a1'// 正常高值
           break
         case 3:
-          color = '#f4e07a'
+          color = '#efa13a'// 轻度
           break
         case 4:
-          color = '#ff947b'
+          color = '#ff7d43' // 中度
           break
         case 5:
-          color = '#ff5252'
+          color = '#f96767' // 危险
           break
         case 0:
           color = '#191918'
