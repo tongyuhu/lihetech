@@ -31,14 +31,15 @@
       <div class="chart" >
         <div class="flex">
           <div class="flex-btn-left">
-            <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-left" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+            <!-- <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-left" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
+            <el-button size="mini" :disabled="!useDrugBtnNext" @click="useDrugNext" type="text" :style="{'font-size':'14px','color':'#1991fc','background':'#fff'}">点击加载更多...</el-button>
             <!-- <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-left" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
           </div>
           <div class="chart-min-width">
             <div v-loading="loading" id='useDrug'  :style="{width:'auto',height:'650px'}"></div>
           </div>
           <div class="flex-btn">
-            <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-right" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button>
+            <!-- <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-right" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
             <!-- <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-right" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
           </div>
         </div>
@@ -48,7 +49,8 @@
 </template>
 
 <script>
-import {useDrugApi} from './../../api/components/BloodheighSickcard/useDrug'
+import {useDrugApi} from '@/api/components/BloodheighSickcard/useDrug'
+import {dateFormat} from '@/untils/date.js'
 import echarts from 'echarts'
 import LI from 'icon/hospital-icon-34.png'
 import B from 'icon/hospital-icon-35.png'
@@ -75,7 +77,7 @@ export default {
       xasis: [],
       page: {
         pageNum: 1,
-        pageSize: 24,
+        pageSize: 48,
         pages: 1,
         currentPage: 1
       },
@@ -91,7 +93,9 @@ export default {
       // 计算Y轴坐标
       // befor: {
       takeMedicineTime: '00000000000',
-      comporeTime: ''
+      comporeTime: '',
+      // 当前页数length
+      currentX: 1
       // }
 
     }
@@ -101,14 +105,15 @@ export default {
     getData (pagenum) {
       let vm = this
       vm.loading = true
+      let today = new Date()
       if (!pagenum) { pagenum = 1 }
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
         'pageNum': pagenum,
         'pageSize': this.page.pageSize,
-        'startTime': '2018-05-20',
-        'endTime': '2018-06-26'
+        'startTime': dateFormat(today, 12, true),
+        'endTime': dateFormat(today, 0, true)
       }
       vm.$axios(useDrugApi(params))
       .then(res => {
@@ -245,61 +250,62 @@ export default {
           console.log('用药', computData)
           // this.xasis = this.axisX(computData)
           // this.optionData = this.seriesItem(this.formatterX(computData))
-          // vm.xasis = vm._.uniq(vm._.concat(this.axisX(computData), this.xasis))
-          vm.xasis = vm._.uniq(vm._.concat(this.xasis, this.axisX(computData)))
+          // vm.xasis = vm._.uniq(vm._.concat(this.xasis, this.axisX(computData)))
           // vm.xasis = (vm._.concat(this.axisX(computData), this.xasis))
           // this.optionData = this._.concat(this.seriesItem(computData, this.optionData))
-          this.optionData = this._.concat(this.seriesItem(this.formatterX(computData)), this.optionData)
+          vm.xasis = vm._.uniq(vm._.concat(this.axisX(computData), this.xasis))
+          this.sourData = this._.concat(computData, this.sourData)
+          this.optionData = this.seriesItem(this.formatterX(this.sourData))
           // vm.xasis = vm._.concat(this.xasis, this.axisX(computData))
           // this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
           // vm.xasis = vm.xasis.reverse()
           // this.optionData = this._.concat(this.seriesItem(this.formatterX(computData).reverse(), this.optionData))
 
-          console.log('用药chu', computData)
+          console.log('用药chu', this.sourData)
           console.log('用药x data', this.xasis)
           // console.log('用药x', this.formatterX(computData))
           console.log('用药option', this.optionData)
           // let copydata = res.data.data
-          // copydata = vm._.filter(copydata, function (item) {
-          //   let hasBlood
-          //   let hasBD = vm._.has(item, 'beforeDiastolic2')
-          //   let hasBS = vm._.has(item, 'beforeSystolic2')
-          //   let hasAS = vm._.has(item, 'afterSystolic')
-          //   let hasAD = vm._.has(item, 'afterDiastolic')
-          //   let hasT = vm._.has(item, 'takeMedicineTime')
-          //   if (hasBD || hasBS || hasAS || hasAD) {
-          //     hasBlood = true
-          //   } else {
-          //     hasBlood = false
-          //   }
-          //   return hasT && hasBlood
-          // })
-          // let merge = function (item) {
-          //   let obj = {
-          //     beforeDiastolic2: 'null',
-          //     beforeSystolic2: 'null',
-          //     bpTypeBefore: 'null',
-          //     afterSystolic: 'null',
-          //     afterDiastolic: 'null',
-          //     bpTypeAfter: 'null',
-          //     sysMedicineId: 'null'
-          //   }
-          //   return vm._.merge(obj, item)
-          // }
-          // copydata = vm._.map(copydata, merge)
-          // copydata = vm._.sortBy(copydata, function (item) {
-          //   return item.takeMedicineTime
-          // })
-          // copydata = copydata.reverse()
-          // this.sourData = vm._.concat(copydata, this.sourData)
-          // let useDrugData = vm.formatter(this.sourData)
-          // let theX = vm.axisX(copydata)
-          // vm.optionData = vm.seriesItem(useDrugData)
-          // vm.optionData = vm._.concat(vm.seriesItem(useDrugData), vm.optionData)
-          // vm.xasis = vm._.uniq(vm._.concat(theX, vm.xasis))
-          // vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
-          // vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
-          // vm.optionData = vm.optionData
+            // copydata = vm._.filter(copydata, function (item) {
+            //   let hasBlood
+            //   let hasBD = vm._.has(item, 'beforeDiastolic2')
+            //   let hasBS = vm._.has(item, 'beforeSystolic2')
+            //   let hasAS = vm._.has(item, 'afterSystolic')
+            //   let hasAD = vm._.has(item, 'afterDiastolic')
+            //   let hasT = vm._.has(item, 'takeMedicineTime')
+            //   if (hasBD || hasBS || hasAS || hasAD) {
+            //     hasBlood = true
+            //   } else {
+            //     hasBlood = false
+            //   }
+            //   return hasT && hasBlood
+            // })
+            // let merge = function (item) {
+            //   let obj = {
+            //     beforeDiastolic2: 'null',
+            //     beforeSystolic2: 'null',
+            //     bpTypeBefore: 'null',
+            //     afterSystolic: 'null',
+            //     afterDiastolic: 'null',
+            //     bpTypeAfter: 'null',
+            //     sysMedicineId: 'null'
+            //   }
+            //   return vm._.merge(obj, item)
+            // }
+            // copydata = vm._.map(copydata, merge)
+            // copydata = vm._.sortBy(copydata, function (item) {
+            //   return item.takeMedicineTime
+            // })
+            // copydata = copydata.reverse()
+            // this.sourData = vm._.concat(copydata, this.sourData)
+            // let useDrugData = vm.formatter(this.sourData)
+            // let theX = vm.axisX(copydata)
+            // vm.optionData = vm.seriesItem(useDrugData)
+            // vm.optionData = vm._.concat(vm.seriesItem(useDrugData), vm.optionData)
+            // vm.xasis = vm._.uniq(vm._.concat(theX, vm.xasis))
+            // vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
+            // vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
+            // vm.optionData = vm.optionData
           // vm.xasis = vm.xasis
         }
 
@@ -314,28 +320,32 @@ export default {
     },
     // 格式化数据 计算x轴坐标  **
     formatterX (arr) {
+      // let copydata = []
+      let copydata = JSON.parse(JSON.stringify(arr))
       let vm = this
-      // let initX = -1
-      // let takeMedicineTime = '0000000000000000'
+      let initX = -1
+      let takeMedicineTime = '0000000000000000'
       // vm._(arr).forEach(function (value, index) {
-      arr.forEach(function (value, index) {
-        let time = value[0]
-        let befortime = vm.takeMedicineTime
-        // console.log('用药befortime', vm.takeMedicineTime)
-        // console.log('initX', vm.initX)
-        let copytime = value[0]
+      copydata.forEach(function (value, index) {
+        // let time = value[0]
+        let T = new Date(value[0].replace(/\\-/g, '\\/'))
+        let time = T.getTime()
+        let befortime = takeMedicineTime
+        // let befortime = vm.takeMedicineTime
+        // let copytime = new Date(value[0].replace(/\\-/g, '\\/'))
         if (vm._.eq(time, befortime)) {
-          value[0] = vm.initX
+          value[0] = initX
+          // value[0] = vm.initX
         } else {
-          vm.initX++
-          value[0] = vm.initX
+          initX++
+          value[0] = initX
+          // vm.initX++
+          // value[0] = vm.initX
         }
-        // console.log('用药befortime', vm.initX)
-        // value.y = vm.axisY(value.takeMedicineTime)
-        // readyarr.push(value)
-        vm.takeMedicineTime = copytime
+        takeMedicineTime = time
+        // vm.takeMedicineTime = time
       })
-      return arr
+      return copydata
     },
     // 计算X轴坐数据**
     axisX (arr) {
@@ -545,16 +555,19 @@ export default {
         dataZoom: [
           {
             type: 'slider',
-            show: false,
+            show: true,
             realtime: true,
             start: zoomstart,
             end: zoomend,
             zoomlock: true,
-            minValueSpan: 10,
-            maxValueSpan: 15,
+            // minValueSpan: 10,
+            maxValueSpan: 10,
             throttle: 500,
             filterMode: 'empty',
-            zoomOnMouseWheel: false
+            zoomOnMouseWheel: false,
+            showDetail: false,
+            showDataShadow: false
+            // handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z'
           }
         ],
         xAxis: {
@@ -834,36 +847,67 @@ export default {
       }
       return option
     },
-    // computeStartend (pageNum, pages) {
-    //   let page = {
-    //   }
-    //   if (pageNum === 1 && pages === 1) {
-    //     page.start = 0
-    //     page.end = 100
-    //   } else if (pageNum === pages) {
-    //     page.start = 0
-    //     page.end = parseInt((1 / pages) * 100)
-    //   } else if (pageNum < pages) {
-    //     page.start = parseInt(((pages - pageNum) / pages) * 100)
-    //     page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
-    //   }
-    //   return page
-    // },
     computeStartend (pageNum, pages) {
       let page = {
       }
       if (pageNum === 1 && pages === 1) {
         page.start = 0
         page.end = 100
-      } else if (pageNum === 1) {
+      } else if (pageNum === pages) {
         page.start = 0
-        page.end = parseInt((pageNum / pages) * 100)
-      } else if (pageNum < pages || pageNum === pages) {
-        page.start = parseInt(((pageNum - 1) / pages) * 100)
-        page.end = parseInt((pageNum / pages) * 100)
+        page.end = parseInt((1 / pages) * 100)
+      } else if (pageNum < pages) {
+        page.start = parseInt(((pages - pageNum) / pages) * 100)
+        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
       }
       return page
     },
+    // computeStartend (pageNum, pages) {
+    //   let page = {
+    //   }
+    //   if (pageNum === 1 && pages === 1) {
+    //     page.start = 0
+    //     page.end = 100
+    //   } else if (pageNum === 1) {
+    //     page.start = 0
+    //     page.end = parseInt((pageNum / pages) * 100)
+    //   } else if (pageNum < pages || pageNum === pages) {
+    //     page.start = parseInt(((pageNum - 1) / pages) * 100)
+    //     page.end = parseInt((pageNum / pages) * 100)
+    //   }
+    //   return page
+    // },
+    // computeStartend (pageNum, pages) {
+    //   let xMax = 10
+    //   // let xLength = this.currentX
+    //   let xLength = this.xasis.length
+    //   let page = {
+    //   }
+    //   // if (xLength < xMax || xLength === xMax) {
+    //   //   page.start = 0
+    //   //   page.end = 100
+    //   // }
+    //   // if (xLength > xMax && xLength < 2 * xMax) {
+    //   //   page.start = 0
+    //   //   page.end = (1 / (Math.ceil(xLength / xMax))).toFixed(2) * 100
+    //   // } else
+    //   // if (xLength > xMax) {
+    //   //   page.start = (1 / (Math.ceil(xLength / xMax) - 1)).toFixed(2) * 100
+    //   //   page.end = (1 / (Math.ceil(xLength / xMax))).toFixed(2) * 100
+    //   // }
+    //   if (pageNum === 1 && pages === 1) {
+    //     page.start = 0
+    //     page.end = 100
+    //   } else if (pageNum === 1) {
+    //     page.start = 0
+    //     page.end = parseInt((pageNum / pages) * 100)
+    //   } else if (pageNum < pages || pageNum === pages) {
+    //     page.start = parseInt(((pageNum - 1) / pages) * 100)
+    //     page.end = parseInt((pageNum / pages) * 100)
+    //   }
+    //   console.log('分页图表', page, 'xLength', xLength)
+    //   return page
+    // },
     useDrugPer () {
       let vm = this
       this.page.currentPage --
@@ -987,7 +1031,8 @@ export default {
     
     /* height: 100%; */
     position: absolute;
-    bottom:50%;
+    bottom:1%;
+    /* bottom:50%; */
     left: 25px;
     z-index:99;
   }
