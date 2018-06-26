@@ -862,52 +862,6 @@ export default {
       }
       return page
     },
-    // computeStartend (pageNum, pages) {
-    //   let page = {
-    //   }
-    //   if (pageNum === 1 && pages === 1) {
-    //     page.start = 0
-    //     page.end = 100
-    //   } else if (pageNum === 1) {
-    //     page.start = 0
-    //     page.end = parseInt((pageNum / pages) * 100)
-    //   } else if (pageNum < pages || pageNum === pages) {
-    //     page.start = parseInt(((pageNum - 1) / pages) * 100)
-    //     page.end = parseInt((pageNum / pages) * 100)
-    //   }
-    //   return page
-    // },
-    // computeStartend (pageNum, pages) {
-    //   let xMax = 10
-    //   // let xLength = this.currentX
-    //   let xLength = this.xasis.length
-    //   let page = {
-    //   }
-    //   // if (xLength < xMax || xLength === xMax) {
-    //   //   page.start = 0
-    //   //   page.end = 100
-    //   // }
-    //   // if (xLength > xMax && xLength < 2 * xMax) {
-    //   //   page.start = 0
-    //   //   page.end = (1 / (Math.ceil(xLength / xMax))).toFixed(2) * 100
-    //   // } else
-    //   // if (xLength > xMax) {
-    //   //   page.start = (1 / (Math.ceil(xLength / xMax) - 1)).toFixed(2) * 100
-    //   //   page.end = (1 / (Math.ceil(xLength / xMax))).toFixed(2) * 100
-    //   // }
-    //   if (pageNum === 1 && pages === 1) {
-    //     page.start = 0
-    //     page.end = 100
-    //   } else if (pageNum === 1) {
-    //     page.start = 0
-    //     page.end = parseInt((pageNum / pages) * 100)
-    //   } else if (pageNum < pages || pageNum === pages) {
-    //     page.start = parseInt(((pageNum - 1) / pages) * 100)
-    //     page.end = parseInt((pageNum / pages) * 100)
-    //   }
-    //   console.log('分页图表', page, 'xLength', xLength)
-    //   return page
-    // },
     useDrugPer () {
       let vm = this
       this.page.currentPage --
