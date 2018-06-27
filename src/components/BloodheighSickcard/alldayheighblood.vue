@@ -259,6 +259,21 @@
         </table>
       </div>
     </el-card>
+    <div class="analysis-wrap">
+      <el-card :body-style="{ padding: '0px'}">
+        <div class="analysis">
+          <div class="summary">
+            <span class="summary-title">总的分析：</span>
+            <span>{{summary}}</span>
+          </div>
+          <div class="risk">
+            <span class="summary-title">心血管疾病评估(未来十年风险)：</span>
+            <span class="risk-text">{{risk}}</span>
+          </div>
+        </div>
+        <div></div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -393,11 +408,37 @@ export default {
           bptype: '',
           referValue: ''
         }
-      }
+      },
+      summary: null,
+      risk: null
     }
   },
   methods: {
-
+    bptype (val) {
+      let type = ''
+      val = parseInt(val)
+      switch (val) {
+        case 1:
+          type = '正常血压'
+          break
+        case 2:
+          type = '正常高值'
+          break
+        case 3:
+          type = '轻度高血压'
+          break
+        case 4:
+          type = '中度高血压'
+          break
+        case 5:
+          type = '危险血压'
+          break
+        default:
+          type = ''
+          break
+      }
+      return type
+    }
   },
   mounted () {
     let date = new Date()
@@ -434,6 +475,15 @@ export default {
         for (let key in data.oneday) {
           this.$set(this.ABPM.oneday, key, data.oneday[key])
         }
+      }
+      this.summary = res.data.data.summary
+      // this.risk = res.data.data.ICVDRisk
+      if (res.data.data.ICVDRisk === '年龄要大于35！') {
+        this.risk = '年龄要大于35！'
+      } else if (res.data.data.ICVDRisk === '请先完善个人档案！') {
+        this.risk = '请先完善个人档案！'
+      } else {
+        this.risk = res.data.data.ICVDRisk + '%' || ''
       }
     })
   }
@@ -482,5 +532,23 @@ export default {
     vertical-align: middle;
     color:#666;
     font-size:14px;
+  }
+  .analysis-wrap{
+    margin-top:8px;
+  }
+  .analysis{
+    padding:20px;
+  }
+  .summary{
+    line-height: 1.5;
+  }
+  .risk{
+    line-height: 1.5;
+  }
+  .summary-title{
+    font-weight: bold;
+  }
+  .risk-text{
+    color: #e87070;
   }
 </style>

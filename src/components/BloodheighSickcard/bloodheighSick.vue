@@ -98,11 +98,10 @@
             <!-- <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="assessment"></component>
           </pane>
-          <pane
+          <!-- <pane
           label="24小时动态血压">
-            <!-- <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
-          </pane>
+          </pane> -->
           <!-- <pane -->
           <!-- label="分析报告"> -->
             <!-- <report :sickID="sickID" :hospitalId="hospitalId"></report> -->
@@ -291,10 +290,10 @@ export default {
         case 3:
           this.assessment = 'assessment'
           break
+        // case 4:
+        //   this.alldayheighblood = 'alldayheighblood'
+        //   break
         case 4:
-          this.alldayheighblood = 'alldayheighblood'
-          break
-        case 5:
           this.original = 'original'
           break
         case 6:
