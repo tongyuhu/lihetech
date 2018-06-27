@@ -32,7 +32,7 @@
         <div class="flex">
           <div class="flex-btn-left">
             <!-- <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-left" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
-            <el-button size="mini" :disabled="!useDrugBtnNext" @click="useDrugNext" type="text" :style="{'font-size':'14px','color':'#1991fc','background':'#fff'}">点击加载更多...</el-button>
+            <!-- <el-button size="mini" :disabled="!useDrugBtnNext" @click="useDrugNext" type="text" :style="{'font-size':'14px','color':'#1991fc','background':'#fff'}">点击加载更多...</el-button> -->
             <!-- <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-left" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
           </div>
           <div class="chart-min-width">
@@ -245,7 +245,7 @@ export default {
           }
           computData = this._.uniq(computData)
           computData = this._.sortBy(computData, function (item) {
-            return item[0]
+            return item[1]
           })
           console.log('用药', computData)
           // this.xasis = this.axisX(computData)
@@ -262,6 +262,7 @@ export default {
           // this.optionData = this._.concat(this.seriesItem(this.formatterX(computData).reverse(), this.optionData))
 
           console.log('用药chu', this.sourData)
+          console.log('用药formatterX', this.formatterX(this.sourData))
           console.log('用药x data', this.xasis)
           // console.log('用药x', this.formatterX(computData))
           console.log('用药option', this.optionData)
@@ -416,22 +417,51 @@ export default {
               icon += '{li|}'
             }
           }
-          let obj = {
-            value: item,
-            // symbolSize: 1,
-
-            label: {
-              show: true,
-              normal: {
-                // symbolSize: 0,
-                // position: [0, 0],
-                formatter: [
-                  text,
-                  '{hr|}',
-                  icon,
-                  '{hr|}'
-                ].join('\n'),
-                rich: {
+          let obj = {}
+          if (item[2].length > 0) {
+            obj = {
+              value: item,
+              // symbolSize: 1,
+              symbolOffset: ['50%', '0%'],
+              label: {
+                show: true,
+                fontSize: 10,
+                normal: {
+                  // symbolSize: 0,
+                  // position: [0, 0],
+                  formatter: [
+                    text,
+                    '{hr|}',
+                    '{hr|}',
+                    icon,
+                    '{hr|}'
+                  ].join('\n'),
+                  rich: {
+                  }
+                }
+              }
+            }
+          }
+          if (item[3].length > 0) {
+            obj = {
+              value: item,
+              // symbolSize: 1,
+              symbolOffset: ['90%', '50%'],
+              label: {
+                show: true,
+                fontSize: 10,
+                normal: {
+                  // symbolSize: 0,
+                  // position: ['90%', '50%'],
+                  formatter: [
+                    text,
+                    '{hr|}',
+                    '{hr|}',
+                    icon,
+                    '{hr|}'
+                  ].join('\n'),
+                  rich: {
+                  }
                 }
               }
             }
@@ -448,7 +478,6 @@ export default {
       let x1 = ''
       let zoomstart = 0
       let zoomend = 100
-      console.log('888888')
       if (start) {
         zoomstart = start
       }
@@ -491,7 +520,7 @@ export default {
             // if (a.data.value[4]) {
             //   time = a.data.value[4]
             // }
-            return (a.data.value[5] + '<br>' + a.data.value[4])
+            return (a.data.value[4] + '<br>' + a.data.value[5])
             // return (a.data.value[5])
             // console.log(a)
             // let befor = ''
@@ -597,10 +626,31 @@ export default {
             splitLine: {
               show: false
             },
-            show: true,
+            show: false,
             min: 0,
             max: 60 * 24
             // boundaryGap: ['50%', '50%']
+          },
+          {
+            splitLine: {
+              show: true
+            },
+            axisTick: {
+              show: false
+            },
+            type: 'category',
+            offset: 0,
+            position: 'bottom',
+            onZeroAsisIndex: 0,
+            boundaryGap: false,
+            data: hours,
+            axisLine: {
+              show: true,
+              lineStyle: {
+                color: '#999',
+                width: 1
+              }
+            }
           },
           {
             splitLine: {
@@ -628,58 +678,72 @@ export default {
           {
             name: 'medicine',
             type: 'scatter',
-            symbol: 'rect',
-            symbolSize: [60, 15],
+            symbol: 'image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABLCAYAAAA1fMjoAAAB/UlEQVR4Xu3VsRHAMAzEsHj/pTOBXbB9pFchyLycz0eAwFXgsCFA4C4gEK+DwENAIJ4HAYF4AwSagD9IczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAICaW6mRgQEMnJoazYBgTQ3UyMCAhk5tDWbgECam6kRAYGMHNqaTUAgzc3UiIBARg5tzSYgkOZmakRAICOHtmYTEEhzMzUiIJCRQ1uzCQikuZkaERDIyKGt2QQE0txMjQgIZOTQ1mwCAmlupkYEBDJyaGs2AYE0N1MjAgIZObQ1m4BAmpupEQGBjBzamk1AIM3N1IiAQEYObc0mIJDmZmpEQCAjh7ZmExBIczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAI/whoATO4mYfAAAAAASUVORK5CYII=',
+            symbolSize: [60, 40],
+            // symbolSize: [10, 10],
             label: {
               normal: {
                 show: true,
                 color: '#000',
-                fontSize: 12,
+                fontSize: 10,
                 align: 'center',
+                // position: ['90%', '0'],
+                padding: [0, 0],
+                // offset: ['30%', 0],
+                // lineHeight: 40,
                 rich: {
                   normalBg: {
+                    // backgroundColor: 'linear-gradient(red, blue)',
+                    height: 25,
+                    width: 45,
                     backgroundColor: '#33b2f2',
                     color: '#fff',
-                    fontSize: 12,
-                    align: 'center',
-                    fontWeight: 'bold'
-                  },
-                  middleBg: {
-                    backgroundColor: '#32b77a',
-                    color: '#fff',
-                    fontSize: 12,
+                    fontSize: 10,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   normalheighBg: {
+                    height: 25,
+                    backgroundColor: '#59d8a1',
+                    color: '#fff',
+                    fontSize: 10,
+                    align: 'center',
+                    fontWeight: 'bold'
+                  },
+                  middleBg: {
+                    height: 25,
                     backgroundColor: '#efa13a',
                     color: '#fff',
-                    fontSize: 12,
+                    fontSize: 10,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   middleheighBg: {
+                    height: 25,
                     backgroundColor: '#ff7d43',
                     color: '#fff',
-                    fontSize: 12,
+                    fontSize: 10,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   dangerBg: {
+                    height: 25,
                     backgroundColor: '#f96767',
                     color: '#fff',
-                    fontSize: 12,
+                    fontSize: 10,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   nullBg: {
+                    height: 25,
                     backgroundColor: '#666',
                     color: '#fff',
-                    fontSize: 12,
+                    fontSize: 10,
                     align: 'center',
                     fontWeight: 'bold'
                   },
                   bBg: {
+                    height: 25,
                     backgroundColor: '#f4e07a',
                     color: '#fff',
                     fontSize: 10,
@@ -688,6 +752,7 @@ export default {
                   // fontWeight: 'blod'
                   },
                   liBg: {
+                    height: 25,
                     backgroundColor: '#81cefc',
                     color: '#fff',
                     fontSize: 10,
@@ -696,6 +761,7 @@ export default {
                   // fontWeight: 'blod'
                   },
                   ccbBg: {
+                    height: 25,
                     backgroundColor: '#7cedc4',
                     color: '#fff',
                     fontSize: 12,
@@ -704,6 +770,7 @@ export default {
                   // fontWeight: 'blod'
                   },
                   aceiBg: {
+                    height: 25,
                     backgroundColor: '#9c9ce2',
                     color: '#fff',
                     fontSize: 10,
@@ -712,6 +779,7 @@ export default {
                   // fontWeight: 'blod'
                   },
                   arbBg: {
+                    height: 25,
                     backgroundColor: '#ff8f8f',
                     color: '#fff',
                     fontSize: 10,
@@ -731,21 +799,21 @@ export default {
                     height: 0
                   },
                   li: {
-                    height: 15,
+                    // height: 15,
                     align: 'center',
                     backgroundColor: {
                       image: Icons.li
                     }
                   },
                   b: {
-                    height: 15,
+                    // height: 15,
                     align: 'center',
                     backgroundColor: {
                       image: Icons.b
                     }
                   },
                   ccb: {
-                    height: 15,
+                    // height: 15,
                     align: 'center',
                     backgroundColor: {
                       image: Icons.ccb
@@ -753,15 +821,19 @@ export default {
                   },
 
                   acei: {
-                    height: 15,
-                    align: 'center',
+                    // height: 35,
+                    width: 15,
+                    align: 'bottom',
                     backgroundColor: {
-                      image: Icons.acei
+
+                      image: '<img></img>'
+                      // image: Icons.acei
                     }
                   },
                   arb: {
-                    height: 15,
+                    // height: 15,
                     align: 'center',
+
                     backgroundColor: {
                       image: Icons.arb
                     }

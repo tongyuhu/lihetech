@@ -365,6 +365,7 @@ export default {
           let targetId = vm.currentChat.userId
           var imageUri = res.data.data.seeFile // 上传到自己服务器的 URL。
           // var msg = new RongIMLib.ImageMessage({imageUri: imageUri})
+          console.log('base64Str', base64Str)
           var msg = new RongIMLib.ImageMessage({content: base64Str, imageUri: imageUri})
           var conversationtype = RongIMLib.ConversationType.PRIVATE // 单聊,其他会话选择相应的消息类型即可。
 
