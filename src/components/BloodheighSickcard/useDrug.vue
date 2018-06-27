@@ -77,7 +77,7 @@ export default {
       xasis: [],
       page: {
         pageNum: 1,
-        pageSize: 48,
+        pageSize: 70,
         pages: 1,
         currentPage: 1
       },
@@ -112,6 +112,8 @@ export default {
         'adminHospitalId': vm.hospitalId,
         'pageNum': pagenum,
         'pageSize': this.page.pageSize,
+        // 'startTime': '2018-04-01',
+        // 'endTime': '2018-06-01'
         'startTime': dateFormat(today, 12, true),
         'endTime': dateFormat(today, 0, true)
       }
@@ -446,7 +448,7 @@ export default {
             obj = {
               value: item,
               // symbolSize: 1,
-              symbolOffset: ['90%', '50%'],
+              symbolOffset: ['0%', '20%'],
               label: {
                 show: true,
                 fontSize: 10,
@@ -455,7 +457,6 @@ export default {
                   // position: ['90%', '50%'],
                   formatter: [
                     text,
-                    '{hr|}',
                     '{hr|}',
                     icon,
                     '{hr|}'
@@ -688,7 +689,7 @@ export default {
                 fontSize: 10,
                 align: 'center',
                 // position: ['90%', '0'],
-                padding: [0, 0],
+                // padding: [0, 0],
                 // offset: ['30%', 0],
                 // lineHeight: 40,
                 rich: {
@@ -799,21 +800,21 @@ export default {
                     height: 0
                   },
                   li: {
-                    // height: 15,
+                    height: 10,
                     align: 'center',
                     backgroundColor: {
                       image: Icons.li
                     }
                   },
                   b: {
-                    // height: 15,
+                    height: 10,
                     align: 'center',
                     backgroundColor: {
                       image: Icons.b
                     }
                   },
                   ccb: {
-                    // height: 15,
+                    height: 10,
                     align: 'center',
                     backgroundColor: {
                       image: Icons.ccb
@@ -821,19 +822,17 @@ export default {
                   },
 
                   acei: {
-                    // height: 35,
-                    width: 15,
+                    height: 10,
+                    // width: 15,
                     align: 'bottom',
                     backgroundColor: {
-
-                      image: '<img></img>'
-                      // image: Icons.acei
+                      // image: '<img></img>'
+                      image: Icons.acei
                     }
                   },
                   arb: {
-                    // height: 15,
+                    height: 10,
                     align: 'center',
-
                     backgroundColor: {
                       image: Icons.arb
                     }
