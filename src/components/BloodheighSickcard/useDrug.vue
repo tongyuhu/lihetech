@@ -188,8 +188,8 @@ export default {
                   let date = item.measureTime.slice(0, 10)
 
                   let hours = item.measureTime.slice(11) + ':00'
-                  bloodlist.push(date)
                   bloodlist.push(this.transformtime(hours))
+                  bloodlist.push(date)
                   blood.push(item.avgSystolic)
                   blood.push(item.avgDiastolic)
                   blood.push(item.bpTypeAvg)
@@ -210,8 +210,8 @@ export default {
                                     if (medicinelist.userMedicationList.length > 0) {
                                       let M = []
                                       let list = []
-                                      M.push(date)// x
                                       M.push(this.transformtime(medicinelist.time)) // y
+                                      M.push(date)// x
                                       M.push([])// blod
 
                                       medicinelist.userMedicationList.forEach(medicine => {
@@ -327,20 +327,20 @@ export default {
       let takeMedicineTime = '0000000000000000'
       // vm._(arr).forEach(function (value, index) {
       copydata.forEach(function (value, index) {
-        // let time = value[0]
-        let T = new Date(value[0].replace(/\\-/g, '\\/'))
+        // let time = value[1]
+        let T = new Date(value[1].replace(/\\-/g, '\\/'))
         let time = T.getTime()
         let befortime = takeMedicineTime
         // let befortime = vm.takeMedicineTime
-        // let copytime = new Date(value[0].replace(/\\-/g, '\\/'))
+        // let copytime = new Date(value[1].replace(/\\-/g, '\\/'))
         if (vm._.eq(time, befortime)) {
-          value[0] = initX
-          // value[0] = vm.initX
+          value[1] = initX
+          // value[1] = vm.initX
         } else {
           initX++
-          value[0] = initX
+          value[1] = initX
           // vm.initX++
-          // value[0] = vm.initX
+          // value[1] = vm.initX
         }
         takeMedicineTime = time
         // vm.takeMedicineTime = time
@@ -352,53 +352,10 @@ export default {
       let vm = this
       let x = []
       vm._(arr).forEach(function (item, index) {
-        x.push(item[0])
+        x.push(item[1])
       })
       x = vm._.uniq(x)
       return x
-    },
-    // 计算Y轴坐标
-    axisY (str) {
-      let time = str.slice(11, -1)
-      let y
-      let a0 = '00:00'
-      let a2 = '02:00'
-      let a4 = '04:00'
-      let a6 = '06:00'
-      let a8 = '08:00'
-      let a10 = '10:00'
-      let a12 = '12:00'
-      let a14 = '14:00'
-      let a16 = '16:00'
-      let a18 = '18:00'
-      let a20 = '20:00'
-      let a22 = '22:00'
-      if (this._.gte(time, a22)) {
-        y = 11
-      } else if (this._.gte(time, a20)) {
-        y = 10
-      } else if (this._.gte(time, a18)) {
-        y = 9
-      } else if (this._.gte(time, a16)) {
-        y = 8
-      } else if (this._.gte(time, a14)) {
-        y = 7
-      } else if (this._.gte(time, a12)) {
-        y = 6
-      } else if (this._.gte(time, a10)) {
-        y = 5
-      } else if (this._.gte(time, a8)) {
-        y = 4
-      } else if (this._.gte(time, a6)) {
-        y = 3
-      } else if (this._.gte(time, a4)) {
-        y = 2
-      } else if (this._.gte(time, a2)) {
-        y = 1
-      } else if (this._.gte(time, a0)) {
-        y = 0
-      }
-      return y
     },
     transformtime (time) {  // 时间转value y轴**
       let hours = parseInt(time.slice(0, 2))
@@ -510,9 +467,9 @@ export default {
       let option = {
         color: ['#fff'],
         grid: {
-          left: '80',
+          left: '40',
           bottom: '8%',
-          right: '80',
+          right: '40',
           top: 20,
           containLabel: true
         },
@@ -555,7 +512,7 @@ export default {
         dataZoom: [
           {
             type: 'slider',
-            show: true,
+            show: false,
             realtime: true,
             start: zoomstart,
             end: zoomend,
@@ -570,12 +527,14 @@ export default {
             // handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z'
           }
         ],
-        xAxis: {
+        yAxis: {
           // type: 'time',
           type: 'category',
           // inverse: true,
           data: days,
-          boundaryGap: true,
+          // boundaryGap: true,
+          name: 'yyyyy',
+          nameGap: 80,
           // boundaryGap: ['20%', '20%'],
           // padding: 2,
           splitLine: {
@@ -588,15 +547,17 @@ export default {
           },
           axisTick: {
             // 坐标轴刻度
-            show: false,
-            alignWithLabel: true
+            show: false
+            // alignWithLabel: true
           },
           axisLabel: {
             interval: 0, // 显示x轴数据
             showMinLabel: true,
             showMaxLabel: true,
-            align: 'center',
-            rotate: 0,
+            // align: 'center',
+            margin: 20,
+            verticalAlign: 'middle',
+            // rotate: 0,
             // formatter: function (value, index) {
             //   // 格式化成月/日，只在第一个刻度显示年份
             //   var date = new Date(value)
@@ -630,15 +591,16 @@ export default {
             }
           }
         },
-        yAxis: [
+        xAxis: [
           {
             type: 'value',
             splitLine: {
               show: false
             },
-            show: false,
+            show: true,
             min: 0,
             max: 60 * 24
+            // boundaryGap: ['50%', '50%']
           },
           {
             splitLine: {
@@ -649,7 +611,7 @@ export default {
             },
             type: 'category',
             offset: 0,
-            position: 'left',
+            position: 'top',
             onZeroAsisIndex: 0,
             boundaryGap: false,
             data: hours,
