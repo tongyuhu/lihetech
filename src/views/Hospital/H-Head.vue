@@ -20,7 +20,7 @@
           <span class="head-right">{{ adminName }}</span>
         </div>
         <div class="head-right">
-            <img :src="imgExists(adminImg,'./static/admin.jpg')" alt=""  class="admin-icon" width="34px" height="34px">
+            <img :src="adminHeadImg" alt=""  class="admin-icon" width="34px" height="34px">
         </div>
   
       <el-dialog
@@ -32,6 +32,7 @@
         :model="changePasswordForm" 
         status-icon 
         :rules="changePasswordRules" 
+        :validateField="validateFieldForm('oldPassword')"
         ref="changpasswordRef" 
         label-width="90px" 
         :label-position="labelPosition"
@@ -119,6 +120,7 @@ export default {
       changePasswordRules: {
         oldPassword: [
             // { required: true, message: '请输入邮箱', trigger: 'blur' }
+            // { required: true, message: '请输入原始密码', trigger: 'blur', enum: [this.labelPosition] }
             { validator: checkOldPassword, trigger: 'blur' }
         ],
         newPassword1: [
@@ -131,7 +133,8 @@ export default {
           //  { required: true, message: '请输入电话', trigger: 'blur' },
           //  {min: 11, message: '请输入正确的电话', trigger: 'blur'}
         ]
-      }
+      },
+      adminHeadImg: ''
     }
   },
   computed: {
@@ -167,6 +170,9 @@ export default {
     }
   },
   methods: {
+    validateFieldForm (val) {
+      console.log('密码修改', val)
+    },
     imgExists (url, errurl) {
       return imgExists(url, errurl)
     },
@@ -261,6 +267,7 @@ export default {
     } else {
       this.adminIcon = null
     }
+    this.adminHeadImg = this.imgExists(this.adminImg, './static/admin.jpg')
   }
 }
 </script>
