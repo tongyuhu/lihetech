@@ -122,65 +122,6 @@ export default {
         if (res.data.data) {
           let data = res.data.data
           let computData = []
-          // if (this._.has(data, 'userMedicationTotalplanList')) {
-            //   if (data.userMedicationTotalplanList.length > 0) {
-            //     data.userMedicationTotalplanList.forEach(item => {
-            //       if (this._.has(item, 'userMedicationPlanList')) {
-            //         if (item.userMedicationPlanList.length > 0) {
-            //           item.userMedicationPlanList.forEach(medicinelist => {
-            //             if (this._.has(medicinelist, 'userMedicationList')) {
-            //               if (medicinelist.userMedicationList.length > 0) {
-            //                 let M = []
-            //                 let list = []
-            //                 M.push((medicinelist.modifyTime || medicinelist.createTime).slice(0, 10))// x
-            //                 M.push(this.transformtime(medicinelist.time)) // y
-            //                 M.push([])// blod
-
-            //                 medicinelist.userMedicationList.forEach(medicine => {
-            //                   if (this._.has(medicine, 'sysMedicineId')) {
-            //                     list.push(medicine.sysMedicineId)
-            //                   }
-            //                 })
-            //                 list = this._.uniq(list)
-            //                 M.push(list) // medicine
-            //                 M.push((medicinelist.modifyTime || medicinelist.createTime).slice(0, 10))// x
-            //                 M.push(medicinelist.time) // y
-            //                 computData.push(M)
-            //               }
-            //             }
-            //           })
-            //         }
-            //       }
-            //     })
-            //   }
-          // }
-          // if (this._.has(data, 'userMedicationTotalplanList')) {
-            //   if (data.userMedicationTotalplanList.length > 0) {
-            //     data.userMedicationTotalplanList.forEach(item => {
-            //       if (this._.has(item, 'userMedicationPlanList')) {
-            //         if (item.userMedicationPlanList.length > 0) {
-            //           item.userMedicationPlanList.forEach(medicinelist => {
-            //             if (this._.has(medicinelist, 'userMedicationList')) {
-            //               if (medicinelist.userMedicationList.length > 0) {
-            //                 let list = []
-            //                 // medicinelist.time
-
-            //                 medicinelist.userMedicationList.forEach(medicine => {
-            //                   if (this._.has(medicine, 'sysMedicineId')) {
-            //                     list.push(medicine.sysMedicineId)
-            //                   }
-            //                 })
-            //                 list = this._.uniq(list)
-            //                 computData.push(list)
-            //               }
-            //             }
-            //           })
-            //         }
-            //       }
-            //     })
-            //   }
-          // }
-          // let comporeTime = ''
           if (this._.has(data, 'userBloodPressureList')) {
             if (data.userBloodPressureList.length > 0) {
               data.userBloodPressureList.forEach(item => {
@@ -197,6 +138,8 @@ export default {
                   blood.push(item.bpTypeAvg)
                   bloodlist.push(blood)
                   if (date !== this.comporeTime) {
+                    // let M = []
+                    let lists = []
                     if (this._.has(data, 'userMedicationTotalplanList')) {
                       if (data.userMedicationTotalplanList.length > 0) {
                         data.userMedicationTotalplanList.forEach(item => {
@@ -212,6 +155,7 @@ export default {
                                     if (medicinelist.userMedicationList.length > 0) {
                                       let M = []
                                       let list = []
+                                      // M = []
                                       M.push(this.transformtime(medicinelist.time)) // y
                                       M.push(date)// x
                                       M.push([])// blod
@@ -225,7 +169,8 @@ export default {
                                       M.push(list) // medicine
                                       M.push(date)// x
                                       M.push(medicinelist.time) // y
-                                      computData.push(M)
+                                      // computData.push(M)
+                                      lists.push(M)
                                     }
                                   }
                                 })
@@ -235,6 +180,31 @@ export default {
                         })
                       }
                     }
+                    lists = this._.sortBy(lists, function (item) {
+                      return item[0]
+                    })
+                    console.log('用药集合', lists)
+                    let index = []
+                    for (let i = 0; i < lists.length; i++) {
+                      if (i < lists.length - 2) {
+                        if (lists[i][0] === lists[i + 1][0]) {
+                          lists[i][3] = this._.uniq(this._.concat(lists[i][3], lists[i + 1][3]))
+                          // lists[i + 1][3] = this._.uniq(this._.concat(lists[i][3], lists[i + 1][3]))
+                          // lists.splice(i + 1, 1)
+                          index.push(i + 1)
+                        }
+                      }
+                    }
+                    let total = 0
+                    index.forEach((item, i) => {
+                      total += i
+                      lists.splice(item - i + total, 1)
+                      // console.log('用药集合4', item)
+                    })
+                    // this._.differenceWith(lists, [{ 'x': 1, 'y': 2 }], this._.isEqual)
+                    // lists = this._.uniq(lists)
+                    computData = this._.concat(computData, lists)
+                    console.log('用药集合2', lists)
                   }
 
                   bloodlist.push([])
@@ -262,7 +232,6 @@ export default {
           // this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
           // vm.xasis = vm.xasis.reverse()
           // this.optionData = this._.concat(this.seriesItem(this.formatterX(computData).reverse(), this.optionData))
-
           console.log('用药chu', this.sourData)
           console.log('用药formatterX', this.formatterX(this.sourData))
           console.log('用药x data', this.xasis)
@@ -270,7 +239,7 @@ export default {
           console.log('用药option', this.optionData)
           // let copydata = res.data.data
             // copydata = vm._.filter(copydata, function (item) {
-            //   let hasBlood
+              //   let hasBlood
             //   let hasBD = vm._.has(item, 'beforeDiastolic2')
             //   let hasBS = vm._.has(item, 'beforeSystolic2')
             //   let hasAS = vm._.has(item, 'afterSystolic')
@@ -319,6 +288,9 @@ export default {
         useDrug.setOption(this.useDrugOption(position.start, position.end))
         this.page.pageNum = res.data.pageNum
         this.page.pages = res.data.pages
+        // if (vm.xasis.length < 7) {
+        //   vm.useDrugNext()
+        // }
       })
     },
     // 格式化数据 计算x轴坐标  **
@@ -331,7 +303,7 @@ export default {
       // vm._(arr).forEach(function (value, index) {
       copydata.forEach(function (value, index) {
         // let time = value[1]
-        let T = new Date(value[1].replace(/\\-/g, '\\/'))
+        let T = new Date(value[1].replace(/-/g, '\/'))
         let time = T.getTime()
         let befortime = takeMedicineTime
         // let befortime = vm.takeMedicineTime
@@ -361,9 +333,13 @@ export default {
       return x
     },
     transformtime (time) {  // 时间转value y轴**
-      let hours = parseInt(time.slice(0, 2))
-      let minute = parseInt(time.slice(3, 5))
-      return hours * 60 + minute
+      if (this._.isNumber(time)) {
+        return time
+      } else {
+        let hours = parseInt(time.slice(0, 2))
+        let minute = parseInt(time.slice(3, 5))
+        return hours * 60 + minute
+      }
     },
     // 背景颜色
     colorBg (bptype) {
@@ -424,7 +400,7 @@ export default {
             obj = {
               value: item,
               // symbolSize: 1,
-              symbolOffset: ['50%', '0%'],
+              symbolOffset: ['60%', '0%'],
               label: {
                 show: true,
                 fontSize: 10,
@@ -548,7 +524,8 @@ export default {
             end: zoomend,
             zoomlock: true,
             // minValueSpan: 10,
-            maxValueSpan: 10,
+            yAxisIndex: 0,
+            maxValueSpan: 7,
             throttle: 500,
             filterMode: 'empty',
             zoomOnMouseWheel: false,
@@ -560,11 +537,12 @@ export default {
         yAxis: {
           // type: 'time',
           type: 'category',
+          offset: 20,
           // inverse: true,
           data: days,
           // boundaryGap: true,
-          name: 'yyyyy',
-          nameGap: 80,
+          // name: 'yyyyy',
+          // nameGap: 80,
           // boundaryGap: ['20%', '20%'],
           // padding: 2,
           splitLine: {
@@ -627,12 +605,15 @@ export default {
             splitLine: {
               show: false
             },
-            show: false,
+            show: true,
+            minInterval: 1,
+            maxInterval: 60,
             min: 0,
-            max: 60 * 24
+            max: 1440
             // boundaryGap: ['50%', '50%']
           },
           {
+            show: false,
             splitLine: {
               show: true
             },
@@ -680,7 +661,7 @@ export default {
             name: 'medicine',
             type: 'scatter',
             symbol: 'image://data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAABLCAYAAAA1fMjoAAAB/UlEQVR4Xu3VsRHAMAzEsHj/pTOBXbB9pFchyLycz0eAwFXgsCFA4C4gEK+DwENAIJ4HAYF4AwSagD9IczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAICaW6mRgQEMnJoazYBgTQ3UyMCAhk5tDWbgECam6kRAYGMHNqaTUAgzc3UiIBARg5tzSYgkOZmakRAICOHtmYTEEhzMzUiIJCRQ1uzCQikuZkaERDIyKGt2QQE0txMjQgIZOTQ1mwCAmlupkYEBDJyaGs2AYE0N1MjAgIZObQ1m4BAmpupEQGBjBzamk1AIM3N1IiAQEYObc0mIJDmZmpEQCAjh7ZmExBIczM1IiCQkUNbswkIpLmZGhEQyMihrdkEBNLcTI0ICGTk0NZsAgJpbqZGBAQycmhrNgGBNDdTIwICGTm0NZuAQJqbqREBgYwc2ppNQCDNzdSIgEBGDm3NJiCQ5mZqREAgI4e2ZhMQSHMzNSIgkJFDW7MJCKS5mRoREMjIoa3ZBATS3EyNCAhk5NDWbAI/whoATO4mYfAAAAAASUVORK5CYII=',
-            symbolSize: [60, 40],
+            symbolSize: [40, 40],
             // symbolSize: [10, 10],
             label: {
               normal: {
@@ -688,15 +669,11 @@ export default {
                 color: '#000',
                 fontSize: 10,
                 align: 'center',
-                // position: ['90%', '0'],
-                // padding: [0, 0],
-                // offset: ['30%', 0],
-                // lineHeight: 40,
                 rich: {
                   normalBg: {
                     // backgroundColor: 'linear-gradient(red, blue)',
                     height: 25,
-                    width: 45,
+                    // width: 45,
                     backgroundColor: '#33b2f2',
                     color: '#fff',
                     fontSize: 10,
