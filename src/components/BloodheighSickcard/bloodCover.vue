@@ -860,8 +860,8 @@ export default {
           textStyle: {
             color: '#000'
           },
+          // triggerOn: 'click',
           triggerOn: 'mousemove|click',
-          // triggerOn: 'mousemove|click',
           formatter: function (a) {
             // if (a[0].dataIndex === vm.bloodTrendIndex) {
               // vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
@@ -1515,11 +1515,36 @@ export default {
         .then(res => {
           let total = 0
           let heigh = 0
+          // let a = this._.findIndex(res.data.data, function (o) {
+          //   return o.id === 1
+          // })
+          let b = this._.findIndex(res.data.data, function (o) {
+            return o.id === 2
+          })
+          let c = this._.findIndex(res.data.data, function (o) {
+            return o.id === 3 || o.id === 4
+          })
+          let d = this._.findIndex(res.data.data, function (o) {
+            return o.id === 5
+          })
+          // if (a === -1) {
+          //   this.$set(this.bloodTrendState, 'normal', 0)
+          // }
+          if (b === -1) {
+            this.$set(this.bloodTrendState, 'normal', 0)
+          }
+          if (c === -1) {
+            this.$set(this.bloodTrendState, 'heigh', 0)
+          }
+          if (d === -1) {
+            this.$set(this.bloodTrendState, 'danger', 0)
+          }
           res.data.data.forEach(item => {
             total += item.highNum
             // if (item.id === 1) {
             //   this.$set(this.bloodTrendState, 'total', item.highNum)
             // }
+            
             if (this._.toNumber(item.id) === 2) {
               this.$set(this.bloodTrendState, 'normal', item.highNum)
             }
