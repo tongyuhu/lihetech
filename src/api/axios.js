@@ -1,4 +1,4 @@
-import { Message, MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 import axios from 'axios'
 import qs from 'qs' // formdata序列化
 // import router from './../router/index'
