@@ -2,9 +2,7 @@
   <div>
     <div class="order-setting">
       <button @click="setWeektime">周批量设置</button>
-      <!-- <span class="title">{{start}} 至 {{end}}</span> -->
     </div>
-
     <div v-loading="loading" class="loading-min-height">
       <el-card>
         <table>
@@ -49,37 +47,6 @@
         </table>
       </el-card>
     </div>
-
-
-    <!-- <div v-if="false">
-      <el-card>
-        <table>
-          <thead>
-            <th>日期</th>
-            <th>编辑</th>
-            <th>编辑</th>
-          </thead>
-          <tbody>
-            <tr v-for="(item,index) in order" :key="item.time">
-              <td>{{item.time}}</td>
-              <td>该日预约
-                <el-switch
-                  v-model="item.order"
-                  active-color="#f1f1f1"
-                  inactive-color="#1991fc">
-                </el-switch>
-              </td>
-              <td>
-                <span>上午：{{item.morning ? item.morning:'/'}}</span>
-                <span>下午：{{item.noon ? item.noon:'/'}}</span>
-                <el-button @click="editTime(index)" type="text" icon="el-icon-edit-outline">编辑</el-button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </el-card>
-    </div> -->
-
     <el-dialog
     center
     width="500px"
@@ -136,7 +103,7 @@
         <el-button @click="settingSingleConfirm" type="primary">保存</el-button>
       </div>
     </el-dialog>
-
+    
     <el-dialog
     center
     width="500px"
@@ -314,8 +281,6 @@ export default {
         this.settingSingleNoon.start = ''
         this.settingSingleNoon.end = ''
       } else {
-        this.orderlist[this.index].morning.time = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
-        this.orderlist[this.index].noon.time = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
         let parmars = {
           'weeks': this.index + 1,
           'startEndPeriodTimeMor': this.settingSingleMorning.start + '-' + this.settingSingleMorning.end,
@@ -332,8 +297,21 @@ export default {
               this.orderlist[this.index].morning.time = ''
               this.orderlist[this.index].noon.time = ''
             }
+            if (res.data.code === '0000') {
+              this.$message({
+                showClose: true,
+                message: '设置成功',
+                type: 'success'
+              })
+              if (this.settingSingleMorning.start) {
+                this.orderlist[this.index].morning.time = this.settingSingleMorning.start + '-' + this.settingSingleMorning.end
+              }
+              if (this.settingSingleNoon.start) {
+                this.orderlist[this.index].noon.time = this.settingSingleNoon.start + '-' + this.settingSingleNoon.end
+              }
+            }
           })
-        this.initlist()
+        // this.initlist()
         this.settingSingle = false
       }
     },
@@ -356,45 +334,14 @@ export default {
         let edit = true
         let morning = this._.gt(this.settingGroupMorning.start, this.settingGroupMorning.end)
         let noon = this._.gt(this.settingGroupNoon.start, this.settingGroupNoon.end)
-        if (this.settingGroupMorning.start) {
-          if (!this.settingGroupMorning.end) {
-            // this.settingGroupMorning.start = ''
-            edit = false
-            this.$message({
-              message: '请完善设置',
-              type: 'warning'
-            })
-          }
-        }
-        if (!this.settingGroupMorning.start) {
-          if (this.settingGroupMorning.end) {
-            // this.settingGroupMorning.end = ''
-            edit = false
-            this.$message({
-              message: '请完善设置',
-              type: 'warning'
-            })
-          }
-        }
-        if (!this.settingGroupNoon.start) {
-          if (this.settingGroupNoon.end) {
-            // this.settingGroupNoon.end = ''
-            edit = false
-            this.$message({
-              message: '请完善设置',
-              type: 'warning'
-            })
-          }
-        }
-        if (this.settingGroupNoon.start) {
-          if (!this.settingGroupNoon.end) {
-            edit = false
-            // this.settingGroupNoon.start = ''
-            this.$message({
-              message: '请完善设置',
-              type: 'warning'
-            })
-          }
+        let hasMorning = !this.settingGroupMorning.start || !this.settingGroupMorning.end
+        let hasNoon = !this.settingGroupNoon.start || !this.settingGroupNoon.end
+        if (hasMorning && hasNoon) {
+          edit = false
+          this.$message({
+            message: '请完善设置',
+            type: 'warning'
+          })
         }
         if (morning || noon) {
           edit = false
@@ -408,40 +355,95 @@ export default {
           // this.settingGroupNoon.end = ''
         }
         if (edit) {
-          // this.cheeckedweek.forEach(item => {
-          //   this.orderlist[item].morning.order = true
-          //   this.orderlist[item].noon.order = true
-          //   this.orderlist[item].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
-          //   this.orderlist[item].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
-          // })
           let parmars = {
             'weeks': this.cheeckedweek.join(','),
             'startEndPeriodTimeMor': this.settingGroupMorning.start + '-' + this.settingGroupMorning.end,
             'startEndPeriodTimeAftn': this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
           }
+          if (!hasMorning) {
+            parmars.startEndPeriodTimeMor = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+          }
+          if (!hasNoon) {
+            parmars.startEndPeriodTimeAftn = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+          }
           this.$axios(orderSettingApi(parmars))
           .then(res => {
             if (res.data.code === '1001') {
+              let orderWeekList = []
+              this.cheeckedweek.forEach(item => {
+                if (!hasMorning) {
+                  let morning = {
+                    slotType: 1,
+                    weekDay: item
+                  }
+                  orderWeekList.push(morning)
+                }
+                if (!hasNoon) {
+                  let noon = {
+                    slotType: 2,
+                    weekDay: item
+                  }
+                  orderWeekList.push(noon)
+                }
+              })
+              if (res.data.data) {
+                if (res.data.data.length > 0) {
+                  let errorText = ''
+                  let finalList = this._.differenceWith(orderWeekList, res.data.data, this._.isEqual)
+                  console.log('设置的日期', orderWeekList)
+                  console.log('失败的日期', res.data.data)
+                  console.log('成功的日期', finalList)
+                  finalList.forEach(item => {
+                    if (this._.has(item, 'weekDay')) {
+                      errorText += this.judgeWeek(item.weekDay)
+                    }
+                    if (this._.has(item, 'slotType')) {
+                      if (item.slotType === 1) {
+                        errorText += '上午，'
+                      }
+                      if (item.slotType === 2) {
+                        errorText += '下午，'
+                      }
+                    }
+                    if (item.slotType === 1) {
+                      this.orderlist[item.weekDay - 1].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+                    }
+                    if (item.slotType === 2) {
+                      this.orderlist[item.weekDay - 1].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+                    }
+                  })
+                  errorText += '设置失败'
+                  this.$message({
+                    showClose: true,
+                    message: errorText,
+                    type: 'warning'
+                  })
+                } else {
+                  this.$message({
+                    showClose: true,
+                    message: res.data.msg,
+                    type: 'warning'
+                  })
+                }
+              }
+            }
+            if (res.data.code === '0000') {
               this.$message({
                 showClose: true,
-                message: res.data.msg,
-                type: 'warning'
+                message: '设置成功',
+                type: 'success'
               })
-              // res.data.data.forEach(item => {
-              //   if (item.weekDay) {
-              //     // this.orderlist[item.weekDay - 1].order = true
-              //     this.orderlist[item.weekDay - 1].noon.order = true
-              //     this.orderlist[item.weekDay - 1].morning.order = true
-              //     if (item.slotType === 1) {
-              //       this.orderlist[item.weekDay - 1].morning = ''
-              //     }
-              //     if (item.slotType === 2) {
-              //       this.orderlist[item.weekDay - 1].noon = ''
-              //     }
-              //   }
-              // })
+              this.cheeckedweek.forEach(item => {
+                if (!hasMorning) {
+                  this.orderlist[item - 1].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+                }
+                if (!hasNoon) {
+                  this.orderlist[item - 1].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+                }
+              })
             }
-            this.initlist()
+
+            // this.initlist()
           })
           this.settingGroup = false
         }
@@ -521,14 +523,15 @@ export default {
     chooseWeek (index) {
       this.week[index].choose = !this.week[index].choose
       if (this.week[index].choose) {
-        this.cheeckedweek.push(index)
+        this.cheeckedweek.push(index + 1)
       } else {
-        let hasIndex = this._.indexOf(this.cheeckedweek, index)
+        let hasIndex = this._.indexOf(this.cheeckedweek, index + 1)
         if (hasIndex !== -1) {
           this.cheeckedweek.splice(hasIndex, 1)
         }
       }
       this.cheeckedweek = this._.uniq(this.cheeckedweek)
+      console.log('选择的周', this.cheeckedweek)
     },
     initlist () {
       this.loading = true
@@ -718,6 +721,31 @@ export default {
           })
         }
       })
+    },
+    judgeWeek (day) {
+      let week = null
+      if (day === 1) {
+        week = '周一'
+      }
+      if (day === 2) {
+        week = '周二'
+      }
+      if (day === 3) {
+        week = '周三'
+      }
+      if (day === 4) {
+        week = '周四'
+      }
+      if (day === 5) {
+        week = '周五'
+      }
+      if (day === 6) {
+        week = '周六'
+      }
+      if (day === 7) {
+        week = '周日'
+      }
+      return week
     }
   },
   mounted () {
