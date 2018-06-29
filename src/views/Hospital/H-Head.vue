@@ -267,7 +267,7 @@ export default {
     } else {
       this.adminIcon = null
     }
-    this.adminHeadImg = this.imgExists(this.adminImg, './static/admin.jpg')
+    this.adminHeadImg = this.imgExists(process.env.IMG_URL + this.adminImg, './static/admin.jpg')
   }
 }
 </script>
