@@ -33,10 +33,10 @@ export default {
       }
     },
     hospitalAddress () {
-      if (this.admin && this.admin.address) {
+      if (this.admin && this.admin.hospital.address) {
         return this.admin.address
       } else {
-        return '暂无数据'
+        return ''
       }
     },
     hospitalDoctorNum () {
