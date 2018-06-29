@@ -117,23 +117,31 @@ axios.interceptors.response.use(
           // }, 3000)
           break
         case '1005':
-          let errAction = new Promise(function (resolve, reject) {
-            setTimeout(function () {
-              MessageBox.alert('登录超时,请重新登录', '提示信息', {
-                'confirmButtonText': '确定'
-              }).then(() => {
-                // sessionStorage.clear()
-                // router.push({path: '/login'})
-                window.location.href = '/BPWatch/admin/login/page'
-                location.reload()
-                resolve()
-              })
-            }, 2000)
+          Message({
+            type: 'warning',
+            message: '登录超时,请重新登录',
+            duration: 5000,
+            showClose: true
           })
-          errAction.then(function () {
-            window.location.href = '/BPWatch/admin/login/page'
-            location.reload()
-          })
+          window.location.href = '/BPWatch/admin/login/page'
+          // let errAction = new Promise(function (resolve, reject) {
+          //   setTimeout(function () {
+          //     // location.reload()
+          //     // MessageBox.alert('登录超时,请重新登录', '提示信息', {
+          //     //   'confirmButtonText': '确定'
+          //     // }).then(() => {
+          //     //   // sessionStorage.clear()
+          //     //   // router.push({path: '/login'})
+          //     //   window.location.href = '/BPWatch/admin/login/page'
+          //     //   location.reload()
+          //     //   resolve()
+          //     // })
+          //   }, 2000)
+          // })
+          // errAction.then(function () {
+          //   window.location.href = '/BPWatch/admin/login/page'
+          //   location.reload()
+          // })
           break
         case '-1006':
           Message({
