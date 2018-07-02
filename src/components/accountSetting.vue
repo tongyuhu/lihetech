@@ -6,7 +6,7 @@
     <el-card :body-style="{ padding: '0px' }">
       <div>
         <div class="add-sick-img" v-loading="ercodeimg">
-          <img width="250px" :src="addSickImg" alt="二维码图片加载失败">
+          <img v-show="!ercodeimg" width="250px" :src="addSickImg" alt="二维码图片加载失败">
         </div>
         <!-- <img src="" alt=""> -->
       </div>
