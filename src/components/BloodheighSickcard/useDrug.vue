@@ -32,7 +32,8 @@
         <div class="flex">
           <div class="flex-btn-left">
             <!-- <el-button size="mini" :disabled="!useDrugBtnNext" icon="el-icon-arrow-left" @click="useDrugNext" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
-            <!-- <el-button size="mini" :disabled="!useDrugBtnNext" @click="useDrugNext" type="text" :style="{'font-size':'14px','color':'#1991fc','background':'#fff'}">点击加载更多...</el-button> -->
+            <!-- <el-button size="mini" :disabled="!useDrugBtnNext" @click="useDrug
+            Next" type="text" :style="{'font-size':'14px','color':'#1991fc','background':'#fff'}">点击加载更多...</el-button> -->
             <!-- <el-button size="mini" :disabled="!useDrugBtnPre" icon="el-icon-arrow-left" @click="useDrugPer" type="text" :style="{'font-size':'18px','color':'#999','background':'#eaeaea'}"></el-button> -->
           </div>
           <div class="chart-min-width">
@@ -77,7 +78,7 @@ export default {
       xasis: [],
       page: {
         pageNum: 1,
-        pageSize: 70,
+        pageSize: 120,
         pages: 1,
         currentPage: 1
       },
@@ -189,7 +190,7 @@ export default {
                       if (i < lists.length - 2) {
                         if (lists[i][0] === lists[i + 1][0]) {
                           lists[i][3] = this._.uniq(this._.concat(lists[i][3], lists[i + 1][3]))
-                          // lists[i + 1][3] = this._.uniq(this._.concat(lists[i][3], lists[i + 1][3]))
+                          lists[i + 1][3] = lists[i][3]
                           // lists.splice(i + 1, 1)
                           index.push(i + 1)
                         }
@@ -219,6 +220,7 @@ export default {
           computData = this._.sortBy(computData, function (item) {
             return item[1]
           })
+          computData = computData.reverse()
           console.log('用药', computData)
           // this.xasis = this.axisX(computData)
           // this.optionData = this.seriesItem(this.formatterX(computData))
@@ -226,7 +228,13 @@ export default {
           // vm.xasis = (vm._.concat(this.axisX(computData), this.xasis))
           // this.optionData = this._.concat(this.seriesItem(computData, this.optionData))
           vm.xasis = vm._.uniq(vm._.concat(this.axisX(computData), this.xasis))
-          this.sourData = this._.concat(computData, this.sourData)
+          console.log('用药XZHOU', vm.xasis)
+          if (this.xasis.length > 7) {
+            this.xasis = this.xasis.splice(0, 7).reverse()
+          }
+          computData = this.spliceData(computData)
+          console.log('用药splice', computData)
+          this.sourData = this._.concat(computData.reverse(), this.sourData)
           this.optionData = this.seriesItem(this.formatterX(this.sourData))
           // vm.xasis = vm._.concat(this.xasis, this.axisX(computData))
           // this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
@@ -292,6 +300,21 @@ export default {
         //   vm.useDrugNext()
         // }
       })
+    },
+    spliceData (arr) {
+      let count = 0
+      let base = null
+      let num = 0
+      arr.forEach((item, index) => {
+        if (item[1] !== base) {
+          count += 1
+          base = item[1]
+        }
+        if (count === 7) {
+          num = index
+        }
+      })
+      return arr.splice(0, num)
     },
     // 格式化数据 计算x轴坐标  **
     formatterX (arr) {
@@ -497,7 +520,7 @@ export default {
             // if (a.data.value[4]) {
             //   time = a.data.value[4]
             // }
-            return (a.data.value[4] + '<br>' + a.data.value[5])
+            // return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
             // return (a.data.value[5])
             // console.log(a)
             // let befor = ''
@@ -605,7 +628,7 @@ export default {
             splitLine: {
               show: false
             },
-            show: true,
+            show: false,
             minInterval: 1,
             maxInterval: 60,
             min: 0,
@@ -613,7 +636,7 @@ export default {
             // boundaryGap: ['50%', '50%']
           },
           {
-            show: false,
+            show: true,
             splitLine: {
               show: true
             },
