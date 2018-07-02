@@ -170,7 +170,6 @@ export default {
                                       M.push(list) // medicine
                                       M.push(date)// x
                                       M.push(medicinelist.time) // y
-                                      // computData.push(M)
                                       lists.push(M)
                                     }
                                   }
@@ -186,24 +185,21 @@ export default {
                     })
                     console.log('用药集合', lists)
                     let index = []
-                    for (let i = 0; i < lists.length; i++) {
-                      if (i < lists.length - 2) {
-                        if (lists[i][0] === lists[i + 1][0]) {
-                          lists[i][3] = this._.uniq(this._.concat(lists[i][3], lists[i + 1][3]))
-                          lists[i + 1][3] = lists[i][3]
-                          // lists.splice(i + 1, 1)
-                          index.push(i + 1)
+                    if (lists.length > 1) {
+                      for (let i = 1; i < lists.length; i++) {
+                        if (lists[i][0] === lists[i - 1][0]) {
+                          lists[i][3] = this._.uniq(this._.concat(lists[i][3], lists[i - 1][3]))
+                          lists[i - 1][3] = lists[i][3]
+                          index.push(i - 1)
                         }
                       }
                     }
+
                     let total = 0
                     index.forEach((item, i) => {
-                      total += i
-                      lists.splice(item - i + total, 1)
-                      // console.log('用药集合4', item)
+                      total += 1
+                      lists.splice(item - total, 1)
                     })
-                    // this._.differenceWith(lists, [{ 'x': 1, 'y': 2 }], this._.isEqual)
-                    // lists = this._.uniq(lists)
                     computData = this._.concat(computData, lists)
                     console.log('用药集合2', lists)
                   }
@@ -237,57 +233,12 @@ export default {
           console.log('用药splice', computData)
           vm.sourData = vm._.concat(computData.reverse(), vm.sourData)
           vm.optionData = vm.seriesItem(vm.formatterX(vm.sourData))
-          // vm.xasis = vm._.concat(this.xasis, this.axisX(computData))
-          // this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
-          // vm.xasis = vm.xasis.reverse()
-          // this.optionData = this._.concat(this.seriesItem(this.formatterX(computData).reverse(), this.optionData))
+
           console.log('用药chu', this.sourData)
           console.log('用药formatterX', this.formatterX(this.sourData))
           console.log('用药x data', this.xasis)
           // console.log('用药x', this.formatterX(computData))
           console.log('用药option', this.optionData)
-          // let copydata = res.data.data
-            // copydata = vm._.filter(copydata, function (item) {
-              //   let hasBlood
-            //   let hasBD = vm._.has(item, 'beforeDiastolic2')
-            //   let hasBS = vm._.has(item, 'beforeSystolic2')
-            //   let hasAS = vm._.has(item, 'afterSystolic')
-            //   let hasAD = vm._.has(item, 'afterDiastolic')
-            //   let hasT = vm._.has(item, 'takeMedicineTime')
-            //   if (hasBD || hasBS || hasAS || hasAD) {
-            //     hasBlood = true
-            //   } else {
-            //     hasBlood = false
-            //   }
-            //   return hasT && hasBlood
-            // })
-            // let merge = function (item) {
-            //   let obj = {
-            //     beforeDiastolic2: 'null',
-            //     beforeSystolic2: 'null',
-            //     bpTypeBefore: 'null',
-            //     afterSystolic: 'null',
-            //     afterDiastolic: 'null',
-            //     bpTypeAfter: 'null',
-            //     sysMedicineId: 'null'
-            //   }
-            //   return vm._.merge(obj, item)
-            // }
-            // copydata = vm._.map(copydata, merge)
-            // copydata = vm._.sortBy(copydata, function (item) {
-            //   return item.takeMedicineTime
-            // })
-            // copydata = copydata.reverse()
-            // this.sourData = vm._.concat(copydata, this.sourData)
-            // let useDrugData = vm.formatter(this.sourData)
-            // let theX = vm.axisX(copydata)
-            // vm.optionData = vm.seriesItem(useDrugData)
-            // vm.optionData = vm._.concat(vm.seriesItem(useDrugData), vm.optionData)
-            // vm.xasis = vm._.uniq(vm._.concat(theX, vm.xasis))
-            // vm.optionData = vm._.concat(vm.optionData, vm.seriesItem(useDrugData))
-            // vm.xasis = vm._.uniq(vm._.concat(vm.xasis, theX))
-            // vm.optionData = vm.optionData
-          // vm.xasis = vm.xasis
         }
 
         vm.loading = false
@@ -297,9 +248,6 @@ export default {
         useDrug.setOption(this.useDrugOption(position.start, position.end))
         this.page.pageNum = res.data.pageNum
         this.page.pages = res.data.pages
-        // if (vm.xasis.length < 7) {
-        //   vm.useDrugNext()
-        // }
       })
     },
     spliceData (arr) {
@@ -521,7 +469,7 @@ export default {
             // if (a.data.value[4]) {
             //   time = a.data.value[4]
             // }
-            // return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
+            return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
             // return (a.data.value[5])
             // console.log(a)
             // let befor = ''
