@@ -521,7 +521,7 @@ export default {
             // if (a.data.value[4]) {
             //   time = a.data.value[4]
             // }
-            return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
+            // return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
             // return (a.data.value[5])
             // console.log(a)
             // let befor = ''
