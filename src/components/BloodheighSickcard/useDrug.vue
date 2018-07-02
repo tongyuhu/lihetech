@@ -229,13 +229,14 @@ export default {
           // this.optionData = this._.concat(this.seriesItem(computData, this.optionData))
           vm.xasis = vm._.uniq(vm._.concat(this.axisX(computData), this.xasis))
           console.log('用药XZHOU', vm.xasis)
-          if (this.xasis.length > 7) {
-            this.xasis = this.xasis.splice(0, 7).reverse()
+          if (vm.xasis.length > 7) {
+            vm.xasis = vm.xasis.splice(0, 7)
           }
-          computData = this.spliceData(computData)
+          vm.xasis = vm.xasis.reverse()
+          computData = vm.spliceData(computData)
           console.log('用药splice', computData)
-          this.sourData = this._.concat(computData.reverse(), this.sourData)
-          this.optionData = this.seriesItem(this.formatterX(this.sourData))
+          vm.sourData = vm._.concat(computData.reverse(), vm.sourData)
+          vm.optionData = vm.seriesItem(vm.formatterX(vm.sourData))
           // vm.xasis = vm._.concat(this.xasis, this.axisX(computData))
           // this.optionData = this._.concat(this.optionData, this.seriesItem(this.formatterX(computData)))
           // vm.xasis = vm.xasis.reverse()
@@ -310,7 +311,7 @@ export default {
           count += 1
           base = item[1]
         }
-        if (count === 7) {
+        if (count === 7 || count < 7) {
           num = index
         }
       })
@@ -520,7 +521,7 @@ export default {
             // if (a.data.value[4]) {
             //   time = a.data.value[4]
             // }
-            // return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
+            return (a.data.value[4] + '<br>' + a.data.value[5])  // ready
             // return (a.data.value[5])
             // console.log(a)
             // let befor = ''
