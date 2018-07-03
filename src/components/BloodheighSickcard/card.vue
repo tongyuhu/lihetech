@@ -61,7 +61,7 @@
                     <div>{{item.medicineName}}</div>
                     <div>
                       <span>{{item.everyDosage ?item.everyDosage+ item.unit+'/次':""}}</span>
-                      <span>{{ item.usageTimes ? item.usageTimes :''}}</span>
+                      <span>{{ item.usageTimes ? item.usageTimes +'次/天':''}}</span>
                     </div>
                   </div>
                 </div>
