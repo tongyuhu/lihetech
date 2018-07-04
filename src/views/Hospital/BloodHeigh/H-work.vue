@@ -666,6 +666,7 @@ export default {
       })
     },
     call (row) {
+      console.log('聊天对象', row)
       let rongId = 'member_' + row.id
       let sick = {
         userId: rongId,
@@ -674,10 +675,10 @@ export default {
         hasMsg: false,
         currentChat: false
       }
+      console.log('聊天对象sick', sick)
       this.addChatFriend(sick)
       this.changeChatFriend(sick)
       this.openChatWindow()
-      console.log(row)
     },
     handlePersonMsg (row, column, cell, event) {
     }
@@ -826,7 +827,7 @@ export default {
 }
 .table-row td{
   /* background-color:#111; */
-  padding:5px;
+  padding: 5px 0;
 }
 .el-button{
   /* font-size:14px; */

@@ -150,7 +150,7 @@ export default {
       // friend.history = []
       // 获取历史消息
 
-      vm.openChatWindow()
+      // vm.openChatWindow()
     }
   },
   mounted () {

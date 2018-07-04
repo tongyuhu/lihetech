@@ -7,12 +7,6 @@
       <H-Sider></H-Sider>
     </div>
     <div class="container-main">
-      <!-- 11111111
-      <position
-      :position="locationMsg"
-      :tip="locationName"
-      mapId='ssss'>
-      </position> -->
       <router-view v-cloak></router-view>
     </div>
     <!-- <div class="has-message-animation"> -->
@@ -70,7 +64,6 @@
     },
     data () {
       return {
-        imStatus: false,
         appKey: 'pwe86ga5pv726',
         token: '',
         selfVideoDomID: null,
@@ -86,7 +79,8 @@
         video: 'video',
         hasVideoMsg: 'hasVideoMsg',
         currentVideo: 'currentVideo',
-        currentIsVideo: 'currentIsVideo'
+        currentIsVideo: 'currentIsVideo',
+        imStatus: 'imStatus'
       }),
       ...mapGetters([
         'currentChat'
@@ -107,7 +101,8 @@
         'getVideoMsg',
         'changeCurrentVideo',
         'getInvite',
-        'changeCurrentIsVideo'
+        'changeCurrentIsVideo',
+        'changeImStatus'
       ]),
       ...mapActions([
         'setRongUserIdAction',
@@ -115,11 +110,11 @@
       ]),
       showFriendWindow () {
         this.closeAnimation()
-        this.setFriendsListActon()
-        this.imStatus = true
+        // this.setFriendsListActon()
+        this.changeImStatus(true)
       },
       closeIMhandle () {
-        this.imStatus = false
+        this.changeImStatus(false)
       },
       chatWith (history) {
         Bus.$emit('history', history)

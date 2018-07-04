@@ -24,6 +24,7 @@ export const store = new Vuex.Store({
     currentSickData: {},
     // 聊天窗口状态
     chatStatus: false,
+    imStatus: false,
     // 用户融云id
     rongUserId: '',
     // 聊天列表
@@ -127,16 +128,16 @@ export const store = new Vuex.Store({
     // 添加聊天好友到列表
     addChatFriend (state, friend) {
       let i = 0
-      state.chatfriend.forEach(item => {
+      state.friendsList.forEach(item => {
         if (item.userId !== friend.userId) {
           i++
         } else {
           _.merge(item, friend)
         }
       })
-      if (i < state.chatfriend.length) {
+      if (i < state.friendsList.length) {
       } else {
-        state.chatfriend.push(friend)
+        state.friendsList.push(friend)
       }
     },
     // 改变聊天对象
@@ -253,6 +254,7 @@ export const store = new Vuex.Store({
     closeVideoMsg (state) {
       state.hasVideoMsg = false
     },
+    // 改变通话对象
     changeCurrentVideo (state, val) {
       state.currentVideo = val
     },
@@ -264,12 +266,17 @@ export const store = new Vuex.Store({
         state.invite = false
       }
     },
+    // 正在通话
     changeCurrentIsVideo (state, val) {
       if (val) {
         state.currentIsVideo = true
       } else {
         state.currentIsVideo = false
       }
+    },
+    // 打开、关闭im窗口
+    changeImStatus (state, val) {
+      state.imStatus = val
     }
   },
   actions: {

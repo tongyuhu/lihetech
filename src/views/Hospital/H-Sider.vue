@@ -95,6 +95,11 @@ export default {
           }
         ]
       },
+      FlupMenu: {
+        iconName: 'heigh-blood',
+        title: '随访',
+        routerName: 'Flup'
+      },
       menu: []
       // menu: [
       //   {
@@ -301,10 +306,12 @@ export default {
       if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
         this.menu.push(this.bloodHeighMenu)
         this.menu.push(this.personManage)
+        this.menu.push(this.FlupMenu)
       } else {
         this.menu.push(this.bloodHeighMenu)
         this.menu.push(this.orderMenu)
         this.menu.push(this.personManage)
+        this.menu.push(this.FlupMenu)
       }
     }
   }

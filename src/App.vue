@@ -84,7 +84,8 @@ export default {
             // let router = routeMatch(res.data.route, fullpath)
             // let router = roleMatch(role, fullpath)
             let router = []
-            router = routerRoleMatch(role, fullpath)
+            // router = routerRoleMatch(role, fullpath)
+            router = routerRoleMatch(role, fullpath(res.data.data.adminType))
             // 动态注入路由 addroute
             // this.$router = baseroutes
             console.log(router)
