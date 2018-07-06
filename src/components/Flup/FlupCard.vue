@@ -1,6 +1,6 @@
 <template>
   <div class="flup-card">
-    <el-card>
+    <!-- <el-card> -->
       <!-- <div class="my-input-wrap">
         <span class="my-input-q">前置</span>
         <input type="text" class="my-input">
@@ -12,7 +12,7 @@
       :rightOffset="60">
       </numberinput> -->
       <!-- <button @click="ccccccccc">jij</button> -->
-    </el-card>
+    <!-- </el-card> -->
     <div class="head-title">
       <span>患者</span>
       <button class="voice-btn">语音</button>
@@ -1294,10 +1294,10 @@ export default {
   }
   select{
     // width: 100%;
-    height: 28px;
+    // height: 28px;
     // border:1px solid #606266;
     border: none;
-    border-radius: 2px;
+    // border-radius: 2px;
     outline: none;
     /*很关键：将默认的select选择框样式清除*/
     appearance:none;

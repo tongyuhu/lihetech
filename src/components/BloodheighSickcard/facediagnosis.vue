@@ -352,12 +352,14 @@
                 <div class="case-main-rp">
                   <div class="case-main-rp-title">
                     <span>RP</span>
+                    <el-button @click="openAddMedicineDialog" type="primary">添加</el-button>
                   </div>
                   <el-table
                   ref="multipleTable"
                   :data="doctorMedicine"
                   tooltip-effect="dark"
                   style="width: 100%"
+                  border
                   max-height="400">
                     <el-table-column
                       type="index"
@@ -372,24 +374,37 @@
                     <el-table-column
                       prop="singleuse"
                       label="单次用量"
-                      width="100">
+                      width="100"
+                      >
                       <template slot-scope="scope">
-                        <!-- <input  type="text"  v-model.number="scope.row.singleuse" 
-                        class="table-input use-num single-use"> -->
-                        <!-- <el-input v-model="scope.row.singleuse" placeholder="" class="table-input use-num single-use"></el-input> -->
-                        <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
+                        <numberinput
+                        v-model="scope.row.singleuse"
+                        :leftOffset="5"
+                        :rightOffset="40"
+                        :height="28"
+                        >
+                          <template slot="right">
+                            <select slot="suffix" v-model="scope.row.singleuseUnit">
+                            <option value="pian">片</option>
+                            <option value="li">粒</option>
+                            <option value="ke">颗</option>
+                            <option value="zhi">支</option>
+                          </select>
+                          </template>
+                        </numberinput>
+                        <!-- <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
                         <select class="use-num" v-model="scope.row.singleuseUnit">
                           <option value="pian">片</option>
                           <option value="li">粒</option>
                           <option value="ke">颗</option>
                           <option value="zhi">支</option>
-                        </select>
+                        </select> -->
                       </template>
                     </el-table-column>
                     <el-table-column
                       prop="usemethod"
                       label="用法"
-                      width="65">
+                      width="75">
                       <template slot-scope="scope">
                         <select v-model="scope.row.usemethod">
                           <option value="mouse">口服</option>
@@ -401,38 +416,74 @@
                     <el-table-column
                       prop="usetimes"
                       label="频度"
-                      width="80">
+                      width="100">
                       <template slot-scope="scope">
-                        <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天
+                        <numberinput
+                        v-model="scope.row.usetimes"
+                        :leftOffset="5"
+                        :rightOffset="40"
+                        :height="28">
+                          <template slot="right">
+                            <span>
+                            次/天
+                            </span>
+                          </template>
+                        </numberinput>
+                        <!-- <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天 -->
                       </template>
                     </el-table-column>
                     <el-table-column
                       prop="uselong"
                       label="天数"
-                      width="50">
+                      width="95">
                       <template slot-scope="scope">
-                        <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use">
+                        <numberinput
+                        v-model="scope.row.uselong"
+                        :leftOffset="5"
+                        :rightOffset="20"
+                        :height="28">
+                          <template slot="right">
+                            <span>
+                            天
+                            </span>
+                          </template>
+                        </numberinput>
+                        <!-- <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use"> -->
                       </template>
                     </el-table-column>
                     <el-table-column
                       prop="usetotal"
                       label="总量"
-                      width="65">
+                      width="95">
                       <template slot-scope="scope">
-                        <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒
+                        <numberinput
+                        v-model="scope.row.usetotal"
+                        :leftOffset="5"
+                        :rightOffset="20"
+                        :height="28">
+                          <template slot="right">
+                            <span>
+                            盒
+                            </span>
+                          </template>
+                        </numberinput>
+                        <!-- <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒 -->
                       </template>
                     </el-table-column>
                     <el-table-column
                       prop="tip"
                       label="备注">
                       <template slot-scope="scope">
-                        <input v-model="scope.row.tip" type="text" class="table-input  width-tip" >
+                        <el-input v-model="scope.row.tip"
+                        size="mini"></el-input>
+                        <!-- <input v-model="scope.row.tip" type="text" class="table-input  width-tip" > -->
                       </template>
                     </el-table-column>
                     <el-table-column
                       prop="delete"
                       label="编辑"
-                      width="100">
+                      width="100"
+                      align="center">
                       <template slot-scope="scope">
                         <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
                       </template>
@@ -449,7 +500,7 @@
           </div>
         </div>
 
-        <div class="case-right">
+        <!-- <div class="case-right">
           <div class="case-right-main">
             <tabs
             v-model="activeIndex"
@@ -502,7 +553,7 @@
                   <el-button type="primary" @click="addsure">确认添加</el-button>
                 </div>
               </pane>
-              <!-- <pane
+              <pane
               label="运动">
                 <div class="pane-bg">
                 </div>
@@ -520,8 +571,8 @@
                     ></addSport>
                   </div>
                 </div>
-              </pane> -->
-              <!-- <pane
+              </pane>
+              <pane
               label="饮食">
                 <div class="pane-bg">
                 </div>
@@ -532,11 +583,18 @@
                     @addfood="addfoods">
                     </addFood>
                 </div>
-              </pane> -->
+              </pane>
             </tabs>
           </div>
-        </div>  
+        </div>   -->
       </div>
+      <el-dialog
+        title="西药处方"
+        :visible.sync="addMedicineDialog"
+        width="50%"
+        center>
+        <medicine @addMedicine="addMedicineHandler"></medicine>
+      </el-dialog>
 
 
       <div id="print" class="print">
@@ -600,6 +658,7 @@ import addMedicine from '@/components/addMedicine.vue'
 import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
+import numberinput from './../../components/Flup/number'
 import {bloodheighSickApi, sickApi, modifyCardApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 import {mapState, mapMutations} from 'vuex'
 // import Bus from '@/bus.js'
@@ -634,7 +693,8 @@ export default {
     addMedicine,
     searchMedicine,
     addSport,
-    addFood
+    addFood,
+    numberinput
   },
   props: {
     sickID: {
@@ -790,7 +850,8 @@ export default {
       year: [],
       month: [],
       day: [],
-      canPrint: false
+      canPrint: false,
+      addMedicineDialog: false
     }
   },
   watch: {
@@ -1228,6 +1289,13 @@ export default {
     },
     openChecklist () {
       this.$emit('openchecklist')
+    },
+    openAddMedicineDialog () {
+      this.addMedicineDialog = true
+    },
+    addMedicineHandler (list) {
+      this.doctorMedicine = list
+      this.addMedicineDialog = false
     }
   },
   computed: {
@@ -1721,9 +1789,10 @@ export default {
   }
   select{
     // width: 100%;
-    height: 30px;
-    border:1px solid $border-color-input;
-    border-radius: $border-radius;
+    // height: 28px;
+    // border:1px solid #606266;
+    border: none;
+    // border-radius: 2px;
     outline: none;
     /*很关键：将默认的select选择框样式清除*/
     appearance:none;
@@ -1733,13 +1802,36 @@ export default {
     /*为下拉小箭头留出一点位置，避免被文字覆盖*/
     padding-right: 20px;
     padding-left: 4px;
-    background-color: #fff;
+    background-color:transparent;
     font-size: 14px;
     cursor: pointer;
+    color: #606266;
+    line-height: 1;
     // text-align: center;
   }
   /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
   select::-ms-expand { display: none; }
+  // select{
+  //   // width: 100%;
+  //   height: 30px;
+  //   border:1px solid $border-color-input;
+  //   border-radius: $border-radius;
+  //   outline: none;
+  //   /*很关键：将默认的select选择框样式清除*/
+  //   appearance:none;
+  //   -moz-appearance:none;
+  //   -webkit-appearance:none;
+  //   background: url('~icon/hospital-icon-199.png') no-repeat scroll right 3px center transparent;
+  //   /*为下拉小箭头留出一点位置，避免被文字覆盖*/
+  //   padding-right: 20px;
+  //   padding-left: 4px;
+  //   background-color: #fff;
+  //   font-size: 14px;
+  //   cursor: pointer;
+  //   // text-align: center;
+  // }
+  // /*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+  // select::-ms-expand { display: none; }
   $left-width:216px;
   $right-width:420px;
 

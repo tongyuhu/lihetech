@@ -43,6 +43,10 @@ export default {
     height: {
       type: Number,
       default: 32
+    },
+    number: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -68,11 +72,15 @@ export default {
     },
     handleChange: function (event) {
       let val = event.target.value.trim()
-      if (isValueNumber(val)) {
-        val = Number(val)
-        this.currentValue = val
+      if (this.number) {
+        if (isValueNumber(val)) {
+          val = Number(val)
+          this.currentValue = val
+        } else {
+          event.target.value = null
+        }
       } else {
-        event.target.value = null
+        this.currentValue = val
       }
       // isValueNumber(val)
     }
