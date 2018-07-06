@@ -30,23 +30,29 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="dangerLayer"
+                    prop="dangerLevel"
                     label="危险分层"
                     label-class-name="tableTitle"
                     width="200">
+                    <template slot-scope="scope">
+                        {{layer(scope.row.dangerLevel)}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="lately"
                     label="近7日平均血压"
                     label-class-name="tableTitle">
+                    <template slot-scope="scope">
+                        {{scope.row.systolic7}}/{{scope.row.diastolic7}}
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="doctor"
+                    prop="name"
                     label="医生"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
-                    prop="FlupDate"
+                    prop="followUpTime"
                     label="随访日期"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -105,23 +111,29 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="dangerLayer"
+                    prop="dangerLevel"
                     label="危险分层"
                     label-class-name="tableTitle"
                     width="200">
+                    <template slot-scope="scope">
+                        {{layer(scope.row.dangerLevel)}}
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="lately"
                     label="近7日平均血压"
                     label-class-name="tableTitle">
+                    <template slot-scope="scope">
+                        {{scope.row.systolic7}}/{{scope.row.diastolic7}}
+                    </template>
                 </el-table-column>
                 <el-table-column
-                    prop="doctor"
+                    prop="name"
                     label="医生"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
-                    prop="FlupDate"
+                    prop="followUpTime"
                     label="随访日期"
                     label-class-name="tableTitle">
                 </el-table-column>
@@ -142,11 +154,11 @@
         <div class="paging">
           <el-pagination
               class="el-pagination"
-              @current-change="unfinishedPageChange"
-              :current-page.sync="unfinishedCurrentPage"
-              :page-size="unfinishedPageSize"
+              @current-change="finishedPageChange"
+              :current-page.sync="finishedCurrentPage"
+              :page-size="finishedPageSize"
               layout="total, prev, pager, next, jumper"
-              :total="unfinishedTotal"
+              :total="finishedTotal"
               prev-text="上一页"
               next-text="下一页">
             </el-pagination>
@@ -157,6 +169,8 @@
 </template>
 
 <script>
+import {FlupListApi} from '@/api/components/Flup/Flup.js'
+import {mapState} from 'vuex'
 export default {
   name: 'Flup',
   data () {
@@ -191,18 +205,74 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapState(['adminInfo'])
+  },
   methods: {
     flupHandler (val) {
       this.$router.push({
         name: 'FlupCard'
       })
     },
+    /**
+     * @description val===true 已随访 反之
+     */
+    getListData (val) {
+      let params = {
+
+      }
+      if (val) {
+        params.pageNum = this.finishedCurrentPage
+        params.pageSize = this.finishedPageSize
+        params.isFollowUp = 1
+      } else {
+        params.pageNum = this.unfinishedCurrentPage
+        params.pageSize = this.unfinishedPageSize
+        params.isFollowUp = this.adminInfo.id
+      }
+      params.adminIdMainDoctor = 3
+      this.$axios(FlupListApi(params))
+      .then(res => {
+        if (val) {
+          this.finishedFlupData = res.data.data
+          this.finishedTotal = res.data.recordCount
+          // this.pages = res.data.pages
+        } else {
+          this.unfinishedFlupData = res.data.data
+          this.unfinishedTotal = res.data.recordCount
+        }
+      })
+    },
     call (val) {
 
     },
     unfinishedPageChange (currentpage) {
-
+      this.unfinishedCurrentPage = currentpage
+      this.getListData(false)
+    },
+    finishedPageChange (currentpage) {
+      this.finishedCurrentPage = currentpage
+      this.getListData(true)
+    },
+    layer (val) {
+      let layer = ''
+      switch (val) {
+        case 1:
+          layer = '一级'
+          break
+        case 2:
+          layer = '二级'
+          break
+        case 3:
+          layer = '三级'
+          break
+      }
+      return layer
     }
+  },
+  mounted () {
+    this.getListData(true)
+    this.getListData(false)
   }
 }
 </script>

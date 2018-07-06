@@ -2,7 +2,6 @@
   <div>
       <el-row>
         <!-- <face></face> -->
-        <medicine></medicine>
           <el-col :span="24">
             <Hhospitalmsg></Hhospitalmsg>
             <HBloodheightotal></HBloodheightotal>
@@ -19,8 +18,8 @@ import HBloodheightotal from './H-bloodheightotal'
 import HWork from './H-work'
 import bloodSicklist from './H-bloodSicklist.vue'
 // import Bus from '@/bus'
-import face from '@/components/BloodheighSickcard/facediagnosis'
-import medicine from '@/components/medicine/medicine.vue'
+// import face from '@/components/BloodheighSickcard/facediagnosis'
+// import medicine from '@/components/medicine/medicine.vue'
 // import {cookie} from './../../../untils/cookie'
 export default {
   name: 'H-bloodheigh',
@@ -28,9 +27,9 @@ export default {
     Hhospitalmsg,
     HBloodheightotal,
     HWork,
-    bloodSicklist,
-    face,
-    medicine
+    bloodSicklist
+    // face
+    // medicine
   },
   mounted () {
     console.log('blood', this.$route.name)

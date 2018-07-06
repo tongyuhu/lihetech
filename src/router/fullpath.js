@@ -18,6 +18,7 @@ const orderSetting = (resolve) => require(['@/components/order/orderSetting.vue'
 const editAdmin = (resolve) => require(['@/components/editAdmin.vue'], resolve)
 const Flup = (resolve) => require(['@/components/Flup/Flup.vue'], resolve)
 const FlupCard = (resolve) => require(['@/components/Flup/FlupCard.vue'], resolve)
+const dangerLayer = (resolve) => require(['@/components/Flup/dangerLayer.vue'], resolve)
 // const addDoctor = (resolve) => require(['@/views/Hospital/personManage/addDoctor.vue'], resolve)
 let routers = null
 let superAdminRouters = [
@@ -69,6 +70,16 @@ let superAdminRouters = [
         meta: {
           requireAuth: true,
           name: '随访',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'dangerLayer',
+        name: 'dangerLayer',
+        component: dangerLayer,
+        meta: {
+          requireAuth: true,
+          name: '分层评估',
           role: ['admin', 'doctor', 'hospital', 'nurse']
         }
       },

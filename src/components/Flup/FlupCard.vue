@@ -1,23 +1,49 @@
 <template>
   <div class="flup-card">
+    <el-card>
+      <!-- <div class="my-input-wrap">
+        <span class="my-input-q">前置</span>
+        <input type="text" class="my-input">
+        <span class="my-input-h">后置</span>
+      </div> -->
+      <!-- <numberinput
+      v-model="value"
+      :leftOffset="40"
+      :rightOffset="60">
+      </numberinput> -->
+      <!-- <button @click="ccccccccc">jij</button> -->
+    </el-card>
     <div class="head-title">
       <span>患者</span>
       <button class="voice-btn">语音</button>
     </div>
     <div class="bottom-gap">
-
       <el-card :body-style="{padding: '18px 20px 0 20px'}">
         <el-form
         label-width="45px" 
         label-position="left">
           <div class="inline-block flup-methods right-gap">
             <el-form-item label="随访方式" label-width="68px">
-              <el-select v-model="value" size="small" placeholder="请选择" style="{'width':'60px'}">
+              <el-select v-model="flupMethods" size="small" placeholder="请选择" style="{'width':'60px'}">
                 <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
+                  label="远程随访"
+                  :value="1">
+                </el-option>
+                <el-option
+                  label="电话随访"
+                  :value="2">
+                </el-option>
+                <el-option
+                  label="社区随访"
+                  :value="3">
+                </el-option>
+                <el-option
+                  label="上门随访"
+                  :value="4">
+                </el-option>
+                <el-option
+                  label="其他"
+                  :value="5">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -25,28 +51,26 @@
           <div class="inline-block right-gap">
             <el-form-item label="随访时间" label-width="68px">
               <el-date-picker
-              v-model="value2"
+              v-model="flupTime"
               align="right"
               type="date"
               size="small"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
-              placeholder="选择日期"
-              :picker-options="pickerOptions1">
+              placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
           </div>
           <div class="inline-block">
             <el-form-item label="下次随访时间" label-width="99px">
               <el-date-picker
-              v-model="value2"
+              v-model="nextFlupTime"
               align="right"
               type="date"
               size="small"
               format="yyyy-MM-dd"
               value-format="yyyy-MM-dd"
-              placeholder="选择日期"
-              :picker-options="pickerOptions1">
+              placeholder="选择日期">
               </el-date-picker>
             </el-form-item>
           </div>
@@ -62,7 +86,18 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="elinput-wrap-small">
-                <el-input placeholder="" v-model="input3" size="small">
+                <numberinput
+                v-model="body.heighBlood"
+                :leftOffset="60"
+                :rightOffset="50">
+                  <template slot="left">
+                    <span class="input-tip">收缩压：</span>
+                  </template>
+                  <template slot="right">
+                    <span class="input-tip">mmHg</span>
+                  </template>
+                </numberinput>
+                <!-- <el-input placeholder="" v-model="body.heighBlood" size="small">
                   <template slot="prefix">
                     <span class="input-tip">收缩压：</span>
                   </template>
@@ -70,20 +105,31 @@
 
                     <span class="input-tip">mmHg</span>
                   </template>
-                </el-input>
+                </el-input> -->
               </div>
 
             </el-col>
             <el-col :span="6">
               <div class="elinput-wrap-small">
-                <el-input placeholder="" v-model="input3" size="small">
+                <numberinput
+                v-model="body.lowBlood"
+                :leftOffset="60"
+                :rightOffset="50">
+                  <template slot="left">
+                    <span class="input-tip">舒张压：</span>
+                  </template>
+                  <template slot="right">
+                    <span class="input-tip">mmHg</span>
+                  </template>
+                </numberinput>
+                <!-- <el-input placeholder="" v-model="body.lowBlood" size="small">
                   <template slot="prefix">
-                    <span class="input-tip">收缩压：</span>
+                    <span class="input-tip">舒张压：</span>
                   </template>
                   <template slot="suffix">
                     <span class="input-tip">mmHg</span>
                   </template>
-                </el-input>
+                </el-input> -->
               </div>
 
             </el-col>
@@ -95,13 +141,13 @@
                   </div>
                   <div>
                     <el-radio-group 
-                      v-model="checkedCities1"
+                      v-model="body.dangerLayer"
                       size="small">
-                      <el-radio :label="3">低危</el-radio>
-                      <el-radio :label="6">中危</el-radio>
-                      <el-radio :label="9">高危</el-radio>
-                      <el-radio :label="19">很高危</el-radio>
-                      <el-radio :label="29">未分层</el-radio>
+                      <el-radio :label="1">低危</el-radio>
+                      <el-radio :label="2">中危</el-radio>
+                      <el-radio :label="3">高危</el-radio>
+                      <el-radio :label="4">很高危</el-radio>
+                      <el-radio :label="5">未分层</el-radio>
                       <!-- <el-radio :label="9">高危</el-radio> -->
                     </el-radio-group>
                   </div>
@@ -109,8 +155,10 @@
                 </div>
                 <div class="question-btn">
                   <!-- <el-button type="text" size="mini"> -->
-                    <button>
+                    <button
+                    @click="dangerLayerHandler">
                       <i class="el-icon-question" :style="{'color':'#999','font-size':'16px','height':'16px'}"></i>
+                      分层评估
                     </button>
                   <!-- </el-button> -->
                 </div>
@@ -121,31 +169,64 @@
         <el-row :gutter="20">
           <el-col :span="6">
             <div class="elinput-wrap-mini">
-              <el-input placeholder="" v-model="input3" size="small">
+              <numberinput
+              v-model="body.heigh"
+              :leftOffset="45"
+              :rightOffset="30">
+                <template slot="left">
+                  <span class="input-tip">身高：</span>
+                </template>
+                <template slot="right">
+                  <span class="input-tip">cm</span>
+                </template>
+              </numberinput>
+              <!-- <el-input placeholder="" v-model="body.heigh" size="small">
                 <template slot="prefix">
                   <span class="input-tip">身高：</span>
                 </template>
                 <template slot="suffix">
                   <span class="input-tip">cm</span>
                 </template>
-              </el-input>
+              </el-input> -->
             </div>
           </el-col>
           <el-col :span="6">
             <div class="elinput-wrap-mini">
-              <el-input placeholder="" v-model="input3" size="small">
+              <numberinput
+              v-model="body.weight"
+              :leftOffset="45"
+              :rightOffset="30">
+                <template slot="left">
+                  <span class="input-tip">体重：</span>
+                </template>
+                <template slot="right">
+                  <span class="input-tip">kg</span>
+                </template>
+              </numberinput>
+              <!-- <el-input placeholder="" v-model="body.weight" size="small">
                 <template slot="prefix">
                   <span class="input-tip">体重：</span>
                 </template>
                 <template slot="suffix">
                   <span class="input-tip">kg</span>
                 </template>
-              </el-input>
+              </el-input> -->
             </div>
           </el-col>
           <el-col :span="6">
             <div class="elinput-wrap-mini">
-              <el-input placeholder="" v-model="input3" size="small">
+              <numberinput
+              v-model="body.heart"
+              :leftOffset="45"
+              :rightOffset="40">
+                <template slot="left">
+                  <span class="input-tip">心律：</span>
+                </template>
+                <template slot="right">
+                  <span class="input-tip">次/分</span>
+                </template>
+              </numberinput>
+              <!-- <el-input placeholder="" v-model="body.heart" size="small">
                 <template slot="prefix">
                   <span class="input-tip">心律：</span>
                 </template>
@@ -153,16 +234,26 @@
 
                   <span class="input-tip">次/分</span>
                 </template>
-              </el-input>
+              </el-input> -->
             </div>
           </el-col>
           <el-col :span="6">
             <div class="elinput-wrap-middle">
-              <el-input placeholder="" v-model="input3" size="small">
+              <numberinput
+              v-model="body.health"
+              :leftOffset="75">
+                <template slot="left">
+                  <span class="input-tip">体质指数：</span>
+                </template>
+                <!-- <template slot="right">
+                  <span class="input-tip">次/分</span>
+                </template> -->
+              </numberinput>
+              <!-- <el-input placeholder="" v-model="body.health" size="small">
                 <template slot="prefix">
                   <span class="input-tip">体质指数：</span>
                 </template>
-              </el-input>
+              </el-input> -->
             </div>
           </el-col>
         </el-row>
@@ -182,55 +273,88 @@
           <el-row :gutter="20">
             <el-col :span="6">
               <div class="elinput-wrap-middle">
-                <el-input placeholder="" v-model="input3" size="small">
+                <numberinput
+                v-model="daily.smoke"
+                :leftOffset="75"
+                :rightOffset="20">
+                  <template slot="left">
+                    <span class="input-tip">日吸烟量：</span>
+                  </template>
+                  <template slot="right">
+                    <span class="input-tip">支</span>
+                  </template>
+                </numberinput>
+                <!-- <el-input placeholder="" v-model="daily.smoke" size="small">
                   <template slot="prefix">
                     <span class="input-tip">日吸烟量：</span>
                   </template>
                   <template slot="suffix">
-                    <span class="input-tip">mmHg</span>
+                    <span class="input-tip">支</span>
                   </template>
-                </el-input>
+                </el-input> -->
               </div>
 
             </el-col>
             <el-col :span="6">
               <div class="elinput-wrap-middle">
-                <el-input placeholder="" v-model="input3" size="small">
+                <numberinput
+                v-model="daily.drink"
+                :leftOffset="75"
+                :rightOffset="20">
+                  <template slot="left">
+                    <span class="input-tip">日饮酒量：</span>
+                  </template>
+                  <template slot="right">
+                    <span class="input-tip">两</span>
+                  </template>
+                </numberinput>
+                <!-- <el-input placeholder="" v-model="daily.drink" size="small">
                   <template slot="prefix">
                     <span class="input-tip">日饮酒量：</span>
                   </template>
                   <template slot="suffix">
-                    <span class="input-tip">mmHg</span>
+                    <span class="input-tip">两</span>
                   </template>
-                </el-input>
+                </el-input> -->
               </div>
             </el-col>
             <el-col :span="6">
               <div class="radio-box flex">
                 <div class="check-box-title">
-                危险分层：
+                睡眠质量：
                 </div>
                 <div>
                   <el-radio-group 
-                    v-model="checkedCities1"
+                    v-model="daily.sleep"
                     size="small">
-                    <el-radio :label="3">良好</el-radio>
-                    <el-radio :label="6">一般</el-radio>
-                    <el-radio :label="9">差</el-radio>
+                    <el-radio :label="1">良好</el-radio>
+                    <el-radio :label="2">一般</el-radio>
+                    <el-radio :label="3">差</el-radio>
                   </el-radio-group>
                 </div>
               </div>
             </el-col>
             <el-col :span="6">
               <div class="elinput-wrap-middle">
-                <el-input placeholder="" v-model="input3" size="small">
+                <numberinput
+                v-model="daily.sport"
+                :leftOffset="65"
+                :rightOffset="60">
+                  <template slot="left">
+                    <span class="input-tip">运动量：</span>
+                  </template>
+                  <template slot="right">
+                    <span class="input-tip">分钟/次</span>
+                  </template>
+                </numberinput>
+                <!-- <el-input placeholder="" v-model="daily.sport" size="small">
                   <template slot="prefix">
-                    <span class="input-tip">日饮酒量：</span>
+                    <span class="input-tip">运动量：</span>
                   </template>
                   <template slot="suffix">
-                    <span class="input-tip">mmHg</span>
+                    <span class="input-tip">分钟/次</span>
                   </template>
-                </el-input>
+                </el-input> -->
               </div>
             </el-col>
           </el-row>
@@ -248,56 +372,68 @@
           label-position="left">
             <div class="inline-block flup-methods">
               <el-form-item label="是否按时服药：" label-width="110px">
-                <el-select v-model="value" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="life.medicine" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
                     label="是"
-                    value="1">
+                    :value="1">
                   </el-option>
                   <el-option
                     label="否"
-                    value="2">
+                    :value="2">
                   </el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="inline-block flup-methods">
               <el-form-item label="情绪：" label-width="55px">
-                <el-select v-model="value" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="life.mood" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
                     label="良好"
-                    value="1">
+                    :value="1">
                   </el-option>
                   <el-option
-                    label="否"
-                    value="2">
+                    label="一般"
+                    :value="2">
+                  </el-option>
+                  <el-option
+                    label="差"
+                    :value="3">
                   </el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="inline-block flup-methods">
               <el-form-item label="遵医行为：" label-width="85px">
-                <el-select v-model="value" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="life.doctor" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
                     label="良好"
-                    value="1">
+                    :value="1">
                   </el-option>
                   <el-option
-                    label="否"
-                    value="2">
+                    label="一般"
+                    :value="2">
+                  </el-option>
+                  <el-option
+                    label="差"
+                    :value="3">
                   </el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="inline-block flup-methods">
               <el-form-item label="摄盐情况：" label-width="85px">
-                <el-select v-model="value" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="life.salt" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
-                    label="良好"
-                    value="1">
+                    label="轻"
+                    :value="1">
                   </el-option>
                   <el-option
-                    label="否"
-                    value="2">
+                    label="中"
+                    :value="2">
+                  </el-option>
+                  <el-option
+                    label="重"
+                    :value="3">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -308,13 +444,14 @@
               </div>
               <div>
                 <el-checkbox-group 
-                  v-model="checkedCities1"
+                  v-model="life.symptom"
                   size="small">
-                  <el-checkbox :label="3">低危</el-checkbox>
-                  <el-checkbox :label="6">中危</el-checkbox>
-                  <el-checkbox :label="9">高危</el-checkbox>
-                  <el-checkbox :label="19">很高危</el-checkbox>
-                  <el-checkbox :label="29">未分层</el-checkbox>
+                  <el-checkbox :label="1">头晕</el-checkbox>
+                  <el-checkbox :label="2">头痛</el-checkbox>
+                  <el-checkbox :label="3">烦躁</el-checkbox>
+                  <el-checkbox :label="4">面色苍白或潮红</el-checkbox>
+                  <el-checkbox :label="5">视力模糊</el-checkbox>
+                  <el-checkbox :label="6">以上情况全无</el-checkbox>
                   <!-- <el-checkbox :label="9">高危</el-checkbox> -->
                 </el-checkbox-group>
               </div>
@@ -325,9 +462,9 @@
               </div>
               <div>
                 <el-checkbox-group 
-                  v-model="checkedCities1"
+                  v-model="life.bed"
                   size="small">
-                  <el-checkbox v-for='i in bingfalinchuang' :key="i.label" :label="i.value">{{i.label}}</el-checkbox>
+                  <el-checkbox v-for='i in bingfalinchuang' :key="i.value" :label="i.value">{{i.label}}</el-checkbox>
                 </el-checkbox-group>
               </div>
             </div>
@@ -338,19 +475,19 @@
                 </div>
                 <div>
                   <el-checkbox-group 
-                    v-model="checkedCities1"
+                    v-model="life.chinese"
                     size="small">
-                    <el-checkbox :label="3">阴虚阳亢证</el-checkbox>
-                    <el-checkbox :label="6">气血两虚证</el-checkbox>
-                    <el-checkbox :label="9">痰瘀互结证</el-checkbox>
-                    <el-checkbox :label="19">肾精不足证</el-checkbox>
-                    <el-checkbox :label="29">肾阳亏虚证</el-checkbox>
-                    <el-checkbox :label="29">冲任失调证</el-checkbox>
+                    <el-checkbox :label="1">阴虚阳亢证</el-checkbox>
+                    <el-checkbox :label="2">气血两虚证</el-checkbox>
+                    <el-checkbox :label="3">痰瘀互结证</el-checkbox>
+                    <el-checkbox :label="4">肾精不足证</el-checkbox>
+                    <el-checkbox :label="5">肾阳亏虚证</el-checkbox>
+                    <el-checkbox :label="6">冲任失调证</el-checkbox>
                   </el-checkbox-group>
                 </div>
               </div>
               <div class="question-btn">
-                <button>
+                <button @click="openChinese">
                   <i class="el-icon-question" :style="{'color':'#999','font-size':'16px','height':'16px'}"></i>
                   <span>中医辩证分型判断标准</span>
                 </button>
@@ -362,16 +499,16 @@
               </div>
               <div>
                 <el-checkbox-group 
-                  v-model="checkedCities1"
+                  v-model="life.unmedicine"
                   size="small">
-                  <el-checkbox :label="3">限盐</el-checkbox>
-                  <el-checkbox :label="6">减少吸烟量或戒烟</el-checkbox>
-                  <el-checkbox :label="9">减少饮酒量或戒酒</el-checkbox>
-                  <el-checkbox :label="19">减少膳食脂肪</el-checkbox>
-                  <el-checkbox :label="29">减轻体重</el-checkbox>
-                  <el-checkbox :label="29">有规律体育劳动</el-checkbox>
-                  <el-checkbox :label="29">放松情绪</el-checkbox>
-                  <el-checkbox :label="29">以上全无</el-checkbox>
+                  <el-checkbox :label="1">限盐</el-checkbox>
+                  <el-checkbox :label="2">减少吸烟量或戒烟</el-checkbox>
+                  <el-checkbox :label="3">减少饮酒量或戒酒</el-checkbox>
+                  <el-checkbox :label="4">减少膳食脂肪</el-checkbox>
+                  <el-checkbox :label="5">减轻体重</el-checkbox>
+                  <el-checkbox :label="6">有规律体育劳动</el-checkbox>
+                  <el-checkbox :label="7">放松情绪</el-checkbox>
+                  <el-checkbox :label="8">以上全无</el-checkbox>
                 </el-checkbox-group>
               </div>
             </div>
@@ -381,7 +518,7 @@
               </div>
               <div>
                 <el-checkbox-group 
-                  v-model="checkedCities1"
+                  v-model="life.health"
                   size="small">
                   <el-checkbox :label="3">低盐清淡饮食一食盐摄入每天控制在5克左右</el-checkbox>
                   <el-checkbox :label="6">适当控制饮食，体重不超过标准体重的10%</el-checkbox>
@@ -400,7 +537,7 @@
               </div>
               <div>
                 <el-checkbox-group 
-                  v-model="checkedCities1"
+                  v-model="life.direct"
                   size="small">
                   <el-checkbox :label="3">食疗</el-checkbox>
                   <el-checkbox :label="6">茶饮</el-checkbox>
@@ -417,9 +554,9 @@
               </div>
               <div>
                 <el-checkbox-group 
-                  v-model="checkedCities1"
+                  v-model="life.suggest"
                   size="small">
-                  <el-checkbox v-for="item in health" :key="item.label" :label="item.value">{{item.label}}</el-checkbox>
+                  <el-checkbox v-for="item in health" :key="item.value" :label="item.value">{{item.label}}</el-checkbox>
                 </el-checkbox-group>
               </div>
             </div>
@@ -434,144 +571,204 @@
           <button class="add-btn" @click="addMedicine">添加</button>
         </div>
         <div>
-          <el-table
-          ref="multipleTable"
-          :data="doctorMedicine"
-          tooltip-effect="dark"
-          style="width: 100%"
-          border
-          max-height="400">
-            <el-table-column
-              type="index"
-              label="序号"
-              width="55"
-              align="center">
-            </el-table-column>
-            <el-table-column
-              show-overflow-tooltip
-              prop="name"
-              label="名称"
-              align="center">
-            </el-table-column>
-            <el-table-column
-              prop="singleuse"
-              label="单次用量"
-              align="center">
-              <template slot-scope="scope">
-                <span class="elinput-wrap-onetext">
-                  <el-input placeholder="" v-model="input5" 
+          <el-form>
+
+            <el-table
+            ref="multipleTable"
+            :data="doctorMedicine"
+            tooltip-effect="dark"
+            style="width: 100%"
+            border
+            max-height="400">
+              <el-table-column
+                type="index"
+                label="序号"
+                width="55"
+                align="center">
+              </el-table-column>
+              <el-table-column
+                show-overflow-tooltip
+                prop="name"
+                label="名称"
+                align="center">
+              </el-table-column>
+              <el-table-column
+                prop="singleuse"
+                label="单次用量"
+                align="center">
+                <template slot-scope="scope">
+                  <span class="elinput-wrap-onetext">
+                    <numberinput
+                    v-model="scope.row.singleuse"
+                    :leftOffset="5"
+                    :rightOffset="40"
+                    :height="28">
+                      <template slot="right">
+                        <select slot="suffix" v-model="scope.row.singleuseUnit">
+                        <option value="pian">片</option>
+                        <option value="li">粒</option>
+                        <option value="ke">颗</option>
+                        <option value="zhi">支</option>
+                      </select>
+                      </template>
+                    </numberinput>
+                    <!-- <el-input placeholder="" v-model.number="scope.row.singleuse" 
+                      size="mini"
+                      class="input-with-select">
+                      <select slot="suffix" v-model="scope.row.singleuseUnit">
+                        <option value="pian">片</option>
+                        <option value="li">粒</option>
+                        <option value="ke">颗</option>
+                        <option value="zhi">支</option>
+                      </select>
+                    </el-input> -->
+                  </span>
+                    <!-- <el-select v-model="select" slot="append" size="mini" placeholder="请选择">
+                      <el-option label="餐厅名" value="1"></el-option>
+                      <el-option label="订单号" value="2"></el-option>
+                      <el-option label="用户电话" value="3"></el-option>
+                    </el-select> -->
+                  <!-- <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
+                  <select class="use-num" v-model="scope.row.singleuseUnit">
+                    <option value="pian">片</option>
+                    <option value="li">粒</option>
+                    <option value="ke">颗</option>
+                    <option value="zhi">支</option>
+                  </select> -->
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="usemethod"
+                label="用法"
+                align="center">
+                <template slot-scope="scope">
+                  <select v-model="scope.row.usemethod">
+                    <option value="mouse">口服</option>
+                    <option value="in">注射</option>
+                    <option value="out">外涂</option>
+                  </select>
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="usetimes"
+                label="频度"
+                align="center">
+                <template slot-scope="scope">
+                  <span class="elinput-wrap-onetext">
+                    <numberinput
+                    v-model="scope.row.usetimes"
+                    :leftOffset="5"
+                    :rightOffset="40"
+                    :height="28">
+                      <template slot="right">
+                        <span>
+                        次/天
+                        </span>
+                      </template>
+                    </numberinput>
+                    <!-- <el-input placeholder="" v-model="scope.row.usetimes" 
+                      size="mini"
+                      class="input-with-select">
+                      <span slot="suffix" class="input-end-text">
+                        次/天
+                      </span>
+                    </el-input> -->
+                  </span>
+                  <!-- <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天 -->
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="uselong"
+                label="天数"
+                align="center">
+                <template slot-scope="scope">
+                  <span class="elinput-wrap-onetext">
+                    <!-- <el-form-item> -->
+                      <!-- <el-input-number v-model="num8" :controls="false"
+                      size="mini"
+                      label="tian"></el-input-number> -->
+                      <!-- <input type="number"> -->
+                      <numberinput
+                      v-model="scope.row.uselong"
+                      :leftOffset="5"
+                      :rightOffset="20"
+                      :height="28">
+                        <template slot="right">
+                          <span>
+                          天
+                          </span>
+                        </template>
+                      </numberinput>
+                      <!-- <el-input placeholder="" v-model.number="inputvalue" 
+                      @change="inputchange"
+                        size="mini"
+                        value="number"
+                        v-numberOnly
+                        class="input-with-select">
+                        <span slot="suffix" class="input-end-text">
+                          天
+                        </span>
+                      </el-input> -->
+                    <!-- </el-form-item> -->
+                  </span>
+                  <!-- <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use">
+                  <span>天</span> -->
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="usetotal"
+                label="总量"
+                align="center">
+                <template slot-scope="scope">
+                  <span class="elinput-wrap-onetext">
+                    <numberinput
+                    v-model="scope.row.usetotal"
+                    :leftOffset="5"
+                    :rightOffset="20"
+                    :height="28">
+                      <template slot="right">
+                        <span>
+                        盒
+                        </span>
+                      </template>
+                    </numberinput>
+                    <!-- <el-input placeholder="" v-model="scope.row.usetotal" 
+                      size="mini"
+                      class="input-with-select">
+                      <span slot="suffix" class="input-end-text">
+                        盒
+                      </span>
+                    </el-input> -->
+                  </span>
+                  <!-- <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒 -->
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="tip"
+                label="备注"
+                align="center">
+                <template slot-scope="scope">
+                  <el-input placeholder="" v-model="scope.row.tip" 
                     size="mini"
                     class="input-with-select">
-                    <select slot="suffix" v-model="scope.row.singleuseUnit">
-                      <option value="pian">片</option>
-                      <option value="li">粒</option>
-                      <option value="ke">颗</option>
-                      <option value="zhi">支</option>
-                    </select>
-                  </el-input>
-                </span>
-                  <!-- <el-select v-model="select" slot="append" size="mini" placeholder="请选择">
-                    <el-option label="餐厅名" value="1"></el-option>
-                    <el-option label="订单号" value="2"></el-option>
-                    <el-option label="用户电话" value="3"></el-option>
-                  </el-select> -->
-                <!-- <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
-                <select class="use-num" v-model="scope.row.singleuseUnit">
-                  <option value="pian">片</option>
-                  <option value="li">粒</option>
-                  <option value="ke">颗</option>
-                  <option value="zhi">支</option>
-                </select> -->
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="usemethod"
-              label="用法"
-              align="center">
-              <template slot-scope="scope">
-                <select v-model="scope.row.usemethod">
-                  <option value="mouse">口服</option>
-                  <option value="in">注射</option>
-                  <option value="out">外涂</option>
-                </select>
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="usetimes"
-              label="频度"
-              align="center">
-              <template slot-scope="scope">
-                <span class="elinput-wrap-onetext">
-                  <el-input placeholder="" v-model="input5" 
-                    size="mini"
-                    class="input-with-select">
-                    <span slot="suffix" class="input-end-text">
-                      次/天
-                    </span>
-                  </el-input>
-                </span>
-                <!-- <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天 -->
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="uselong"
-              label="天数"
-              align="center">
-              <template slot-scope="scope">
-                <span class="elinput-wrap-onetext">
-                  <el-input placeholder="" v-model="input5" 
-                    size="mini"
-                    class="input-with-select">
-                    <span slot="suffix" class="input-end-text">
-                      天
-                    </span>
-                  </el-input>
-                </span>
-                <!-- <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use"> -->
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="usetotal"
-              label="总量"
-              align="center">
-              <template slot-scope="scope">
-                <span class="elinput-wrap-onetext">
-                  <el-input placeholder="" v-model="input5" 
-                    size="mini"
-                    class="input-with-select">
-                    <span slot="suffix" class="input-end-text">
+                    <!-- <span slot="suffix" class="input-end-text">
                       盒
-                    </span>
+                    </span> -->
                   </el-input>
-                </span>
-                <!-- <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒 -->
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="tip"
-              label="备注"
-              align="center">
-              <template slot-scope="scope">
-                <el-input placeholder="" v-model="input5" 
-                  size="mini"
-                  class="input-with-select">
-                  <!-- <span slot="suffix" class="input-end-text">
-                    盒
-                  </span> -->
-                </el-input>
-                <!-- <input v-model="scope.row.tip" type="text" class="table-input  width-tip" > -->
-              </template>
-            </el-table-column>
-            <el-table-column
-              prop="delete"
-              label="编辑"
-              width="100"
-              align="center">
-              <template slot-scope="scope">
-                <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+                  <!-- <input v-model="scope.row.tip" type="text" class="table-input  width-tip" > -->
+                </template>
+              </el-table-column>
+              <el-table-column
+                prop="delete"
+                label="编辑"
+                width="100"
+                align="center">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-form>
         </div>
       </el-card>
     </div>
@@ -586,20 +783,128 @@
       center>
       <medicine @addMedicine="addMedicineHandler"></medicine>
     </el-dialog>
+    <el-dialog
+      title="高血压病中医辩证分型表"
+      :visible.sync="chineseMedicineDialog"
+      width="50%"
+      center>
+      <el-table
+        ref="chineseMedicineref"
+        :data="chineseMedicine"
+        tooltip-effect="dark"
+        style="width: 100%"
+        border
+        @selection-change="chineseMedicineSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55"
+          label="s">
+        </el-table-column>
+        <el-table-column
+          label="辨证类型"
+          prop="type"
+          width="120"
+          align="center"
+          >
+          <!-- <template slot-scope="scope">{{ scope.row.date }}</template> -->
+        </el-table-column>
+        <el-table-column
+          prop="main"
+          label="主症"
+          align="center"
+          >
+        </el-table-column>
+        <el-table-column
+          prop="unmain"
+          label="次症"
+          align="center">
+        </el-table-column>
+      </el-table>
+      <div>
+        <span>注：以上凡具备一项主症和两项次症症状，即可诊断该证候成立，采取相应的中医药随访指导。</span>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import medicine from '@/components/medicine/medicine.vue'
-const cityOptions = ['上海', '北京', '广州', '深圳']
+import numberinput from './number'
 export default {
   name: 'FlupCard',
+  directives: {
+    numberOnly: {
+      bind: function (el) {
+        if (el.tagName === 'INPUT') {
+          el.handler = function () {
+            el.value = el.value.replace(/\D+/, '')
+          }
+          el.addEventListener('input', el.handler)
+        } else {
+          let inputdom = el.getElementsByTagName('input')[0]
+          inputdom.handler = function () {
+            inputdom.value = inputdom.value.replace(/\D+/, '')
+          }
+          inputdom.addEventListener('input', inputdom.handler)
+        }
+      },
+      // update: function (el) {
+      //   el.handler = function () {
+      //     el.value = el.value.replace(/\D+/, '')
+      //   }
+      //   el.addEventListener('input', el.handler)
+      // }
+      unbind: function (el) {
+        if (el.tagName === 'INPUT') {
+          el.removeEventListener('input', el.handler)
+        } else {
+          let inputdom = el.getElementsByTagName('input')[0]
+          inputdom.removeEventListener('input', el.handler)
+        }
+      }
+    }
+  },
   components: {
-    medicine
+    medicine,
+    numberinput
   },
   data () {
     return {
+      value: 777,
       addMedicineDialog: false,
+      chineseMedicineDialog: false,
+      flupMethods: null,
+      flupTime: null,
+      nextFlupTime: null,
+      body: {
+        heighBlood: null,
+        lowBlood: null,
+        dangerLayer: 5,
+        heigh: null,
+        weight: null,
+        heart: null,
+        health: null
+      },
+      daily: {
+        smoke: null,
+        drink: null,
+        sleep: null,
+        sport: null
+
+      },
+      life: {
+        medicine: null,
+        mood: null,
+        doctor: null,
+        salt: null,
+        symptom: [],
+        bed: [],
+        chinese: [],
+        unmedicine: [],
+        health: [],
+        direct: [],
+        suggest: []
+      },
       doctorMedicine: [
         {
           drugSpec: '5毫克x7',
@@ -619,8 +924,6 @@ export default {
           usetotal: ''
         }
       ],
-      checkedCities1: ['北京'],
-      cities: cityOptions,
       bingfalinchuang: [
         {
           label: '缺血性卒中',
@@ -776,16 +1079,82 @@ export default {
           label: '放松心情，调节睡眠。注意休息',
           value: 23
         }
+      ],
+      inputvalue: null,
+      chineseMedicine: [
+        {
+          type: '阴虚阳亢证',
+          main: '头部胀痛、烦躁易怒、腰膝痠软',
+          unmain: '面红目赤，胁痛口苦，便秘溲黄，五心烦热，口干口渴，失眠梦遗',
+          value: 1
+        },
+        {
+          type: '气血两虚证',
+          main: '头晕时作、少气乏力',
+          unmain: '动则气短，头部空痛，自汗或盗汗、心悸失眠',
+          value: 2
+        },
+        {
+          type: '痰瘀互结证',
+          main: '头重或痛',
+          unmain: '头重如裹，胸脘痞闷，胸痛心悸，纳呆恶心，身重困倦，手足麻木',
+          value: 3
+        },
+        {
+          type: '肾精不足证',
+          main: '心烦不寐、耳鸣腰酸',
+          unmain: '心悸健忘、失眠梦遗、口干口渴等症',
+          value: 4
+        },
+        {
+          type: '肾阳亏虚证',
+          main: '背寒恶风，腰膝酸软',
+          unmain: '头痛遇冷加重，手足发冷，夜尿频数',
+          value: 5
+        },
+        {
+          type: '冲任失调证',
+          main: '妇女月经来潮或更年期前后出现头痛、头晕',
+          unmain: '心烦、失眠、胁痛',
+          value: 6
+        }
       ]
     }
   },
   methods: {
+    // ccccccccc () {
+    //   console.log('aaaaaaa', this.value)
+    // },
     addMedicine () {
       this.addMedicineDialog = true
     },
     addMedicineHandler (medicinelist) {
       this.doctorMedicine = medicinelist
       this.addMedicineDialog = false
+    },
+    deleteMedicine (index, rows) {
+      rows.splice(index, 1)
+    },
+    openChinese () {
+      this.chineseMedicineDialog = true
+    },
+    inputchange (value) {
+      console.log('input', value)
+    },
+    chineseMedicineSelectionChange (val) {
+      let list = []
+      console.log('zhongyi', val)
+      if (val.length > 0) {
+        val.forEach(item => {
+          list.push(item.value)
+        })
+      }
+      this.life.chinese = list
+    },
+    dangerLayerHandler () {
+      this.$router.push({
+        name: 'dangerLayer'
+      })
     }
   }
 }
@@ -954,6 +1323,55 @@ export default {
     height: 28px;
     line-height: 28px;
   }
+  // .my-input{
+  //   border:none;
+  //   outline: none;
+  //   background: transparent;
+  //   font-size: 14px;
+  //   height: 28px;
+  //   border:1px solid #dcdfe6;
+  //   border-radius: 4px;
+  //   width: 100%;
+  //   padding-left: 60px;
+  // }
+  // .my-input-wrap{
+  //   position: relative;
+  //   max-width: 1080px;
+  //   // border:1px solid #dcdfe6;
+  // }
+  // // .my-input:focus .my-input-wrap{
+  // //   border:1px solid #1991fc;
+  // //   border-radius: 4px;
+  // // }
+  // .my-input:focus {
+  //   border:1px solid #1991fc;
+  //   border-radius: 4px;
+  // }
+  // .my-input-q{
+  //   position: absolute;
+  //   top:0;
+  //   left: 5px;
+  //   height: 100%;
+  //   text-align: center;
+  //   line-height: 1;
+  //   vertical-align: baseline;
+  //   display: inline-block;
+  //   font-size: 14px;
+  //   padding-top: 10px;
+  //   // display: table-cell;
+  // }
+  // .my-input-h{
+  //   position: absolute;
+  //   right: 5px;
+  //   top:0;
+  //   height: 100%;
+  //   font-size: 14px;
+  //   padding-top: 10px;
+  // }
+  // .my-input:focus .my-input-wrap{
+  //   border:1px solid #1991fc;
+  //   border-radius: 4px;
+  // }
 </style>
 <style lang="scss">
   .elinput-wrap-onetext .el-input--suffix .el-input__inner {
