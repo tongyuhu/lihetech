@@ -1,40 +1,45 @@
 <template>
   <div class="danger-layer">
-    <div>
+    <div class="gap-bottom">
       <el-card>
         <div>
-          <span class="title-name">毛健康</span>
+          <span class="title-name">{{realName}}</span>
           <button class="voice-btn">语音</button>
         </div>
       </el-card>
     </div>
-    <div class="gap-bottom">
-      <span class="heart-layer">心血管分层</span>
-    </div>
-    <div class="gap-bottom">
-      <el-card>
-        <div class="card-head-title">
-          <p>评估结果</p>
-        </div>
-        <div class="gap-bottom">
-          <span>危险等级：</span>
-          <span class="danger-btn-text">很危险</span>
-        </div>
-        <div>
-          <div class="line-block gap-right">
-            <span>危险因素：</span>
-            <span class="red-text">血脂异常、耐糖量受损</span>
+    <div v-if="showResult">
+
+      <div class="gap-bottom">
+        <span class="heart-layer">心血管分层</span>
+      </div>
+      <div class="gap-bottom">
+        <el-card>
+          <div class="card-head-title">
+            <p>评估结果</p>
           </div>
-          <div class="line-block gap-right">
-            <span>靶器官损害：</span>
-            <span class="red-text">左心室肥厚</span>
+          <div class="gap-bottom">
+            <span>危险等级：</span>
+            <span class="danger-btn-text" :style="{'background':computeDanger(result.dangerLevel)}">
+              {{danger(result.dangerLevel)}}
+            </span>
           </div>
-          <div class="line-block gap-right">
-            <span>临床疾患：</span>
-            <span class="red-text">心肌梗死史</span>
+          <div>
+            <div class="line-block gap-right">
+              <span>危险因素：</span>
+              <span class="red-text">{{result.danger}}</span>
+            </div>
+            <div class="line-block gap-right">
+              <span>靶器官损害：</span>
+              <span class="red-text">{{result.organDamage}}</span>
+            </div>
+            <div class="line-block gap-right">
+              <span>临床疾患：</span>
+              <span class="red-text">{{result.disease}}</span>
+            </div>
           </div>
-        </div>
-      </el-card>
+        </el-card>
+      </div>
     </div>
     <el-form>
       <div class="gap-bottom">
@@ -45,8 +50,17 @@
           <div class="gap-bottom">
             <el-row :gutter="20">
               <el-col :span="6">
-                <numberinput
-                v-model="value"
+                <span>出生日期</span>
+                <el-date-picker
+                  v-model="birthDate"
+                  type="date"
+                  size="small"
+                  format="yyyy-MM-dd"
+                  value-format="yyyy-MM-dd"
+                  placeholder="选择日期">
+                </el-date-picker>
+                <!-- <numberinput
+                v-model="birthDate"
                 :leftOffset="45"
                 :rightOffset="5">
                   <template slot="left">
@@ -54,12 +68,7 @@
                     年龄：
                     </span>
                   </template>
-                  <!-- <template slot="right">
-                    <span>
-                    次/天
-                    </span>
-                  </template> -->
-                </numberinput>
+                </numberinput> -->
                 <!-- <el-input placeholder="" v-model="body" size="small">
                   <template slot="prefix">
                     <span class="input-tip">年龄：</span>
@@ -71,7 +80,7 @@
               </el-col>
               <el-col :span="6">
                 <numberinput
-                v-model="value"
+                v-model="height"
                 :leftOffset="45"
                 :rightOffset="30">
                   <template slot="left">
@@ -96,7 +105,7 @@
               </el-col>
               <el-col :span="6">
                 <numberinput
-                v-model="value"
+                v-model="weight"
                 :leftOffset="45"
                 :rightOffset="30">
                   <template slot="left">
@@ -113,7 +122,7 @@
               </el-col>
               <el-col :span="6">
                 <numberinput
-                v-model="value"
+                v-model="waistWai"
                 :leftOffset="45"
                 :rightOffset="30">
                   <template slot="left">
@@ -133,21 +142,21 @@
           <div>
             <div class="line-block">
               <el-form-item label="性别" label-width="40px">
-                <el-select v-model="flupMethods" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="sex" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
                     label="男"
                     :value="1">
                   </el-option>
                   <el-option
                     label="女"
-                    :value="2">
+                    :value="0">
                   </el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="line-block">
               <el-form-item label="是否吸烟" label-width="110px">
-                <el-select v-model="flupMethods" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="smoking" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
                     label="是"
                     :value="1">
@@ -156,19 +165,23 @@
                     label="否"
                     :value="2">
                   </el-option>
+                  <el-option
+                    label="已戒烟"
+                    :value="3">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </div>
             <div class="line-block">
               <el-form-item label="早发心血管病家族史" label-width="170px">
-                <el-select v-model="flupMethods" size="small" placeholder="请选择" style="{'width':'60px'}">
+                <el-select v-model="heartVesselsFamilyHistory" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
                     label="有"
                     :value="1">
                   </el-option>
                   <el-option
                     label="无"
-                    :value="2">
+                    :value="0">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -186,20 +199,19 @@
             <el-row :gutter="20">
                 <div class="radio-box line-block">
                   <div class="line-block">
-                    <span>总胆固醇(mg/24h)</span>
+                    <span>总胆固醇(mg/24h)：</span>
                   </div>
                   <div class="line-block">
-                    <div class="line-block gap-right">
+                    <!-- <div class="line-block gap-right">
                       <el-radio-group 
-                        v-model="body"
+                        v-model="cholesterolTotal"
                         size="small">
                         <el-radio :label="1">mmol/L</el-radio>
                         <el-radio :label="2">mg/dl</el-radio>
-                        <!-- <el-radio :label="3">&gt;6.9</el-radio> -->
                       </el-radio-group>
-                    </div>
+                    </div> -->
                     <el-radio-group 
-                      v-model="body"
+                      v-model="cholesterolTotal"
                       size="small">
                       <el-radio :label="1">&gt;5.7</el-radio>
                       <el-radio :label="2">&lt;=5.7</el-radio>
@@ -213,10 +225,10 @@
                   </div>
                   <div class="line-block">
                     <el-radio-group 
-                      v-model="body"
+                      v-model="highProteinCholesterol"
                       size="small">
-                      <el-radio :label="1">&gt;1.0</el-radio>
-                      <el-radio :label="2">&lt;=1.0</el-radio>
+                      <el-radio :label="1">&lt;1.0</el-radio>
+                      <el-radio :label="2">&gt;=1.0</el-radio>
                       <!-- <el-radio :label="3">&gt;6.9</el-radio> -->
                     </el-radio-group>
                   </div>
@@ -227,7 +239,7 @@
                   </div>
                   <div class="line-block">
                     <el-radio-group 
-                      v-model="body"
+                      v-model="lowProteinCholesterol"
                       size="small">
                       <el-radio :label="1">&gt;3.3</el-radio>
                       <el-radio :label="2">&lt;=3.3</el-radio>
@@ -239,10 +251,15 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload',bloodFatUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('bloodFatUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>血生化-血脂</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 血生化-血脂
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -255,7 +272,7 @@
           <div class="gap-bottom">
             <div class="width">
               <numberinput
-              v-model="value"
+              v-model="hcy"
               :leftOffset="150"
               :rightOffset="60">
                 <template slot="left">
@@ -274,10 +291,15 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload',hcyUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('hcyUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>同型半胱氨酸测定</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 同型半胱氨酸测定
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -290,11 +312,11 @@
           <div class="gap-bottom">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>空腹血糖(mmol/L)</span>
+                  <span>空腹血糖(mmol/L)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="bloodSugarEmpty"
                     size="small">
                     <el-radio :label="1">&lt;6.1</el-radio>
                     <el-radio :label="2">6.1-6.9</el-radio>
@@ -304,11 +326,11 @@
             </div>
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>餐后两小时血糖(mmol/L)</span>
+                  <span>餐后两小时血糖(mmol/L)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="bloodSugarAfterMealTwo"
                     size="small">
                     <el-radio :label="1">&lt;7.8</el-radio>
                     <el-radio :label="2">7.8-11.0</el-radio>
@@ -318,15 +340,15 @@
             </div>
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>糖化血红蛋白(mmol/L)</span>
+                  <span>糖化血红蛋白(mmol/L)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="sugarBloodProtein"
                     size="small">
                     <el-radio :label="1">&lt;6.5%</el-radio>
                     <!-- <el-radio :label="2">6.1-6.9</el-radio> -->
-                    <el-radio :label="3">&gt;=6.5%</el-radio>
+                    <el-radio :label="2">&gt;=6.5%</el-radio>
                   </el-radio-group>
                 </div>
             </div>
@@ -334,7 +356,22 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload','gap-right',bloodSugarEmptyUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('bloodSugarEmptyUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>空腹血糖</span>
+              </a>
+              <a :class="['a-upload','gap-right',bloodSugarAfterMealTwoUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('bloodSugarAfterMealTwoUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>餐后2小时血糖</span>
+              </a>
+              <a :class="['a-upload',sugarBloodProteinUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('sugarBloodProteinUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>糖化血红蛋白HbA1c</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 同型半胱氨酸测定
               </button>
@@ -345,7 +382,7 @@
               <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 糖化血红蛋白HbA1c
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -358,22 +395,24 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>血清肌酐</span>
+                  <span>血清肌酐：</span>
                 </div>
                 <div class="line-block">
+                  <div class="line-block gap-right">
+                    <el-radio-group 
+                      v-model="serumCreatinineUnit"
+                      size="small">
+                      <el-radio :label="1">umol/L</el-radio>
+                      <el-radio :label="2">mg/dl</el-radio>
+                    </el-radio-group>
+                  </div>
                   <el-radio-group 
-                    v-model="body"
-                    size="small">
-                    <el-radio :label="1">umol/L</el-radio>
-                    <el-radio :label="2">mg/dl</el-radio>
-                  </el-radio-group>
-                  <el-radio-group 
-                    v-model="body"
+                    v-model="serumCreatinineType"
                     size="small">
                     <el-radio :label="1">&lt;115</el-radio>
                     <el-radio :label="2">115-133</el-radio>
                     <el-radio :label="3">&gt;133</el-radio>
-                    <el-radio :label="3">估算的肾小球滤过率&lt;60(eGFR降低)</el-radio>
+                    <!-- <el-radio :label="3">估算的肾小球滤过率&lt;60(eGFR降低)</el-radio> -->
                   </el-radio-group>
                 </div>
             </div>
@@ -381,11 +420,27 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>蛋白尿值(mg/24h)</span>
+                  <span>估算的肾小球滤过率&lt;60(eGFR降低)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="egfr"
+                    size="small">
+                    <el-radio :label="1">是</el-radio>
+                    <el-radio :label="0">否</el-radio>
+                    <!-- <el-radio :label="3">&gt;300</el-radio> -->
+                  </el-radio-group>
+                </div>
+            </div>
+          </div>
+          <div class="gap-bottom line-block">
+            <div class="radio-box line-block">
+                <div class="line-block">
+                  <span>蛋白尿值(mg/24h)：</span>
+                </div>
+                <div class="line-block">
+                  <el-radio-group 
+                    v-model="proteinUrineType"
                     size="small">
                     <el-radio :label="1">&lt;30</el-radio>
                     <el-radio :label="2">30-300</el-radio>
@@ -397,7 +452,22 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload','gap-right',bloodFatUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('bloodFatUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>血生化-血肌酐</span>
+              </a>
+              <a :class="['a-upload','gap-right',routineUrineUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('routineUrineUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>尿常规</span>
+              </a>
+              <a :class="['a-upload','gap-right',routineProteinUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('routineProteinUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>尿蛋白</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 血生化-血肌酐
               </button>
@@ -408,7 +478,7 @@
               <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 尿蛋白
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -421,11 +491,11 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>心电图指标</span>
+                  <span>心电图指标：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="ecgType"
                     size="small">
                     <el-radio :label="1">Sokolow-lyon&gt;38mm或cornell&gt;2440mm.ms</el-radio>
                     <el-radio :label="2">正常</el-radio>
@@ -436,15 +506,15 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>超声心动图LVMI指标(g/m2)</span>
+                  <span>超声心动图LVMI指标(g/m2)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="lvmlType"
                     size="small">
                     <el-radio :label="1">&gt;=125</el-radio>
                     <!-- <el-radio :label="2">30-300</el-radio> -->
-                    <el-radio :label="3">&lt;125</el-radio>
+                    <el-radio :label="2">&lt;125</el-radio>
                   </el-radio-group>
                 </div>
             </div>
@@ -452,11 +522,11 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>心脏扩大</span>
+                  <span>心脏扩大：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="heartExpandType"
                     size="small">
                     <el-radio :label="1">左右心房、心室任一增大</el-radio>
                     <el-radio :label="2">无增大</el-radio>
@@ -467,39 +537,63 @@
           <div class="gap-bottom">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>已确诊心脏疾病</span>
+                  <span>已确诊心脏疾病：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="heartDisease"
                     size="small">
                     <el-radio :label="1">心肌梗死史</el-radio>
                     <el-radio :label="2">心绞痛</el-radio>
-                    <el-radio :label="2">冠状动脉血运重建史</el-radio>
-                    <el-radio :label="2">慢性心力衰竭</el-radio>
+                    <el-radio :label="3">冠状动脉血运重建史</el-radio>
+                    <el-radio :label="4">慢性心力衰竭</el-radio>
+                    <el-radio :label="0">未知</el-radio>
                   </el-radio-group>
                 </div>
             </div>
           </div>
           <div>
-            <div class="line-block">
+            <div class="line-block gap-bottom">
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload','gap-right',heartFigureUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('heartFigureUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
-                心电图
-              </button>
-              <button class="check-btn">
+                <span>心电图</span>
+              </a>
+              <a :class="['a-upload','gap-right',heartUltrasonicUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('heartUltrasonicUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
-                超声心动图（心脏彩超）
-              </button>
-              <button class="check-btn">
+                <span>超声心动图（心脏彩超）</span>
+              </a>
+              <a :class="['a-upload','gap-right',xChestUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('xChestUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
-                X线胸片
-              </button>
+                <span>X线胸片</span>
+              </a>
             </div>
-            <div class="line-block">
+            <div class="line-block gap-bottom">
               <span>高级检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload','gap-right',heartMrlMraUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('heartMrlMraUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>心脏MRI 磁共振血管造影 (MRA)</span>
+              </a>
+              <a :class="['a-upload','gap-right',ctaUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('ctaUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>计算机断层扫描血管造影 (CTA)</span>
+              </a>
+              <a :class="['a-upload','gap-right',heartWithUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('heartWithUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>心脏同位素显像</span>
+              </a>
+              <a :class="['a-upload','gap-right',movementUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('movementUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>运动实验 或冠状动脉造影</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 心脏MRI 磁共振血管造影 (MRA)
               </button>
@@ -514,7 +608,7 @@
               <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 运动实验 或冠状动脉造影
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -528,11 +622,11 @@
             <span>靶器官损害</span>
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>颈-股动脉脉搏波 速度(m/s)</span>
+                  <span>颈-股动脉脉搏波 速度(m/s)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="neckStocksSpeedType"
                     size="small">
                     <el-radio :label="1">&gt;=12</el-radio>
                     <el-radio :label="2">&lt;12</el-radio>
@@ -543,15 +637,15 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>踝臂血压指数</span>
+                  <span>踝臂血压指数：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="ankleArmIndex"
                     size="small">
                     <el-radio :label="1">&lt;0.9</el-radio>
                     <!-- <el-radio :label="2">30-300</el-radio> -->
-                    <el-radio :label="3">&gt;=0.9</el-radio>
+                    <el-radio :label="2">&gt;=0.9</el-radio>
                   </el-radio-group>
                 </div>
             </div>
@@ -559,11 +653,11 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>颈动脉超声(IMT)</span>
+                  <span>颈动脉超声(IMT)：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="imtType"
                     size="small">
                     <el-radio :label="1">&gt;=0.9mm或动脉粥样板块</el-radio>
                     <el-radio :label="2">&lt;0.9mm</el-radio>
@@ -575,15 +669,16 @@
             <span>临床疾患</span>
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>外周血管疾病</span>
+                  <span>外周血管疾病：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="outsideVesselsDisease"
                     size="small">
                     <el-radio :label="1">动脉瘤、狭窄、闭塞、栓塞、主动脉夹层</el-radio>
                     <el-radio :label="2">血管外伤、血管瘤、下肢溃疡</el-radio>
-                    <el-radio :label="2">3静脉血栓、形成、曲张、动静脉内瘘</el-radio>
+                    <el-radio :label="3">静脉血栓、形成、曲张、动静脉内瘘</el-radio>
+                    <el-radio :label="0">未知</el-radio>
                   </el-radio-group>
                 </div>
             </div>
@@ -591,7 +686,27 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload','gap-right',neckSoundUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('neckSoundUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>颈动脉超声</span>
+              </a>
+              <a :class="['a-upload','gap-right',pulseSpeedUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('pulseSpeedUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>脉搏波传导速度</span>
+              </a>
+              <a :class="['a-upload','gap-right',ankleArmNumUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('ankleArmNumUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>踝臂指数</span>
+              </a>
+              <a :class="['a-upload','gap-right',otherVesselsUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('otherVesselsUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>其它血管检查项</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 颈动脉超声
               </button>
@@ -606,7 +721,7 @@
               <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 其它血管检查项
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -619,15 +734,16 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>脑血管疾病</span>
+                  <span>脑血管疾病：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="brainDiseaseType"
                     size="small">
                     <el-radio :label="1">脑出血</el-radio>
                     <el-radio :label="2">缺血性脑卒中</el-radio>
                     <el-radio :label="3">短暂性脑缺血发作</el-radio>
+                    <el-radio :label="0">未知</el-radio>
                   </el-radio-group>
                 </div>
             </div>
@@ -635,7 +751,22 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload','gap-right',brainMriMraUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('brainMriMraUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>头颅MRI MRA</span>
+              </a>
+              <a :class="['a-upload','gap-right',brainCtaUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('brainCtaUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>CTA</span>
+              </a>
+              <a :class="['a-upload',spiritStateUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('spiritStateUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>精神状态量表</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 头颅MRI MRA
               </button>
@@ -646,7 +777,7 @@
               <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 精神状态量表
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -659,17 +790,18 @@
           <div class="gap-bottom line-block">
             <div class="radio-box line-block">
                 <div class="line-block">
-                  <span>Keith-Wagnar分级</span>
+                  <span>Keith-Wagnar分级：</span>
                 </div>
                 <div class="line-block">
                   <el-radio-group 
-                    v-model="body"
+                    v-model="keithWagnarLevel"
                     size="small">
-                    <el-radio :label="1">正常</el-radio>
-                    <el-radio :label="2">Ⅰ视网膜动脉痉挛期</el-radio>
-                    <el-radio :label="3">Ⅱ视网膜病变期(出血、渗出)</el-radio>
-                    <el-radio :label="4">Ⅲ视神经视网膜病变期(视乳头水肿)</el-radio>
-                    <el-radio :label="5">Ⅳ失明</el-radio>
+                    <el-radio :label="6">正常</el-radio>
+                    <el-radio :label="1">Ⅰ视网膜动脉痉挛期</el-radio>
+                    <el-radio :label="2">Ⅱ级视网膜动脉硬化期</el-radio>
+                    <el-radio :label="3">Ⅲ视网膜病变期(出血、渗出)</el-radio>
+                    <el-radio :label="4">Ⅳ视神经视网膜病变期(视乳头水肿)</el-radio>
+                    <el-radio :label="5">Ⅴ失明</el-radio>
                   </el-radio-group>
                 </div>
             </div>
@@ -677,10 +809,15 @@
           <div>
             <div>
               <span>检查单：</span>
-              <button class="check-btn">
+              <a :class="['a-upload',fundusUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('fundusUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>眼底检查(高分辨率眼底成像系统)</span>
+              </a>
+              <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 眼底检查(高分辨率眼底成像系统)
-              </button>
+              </button> -->
             </div>
           </div>
         </el-card>
@@ -688,13 +825,16 @@
 
     </el-form>
     <div class="submit-btn-wrap">
-      <button class="submit-btn">提交</button>
+      <button class="submit-btn" @click.prevent="submit">提交</button>
     </div>
   </div>
 </template>
 
 <script>
 import numberinput from './number'
+import {uploadFileApi} from '@/api/components/editAdmin.js'
+import {submitLayerApi} from '@/api/components/Flup/Flup.js'
+import {mapState} from 'vuex'
 export default {
   name: 'dangerLayer',
   components: {
@@ -702,8 +842,412 @@ export default {
   },
   data () {
     return {
-      value: null
+      value: null,
+      // body: {
+      //   birthday: null,
+      //   height: null,
+      //   weight: null,
+      //   bust: null,
+      //   sex: null,
+      //   smoke: null,
+      //   bloodhistroy: null
+      // },
+      realName: null,
+      sex: null,
+      birthDate: null,
+      bloodPressureSickStart: null,  // 患病开始时间
+      systolicMaxHistory: null,  // 收缩压
+      diastolicMaxHistory: null,  // 舒张压 历史最高
+      height: null,  // 身高
+      weight: null,  // 体重
+      waistWai: null,  // 腰围
+      smoking: null,  // 抽烟情况 1：是、2：否、3：已戒烟
+      drinking: null,  // 饮酒情况 1：从不、2：偶尔、3：经常、4：每天
+      cholesterolTotal: null,  // 总的胆固醇
+      highProteinCholesterol: null,  // 高密度脂蛋白胆固醇
+      lowProteinCholesterol: null,  // 低密度脂蛋白胆固醇
+      bloodFatUrls: null,  // 血生化-血脂 检查单
+      hcy: null,  // 血同型半胱氨酸
+      hcyUrls: null,  // 同型半胱氨酸测定 检查单
+      heartVesselsFamilyHistory: null,  // 早发心血管病家族史 0-无 1-有
+      serumCreatinineType: null, // 血清肌酐
+      serumCreatinineUnit: null, // 血清肌酐单位 1-umol/L 2-mg/dl
+      // serumCreatinineUnit: null, // 血清肌酐单位 1-umol/L 2-mg/dl
+      egfr: null,  // 估算的肾小球滤过率<60(eGFR降低) 是-true 否-false
+      proteinUrineType: null,  // 蛋白尿值 1-小于30 2-30到300 3-大于300 单位：mg/24h
+      bloodCreatinineUrls: null,  // 血生化-血肌酐检查单
+      routineUrineUrls: null, // 尿常规 检查单
+      routineProteinUrls: null, // 尿蛋白 检查单
+      ecgType: null,  // 心电图指标类型 1- Sokolow-lyon>38mm 或 cornell>2440 mm.ms 2-正常
+      lvmlType: null,  // 超声心动图LVMI指标类型 1- 大于等于125 2-小于125 单位g/m2
+      heartExpandType: null,  // 心脏扩大 1- 左右心房、心室任一增大 2-无增大
+      heartDisease: null,  // 已确诊心脏基本 0-未知 1-心肌梗塞 2-心绞痛 3-冠状动脉血运重建史 4-慢性心力衰竭
+      heartFigureUrl: null,  // 心电图 检查单
+      heartUltrasonicUrl: null,  // 超声心电图（心脏彩超） 检查单
+      xChestUrl: null,  // X线胸片 检查单
+      heartMrlMraUrl: null,  // 心脏MRI磁共振血管造影（MRA） 检查单
+      ctaUrl: null,  // 计算机断层扫描血管造影（CTA） 检查单
+      heartWithUrl: null,  // 心脏同位素显像 检查单
+      movementUrl: null,  // 运动实验或冠状动脉造影 检查单
+      neckStocksSpeedType: null,  // 颈-股动脉脉搏波速度 1-大于等于12 2-小于12 单位m/s
+      ankleArmIndex: null, // 踝臂血压指数 1-小于0.9 2-大于等于0.9
+      imtType: null, // 颈动脉超声(IMT) 1->=0.9mm或动脉粥样板块 2-<0.9mm
+      outsideVesselsDisease: null, // 外周血管疾病 0-未知 1-主动脉夹层】 //2-【血管
+      neckSoundUrl: null, // 颈动脉超声 检查单
+      pulseSpeedUrl: null, // 脉搏波传导速度 检查单
+      ankleArmNumUrl: null, // 踝臂指数 检查单
+      otherVesselsUrl: null, // 其它血管检查项 检查单
+      brainDiseaseType: null, // 脑血管疾病 0-未知 1-脑出血 2-缺血性脑卒中 3-短暂性脑缺血发作
+      brainMriMraUrl: null, // 头颅MRI MRA 检查单
+      brainCtaUrl: null, // CTA 检查单
+      spiritStateUrl: null, // 精神状态量表 检查单
+      keithWagnarLevel: null, // Keith-Wagnar分级
+      fundusUrl: null, // 眼底检查（高分辨率眼底成像系统） 检查单
+      bloodSugarEmpty: null, // 空腹血糖 1-【小于6.1】 2-【6.1到6.9】3-【大于6.9】
+      bloodSugarAfterMealTwo: null, // 餐后两小时血糖 1-【小于7.8】 2-【7.8到11.0】3-【大于11.0
+      sugarBloodProtein: null, // 糖化血红蛋白 1-小于百分之6.5 2-大于等于百分之6.5
+      bloodSugarEmptyUrl: null, // 空腹血糖 检查单
+      bloodSugarAfterMealTwoUrl: null, // 餐后两小时血糖 检查单
+      sugarBloodProteinUrl: null, // 糖化血红蛋白HbA1c 检查单
+      inDoctoeIdentify: null, // 中医辨证
+      sysIllnessHistoryIdDisease: null, // 疾病史id集合
+      sysIllnessHistoryIdGenetic: null, // 家族遗传病史 id集合
+      userId: null, // 患者id
+      adminHospitalId: null, // 诊所id
+      result: {
+        disease: null,
+        dangerLevel: null,
+        organDamage: null, // 靶器官 信息
+        danger: null
+      },
+      showResult: false
     }
+  },
+  computed: {
+    ...mapState(['FlupInfo', 'adminInfo'])
+  },
+  methods: {
+    uploadFile: function (val, e) {
+      // uploadFileApi
+      // let vm = this
+      let file = e.target.files[0]
+      let formdata = new FormData()
+      formdata.append('files', file)
+      // image.src = window.URL.createObjectURL(files.item(dd))
+      this.$axios(uploadFileApi(formdata))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this[val] = res.data.data.saveFile
+          this.$message({
+            message: '上传成功',
+            type: 'success'
+          })
+        } else {
+          this.$message({
+            message: '上传失败',
+            type: 'waring'
+          })
+        }
+        return false
+      })
+    },
+    submit () {
+      let obj = {}
+      obj.userId = 12
+      obj.adminHospitalId = 2
+      if (this.realName !== null) {
+        obj.realName = this.realName
+      }
+      if (this.sex !== null) {
+        obj.sex = this.sex
+      }
+      if (this.birthDate !== null) {
+        obj.birthDate = this.birthDate
+      }
+      if (this.bloodPressureSickStart !== null) {
+        obj.bloodPressureSickStart = this.bloodPressureSickStart
+      }
+      if (this.systolicMaxHistory !== null) {
+        obj.systolicMaxHistory = this.systolicMaxHistory
+      }
+      if (this.diastolicMaxHistory !== null) {
+        obj.diastolicMaxHistory = this.diastolicMaxHistory
+      }
+      if (this.height !== null) {
+        obj.height = this.height
+      }
+      if (this.weight !== null) {
+        obj.weight = this.weight
+      }
+      if (this.waistWai !== null) {
+        obj.waistWai = this.waistWai
+      }
+      if (this.smoking !== null) {
+        obj.smoking = this.smoking
+      }
+      if (this.drinking !== null) {
+        obj.drinking = this.drinking
+      }
+      if (this.cholesterolTotal !== null) {
+        obj.cholesterolTotal = this.cholesterolTotal
+      }
+      if (this.highProteinCholesterol !== null) {
+        obj.highProteinCholesterol = this.highProteinCholesterol
+      }
+      if (this.lowProteinCholesterol !== null) {
+        obj.lowProteinCholesterol = this.lowProteinCholesterol
+      }
+      if (this.bloodFatUrls !== null) {
+        obj.bloodFatUrls = this.bloodFatUrls
+      }
+      if (this.hcy !== null) {
+        obj.hcy = this.hcy
+      }
+      if (this.hcyUrls !== null) {
+        obj.hcyUrls = this.hcyUrls
+      }
+      if (this.heartVesselsFamilyHistory !== null) {
+        obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
+      }
+      if (this.serumCreatinineType !== null) {
+        obj.serumCreatinineType = this.serumCreatinineType
+      }
+      if (this.serumCreatinineUnit !== null) {
+        obj.serumCreatinineUnit = this.serumCreatinineUnit
+      }
+      if (this.egfr !== null) {
+        obj.egfr = this.egfr
+      }
+      if (this.proteinUrineType !== null) {
+        obj.proteinUrineType = this.proteinUrineType
+      }
+      if (this.bloodCreatinineUrls !== null) {
+        obj.bloodCreatinineUrls = this.bloodCreatinineUrls
+      }
+      if (this.routineProteinUrls !== null) {
+        obj.routineProteinUrls = this.routineProteinUrls
+      }
+      if (this.lvmlType !== null) {
+        obj.lvmlType = this.lvmlType
+      }
+      if (this.heartExpandType !== null) {
+        obj.heartExpandType = this.heartExpandType
+      }
+      if (this.heartDisease !== null) {
+        obj.heartDisease = this.heartDisease
+      }
+      if (this.heartFigureUrl !== null) {
+        obj.heartFigureUrl = this.heartFigureUrl
+      }
+      if (this.heartUltrasonicUrl !== null) {
+        obj.heartUltrasonicUrl = this.heartUltrasonicUrl
+      }
+      if (this.xChestUrl !== null) {
+        obj.xChestUrl = this.xChestUrl
+      }
+      if (this.heartMrlMraUrl !== null) {
+        obj.heartMrlMraUrl = this.heartMrlMraUrl
+      }
+      if (this.ctaUrl !== null) {
+        obj.ctaUrl = this.ctaUrl
+      }
+      if (this.heartWithUrl !== null) {
+        obj.heartWithUrl = this.heartWithUrl
+      }
+      if (this.movementUrl !== null) {
+        obj.movementUrl = this.movementUrl
+      }
+      if (this.neckStocksSpeedType !== null) {
+        obj.neckStocksSpeedType = this.neckStocksSpeedType
+      }
+      if (this.ankleArmIndex !== null) {
+        obj.ankleArmIndex = this.ankleArmIndex
+      }
+      if (this.imtType !== null) {
+        obj.imtType = this.imtType
+      }
+      if (this.outsideVesselsDisease !== null) {
+        obj.outsideVesselsDisease = this.outsideVesselsDisease
+      }
+      if (this.neckSoundUrl !== null) {
+        obj.neckSoundUrl = this.neckSoundUrl
+      }
+      if (this.pulseSpeedUrl !== null) {
+        obj.pulseSpeedUrl = this.pulseSpeedUrl
+      }
+      if (this.ankleArmNumUrl !== null) {
+        obj.ankleArmNumUrl = this.ankleArmNumUrl
+      }
+      if (this.otherVesselsUrl !== null) {
+        obj.otherVesselsUrl = this.otherVesselsUrl
+      }
+      if (this.brainDiseaseType !== null) {
+        obj.brainDiseaseType = this.brainDiseaseType
+      }
+      if (this.brainMriMraUrl !== null) {
+        obj.brainMriMraUrl = this.brainMriMraUrl
+      }
+      if (this.spiritStateUrl !== null) {
+        obj.spiritStateUrl = this.spiritStateUrl
+      }
+      if (this.keithWagnarLevel !== null) {
+        obj.keithWagnarLevel = this.keithWagnarLevel
+      }
+      if (this.fundusUrl !== null) {
+        obj.fundusUrl = this.fundusUrl
+      }
+      if (this.bloodSugarEmpty !== null) {
+        obj.bloodSugarEmpty = this.bloodSugarEmpty
+      }
+      if (this.bloodSugarAfterMealTwo !== null) {
+        obj.bloodSugarAfterMealTwo = this.bloodSugarAfterMealTwo
+      }
+      if (this.sugarBloodProtein !== null) {
+        obj.sugarBloodProtein = this.sugarBloodProtein
+      }
+      if (this.bloodSugarEmptyUrl !== null) {
+        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl
+      }
+      if (this.bloodSugarAfterMealTwoUrl !== null) {
+        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl
+      }
+      if (this.sugarBloodProteinUrl !== null) {
+        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl
+      }
+      if (this.inDoctoeIdentify !== null) {
+        obj.inDoctoeIdentify = this.inDoctoeIdentify
+      }
+      if (this.bloodPressureSickStart !== null) {
+        obj.bloodPressureSickStart = this.bloodPressureSickStart
+      }
+      if (this.sysIllnessHistoryIdDisease !== null) {
+        obj.sysIllnessHistoryIdDisease = this.sysIllnessHistoryIdDisease
+      }
+      if (this.sysIllnessHistoryIdGenetic !== null) {
+        obj.sysIllnessHistoryIdGenetic = this.sysIllnessHistoryIdGenetic
+      }
+
+      // obj.realName = this.realName
+      // obj.sex = this.sex
+      // obj.birthDate = this.birthDate
+      // obj.bloodPressureSickStart = this.bloodPressureSickStart
+      // obj.systolicMaxHistory = this.systolicMaxHistory
+      // obj.diastolicMaxHistory = this.diastolicMaxHistory
+      // obj.height = this.height
+      // obj.weight = this.weight
+      // obj.waistWai = this.waistWai
+      // obj.smoking = this.smoking
+      // obj.drinking = this.drinking
+      // obj.cholesterolTotal = this.cholesterolTotal
+      // obj.highProteinCholesterol = this.highProteinCholesterol
+      // obj.lowProteinCholesterol = this.lowProteinCholesterol
+      // obj.bloodFatUrls = this.bloodFatUrls
+      // obj.hcy = this.hcy
+      // obj.hcyUrls = this.hcyUrls
+      // obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
+      // obj.serumCreatinineType = this.serumCreatinineType
+      // obj.serumCreatinineUnit = this.serumCreatinineUnit
+      // obj.egfr = this.egfr
+      // obj.proteinUrineType = this.proteinUrineType
+      // obj.bloodCreatinineUrls = this.bloodCreatinineUrls
+      // obj.routineProteinUrls = this.routineProteinUrls
+      // obj.lvmlType = this.lvmlType
+      // obj.heartExpandType = this.heartExpandType
+      // obj.heartDisease = this.heartDisease
+      // obj.heartFigureUrl = this.heartFigureUrl
+      // obj.heartUltrasonicUrl = this.heartUltrasonicUrl
+      // obj.xChestUrl = this.xChestUrl
+      // obj.heartMrlMraUrl = this.heartMrlMraUrl
+      // obj.ctaUrl = this.ctaUrl
+      // obj.heartWithUrl = this.heartWithUrl
+      // obj.movementUrl = this.movementUrl
+      // obj.neckStocksSpeedType = this.neckStocksSpeedType
+      // obj.ankleArmIndex = this.ankleArmIndex
+      // obj.imtType = this.imtType
+      // obj.outsideVesselsDisease = this.outsideVesselsDisease
+      // obj.neckSoundUrl = this.neckSoundUrl
+      // obj.pulseSpeedUrl = this.pulseSpeedUrl
+      // obj.ankleArmNumUrl = this.ankleArmNumUrl
+      // obj.otherVesselsUrl = this.otherVesselsUrl
+      // obj.brainDiseaseType = this.brainDiseaseType
+      // obj.brainMriMraUrl = this.brainMriMraUrl
+      // obj.brainCtaUrl = this.brainCtaUrl
+      // obj.spiritStateUrl = this.spiritStateUrl
+      // obj.keithWagnarLevel = this.keithWagnarLevel
+      // obj.fundusUrl = this.fundusUrl
+      // obj.bloodSugarEmpty = this.bloodSugarEmpty
+      // obj.bloodSugarAfterMealTwo = this.bloodSugarAfterMealTwo
+      // obj.sugarBloodProtein = this.sugarBloodProtein
+      // obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl
+      // obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl
+      // obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl
+      // obj.inDoctoeIdentify = this.inDoctoeIdentify
+      // obj.bloodPressureSickStart = this.bloodPressureSickStart
+      // obj.sysIllnessHistoryIdDisease = this.sysIllnessHistoryIdDisease
+      // obj.sysIllnessHistoryIdGenetic = this.sysIllnessHistoryIdGenetic
+      this.$axios(submitLayerApi(obj))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.result = this._.merge(this.result, res.data.data)
+          this.showResult = true
+        } else {
+          this.$message({
+            message: res.data.msg,
+            type: 'waring'
+          })
+        }
+      })
+    },
+    computeDanger (val) {
+      let type = this._.toNumber(val)
+      let color = ''
+      switch (type) {
+        case 5:
+          color = '#33b2f2'// 正常
+          break
+        case 1:
+          color = '#59d8a1'// 低危
+          break
+        case 2:
+          color = '#efa13a'// -中危
+          break
+        case 3:
+          color = '#ff7d43' // 高危
+          break
+        case 4:
+          color = '#f96767' // 很高危
+          break
+        default:
+          color = '#666'
+      }
+      return color
+    },
+    danger (val) {
+      let text = ''
+      switch (val) {
+        case 5:
+          text = '正常'// 正常
+          break
+        case 1:
+          text = '低危'// 低危
+          break
+        case 2:
+          text = '中危'// -中危
+          break
+        case 3:
+          text = '高危' // 高危
+          break
+        case 4:
+          text = '很高危' // 很高危
+          break
+        default:
+          text = '未知'
+      }
+      return text
+    }
+  },
+  mounted () {
+    this.realName = this.FlupInfo.userName
   }
 }
 </script>
@@ -753,7 +1297,7 @@ export default {
 .danger-btn-text{
   color: #fff;
   display: inline-block;
-  background: #e87070;
+  // background: #e87070;
   width: 60px;
   text-align: center;
   padding:3px;
@@ -806,6 +1350,46 @@ export default {
   color: #fff;
   width: 200px;
   height: 30px;
+}
+.a-upload {
+  /* padding: 4px 10px; */
+  // height: 25px;
+  // line-height: 32px;
+  font-size: 14px;
+  position: relative;
+  cursor: pointer;
+  color: #666;
+  vertical-align: middle;
+  /* background: #fafafa; */
+  /* border: 1px solid #ddd; */
+  /* border-radius: 4px; */
+  overflow: hidden;
+  display: inline-block;
+  *display: inline;
+  *zoom: 1
+}
+
+.a-upload  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    /* color: #444; */
+    /* background: #eee; */
+    /* border-color: #ccc; */
+    text-decoration: none
+}
+.unapload{
+  color:#666;
+}
+.hasapload{
+  color:#1991fc;
 }
 </style>
 

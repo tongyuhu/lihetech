@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { SET_ADMIN_INFO, SET_SICK_CARD, SET_CURRENT_SICK_DATA } from './mutationstypes'
+import { SET_ADMIN_INFO, SET_SICK_CARD, SET_CURRENT_SICK_DATA, SET_FLUP_INFO } from './mutationstypes'
 import _ from 'lodash'
 import createPersistedState from 'vuex-persistedstate'
 import axios from '@/api/axios'
@@ -14,6 +14,14 @@ Vue.use(Vuex)
 // return publicStatic.onlineStatic + '/static/user.png'
 export const store = new Vuex.Store({
   state: {
+    FlupInfo: {
+      userHealthDiaryId: null,
+      userId: null,
+      adminIdMainDoctor: null,
+      userFollowUpId: null,
+      isFollowUp: null,
+      userName: null
+    },
     adminInfo: {},
     // 病历卡id
     userCasesCardId: null,
@@ -107,11 +115,16 @@ export const store = new Vuex.Store({
     [SET_CURRENT_SICK_DATA] (state, obj) {
       state.currentSickData = obj
     },
+    [SET_FLUP_INFO] (state, obj) {
+      state.FlupInfo = _.merge(state.FlupInfo, obj)
+      // console.log('store.',state.currentSickData)
+    },
+
     setuserCasesCardId (state, id) {
       state.userCasesCardId = id
     },
     setuserMakeOrderDoctorId (state, id) {
-      state.userMakeOrderDoctorId = id
+      state.FlupInfo = id
     },
     // 打开聊天窗口
     openChatWindow (state) {
@@ -344,7 +357,8 @@ export const store = new Vuex.Store({
       'userMakeOrderDoctorId',
       'showSickCard',
       'currentSickData',
-      'rongUserId'
+      'rongUserId',
+      'FlupInfo'
     ]
   })]
 })

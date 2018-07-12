@@ -9,7 +9,7 @@
         </div>
       </div>
     <!-- </div> -->
-    <input type="text" v-model="currentValue" @change="handleChange" class="feng-input" :style="{'padding-left':leftOffset+'px','padding-right':rightOffset+'px','height':height+'px'}">
+    <input type="text" :value="currentValue" @change="handleChange" class="feng-input" :style="{'padding-left':leftOffset+'px','padding-right':rightOffset+'px','height':height+'px'}">
     <div class="feng-input-h feng-flex">
       <div>
         <slot name="right">
@@ -21,7 +21,7 @@
 </template>
 <script>
 const isValueNumber = function (value) {
-  return (/(^-?[0-9]+\.{1}\d+$)|(^_?[1-9][0-9]*$)|(^-?0{1}$)/).test(value)
+  return (/(^-?[0-9]+\.{1}\d+$)|(^-?[1-9][0-9]*$)|(^-?0{1}$)/).test(value)
 }
 export default {
   name: 'myinput',
@@ -71,16 +71,23 @@ export default {
       this.currentValue = val
     },
     handleChange: function (event) {
+      let vm = this
       let val = event.target.value.trim()
-      if (this.number) {
+      if (vm.number) {
         if (isValueNumber(val)) {
-          val = Number(val)
-          this.currentValue = val
+          let value = Number(val)
+          vm.currentValue = value
+          // console.log('aaaaanumber', this.currentValue)
         } else {
-          event.target.value = null
+          if (val === '') {
+            event.target.value = null
+            vm.currentValue = null
+          } else {
+            event.target.value = vm.currentValue
+          }
         }
       } else {
-        this.currentValue = val
+        vm.currentValue = val
       }
       // isValueNumber(val)
     }

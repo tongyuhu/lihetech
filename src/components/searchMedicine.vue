@@ -55,7 +55,8 @@ export default {
         }
       ],
       medicineList: [],
-      searchMedicine: ''
+      searchMedicine: '',
+      sickType: null
     }
   },
   methods: {
@@ -145,6 +146,7 @@ export default {
                 obj.drugSpec = item.drugSpec
                 obj.id = item.id
                 obj.medicineId = item.medicineId
+                obj.medicineType = this.sickType
                 // obj.makeEnterprise = item.makeEnterprise
                 // obj.medicineImgUrl = process.env.IMG_URL + item.medicineImgUrl
                 arr.push(obj)

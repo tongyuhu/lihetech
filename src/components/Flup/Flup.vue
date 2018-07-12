@@ -35,7 +35,10 @@
                     label-class-name="tableTitle"
                     width="200">
                     <template slot-scope="scope">
+                      <span :style="{'color':computeDanger(scope.row.dangerLevel)}">
                         {{layer(scope.row.dangerLevel)}}
+                      </span>
+                        <!-- {{layer(scope.row.dangerLevel)}} -->
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -61,7 +64,7 @@
                     label=""
                     width="150">
                     <template slot-scope="scope">
-                        <el-button size="mini" type="primary" @click="flupHandler(scope.row)"
+                        <el-button size="mini" type="primary" @click="flupHandler(scope.row,false)"
                         :style="{'width':'72px','color':'#fff'}">随访</el-button>
                         <button class="telephone-btn" @click="call(scope.row)">
                           <i class="iconfont icon-xiaoxi icon-msg-color"></i>
@@ -104,7 +107,7 @@
                     width="100"
                     align="left">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="flupHandler(scope.row,'useUserId')"
+                      <el-button type="text" @click="flupHandler(scope.row,true)"
                       :style="{'color':'#1991fc'}">
                         {{scope.row.realName}}
                       </el-button>
@@ -116,7 +119,9 @@
                     label-class-name="tableTitle"
                     width="200">
                     <template slot-scope="scope">
+                      <span :style="{'color':computeDanger(scope.row.dangerLevel)}">
                         {{layer(scope.row.dangerLevel)}}
+                      </span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -170,7 +175,7 @@
 
 <script>
 import {FlupListApi} from '@/api/components/Flup/Flup.js'
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 export default {
   name: 'Flup',
   data () {
@@ -184,24 +189,24 @@ export default {
       finishedPageSize: 10,
       finishedTotal: 20,
       unfinishedFlupData: [
-        {
-          realName: 'wa',
-          dangerLayer: 1,
-          lately: 111,
-          doctor: '444',
-          FlupDate: '2104-82-99'
+        // {
+        //   realName: 'wa',
+        //   dangerLayer: 1,
+        //   lately: 111,
+        //   doctor: '444',
+        //   FlupDate: '2104-82-99'
 
-        }
+        // }
       ],
       finishedFlupData: [
-        {
-          realName: 'wa',
-          dangerLayer: 1,
-          lately: 111,
-          doctor: '444',
-          FlupDate: '2104-82-99'
+        // {
+        //   realName: 'wa',
+        //   dangerLayer: 1,
+        //   lately: 111,
+        //   doctor: '444',
+        //   FlupDate: '2104-82-99'
 
-        }
+        // }
       ]
     }
   },
@@ -209,7 +214,20 @@ export default {
     ...mapState(['adminInfo'])
   },
   methods: {
-    flupHandler (val) {
+    ...mapMutations(['SET_FLUP_INFO']),
+    flupHandler (val, flup) {
+      let obj = {}
+      if (flup) {
+        obj.isFollowUp = true
+      } else {
+        obj.isFollowUp = false
+      }
+      obj.adminIdMainDoctor = val.adminIdMainDoctor
+      obj.userId = val.userId
+      obj.userFollowUpId = val.id
+      obj.userName = val.realName
+      this.SET_FLUP_INFO(obj)
+      console.log('随访', val, obj)
       this.$router.push({
         name: 'FlupCard'
       })
@@ -258,16 +276,49 @@ export default {
       let layer = ''
       switch (val) {
         case 1:
-          layer = '一级'
+          layer = '低危'
           break
         case 2:
-          layer = '二级'
+          layer = '中危'
           break
         case 3:
-          layer = '三级'
+          layer = '高危'
+          break
+        case 4:
+          layer = '很高危'
+          break
+        case 5:
+          layer = '正常'
+          break
+        case 0:
+          layer = '未知'
           break
       }
       return layer
+    },
+    computeDanger (val) {
+      let type = this._.toNumber(val)
+      let color = ''
+      switch (type) {
+        case 5:
+          color = '#33b2f2'// 正常
+          break
+        case 1:
+          color = '#59d8a1'// 低危
+          break
+        case 2:
+          color = '#efa13a'// -中危
+          break
+        case 3:
+          color = '#ff7d43' // 高危
+          break
+        case 4:
+          color = '#f96767' // 很高危
+          break
+        default:
+          color = '#666'
+      }
+      return color
     }
   },
   mounted () {

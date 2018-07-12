@@ -260,8 +260,434 @@ let superAdminRouters = [
   // }
 ]
 let hospitalRouters = superAdminRouters
-let doctorRouters = superAdminRouters
-let nurseRouters = superAdminRouters
+let doctorRouters = [
+  {
+    path: '/',
+    name: 'Home',
+    meta: {
+      name: '主页',
+      requireAuth: true,
+      role: ['admin', 'doctor', 'hospital', 'nurse']
+    },
+    redirect: '/Hospital'
+  },
+  {
+    path: '/Hospital/',
+    name: 'hospital',
+    component: hospital,
+    redirect: 'hospital/order',
+    meta: {
+      requireAuth: true,
+      name: '诊所主页',
+      role: ['admin', 'doctor', 'hospital', 'nurse']
+    },
+    children: [
+      {
+        path: 'booldheigh',
+        name: 'booldheigh',
+        component: booldheigh,
+        meta: {
+          requireAuth: true,
+          name: '高血压',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'Flup',
+        name: 'Flup',
+        component: Flup,
+        meta: {
+          requireAuth: true,
+          name: '随访',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'FlupCard',
+        name: 'FlupCard',
+        component: FlupCard,
+        meta: {
+          requireAuth: true,
+          name: '随访',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'dangerLayer',
+        name: 'dangerLayer',
+        component: dangerLayer,
+        meta: {
+          requireAuth: true,
+          name: '分层评估',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'sugerheigh',
+        name: 'sugerheigh',
+        component: sugerheigh,
+        meta: {
+          requireAuth: true,
+
+          name: '糖尿病',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'other',
+        name: 'other',
+        component: other,
+        meta: {
+          requireAuth: true,
+          name: '其他',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'order',
+        name: 'order',
+        component: order,
+        meta: {
+          requireAuth: true,
+          name: '预约管理',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        },
+        redirect: {name: 'orderSick'},
+        children: [
+          {
+            path: 'orderSick',
+            name: 'orderSick',
+            components: {
+              default: orderSick,
+              setting: orderSetting
+            },
+            meta: {
+              requireAuth: true,
+              name: '预约',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          },
+          {
+            path: 'orderSetting',
+            name: 'orderSetting',
+            components: {
+              default: orderSetting,
+              setting: orderSick
+            },
+            meta: {
+              requireAuth: true,
+              name: '预约',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          }
+        ]
+      },
+      {
+        path: 'cases',
+        name: 'cases',
+        component: cases,
+        meta: {
+          requireAuth: true,
+          name: '病例库',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'personManage',
+        name: 'personManage',
+        component: personManage,
+        meta: {
+          requireAuth: true,
+          name: '人员管理',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        },
+        redirect: { name: 'doctorManage' },
+        children: [
+          {
+            path: 'addDoctor',
+            name: 'addDoctor',
+            component: addDoctor,
+            meta: {
+              requireAuth: true,
+              name: '添加医生',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          },
+          {
+            path: 'doctorManage',
+            name: 'doctorManage',
+            component: doctorManage,
+            meta: {
+              requireAuth: true,
+              name: '医生管理',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          },
+          {
+            path: 'sickManage',
+            name: 'sickManage',
+            component: sickManage,
+            meta: {
+              requireAuth: true,
+              name: '患者管理',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          }
+        ]
+      },
+      {
+        path: 'bloodheighSick/:sickID',
+        name: 'bloodheighSick',
+        component: bloodheighSick,
+        meta: {
+          requireAuth: true,
+          name: '高血压病人',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'sugerheighSick',
+        name: 'sugerheighSick',
+        component: sugerheighSick,
+        meta: {
+          requireAuth: true,
+          name: '糖尿病病人',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'healthForm',
+        name: 'healthForm',
+        component: healthForm,
+        meta: {
+          requireAuth: true,
+          name: '病历',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'accountSetting',
+        name: 'accountSetting',
+        component: accountSetting,
+        meta: {
+          requireAuth: true,
+          name: '账户设置',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'editAdmin',
+        name: 'editAdmin',
+        component: editAdmin,
+        meta: {
+          requireAuth: true,
+          name: '管理员资料编辑',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      }
+
+    ]
+  }
+  // {
+  //   path: '*',
+  //   meta: {
+  //     name: '主页',
+  //     requireAuth: true,
+  //     role: ['admin', 'doctor','hospital','nurse']
+  //   },
+  //   redirect: '/'
+  // }
+]
+let nurseRouters = [
+  {
+    path: '/',
+    name: 'Home',
+    meta: {
+      name: '主页',
+      requireAuth: true,
+      role: ['admin', 'doctor', 'hospital', 'nurse']
+    },
+    redirect: '/Hospital'
+  },
+  {
+    path: '/Hospital/',
+    name: 'hospital',
+    component: hospital,
+    redirect: 'hospital/Flup',
+    meta: {
+      requireAuth: true,
+      name: '诊所主页',
+      role: ['admin', 'doctor', 'hospital', 'nurse']
+    },
+    children: [
+      {
+        path: 'booldheigh',
+        name: 'booldheigh',
+        component: booldheigh,
+        meta: {
+          requireAuth: true,
+          name: '高血压',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'Flup',
+        name: 'Flup',
+        component: Flup,
+        meta: {
+          requireAuth: true,
+          name: '随访',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'FlupCard',
+        name: 'FlupCard',
+        component: FlupCard,
+        meta: {
+          requireAuth: true,
+          name: '随访',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'dangerLayer',
+        name: 'dangerLayer',
+        component: dangerLayer,
+        meta: {
+          requireAuth: true,
+          name: '分层评估',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'sugerheigh',
+        name: 'sugerheigh',
+        component: sugerheigh,
+        meta: {
+          requireAuth: true,
+
+          name: '糖尿病',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'other',
+        name: 'other',
+        component: other,
+        meta: {
+          requireAuth: true,
+          name: '其他',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'cases',
+        name: 'cases',
+        component: cases,
+        meta: {
+          requireAuth: true,
+          name: '病例库',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'personManage',
+        name: 'personManage',
+        component: personManage,
+        meta: {
+          requireAuth: true,
+          name: '人员管理',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        },
+        redirect: { name: 'doctorManage' },
+        children: [
+          {
+            path: 'addDoctor',
+            name: 'addDoctor',
+            component: addDoctor,
+            meta: {
+              requireAuth: true,
+              name: '添加医生',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          },
+          {
+            path: 'doctorManage',
+            name: 'doctorManage',
+            component: doctorManage,
+            meta: {
+              requireAuth: true,
+              name: '医生管理',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          },
+          {
+            path: 'sickManage',
+            name: 'sickManage',
+            component: sickManage,
+            meta: {
+              requireAuth: true,
+              name: '患者管理',
+              role: ['admin', 'doctor', 'hospital', 'nurse']
+            }
+          }
+        ]
+      },
+      {
+        path: 'bloodheighSick/:sickID',
+        name: 'bloodheighSick',
+        component: bloodheighSick,
+        meta: {
+          requireAuth: true,
+          name: '高血压病人',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'sugerheighSick',
+        name: 'sugerheighSick',
+        component: sugerheighSick,
+        meta: {
+          requireAuth: true,
+          name: '糖尿病病人',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'healthForm',
+        name: 'healthForm',
+        component: healthForm,
+        meta: {
+          requireAuth: true,
+          name: '病历',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'accountSetting',
+        name: 'accountSetting',
+        component: accountSetting,
+        meta: {
+          requireAuth: true,
+          name: '账户设置',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'editAdmin',
+        name: 'editAdmin',
+        component: editAdmin,
+        meta: {
+          requireAuth: true,
+          name: '管理员资料编辑',
+          role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      }
+
+    ]
+  }
+]
 
 let routerarr = [
   {
