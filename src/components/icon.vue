@@ -13,6 +13,33 @@ export default {
 </script>
 
 <style scoped>
+.menu-close{
+  position: relative;
+}
+.menu-close::before{
+  top: 0px;
+  right: -20px;;
+  position: absolute;
+  content: '';
+  width: 9px;;
+  height: 17px;
+  background: url('~icon/hospital-icon-07.png') no-repeat;
+}
+.menu-open{
+  /* font-size: 0; */
+  position: relative;
+  display: inline-block;
+}
+.menu-open::before{
+  top: -10px;
+  right: -20px;;
+  display: inline-block;
+  position: absolute;
+  content: '';
+  width: 17px;;
+  height: 9px;
+  background: url('~icon/hospital-icon-08.png') no-repeat;
+}
 /* 高血压 */
   .heigh-blood-close{
     position: relative;
@@ -177,7 +204,7 @@ export default {
     height: 28px;
     background: url('~icon/hospital-icon-06.png') no-repeat;
   }
-  /* 预约管理 */
+/* 预约管理 */
   .order-close{
     /* font-size: 0; */
     position: relative;
@@ -189,7 +216,7 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('~icon/hospital-icon-102.png') no-repeat;
+    background: url('~icon/hospital-icon2-25.png') no-repeat;
   }
   .order-open{
     /* font-size: 0; */
@@ -202,37 +229,11 @@ export default {
     content: '';
     width: 23px;;
     height: 28px;
-    background: url('~icon/hospital-icon-101.png') no-repeat;
+    background: url('~icon/hospital-icon2-26.png') no-repeat;
   }
 
-  .menu-close{
-    position: relative;
-  }
-  .menu-close::before{
-    top: 0px;
-    right: -20px;;
-    position: absolute;
-    content: '';
-    width: 9px;;
-    height: 17px;
-    background: url('~icon/hospital-icon-07.png') no-repeat;
-  }
-  .menu-open{
-    /* font-size: 0; */
-    position: relative;
-    display: inline-block;
-  }
-  .menu-open::before{
-    top: -10px;
-    right: -20px;;
-    display: inline-block;
-    position: absolute;
-    content: '';
-    width: 17px;;
-    height: 9px;
-    background: url('~icon/hospital-icon-08.png') no-repeat;
-  }
-  /* 随访 */
+  
+/* 随访 */
   .flup-close{
     /* font-size: 0; */
     position: relative;
@@ -258,6 +259,33 @@ export default {
     width: 23px;;
     height: 28px;
     background: url('~icon/hospital-icon2-30.png') no-repeat;
+  }
+/* 问诊 */
+  .diagonse-close{
+    /* font-size: 0; */
+    position: relative;
+  }
+  .diagonse-close::before{
+    top: 0px;
+    left: -36px;
+    position: absolute;
+    content: '';
+    width: 23px;;
+    height: 28px;
+    background: url('~icon/hospital-icon2-27.png') no-repeat;
+  }
+  .diagonse-open{
+    /* font-size: 0; */
+    position: relative;
+  }
+  .diagonse-open::before{
+    top: 0px;
+    left: -36px;
+    position: absolute;
+    content: '';
+    width: 23px;;
+    height: 28px;
+    background: url('~icon/hospital-icon2-28.png') no-repeat;
   }
 
 </style>

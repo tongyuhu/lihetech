@@ -41,35 +41,63 @@ export default {
     return {
       bloodHeighMenu: {
         iconName: 'heigh-blood',
-        title: '高血压',
+        title: '高血压管理',
         routerName: 'booldheigh',
-        open: false,
-        child: [
-          {
-            id: 'bloodtotal',
-            title: '总体趋势'
-          },
-          {
-            id: 'bloodnew',
-            title: '最新问诊'
-          },
-          {
-            id: 'bloodbad',
-            title: '严重患者'
-          },
-          {
-            id: 'bloodnolisten',
-            title: '未遵医嘱'
-          }
-            // {
-            //   id: 'bloodunperfect',
-            //   title: '建档不完善'
-            // },
-            // {
-            //   id: 'bloodcases',
-            //   title: '患者列表'
-            // }
-        ]
+        open: false
+        // child: [
+        //   {
+        //     id: 'threeLevel',
+        //     title: '三级管理'
+        //   },
+        //   {
+        //     id: 'twoLevel',
+        //     title: '二级管理'
+        //   },
+        //   {
+        //     id: 'oneLevel',
+        //     title: '一级管理'
+        //   },
+        //   {
+        //     id: 'easySick',
+        //     title: '易患人群'
+        //   },
+        //   {
+        //     id: 'noLevel',
+        //     title: '未分层'
+        //   }
+        // ]
+      },
+      diagonseMenu: {
+        iconName: 'diagonse',
+        title: '问诊',
+        routerName: 'diagonse',
+        open: false
+        // child: [
+        //   {
+        //     id: 'bloodtotal',
+        //     title: '总体趋势'
+        //   },
+        //   {
+        //     id: 'bloodnew',
+        //     title: '最新问诊'
+        //   },
+        //   {
+        //     id: 'bloodbad',
+        //     title: '严重患者'
+        //   },
+        //   {
+        //     id: 'bloodnolisten',
+        //     title: '未遵医嘱'
+        //   }
+        //     // {
+        //     //   id: 'bloodunperfect',
+        //     //   title: '建档不完善'
+        //     // },
+        //     // {
+        //     //   id: 'bloodcases',
+        //     //   title: '患者列表'
+        //     // }
+        // ]
       },
       orderMenu: {
           // id: 4,
@@ -310,6 +338,7 @@ export default {
       if (this.adminInfo.adminType === 3) {
         this.orderMenu.open = true
         this.menu.push(this.orderMenu)
+        this.menu.push(this.diagonseMenu)
         this.menu.push(this.FlupMenu)
         this.menu.push(this.bloodHeighMenu)
         this.menu.push(this.personManage)
@@ -317,6 +346,7 @@ export default {
       if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
         this.bloodHeighMenu.open = true
         this.menu.push(this.bloodHeighMenu)
+        // this.menu.push(this.diagonseMenu)
         this.menu.push(this.personManage)
         this.menu.push(this.FlupMenu)
       }

@@ -226,6 +226,7 @@ export default {
       obj.userId = val.userId
       obj.userFollowUpId = val.id
       obj.userName = val.realName
+      obj.userHealthDiaryId = val.userHealthDiaryId
       this.SET_FLUP_INFO(obj)
       console.log('随访', val, obj)
       this.$router.push({

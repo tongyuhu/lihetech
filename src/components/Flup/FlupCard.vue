@@ -6,8 +6,8 @@
           <div>
 
             <span>{{info.name}}</span>
-            <el-button :disabled="upBtn"  type="primary" size="mini" @click="FlupUp">上次随访</el-button>
-            <el-button :disabled="nextBtn"  type="primary" size="mini" @click="FlupDn">下次随访</el-button>
+            <el-button :disabled="upBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupUp">上次随访</el-button>
+            <el-button :disabled="nextBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupDn">下次随访</el-button>
           </div>
           <div class="head-title-right">
             <el-button type="primary" size="mini">语音</el-button>
@@ -16,6 +16,7 @@
         <el-form
         label-width="45px" 
         label-position="left">
+          <span class="iconfont icon-bixutian must"></span>
           <div class="inline-block flup-methods-4 right-gap">
             <el-form-item label="随访方式" label-width="68px">
               <el-select v-model="flupMethods" size="small" placeholder="请选择" style="{'width':'60px'}">
@@ -42,6 +43,7 @@
               </el-select>
             </el-form-item>
           </div>
+            <span class="iconfont icon-bixutian must"></span>
           <div class="inline-block right-gap">
             <el-form-item label="随访时间" label-width="68px">
               <el-date-picker
@@ -131,6 +133,7 @@
               <div class="radio-box flex-between">
                 <div class="flex">
                   <div class="check-box-title">
+                    <span class="iconfont icon-bixutian must"></span>
                   危险分层：
                   </div>
                   <div>
@@ -506,6 +509,7 @@
     <div class="bottom-gap">
       <el-card>
         <div class="card-head-title">
+          <span class="iconfont icon-bixutian must"></span>
           <span>近期用药情况</span>
           <button class="add-btn" @click="addMedicine">添加</button>
         </div>
@@ -664,7 +668,7 @@
       </el-card>
     </div>
     <div class="submit-btn-wrap" v-if="submitBtn">
-      <button class="submit-btn">提交</button>
+      <button class="submit-btn" @click="submitData">提交</button>
     </div>
 
     <el-dialog
@@ -1006,38 +1010,38 @@ export default {
             }
           }
         }
-        if (!this.FlupInfo.isFollowUp) {
-          if (val.pageNum === 0) {
-            this.nextBtn = true
-            this.upBtn = false
-            this.submitBtn = true
-          } else {
-            this.submitBtn = false
-            if (val.pageNum === val.pages) {
-              this.nextBtn = false
-              this.upBtn = true
-            } else {
-              this.nextBtn = false
-              this.upBtn = false
-            }
-          }
-          // if (val.pages === 1) {
-            // this.nextBtn = true
-            // this.upBtn = true
-          // } else if (val.pages === 0) {
-          //   this.nextBtn = true
-          //   this.upBtn = true
-          // } else {
-            // if (val.pageNum === val.pages) {
-            //   this.nextBtn = true
-            //   this.upBtn = false
-            // }
-            // if (val.pageNum === 0) {
-            //   this.upBtn = false
-            //   this.nextBtn = true
-            // }
-          // }
-        }
+        // if (!this.FlupInfo.isFollowUp) {
+        //   if (val.pageNum === 0) {
+        //     this.nextBtn = true
+        //     this.upBtn = false
+        //     this.submitBtn = true
+        //   } else {
+        //     this.submitBtn = false
+        //     if (val.pageNum === val.pages) {
+        //       this.nextBtn = false
+        //       this.upBtn = true
+        //     } else {
+        //       this.nextBtn = false
+        //       this.upBtn = false
+        //     }
+        //   }
+        //   // if (val.pages === 1) {
+        //     // this.nextBtn = true
+        //     // this.upBtn = true
+        //   // } else if (val.pages === 0) {
+        //   //   this.nextBtn = true
+        //   //   this.upBtn = true
+        //   // } else {
+        //     // if (val.pageNum === val.pages) {
+        //     //   this.nextBtn = true
+        //     //   this.upBtn = false
+        //     // }
+        //     // if (val.pageNum === 0) {
+        //     //   this.upBtn = false
+        //     //   this.nextBtn = true
+        //     // }
+        //   // }
+        // }
       },
       deep: true,
       immediate: true
@@ -1078,6 +1082,34 @@ export default {
     medicineunit (val) {
       let unit = ''
       switch (val) {
+        case 'pian': {
+          unit = '片'
+          break
+        }
+        case 'li': {
+          unit = '粒'
+          break
+        }
+        case 'ke': {
+          unit = '颗'
+          break
+        }
+        case 'zhi': {
+          unit = '支'
+          break
+        }
+        case 'mouse': {
+          unit = '口服'
+          break
+        }
+        case 'in': {
+          unit = '注射'
+          break
+        }
+        case 'out': {
+          unit = '外服'
+          break
+        }
         case '片': {
           unit = 'pian'
           break
@@ -1306,14 +1338,19 @@ export default {
       ]
     },
     submitData () {
-      // let vm = this
       let submitObj = {}
-      submitObj.dangerLevel = this.body.dangerLayer
-      submitObj.followUpDay = this.body.flupTime
+      submitObj.isFollowUp = false
+      submitObj.userHealthDiaryId = this.FlupInfo.userHealthDiaryId
+      submitObj.userId = this.FlupInfo.userId
+      submitObj.adminIdMainDoctor = this.FlupInfo.adminIdMainDoctor
+      submitObj.userFollowUpId = this.FlupInfo.userFollowUpId
+      // submitObj.dangerLevel = this.body.dangerLayer
+      submitObj.followUpDay = this.flupTime
       // submitObj.userHealthDiaryId = this.body.flupTime
       // submitObj.userId = this.body.flupTime
       // submitObj.adminIdMainDoctor = this.body.flupTime
       // submitObj.userFollowUpId = this.body.flupTime
+      submitObj.dangerLevel = this.body.dangerLayer
       submitObj.followUpWay = this.flupMethods
       submitObj.presentSymptoms = this.life.symptom.join(',')
       submitObj.presentSymptoms = this.flupMethods
@@ -1339,29 +1376,32 @@ export default {
       submitObj.isOntimeMedicat = this.life.medicine
 
       let medicine = []
+      console.log('用药', this.doctorMedicine)
       this.doctorMedicine.forEach(item => {
         let obj = {}
-        obj.medicineType = 1
+        item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
+        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
+        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes)
+        obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
+        obj.usageOff = this.medicineunit(item.usemethod)
+        obj.medicineType = item.medicineType
         obj.medicineName = item.name
         obj.medicineId = item.id
-        obj.unit = this.medicineUnit(item.singleuseUnit)
+        obj.unit = this.medicineunit(item.singleuseUnit)
         obj.remark = item.tip
         if (this._.has(item, 'uselong')) {
         } else {
           item.uselong = 0
         }
-        obj.everyDosage = item.singleuse
-        obj.usageTimes = item.usetimes
-        obj.totalNumber = item.usetotal + '盒'
+        // obj.everyDosage = item.singleuse
+        // obj.usageTimes = item.usetimes
+        // obj.totalNumber = item.usetotal + '盒'
 
-        item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
-        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
-        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes)
-        obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
-        obj.usageOff = this.medicineUnit(item.usemethod)
         medicine.push(obj)
         // obj.totalNumber
       })
+      console.log('用药Submit', medicine)
+      console.log('Submit随访', submitObj)
       submitObj.userFollowUpMedicationJson = JSON.stringify(medicine)
       this.$axios(submitFlupApi(submitObj))
       .then(res => {
@@ -1389,29 +1429,31 @@ export default {
     },
     FlupDn () {
       // Object.assign(this.$data, this.$options.data())
-      if (!this.isFollowUp) {
-        if (this.page.pageNum > 0) {
-          this.page.pageNum --
-          this.getFlupCardData()
-        } else {
-          this.page.pageNum = 0
-        }
+      // if (!this.isFollowUp) {
+      //   if (this.page.pageNum > 0) {
+      //     this.page.pageNum --
+      //     this.getFlupCardData()
+      //   } else {
+      //     this.page.pageNum = 0
+      //   }
+      // } else {
+      if (this.page.pageNum > 1) {
+        this.page.pageNum --
+        this.getFlupCardData()
       } else {
-        if (this.page.pageNum > 1) {
-          this.page.pageNum --
-          this.getFlupCardData()
-        } else {
-          this.page.pageNum = 1
-        }
+        this.page.pageNum = 1
       }
+      // }
     }
   },
   mounted () {
     this.info.name = this.FlupInfo.userName
+    this.getFlupCardData()
     if (this.FlupInfo.isFollowUp) {
-      this.getFlupCardData()
+      this.submitBtn = false
     } else {
-      this.page.pageNum = 0
+      this.submitBtn = true
+      // this.page.pageNum = 0
     }
   }
 }
@@ -1593,6 +1635,10 @@ export default {
     font-size: 14px;
     height: 28px;
     line-height: 28px;
+  }
+  .must{
+    color: #f96767;
+    // font-size: 18px;
   }
   // .my-input{
   //   border:none;

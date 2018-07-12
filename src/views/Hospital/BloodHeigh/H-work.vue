@@ -2,7 +2,7 @@
   <div class='work'>
     <!-- 工作台 start -->
     <div class="workhead">
-      <span>工作台</span>
+      <span>当前问诊</span>
         <el-button type="text" @click="msgTipBtn"  class="work-msg">
           <!-- <i class="work-icon"></i> -->
           <!-- <el-badge :is-dot="showMsgTip">
@@ -11,15 +11,15 @@
           <!-- <i :class="{workMsgtip:showMsgTip}"></i> -->
         </el-button>
     </div>
-    <el-card :body-style="{padding: '0px'}">
+    <div>
     <!-- 工作台 end -->
 
       <!-- 患者最新问诊  start -->
       <div class="bottom-margin" id="bloodnew">
         <el-card :body-style="{ padding: '0px' }">
-          <div class="card-header">
+          <!-- <div class="card-header">
             <p class="title">患者最新问诊</p>
-          </div>
+          </div> -->
           <div class="table">
             <el-table 
             :data='newsickaskData'
@@ -78,290 +78,292 @@
         </el-card>
       </div>
       <!-- 患者最新问诊  end -->
+      <div v-if="false">
 
-      <!-- 严重患者 start -->
-      <div class="bottom-margin" id="bloodbad">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="card-header">
-            <!-- <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p> -->
-            <p class="title">严重患者</p>
-          </div>
-          <div class="table">
-            <el-table 
-            :data='badsickData'
-            style="width: 100%"
-            row-class-name="table-row"
-            v-loading="badSickTableLoading">
-                <el-table-column
-                    prop="realName"
-                    label="姓名"
-                    width="100"
-                    label-class-name="tableTitle">
-                    <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row)"
-                      :style="{'color':'#1991fc','padding':0}">
-                        {{scope.row.realName}}
-                      </el-button>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="bloodPressureType"
-                    label="患者类型"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="bastThan"
-                    label="严重比例"
-                    label-class-name="tableTitle">
-                    <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                                        
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="nowCount"
-                    label="今日严重次数"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="joinHospitalTime"
-                    label="加入时间"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="action"
-                    label=""
-                    width="275px"
-                    align="center">
-                    <template slot-scope="scope">
-                        <el-button 
-                        size="mini" 
-                        type="primary" 
-                        @click.native="isCare(scope.row,badsickData)" 
-                        :key="scope.row.id" 
-                        :style="{'width':'80px','color':'#fff'}"
-                        >
-                          <span v-if="scope.row.isDocusOn">取消关注</span>
-                          <span v-if="!scope.row.isDocusOn">关注</span>
-                        </el-button>
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','color':'#fff'}">诊断</el-button>
-
-                        <button class="telephone-btn" @click="call(scope.row)">
-                          <!-- <i class="telephone-btn-icon"></i> -->
-                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
-                        </button>
-                        <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
-                    </template>
-                </el-table-column>
-            </el-table>
-          </div>
-          <!-- <div>
-            <mpages :pages="20" @jumpPage="jumppage"></mpages>
-          </div> -->
-          <div class="page">
-            <el-pagination
-              class="el-pagination"
-              @size-change="badsickSizeChange"
-              @current-change="badsickCurrentChange"
-              :current-page.sync="badsickCurrentPage"
-              :page-size="badsickPageSize"
-              layout="total, prev, pager, next, jumper"
-              :total="badsickTotal"
-              prev-text="上一页"
-              next-text="下一页">
-            </el-pagination>
-          </div>
-        </el-card>
-      </div>
-      <!-- 严重患者结束 end -->
-
-      <!-- 未遵医嘱患者 start -->
-      <div id="bloodnolisten">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="card-header">
-            <p class="title">未遵医嘱患者</p>
-            <!-- <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p> -->
-          </div>
-          <div class="table">
-
-            <el-table 
-            :data='noListenDoctorData'
-            style="width: 100%"
-            row-class-name="table-row"
-            v-loading="noListenTableLoading">
-                <el-table-column
-                    prop="realName"
-                    label="姓名"
-                    width="100"
-                    label-class-name="tableTitle">
+        <!-- 严重患者 start -->
+        <div class="bottom-margin" id="bloodbad">
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+              <!-- <p class="title">严重患者{{badsickTotal ?'('+badsickTotal+')' :''}}</p> -->
+              <p class="title">严重患者</p>
+            </div>
+            <div class="table">
+              <el-table 
+              :data='badsickData'
+              style="width: 100%"
+              row-class-name="table-row"
+              v-loading="badSickTableLoading">
+                  <el-table-column
+                      prop="realName"
+                      label="姓名"
+                      width="100"
+                      label-class-name="tableTitle">
                       <template slot-scope="scope">
                         <el-button type="text" @click="diagnose(scope.row)"
                         :style="{'color':'#1991fc','padding':0}">
                           {{scope.row.realName}}
                         </el-button>
                       </template>
-                </el-table-column>
-                <el-table-column
-                    prop="bloodPressureType"
-                    label="患者类型"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="bastThan"
-                    label="未遵医嘱比例"
-                    label-class-name="tableTitle">
-                    <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                                        
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="notCount"
-                    label="未遵医嘱"
-                    label-class-name="tableTitle">
-                    <template slot-scope="scope">   
-                      <span> {{scope.row.notCount}}天（共{{scope.row.count+'天'}}）</span>                                        
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="joinHospitalTime"
-                    label="加入时间"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="action"
-                    label=""
-                    width="275px">
-                    <template slot-scope="scope">
-                        <el-button 
-                        size="mini" 
-                        type="primary" 
-                        @click.native="isCare(scope.row)" 
-                        :key="scope.row.id" 
-                        :style="{'width':'80px','color':'#fff'}"
-                        >
-                          <span v-if="scope.row.isDocusOn">取消关注</span>
-                          <span v-if="!scope.row.isDocusOn">关注</span>
-                        </el-button>
-                        <el-button size="mini" type="primary" 
-                        @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','color':'#fff'}">
-                        诊断
-                        </el-button>
-                        <button class="telephone-btn" @click="call(scope.row)">
-                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
-                          <!-- <i class="telephone-btn-icon"></i> -->
-                        </button>
-                    </template>
-                </el-table-column>
-            </el-table>
-          </div>
-          <div class="page">
-            <el-pagination
-              class="el-pagination"
-              @size-change="nolistenSizeChange"
-              @current-change="nolistenCurrentchange"
-              :current-page.sync="nolistenCurrentPage"
-              :page-size="nolistenPageSize"
-              layout="total, prev, pager, next, jumper"
-              :total="nolistenTotal"
-              prev-text="上一页"
-              next-text="下一页">
-            </el-pagination>
-          </div>
-          
-        </el-card>
-      </div>
-      <!-- 未遵医嘱患者 end -->
-
-      <!-- 建档不完整患者 start -->
-      <div id="bloodunperfect" v-if="false">
-        <el-card :body-style="{ padding: '0px' }">
-          <div class="card-header">
-            <p class="title">建档不完整患者</p>
-            <!-- <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p> -->
-          </div>
-          <div class="table">
-
-            <el-table 
-            :data='unperfectMsgData'
-            row-class-name="table-row"
-            style="width: 100%"
-            v-loading="unperfectTableLoading">
-                <el-table-column
-                    prop="name"
-                    label="姓名"
-                    width="100"
-                    label-class-name="tableTitle">
-                      <template slot-scope="scope">
-                        <el-button type="text" @click="diagnose(scope.row)"
-                        :style="{'color':'#1991fc','padding':0}">
-                          {{scope.row.name}}
-                        </el-button>
+                  </el-table-column>
+                  <el-table-column
+                      prop="bloodPressureType"
+                      label="患者类型"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="bastThan"
+                      label="严重比例"
+                      label-class-name="tableTitle">
+                      <template slot-scope="scope">   
+                        <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                                        
                       </template>
-                </el-table-column>
-                <el-table-column
-                    prop="sicktype"
-                    label="患者类型"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="badrate"
-                    label="严重比例"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="unperfectMsg"
-                    label="不完整程度"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="addtime"
-                    label="加入时间"
-                    label-class-name="tableTitle">
-                </el-table-column>
-                <el-table-column
-                    prop="action"
-                    label=""
-                    width="275px">
-                    <template slot-scope="scope">
-                        <el-button 
-                        size="mini" 
-                        type="primary" 
-                        @click.native="isCare(scope.$index,unperfectMsgData.data)" 
-                        :key="scope.row.id" 
-                        :style="{'width':'80px','color':'#fff'}"
-                        >
-                          <span v-if="scope.row.isDocusOn">取消关注</span>
-                          <span v-if="!scope.row.isDocusOn">关注</span>
-                        </el-button>
-                        <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
-                        :style="{'width':'72px','color':'#fff'}">去完善</el-button>
-                        <button class="telephone-btn" @click="call(scope.row)">
-                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
-                          <!-- <i class="telephone-btn-icon"></i> -->
-                        </button>
-                        <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
-                    </template>
-                </el-table-column>
-            </el-table>
-          </div>
-          <div class="page">
-            <el-pagination
-              class="el-pagination"
-              @size-change="handleSizeChange"
-              @current-change="unperfectChangepage"
-              :current-page.sync="currentPage"
-              :page-size="newsickaskData.pageSize"
-              layout="total, prev, pager, next, jumper"
-              :total="newsickaskData.totalPage"
-              prev-text="上一页"
-              next-text="下一页">
-            </el-pagination>
-          </div>
-        </el-card>
+                  </el-table-column>
+                  <el-table-column
+                      prop="nowCount"
+                      label="今日严重次数"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="joinHospitalTime"
+                      label="加入时间"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="action"
+                      label=""
+                      width="275px"
+                      align="center">
+                      <template slot-scope="scope">
+                          <el-button 
+                          size="mini" 
+                          type="primary" 
+                          @click.native="isCare(scope.row,badsickData)" 
+                          :key="scope.row.id" 
+                          :style="{'width':'80px','color':'#fff'}"
+                          >
+                            <span v-if="scope.row.isDocusOn">取消关注</span>
+                            <span v-if="!scope.row.isDocusOn">关注</span>
+                          </el-button>
+                          <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
+                          :style="{'width':'72px','color':'#fff'}">诊断</el-button>
+
+                          <button class="telephone-btn" @click="call(scope.row)">
+                            <!-- <i class="telephone-btn-icon"></i> -->
+                            <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                          </button>
+                          <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
+                      </template>
+                  </el-table-column>
+              </el-table>
+            </div>
+            <!-- <div>
+              <mpages :pages="20" @jumpPage="jumppage"></mpages>
+            </div> -->
+            <div class="page">
+              <el-pagination
+                class="el-pagination"
+                @size-change="badsickSizeChange"
+                @current-change="badsickCurrentChange"
+                :current-page.sync="badsickCurrentPage"
+                :page-size="badsickPageSize"
+                layout="total, prev, pager, next, jumper"
+                :total="badsickTotal"
+                prev-text="上一页"
+                next-text="下一页">
+              </el-pagination>
+            </div>
+          </el-card>
+        </div>
+        <!-- 严重患者结束 end -->
+
+        <!-- 未遵医嘱患者 start -->
+        <div id="bloodnolisten">
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+              <p class="title">未遵医嘱患者</p>
+              <!-- <p class="title">未遵医嘱患者{{nolistenTotal ? '('+nolistenTotal+')' :''}}</p> -->
+            </div>
+            <div class="table">
+
+              <el-table 
+              :data='noListenDoctorData'
+              style="width: 100%"
+              row-class-name="table-row"
+              v-loading="noListenTableLoading">
+                  <el-table-column
+                      prop="realName"
+                      label="姓名"
+                      width="100"
+                      label-class-name="tableTitle">
+                        <template slot-scope="scope">
+                          <el-button type="text" @click="diagnose(scope.row)"
+                          :style="{'color':'#1991fc','padding':0}">
+                            {{scope.row.realName}}
+                          </el-button>
+                        </template>
+                  </el-table-column>
+                  <el-table-column
+                      prop="bloodPressureType"
+                      label="患者类型"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="bastThan"
+                      label="未遵医嘱比例"
+                      label-class-name="tableTitle">
+                      <template slot-scope="scope">   
+                        <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                                        
+                      </template>
+                  </el-table-column>
+                  <el-table-column
+                      prop="notCount"
+                      label="未遵医嘱"
+                      label-class-name="tableTitle">
+                      <template slot-scope="scope">   
+                        <span> {{scope.row.notCount}}天（共{{scope.row.count+'天'}}）</span>                                        
+                      </template>
+                  </el-table-column>
+                  <el-table-column
+                      prop="joinHospitalTime"
+                      label="加入时间"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="action"
+                      label=""
+                      width="275px">
+                      <template slot-scope="scope">
+                          <el-button 
+                          size="mini" 
+                          type="primary" 
+                          @click.native="isCare(scope.row)" 
+                          :key="scope.row.id" 
+                          :style="{'width':'80px','color':'#fff'}"
+                          >
+                            <span v-if="scope.row.isDocusOn">取消关注</span>
+                            <span v-if="!scope.row.isDocusOn">关注</span>
+                          </el-button>
+                          <el-button size="mini" type="primary" 
+                          @click="diagnose(scope.row)" 
+                          :style="{'width':'72px','color':'#fff'}">
+                          诊断
+                          </el-button>
+                          <button class="telephone-btn" @click="call(scope.row)">
+                            <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                            <!-- <i class="telephone-btn-icon"></i> -->
+                          </button>
+                      </template>
+                  </el-table-column>
+              </el-table>
+            </div>
+            <div class="page">
+              <el-pagination
+                class="el-pagination"
+                @size-change="nolistenSizeChange"
+                @current-change="nolistenCurrentchange"
+                :current-page.sync="nolistenCurrentPage"
+                :page-size="nolistenPageSize"
+                layout="total, prev, pager, next, jumper"
+                :total="nolistenTotal"
+                prev-text="上一页"
+                next-text="下一页">
+              </el-pagination>
+            </div>
+            
+          </el-card>
+        </div>
+        <!-- 未遵医嘱患者 end -->
+
+        <!-- 建档不完整患者 start -->
+        <div id="bloodunperfect" v-if="false">
+          <el-card :body-style="{ padding: '0px' }">
+            <div class="card-header">
+              <p class="title">建档不完整患者</p>
+              <!-- <p class="title">建档不完整患者{{unperfectMsgRate?'('+unperfectMsgRate+')':''}}</p> -->
+            </div>
+            <div class="table">
+
+              <el-table 
+              :data='unperfectMsgData'
+              row-class-name="table-row"
+              style="width: 100%"
+              v-loading="unperfectTableLoading">
+                  <el-table-column
+                      prop="name"
+                      label="姓名"
+                      width="100"
+                      label-class-name="tableTitle">
+                        <template slot-scope="scope">
+                          <el-button type="text" @click="diagnose(scope.row)"
+                          :style="{'color':'#1991fc','padding':0}">
+                            {{scope.row.name}}
+                          </el-button>
+                        </template>
+                  </el-table-column>
+                  <el-table-column
+                      prop="sicktype"
+                      label="患者类型"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="badrate"
+                      label="严重比例"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="unperfectMsg"
+                      label="不完整程度"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="addtime"
+                      label="加入时间"
+                      label-class-name="tableTitle">
+                  </el-table-column>
+                  <el-table-column
+                      prop="action"
+                      label=""
+                      width="275px">
+                      <template slot-scope="scope">
+                          <el-button 
+                          size="mini" 
+                          type="primary" 
+                          @click.native="isCare(scope.$index,unperfectMsgData.data)" 
+                          :key="scope.row.id" 
+                          :style="{'width':'80px','color':'#fff'}"
+                          >
+                            <span v-if="scope.row.isDocusOn">取消关注</span>
+                            <span v-if="!scope.row.isDocusOn">关注</span>
+                          </el-button>
+                          <el-button size="mini" type="primary" @click="diagnose(scope.row)" 
+                          :style="{'width':'72px','color':'#fff'}">去完善</el-button>
+                          <button class="telephone-btn" @click="call(scope.row)">
+                            <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                            <!-- <i class="telephone-btn-icon"></i> -->
+                          </button>
+                          <!-- <el-button size="mini" icon="el-icon-phone-outline" @click="call(scope.row)">电话</el-button> -->
+                      </template>
+                  </el-table-column>
+              </el-table>
+            </div>
+            <div class="page">
+              <el-pagination
+                class="el-pagination"
+                @size-change="handleSizeChange"
+                @current-change="unperfectChangepage"
+                :current-page.sync="currentPage"
+                :page-size="newsickaskData.pageSize"
+                layout="total, prev, pager, next, jumper"
+                :total="newsickaskData.totalPage"
+                prev-text="上一页"
+                next-text="下一页">
+              </el-pagination>
+            </div>
+          </el-card>
+        </div>
+        <!-- 建档不完整患者 end -->
       </div>
-      <!-- 建档不完整患者 end -->
-    </el-card>
+    </div>
     
   </div>
 </template>
@@ -405,7 +407,7 @@ export default {
       careState: '',
       // 分页数据
       newAskCurrentPage: 1,
-      newAskPageSize: 5,
+      newAskPageSize: 10,
       newAskTotal: 1,
       newSickTableLoading: false,
 

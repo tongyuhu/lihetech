@@ -19,6 +19,7 @@ const editAdmin = (resolve) => require(['@/components/editAdmin.vue'], resolve)
 const Flup = (resolve) => require(['@/components/Flup/Flup.vue'], resolve)
 const FlupCard = (resolve) => require(['@/components/Flup/FlupCard.vue'], resolve)
 const dangerLayer = (resolve) => require(['@/components/Flup/dangerLayer.vue'], resolve)
+const diagonse = (resolve) => require(['@/views/Hospital/BloodHeigh/H-work.vue'], resolve)
 // const addDoctor = (resolve) => require(['@/views/Hospital/personManage/addDoctor.vue'], resolve)
 let routers = null
 let superAdminRouters = [
@@ -61,6 +62,16 @@ let superAdminRouters = [
           requireAuth: true,
           name: '随访',
           role: ['admin', 'doctor', 'hospital', 'nurse']
+        }
+      },
+      {
+        path: 'diagonse',
+        name: 'diagonse',
+        component: diagonse,
+        meta: {
+          requireAuth: true,
+          name: '问诊',
+          role: ['admin', 'doctor', 'hospital']
         }
       },
       {
@@ -303,6 +314,16 @@ let doctorRouters = [
         }
       },
       {
+        path: 'diagonse',
+        name: 'diagonse',
+        component: diagonse,
+        meta: {
+          requireAuth: true,
+          name: '问诊',
+          role: ['admin', 'doctor', 'hospital']
+        }
+      },
+      {
         path: 'FlupCard',
         name: 'FlupCard',
         component: FlupCard,
@@ -488,15 +509,6 @@ let doctorRouters = [
 
     ]
   }
-  // {
-  //   path: '*',
-  //   meta: {
-  //     name: '主页',
-  //     requireAuth: true,
-  //     role: ['admin', 'doctor','hospital','nurse']
-  //   },
-  //   redirect: '/'
-  // }
 ]
 let nurseRouters = [
   {
