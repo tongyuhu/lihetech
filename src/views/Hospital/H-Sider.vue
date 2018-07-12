@@ -98,7 +98,7 @@ export default {
         ]
       },
       FlupMenu: {
-        iconName: 'heigh-blood',
+        iconName: 'flup',
         title: '随访',
         routerName: 'Flup',
         open: false

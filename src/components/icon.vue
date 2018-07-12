@@ -232,5 +232,33 @@ export default {
     height: 9px;
     background: url('~icon/hospital-icon-08.png') no-repeat;
   }
+  /* 随访 */
+  .flup-close{
+    /* font-size: 0; */
+    position: relative;
+  }
+  .flup-close::before{
+    top: 0px;
+    left: -36px;
+    position: absolute;
+    content: '';
+    width: 23px;;
+    height: 28px;
+    background: url('~icon/hospital-icon2-29.png') no-repeat;
+  }
+  .flup-open{
+    /* font-size: 0; */
+    position: relative;
+  }
+  .flup-open::before{
+    top: 0px;
+    left: -36px;
+    position: absolute;
+    content: '';
+    width: 23px;;
+    height: 28px;
+    background: url('~icon/hospital-icon2-30.png') no-repeat;
+  }
+
 </style>
 
