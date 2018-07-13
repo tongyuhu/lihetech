@@ -53,9 +53,9 @@
                   </td>
                   <td v-if="item.morninng.length === 0">
                     <div class="table-content">
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height no-order">
                         <div class="detials-order">
                           <!-- 姓名 -->
@@ -88,11 +88,11 @@
                   <td v-else class="table-td-div">
                     <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
                       <!-- 预约时间 -->
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         <span>
                           {{morning.makeOrderDate.slice(10,16)}}
                         </span>
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height ">
                         <div class="detials-order">
                         <!-- <div class="detials-order" v-for="(morningPerson,index) in item.morninng" :key="index"> -->
@@ -132,9 +132,9 @@
                   </td>
                   <td v-if="item.noon.length === 0">
                     <div class="table-content">
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height no-order">
                         <div class="detials-order">
                           <!-- 姓名 -->
@@ -166,11 +166,11 @@
                   <td v-else class="table-td-div">
                     <div v-for="noon in item.noon" :key="noon.id" class="table-content">
                       <!-- 预约时间 -->
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         <span>
                           {{noon.startEndPeriodTime}}
                         </span>
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height ">
                         <div class="detials-order">
                         <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->
@@ -232,9 +232,9 @@
                   </td>
                   <td v-if="item.morninng.length === 0">
                     <div class="table-content">
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height no-order">
                         <div class="detials-order">
                           <!-- 姓名 -->
@@ -261,11 +261,11 @@
                   <td v-else class="table-td-div">
                     <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
                       <!-- 预约时间 -->
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         <span>
                           {{morning.makeOrderDate.slice(10,16)}}
                         </span>
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height ">
                         <div class="detials-order">
                         <!-- <div class="detials-order" v-for="morningPerson in item.morninng" :key="morningPerson.id"> -->
@@ -305,9 +305,9 @@
                   </td>
                   <td v-if="item.noon.length === 0">
                     <div class="table-content">
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height no-order">
                         <div class="detials-order">
                           <!-- 姓名 -->
@@ -334,11 +334,11 @@
                   <td v-else class="table-td-div">
                     <div v-for="noon in item.noon" :key="noon.id" class="table-content">
                       <!-- 预约时间 -->
-                      <div class="text-center order-time-width">
+                      <!-- <div class="text-center order-time-width">
                         <span>
                           {{noon.makeOrderDate.slice(10,16)}}
                         </span>
-                      </div>
+                      </div> -->
                       <div class="table-content-border min-height ">
                         <div class="detials-order">
                         <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->

@@ -26,3 +26,10 @@ export const submitLayerApi = (params) => {
     data: params
   }
 }
+export const lookLayerApi = (params) => {
+  return {
+    method: 'post',
+    url: '/member/danger/level/mes',
+    data: params
+  }
+}

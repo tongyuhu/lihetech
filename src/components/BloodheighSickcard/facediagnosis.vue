@@ -15,11 +15,12 @@
           </div>
           <div class="case-left-type">
             <span class="case-left-type-name">{{info.name}}</span>
-            <span class="case-left-type-se">治疗中</span>
+            <span>性别:{{medication.sex==='man' ? '男' :'女'}}</span>
+            <!-- <span class="case-left-type-se">治疗中</span> -->
           </div>
           <div class="case-left-btn">
-            <el-button type="primary" @click="histroySickcard">历史病历</el-button>
-            <el-button type="primary" @click="completeInfo">完善信息</el-button>
+            <el-button type="primary" @click="histroySickcard" size="mini">历史病历</el-button>
+            <el-button type="primary" @click="completeInfo" sizi="mini">完善信息</el-button>
           </div>
           <div class="case-left-msg">
             <!-- <div class="case-left-msg-single">
@@ -36,6 +37,12 @@
               </select> -->
               <!-- <input type="text" v-if="showEditMsg" v-model="info.sex"> -->
             <!-- </div> -->
+            <div class="case-left-msg-single">
+              <span class="label">电话：</span>
+              <span v-if="!showEditMsg">{{medication.phone ? medication.phone:''}}</span>
+              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.phone" size="mini"></el-input>
+              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
+            </div>
             <div class="case-left-msg-single">
               <span class="label">年龄：</span>
               <span v-if="!showEditMsg">{{info.age ? info.age+'岁':''}}</span>
@@ -84,8 +91,8 @@
             <!-- <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button> -->
           </div>
           <div>
-            <el-button type="primary">体检表</el-button>
-            <el-button @click="openChecklist" type="primary">体检单</el-button>
+            <el-button type="text" size="mini">体检表</el-button>
+            <el-button @click="openChecklist" type="text" size="mini">体检单</el-button>
           </div>
 
         </div> 
@@ -100,59 +107,206 @@
                 <el-form
                 label-width="45px" 
                 :label-position="labelPosition">
+                <div>
+                  <div class="line-block gap-right sick-time-width">
+                    <el-form-item label="" label-width="8px">
+                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                        <el-option label="初诊" value="1"></el-option>
+                        <el-option label="复诊" value="0"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </div>
+                  <div class="line-block gap-right">
+                    <!-- <el-form-item label="患病时长：" label-width="85px"> -->
+                      <div class="line-block color-face">
+                        患病时长：
+                      </div>
+                      <div class="line-block sick-time-width color-face">
+                        <numberinput
+                        v-model="medication.year"
+                        :leftOffset="5"
+                        :rightOffset="20"
+                        :height="28">
+                          <template slot="right">
+                            <span>
+                            年
+                            </span>
+                          </template>
+                        </numberinput>
+                      </div>
+                      <div class="line-block sick-time-width color-face">
+                        <numberinput
+                        v-model="medication.month"
+                        :leftOffset="5"
+                        :rightOffset="20"
+                        :height="28">
+                          <template slot="right">
+                            <span>
+                            月
+                            </span>
+                          </template>
+                        </numberinput>
+                      </div>
+                      <div class="line-block sick-time-width color-face">
+                        <numberinput
+                        v-model="medication.day"
+                        :leftOffset="5"
+                        :rightOffset="20"
+                        :height="28">
+                          <template slot="right">
+                            <span>
+                            天
+                            </span>
+                          </template>
+                        </numberinput>
+                      </div>
+                  </div>
+
+                  <div class="line-block color-face">
+                    <div class="line-block layer-box">
+                      <span>当前分层：</span>
+                      <span>{{medication.dangerLevel?medication.dangerLevel:'未分层'}}</span>
+                      <span>
+                        <el-button type="text" size="mini" style="{'height':'24px'}">重新分层</el-button>
+                      </span>
+                    </div>
+                    <!-- <numberinput
+                    v-model="layer"
+                    :leftOffset="80"
+                    :rightOffset="20"
+                    :height="28"
+                    disabled>
+                      <template slot="left">
+                        <span>
+                        当前分层
+                        </span>
+                      </template>
+                      <template slot="right">
+                        <span>
+                        重新分层
+                        </span>
+                      </template>
+                    </numberinput> -->
+                  </div>
+                </div>
+                <div>
+                  <el-form-item label="主述：" label-width="85px">
+                    <el-input v-model="medication.symptom" size="mini" placeholder="请输入症状"></el-input>
+                  </el-form-item>
+                </div>
+                <div>
+                  <el-form-item label="现病史：" label-width="85px">
+                    <div class="el-select-wrap">
+                      <el-select size="mini" 
+                      v-model="medication.sickHistroy" 
+                      multiple 
+                      placeholder="请选择病史"
+                      :loading="loading"
+                      >                
+                        <el-option
+                          v-for="(item,index) in bingshiList"
+                          :key="index"
+                          :label="item.illnessName"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+
+                    </div>
+                  </el-form-item>
+                </div>
+                <div>
+                  <el-form-item label="遗传史：" label-width="85px">
+                    <div class="el-select-wrap">
+                      <el-select size="mini" 
+                      v-model="medication.inhereHistroy" 
+                      multiple 
+                      placeholder="请选择遗传史"
+                      :loading="loading">
+                        <el-option
+                          v-for="(item,index) in yichuanshiList"
+                          :key="index"
+                          :label="item.illnessName"
+                          :value="item.id">
+                        </el-option>
+                      </el-select>
+
+                    </div>
+                  </el-form-item>
+                </div>
+                <div>
+                  <el-form-item label="检查项目：" label-width="85px">
+                    <el-select
+                      v-model="medication.checkItem"
+                      size="mini"
+                      :style="{'width':'100%'}"
+                      multiple
+                      filterable
+                      allow-create
+                      default-first-option
+                      placeholder="请添写项目标签"
+                      no-data-text="填写标签按Enter确认">
+                    </el-select>
+                  </el-form-item>
+                </div>
+                <div class="flex">
+                  <div class="gap-right">
+                    <el-form-item label="诊断编码：" label-width="85px">
+                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                        <el-option label="I13.251" value="1"></el-option>
+                        <el-option label="I13.908" value="0"></el-option>
+                      </el-select>
+                    </el-form-item>
+                  </div>
+                  <div class="flex-grow">
+                    <el-form-item label="确诊疾病：" label-width="85px">
+                      <el-input v-model="medication.sureSick" :style="{'width':'100%'}" size="mini"></el-input>
+                    </el-form-item>
+                  </div>
+                </div>
+                <div>
+                  <el-form-item label="医嘱：" label-width="85px">
+                    <el-input v-model="medication.doctorTip" placeholder="请输入医嘱" size="mini"></el-input>
+                  </el-form-item>
+                </div>
+                
                 <el-row :gutter="10">
-                  <el-col :span="6">
+                  <!-- <el-col :span="6">
                     <el-form-item label="姓名">
                       <el-input v-model="medication.name" size="mini"></el-input>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="11">
+                  </el-col> -->
+
+                  <!-- <el-col :span="11">
                     <el-form-item label="患病时长" label-width="68px"
                     >
                       <div class="pick-date-wrap">
-                        <!-- <div> -->
-                          <!-- <el-form-item label="年"> -->
-                            <!-- <el-input inline v-number-only  v-model.number="medication.year" size="mini"></el-input> -->
-                            <!-- <input v-number-only type="text" v-model.number="medication.year"/> -->
                             <input v-number-only v-model.number="medication.year" type="text">
                             <span>年</span>
-                          <!-- </el-form-item> -->
-                        <!-- </div> -->
-                        <!-- <div> -->
                           <input v-number-only v-model.number="medication.month" type="text">
-                          <!-- <input v-number-only type="text" v-model.number="medication.month"/> -->
-                          <!-- <el-input inline  v-model.number="medication.month" size="mini"></el-input> -->
                           <span>月</span>
-                        <!-- </div> -->
-                        <!-- <div> -->
                           <input v-number-only v-model.number="medication.day" type="text">
-                          <!-- <input v-number-only type="text" v-model.number="medication.day"/> -->
-                          <!-- <el-input inline  v-model.number="medication.day" size="mini"></el-input> -->
                           <span>天</span>
-                        <!-- </div> -->
                       </div>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="7">
+                  </el-col> -->
+
+                  <!-- <el-col :span="7">
                     <el-form-item label="电话" label-width="45px">
-                      <!-- <div class="pick-date-wrap"> -->
-                        <!-- <span>电话</span> -->
-                        <!-- <input v-number-only v-model.number="medication.phone" type="text"> -->
-                      <!-- </div> -->
                       <el-input v-model.number="medication.phone" size="mini"></el-input>
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
                 <el-row :gutter="10">
-                  <el-col :span="6">
+                  <!-- <el-col :span="6">
                     <el-form-item label="性别" label-width="45px">
                       <el-select v-model="medication.sex" placeholder="性别" size="mini">
                         <el-option label="男" value="man"></el-option>
                         <el-option label="女" value="woman"></el-option>
                       </el-select>
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="6">
+                  </el-col> -->
+
+                  <!-- <el-col :span="6">
                     <el-form-item label="" label-width="8px">
                       <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
                         <el-option label="初诊" value="1"></el-option>
@@ -160,8 +314,9 @@
                       </el-select>
                     </el-form-item>
 
-                  </el-col>
-                  <el-col :span="12">
+                  </el-col> -->
+
+                  <!-- <el-col :span="12">
                     <div class="time-picker">
                       <el-form-item label="上次就诊时间" label-width="100px">
                         <el-date-picker
@@ -173,10 +328,10 @@
                       </el-form-item>
 
                     </div>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
                 <el-row>
-                  <el-col>
+                  <!-- <el-col>
                     <el-form-item label="病史" label-width="60px">
                       <div class="el-select-wrap">
                         <el-select size="mini" 
@@ -185,7 +340,6 @@
                         placeholder="请选择病史"
                         :loading="loading"
                         >                
-                        <!-- @visible-change="getbingshiList" -->
                           <el-option
                             v-for="(item,index) in bingshiList"
                             :key="index"
@@ -196,10 +350,10 @@
 
                       </div>
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
                 <el-row>
-                  <el-col>
+                  <!-- <el-col>
                     <el-form-item label="遗传史" label-width="60px">
                       <div class="el-select-wrap">
                         <el-select size="mini" 
@@ -217,9 +371,9 @@
 
                       </div>
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                   <el-col>
                     <el-form-item label="并发症" label-width="60px">
                       <div class="el-select-wrap">
@@ -239,10 +393,10 @@
                       </div>
                     </el-form-item>
                   </el-col>
-                </el-row>
-
+                </el-row> -->
+ 
                 
-                <el-row :gutter="10">
+                <!-- <el-row :gutter="10">
                   <el-col :span="12">
                     <el-form-item label="抽烟情况" label-width="68px">
                       <el-select v-model="medication.smoking" placeholder="抽烟情况" size="mini">
@@ -291,10 +445,10 @@
 
                   </el-col>
 
-                </el-row>
+                </el-row> -->
 
                 <el-row :gutter="10">
-                  <el-col :span="12">
+                  <!-- <el-col :span="12">
                     <el-form-item label="检查项目" label-width="68px">
                       <el-select
                         v-model="medication.checkItem"
@@ -305,48 +459,36 @@
                         default-first-option
                         placeholder="请添写项目标签"
                         no-data-text="填写标签按Enter确认">
-                        <!-- <el-option
-                          v-for="item in options5"
-                          :key="item.value"
-                          :label="item.label"
-                          :value="item.value">
-                        </el-option> -->
                       </el-select>
-                      <!-- <el-select v-model="medication.checkItem" placeholder="抽烟情况" size="mini">
-                        <el-option label="抽烟" value="1"></el-option>
-                        <el-option label="不抽烟" value="2"></el-option>
-                        <el-option label="已戒烟" value="3"></el-option>
-                      </el-select> -->
-                      <!-- <el-input v-model="medication.checkItem" size="mini"></el-input> -->
                     </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
+                  </el-col> -->
+                  <!-- <el-col :span="12">
                     <el-form-item label="确诊疾病" label-width="68px">
                       <el-input v-model="medication.sureSick" size="mini"></el-input>
                     </el-form-item>
 
-                  </el-col>
+                  </el-col> -->
                 </el-row>
                 <el-row>
-                  <el-col>
+                  <!-- <el-col>
                     <el-form-item label="自述" label-width="68px">
                       <el-input v-model="medication.symptom" size="mini"></el-input>
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                   <el-col>
                     <el-form-item label="诊断信息" label-width="68px">
                       <el-input v-model="medication.diagnosisMsg" size="mini"></el-input>
                     </el-form-item>
                   </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
-                  <el-col>
+                  <!-- <el-col>
                     <el-form-item label="医嘱" label-width="68px">
                       <el-input v-model="medication.doctorTip" size="mini"></el-input>
                     </el-form-item>
-                  </el-col>
+                  </el-col> -->
                 </el-row>
                 </el-form>
                 <div class="case-main-rp">
@@ -354,13 +496,14 @@
                     <span>RP</span>
                     <el-button @click="openAddMedicineDialog" type="primary">添加</el-button>
                   </div>
+                  <!-- max-height="400" -->
                   <el-table
                   ref="multipleTable"
                   :data="doctorMedicine"
                   tooltip-effect="dark"
                   style="width: 100%"
                   border
-                  max-height="400">
+                  >
                     <el-table-column
                       type="index"
                       label="序号"
@@ -599,8 +742,8 @@
 
       <div id="print" class="print">
         <div class="title">
-          <h1>上海立阖泰科技</h1>
-          <h1>门诊病历</h1>
+          <p>上海立阖泰科技</p>
+          <p>门诊检查单</p>
         </div>
         <div class="bottom-boder cardnum">
           <span>医疗证/医保卡号：</span>
@@ -609,14 +752,13 @@
           <div class="base-info">
             <span>姓名：{{info.name}}</span>
             <span>性别：{{info.sex === 'man' ? '男':'女'}}</span>
-            <span>年龄：{{info.age}}</span>
+            <span>年龄：{{info.age?info.age+'岁':''}}</span>
             <!-- <span>科室：{{footerData.type}}</span> -->
             <!-- <span>费别：{{footerData.total}}</span> -->
           </div>
-          <div class="info-card">
-            <!-- <span>病历号：</span> -->
+          <!-- <div class="info-card">
             <span>电话：{{medication.phone}}</span>
-          </div>
+          </div> -->
           <div class="info-card">
             <span>诊断：{{medication.sureSick}}</span>
             <span>开具时间：{{currentDate}}</span>
@@ -627,7 +769,7 @@
             <span>主诉：{{medication.symptom}}</span>
           </p>
           <p>
-            <span>病史：{{bingshiStr}}</span>
+            <span>现病史：{{bingshiStr}}</span>
           </p>
           <p>
             <span>遗传史：{{yichuanshiStr}}</span>
@@ -639,8 +781,63 @@
             <span>检查项目：{{jianchaxiangmu}}</span>
           </p>
           <p>
-            <span>处理意见：{{medication.doctorTip}}</span>
+            <span>医嘱：{{medication.doctorTip}}</span>
           </p>
+          <p>
+            <span>西药处方：{{medication.doctorTip}}</span>
+          </p>
+          <div>
+            <el-table
+            ref="multipleTable"
+            :data="printdoctorMedicine"
+            tooltip-effect="dark"
+            style="width: 100%"
+            border
+            >
+              <el-table-column
+                show-overflow-tooltip
+                prop="name"
+                label="名称"
+                align="center">
+              </el-table-column>
+              <el-table-column
+                prop="use"
+                label="单次用量"
+                width="100"
+                align="center"
+                >
+              </el-table-column>
+              <el-table-column
+                prop="method"
+                label="用法"
+                width="75"
+                align="center">
+              </el-table-column>
+              <el-table-column
+                prop="times"
+                label="频度"
+                width="100"
+                align="center">
+              </el-table-column>
+              <el-table-column
+                prop="long"
+                label="天数"
+                width="95"
+                align="center">
+              </el-table-column>
+              <el-table-column
+                prop="total"
+                label="总量"
+                width="95"
+                align="center">
+              </el-table-column>
+              <!-- <el-table-column
+                prop="tip"
+                label="备注"
+                align="center">
+              </el-table-column> -->
+            </el-table>
+          </div>
         </div>
         <div class="print-footer">
           <p>签字医生：{{adminInfo.name}}</p>
@@ -762,10 +959,11 @@ export default {
         drinking: '',
         is23Sleep: '',
         sleepStatus: '',
-        diagnosisMsg: ''
-
+        diagnosisMsg: '',
+        dangerLevel: ''
       },
       doctorMedicine: [],
+      printdoctorMedicine: [],
       footerData: {
         doctor: '',
         type: '',
@@ -851,7 +1049,8 @@ export default {
       month: [],
       day: [],
       canPrint: false,
-      addMedicineDialog: false
+      addMedicineDialog: false,
+      adminHospitalId: null
     }
   },
   watch: {
@@ -933,37 +1132,105 @@ export default {
         userCasesCardId: this.userCasesCardId
       }
       // if (this.id) {
-      console.log('this.id', this.id)
+      // console.log('this.id', this.id)
       // params.userCasesCardId = this.$route.params.userCasesCardId
       // }
       this.$axios(bloodheighSickApi(params))
       .then(res => {
         if (res.data) {
           if (res.data.data) {
+            if (this._.has(res.data.data, 'adminHospitalId')) {
+              this.adminHospitalId = res.data.data.adminHospitalId
+            }
+            if (this._.has(res.data.data, 'realName')) {
+              this.info.name = res.data.data.realName
+              this.medication.name = res.data.data.realName
+            }
+            if (this._.has(res.data.data, 'userImage')) {
+              this.info.img = process.env.IMG_URL + res.data.data.userImage
+            }
+            if (this._.has(res.data.data, 'sex')) {
+              if (res.data.data.realName.sex === 0) {
+                this.info.sex = '女'
+              }
+              if (res.data.data.realName.sex === 1) {
+                this.info.sex = '男'
+              }
+            }
+            if (this._.has(res.data.data, 'mobile')) {
+              this.medication.phone = res.data.data.mobile
+            }
+            if (this._.has(res.data.data, 'dangerLevel')) {
+              this.medication.dangerLevel = this.danger(res.data.data.dangerLevel)
+            }
+            if (this._.has(res.data.data, 'birthDate')) {
+              let b = dateFormat(new Date())
+              let a = dateFormat(res.data.data.birthDate, 0, true)
+              b = parseInt(b.slice(0, 4))
+              a = parseInt(a.slice(0, 4))
+              this.info.age = (b - a) + ''
+            }
+            if (this._.has(res.data.data, 'userBody')) {
+              if (this._.has(res.data.data.userBody, 'height')) {
+                this.info.heigh = res.data.data.userBody.height
+              }
+              if (this._.has(res.data.data.userBody, 'weight')) {
+                this.info.weight = res.data.data.userBody.weight
+              }
+              if (this._.has(res.data.data.userBody, 'sysIllnessHistoryIdDisease')) {
+                let sicklist1 = (res.data.data.userBody.sysIllnessHistoryIdDisease + '').split(',')
+                // console.log('sysIllnessHistoryIdDisease', sicklist)
+                sicklist1 = this._.uniqWith(sicklist1, this._.isEqual)
+                this.medication.sickHistroy = sicklist1
+              }
+              if (this._.has(res.data.data.userBody, 'sysIllnessHistoryIdGenetic')) {
+                let sicklist2 = (res.data.data.userBody.sysIllnessHistoryIdGenetic + '').split(',')
+                sicklist2 = this._.uniqWith(sicklist2, this._.isEqual)
+                this.medication.inhereHistroy = sicklist2
+              }
+            }
+            if (this._.has(res.data.data, 'userCasesCard')) {
+              if (this._.has(res.data.data.userCasesCard, 'yearsSick')) {
+                this.medication.year = res.data.data.userCasesCard.yearsSick
+              }
+              if (this._.has(res.data.data.userCasesCard, 'monthSick')) {
+                this.medication.month = res.data.data.userCasesCard.monthSick
+              }
+              if (this._.has(res.data.data.userCasesCard, 'daySick')) {
+                this.medication.day = res.data.data.userCasesCard.daySick
+              }
+              if (this._.has(res.data.data.userCasesCard, 'readme')) {
+                this.medication.symptom = res.data.data.userCasesCard.readme
+              }
+            }
+
+            // if (this._.has(res.data.data, 'realName')) {
+            //   this.medication.habit = res.data.data.realName
+            // }
+            // if (this._.has(res.data.data, 'realName')) {
+            //   this.medication.complication = res.data.data.realName
+            // }
             this.cardData = {}
             this.cardData = Object.assign({}, res.data.data)
-            this.info.name = this.name
-            this.info.img = process.env.IMG_URL + this.img
-            this.info.sex = (this.sex === '男' ? 'man' : 'woman')
-            this.info.age = this.age
-            this.info.heigh = this.height
-            // console.log('name', this.name)
-            // console.log('heigh1', this.height)
-            // console.log('heigh', this.info.height)
-            this.info.weight = this.weight
-            this.medication.name = this.name
-            this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
-            this.medication.phone = this.mobile
-            this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
-            this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
-            this.medication.habit = this.habits
-            this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
-            this.medication.sureSick = this.doctorDiagnos
-            this.medication.symptom = this.readme
-            this.medication.lastTime = this.lastDate
-            this.medication.year = this.longtimeyear ? this.longtimeyear : null
-            this.medication.month = this.longtimemonth ? this.longtimemonth : null
-            this.medication.day = this.longtimeday ? this.longtimeday : null
+            // this.info.name = this.name
+            // this.info.img = process.env.IMG_URL + this.img
+            // this.info.sex = (this.sex === '男' ? 'man' : 'woman')
+            // this.info.age = this.age
+            // this.info.heigh = this.height
+            // this.info.weight = this.weight
+            // this.medication.name = this.name
+            // this.medication.sex = (this.sex === '男' ? 'man' : 'woman')
+            // this.medication.phone = this.mobile
+            // this.medication.sickHistroy = this.sysIllnessHistoryNameDisease
+            // this.medication.inhereHistroy = this.sysIllnessHistoryNameGenetic
+            // this.medication.habit = this.habits
+            // this.medication.complication = this.sysIllnessHistoryNameBpConcurrent
+            // this.medication.sureSick = this.doctorDiagnos
+            // this.medication.symptom = this.readme
+            // this.medication.lastTime = this.lastDate
+            // this.medication.year = this.longtimeyear ? this.longtimeyear : null
+            // this.medication.month = this.longtimemonth ? this.longtimemonth : null
+            // this.medication.day = this.longtimeday ? this.longtimeday : null
             let userDetectReportList = []
             if (this._.has(this.cardData, 'userDetectReportList')) {
               if (this.cardData.userDetectReportList.length > 0) {
@@ -1128,6 +1395,11 @@ export default {
         if (res.data.code === '0000') {
           this.$emit('complete', '1')
           this.canPrint = true
+          this.$message({
+            showClose: true,
+            message: '提交成功',
+            type: 'success'
+          })
         } else {
           let errmsg = res.data.msg
           if (res.data.msg === '失败！') {
@@ -1222,6 +1494,20 @@ export default {
     },
     // 打印病历
     dayin () {
+      this.printdoctorMedicine = []
+      this.doctorMedicine.forEach(item => {
+        let obj = {}
+        obj.name = item.medicineName
+        obj.use = item.singleuse ? item.singleuse + this.medicineunit(item.singleuseUnit) : ''
+        // obj.use = item.singleuse ? item.singleuse + this.medicineunit(item.singleuseUnit) : ''
+        obj.method = item.usemethod ? this.medicineunit(item.usemethod) : ''
+        obj.times = item.usetimes ? item.usetimes + '次/天' : ''
+        obj.long = item.uselong ? item.uselong + '天' : ''
+        obj.total = item.usetotal ? item.usetotal + '盒' : ''
+        obj.tip = item.tip ? item.tip : ''
+        this.printdoctorMedicine.push(obj)
+      })
+      console.log('打印药品', this.printdoctorMedicine)
       var windows = print(document.getElementById('print').innerHTML)
       windows.close()
       // // this.complete()
@@ -1257,36 +1543,36 @@ export default {
         return parseInt(val)
       }
     },
-    medicineUnit (val) {
-      let unit
-      switch (val) {
-        case 'pian':
-          unit = '片'
-          break
-        case 'li':
-          unit = '粒'
-          break
-        case 'ke':
-          unit = '颗'
-          break
-        case 'zhi':
-          unit = '支'
-          break
-        case 'mouse':
-          unit = '口服'
-          break
-        case 'in':
-          unit = '注射'
-          break
-        case 'out':
-          unit = '外涂'
-          break
-        default:
-          unit = null
-          break
-      }
-      return unit
-    },
+    // medicineUnit (val) {
+    //   let unit
+    //   switch (val) {
+    //     case 'pian':
+    //       unit = '片'
+    //       break
+    //     case 'li':
+    //       unit = '粒'
+    //       break
+    //     case 'ke':
+    //       unit = '颗'
+    //       break
+    //     case 'zhi':
+    //       unit = '支'
+    //       break
+    //     case 'mouse':
+    //       unit = '口服'
+    //       break
+    //     case 'in':
+    //       unit = '注射'
+    //       break
+    //     case 'out':
+    //       unit = '外涂'
+    //       break
+    //     default:
+    //       unit = null
+    //       break
+    //   }
+    //   return unit
+    // },
     openChecklist () {
       this.$emit('openchecklist')
     },
@@ -1294,8 +1580,109 @@ export default {
       this.addMedicineDialog = true
     },
     addMedicineHandler (list) {
-      this.doctorMedicine = list
+      this.doctorMedicine = this._.concat(this.doctorMedicine, list)
+      console.log('药品列表', this.doctorMedicine)
       this.addMedicineDialog = false
+    },
+    danger (val) {
+      val = this._.toNumber(val)
+      let text = ''
+      switch (val) {
+        case 5:
+          text = '正常'// 正常
+          break
+        case 1:
+          text = '低危'// 低危
+          break
+        case 2:
+          text = '中危'// -中危
+          break
+        case 3:
+          text = '高危' // 高危
+          break
+        case 4:
+          text = '很高危' // 很高危
+          break
+        default:
+          text = '未知'
+      }
+      return text
+    },
+    goLayer () {
+      let obj = {}
+      obj.isFollowUp = null
+      obj.adminIdMainDoctor = null
+      obj.userId = this.sickID
+      obj.userFollowUpId = null
+      obj.userName = this.info.name
+      obj.userHealthDiaryId = null
+      obj.adminHospitalId = this.adminHospitalId
+      this.SET_FLUP_INFO(obj)
+      this.$router.push({
+        name: 'dangerLayer'
+      })
+    },
+    medicineunit (val) {
+      let unit = ''
+      switch (val) {
+        case 'pian': {
+          unit = '片'
+          break
+        }
+        case 'li': {
+          unit = '粒'
+          break
+        }
+        case 'ke': {
+          unit = '颗'
+          break
+        }
+        case 'zhi': {
+          unit = '支'
+          break
+        }
+        case 'mouse': {
+          unit = '口服'
+          break
+        }
+        case 'in': {
+          unit = '注射'
+          break
+        }
+        case 'out': {
+          unit = '外服'
+          break
+        }
+        case '片': {
+          unit = 'pian'
+          break
+        }
+        case '粒': {
+          unit = 'li'
+          break
+        }
+        case '颗': {
+          unit = 'ke'
+          break
+        }
+        case '支': {
+          unit = 'zhi'
+          break
+        }
+        case '口服': {
+          unit = 'mouse'
+          break
+        }
+        case '注射': {
+          unit = 'in'
+          break
+        }
+        case '外服': {
+          unit = 'out'
+          break
+        }
+      }
+      return unit
     }
   },
   computed: {
@@ -1415,16 +1802,7 @@ export default {
             // let list = []
             // this.
             let sicklist = this.cardData.userBody.sysIllnessHistoryIdDisease.split(',')
-            console.log('sysIllnessHistoryIdDisease', sicklist)
-            // if(sicklist.length !==0){
-            // sicklist.forEach(item => {
-            //   item = parseInt(item)
-            // })
-            // }
-            // sicklist.forEach(item => {
-            //   let obj ={}
-            //   obj.
-            // })
+            // console.log('sysIllnessHistoryIdDisease', sicklist)
             sicklist = this._.uniqWith(sicklist, this._.isEqual)
             return sicklist
             // return this.cardData.userBody.sysIllnessHistoryNameDisease
@@ -2193,7 +2571,31 @@ export default {
   padding-right: 5px;
   /* justify-content: space-around; */
 }
-
+.line-block{
+  display: inline-block;
+}
+.sick-time-width{
+  width: 120px;
+}
+.gap-right{
+  margin-right: 10px;
+}
+.color-face{
+  color: #606266;
+  font-size: 14px;
+}
+.flex{
+  display: flex;
+}
+.flex-grow{
+  flex-grow:1
+}
+.layer-box{
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+  height: 26px;
+  padding: 0 10px;
+}
 </style>
 
 

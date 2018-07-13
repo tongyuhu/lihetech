@@ -522,7 +522,7 @@
             tooltip-effect="dark"
             style="width: 100%"
             border
-            max-height="400">
+            >
               <el-table-column
                 type="index"
                 label="序号"
@@ -1052,7 +1052,7 @@ export default {
       this.addMedicineDialog = true
     },
     addMedicineHandler (medicinelist) {
-      this.doctorMedicine = medicinelist
+      this.doctorMedicine = this._.concat(this.doctorMedicine, medicinelist)
       this.addMedicineDialog = false
     },
     deleteMedicine (index, rows) {
@@ -1213,32 +1213,32 @@ export default {
               this.life.salt = this._.toNumber(res.data.data[0].userHealthDiary.eatSaltToday)
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'presentSymptoms')) {
-              this.life.symptom = res.data.data[0].userHealthDiary.presentSymptoms.split(',').map(item => {
+              this.life.symptom = (res.data.data[0].userHealthDiary.presentSymptoms + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'andhairClinical')) {
-              this.life.bed = res.data.data[0].userHealthDiary.andhairClinical.split(',').map(item => {
+              this.life.bed = (res.data.data[0].userHealthDiary.andhairClinical + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeIdentify')) {
-              this.life.chinese = res.data.data[0].userHealthDiary.inDoctoeIdentify.split(',').map(item => {
+              this.life.chinese = (res.data.data[0].userHealthDiary.inDoctoeIdentify + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'nonMedicineTreatment')) {
-              this.life.unmedicine = res.data.data[0].userHealthDiary.nonMedicineTreatment.split(',').map(item => {
+              this.life.unmedicine = (res.data.data[0].userHealthDiary.nonMedicineTreatment + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeCare')) {
-              this.life.direct = res.data.data[0].userHealthDiary.inDoctoeCare.split(',').map(item => {
+              this.life.direct = (res.data.data[0].userHealthDiary.inDoctoeCare + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'healthPrescriptionAdvice')) {
-              this.life.suggest = res.data.data[0].userHealthDiary.healthPrescriptionAdvice.split(',').map(item => {
+              this.life.suggest = (res.data.data[0].userHealthDiary.healthPrescriptionAdvice + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
             }
@@ -1248,15 +1248,33 @@ export default {
               let medicinelist = []
               res.data.data[0].userFollowUpMedicationList.forEach(item => {
                 let obj = {}
+                if (this._.has(item, 'id')) {
+                  obj.changeid = item.id
+                }
+                // else {
+                //   obj.changeid = null
+                // }
+                if (this._.has(item, 'medicineType')) {
+                  obj.medicineType = item.medicineType
+                } else {
+                  obj.medicineType = null
+                }
                 if (this._.has(item, 'medicineName')) {
                   obj.name = item.medicineName
                 } else {
                   obj.name = null
                 }
+                if (this._.has(item, 'medicineId')) {
+                  obj.medicineId = item.medicineId
+                } else {
+                  obj.medicineId = null
+                }
                 if (this._.has(item, 'everyDosage')) {
                   obj.singleuse = item.everyDosage
+                  obj.everyDosage = item.everyDosage
                 } else {
                   obj.singleuse = null
+                  obj.everyDosage = null
                 }
                 if (this._.has(item, 'unit')) {
                   obj.singleuseUnit = this.medicineunit(item.unit)
@@ -1379,20 +1397,24 @@ export default {
       console.log('用药', this.doctorMedicine)
       this.doctorMedicine.forEach(item => {
         let obj = {}
-        item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
-        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
-        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes)
-        obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
-        obj.usageOff = this.medicineunit(item.usemethod)
+        obj.medicineId = item.medicineId
+        if (this._.has(item, 'changeid')) {
+          obj.id = item.changeid
+        }
         obj.medicineType = item.medicineType
         obj.medicineName = item.name
-        obj.medicineId = item.id
+        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse) + ''
         obj.unit = this.medicineunit(item.singleuseUnit)
+        obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes) + ''
+        obj.usageOff = this.medicineunit(item.usemethod)
+        item.uselong = this._.isNaN(parseInt(item.uselong)) ? 0 : parseInt(item.uselong)
+        obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
+        // obj.medicineId = item.id
         obj.remark = item.tip
-        if (this._.has(item, 'uselong')) {
-        } else {
-          item.uselong = 0
-        }
+        // if (this._.has(item, 'uselong')) {
+        // } else {
+        //   item.uselong = 0
+        // }
         // obj.everyDosage = item.singleuse
         // obj.usageTimes = item.usetimes
         // obj.totalNumber = item.usetotal + '盒'
@@ -1410,6 +1432,7 @@ export default {
             message: '提交成功',
             type: 'success'
           })
+          this.$router.go(-1)
         } else {
           this.$message({
             message: res.data.msg,

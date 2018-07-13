@@ -46,7 +46,7 @@
                     label="近7日平均血压"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
-                        {{scope.row.systolic7}}/{{scope.row.diastolic7}}
+                        {{scope.row.systolic}}/{{scope.row.diastolic}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -129,7 +129,7 @@
                     label="近7日平均血压"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
-                        {{scope.row.systolic7}}/{{scope.row.diastolic7}}
+                        {{scope.row.systolic}}/{{scope.row.diastolic}}
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -227,6 +227,7 @@ export default {
       obj.userFollowUpId = val.id
       obj.userName = val.realName
       obj.userHealthDiaryId = val.userHealthDiaryId
+      obj.adminHospitalId = val.adminHospitalId
       this.SET_FLUP_INFO(obj)
       console.log('随访', val, obj)
       this.$router.push({

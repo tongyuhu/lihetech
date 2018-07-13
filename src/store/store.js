@@ -20,7 +20,8 @@ export const store = new Vuex.Store({
       adminIdMainDoctor: null,
       userFollowUpId: null,
       isFollowUp: null,
-      userName: null
+      userName: null,
+      adminHospitalId: null
     },
     adminInfo: {},
     // 病历卡id

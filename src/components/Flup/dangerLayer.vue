@@ -833,7 +833,7 @@
 <script>
 import numberinput from './number'
 import {uploadFileApi} from '@/api/components/editAdmin.js'
-import {submitLayerApi} from '@/api/components/Flup/Flup.js'
+import {submitLayerApi, lookLayerApi} from '@/api/components/Flup/Flup.js'
 import {mapState} from 'vuex'
 export default {
   name: 'dangerLayer',
@@ -842,7 +842,7 @@ export default {
   },
   data () {
     return {
-      value: null,
+      // value: null,
       // body: {
       //   birthday: null,
       //   height: null,
@@ -1223,6 +1223,7 @@ export default {
       return color
     },
     danger (val) {
+      val = this._.toNumber(val)
       let text = ''
       switch (val) {
         case 5:
@@ -1244,10 +1245,57 @@ export default {
           text = '未知'
       }
       return text
+    },
+    getLayerData () {
+      let obj = {}
+      obj.userId = this.FlupInfo.userId
+      obj.adminHospitalId = this.FlupInfo.adminHospitalId
+      this.$axios(lookLayerApi(obj))
+      .then(res => {
+        if (res.data.data) {
+          let resdata = res.data.data
+          if (this._.has(resdata, 'realName')) {
+            this.realName = resdata.realName
+          }
+          if (this._.has(resdata, 'sex')) {
+            this.sex = this._.toNumber(resdata.sex)
+          }
+          if (this._.has(resdata, 'birthDate')) {
+            this.birthDate = resdata.birthDate
+          }
+          if (this._.has(resdata, 'userBody')) {
+            if (this._.has(resdata.userBody, 'height')) {
+              this.height = resdata.userBody.height
+            }
+            if (this._.has(resdata.userBody, 'weight')) {
+              this.weight = resdata.userBody.weight
+            }
+            if (this._.has(resdata.userBody, 'smoking')) {
+              this.smoking = resdata.userBody.smoking
+            }
+            if (this._.has(resdata.userBody, 'drinking')) {
+              this.drinking = resdata.userBody.drinking
+            }
+            // if (this._.has(resdata.userBody, 'weight')) {
+            //   this.waistWai = resdata.userBody.weight
+            // }
+          }
+          // if (this._.has(resdata, 'birthDate')) {
+          //   this.systolicMaxHistory = resdata.birthDate
+          // }
+          // if (this._.has(resdata, 'birthDate')) {
+          //   this.diastolicMaxHistory = resdata.birthDate
+          // }
+          // if (this._.has(resdata, 'birthDate')) {
+          //   this.bloodPressureSickStart = resdata.birthDate
+          // }
+        }
+      })
     }
   },
   mounted () {
     this.realName = this.FlupInfo.userName
+    this.getLayerData()
   }
 }
 </script>

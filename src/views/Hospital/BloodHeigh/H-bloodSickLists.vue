@@ -401,7 +401,7 @@
                     width="100"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="diagnose(scope.row)"
+                      <el-button type="text" @click="assessmentLayer(scope.row)"
                       :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
@@ -756,6 +756,7 @@ export default {
       obj.userFollowUpId = val.id
       obj.userName = val.realName
       obj.userHealthDiaryId = null
+      obj.adminHospitalId = val.adminHospitalId
       this.SET_FLUP_INFO(obj)
       this.$router.push({
         name: 'dangerLayer'

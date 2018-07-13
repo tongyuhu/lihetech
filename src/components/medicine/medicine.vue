@@ -65,12 +65,12 @@ export default {
       this._.forEach(list, (item, index) => {
         // let obj = {}
         item.name = item.medicineName
-        item.spec = item.drugSpec
-        item.kucun = item.id
-        item.price = item.medicineId
+        // item.spec = item.drugSpec
+        // item.kucun = item.id
+        // item.price = item.medicineId
         vm.medicineList.push(item)
       })
-      console.log('this.changeMedicineList', this.medicineList)
+      // console.log('this.changeMedicineList', this.medicineList)
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -87,7 +87,7 @@ export default {
           item.usetotal = ''
           item.tip = ''
           this.doctorMedicine.push(item)
-          console.log('this.doctorMedicine', this.doctorMedicine)
+          console.log('要添加的药品', this.doctorMedicine)
         })
       }
       this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)
