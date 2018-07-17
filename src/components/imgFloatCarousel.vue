@@ -23,7 +23,7 @@
           添加检查单
         </el-button> -->
         <a class="a-upload" title="上传"> 
-          <input type="file" accept="image/jpg" @change="uploadFile('bloodFatUrls',$event)">
+          <input type="file" accept="image/jpg" @change="uploadFile($event)">
           <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
           <span>添加检查单</span>
         </a>
@@ -144,30 +144,30 @@ export default {
       })
       return arr
     },
-    uploadFile: function (val, e) {
+    uploadFile: function (e) {
       // uploadFileApi
-      // let vm = this
+      let vm = this
       let file = e.target.files[0]
       let formdata = new FormData()
       formdata.append('files', file)
       // image.src = window.URL.createObjectURL(files.item(dd))
-      this.$axios(uploadFileApi(formdata))
+      vm.$axios(uploadFileApi(formdata))
       .then(res => {
         if (res.data.code === '0000') {
-          // this[val] = res.data.data.saveFile
-          this.imgs.push({
+          // vm[val] = res.data.data.saveFile
+          vm.imgs.push({
             src: process.env.IMG_URL + res.data.data.saveFile,
             show: false
           })
-          this.index = this.imgs.length - 1
-          this.showImg(this.index)
-          this.$emit('addImg', this.emitimgarr())
-          this.$message({
+          vm.index = vm.imgs.length - 1
+          vm.showImg(vm.index)
+          vm.$emit('addImg', vm.emitimgarr())
+          vm.$message({
             message: '上传成功',
             type: 'success'
           })
         } else {
-          this.$message({
+          vm.$message({
             message: '上传失败',
             type: 'waring'
           })
