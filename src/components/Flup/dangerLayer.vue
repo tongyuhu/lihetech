@@ -1102,7 +1102,7 @@ export default {
         obj.lowProteinCholesterol = this.lowProteinCholesterol
       }
       if (this.bloodFatUrls !== []) {
-        obj.bloodFatUrls = this.bloodFatUrls.split(',')
+        obj.bloodFatUrls = this.bloodFatUrls.join(',')
       }
       if (this.hcy !== null) {
         obj.hcy = this.hcy
@@ -1126,10 +1126,10 @@ export default {
         obj.proteinUrineType = this.proteinUrineType
       }
       if (this.bloodCreatinineUrls !== []) {
-        obj.bloodCreatinineUrls = this.bloodCreatinineUrls.split(',')
+        obj.bloodCreatinineUrls = this.bloodCreatinineUrls.join(',')
       }
       if (this.routineProteinUrls !== []) {
-        obj.routineProteinUrls = this.routineProteinUrls.split(',')
+        obj.routineProteinUrls = this.routineProteinUrls.join(',')
       }
       if (this.lvmlType !== null) {
         obj.lvmlType = this.lvmlType
@@ -1141,25 +1141,25 @@ export default {
         obj.heartDisease = this.heartDisease
       }
       if (this.heartFigureUrl !== []) {
-        obj.heartFigureUrl = this.heartFigureUrl.split(',')
+        obj.heartFigureUrl = this.heartFigureUrl.join(',')
       }
       if (this.heartUltrasonicUrl !== []) {
-        obj.heartUltrasonicUrl = this.heartUltrasonicUrl.split(',')
+        obj.heartUltrasonicUrl = this.heartUltrasonicUrl.join(',')
       }
       if (this.xChestUrl !== []) {
-        obj.xChestUrl = this.xChestUrl.split(',')
+        obj.xChestUrl = this.xChestUrl.join(',')
       }
       if (this.heartMrlMraUrl !== []) {
-        obj.heartMrlMraUrl = this.heartMrlMraUrl.split(',')
+        obj.heartMrlMraUrl = this.heartMrlMraUrl.join(',')
       }
       if (this.ctaUrl !== []) {
-        obj.ctaUrl = this.ctaUrl.split(',')
+        obj.ctaUrl = this.ctaUrl.join(',')
       }
       if (this.heartWithUrl !== []) {
-        obj.heartWithUrl = this.heartWithUrl.split(',')
+        obj.heartWithUrl = this.heartWithUrl.join(',')
       }
       if (this.movementUrl !== []) {
-        obj.movementUrl = this.movementUrl.split(',')
+        obj.movementUrl = this.movementUrl.join(',')
       }
       if (this.neckStocksSpeedType !== null) {
         obj.neckStocksSpeedType = this.neckStocksSpeedType
@@ -1174,31 +1174,31 @@ export default {
         obj.outsideVesselsDisease = this.outsideVesselsDisease
       }
       if (this.neckSoundUrl !== []) {
-        obj.neckSoundUrl = this.neckSoundUrl.split(',')
+        obj.neckSoundUrl = this.neckSoundUrl.join(',')
       }
       if (this.pulseSpeedUrl !== []) {
-        obj.pulseSpeedUrl = this.pulseSpeedUrl.split(',')
+        obj.pulseSpeedUrl = this.pulseSpeedUrl.join(',')
       }
       if (this.ankleArmNumUrl !== []) {
-        obj.ankleArmNumUrl = this.ankleArmNumUrl.split(',')
+        obj.ankleArmNumUrl = this.ankleArmNumUrl.join(',')
       }
       if (this.otherVesselsUrl !== []) {
-        obj.otherVesselsUrl = this.otherVesselsUrl.split(',')
+        obj.otherVesselsUrl = this.otherVesselsUrl.join(',')
       }
       if (this.brainDiseaseType !== null) {
         obj.brainDiseaseType = this.brainDiseaseType
       }
       if (this.brainMriMraUrl !== []) {
-        obj.brainMriMraUrl = this.brainMriMraUrl.split(',')
+        obj.brainMriMraUrl = this.brainMriMraUrl.join(',')
       }
       if (this.spiritStateUrl !== []) {
-        obj.spiritStateUrl = this.spiritStateUrl.split(',')
+        obj.spiritStateUrl = this.spiritStateUrl.join(',')
       }
       if (this.keithWagnarLevel !== null) {
         obj.keithWagnarLevel = this.keithWagnarLevel
       }
       if (this.fundusUrl !== []) {
-        obj.fundusUrl = this.fundusUrl.split(',')
+        obj.fundusUrl = this.fundusUrl.join(',')
       }
       if (this.bloodSugarEmpty !== null) {
         obj.bloodSugarEmpty = this.bloodSugarEmpty
@@ -1210,13 +1210,13 @@ export default {
         obj.sugarBloodProtein = this.sugarBloodProtein
       }
       if (this.bloodSugarEmptyUrl !== []) {
-        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl.split(',')
+        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl.join(',')
       }
       if (this.bloodSugarAfterMealTwoUrl !== []) {
-        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl.split(',')
+        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl.join(',')
       }
       if (this.sugarBloodProteinUrl !== []) {
-        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl.split(',')
+        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl.join(',')
       }
       if (this.inDoctoeIdentify !== null) {
         obj.inDoctoeIdentify = this.inDoctoeIdentify
