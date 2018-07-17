@@ -251,15 +251,16 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload',bloodFatUrls?'hasapload':'unapload']" title="上传"> 
+              <!-- <a :class="['a-upload',bloodFatUrls?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('bloodFatUrls',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>血生化-血脂</span>
-              </a>
-              <!-- <button class="check-btn">
+              </a> -->
+              <button @click.prevent="openCheckItemDialog('bloodFatUrls')" 
+              :class="['check-btn',bloodFatUrls.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 血生化-血脂
-              </button> -->
+              </button>
             </div>
           </div>
         </el-card>
@@ -296,7 +297,8 @@
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>同型半胱氨酸测定</span>
               </a> -->
-              <button @click.prevent="openCheckItemDialog" class="check-btn">
+              <button @click.prevent="openCheckItemDialog('hcyUrls')" 
+              :class="['check-btn',hcyUrls.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 同型半胱氨酸测定
               </button>
@@ -356,7 +358,22 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload','gap-right',bloodSugarEmptyUrl?'hasapload':'unapload']" title="上传"> 
+              <button @click.prevent="openCheckItemDialog('bloodSugarEmptyUrl')" 
+              :class="['check-btn',bloodSugarEmptyUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                空腹血糖
+              </button>
+              <button @click.prevent="openCheckItemDialog('bloodSugarAfterMealTwoUrl')" 
+              :class="['check-btn',bloodSugarAfterMealTwoUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                餐后2小时血糖
+              </button>
+              <button @click.prevent="openCheckItemDialog('sugarBloodProteinUrl')" 
+              :class="['check-btn',sugarBloodProteinUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                糖化血红蛋白HbA1c
+              </button>
+              <!-- <a :class="['a-upload','gap-right',bloodSugarEmptyUrl?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('bloodSugarEmptyUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>空腹血糖</span>
@@ -365,12 +382,12 @@
                 <input type="file" accept="image/jpg" @change="uploadFile('bloodSugarAfterMealTwoUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>餐后2小时血糖</span>
-              </a>
-              <a :class="['a-upload',sugarBloodProteinUrl?'hasapload':'unapload']" title="上传"> 
+              </a> -->
+              <!-- <a :class="['a-upload',sugarBloodProteinUrl?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('sugarBloodProteinUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>糖化血红蛋白HbA1c</span>
-              </a>
+              </a> -->
               <!-- <button class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 同型半胱氨酸测定
@@ -452,33 +469,37 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload','gap-right',bloodFatUrls?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('bloodFatUrls',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>血生化-血肌酐</span>
-              </a>
-              <a :class="['a-upload','gap-right',routineUrineUrls?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('routineUrineUrls',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>尿常规</span>
-              </a>
-              <a :class="['a-upload','gap-right',routineProteinUrls?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('routineProteinUrls',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>尿蛋白</span>
-              </a>
-              <!-- <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('bloodCreatinineUrls')" 
+              :class="['check-btn',bloodCreatinineUrls.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 血生化-血肌酐
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('routineUrineUrls')" 
+              :class="['check-btn',routineUrineUrls.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 尿常规
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('routineProteinUrls')" 
+              :class="['check-btn',routineProteinUrls.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 尿蛋白
-              </button> -->
+              </button>
+              
+              <!-- <a :class="['a-upload','gap-right',bloodFatUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('bloodFatUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>血生化-血肌酐</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',routineUrineUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('routineUrineUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>尿常规</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',routineProteinUrls?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('routineProteinUrls',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>尿蛋白</span>
+              </a> -->
             </div>
           </div>
         </el-card>
@@ -555,60 +576,79 @@
           <div>
             <div class="line-block gap-bottom">
               <span>检查单：</span>
-              <a :class="['a-upload','gap-right',heartFigureUrl?'hasapload':'unapload']" title="上传"> 
+              <button @click.prevent="openCheckItemDialog('heartFigureUrl')" 
+              :class="['check-btn',heartFigureUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                心电图
+              </button>
+              <button @click.prevent="openCheckItemDialog('heartUltrasonicUrl')" 
+              :class="['check-btn',heartUltrasonicUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                超声心动图（心脏彩超）
+              </button>
+              <button @click.prevent="openCheckItemDialog('xChestUrl')" 
+              :class="['check-btn',xChestUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                X线胸片
+              </button>
+              <!-- <a :class="['a-upload','gap-right',heartFigureUrl?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('heartFigureUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>心电图</span>
-              </a>
-              <a :class="['a-upload','gap-right',heartUltrasonicUrl?'hasapload':'unapload']" title="上传"> 
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',heartUltrasonicUrl?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('heartUltrasonicUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>超声心动图（心脏彩超）</span>
-              </a>
-              <a :class="['a-upload','gap-right',xChestUrl?'hasapload':'unapload']" title="上传"> 
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',xChestUrl?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('xChestUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>X线胸片</span>
-              </a>
+              </a> -->
             </div>
             <div class="line-block gap-bottom">
               <span>高级检查单：</span>
-              <a :class="['a-upload','gap-right',heartMrlMraUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('heartMrlMraUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>心脏MRI 磁共振血管造影 (MRA)</span>
-              </a>
-              <a :class="['a-upload','gap-right',ctaUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('ctaUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>计算机断层扫描血管造影 (CTA)</span>
-              </a>
-              <a :class="['a-upload','gap-right',heartWithUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('heartWithUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>心脏同位素显像</span>
-              </a>
-              <a :class="['a-upload','gap-right',movementUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('movementUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>运动实验 或冠状动脉造影</span>
-              </a>
-              <!-- <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('heartMrlMraUrl')" 
+              :class="['check-btn',heartMrlMraUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 心脏MRI 磁共振血管造影 (MRA)
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('ctaUrl')" 
+              :class="['check-btn',ctaUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
-                计算机断层扫描血管造影 (CTA)
+                计算机断层扫描血管造影
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('heartWithUrl')" 
+              :class="['check-btn',heartWithUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 心脏同位素显像
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('movementUrl')" 
+              :class="['check-btn',movementUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 运动实验 或冠状动脉造影
-              </button> -->
+              </button>
+              <!-- <a :class="['a-upload','gap-right',heartMrlMraUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('heartMrlMraUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>心脏MRI 磁共振血管造影 (MRA)</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',ctaUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('ctaUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>计算机断层扫描血管造影 (CTA)</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',heartWithUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('heartWithUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>心脏同位素显像</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',movementUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('movementUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>运动实验 或冠状动脉造影</span>
+              </a> -->
             </div>
           </div>
         </el-card>
@@ -686,42 +726,46 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload','gap-right',neckSoundUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('neckSoundUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>颈动脉超声</span>
-              </a>
-              <a :class="['a-upload','gap-right',pulseSpeedUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('pulseSpeedUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>脉搏波传导速度</span>
-              </a>
-              <a :class="['a-upload','gap-right',ankleArmNumUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('ankleArmNumUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>踝臂指数</span>
-              </a>
-              <a :class="['a-upload','gap-right',otherVesselsUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('otherVesselsUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>其它血管检查项</span>
-              </a>
-              <!-- <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('neckSoundUrl')" 
+              :class="['check-btn',neckSoundUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 颈动脉超声
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('pulseSpeedUrl')" 
+              :class="['check-btn',pulseSpeedUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 脉搏波传导速度
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('ankleArmNumUrl')" 
+              :class="['check-btn',ankleArmNumUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 踝臂指数
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('otherVesselsUrl')" 
+              :class="['check-btn',otherVesselsUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 其它血管检查项
-              </button> -->
+              </button>
+              <!-- <a :class="['a-upload','gap-right',neckSoundUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('neckSoundUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>颈动脉超声</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',pulseSpeedUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('pulseSpeedUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>脉搏波传导速度</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',ankleArmNumUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('ankleArmNumUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>踝臂指数</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',otherVesselsUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('otherVesselsUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>其它血管检查项</span>
+              </a> -->
             </div>
           </div>
         </el-card>
@@ -751,33 +795,36 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload','gap-right',brainMriMraUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('brainMriMraUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>头颅MRI MRA</span>
-              </a>
-              <a :class="['a-upload','gap-right',brainCtaUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('brainCtaUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>CTA</span>
-              </a>
-              <a :class="['a-upload',spiritStateUrl?'hasapload':'unapload']" title="上传"> 
-                <input type="file" accept="image/jpg" @change="uploadFile('spiritStateUrl',$event)">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                <span>精神状态量表</span>
-              </a>
-              <!-- <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('brainMriMraUrl')" 
+              :class="['check-btn',brainMriMraUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 头颅MRI MRA
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('brainCtaUrl')" 
+              :class="['check-btn',brainCtaUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 CTA
               </button>
-              <button class="check-btn">
+              <button @click.prevent="openCheckItemDialog('spiritStateUrl')" 
+              :class="['check-btn',spiritStateUrl.length!==0?'hasapload':'unapload']">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 精神状态量表
-              </button> -->
+              </button>
+              <!-- <a :class="['a-upload','gap-right',brainMriMraUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('brainMriMraUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>头颅MRI MRA</span>
+              </a> -->
+              <!-- <a :class="['a-upload','gap-right',brainCtaUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('brainCtaUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>CTA</span>
+              </a> -->
+              <!-- <a :class="['a-upload',spiritStateUrl?'hasapload':'unapload']" title="上传"> 
+                <input type="file" accept="image/jpg" @change="uploadFile('spiritStateUrl',$event)">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                <span>精神状态量表</span>
+              </a> -->
             </div>
           </div>
         </el-card>
@@ -809,15 +856,16 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload',fundusUrl?'hasapload':'unapload']" title="上传"> 
+              <button @click.prevent="openCheckItemDialog('fundusUrl')" 
+              :class="['check-btn',fundusUrl.length!==0?'hasapload':'unapload']">
+                <span class="iconfont icon-chakanwenjian icon"></span>
+                眼底检查(高分辨率眼底成像系统)
+              </button>
+              <!-- <a :class="['a-upload',fundusUrl?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('fundusUrl',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>眼底检查(高分辨率眼底成像系统)</span>
-              </a>
-              <!-- <button class="check-btn">
-                <span class="iconfont icon-chakanwenjian icon"></span>
-                眼底检查(高分辨率眼底成像系统)
-              </button> -->
+              </a> -->
             </div>
           </div>
         </el-card>
@@ -827,21 +875,21 @@
     <div class="submit-btn-wrap">
       <button class="submit-btn" @click.prevent="submit">提交</button>
     </div>
-        <!-- <imgFloatCarousel
-        imgsrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg"
-        :show="true"
-        >
-        </imgFloatCarousel> -->
+    <div v-if="imgDialog">
+      <imgFloatCarousel
+      :imgsrc="imgarr"
+      :show="true"
+      @addImg="changeImgs"
+      @close="closeImg"
+      >
+      </imgFloatCarousel>
+    </div>
     <div>
-      <el-dialog
+      <!-- <el-dialog
         title="检查单"
         :visible.sync="dialogVisible"
         width="90%"
         center>
-
-        <!-- <imgFloat imgsrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg">
-        </imgFloat> -->
-        
         <el-carousel indicator-position="outside" arrow="always" :autoplay="false" trigger="click">
           <el-carousel-item v-for="item in 4" :key="item">
             <div class="dialog-img-box">
@@ -850,12 +898,10 @@
             <h3>{{ item }}</h3>
           </el-carousel-item>
         </el-carousel>
-        <!-- <span>这是一段信息</span> -->
         <span slot="footer" class="dialog-footer">
           <el-button @click="openCheckItemDialog" type="primary">添加体检单</el-button>
-          <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
         </span>
-      </el-dialog>
+      </el-dialog> -->
     </div>
   </div>
 </template>
@@ -886,7 +932,12 @@ export default {
       //   smoke: null,
       //   bloodhistroy: null
       // },
-      dialogVisible: false,
+      imgarr: [
+        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=fa47cd471c3075484fd0980fa42871d5&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F342ac65c103853434cc02dda9f13b07eca80883a.jpg',
+        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=789a8bfd582e29315ca2a71b5047d815&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffcfaaf51f3deb48fd0e9be27fc1f3a292cf57842.jpg'
+      ],
+      imgDialog: false,
+      currentCheckItem: '',
       realName: null,
       sex: null,
       birthDate: null,
@@ -901,49 +952,49 @@ export default {
       cholesterolTotal: null,  // 总的胆固醇
       highProteinCholesterol: null,  // 高密度脂蛋白胆固醇
       lowProteinCholesterol: null,  // 低密度脂蛋白胆固醇
-      bloodFatUrls: null,  // 血生化-血脂 检查单
+      bloodFatUrls: [],  // 血生化-血脂 检查单
       hcy: null,  // 血同型半胱氨酸
-      hcyUrls: null,  // 同型半胱氨酸测定 检查单
+      hcyUrls: [],  // 同型半胱氨酸测定 检查单
       heartVesselsFamilyHistory: null,  // 早发心血管病家族史 0-无 1-有
       serumCreatinineType: null, // 血清肌酐
       serumCreatinineUnit: null, // 血清肌酐单位 1-umol/L 2-mg/dl
       // serumCreatinineUnit: null, // 血清肌酐单位 1-umol/L 2-mg/dl
       egfr: null,  // 估算的肾小球滤过率<60(eGFR降低) 是-true 否-false
       proteinUrineType: null,  // 蛋白尿值 1-小于30 2-30到300 3-大于300 单位：mg/24h
-      bloodCreatinineUrls: null,  // 血生化-血肌酐检查单
-      routineUrineUrls: null, // 尿常规 检查单
-      routineProteinUrls: null, // 尿蛋白 检查单
+      bloodCreatinineUrls: [],  // 血生化-血肌酐检查单
+      routineUrineUrls: [], // 尿常规 检查单
+      routineProteinUrls: [], // 尿蛋白 检查单
       ecgType: null,  // 心电图指标类型 1- Sokolow-lyon>38mm 或 cornell>2440 mm.ms 2-正常
       lvmlType: null,  // 超声心动图LVMI指标类型 1- 大于等于125 2-小于125 单位g/m2
       heartExpandType: null,  // 心脏扩大 1- 左右心房、心室任一增大 2-无增大
       heartDisease: null,  // 已确诊心脏基本 0-未知 1-心肌梗塞 2-心绞痛 3-冠状动脉血运重建史 4-慢性心力衰竭
-      heartFigureUrl: null,  // 心电图 检查单
-      heartUltrasonicUrl: null,  // 超声心电图（心脏彩超） 检查单
-      xChestUrl: null,  // X线胸片 检查单
-      heartMrlMraUrl: null,  // 心脏MRI磁共振血管造影（MRA） 检查单
-      ctaUrl: null,  // 计算机断层扫描血管造影（CTA） 检查单
-      heartWithUrl: null,  // 心脏同位素显像 检查单
-      movementUrl: null,  // 运动实验或冠状动脉造影 检查单
+      heartFigureUrl: [],  // 心电图 检查单
+      heartUltrasonicUrl: [],  // 超声心电图（心脏彩超） 检查单
+      xChestUrl: [],  // X线胸片 检查单
+      heartMrlMraUrl: [],  // 心脏MRI磁共振血管造影（MRA） 检查单
+      ctaUrl: [],  // 计算机断层扫描血管造影（CTA） 检查单
+      heartWithUrl: [],  // 心脏同位素显像 检查单
+      movementUrl: [],  // 运动实验或冠状动脉造影 检查单
       neckStocksSpeedType: null,  // 颈-股动脉脉搏波速度 1-大于等于12 2-小于12 单位m/s
       ankleArmIndex: null, // 踝臂血压指数 1-小于0.9 2-大于等于0.9
       imtType: null, // 颈动脉超声(IMT) 1->=0.9mm或动脉粥样板块 2-<0.9mm
       outsideVesselsDisease: null, // 外周血管疾病 0-未知 1-主动脉夹层】 //2-【血管
-      neckSoundUrl: null, // 颈动脉超声 检查单
-      pulseSpeedUrl: null, // 脉搏波传导速度 检查单
-      ankleArmNumUrl: null, // 踝臂指数 检查单
-      otherVesselsUrl: null, // 其它血管检查项 检查单
+      neckSoundUrl: [], // 颈动脉超声 检查单
+      pulseSpeedUrl: [], // 脉搏波传导速度 检查单
+      ankleArmNumUrl: [], // 踝臂指数 检查单
+      otherVesselsUrl: [], // 其它血管检查项 检查单
       brainDiseaseType: null, // 脑血管疾病 0-未知 1-脑出血 2-缺血性脑卒中 3-短暂性脑缺血发作
-      brainMriMraUrl: null, // 头颅MRI MRA 检查单
-      brainCtaUrl: null, // CTA 检查单
-      spiritStateUrl: null, // 精神状态量表 检查单
+      brainMriMraUrl: [], // 头颅MRI MRA 检查单
+      brainCtaUrl: [], // CTA 检查单
+      spiritStateUrl: [], // 精神状态量表 检查单
       keithWagnarLevel: null, // Keith-Wagnar分级
-      fundusUrl: null, // 眼底检查（高分辨率眼底成像系统） 检查单
+      fundusUrl: [], // 眼底检查（高分辨率眼底成像系统） 检查单
       bloodSugarEmpty: null, // 空腹血糖 1-【小于6.1】 2-【6.1到6.9】3-【大于6.9】
       bloodSugarAfterMealTwo: null, // 餐后两小时血糖 1-【小于7.8】 2-【7.8到11.0】3-【大于11.0
       sugarBloodProtein: null, // 糖化血红蛋白 1-小于百分之6.5 2-大于等于百分之6.5
-      bloodSugarEmptyUrl: null, // 空腹血糖 检查单
-      bloodSugarAfterMealTwoUrl: null, // 餐后两小时血糖 检查单
-      sugarBloodProteinUrl: null, // 糖化血红蛋白HbA1c 检查单
+      bloodSugarEmptyUrl: [], // 空腹血糖 检查单
+      bloodSugarAfterMealTwoUrl: [], // 餐后两小时血糖 检查单
+      sugarBloodProteinUrl: [], // 糖化血红蛋白HbA1c 检查单
       inDoctoeIdentify: null, // 中医辨证
       sysIllnessHistoryIdDisease: null, // 疾病史id集合
       sysIllnessHistoryIdGenetic: null, // 家族遗传病史 id集合
@@ -967,8 +1018,18 @@ export default {
       'changeChatFriend',
       'openChatWindow'
     ]),
-    openCheckItemDialog () {
-      this.dialogVisible = true
+    openCheckItemDialog (val) {
+      console.log('检查单', val)
+      this.imgDialog = true
+      this.imgarr = this[val]
+      this.currentCheckItem = val
+    },
+    changeImgs (arr) {
+      this[this.currentCheckItem] = arr
+      console.log('添加体检单', this[this.currentCheckItem], arr)
+    },
+    closeImg () {
+      this.imgDialog = false
     },
     uploadFile: function (val, e) {
       // uploadFileApi
@@ -1040,13 +1101,13 @@ export default {
       if (this.lowProteinCholesterol !== null) {
         obj.lowProteinCholesterol = this.lowProteinCholesterol
       }
-      if (this.bloodFatUrls !== null) {
-        obj.bloodFatUrls = this.bloodFatUrls
+      if (this.bloodFatUrls !== []) {
+        obj.bloodFatUrls = this.bloodFatUrls.split(',')
       }
       if (this.hcy !== null) {
         obj.hcy = this.hcy
       }
-      if (this.hcyUrls !== null) {
+      if (this.hcyUrls !== []) {
         obj.hcyUrls = this.hcyUrls
       }
       if (this.heartVesselsFamilyHistory !== null) {
@@ -1064,11 +1125,11 @@ export default {
       if (this.proteinUrineType !== null) {
         obj.proteinUrineType = this.proteinUrineType
       }
-      if (this.bloodCreatinineUrls !== null) {
-        obj.bloodCreatinineUrls = this.bloodCreatinineUrls
+      if (this.bloodCreatinineUrls !== []) {
+        obj.bloodCreatinineUrls = this.bloodCreatinineUrls.split(',')
       }
-      if (this.routineProteinUrls !== null) {
-        obj.routineProteinUrls = this.routineProteinUrls
+      if (this.routineProteinUrls !== []) {
+        obj.routineProteinUrls = this.routineProteinUrls.split(',')
       }
       if (this.lvmlType !== null) {
         obj.lvmlType = this.lvmlType
@@ -1079,26 +1140,26 @@ export default {
       if (this.heartDisease !== null) {
         obj.heartDisease = this.heartDisease
       }
-      if (this.heartFigureUrl !== null) {
-        obj.heartFigureUrl = this.heartFigureUrl
+      if (this.heartFigureUrl !== []) {
+        obj.heartFigureUrl = this.heartFigureUrl.split(',')
       }
-      if (this.heartUltrasonicUrl !== null) {
-        obj.heartUltrasonicUrl = this.heartUltrasonicUrl
+      if (this.heartUltrasonicUrl !== []) {
+        obj.heartUltrasonicUrl = this.heartUltrasonicUrl.split(',')
       }
-      if (this.xChestUrl !== null) {
-        obj.xChestUrl = this.xChestUrl
+      if (this.xChestUrl !== []) {
+        obj.xChestUrl = this.xChestUrl.split(',')
       }
-      if (this.heartMrlMraUrl !== null) {
-        obj.heartMrlMraUrl = this.heartMrlMraUrl
+      if (this.heartMrlMraUrl !== []) {
+        obj.heartMrlMraUrl = this.heartMrlMraUrl.split(',')
       }
-      if (this.ctaUrl !== null) {
-        obj.ctaUrl = this.ctaUrl
+      if (this.ctaUrl !== []) {
+        obj.ctaUrl = this.ctaUrl.split(',')
       }
-      if (this.heartWithUrl !== null) {
-        obj.heartWithUrl = this.heartWithUrl
+      if (this.heartWithUrl !== []) {
+        obj.heartWithUrl = this.heartWithUrl.split(',')
       }
-      if (this.movementUrl !== null) {
-        obj.movementUrl = this.movementUrl
+      if (this.movementUrl !== []) {
+        obj.movementUrl = this.movementUrl.split(',')
       }
       if (this.neckStocksSpeedType !== null) {
         obj.neckStocksSpeedType = this.neckStocksSpeedType
@@ -1112,32 +1173,32 @@ export default {
       if (this.outsideVesselsDisease !== null) {
         obj.outsideVesselsDisease = this.outsideVesselsDisease
       }
-      if (this.neckSoundUrl !== null) {
-        obj.neckSoundUrl = this.neckSoundUrl
+      if (this.neckSoundUrl !== []) {
+        obj.neckSoundUrl = this.neckSoundUrl.split(',')
       }
-      if (this.pulseSpeedUrl !== null) {
-        obj.pulseSpeedUrl = this.pulseSpeedUrl
+      if (this.pulseSpeedUrl !== []) {
+        obj.pulseSpeedUrl = this.pulseSpeedUrl.split(',')
       }
-      if (this.ankleArmNumUrl !== null) {
-        obj.ankleArmNumUrl = this.ankleArmNumUrl
+      if (this.ankleArmNumUrl !== []) {
+        obj.ankleArmNumUrl = this.ankleArmNumUrl.split(',')
       }
-      if (this.otherVesselsUrl !== null) {
-        obj.otherVesselsUrl = this.otherVesselsUrl
+      if (this.otherVesselsUrl !== []) {
+        obj.otherVesselsUrl = this.otherVesselsUrl.split(',')
       }
       if (this.brainDiseaseType !== null) {
         obj.brainDiseaseType = this.brainDiseaseType
       }
-      if (this.brainMriMraUrl !== null) {
-        obj.brainMriMraUrl = this.brainMriMraUrl
+      if (this.brainMriMraUrl !== []) {
+        obj.brainMriMraUrl = this.brainMriMraUrl.split(',')
       }
-      if (this.spiritStateUrl !== null) {
-        obj.spiritStateUrl = this.spiritStateUrl
+      if (this.spiritStateUrl !== []) {
+        obj.spiritStateUrl = this.spiritStateUrl.split(',')
       }
       if (this.keithWagnarLevel !== null) {
         obj.keithWagnarLevel = this.keithWagnarLevel
       }
-      if (this.fundusUrl !== null) {
-        obj.fundusUrl = this.fundusUrl
+      if (this.fundusUrl !== []) {
+        obj.fundusUrl = this.fundusUrl.split(',')
       }
       if (this.bloodSugarEmpty !== null) {
         obj.bloodSugarEmpty = this.bloodSugarEmpty
@@ -1148,14 +1209,14 @@ export default {
       if (this.sugarBloodProtein !== null) {
         obj.sugarBloodProtein = this.sugarBloodProtein
       }
-      if (this.bloodSugarEmptyUrl !== null) {
-        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl
+      if (this.bloodSugarEmptyUrl !== []) {
+        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl.split(',')
       }
-      if (this.bloodSugarAfterMealTwoUrl !== null) {
-        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl
+      if (this.bloodSugarAfterMealTwoUrl !== []) {
+        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl.split(',')
       }
-      if (this.sugarBloodProteinUrl !== null) {
-        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl
+      if (this.sugarBloodProteinUrl !== []) {
+        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl.split(',')
       }
       if (this.inDoctoeIdentify !== null) {
         obj.inDoctoeIdentify = this.inDoctoeIdentify
