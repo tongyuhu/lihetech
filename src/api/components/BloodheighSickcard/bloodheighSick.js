@@ -49,3 +49,12 @@ export const modifyCardApi = (params) => {
     outtime: 10000
   }
 }
+export const sickCodeApi = (params) => {
+  return {
+    method: 'post',
+    url: '/sys/national/disease/list',
+    data: params,
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    outtime: 10000
+  }
+}

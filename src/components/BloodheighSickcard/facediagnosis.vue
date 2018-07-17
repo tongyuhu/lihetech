@@ -19,8 +19,8 @@
             <!-- <span class="case-left-type-se">治疗中</span> -->
           </div>
           <div class="case-left-btn">
-            <el-button type="primary" @click="histroySickcard" size="mini">历史病历</el-button>
-            <el-button type="primary" @click="completeInfo" sizi="mini">完善信息</el-button>
+            <el-button type="primary" @click="histroySickcard" size="mini" :style="{'font-size':'12px'}">历史病历</el-button>
+            <el-button type="primary" @click="completeInfo" sizi="mini" :style="{'font-size':'12px'}">完善信息</el-button>
           </div>
           <div class="case-left-msg">
             <!-- <div class="case-left-msg-single">
@@ -107,16 +107,17 @@
                 <el-form
                 label-width="45px" 
                 :label-position="labelPosition">
-                <div>
-                  <div class="line-block gap-right sick-time-width">
+                <!-- <div class="flex"> -->
+                <div >
+                  <div class="line-block  gap-right">
                     <el-form-item label="" label-width="8px">
-                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100%'}">
                         <el-option label="初诊" value="1"></el-option>
                         <el-option label="复诊" value="0"></el-option>
                       </el-select>
                     </el-form-item>
                   </div>
-                  <div class="line-block gap-right">
+                  <div class="line-block gap-right margin7">
                     <!-- <el-form-item label="患病时长：" label-width="85px"> -->
                       <div class="line-block color-face">
                         患病时长：
@@ -162,31 +163,18 @@
                       </div>
                   </div>
 
-                  <div class="line-block color-face">
-                    <div class="line-block layer-box">
-                      <span>当前分层：</span>
-                      <span>{{medication.dangerLevel?medication.dangerLevel:'未分层'}}</span>
-                      <span>
-                        <el-button type="text" size="mini" style="{'height':'24px'}">重新分层</el-button>
-                      </span>
+                  <div class="line-block color-face  margin7">
+                    <div class="line-block layer-box flex flex-between">
+                      <div class="flex">
+                        <span>当前分层：</span>
+                        <span :style="{'color':computeDanger(medication.dangerLevel)}">{{medication.dangerLevel?danger(medication.dangerLevel):'未分层'}}</span>
+                      </div>
+                      <div>
+                        <span>
+                          <el-button @click="goLayer" type="text" size="mini" style="{'height':'24px'}">重新分层</el-button>
+                        </span>
+                      </div>
                     </div>
-                    <!-- <numberinput
-                    v-model="layer"
-                    :leftOffset="80"
-                    :rightOffset="20"
-                    :height="28"
-                    disabled>
-                      <template slot="left">
-                        <span>
-                        当前分层
-                        </span>
-                      </template>
-                      <template slot="right">
-                        <span>
-                        重新分层
-                        </span>
-                      </template>
-                    </numberinput> -->
                   </div>
                 </div>
                 <div>
@@ -251,15 +239,26 @@
                 <div class="flex">
                   <div class="gap-right">
                     <el-form-item label="诊断编码：" label-width="85px">
-                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                      <el-select v-model="bloodSickCode" placeholder="请选择" @change="sickCodeChange" size="mini" :style="{'width':'100%'}">
+                        <el-option
+                          v-for="item in bloodSickCodeList"
+                          :key="item.id"
+                          :label="item.diseaseCode"
+                          :value="item.id"
+                          >
+                          <span style="float: left">{{ item.diseaseCode }}</span>
+                          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.diseaseName }}</span>
+                        </el-option>
+                      </el-select>
+                      <!-- <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
                         <el-option label="I13.251" value="1"></el-option>
                         <el-option label="I13.908" value="0"></el-option>
-                      </el-select>
+                      </el-select> -->
                     </el-form-item>
                   </div>
                   <div class="flex-grow">
                     <el-form-item label="确诊疾病：" label-width="85px">
-                      <el-input v-model="medication.sureSick" :style="{'width':'100%'}" size="mini"></el-input>
+                      <el-input disabled v-model="medication.sureSick" :style="{'width':'100%'}" size="mini"></el-input>
                     </el-form-item>
                   </div>
                 </div>
@@ -856,7 +855,7 @@ import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
 import searchMedicine from '@/components/searchMedicine.vue'
 import numberinput from './../../components/Flup/number'
-import {bloodheighSickApi, sickApi, modifyCardApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
+import {bloodheighSickApi, sickApi, modifyCardApi, sickCodeApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 import {mapState, mapMutations} from 'vuex'
 // import Bus from '@/bus.js'
 import {dateFormat} from './../../untils/date.js'
@@ -1050,7 +1049,10 @@ export default {
       day: [],
       canPrint: false,
       addMedicineDialog: false,
-      adminHospitalId: null
+      adminHospitalId: null,
+      bloodSickCodeList: [],
+      bloodSickCode: null,
+      sugerSickCodeList: []
     }
   },
   watch: {
@@ -1118,7 +1120,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setuserCasesCardId', 'setuserMakeOrderDoctorId']),
+    ...mapMutations(['setuserCasesCardId', 'setuserMakeOrderDoctorId', 'SET_FLUP_INFO']),
     handleInput (e) {
       this.val = e.target.value.replace(/-?[1-9]\d*/g, '')
       // e.target.value = e.target.value.replace(/-?[1-9]\d*/g, '')
@@ -1161,7 +1163,8 @@ export default {
               this.medication.phone = res.data.data.mobile
             }
             if (this._.has(res.data.data, 'dangerLevel')) {
-              this.medication.dangerLevel = this.danger(res.data.data.dangerLevel)
+              this.medication.dangerLevel = res.data.data.dangerLevel
+              // this.medication.dangerLevel = this.danger(res.data.data.dangerLevel)
             }
             if (this._.has(res.data.data, 'birthDate')) {
               let b = dateFormat(new Date())
@@ -1340,6 +1343,7 @@ export default {
       obj.drinking = this.medication.drinking
       obj.is23Sleep = this.medication.is23Sleep
       obj.sleepStatus = this.medication.sleepStatus
+      obj.sysNationalDiseaseId = this.bloodSickCode
       // obj.sleepStatus = this.medication.sleepStatus
       obj.checkItem = this.medication.checkItem.join(',')
       let medicine = []
@@ -1608,6 +1612,30 @@ export default {
       }
       return text
     },
+    computeDanger (val) {
+      let type = this._.toNumber(val)
+      let color = ''
+      switch (type) {
+        case 5:
+          color = '#33b2f2'// 正常
+          break
+        case 1:
+          color = '#59d8a1'// 低危
+          break
+        case 2:
+          color = '#efa13a'// -中危
+          break
+        case 3:
+          color = '#ff7d43' // 高危
+          break
+        case 4:
+          color = '#f96767' // 很高危
+          break
+        default:
+          color = '#666'
+      }
+      return color
+    },
     goLayer () {
       let obj = {}
       obj.isFollowUp = null
@@ -1618,6 +1646,7 @@ export default {
       obj.userHealthDiaryId = null
       obj.adminHospitalId = this.adminHospitalId
       this.SET_FLUP_INFO(obj)
+      console.log('重新分层', obj)
       this.$router.push({
         name: 'dangerLayer'
       })
@@ -1683,6 +1712,14 @@ export default {
         }
       }
       return unit
+    },
+    sickCodeChange (val) {
+      this.bloodSickCodeList.forEach(item => {
+        if (item.id === val) {
+          this.medication.sureSick = item.diseaseName
+        }
+      })
+      console.log('诊断编码', val)
     }
   },
   computed: {
@@ -2085,8 +2122,34 @@ export default {
         }
       })
     })
+    let promise4 = new Promise(function (resolve, reject) {
+      vm.$axios(sickCodeApi({
+        diseaseType: 1
+      }))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          // res.data.data.forEach(item => {
+          //   item.id = vm._.toString(item.id)
+          // })
+          vm.bloodSickCodeList = res.data.data
+          resolve('4')
+        }
+      })
+      vm.$axios(sickCodeApi({
+        diseaseType: 2
+      }))
+      .then(res => {
+        if (res.data.data.length !== 0) {
+          res.data.data.forEach(item => {
+            item.id = vm._.toString(item.id)
+          })
+          vm.sugerSickCodeList = res.data.data
+          resolve('4')
+        }
+      })
+    })
 
-    Promise.all([promise1, promise2, promise3]).then(function (results) {
+    Promise.all([promise1, promise2, promise3, promise4]).then(function (results) {
       vm.getData()
     })
     // this.getbingshiList()
@@ -2575,7 +2638,9 @@ export default {
   display: inline-block;
 }
 .sick-time-width{
-  width: 120px;
+  max-width: 100px;
+  min-width: 60px;
+  // width: 120px;
 }
 .gap-right{
   margin-right: 10px;
@@ -2586,15 +2651,28 @@ export default {
 }
 .flex{
   display: flex;
+  align-self: center;
+}
+.flex-between{
+
+  justify-content: space-between;
 }
 .flex-grow{
   flex-grow:1
+}
+.margin7{
+  margin-top: 7px;
+}
+.box-border{
+  box-sizing: border-box;
 }
 .layer-box{
   border: 1px solid #dcdfe6;
   border-radius: 4px;
   height: 26px;
   padding: 0 10px;
+  // width: inherit;
+  width: 100%;
 }
 </style>
 
