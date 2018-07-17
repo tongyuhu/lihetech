@@ -9,7 +9,7 @@
         <i class="el-icon-close"></i>
       </button> -->
     </div>
-    <div class="page-up-wrap">
+    <div class="page-up-wrap" v-show="imgs.length !==0">
       <button class="page-btn" @click.prevent="pageUp">
         <i class="el-icon-arrow-left"></i>
       </button>
@@ -30,7 +30,7 @@
       </div>
     </div>
     
-    <div class="page-down-wrap">
+    <div class="page-down-wrap" v-show="imgs.length !==0">
       <button class="page-btn" @click.prevent="pageDn">
         <i class="el-icon-arrow-right"></i>
       </button>
