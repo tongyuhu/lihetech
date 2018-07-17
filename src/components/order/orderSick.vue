@@ -48,7 +48,8 @@
                     <div class="half-day">
 
                     <span class="span-block">上午</span>
-                    <span class="span-block">{{item.morninngWork}}</span>
+                    <!-- <span class="span-block">{{item.morninngWork}}</span> -->
+                    <span class="span-block">{{ item.morninngTotal===0?'':'共'+item.morninngTotal+'人'}}</span>
                     </div>
                   </td>
                   <td v-if="item.morninng.length === 0">
@@ -127,7 +128,8 @@
                   <td class="width">
                     <div class="half-day">
                       <span class="span-block">下午</span>
-                      <span class="span-block">{{item.noonWork}}</span>
+                      <span class="span-block">{{item.noonTotal===0?'':'共'+item.noonTotal+'人'}}</span>
+                      <!-- <span class="span-block">{{item.noonWork}}</span> -->
                     </div>
                   </td>
                   <td v-if="item.noon.length === 0">
@@ -714,6 +716,8 @@ export default {
           item.noonStop = true
           item.morninngWork = ''
           item.noonWork = ''
+          item.morninngTotal = 0
+          item.noonTotal = 0
         } else if (item.adminMakeOrderTotalList.length === 2) {
           item.adminMakeOrderTotalList.forEach(half => {
             if (half.slotType === 1) {
@@ -724,6 +728,7 @@ export default {
               }
               item.morninngWork = half.startEndPeriodTime
               item.morninngStop = half.isStop
+              item.morninngTotal = half.totalNumber
             }
             if (half.slotType === 2) {
               if (this._.has(half, 'userMakeOrderDoctorList')) {
@@ -733,6 +738,7 @@ export default {
               }
               // item.noon = half.userMakeOrderDoctorList
               item.noonWork = half.startEndPeriodTime
+              item.noonTotal = half.totalNumber
               item.noonStop = half.isStop
             }
           })
@@ -746,8 +752,10 @@ export default {
             // item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
             item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
             item.morninngStop = item.adminMakeOrderTotalList[0].isStop
+            item.morninngTotal = item.adminMakeOrderTotalList[0].totalNumber
             item.noon = []
             item.noonWork = ''
+            item.noonTotal = 0
             item.noonStop = true
           } else {
             // item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
@@ -762,9 +770,11 @@ export default {
             }
             item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
             item.noonStop = item.adminMakeOrderTotalList[0].isStop
+            item.noonTotal = item.adminMakeOrderTotalList[0].totalNumber
             item.morninng = []
             item.morninngWork = ''
             item.morninngStop = true
+            item.morninngTotal = 0
           }
         }
       })
