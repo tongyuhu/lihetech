@@ -214,7 +214,11 @@ export default {
     ...mapState(['adminInfo'])
   },
   methods: {
-    ...mapMutations(['SET_FLUP_INFO']),
+    ...mapMutations(['SET_FLUP_INFO',
+      'addChatFriend',
+      'changeChatFriend',
+      'openChatWindow'
+    ]),
     flupHandler (val, flup) {
       let obj = {}
       if (flup) {
@@ -263,8 +267,20 @@ export default {
         }
       })
     },
-    call (val) {
-
+    call (row) {
+      console.log('聊天对象', row)
+      let rongId = 'member_' + row.userId
+      let sick = {
+        userId: rongId,
+        userImg: '',
+        userName: row.realName || '患者',
+        hasMsg: false,
+        currentChat: false
+      }
+      console.log('聊天对象sick', sick)
+      this.addChatFriend(sick)
+      this.changeChatFriend(sick)
+      this.openChatWindow()
     },
     unfinishedPageChange (currentpage) {
       this.unfinishedCurrentPage = currentpage

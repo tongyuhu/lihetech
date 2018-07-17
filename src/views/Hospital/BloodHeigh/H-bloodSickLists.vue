@@ -757,6 +757,7 @@ export default {
       obj.userName = val.realName
       obj.userHealthDiaryId = null
       obj.adminHospitalId = val.adminHospitalId
+      console.log('分层评估', obj)
       this.SET_FLUP_INFO(obj)
       this.$router.push({
         name: 'dangerLayer'

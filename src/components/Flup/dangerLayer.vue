@@ -4,7 +4,7 @@
       <el-card>
         <div>
           <span class="title-name">{{realName}}</span>
-          <button class="voice-btn">语音</button>
+          <button @click="call" class="voice-btn">语音</button>
         </div>
       </el-card>
     </div>
@@ -27,15 +27,15 @@
           <div>
             <div class="line-block gap-right">
               <span>危险因素：</span>
-              <span class="red-text">{{result.danger}}</span>
+              <span class="red-text">{{result.danger?result.danger:'暂无'}}</span>
             </div>
             <div class="line-block gap-right">
               <span>靶器官损害：</span>
-              <span class="red-text">{{result.organDamage}}</span>
+              <span class="red-text">{{result.organDamage?result.organDamage:'暂无'}}</span>
             </div>
             <div class="line-block gap-right">
               <span>临床疾患：</span>
-              <span class="red-text">{{result.disease}}</span>
+              <span class="red-text">{{result.disease?result.disease:'暂无'}}</span>
             </div>
           </div>
         </el-card>
@@ -291,15 +291,15 @@
           <div>
             <div>
               <span>检查单：</span>
-              <a :class="['a-upload',hcyUrls?'hasapload':'unapload']" title="上传"> 
+              <!-- <a :class="['a-upload',hcyUrls?'hasapload':'unapload']" title="上传"> 
                 <input type="file" accept="image/jpg" @change="uploadFile('hcyUrls',$event)">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 <span>同型半胱氨酸测定</span>
-              </a>
-              <!-- <button class="check-btn">
+              </a> -->
+              <button @click.prevent="openCheckItemDialog" class="check-btn">
                 <span class="iconfont icon-chakanwenjian icon"></span>
                 同型半胱氨酸测定
-              </button> -->
+              </button>
             </div>
           </div>
         </el-card>
@@ -827,6 +827,36 @@
     <div class="submit-btn-wrap">
       <button class="submit-btn" @click.prevent="submit">提交</button>
     </div>
+        <!-- <imgFloatCarousel
+        imgsrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg"
+        :show="true"
+        >
+        </imgFloatCarousel> -->
+    <div>
+      <el-dialog
+        title="检查单"
+        :visible.sync="dialogVisible"
+        width="90%"
+        center>
+
+        <!-- <imgFloat imgsrc="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg">
+        </imgFloat> -->
+        
+        <el-carousel indicator-position="outside" arrow="always" :autoplay="false" trigger="click">
+          <el-carousel-item v-for="item in 4" :key="item">
+            <div class="dialog-img-box">
+              <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg" alt="">
+            </div>
+            <h3>{{ item }}</h3>
+          </el-carousel-item>
+        </el-carousel>
+        <!-- <span>这是一段信息</span> -->
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="openCheckItemDialog" type="primary">添加体检单</el-button>
+          <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
+        </span>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -834,11 +864,15 @@
 import numberinput from './number'
 import {uploadFileApi} from '@/api/components/editAdmin.js'
 import {submitLayerApi, lookLayerApi} from '@/api/components/Flup/Flup.js'
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
+import imgFloat from '@/components/imgFloat.vue'
+import imgFloatCarousel from '@/components/imgFloatCarousel.vue'
 export default {
   name: 'dangerLayer',
   components: {
-    numberinput
+    numberinput,
+    imgFloat,
+    imgFloatCarousel
   },
   data () {
     return {
@@ -852,6 +886,7 @@ export default {
       //   smoke: null,
       //   bloodhistroy: null
       // },
+      dialogVisible: false,
       realName: null,
       sex: null,
       birthDate: null,
@@ -927,6 +962,14 @@ export default {
     ...mapState(['FlupInfo', 'adminInfo'])
   },
   methods: {
+    ...mapMutations([
+      'addChatFriend',
+      'changeChatFriend',
+      'openChatWindow'
+    ]),
+    openCheckItemDialog () {
+      this.dialogVisible = true
+    },
     uploadFile: function (val, e) {
       // uploadFileApi
       // let vm = this
@@ -953,8 +996,8 @@ export default {
     },
     submit () {
       let obj = {}
-      obj.userId = 12
-      obj.adminHospitalId = 2
+      obj.userId = this.FlupInfo.userId
+      obj.adminHospitalId = this.FlupInfo.adminHospitalId
       if (this.realName !== null) {
         obj.realName = this.realName
       }
@@ -1190,6 +1233,11 @@ export default {
         if (res.data.code === '0000') {
           this.result = this._.merge(this.result, res.data.data)
           this.showResult = true
+          this.$message({
+            message: '评估成功',
+            type: 'success'
+          })
+          // this.$router.go(-1)
         } else {
           this.$message({
             message: res.data.msg,
@@ -1291,11 +1339,33 @@ export default {
           // }
         }
       })
+    },
+    call () {
+      // console.log('聊天对象', )
+      let rongId = 'member_' + this.FlupInfo.userId
+      let sick = {
+        userId: rongId,
+        userImg: '',
+        userName: this.realName || '患者',
+        hasMsg: false,
+        currentChat: false
+      }
+      console.log('聊天对象sick', sick)
+      this.addChatFriend(sick)
+      this.changeChatFriend(sick)
+      this.openChatWindow()
     }
   },
-  mounted () {
+  created () {
+    console.log('store随访数据', this.FlupInfo)
     this.realName = this.FlupInfo.userName
     this.getLayerData()
+  },
+  mounted () {
+    // this.realName = this.FlupInfo.userName
+    // console.log('store随访数据', this.FlupInfo)
+    // console.log('store随访数据', this.FlupInfo)
+    // this.getLayerData()
   }
 }
 </script>
@@ -1438,6 +1508,16 @@ export default {
 }
 .hasapload{
   color:#1991fc;
+}
+.dialog-img-box{
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  text-align: center;
+  img{
+    max-width: 100%;
+    max-height: 100%;
+  }
 }
 </style>
 

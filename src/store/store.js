@@ -118,7 +118,8 @@ export const store = new Vuex.Store({
     },
     [SET_FLUP_INFO] (state, obj) {
       state.FlupInfo = _.merge(state.FlupInfo, obj)
-      // console.log('store.',state.currentSickData)
+      // state.FlupInfo = obj
+      console.log('store.', state.FlupInfo)
     },
 
     setuserCasesCardId (state, id) {

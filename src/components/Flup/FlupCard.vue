@@ -10,7 +10,7 @@
             <el-button :disabled="nextBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupDn">下次随访</el-button>
           </div>
           <div class="head-title-right">
-            <el-button type="primary" size="mini">语音</el-button>
+            <el-button @click="call" type="primary" size="mini">语音</el-button>
           </div>
         </div>
         <el-form
@@ -726,7 +726,7 @@
 import medicine from '@/components/medicine/medicine.vue'
 import numberinput from './number'
 import {FlupCardApi, submitFlupApi} from '@/api/components/Flup/Flup.js'
-import {mapState} from 'vuex'
+import {mapState, mapMutations} from 'vuex'
 export default {
   name: 'FlupCard',
 
@@ -1048,6 +1048,11 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'addChatFriend',
+      'changeChatFriend',
+      'openChatWindow'
+    ]),
     addMedicine () {
       this.addMedicineDialog = true
     },
@@ -1467,6 +1472,21 @@ export default {
         this.page.pageNum = 1
       }
       // }
+    },
+    call () {
+      // console.log('聊天对象', )
+      let rongId = 'member_' + this.FlupInfo.userId
+      let sick = {
+        userId: rongId,
+        userImg: '',
+        userName: this.info.name || '患者',
+        hasMsg: false,
+        currentChat: false
+      }
+      console.log('聊天对象sick', sick)
+      this.addChatFriend(sick)
+      this.changeChatFriend(sick)
+      this.openChatWindow()
     }
   },
   mounted () {
