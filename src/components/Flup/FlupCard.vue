@@ -1368,7 +1368,7 @@ export default {
       submitObj.adminIdMainDoctor = this.FlupInfo.adminIdMainDoctor
       submitObj.userFollowUpId = this.FlupInfo.userFollowUpId
       // submitObj.dangerLevel = this.body.dangerLayer
-      submitObj.followUpDay = this.flupTime
+      // submitObj.followUpDay = this.flupTime      //废弃不传
       // submitObj.userHealthDiaryId = this.body.flupTime
       // submitObj.userId = this.body.flupTime
       // submitObj.adminIdMainDoctor = this.body.flupTime
