@@ -1230,65 +1230,6 @@ export default {
       if (this.sysIllnessHistoryIdGenetic !== null) {
         obj.sysIllnessHistoryIdGenetic = this.sysIllnessHistoryIdGenetic
       }
-
-      // obj.realName = this.realName
-      // obj.sex = this.sex
-      // obj.birthDate = this.birthDate
-      // obj.bloodPressureSickStart = this.bloodPressureSickStart
-      // obj.systolicMaxHistory = this.systolicMaxHistory
-      // obj.diastolicMaxHistory = this.diastolicMaxHistory
-      // obj.height = this.height
-      // obj.weight = this.weight
-      // obj.waistWai = this.waistWai
-      // obj.smoking = this.smoking
-      // obj.drinking = this.drinking
-      // obj.cholesterolTotal = this.cholesterolTotal
-      // obj.highProteinCholesterol = this.highProteinCholesterol
-      // obj.lowProteinCholesterol = this.lowProteinCholesterol
-      // obj.bloodFatUrls = this.bloodFatUrls
-      // obj.hcy = this.hcy
-      // obj.hcyUrls = this.hcyUrls
-      // obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
-      // obj.serumCreatinineType = this.serumCreatinineType
-      // obj.serumCreatinineUnit = this.serumCreatinineUnit
-      // obj.egfr = this.egfr
-      // obj.proteinUrineType = this.proteinUrineType
-      // obj.bloodCreatinineUrls = this.bloodCreatinineUrls
-      // obj.routineProteinUrls = this.routineProteinUrls
-      // obj.lvmlType = this.lvmlType
-      // obj.heartExpandType = this.heartExpandType
-      // obj.heartDisease = this.heartDisease
-      // obj.heartFigureUrl = this.heartFigureUrl
-      // obj.heartUltrasonicUrl = this.heartUltrasonicUrl
-      // obj.xChestUrl = this.xChestUrl
-      // obj.heartMrlMraUrl = this.heartMrlMraUrl
-      // obj.ctaUrl = this.ctaUrl
-      // obj.heartWithUrl = this.heartWithUrl
-      // obj.movementUrl = this.movementUrl
-      // obj.neckStocksSpeedType = this.neckStocksSpeedType
-      // obj.ankleArmIndex = this.ankleArmIndex
-      // obj.imtType = this.imtType
-      // obj.outsideVesselsDisease = this.outsideVesselsDisease
-      // obj.neckSoundUrl = this.neckSoundUrl
-      // obj.pulseSpeedUrl = this.pulseSpeedUrl
-      // obj.ankleArmNumUrl = this.ankleArmNumUrl
-      // obj.otherVesselsUrl = this.otherVesselsUrl
-      // obj.brainDiseaseType = this.brainDiseaseType
-      // obj.brainMriMraUrl = this.brainMriMraUrl
-      // obj.brainCtaUrl = this.brainCtaUrl
-      // obj.spiritStateUrl = this.spiritStateUrl
-      // obj.keithWagnarLevel = this.keithWagnarLevel
-      // obj.fundusUrl = this.fundusUrl
-      // obj.bloodSugarEmpty = this.bloodSugarEmpty
-      // obj.bloodSugarAfterMealTwo = this.bloodSugarAfterMealTwo
-      // obj.sugarBloodProtein = this.sugarBloodProtein
-      // obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl
-      // obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl
-      // obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl
-      // obj.inDoctoeIdentify = this.inDoctoeIdentify
-      // obj.bloodPressureSickStart = this.bloodPressureSickStart
-      // obj.sysIllnessHistoryIdDisease = this.sysIllnessHistoryIdDisease
-      // obj.sysIllnessHistoryIdGenetic = this.sysIllnessHistoryIdGenetic
       this.$axios(submitLayerApi(obj))
       .then(res => {
         if (res.data.code === '0000') {
@@ -1384,6 +1325,178 @@ export default {
             }
             if (this._.has(resdata.userBody, 'drinking')) {
               this.drinking = resdata.userBody.drinking
+            }
+            //
+            if (this._.has(resdata.userBody, 'realName')) {
+              this.realName = resdata.userBody.realName
+            }
+            if (this._.has(resdata.userBody, 'sex')) {
+              this.sex = resdata.userBody.sex
+            }
+            if (this._.has(resdata.userBody, 'birthDate')) {
+              this.birthDate = resdata.userBody.birthDate
+            }
+            if (this._.has(resdata.userBody, 'bloodPressureSickStart')) {
+              this.bloodPressureSickStart = resdata.userBody.bloodPressureSickStart
+            }
+            if (this._.has(resdata.userBody, 'systolicMaxHistory')) {
+              this.systolicMaxHistory = resdata.userBody.systolicMaxHistory
+            }
+            if (this._.has(resdata.userBody, 'diastolicMaxHistory')) {
+              this.diastolicMaxHistory = resdata.userBody.diastolicMaxHistory
+            }
+            if (this._.has(resdata.userBody, 'height')) {
+              this.height = resdata.userBody.height
+            }
+            if (this._.has(resdata.userBody, 'weight')) {
+              this.weight = resdata.userBody.weight
+            }
+            if (this._.has(resdata.userBody, 'waistWai')) {
+              this.waistWai = resdata.userBody.waistWai
+            }
+            if (this._.has(resdata.userBody, 'smoking')) {
+              this.smoking = resdata.userBody.smoking
+            }
+            if (this._.has(resdata.userBody, 'drinking')) {
+              this.drinking = resdata.userBody.drinking
+            }
+            if (this._.has(resdata.userBody, 'sex')) {
+              this.cholesterolTotal = resdata.userBody.cholesterolTotal
+            }
+            if (this._.has(resdata.userBody, 'highProteinCholesterol')) {
+              this.highProteinCholesterol = resdata.userBody.highProteinCholesterol
+            }
+            if (this._.has(resdata.userBody, 'lowProteinCholesterol')) {
+              this.lowProteinCholesterol = resdata.userBody.lowProteinCholesterol
+            }
+            if (this._.has(resdata.userBody, 'bloodFatUrls')) {
+              this.bloodFatUrls = resdata.userBody.bloodFatUrls.split(',')
+            }
+            if (this._.has(resdata.userBody, 'hcy')) {
+              this.hcy = resdata.userBody.hcy
+            }
+            if (this._.has(resdata.userBody, 'hcyUrls')) {
+              this.hcyUrls = resdata.userBody.hcyUrls
+            }
+            if (this._.has(resdata.userBody, 'heartVesselsFamilyHistory')) {
+              this.heartVesselsFamilyHistory = resdata.userBody.heartVesselsFamilyHistory
+            }
+            if (this._.has(resdata.userBody, 'serumCreatinineType')) {
+              this.serumCreatinineType = resdata.userBody.serumCreatinineType
+            }
+            if (this._.has(resdata.userBody, 'serumCreatinineUnit')) {
+              this.serumCreatinineUnit = resdata.userBody.serumCreatinineUnit
+            }
+            if (this._.has(resdata.userBody, 'egfr')) {
+              this.egfr = resdata.userBody.egfr
+            }
+            if (this._.has(resdata.userBody, 'proteinUrineType')) {
+              this.proteinUrineType = resdata.userBody.proteinUrineType
+            }
+            if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
+              this.bloodCreatinineUrls = resdata.userBody.bloodCreatinineUrls.split(',')
+            }
+            if (this._.has(resdata.userBody, 'routineProteinUrls')) {
+              this.routineProteinUrls = resdata.userBody.routineProteinUrls.split(',')
+            }
+            if (this._.has(resdata.userBody, 'lvmlType')) {
+              this.lvmlType = resdata.userBody.lvmlType
+            }
+            if (this._.has(resdata.userBody, 'heartExpandType')) {
+              this.heartExpandType = resdata.userBody.heartExpandType
+            }
+            if (this._.has(resdata.userBody, 'heartDisease')) {
+              this.heartDisease = resdata.userBody.heartDisease
+            }
+            if (this._.has(resdata.userBody, 'heartFigureUrl')) {
+              this.heartFigureUrl = resdata.userBody.heartFigureUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'heartUltrasonicUrl')) {
+              this.heartUltrasonicUrl = resdata.userBody.heartUltrasonicUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'xChestUrl')) {
+              this.xChestUrl = resdata.userBody.xChestUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'heartMrlMraUrl')) {
+              this.heartMrlMraUrl = resdata.userBody.heartMrlMraUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'ctaUrl')) {
+              this.ctaUrl = resdata.userBody.ctaUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'heartWithUrl')) {
+              this.heartWithUrl = resdata.userBody.heartWithUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'movementUrl')) {
+              this.movementUrl = resdata.userBody.movementUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'neckStocksSpeedType')) {
+              this.neckStocksSpeedType = resdata.userBody.neckStocksSpeedType
+            }
+            if (this._.has(resdata.userBody, 'ankleArmIndex')) {
+              this.ankleArmIndex = resdata.userBody.ankleArmIndex
+            }
+            if (this._.has(resdata.userBody, 'imtType')) {
+              this.imtType = resdata.userBody.imtType
+            }
+            if (this._.has(resdata.userBody, 'outsideVesselsDisease')) {
+              this.outsideVesselsDisease = resdata.userBody.outsideVesselsDisease
+            }
+            if (this._.has(resdata.userBody, 'neckSoundUrl')) {
+              this.neckSoundUrl = resdata.userBody.neckSoundUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'pulseSpeedUrl')) {
+              this.pulseSpeedUrl = resdata.userBody.pulseSpeedUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'ankleArmNumUrl')) {
+              this.ankleArmNumUrl = resdata.userBody.ankleArmNumUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'otherVesselsUrl')) {
+              this.otherVesselsUrl = resdata.userBody.otherVesselsUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'brainDiseaseType')) {
+              this.brainDiseaseType = resdata.userBody.brainDiseaseType
+            }
+            if (this._.has(resdata.userBody, 'brainMriMraUrl')) {
+              this.brainMriMraUrl = resdata.userBody.brainMriMraUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'spiritStateUrl')) {
+              this.spiritStateUrl = resdata.userBody.spiritStateUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'keithWagnarLevel')) {
+              this.keithWagnarLevel = resdata.userBody.keithWagnarLevel
+            }
+            if (this._.has(resdata.userBody, 'fundusUrl')) {
+              this.fundusUrl = resdata.userBody.fundusUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'bloodSugarEmpty')) {
+              this.bloodSugarEmpty = resdata.userBody.bloodSugarEmpty
+            }
+            if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwo')) {
+              this.bloodSugarAfterMealTwo = resdata.userBody.bloodSugarAfterMealTwo
+            }
+            if (this._.has(resdata.userBody, 'sugarBloodProtein')) {
+              this.sugarBloodProtein = resdata.userBody.sugarBloodProtein
+            }
+            if (this._.has(resdata.userBody, 'bloodSugarEmptyUrl')) {
+              this.bloodSugarEmptyUrl = resdata.userBody.bloodSugarEmptyUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwoUrl')) {
+              this.bloodSugarAfterMealTwoUrl = resdata.userBody.bloodSugarAfterMealTwoUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'sugarBloodProteinUrl')) {
+              this.sugarBloodProteinUrl = resdata.userBody.sugarBloodProteinUrl.split(',')
+            }
+            if (this._.has(resdata.userBody, 'inDoctoeIdentify')) {
+              this.inDoctoeIdentify = resdata.userBody.inDoctoeIdentify
+            }
+            if (this._.has(resdata.userBody, 'bloodPressureSickStart')) {
+              this.bloodPressureSickStart = resdata.userBody.bloodPressureSickStart
+            }
+            if (this._.has(resdata.userBody, 'sysIllnessHistoryIdDisease')) {
+              this.sysIllnessHistoryIdDisease = resdata.userBody.sysIllnessHistoryIdDisease
+            }
+            if (this._.has(resdata.userBody, 'sysIllnessHistoryIdGenetic')) {
+              this.sysIllnessHistoryIdGenetic = resdata.userBody.sysIllnessHistoryIdGenetic
             }
             // if (this._.has(resdata.userBody, 'weight')) {
             //   this.waistWai = resdata.userBody.weight
