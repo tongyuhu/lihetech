@@ -78,9 +78,13 @@
                           </div>
                           <!-- 操作 -->
                           <div class="no-order-action">
-                            <button class="contant-btn" @click="openEditTime(item.weekDay,'morning')">编辑时间</button>
-                            <button v-if="!item.morninngStop"  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
-                            @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button>
+                            <!-- <button class="contant-btn" @click="openEditTime(item.weekDay,'morning')">编辑时间</button> -->
+                            <!-- <button v-if="!item.morninngStop"  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
+                            @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button> -->
+                            <button :disabled="!item.morninngStop" :class="{'open-order':true}" 
+                            @click="closeOpenOrder(item.weekDay,1,index,false)">开启预约</button>
+                            <button :disabled="item.morninngStop" :class="{'close-order':true}" 
+                            @click="closeOpenOrder(item.weekDay,1,index,true)">关闭预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -158,8 +162,13 @@
                           </div>
                           <!-- 操作 -->
                           <div class="no-order-action">
-                            <button class="contant-btn" @click="openEditTime(item.weekDay,'noon')">编辑时间</button>
-                            <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button>
+                            <!-- <button class="contant-btn" @click="openEditTime(item.weekDay,'noon')">编辑时间</button>
+                            <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button> -->
+
+                            <button :disabled="!item.noonStop" :class="{'open-order':true}" 
+                            @click="closeOpenOrder(item.weekDay,2,index,false)">开启预约</button>
+                            <button :disabled="item.noonStop" :class="{'close-order':true}" 
+                            @click="closeOpenOrder(item.weekDay,2,index,true)">关闭预约</button>
                           </div>                         
                         </div>
                       </div>
@@ -980,6 +989,67 @@ export default {
         }
       })
       // closeorderApi
+    },
+    closeOpenOrder (day, val, index, state) {
+      let week
+      if (day === '周一') {
+        week = 1
+      }
+      if (day === '周二') {
+        week = 2
+      }
+      if (day === '周三') {
+        week = 3
+      }
+      if (day === '周四') {
+        week = 4
+      }
+      if (day === '周五') {
+        week = 5
+      }
+      if (day === '周六') {
+        week = 6
+      }
+      if (day === '周日') {
+        week = 7
+      }
+      let stop
+      if (state) {
+        stop = true
+      } else {
+        stop = false
+      }
+
+      let params = {
+        'weekDay': week,
+        'slotType': val,
+        'isStop': stop
+      }
+      this.$axios(closeorderApi(params))
+      .then(res => {
+        if (res.data.code === '0000') {
+          this.$message({
+            showClose: true,
+            message: '设置成功',
+            type: 'success'
+          })
+          let list = this.orderList
+          if (val === 1) {
+            list[index].morninngStop = state
+          }
+          if (val === 2) {
+            list[index].noonStop = state
+          }
+          this.getOrderData({type: 0})
+        } else {
+          this.$message({
+            showClose: true,
+            message: res.data.msg,
+            type: 'warning'
+          })
+        }
+      })
+      // closeorderApi
     }
   },
   mounted () {
@@ -997,6 +1067,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+button[disabled]{
+  cursor: not-allowed;
+  // not-allowed
+}
 .order-sick{
   font-size: 14px;
   table{
