@@ -1353,7 +1353,7 @@ export default {
         obj.medicineName = item.name
         obj.medicineId = item.id
         // obj.medicineId =
-        obj.unit = this.medicineUnit(item.singleuseUnit)
+        obj.unit = this.medicineunit(item.singleuseUnit)
 
         obj.remark = item.tip
         if (this._.has(item, 'uselong')) {
@@ -1373,7 +1373,7 @@ export default {
         obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
         obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes)
         obj.totalNumber = this._.isNaN(parseInt(item.usetotal)) ? null : parseInt(item.usetotal) + '盒'
-        obj.usageOff = this.medicineUnit(item.usemethod)
+        obj.usageOff = this.medicineunit(item.usemethod)
         medicine.push(obj)
         // obj.totalNumber
       })
