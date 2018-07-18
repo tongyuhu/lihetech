@@ -1,7 +1,7 @@
 import { Message } from 'element-ui'
 import axios from 'axios'
 import qs from 'qs' // formdata序列化
-// import router from './../router/index'
+import router from '@/router/index'
 // import { Message, MessageBox, Loading } from 'element-ui'
 // import Vue from 'vue'
 // axios 配置
@@ -177,12 +177,18 @@ axios.interceptors.response.use(
 
         case 404:
           err.message = `请求地址出错: ${err.response.config.url}`
+          router.replace({name: '404'})
           break
 
         case 408:
           err.message = '请求超时'
+          Message({
+            type: 'warning',
+            message: '请求超时',
+            duration: 5000,
+            showClose: true
+          })
           break
-
         case 500:
           // sessionStorage.clear()
           // window.location.href = '/BPWatch/admin/login/page'
