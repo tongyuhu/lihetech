@@ -252,7 +252,7 @@ export default {
       } else {
         params.pageNum = this.unfinishedCurrentPage
         params.pageSize = this.unfinishedPageSize
-        params.isFollowUp = this.adminInfo.id
+        params.isFollowUp = 0
       }
       params.adminIdMainDoctor = 3
       this.$axios(FlupListApi(params))

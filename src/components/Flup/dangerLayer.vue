@@ -270,7 +270,21 @@
           <div class="card-head-title">
             <p>血同型半胱氨酸（Hcy）</p>
           </div>
-          <div class="gap-bottom">
+          <div class="radio-box line-block gap-bottom">
+            <div class="line-block">
+              <span>血同型半胱氨酸(Hcy)：</span>
+            </div>
+            <div class="line-block">
+              <el-radio-group 
+                v-model="hcy"
+                size="small">
+                <el-radio :label="1">&gt;=10umol/L</el-radio>
+                <el-radio :label="2">&lt;10umol/L</el-radio>
+                <!-- <el-radio :label="3">&gt;6.9</el-radio> -->
+              </el-radio-group>
+            </div>
+          </div>
+          <!-- <div class="gap-bottom">
             <div class="width">
               <numberinput
               v-model="hcy"
@@ -288,7 +302,7 @@
                 </template>
               </numberinput>
             </div>
-          </div>
+          </div> -->
           <div>
             <div>
               <span>检查单：</span>
@@ -1121,7 +1135,11 @@ export default {
         obj.serumCreatinineUnit = this.serumCreatinineUnit
       }
       if (this.egfr !== null) {
-        obj.egfr = this.egfr
+        if (this.egfr === 1) {
+          obj.egfr = true
+        } else {
+          obj.egfr = false
+        }
       }
       if (this.proteinUrineType !== null) {
         obj.proteinUrineType = this.proteinUrineType
@@ -1316,18 +1334,21 @@ export default {
             this.birthDate = resdata.birthDate
           }
           if (this._.has(resdata, 'userBody')) {
-            if (this._.has(resdata.userBody, 'height')) {
-              this.height = resdata.userBody.height
-            }
-            if (this._.has(resdata.userBody, 'weight')) {
-              this.weight = resdata.userBody.weight
-            }
-            if (this._.has(resdata.userBody, 'smoking')) {
-              this.smoking = resdata.userBody.smoking
-            }
-            if (this._.has(resdata.userBody, 'drinking')) {
-              this.drinking = resdata.userBody.drinking
-            }
+            // if (this._.has(resdata.userBody, 'height')) {
+            //   this.height = resdata.userBody.height
+            // }
+            // if (this._.has(resdata.userBody, 'weight')) {
+            //   this.weight = resdata.userBody.weight
+            // }
+            // if (this._.has(resdata.userBody, 'weight')) {
+            //   this.weight = resdata.userBody.weight
+            // }
+            // if (this._.has(resdata.userBody, 'smoking')) {
+            //   this.smoking = resdata.userBody.smoking
+            // }
+            // if (this._.has(resdata.userBody, 'drinking')) {
+            //   this.drinking = resdata.userBody.drinking
+            // }
             //
             if (this._.has(resdata.userBody, 'realName')) {
               this.realName = resdata.userBody.realName
@@ -1362,7 +1383,7 @@ export default {
             if (this._.has(resdata.userBody, 'drinking')) {
               this.drinking = resdata.userBody.drinking
             }
-            if (this._.has(resdata.userBody, 'sex')) {
+            if (this._.has(resdata.userBody, 'cholesterolTotal')) {
               this.cholesterolTotal = resdata.userBody.cholesterolTotal
             }
             if (this._.has(resdata.userBody, 'highProteinCholesterol')) {
@@ -1394,10 +1415,33 @@ export default {
               this.serumCreatinineUnit = resdata.userBody.serumCreatinineUnit
             }
             if (this._.has(resdata.userBody, 'egfr')) {
-              this.egfr = resdata.userBody.egfr
+              if (resdata.userBody.egfr) {
+                this.egfr = 1
+              } else {
+                this.egfr = 0
+              }
+              // this.egfr = resdata.userBody.egfr
             }
+            // routineUrineUrls
+            // routineUrineUrls
             if (this._.has(resdata.userBody, 'proteinUrineType')) {
               this.proteinUrineType = resdata.userBody.proteinUrineType
+            }
+            if (this._.has(resdata.userBody, 'ecgType')) {
+              this.ecgType = resdata.userBody.ecgType
+            }
+            if (this._.has(resdata.userBody, 'heartDisease')) {
+              this.heartDisease = resdata.userBody.heartDisease
+            }
+            if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
+              if (resdata.userBody.bloodCreatinineUrls.length > 0) {
+                this.bloodCreatinineUrls = this.deleteEmpty(resdata.userBody.bloodCreatinineUrls.split(','))
+              }
+            }
+            if (this._.has(resdata.userBody, 'routineUrineUrls')) {
+              if (resdata.userBody.routineUrineUrls.length > 0) {
+                this.routineUrineUrls = this.deleteEmpty(resdata.userBody.routineUrineUrls.split(','))
+              }
             }
             if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
               if (resdata.userBody.bloodCreatinineUrls.length > 0) {
@@ -1415,9 +1459,9 @@ export default {
             if (this._.has(resdata.userBody, 'heartExpandType')) {
               this.heartExpandType = resdata.userBody.heartExpandType
             }
-            if (this._.has(resdata.userBody, 'heartDisease')) {
-              this.heartDisease = resdata.userBody.heartDisease
-            }
+            // if (this._.has(resdata.userBody, 'heartDisease')) {
+            //   this.heartDisease = resdata.userBody.heartDisease
+            // }
             if (this._.has(resdata.userBody, 'heartFigureUrl')) {
               if (resdata.userBody.heartFigureUrl.length > 0) {
                 this.heartFigureUrl = this.deleteEmpty(resdata.userBody.heartFigureUrl.split(','))
@@ -1468,6 +1512,11 @@ export default {
             if (this._.has(resdata.userBody, 'neckSoundUrl')) {
               if (resdata.userBody.neckSoundUrl.length > 0) {
                 this.neckSoundUrl = this.deleteEmpty(resdata.userBody.neckSoundUrl.split(','))
+              }
+            }
+            if (this._.has(resdata.userBody, 'ctaUrl')) {
+              if (resdata.userBody.ctaUrl.length > 0) {
+                this.ctaUrl = this.deleteEmpty(resdata.userBody.ctaUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'pulseSpeedUrl')) {
