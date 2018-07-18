@@ -1056,6 +1056,7 @@ export default {
       })
     },
     submit () {
+      console.log('分层数据', this.$data)
       let obj = {}
       obj.userId = this.FlupInfo.userId
       obj.adminHospitalId = this.FlupInfo.adminHospitalId
@@ -1101,14 +1102,14 @@ export default {
       if (this.lowProteinCholesterol !== null) {
         obj.lowProteinCholesterol = this.lowProteinCholesterol
       }
-      if (this.bloodFatUrls !== []) {
+      if (this.bloodFatUrls.length !== 0) {
         obj.bloodFatUrls = this.bloodFatUrls.join(',')
       }
       if (this.hcy !== null) {
         obj.hcy = this.hcy
       }
-      if (this.hcyUrls !== []) {
-        obj.hcyUrls = this.hcyUrls
+      if (this.hcyUrls.length !== 0) {
+        obj.hcyUrls = this.hcyUrls.join(',')
       }
       if (this.heartVesselsFamilyHistory !== null) {
         obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
@@ -1125,10 +1126,10 @@ export default {
       if (this.proteinUrineType !== null) {
         obj.proteinUrineType = this.proteinUrineType
       }
-      if (this.bloodCreatinineUrls !== []) {
+      if (this.bloodCreatinineUrls.length !== 0) {
         obj.bloodCreatinineUrls = this.bloodCreatinineUrls.join(',')
       }
-      if (this.routineProteinUrls !== []) {
+      if (this.routineProteinUrls.length !== 0) {
         obj.routineProteinUrls = this.routineProteinUrls.join(',')
       }
       if (this.lvmlType !== null) {
@@ -1140,25 +1141,25 @@ export default {
       if (this.heartDisease !== null) {
         obj.heartDisease = this.heartDisease
       }
-      if (this.heartFigureUrl !== []) {
+      if (this.heartFigureUrl.length !== 0) {
         obj.heartFigureUrl = this.heartFigureUrl.join(',')
       }
-      if (this.heartUltrasonicUrl !== []) {
+      if (this.heartUltrasonicUrl.length !== 0) {
         obj.heartUltrasonicUrl = this.heartUltrasonicUrl.join(',')
       }
-      if (this.xChestUrl !== []) {
+      if (this.xChestUrl.length !== 0) {
         obj.xChestUrl = this.xChestUrl.join(',')
       }
-      if (this.heartMrlMraUrl !== []) {
+      if (this.heartMrlMraUrl.length !== 0) {
         obj.heartMrlMraUrl = this.heartMrlMraUrl.join(',')
       }
-      if (this.ctaUrl !== []) {
+      if (this.ctaUrl.length !== 0) {
         obj.ctaUrl = this.ctaUrl.join(',')
       }
-      if (this.heartWithUrl !== []) {
+      if (this.heartWithUrl.length !== 0) {
         obj.heartWithUrl = this.heartWithUrl.join(',')
       }
-      if (this.movementUrl !== []) {
+      if (this.movementUrl.length !== 0) {
         obj.movementUrl = this.movementUrl.join(',')
       }
       if (this.neckStocksSpeedType !== null) {
@@ -1173,31 +1174,31 @@ export default {
       if (this.outsideVesselsDisease !== null) {
         obj.outsideVesselsDisease = this.outsideVesselsDisease
       }
-      if (this.neckSoundUrl !== []) {
+      if (this.neckSoundUrl.length !== 0) {
         obj.neckSoundUrl = this.neckSoundUrl.join(',')
       }
-      if (this.pulseSpeedUrl !== []) {
+      if (this.pulseSpeedUrl.length !== 0) {
         obj.pulseSpeedUrl = this.pulseSpeedUrl.join(',')
       }
-      if (this.ankleArmNumUrl !== []) {
+      if (this.ankleArmNumUrl.length !== 0) {
         obj.ankleArmNumUrl = this.ankleArmNumUrl.join(',')
       }
-      if (this.otherVesselsUrl !== []) {
+      if (this.otherVesselsUrl.length !== 0) {
         obj.otherVesselsUrl = this.otherVesselsUrl.join(',')
       }
       if (this.brainDiseaseType !== null) {
         obj.brainDiseaseType = this.brainDiseaseType
       }
-      if (this.brainMriMraUrl !== []) {
+      if (this.brainMriMraUrl.length !== 0) {
         obj.brainMriMraUrl = this.brainMriMraUrl.join(',')
       }
-      if (this.spiritStateUrl !== []) {
+      if (this.spiritStateUrl.length !== 0) {
         obj.spiritStateUrl = this.spiritStateUrl.join(',')
       }
       if (this.keithWagnarLevel !== null) {
         obj.keithWagnarLevel = this.keithWagnarLevel
       }
-      if (this.fundusUrl !== []) {
+      if (this.fundusUrl.length !== 0) {
         obj.fundusUrl = this.fundusUrl.join(',')
       }
       if (this.bloodSugarEmpty !== null) {
@@ -1209,13 +1210,13 @@ export default {
       if (this.sugarBloodProtein !== null) {
         obj.sugarBloodProtein = this.sugarBloodProtein
       }
-      if (this.bloodSugarEmptyUrl !== []) {
+      if (this.bloodSugarEmptyUrl.length !== 0) {
         obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl.join(',')
       }
-      if (this.bloodSugarAfterMealTwoUrl !== []) {
+      if (this.bloodSugarAfterMealTwoUrl.length !== 0) {
         obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl.join(',')
       }
-      if (this.sugarBloodProteinUrl !== []) {
+      if (this.sugarBloodProteinUrl.length !== 0) {
         obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl.join(',')
       }
       if (this.inDoctoeIdentify !== null) {
@@ -1230,6 +1231,7 @@ export default {
       if (this.sysIllnessHistoryIdGenetic !== null) {
         obj.sysIllnessHistoryIdGenetic = this.sysIllnessHistoryIdGenetic
       }
+      console.log('分层评估提交', obj)
       this.$axios(submitLayerApi(obj))
       .then(res => {
         if (res.data.code === '0000') {
@@ -1370,13 +1372,17 @@ export default {
               this.lowProteinCholesterol = resdata.userBody.lowProteinCholesterol
             }
             if (this._.has(resdata.userBody, 'bloodFatUrls')) {
-              this.bloodFatUrls = resdata.userBody.bloodFatUrls.split(',')
+              if (resdata.userBody.bloodFatUrls.length > 0) {
+                this.bloodFatUrls = resdata.userBody.bloodFatUrls.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'hcy')) {
               this.hcy = resdata.userBody.hcy
             }
             if (this._.has(resdata.userBody, 'hcyUrls')) {
-              this.hcyUrls = resdata.userBody.hcyUrls
+              if (resdata.userBody.hcyUrls.length > 0) {
+                this.hcyUrls = resdata.userBody.hcyUrls.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'heartVesselsFamilyHistory')) {
               this.heartVesselsFamilyHistory = resdata.userBody.heartVesselsFamilyHistory
@@ -1394,10 +1400,14 @@ export default {
               this.proteinUrineType = resdata.userBody.proteinUrineType
             }
             if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
-              this.bloodCreatinineUrls = resdata.userBody.bloodCreatinineUrls.split(',')
+              if (resdata.userBody.bloodCreatinineUrls.length > 0) {
+                this.bloodCreatinineUrls = resdata.userBody.bloodCreatinineUrls.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'routineProteinUrls')) {
-              this.routineProteinUrls = resdata.userBody.routineProteinUrls.split(',')
+              if (resdata.userBody.routineProteinUrls.length > 0) {
+                this.routineProteinUrls = resdata.userBody.routineProteinUrls.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'lvmlType')) {
               this.lvmlType = resdata.userBody.lvmlType
@@ -1409,25 +1419,39 @@ export default {
               this.heartDisease = resdata.userBody.heartDisease
             }
             if (this._.has(resdata.userBody, 'heartFigureUrl')) {
-              this.heartFigureUrl = resdata.userBody.heartFigureUrl.split(',')
+              if (resdata.userBody.heartFigureUrl.length > 0) {
+                this.heartFigureUrl = resdata.userBody.heartFigureUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'heartUltrasonicUrl')) {
-              this.heartUltrasonicUrl = resdata.userBody.heartUltrasonicUrl.split(',')
+              if (resdata.userBody.heartUltrasonicUrl.length > 0) {
+                this.heartUltrasonicUrl = resdata.userBody.heartUltrasonicUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'xChestUrl')) {
-              this.xChestUrl = resdata.userBody.xChestUrl.split(',')
+              if (resdata.userBody.xChestUrl.length > 0) {
+                this.xChestUrl = resdata.userBody.xChestUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'heartMrlMraUrl')) {
-              this.heartMrlMraUrl = resdata.userBody.heartMrlMraUrl.split(',')
+              if (resdata.userBody.heartMrlMraUrl.length > 0) {
+                this.heartMrlMraUrl = resdata.userBody.heartMrlMraUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'ctaUrl')) {
-              this.ctaUrl = resdata.userBody.ctaUrl.split(',')
+              if (resdata.userBody.ctaUrl.length > 0) {
+                this.ctaUrl = resdata.userBody.ctaUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'heartWithUrl')) {
-              this.heartWithUrl = resdata.userBody.heartWithUrl.split(',')
+              if (resdata.userBody.heartWithUrl.length > 0) {
+                this.heartWithUrl = resdata.userBody.heartWithUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'movementUrl')) {
-              this.movementUrl = resdata.userBody.movementUrl.split(',')
+              if (resdata.userBody.movementUrl.length > 0) {
+                this.movementUrl = resdata.userBody.movementUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'neckStocksSpeedType')) {
               this.neckStocksSpeedType = resdata.userBody.neckStocksSpeedType
@@ -1442,31 +1466,45 @@ export default {
               this.outsideVesselsDisease = resdata.userBody.outsideVesselsDisease
             }
             if (this._.has(resdata.userBody, 'neckSoundUrl')) {
-              this.neckSoundUrl = resdata.userBody.neckSoundUrl.split(',')
+              if (resdata.userBody.neckSoundUrl.length > 0) {
+                this.neckSoundUrl = resdata.userBody.neckSoundUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'pulseSpeedUrl')) {
-              this.pulseSpeedUrl = resdata.userBody.pulseSpeedUrl.split(',')
+              if (resdata.userBody.pulseSpeedUrl.length > 0) {
+                this.pulseSpeedUrl = resdata.userBody.pulseSpeedUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'ankleArmNumUrl')) {
-              this.ankleArmNumUrl = resdata.userBody.ankleArmNumUrl.split(',')
+              if (resdata.userBody.ankleArmNumUrl.length > 0) {
+                this.ankleArmNumUrl = resdata.userBody.ankleArmNumUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'otherVesselsUrl')) {
-              this.otherVesselsUrl = resdata.userBody.otherVesselsUrl.split(',')
+              if (resdata.userBody.otherVesselsUrl.length > 0) {
+                this.otherVesselsUrl = resdata.userBody.otherVesselsUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'brainDiseaseType')) {
               this.brainDiseaseType = resdata.userBody.brainDiseaseType
             }
             if (this._.has(resdata.userBody, 'brainMriMraUrl')) {
-              this.brainMriMraUrl = resdata.userBody.brainMriMraUrl.split(',')
+              if (resdata.userBody.brainMriMraUrl.length > 0) {
+                this.brainMriMraUrl = resdata.userBody.brainMriMraUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'spiritStateUrl')) {
-              this.spiritStateUrl = resdata.userBody.spiritStateUrl.split(',')
+              if (resdata.userBody.spiritStateUrl.length > 0) {
+                this.spiritStateUrl = resdata.userBody.spiritStateUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'keithWagnarLevel')) {
               this.keithWagnarLevel = resdata.userBody.keithWagnarLevel
             }
             if (this._.has(resdata.userBody, 'fundusUrl')) {
-              this.fundusUrl = resdata.userBody.fundusUrl.split(',')
+              if (resdata.userBody.fundusUrl.length > 0) {
+                this.fundusUrl = resdata.userBody.fundusUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'bloodSugarEmpty')) {
               this.bloodSugarEmpty = resdata.userBody.bloodSugarEmpty
@@ -1478,13 +1516,19 @@ export default {
               this.sugarBloodProtein = resdata.userBody.sugarBloodProtein
             }
             if (this._.has(resdata.userBody, 'bloodSugarEmptyUrl')) {
-              this.bloodSugarEmptyUrl = resdata.userBody.bloodSugarEmptyUrl.split(',')
+              if (resdata.userBody.bloodSugarEmptyUrl.length > 0) {
+                this.bloodSugarEmptyUrl = resdata.userBody.bloodSugarEmptyUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwoUrl')) {
-              this.bloodSugarAfterMealTwoUrl = resdata.userBody.bloodSugarAfterMealTwoUrl.split(',')
+              if (resdata.userBody.bloodSugarAfterMealTwoUrl.length > 0) {
+                this.bloodSugarAfterMealTwoUrl = resdata.userBody.bloodSugarAfterMealTwoUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'sugarBloodProteinUrl')) {
-              this.sugarBloodProteinUrl = resdata.userBody.sugarBloodProteinUrl.split(',')
+              if (resdata.userBody.sugarBloodProteinUrl.length > 0) {
+                this.sugarBloodProteinUrl = resdata.userBody.sugarBloodProteinUrl.split(',')
+              }
             }
             if (this._.has(resdata.userBody, 'inDoctoeIdentify')) {
               this.inDoctoeIdentify = resdata.userBody.inDoctoeIdentify
@@ -1536,6 +1580,7 @@ export default {
     this.getLayerData()
   },
   mounted () {
+    console.log('fenceng数据', this.$data)
     // this.realName = this.FlupInfo.userName
     // console.log('store随访数据', this.FlupInfo)
     // console.log('store随访数据', this.FlupInfo)

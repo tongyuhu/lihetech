@@ -75,6 +75,7 @@ export default {
       showBigImg: false,
       imgs: [],
       index: 0
+
     }
   },
   methods: {
@@ -98,8 +99,10 @@ export default {
       let imgArr = []
       arr.forEach(item => {
         let obj = {}
-        obj.show = false
-        obj.src = item
+        if (item.src) {
+          obj.show = false
+          obj.src = process.env.IMG_URL + item
+        }
         imgArr.push(obj)
       })
       return imgArr
@@ -129,6 +132,7 @@ export default {
       }
     },
     pageUp () {
+      console.log('检查单arr', this.imgs)
       if (this.index > 0) {
         this.index --
         this.showImg(this.index)
@@ -140,7 +144,9 @@ export default {
     emitimgarr () {
       let arr = []
       this.imgs.forEach(item => {
-        arr.push(item.src)
+        // let src = item.src.match(/process.env.IMG_URL(\S*)/)[1]
+        let src = this._.replace(item.src, process.env.IMG_URL, '')
+        arr.push(src)
       })
       return arr
     },
@@ -181,6 +187,7 @@ export default {
     this.showBigImg = this.show
     this.imgs = this.imgarr()
     this.initImg()
+    console.log('检查单arr', this.imgs)
     Bus.$on('showbigimg', () => {
       vm.showBig()
     })
