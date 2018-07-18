@@ -88,22 +88,22 @@ export default {
     },
     imgarr () {
       let arr = []
+      let imgArr = []
       if (typeOf(this.imgsrc) === 'string') {
         if (this.imgsrc !== '') {
-          arr.push(this.imgsrc)
+          imgArr.push(this.imgsrc)
         }
       }
       if (typeOf(this.imgsrc) === 'array') {
         arr = this.imgsrc
       }
-      let imgArr = []
       arr.forEach(item => {
+        // if (item) {
         let obj = {}
-        if (item.src) {
-          obj.show = false
-          obj.src = process.env.IMG_URL + item
-        }
+        obj.show = false
+        obj.src = process.env.IMG_URL + item
         imgArr.push(obj)
+        // }
       })
       return imgArr
     },
@@ -152,6 +152,7 @@ export default {
     },
     uploadFile: function (e) {
       // uploadFileApi
+      console.log('检查单arr', this.imgs)
       let vm = this
       let file = e.target.files[0]
       let formdata = new FormData()
@@ -184,7 +185,8 @@ export default {
   },
   mounted () {
     let vm = this
-    this.showBigImg = this.show
+    // this.showBigImg = this.show
+
     this.imgs = this.imgarr()
     this.initImg()
     console.log('检查单arr', this.imgs)

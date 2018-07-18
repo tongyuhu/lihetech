@@ -878,7 +878,7 @@
     <div v-if="imgDialog">
       <imgFloatCarousel
       :imgsrc="imgarr"
-      :show="true"
+      :show="imgDialog"
       @addImg="changeImgs"
       @close="closeImg"
       >
@@ -933,8 +933,8 @@ export default {
       //   bloodhistroy: null
       // },
       imgarr: [
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=fa47cd471c3075484fd0980fa42871d5&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F342ac65c103853434cc02dda9f13b07eca80883a.jpg',
-        'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=789a8bfd582e29315ca2a71b5047d815&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffcfaaf51f3deb48fd0e9be27fc1f3a292cf57842.jpg'
+        // 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=fa47cd471c3075484fd0980fa42871d5&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F342ac65c103853434cc02dda9f13b07eca80883a.jpg',
+        // 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=789a8bfd582e29315ca2a71b5047d815&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffcfaaf51f3deb48fd0e9be27fc1f3a292cf57842.jpg'
       ],
       imgDialog: false,
       currentCheckItem: '',
@@ -1019,10 +1019,10 @@ export default {
       'openChatWindow'
     ]),
     openCheckItemDialog (val) {
-      console.log('检查单', val)
       this.imgDialog = true
       this.imgarr = this[val]
       this.currentCheckItem = val
+      console.log('检查单', this[val])
     },
     changeImgs (arr) {
       this[this.currentCheckItem] = arr
@@ -1373,7 +1373,7 @@ export default {
             }
             if (this._.has(resdata.userBody, 'bloodFatUrls')) {
               if (resdata.userBody.bloodFatUrls.length > 0) {
-                this.bloodFatUrls = resdata.userBody.bloodFatUrls.split(',')
+                this.bloodFatUrls = this.deleteEmpty(resdata.userBody.bloodFatUrls.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'hcy')) {
@@ -1401,12 +1401,12 @@ export default {
             }
             if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
               if (resdata.userBody.bloodCreatinineUrls.length > 0) {
-                this.bloodCreatinineUrls = resdata.userBody.bloodCreatinineUrls.split(',')
+                this.bloodCreatinineUrls = this.deleteEmpty(resdata.userBody.bloodCreatinineUrls.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'routineProteinUrls')) {
               if (resdata.userBody.routineProteinUrls.length > 0) {
-                this.routineProteinUrls = resdata.userBody.routineProteinUrls.split(',')
+                this.routineProteinUrls = this.deleteEmpty(resdata.userBody.routineProteinUrls.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'lvmlType')) {
@@ -1420,37 +1420,37 @@ export default {
             }
             if (this._.has(resdata.userBody, 'heartFigureUrl')) {
               if (resdata.userBody.heartFigureUrl.length > 0) {
-                this.heartFigureUrl = resdata.userBody.heartFigureUrl.split(',')
+                this.heartFigureUrl = this.deleteEmpty(resdata.userBody.heartFigureUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'heartUltrasonicUrl')) {
               if (resdata.userBody.heartUltrasonicUrl.length > 0) {
-                this.heartUltrasonicUrl = resdata.userBody.heartUltrasonicUrl.split(',')
+                this.heartUltrasonicUrl = this.deleteEmpty(resdata.userBody.heartUltrasonicUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'xChestUrl')) {
               if (resdata.userBody.xChestUrl.length > 0) {
-                this.xChestUrl = resdata.userBody.xChestUrl.split(',')
+                this.xChestUrl = this.deleteEmpty(resdata.userBody.xChestUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'heartMrlMraUrl')) {
               if (resdata.userBody.heartMrlMraUrl.length > 0) {
-                this.heartMrlMraUrl = resdata.userBody.heartMrlMraUrl.split(',')
+                this.heartMrlMraUrl = this.deleteEmpty(resdata.userBody.heartMrlMraUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'ctaUrl')) {
               if (resdata.userBody.ctaUrl.length > 0) {
-                this.ctaUrl = resdata.userBody.ctaUrl.split(',')
+                this.ctaUrl = this.deleteEmpty(resdata.userBody.ctaUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'heartWithUrl')) {
               if (resdata.userBody.heartWithUrl.length > 0) {
-                this.heartWithUrl = resdata.userBody.heartWithUrl.split(',')
+                this.heartWithUrl = this.deleteEmpty(resdata.userBody.heartWithUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'movementUrl')) {
               if (resdata.userBody.movementUrl.length > 0) {
-                this.movementUrl = resdata.userBody.movementUrl.split(',')
+                this.movementUrl = this.deleteEmpty(resdata.userBody.movementUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'neckStocksSpeedType')) {
@@ -1467,22 +1467,22 @@ export default {
             }
             if (this._.has(resdata.userBody, 'neckSoundUrl')) {
               if (resdata.userBody.neckSoundUrl.length > 0) {
-                this.neckSoundUrl = resdata.userBody.neckSoundUrl.split(',')
+                this.neckSoundUrl = this.deleteEmpty(resdata.userBody.neckSoundUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'pulseSpeedUrl')) {
               if (resdata.userBody.pulseSpeedUrl.length > 0) {
-                this.pulseSpeedUrl = resdata.userBody.pulseSpeedUrl.split(',')
+                this.pulseSpeedUrl = this.deleteEmpty(resdata.userBody.pulseSpeedUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'ankleArmNumUrl')) {
               if (resdata.userBody.ankleArmNumUrl.length > 0) {
-                this.ankleArmNumUrl = resdata.userBody.ankleArmNumUrl.split(',')
+                this.ankleArmNumUrl = this.deleteEmpty(resdata.userBody.ankleArmNumUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'otherVesselsUrl')) {
               if (resdata.userBody.otherVesselsUrl.length > 0) {
-                this.otherVesselsUrl = resdata.userBody.otherVesselsUrl.split(',')
+                this.otherVesselsUrl = this.deleteEmpty(resdata.userBody.otherVesselsUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'brainDiseaseType')) {
@@ -1490,12 +1490,12 @@ export default {
             }
             if (this._.has(resdata.userBody, 'brainMriMraUrl')) {
               if (resdata.userBody.brainMriMraUrl.length > 0) {
-                this.brainMriMraUrl = resdata.userBody.brainMriMraUrl.split(',')
+                this.brainMriMraUrl = this.deleteEmpty(resdata.userBody.brainMriMraUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'spiritStateUrl')) {
               if (resdata.userBody.spiritStateUrl.length > 0) {
-                this.spiritStateUrl = resdata.userBody.spiritStateUrl.split(',')
+                this.spiritStateUrl = this.deleteEmpty(resdata.userBody.spiritStateUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'keithWagnarLevel')) {
@@ -1503,7 +1503,7 @@ export default {
             }
             if (this._.has(resdata.userBody, 'fundusUrl')) {
               if (resdata.userBody.fundusUrl.length > 0) {
-                this.fundusUrl = resdata.userBody.fundusUrl.split(',')
+                this.fundusUrl = this.deleteEmpty(resdata.userBody.fundusUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'bloodSugarEmpty')) {
@@ -1517,17 +1517,17 @@ export default {
             }
             if (this._.has(resdata.userBody, 'bloodSugarEmptyUrl')) {
               if (resdata.userBody.bloodSugarEmptyUrl.length > 0) {
-                this.bloodSugarEmptyUrl = resdata.userBody.bloodSugarEmptyUrl.split(',')
+                this.bloodSugarEmptyUrl = this.deleteEmpty(resdata.userBody.bloodSugarEmptyUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwoUrl')) {
               if (resdata.userBody.bloodSugarAfterMealTwoUrl.length > 0) {
-                this.bloodSugarAfterMealTwoUrl = resdata.userBody.bloodSugarAfterMealTwoUrl.split(',')
+                this.bloodSugarAfterMealTwoUrl = this.deleteEmpty(resdata.userBody.bloodSugarAfterMealTwoUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'sugarBloodProteinUrl')) {
               if (resdata.userBody.sugarBloodProteinUrl.length > 0) {
-                this.sugarBloodProteinUrl = resdata.userBody.sugarBloodProteinUrl.split(',')
+                this.sugarBloodProteinUrl = this.deleteEmpty(resdata.userBody.sugarBloodProteinUrl.split(','))
               }
             }
             if (this._.has(resdata.userBody, 'inDoctoeIdentify')) {
@@ -1572,6 +1572,16 @@ export default {
       this.addChatFriend(sick)
       this.changeChatFriend(sick)
       this.openChatWindow()
+    },
+    deleteEmpty (val) {
+      let arr = []
+      val.forEach(item => {
+        let str = item
+        if (this._.replace(str, '\/', '')) {
+          arr.push(item)
+        }
+      })
+      return arr
     }
   },
   created () {
