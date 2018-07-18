@@ -786,6 +786,7 @@ export default {
       let time = {
       }
       nowDay = dateFormat(nowDay, 0, true)
+      nowDay = daybefor(nowDay, 1, true)
       if (this._.gt(val, nowDay)) {
         this.$message({
           showClose: true,
