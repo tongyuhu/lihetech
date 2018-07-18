@@ -238,7 +238,7 @@
                     <div class="half-day">
 
                     <span class="span-block">上午</span>
-                    <span class="span-block">{{item.morninngWork}}</span>
+                    <!-- <span class="span-block">{{item.morninngWork}}</span> -->
                     </div>
                   </td>
                   <td v-if="item.morninng.length === 0">
@@ -311,7 +311,7 @@
                   <td class="width">
                     <div class="half-day">
                       <span class="span-block">下午</span>
-                      <span class="span-block">{{item.noonWork}}</span>
+                      <!-- <span class="span-block">{{item.noonWork}}</span> -->
                     </div>
                   </td>
                   <td v-if="item.noon.length === 0">
