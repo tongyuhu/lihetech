@@ -1074,6 +1074,7 @@ export default {
       let obj = {}
       obj.userId = this.FlupInfo.userId
       obj.adminHospitalId = this.FlupInfo.adminHospitalId
+      // 身体指标
       if (this.realName !== null) {
         obj.realName = this.realName
       }
@@ -1082,15 +1083,6 @@ export default {
       }
       if (this.birthDate !== null) {
         obj.birthDate = this.birthDate
-      }
-      if (this.bloodPressureSickStart !== null) {
-        obj.bloodPressureSickStart = this.bloodPressureSickStart
-      }
-      if (this.systolicMaxHistory !== null) {
-        obj.systolicMaxHistory = this.systolicMaxHistory
-      }
-      if (this.diastolicMaxHistory !== null) {
-        obj.diastolicMaxHistory = this.diastolicMaxHistory
       }
       if (this.height !== null) {
         obj.height = this.height
@@ -1104,9 +1096,10 @@ export default {
       if (this.smoking !== null) {
         obj.smoking = this.smoking
       }
-      if (this.drinking !== null) {
-        obj.drinking = this.drinking
+      if (this.heartVesselsFamilyHistory !== null) {
+        obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
       }
+      // 血脂
       if (this.cholesterolTotal !== null) {
         obj.cholesterolTotal = this.cholesterolTotal
       }
@@ -1119,15 +1112,33 @@ export default {
       if (this.bloodFatUrls.length !== 0) {
         obj.bloodFatUrls = this.bloodFatUrls.join(',')
       }
+      // 血同型半胱氨酸（Hcy
       if (this.hcy !== null) {
         obj.hcy = this.hcy
       }
       if (this.hcyUrls.length !== 0) {
         obj.hcyUrls = this.hcyUrls.join(',')
       }
-      if (this.heartVesselsFamilyHistory !== null) {
-        obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
+      // 血糖评估
+      if (this.bloodSugarEmpty !== null) {
+        obj.bloodSugarEmpty = this.bloodSugarEmpty
       }
+      if (this.bloodSugarAfterMealTwo !== null) {
+        obj.bloodSugarAfterMealTwo = this.bloodSugarAfterMealTwo
+      }
+      if (this.sugarBloodProtein !== null) {
+        obj.sugarBloodProtein = this.sugarBloodProtein
+      }
+      if (this.bloodSugarEmptyUrl.length !== 0) {
+        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl.join(',')
+      }
+      if (this.bloodSugarAfterMealTwoUrl.length !== 0) {
+        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl.join(',')
+      }
+      if (this.sugarBloodProteinUrl.length !== 0) {
+        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl.join(',')
+      }
+      // 肾脏评估
       if (this.serumCreatinineType !== null) {
         obj.serumCreatinineType = this.serumCreatinineType
       }
@@ -1147,8 +1158,15 @@ export default {
       if (this.bloodCreatinineUrls.length !== 0) {
         obj.bloodCreatinineUrls = this.bloodCreatinineUrls.join(',')
       }
+      if (this.routineUrineUrls.length !== 0) {
+        obj.routineUrineUrls = this.routineUrineUrls.join(',')
+      }
       if (this.routineProteinUrls.length !== 0) {
         obj.routineProteinUrls = this.routineProteinUrls.join(',')
+      }
+      // 心脏评估
+      if (this.ecgType !== null) {
+        obj.ecgType = this.ecgType
       }
       if (this.lvmlType !== null) {
         obj.lvmlType = this.lvmlType
@@ -1180,6 +1198,7 @@ export default {
       if (this.movementUrl.length !== 0) {
         obj.movementUrl = this.movementUrl.join(',')
       }
+      // 外周血管评估
       if (this.neckStocksSpeedType !== null) {
         obj.neckStocksSpeedType = this.neckStocksSpeedType
       }
@@ -1204,51 +1223,27 @@ export default {
       if (this.otherVesselsUrl.length !== 0) {
         obj.otherVesselsUrl = this.otherVesselsUrl.join(',')
       }
+      // 脑评估
       if (this.brainDiseaseType !== null) {
         obj.brainDiseaseType = this.brainDiseaseType
       }
       if (this.brainMriMraUrl.length !== 0) {
         obj.brainMriMraUrl = this.brainMriMraUrl.join(',')
       }
+      if (this.brainCtaUrl.length !== 0) {
+        obj.brainCtaUrl = this.brainCtaUrl.join(',')
+      }
       if (this.spiritStateUrl.length !== 0) {
         obj.spiritStateUrl = this.spiritStateUrl.join(',')
       }
+      // 眼底评估
       if (this.keithWagnarLevel !== null) {
         obj.keithWagnarLevel = this.keithWagnarLevel
       }
       if (this.fundusUrl.length !== 0) {
         obj.fundusUrl = this.fundusUrl.join(',')
       }
-      if (this.bloodSugarEmpty !== null) {
-        obj.bloodSugarEmpty = this.bloodSugarEmpty
-      }
-      if (this.bloodSugarAfterMealTwo !== null) {
-        obj.bloodSugarAfterMealTwo = this.bloodSugarAfterMealTwo
-      }
-      if (this.sugarBloodProtein !== null) {
-        obj.sugarBloodProtein = this.sugarBloodProtein
-      }
-      if (this.bloodSugarEmptyUrl.length !== 0) {
-        obj.bloodSugarEmptyUrl = this.bloodSugarEmptyUrl.join(',')
-      }
-      if (this.bloodSugarAfterMealTwoUrl.length !== 0) {
-        obj.bloodSugarAfterMealTwoUrl = this.bloodSugarAfterMealTwoUrl.join(',')
-      }
-      if (this.sugarBloodProteinUrl.length !== 0) {
-        obj.sugarBloodProteinUrl = this.sugarBloodProteinUrl.join(',')
-      }
-      if (this.inDoctoeIdentify !== null) {
-        obj.inDoctoeIdentify = this.inDoctoeIdentify
-      }
-      if (this.bloodPressureSickStart !== null) {
-        obj.bloodPressureSickStart = this.bloodPressureSickStart
-      }
-      if (this.sysIllnessHistoryIdDisease !== null) {
-        obj.sysIllnessHistoryIdDisease = this.sysIllnessHistoryIdDisease
-      }
-      if (this.sysIllnessHistoryIdGenetic !== null) {
-        obj.sysIllnessHistoryIdGenetic = this.sysIllnessHistoryIdGenetic
-      }
+      // end
       console.log('分层评估提交', obj)
       this.$axios(submitLayerApi(obj))
       .then(res => {
@@ -1327,47 +1322,14 @@ export default {
           if (this._.has(resdata, 'realName')) {
             this.realName = resdata.realName
           }
-          if (this._.has(resdata, 'sex')) {
-            this.sex = this._.toNumber(resdata.sex)
-          }
           if (this._.has(resdata, 'birthDate')) {
             this.birthDate = resdata.birthDate
           }
+          if (this._.has(resdata, 'sex')) {
+            this.sex = this._.toNumber(resdata.sex)
+          }
           if (this._.has(resdata, 'userBody')) {
-            // if (this._.has(resdata.userBody, 'height')) {
-            //   this.height = resdata.userBody.height
-            // }
-            // if (this._.has(resdata.userBody, 'weight')) {
-            //   this.weight = resdata.userBody.weight
-            // }
-            // if (this._.has(resdata.userBody, 'weight')) {
-            //   this.weight = resdata.userBody.weight
-            // }
-            // if (this._.has(resdata.userBody, 'smoking')) {
-            //   this.smoking = resdata.userBody.smoking
-            // }
-            // if (this._.has(resdata.userBody, 'drinking')) {
-            //   this.drinking = resdata.userBody.drinking
-            // }
-            //
-            if (this._.has(resdata.userBody, 'realName')) {
-              this.realName = resdata.userBody.realName
-            }
-            if (this._.has(resdata.userBody, 'sex')) {
-              this.sex = resdata.userBody.sex
-            }
-            if (this._.has(resdata.userBody, 'birthDate')) {
-              this.birthDate = resdata.userBody.birthDate
-            }
-            if (this._.has(resdata.userBody, 'bloodPressureSickStart')) {
-              this.bloodPressureSickStart = resdata.userBody.bloodPressureSickStart
-            }
-            if (this._.has(resdata.userBody, 'systolicMaxHistory')) {
-              this.systolicMaxHistory = resdata.userBody.systolicMaxHistory
-            }
-            if (this._.has(resdata.userBody, 'diastolicMaxHistory')) {
-              this.diastolicMaxHistory = resdata.userBody.diastolicMaxHistory
-            }
+          // 身体指标
             if (this._.has(resdata.userBody, 'height')) {
               this.height = resdata.userBody.height
             }
@@ -1380,9 +1342,10 @@ export default {
             if (this._.has(resdata.userBody, 'smoking')) {
               this.smoking = resdata.userBody.smoking
             }
-            if (this._.has(resdata.userBody, 'drinking')) {
-              this.drinking = resdata.userBody.drinking
+            if (this._.has(resdata.userBody, 'heartVesselsFamilyHistory')) {
+              this.heartVesselsFamilyHistory = resdata.userBody.heartVesselsFamilyHistory
             }
+          // 血脂
             if (this._.has(resdata.userBody, 'cholesterolTotal')) {
               this.cholesterolTotal = resdata.userBody.cholesterolTotal
             }
@@ -1397,6 +1360,7 @@ export default {
                 this.bloodFatUrls = this.deleteEmpty(resdata.userBody.bloodFatUrls.split(','))
               }
             }
+          // 血同型半胱氨酸（Hcy
             if (this._.has(resdata.userBody, 'hcy')) {
               this.hcy = resdata.userBody.hcy
             }
@@ -1405,9 +1369,33 @@ export default {
                 this.hcyUrls = resdata.userBody.hcyUrls.split(',')
               }
             }
-            if (this._.has(resdata.userBody, 'heartVesselsFamilyHistory')) {
-              this.heartVesselsFamilyHistory = resdata.userBody.heartVesselsFamilyHistory
+          // 血糖评估
+            if (this._.has(resdata.userBody, 'bloodSugarEmpty')) {
+              this.bloodSugarEmpty = resdata.userBody.bloodSugarEmpty
             }
+            if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwo')) {
+              this.bloodSugarAfterMealTwo = resdata.userBody.bloodSugarAfterMealTwo
+            }
+            if (this._.has(resdata.userBody, 'sugarBloodProtein')) {
+              this.sugarBloodProtein = resdata.userBody.sugarBloodProtein
+            }
+            if (this._.has(resdata.userBody, 'bloodSugarEmptyUrl')) {
+              if (resdata.userBody.bloodSugarEmptyUrl.length > 0) {
+                this.bloodSugarEmptyUrl = this.deleteEmpty(resdata.userBody.bloodSugarEmptyUrl.split(','))
+              }
+            }
+            if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwoUrl')) {
+              if (resdata.userBody.bloodSugarAfterMealTwoUrl.length > 0) {
+                this.bloodSugarAfterMealTwoUrl = this.deleteEmpty(resdata.userBody.bloodSugarAfterMealTwoUrl.split(','))
+              }
+            }
+            if (this._.has(resdata.userBody, 'sugarBloodProteinUrl')) {
+              if (resdata.userBody.sugarBloodProteinUrl.length > 0) {
+                this.sugarBloodProteinUrl = this.deleteEmpty(resdata.userBody.sugarBloodProteinUrl.split(','))
+              }
+            }
+
+          // 肾脏评估
             if (this._.has(resdata.userBody, 'serumCreatinineType')) {
               this.serumCreatinineType = resdata.userBody.serumCreatinineType
             }
@@ -1420,18 +1408,9 @@ export default {
               } else {
                 this.egfr = 0
               }
-              // this.egfr = resdata.userBody.egfr
             }
-            // routineUrineUrls
-            // routineUrineUrls
             if (this._.has(resdata.userBody, 'proteinUrineType')) {
               this.proteinUrineType = resdata.userBody.proteinUrineType
-            }
-            if (this._.has(resdata.userBody, 'ecgType')) {
-              this.ecgType = resdata.userBody.ecgType
-            }
-            if (this._.has(resdata.userBody, 'heartDisease')) {
-              this.heartDisease = resdata.userBody.heartDisease
             }
             if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
               if (resdata.userBody.bloodCreatinineUrls.length > 0) {
@@ -1443,25 +1422,27 @@ export default {
                 this.routineUrineUrls = this.deleteEmpty(resdata.userBody.routineUrineUrls.split(','))
               }
             }
-            if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
-              if (resdata.userBody.bloodCreatinineUrls.length > 0) {
-                this.bloodCreatinineUrls = this.deleteEmpty(resdata.userBody.bloodCreatinineUrls.split(','))
-              }
-            }
             if (this._.has(resdata.userBody, 'routineProteinUrls')) {
               if (resdata.userBody.routineProteinUrls.length > 0) {
                 this.routineProteinUrls = this.deleteEmpty(resdata.userBody.routineProteinUrls.split(','))
               }
             }
+          // 心脏评估
+            if (this._.has(resdata.userBody, 'ecgType')) {
+              this.ecgType = resdata.userBody.ecgType
+            }
             if (this._.has(resdata.userBody, 'lvmlType')) {
               this.lvmlType = resdata.userBody.lvmlType
+            }
+            if (this._.has(resdata.userBody, 'heartDisease')) {
+              this.heartDisease = resdata.userBody.heartDisease
             }
             if (this._.has(resdata.userBody, 'heartExpandType')) {
               this.heartExpandType = resdata.userBody.heartExpandType
             }
-            // if (this._.has(resdata.userBody, 'heartDisease')) {
-            //   this.heartDisease = resdata.userBody.heartDisease
-            // }
+            if (this._.has(resdata.userBody, 'heartDisease')) {
+              this.heartDisease = resdata.userBody.heartDisease
+            }
             if (this._.has(resdata.userBody, 'heartFigureUrl')) {
               if (resdata.userBody.heartFigureUrl.length > 0) {
                 this.heartFigureUrl = this.deleteEmpty(resdata.userBody.heartFigureUrl.split(','))
@@ -1497,6 +1478,7 @@ export default {
                 this.movementUrl = this.deleteEmpty(resdata.userBody.movementUrl.split(','))
               }
             }
+          // 外周血管评估
             if (this._.has(resdata.userBody, 'neckStocksSpeedType')) {
               this.neckStocksSpeedType = resdata.userBody.neckStocksSpeedType
             }
@@ -1514,11 +1496,6 @@ export default {
                 this.neckSoundUrl = this.deleteEmpty(resdata.userBody.neckSoundUrl.split(','))
               }
             }
-            if (this._.has(resdata.userBody, 'ctaUrl')) {
-              if (resdata.userBody.ctaUrl.length > 0) {
-                this.ctaUrl = this.deleteEmpty(resdata.userBody.ctaUrl.split(','))
-              }
-            }
             if (this._.has(resdata.userBody, 'pulseSpeedUrl')) {
               if (resdata.userBody.pulseSpeedUrl.length > 0) {
                 this.pulseSpeedUrl = this.deleteEmpty(resdata.userBody.pulseSpeedUrl.split(','))
@@ -1534,6 +1511,7 @@ export default {
                 this.otherVesselsUrl = this.deleteEmpty(resdata.userBody.otherVesselsUrl.split(','))
               }
             }
+          // 脑评估
             if (this._.has(resdata.userBody, 'brainDiseaseType')) {
               this.brainDiseaseType = resdata.userBody.brainDiseaseType
             }
@@ -1542,11 +1520,17 @@ export default {
                 this.brainMriMraUrl = this.deleteEmpty(resdata.userBody.brainMriMraUrl.split(','))
               }
             }
+            if (this._.has(resdata.userBody, 'brainCtaUrl')) {
+              if (resdata.userBody.brainCtaUrl.length > 0) {
+                this.brainCtaUrl = this.deleteEmpty(resdata.userBody.brainCtaUrl.split(','))
+              }
+            }
             if (this._.has(resdata.userBody, 'spiritStateUrl')) {
               if (resdata.userBody.spiritStateUrl.length > 0) {
                 this.spiritStateUrl = this.deleteEmpty(resdata.userBody.spiritStateUrl.split(','))
               }
             }
+          // 眼底评估
             if (this._.has(resdata.userBody, 'keithWagnarLevel')) {
               this.keithWagnarLevel = resdata.userBody.keithWagnarLevel
             }
@@ -1555,55 +1539,46 @@ export default {
                 this.fundusUrl = this.deleteEmpty(resdata.userBody.fundusUrl.split(','))
               }
             }
-            if (this._.has(resdata.userBody, 'bloodSugarEmpty')) {
-              this.bloodSugarEmpty = resdata.userBody.bloodSugarEmpty
-            }
-            if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwo')) {
-              this.bloodSugarAfterMealTwo = resdata.userBody.bloodSugarAfterMealTwo
-            }
-            if (this._.has(resdata.userBody, 'sugarBloodProtein')) {
-              this.sugarBloodProtein = resdata.userBody.sugarBloodProtein
-            }
-            if (this._.has(resdata.userBody, 'bloodSugarEmptyUrl')) {
-              if (resdata.userBody.bloodSugarEmptyUrl.length > 0) {
-                this.bloodSugarEmptyUrl = this.deleteEmpty(resdata.userBody.bloodSugarEmptyUrl.split(','))
-              }
-            }
-            if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwoUrl')) {
-              if (resdata.userBody.bloodSugarAfterMealTwoUrl.length > 0) {
-                this.bloodSugarAfterMealTwoUrl = this.deleteEmpty(resdata.userBody.bloodSugarAfterMealTwoUrl.split(','))
-              }
-            }
-            if (this._.has(resdata.userBody, 'sugarBloodProteinUrl')) {
-              if (resdata.userBody.sugarBloodProteinUrl.length > 0) {
-                this.sugarBloodProteinUrl = this.deleteEmpty(resdata.userBody.sugarBloodProteinUrl.split(','))
-              }
-            }
-            if (this._.has(resdata.userBody, 'inDoctoeIdentify')) {
-              this.inDoctoeIdentify = resdata.userBody.inDoctoeIdentify
-            }
-            if (this._.has(resdata.userBody, 'bloodPressureSickStart')) {
-              this.bloodPressureSickStart = resdata.userBody.bloodPressureSickStart
-            }
-            if (this._.has(resdata.userBody, 'sysIllnessHistoryIdDisease')) {
-              this.sysIllnessHistoryIdDisease = resdata.userBody.sysIllnessHistoryIdDisease
-            }
-            if (this._.has(resdata.userBody, 'sysIllnessHistoryIdGenetic')) {
-              this.sysIllnessHistoryIdGenetic = resdata.userBody.sysIllnessHistoryIdGenetic
-            }
-            // if (this._.has(resdata.userBody, 'weight')) {
-            //   this.waistWai = resdata.userBody.weight
+          // end
+            // if (this._.has(resdata.userBody, 'bloodPressureSickStart')) {
+            //   this.bloodPressureSickStart = resdata.userBody.bloodPressureSickStart
+            // }
+            // if (this._.has(resdata.userBody, 'systolicMaxHistory')) {
+            //   this.systolicMaxHistory = resdata.userBody.systolicMaxHistory
+            // }
+            // if (this._.has(resdata.userBody, 'diastolicMaxHistory')) {
+            //   this.diastolicMaxHistory = resdata.userBody.diastolicMaxHistory
+            // }
+
+            // if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
+            //   if (resdata.userBody.bloodCreatinineUrls.length > 0) {
+            //     this.bloodCreatinineUrls = this.deleteEmpty(resdata.userBody.bloodCreatinineUrls.split(','))
+            //   }
+            // }
+
+            // if (this._.has(resdata.userBody, 'ctaUrl')) {
+            //   if (resdata.userBody.ctaUrl.length > 0) {
+            //     this.ctaUrl = this.deleteEmpty(resdata.userBody.ctaUrl.split(','))
+            //   }
+            // }
+
+            // if (this._.has(resdata.userBody, 'inDoctoeIdentify')) {
+            //   this.inDoctoeIdentify = resdata.userBody.inDoctoeIdentify
+            // }
+            // if (this._.has(resdata.userBody, 'bloodPressureSickStart')) {
+            //   this.bloodPressureSickStart = resdata.userBody.bloodPressureSickStart
+            // }
+            // if (this._.has(resdata.userBody, 'sysIllnessHistoryIdDisease')) {
+            //   this.sysIllnessHistoryIdDisease = resdata.userBody.sysIllnessHistoryIdDisease
+            // }
+            // if (this._.has(resdata.userBody, 'sysIllnessHistoryIdGenetic')) {
+            //   this.sysIllnessHistoryIdGenetic = resdata.userBody.sysIllnessHistoryIdGenetic
+            // }
+
+            // if (this._.has(resdata.userBody, 'drinking')) {
+            //   this.drinking = resdata.userBody.drinking
             // }
           }
-          // if (this._.has(resdata, 'birthDate')) {
-          //   this.systolicMaxHistory = resdata.birthDate
-          // }
-          // if (this._.has(resdata, 'birthDate')) {
-          //   this.diastolicMaxHistory = resdata.birthDate
-          // }
-          // if (this._.has(resdata, 'birthDate')) {
-          //   this.bloodPressureSickStart = resdata.birthDate
-          // }
         }
       })
     },

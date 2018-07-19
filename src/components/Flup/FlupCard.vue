@@ -1171,6 +1171,7 @@ export default {
           if (this._.has(res.data.data[0], 'followUpUnderTime')) {
             this.nextFlupTime = res.data.data[0].followUpUnderTime
           }
+        // 身体指标
           if (this._.has(res.data.data[0], 'systolic')) {
             this.body.heighBlood = res.data.data[0].systolic
           }
@@ -1193,6 +1194,7 @@ export default {
             this.body.health = this._.toNumber(res.data.data[0].bmi)
           }
           if (this._.has(res.data.data[0], 'userHealthDiary')) {
+            // 日常情况
             if (this._.has(res.data.data[0].userHealthDiary, 'smokingToday')) {
               this.daily.smoke = this._.toNumber(res.data.data[0].userHealthDiary.smokingToday)
             }
@@ -1205,6 +1207,7 @@ export default {
             if (this._.has(res.data.data[0].userHealthDiary, 'movementToday')) {
               this.daily.sport = this._.toNumber(res.data.data[0].userHealthDiary.movementToday)
             }
+            // 生活习惯
             if (this._.has(res.data.data[0].userHealthDiary, 'isOntimeMedicat')) {
               this.life.medicine = this._.toNumber(res.data.data[0].userHealthDiary.isOntimeMedicat)
             }
@@ -1223,9 +1226,11 @@ export default {
               })
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'andhairClinical')) {
+              // if (res.data.data[0].userHealthDiary.andhairClinical) {
               this.life.bed = (res.data.data[0].userHealthDiary.andhairClinical + '').split(',').map(item => {
                 return this._.toNumber(item)
               })
+              // }
             }
             if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeIdentify')) {
               this.life.chinese = (res.data.data[0].userHealthDiary.inDoctoeIdentify + '').split(',').map(item => {
@@ -1297,7 +1302,7 @@ export default {
                   obj.usetimes = null
                 }
                 if (this._.has(item, 'totalNumber')) {
-                  obj.usetotal = item.totalNumber
+                  obj.usetotal = parseInt(item.totalNumber)
                 } else {
                   obj.usetotal = null
                 }
@@ -1316,7 +1321,7 @@ export default {
           }
         }
         // console.log('随访卡数据', this.body, this.info, this.daily, this.life)
-        console.log('随访卡数据111', this.$data)
+        console.log('chushihua随访卡数据111', this.$data)
         this.page.pages = res.data.pages
         this.loading = false
         // this.page.pageSize = res.data.pages * res.data.recordCount
@@ -1373,31 +1378,35 @@ export default {
       // submitObj.userId = this.body.flupTime
       // submitObj.adminIdMainDoctor = this.body.flupTime
       // submitObj.userFollowUpId = this.body.flupTime
-      submitObj.dangerLevel = this.body.dangerLayer
       submitObj.followUpWay = this.flupMethods
-      submitObj.presentSymptoms = this.life.symptom.join(',')
-      submitObj.presentSymptoms = this.flupMethods
-      submitObj.moodToday = this.life.mood
-      submitObj.sleepToday = this.daily.sleep
-      submitObj.movementToday = this.daily.sport
-      submitObj.eatSaltToday = this.life.salt
-      submitObj.smokingToday = this.daily.smoke
-      submitObj.drinkingToday = this.daily.drink
-      // submitObj.isHealthEducation = this.daily.drink
-      submitObj.andhairClinical = this.life.bed.join(',')
-      submitObj.inDoctoeIdentify = this.life.chinese.join(',')
-      submitObj.nonMedicineTreatment = this.life.unmedicine.join(',')
-      submitObj.healthEducation = this.life.health.join(',')
-      submitObj.inDoctoeCare = this.life.direct.join(',')
-      submitObj.healthPrescriptionAdvice = this.life.suggest.join(',')
+    // 身体指标
       submitObj.systolic = this.body.heighBlood
       submitObj.diastolic = this.body.lowBlood
+      submitObj.dangerLevel = this.body.dangerLayer
       submitObj.pulse = this.body.heart
       submitObj.height = this.body.heigh
       submitObj.weight = this.body.weight
       submitObj.bmi = this.body.health
+    // 日常情况
+      submitObj.smokingToday = this.daily.smoke
+      submitObj.drinkingToday = this.daily.drink
+      submitObj.sleepToday = this.daily.sleep
+      submitObj.movementToday = this.daily.sport
+    // 生活习惯
       submitObj.isOntimeMedicat = this.life.medicine
+      submitObj.moodToday = this.life.mood
+      submitObj.eatSaltToday = this.life.salt
+      // submitObj.eatSaltToday = this.life.doctor
+      // 缺少遵医情况上传
+      submitObj.presentSymptoms = this.life.symptom.join(',')
+      submitObj.andhairClinical = this.life.bed.join(',')
+      submitObj.inDoctoeIdentify = this.life.chinese.join(',')
 
+      submitObj.nonMedicineTreatment = this.life.unmedicine.join(',')
+      submitObj.healthEducation = this.life.health.join(',')
+      submitObj.inDoctoeCare = this.life.direct.join(',')
+      submitObj.healthPrescriptionAdvice = this.life.suggest.join(',')
+    // end
       let medicine = []
       console.log('用药', this.doctorMedicine)
       this.doctorMedicine.forEach(item => {
