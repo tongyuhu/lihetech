@@ -6,12 +6,17 @@
           <div>
 
             <span>{{info.name}}</span>
+            <el-button @click="call" type="text" size="mini">
+              <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+            </el-button>
             <el-button :disabled="upBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupUp">上次随访</el-button>
             <el-button :disabled="nextBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupDn">下次随访</el-button>
           </div>
-          <div class="head-title-right">
-            <el-button @click="call" type="primary" size="mini">语音</el-button>
-          </div>
+          <!-- <div class="head-title-right">
+            <el-button @click="call" type="text" size="mini">
+              <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+            </el-button>
+          </div> -->
         </div>
         <el-form
         label-width="45px" 

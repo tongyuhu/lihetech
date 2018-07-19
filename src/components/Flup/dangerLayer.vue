@@ -4,7 +4,10 @@
       <el-card>
         <div>
           <span class="title-name">{{realName}}</span>
-          <button @click="call" class="voice-btn">语音</button>
+          <el-button @click="call" type="text" size="mini">
+            <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+          </el-button>
+          <!-- <button @click="call" class="voice-btn">语音</button> -->
         </div>
       </el-card>
     </div>
@@ -445,9 +448,9 @@
                   <el-radio-group 
                     v-model="serumCreatinineType"
                     size="small">
-                    <el-radio :label="1">&lt;115</el-radio>
-                    <el-radio :label="2">115-133</el-radio>
-                    <el-radio :label="3">&gt;133</el-radio>
+                    <el-radio :label="1">{{serum.lowvalue}}</el-radio>
+                    <el-radio :label="2">{{serum.middlehvalue}}</el-radio>
+                    <el-radio :label="3">{{serum.heighvalue}}</el-radio>
                     <!-- <el-radio :label="3">估算的肾小球滤过率&lt;60(eGFR降低)</el-radio> -->
                   </el-radio-group>
                 </div>
@@ -980,7 +983,7 @@ export default {
       hcyUrls: [],  // 同型半胱氨酸测定 检查单
       heartVesselsFamilyHistory: null,  // 早发心血管病家族史 0-无 1-有
       serumCreatinineType: null, // 血清肌酐
-      serumCreatinineUnit: null, // 血清肌酐单位 1-umol/L 2-mg/dl
+      serumCreatinineUnit: 1, // 血清肌酐单位 1-umol/L 2-mg/dl
       // serumCreatinineUnit: null, // 血清肌酐单位 1-umol/L 2-mg/dl
       egfr: null,  // 估算的肾小球滤过率<60(eGFR降低) 是-true 否-false
       proteinUrineType: null,  // 蛋白尿值 1-小于30 2-30到300 3-大于300 单位：mg/24h
@@ -1029,11 +1032,37 @@ export default {
         organDamage: null, // 靶器官 信息
         danger: null
       },
-      showResult: false
+      showResult: false,
+      serum: {
+        unit: 1,
+        heighvalue: '>133',
+        middlehvalue: '115-133',
+        lowvalue: '<115',
+        heighvalue1: '>1.3',
+        middlehvalue1: '1.3-1.5',
+        lowvalue1: '<1.5'
+      }
     }
   },
   computed: {
     ...mapState(['FlupInfo', 'adminInfo'])
+  },
+  watch: {
+    serumCreatinineUnit: {
+      handler: function (val) {
+        if (val === 1) {
+          this.serum.heighvalue = '>133'
+          this.serum.middlehvalue = '115-133'
+          this.serum.lowvalue = '<115'
+        }
+        if (val === 2) {
+          this.serum.heighvalue = '>1.5'
+          this.serum.middlehvalue = '1.3-1.5'
+          this.serum.lowvalue = '<1.3'
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     ...mapMutations([
