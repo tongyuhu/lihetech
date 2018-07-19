@@ -42,6 +42,7 @@
       </div>
     </div>
     <el-form>
+      <!-- 身体指标 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -190,6 +191,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 血脂 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -265,6 +267,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 血同型半胱氨酸（Hcy） -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -320,6 +323,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 血糖评估 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -418,6 +422,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 肾脏评估 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -518,6 +523,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 心脏评估 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -667,6 +673,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 外周血管评估 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -784,6 +791,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 脑评估 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -843,6 +851,7 @@
           </div>
         </el-card>
       </div>
+      <!-- 眼底评估 -->
       <div class="gap-bottom">
         <el-card>
           <div class="card-head-title">
@@ -1340,20 +1349,20 @@ export default {
               this.waistWai = resdata.userBody.waistWai
             }
             if (this._.has(resdata.userBody, 'smoking')) {
-              this.smoking = resdata.userBody.smoking
+              this.smoking = parseInt(resdata.userBody.smoking)
             }
             if (this._.has(resdata.userBody, 'heartVesselsFamilyHistory')) {
-              this.heartVesselsFamilyHistory = resdata.userBody.heartVesselsFamilyHistory
+              this.heartVesselsFamilyHistory = parseInt(resdata.userBody.heartVesselsFamilyHistory)
             }
           // 血脂
             if (this._.has(resdata.userBody, 'cholesterolTotal')) {
-              this.cholesterolTotal = resdata.userBody.cholesterolTotal
+              this.cholesterolTotal = parseInt(resdata.userBody.cholesterolTotal)
             }
             if (this._.has(resdata.userBody, 'highProteinCholesterol')) {
-              this.highProteinCholesterol = resdata.userBody.highProteinCholesterol
+              this.highProteinCholesterol = parseInt(resdata.userBody.highProteinCholesterol)
             }
             if (this._.has(resdata.userBody, 'lowProteinCholesterol')) {
-              this.lowProteinCholesterol = resdata.userBody.lowProteinCholesterol
+              this.lowProteinCholesterol = parseInt(resdata.userBody.lowProteinCholesterol)
             }
             if (this._.has(resdata.userBody, 'bloodFatUrls')) {
               if (resdata.userBody.bloodFatUrls.length > 0) {
@@ -1362,7 +1371,7 @@ export default {
             }
           // 血同型半胱氨酸（Hcy
             if (this._.has(resdata.userBody, 'hcy')) {
-              this.hcy = resdata.userBody.hcy
+              this.hcy = parseInt(resdata.userBody.hcy)
             }
             if (this._.has(resdata.userBody, 'hcyUrls')) {
               if (resdata.userBody.hcyUrls.length > 0) {
@@ -1371,13 +1380,13 @@ export default {
             }
           // 血糖评估
             if (this._.has(resdata.userBody, 'bloodSugarEmpty')) {
-              this.bloodSugarEmpty = resdata.userBody.bloodSugarEmpty
+              this.bloodSugarEmpty = parseInt(resdata.userBody.bloodSugarEmpty)
             }
             if (this._.has(resdata.userBody, 'bloodSugarAfterMealTwo')) {
-              this.bloodSugarAfterMealTwo = resdata.userBody.bloodSugarAfterMealTwo
+              this.bloodSugarAfterMealTwo = parseInt(resdata.userBody.bloodSugarAfterMealTwo)
             }
             if (this._.has(resdata.userBody, 'sugarBloodProtein')) {
-              this.sugarBloodProtein = resdata.userBody.sugarBloodProtein
+              this.sugarBloodProtein = parseInt(resdata.userBody.sugarBloodProtein)
             }
             if (this._.has(resdata.userBody, 'bloodSugarEmptyUrl')) {
               if (resdata.userBody.bloodSugarEmptyUrl.length > 0) {
@@ -1397,10 +1406,10 @@ export default {
 
           // 肾脏评估
             if (this._.has(resdata.userBody, 'serumCreatinineType')) {
-              this.serumCreatinineType = resdata.userBody.serumCreatinineType
+              this.serumCreatinineType = parseInt(resdata.userBody.serumCreatinineType)
             }
             if (this._.has(resdata.userBody, 'serumCreatinineUnit')) {
-              this.serumCreatinineUnit = resdata.userBody.serumCreatinineUnit
+              this.serumCreatinineUnit = parseInt(resdata.userBody.serumCreatinineUnit)
             }
             if (this._.has(resdata.userBody, 'egfr')) {
               if (resdata.userBody.egfr) {
@@ -1410,7 +1419,7 @@ export default {
               }
             }
             if (this._.has(resdata.userBody, 'proteinUrineType')) {
-              this.proteinUrineType = resdata.userBody.proteinUrineType
+              this.proteinUrineType = parseInt(resdata.userBody.proteinUrineType)
             }
             if (this._.has(resdata.userBody, 'bloodCreatinineUrls')) {
               if (resdata.userBody.bloodCreatinineUrls.length > 0) {
@@ -1429,19 +1438,19 @@ export default {
             }
           // 心脏评估
             if (this._.has(resdata.userBody, 'ecgType')) {
-              this.ecgType = resdata.userBody.ecgType
+              this.ecgType = parseInt(resdata.userBody.ecgType)
             }
             if (this._.has(resdata.userBody, 'lvmlType')) {
-              this.lvmlType = resdata.userBody.lvmlType
+              this.lvmlType = parseInt(resdata.userBody.lvmlType)
             }
             if (this._.has(resdata.userBody, 'heartDisease')) {
-              this.heartDisease = resdata.userBody.heartDisease
+              this.heartDisease = parseInt(resdata.userBody.heartDisease)
             }
             if (this._.has(resdata.userBody, 'heartExpandType')) {
-              this.heartExpandType = resdata.userBody.heartExpandType
+              this.heartExpandType = parseInt(resdata.userBody.heartExpandType)
             }
             if (this._.has(resdata.userBody, 'heartDisease')) {
-              this.heartDisease = resdata.userBody.heartDisease
+              this.heartDisease = parseInt(resdata.userBody.heartDisease)
             }
             if (this._.has(resdata.userBody, 'heartFigureUrl')) {
               if (resdata.userBody.heartFigureUrl.length > 0) {
@@ -1480,16 +1489,16 @@ export default {
             }
           // 外周血管评估
             if (this._.has(resdata.userBody, 'neckStocksSpeedType')) {
-              this.neckStocksSpeedType = resdata.userBody.neckStocksSpeedType
+              this.neckStocksSpeedType = parseInt(resdata.userBody.neckStocksSpeedType)
             }
             if (this._.has(resdata.userBody, 'ankleArmIndex')) {
-              this.ankleArmIndex = resdata.userBody.ankleArmIndex
+              this.ankleArmIndex = parseInt(resdata.userBody.ankleArmIndex)
             }
             if (this._.has(resdata.userBody, 'imtType')) {
-              this.imtType = resdata.userBody.imtType
+              this.imtType = parseInt(resdata.userBody.imtType)
             }
             if (this._.has(resdata.userBody, 'outsideVesselsDisease')) {
-              this.outsideVesselsDisease = resdata.userBody.outsideVesselsDisease
+              this.outsideVesselsDisease = parseInt(resdata.userBody.outsideVesselsDisease)
             }
             if (this._.has(resdata.userBody, 'neckSoundUrl')) {
               if (resdata.userBody.neckSoundUrl.length > 0) {
@@ -1513,7 +1522,7 @@ export default {
             }
           // 脑评估
             if (this._.has(resdata.userBody, 'brainDiseaseType')) {
-              this.brainDiseaseType = resdata.userBody.brainDiseaseType
+              this.brainDiseaseType = parseInt(resdata.userBody.brainDiseaseType)
             }
             if (this._.has(resdata.userBody, 'brainMriMraUrl')) {
               if (resdata.userBody.brainMriMraUrl.length > 0) {
@@ -1532,7 +1541,7 @@ export default {
             }
           // 眼底评估
             if (this._.has(resdata.userBody, 'keithWagnarLevel')) {
-              this.keithWagnarLevel = resdata.userBody.keithWagnarLevel
+              this.keithWagnarLevel = parseInt(resdata.userBody.keithWagnarLevel)
             }
             if (this._.has(resdata.userBody, 'fundusUrl')) {
               if (resdata.userBody.fundusUrl.length > 0) {
