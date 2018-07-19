@@ -126,7 +126,7 @@ export const store = new Vuex.Store({
       state.userCasesCardId = id
     },
     setuserMakeOrderDoctorId (state, id) {
-      state.FlupInfo = id
+      state.userMakeOrderDoctorId = id
     },
     // 打开聊天窗口
     openChatWindow (state) {
