@@ -110,12 +110,17 @@
                 <!-- <div class="flex"> -->
                 <div >
                   <div class="line-block  gap-right">
-                    <el-form-item label="" label-width="8px">
-                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100%'}">
-                        <el-option label="初诊" value="1"></el-option>
-                        <el-option label="复诊" value="0"></el-option>
-                      </el-select>
-                    </el-form-item>
+                    <div class="line-block">
+                      <span class="iconfont icon-bixutian must"></span>
+                    </div>
+                    <div class="line-block">
+                      <el-form-item label="" label-width="8px">
+                        <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100%'}">
+                          <el-option label="初诊" value="1"></el-option>
+                          <el-option label="复诊" value="0"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </div>
                   </div>
                   <div class="line-block gap-right margin7">
                     <!-- <el-form-item label="患病时长：" label-width="85px"> -->
@@ -177,12 +182,12 @@
                     </div>
                   </div>
                 </div>
-                <div>
+                <div class="gap-bottom">
                   <el-form-item label="主述：" label-width="85px">
                     <el-input v-model="medication.symptom" size="mini" placeholder="请输入症状"></el-input>
                   </el-form-item>
                 </div>
-                <div>
+                <div class="gap-bottom">
                   <el-form-item label="现病史：" label-width="85px">
                     <div class="el-select-wrap">
                       <el-select size="mini" 
@@ -202,7 +207,7 @@
                     </div>
                   </el-form-item>
                 </div>
-                <div>
+                <div class="gap-bottom">
                   <el-form-item label="遗传史：" label-width="85px">
                     <div class="el-select-wrap">
                       <el-select size="mini" 
@@ -237,6 +242,9 @@
                   </el-form-item>
                 </div>
                 <div class="flex">
+                  <div>
+                    <span class="iconfont icon-bixutian must"></span>
+                  </div>
                   <div class="gap-right">
                     <el-form-item label="诊断编码：" label-width="85px">
                       <el-select v-model="bloodSickCode" placeholder="请选择" @change="sickCodeChange" size="mini" :style="{'width':'100%'}">
@@ -492,6 +500,7 @@
                 </el-form>
                 <div class="case-main-rp">
                   <div class="case-main-rp-title">
+                    <span class="iconfont icon-bixutian must"></span>
                     <span>RP</span>
                     <el-button @click="openAddMedicineDialog" type="primary">添加</el-button>
                   </div>
@@ -2177,6 +2186,9 @@ export default {
   $border-color-input:#eaeaea;
   // $border-color-input:#ebeef5;
   $border-radius:4px;
+  .must{
+    color:#f96767;
+  }
   input{
     border:1px solid $border-color-input;
     // padding: 5px;
@@ -2400,6 +2412,9 @@ export default {
   .case-wrap{
     margin-bottom: 8px;
     background: #fff;
+    .el-form-item{
+      margin: 0;
+    }
   }
   .case-left{
     $font-color:#041421;
@@ -2651,7 +2666,7 @@ export default {
 }
 .flex{
   display: flex;
-  align-self: center;
+  align-items: center;
 }
 .flex-between{
 
@@ -2673,6 +2688,9 @@ export default {
   padding: 0 10px;
   // width: inherit;
   width: 100%;
+}
+.gap-bottom{
+  margin-bottom: 10px;
 }
 </style>
 
