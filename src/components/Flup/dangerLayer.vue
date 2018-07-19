@@ -1157,7 +1157,7 @@ export default {
       if (this.egfr !== null) {
         if (this.egfr === 1) {
           obj.egfr = true
-        } else {
+        } else if (this.egfr === 0) {
           obj.egfr = false
         }
       }
@@ -1414,7 +1414,7 @@ export default {
             if (this._.has(resdata.userBody, 'egfr')) {
               if (resdata.userBody.egfr) {
                 this.egfr = 1
-              } else {
+              } else if (!resdata.userBody.egfr) {
                 this.egfr = 0
               }
             }
