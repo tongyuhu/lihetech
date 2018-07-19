@@ -114,7 +114,8 @@
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span :class="{'success':computeColor(morning.makeOrderState),'error':!computeColor(morning.makeOrderState)}">{{oderStutas(morning.makeOrderState)}}</span>
+                            <span :style="{'color':computeColor(morning.makeOrderState)}">
+                              {{oderStutas(morning.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
@@ -198,7 +199,8 @@
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span :class="{'success':computeColor(noon.makeOrderState),'error':!computeColor(noon.makeOrderState)}">{{oderStutas(noon.makeOrderState)}}</span>
+                            <span :style="{'color':computeColor(noon.makeOrderState)}"
+                            >{{oderStutas(noon.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
@@ -293,7 +295,7 @@
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span :class="{'success':computeColor(morning.makeOrderState),'error':!computeColor(morning.makeOrderState)}">{{oderStutas(morning.makeOrderState)}}</span>
+                            <span :style="{'color':computeColor(morning.makeOrderState)}">{{oderStutas(morning.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
@@ -367,7 +369,7 @@
                           </div>
                           <!-- 就诊状态 -->
                           <div class="order-status">
-                            <span>{{oderStutas(noon.makeOrderState)}}</span>
+                            <span :style="{'color':computeColor(noon.makeOrderState)}">{{oderStutas(noon.makeOrderState)}}</span>
                           </div>
                           <!-- 操作 -->
                           <div class="order-action">
@@ -516,19 +518,19 @@ export default {
       let color
       switch (val) {
         case 1:
-          color = true
+          color = '#4cc191'
           break
         case 2:
-          color = true
+          color = '#1991fc'
           break
         case 3:
-          color = false
+          color = '#e87070'
           break
         case 4:
-          color = false
+          color = '#e87070'
           break
         default:
-          color = false
+          color = '#4cc191'
           break
       }
       return color
