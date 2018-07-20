@@ -159,9 +159,10 @@
           <el-form-item label="备注" prop="adminNote">
             <el-input type="text" v-model="editDoctorForm.adminNote" size="medium"></el-input>
           </el-form-item>
-          <el-form-item class="submit-btn">
-            <button @click.prevent="editDoctorConfirm('editDoctorFormref')">保存</button>
-            <button @click.prevent="editDoctorCancel('editDoctorFormref')">取消</button>
+          <el-form-item class="submit-btn"
+          label-width="0px" >
+            <el-button type="primary" size="small" @click.prevent="editDoctorConfirm('editDoctorFormref')">保存</el-button>
+            <el-button type="primary" size="small" @click.prevent="editDoctorCancel('editDoctorFormref')">取消</el-button>
           </el-form-item>
         </el-form>
 
@@ -177,9 +178,9 @@
         width="456px"
         center>
         <span slot="title" class="dialog-title">确定删除该医生记录吗？</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmDeleteHandle">确 定</button>
-          <button class="cancel" @click="cancelDeleteHandle">取 消</button>
+        <span slot="footer">
+          <el-button type="primary" size="small" @click="confirmDeleteHandle">确 定</el-button>
+          <el-button type="primary" size="small" @click="cancelDeleteHandle">取 消</el-button>
         </span>
       </el-dialog>
     </div>
@@ -751,20 +752,7 @@ button{
     font-weight: bold;
   }
   button{
-    width: 130px;
-      height: 36px;
-      line-height: 36px;
-      text-align: center;
-      font-size: 18px;
-      color:#fff;
-      opacity: 0.9;
-      background-color: #1991fc;
-      cursor: pointer;
-      border-radius: 2px;
-      border:1px solid #1991fc;
-      &:hover{
-        opacity: 1;
-      }
+    font-size: 14px;
   }
   .cancel{
     background-color: #fff;
@@ -777,10 +765,13 @@ button{
   width:300px;
   display:flex;
 }
-.submit-btn button{
-  margin-left: 10px;
-  margin-right:10px;
+.submit-btn{
+  text-align: center;
 }
+// .submit-btn button{
+//   margin-left: 10px;
+//   margin-right:10px;
+// }
 .loading-min-height{
   min-height: 400px;
   width: 100%;

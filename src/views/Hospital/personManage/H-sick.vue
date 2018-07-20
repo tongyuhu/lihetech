@@ -120,9 +120,9 @@
           <input type="text" v-model="editSickAddress">
         </div>
         <span slot="title" class="dialog-title">修改患者</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="modifySick = false">确 定</button>
-          <button class="cancel" @click="modifySick = false">取 消</button>
+        <span slot="footer">
+          <el-button type="primary" size="small" @click="modifySick = false">确 定</el-button>
+          <el-button type="primary" size="small" @click="modifySick = false">取 消</el-button>
         </span>
       </el-dialog>
       <el-dialog
@@ -130,9 +130,9 @@
         width="456px"
         center>
         <span slot="title" class="dialog-title">确定删除该患者记录吗？</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmDeleteHandle">确 定</button>
-          <button class="cancel" @click="cancelDeleteHandle">取 消</button>
+        <span slot="footer">
+          <el-button  type="primary" size="small" @click="confirmDeleteHandle">确 定</el-button>
+          <el-button type="primary" size="small" @click="cancelDeleteHandle">取 消</el-button>
         </span>
       </el-dialog>
       <el-dialog
@@ -143,8 +143,10 @@
         <div class="add-sick-img">
           <img width="200px" :src="addSickImg" alt="二维码">
         </div>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmAddSick">确 定</button>
+        <span slot="footer">
+          <div class="erocde-btn">
+            <el-button size="small" type="primary" @click="confirmAddSick">确 定</el-button>
+          </div>
           <!-- <button class="cancel" @click="showAddSick = false">取 消</button> -->
         </span>
       </el-dialog>
@@ -168,7 +170,6 @@ export default {
       currentPage: 1,
       totalpage: null,
       pageSize: 10,
-      loading: false,
       modifySick: false,
       editSickName: '',
       editSickPhone: '',
@@ -536,21 +537,13 @@ input{
       // color:#041421;
       font-weight: bold;
     }
+    .erocde-btn{
+      button{
+          font-size: 16px;
+      }
+    }
     button{
-      width: 130px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        font-size: 18px;
-        color:#fff;
-        opacity: 0.9;
-        background-color: #1991fc;
-        cursor: pointer;
-        border-radius: 2px;
-        border:1px solid #1991fc;
-        &:hover{
-          opacity: 1;
-        }
+      font-size: 14px;
     }
     .cancel{
       background-color: #fff;

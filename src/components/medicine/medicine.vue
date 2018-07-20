@@ -109,12 +109,18 @@ export default {
   }
   .submit-btn{
     background: #1991fc;
-    border:none;
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border:1px solid #1991fc;
     border-radius: 2px;
     cursor: pointer;
     outline: none;
     color: #fff;
     width: 100px;
     height: 30px;
+  }
+  .submit-btn:hover{
+    opacity: 0.9;
   }
 </style>
