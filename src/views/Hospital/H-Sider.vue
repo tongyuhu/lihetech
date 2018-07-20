@@ -3,17 +3,23 @@
     <div class="head-logo">
       <img src="~icon/hospital-icon-01.png" alt="logo" class="head-logo-img" @click="goHome">
     </div>
-    <div
+    <!-- <div
     v-for="item in menu"
     :key="item.id"
     class="menu"
-    >
-      <wmenu 
+    > -->
+    <!-- <wmenu
+    :menu="menu"> -->
+      <wmenu-group 
+        v-for="(item,index) in menu"
+        :key="item.id"
         :iconName="item.iconName"
         :title="item.title"
         :routerName="item.routerName"
         :open="item.open"
-        :hasMsg="item.hasMsg">
+        :hasMsg="item.hasMsg"
+        :index="index"
+        @checked="checkedMenu">
         <wmenuitem
         v-for="i in item.child"
         :key="i.title"
@@ -21,19 +27,23 @@
         :id="i.id"
         :routerName="i.routerName"
         @activeitemmenu="goanchor"></wmenuitem>
-      </wmenu>
-    </div>
+      </wmenu-group>
+    <!-- </wmenu> -->
+    <!-- </div> -->
   </div>
 </template>
 
 <script>
 
 import wmenu from '@/components/wmenu.vue'
+import wmenuGroup from '@/components/wmenuGroup.vue'
 import wmenuitem from '@/components/wmenuitem.vue'
 import {mapState} from 'vuex'
+import {session} from '@/untils/untils'
 export default {
   name: 'H-Sider',
   components: {
+    wmenuGroup,
     wmenu,
     wmenuitem
   },
@@ -322,7 +332,12 @@ export default {
           name: routerName
         })
       }
+      session('itemtab', obj)
       // console.log(step)
+    },
+    checkedMenu (val) {
+      session('tabindex', val.index)
+      session('itemtab', '')
     },
     goHome () {
       this.$router.push({
@@ -336,7 +351,7 @@ export default {
     //  1-超级管理员 2-医院诊所 3-医生 4-护士
     if (this._.has(this.adminInfo, 'adminType')) {
       if (this.adminInfo.adminType === 3) {
-        // this.orderMenu.open = true
+        this.orderMenu.open = true
         this.menu.push(this.orderMenu)
         this.menu.push(this.diagonseMenu)
         this.menu.push(this.FlupMenu)
@@ -344,7 +359,7 @@ export default {
         this.menu.push(this.personManage)
       }
       if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
-        // this.bloodHeighMenu.open = true
+        this.bloodHeighMenu.open = true
         this.menu.push(this.bloodHeighMenu)
         // this.menu.push(this.diagonseMenu)
         this.menu.push(this.personManage)
@@ -352,11 +367,21 @@ export default {
       }
       if (this.adminInfo.adminType === 4) {
         // this.menu.push(this.orderMenu)
-        // this.FlupMenu.open = true
+        this.FlupMenu.open = true
         this.menu.push(this.FlupMenu)
         this.menu.push(this.bloodHeighMenu)
         this.menu.push(this.personManage)
       }
+    }
+    let tabindex = session('tabindex')
+    let tabitem = session('itemtab')
+    if (tabitem) {
+      this.menu[0].open = false
+      this.menu[tabindex].open = true
+      this.goanchor(tabitem)
+    } else if (tabindex) {
+      this.menu[0].open = false
+      this.menu[tabindex].open = true
     }
   }
 }

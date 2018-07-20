@@ -132,14 +132,14 @@ router.beforeEach((to, from, next) => {
   // let route = session(router)
   // if(route){
   if (to.params !== {}) {
-    let ssss = {
+    let router = {
       name: to.name,
       params: to.params
     }
       // session('router', '')
-    session('router', ssss)
-    let s = session('router')
-    console.log('前往路由', to, 'session', s)
+    session('router', router)
+    // let s = session('router')
+    console.log('前往路由', to, 'session', session('router'))
   }
   // }
   next()
