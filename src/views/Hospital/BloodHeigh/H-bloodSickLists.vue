@@ -444,7 +444,7 @@
                           <span v-if="!scope.row.isDocusOn">关注</span>
                         </el-button> -->
                         <el-button size="mini" type="primary" @click="assessmentLayer(scope.row)" 
-                        :style="{'width':'72px','color':'#fff'}">分层评估</el-button>
+                        :style="{'width':'80px','color':'#fff'}">分层评估</el-button>
 
                         <button class="telephone-btn" @click="call(scope.row)">
                           <i class="iconfont icon-xiaoxi icon-msg-color"></i>
