@@ -47,9 +47,9 @@
                   <td class="width">
                     <div class="half-day">
 
-                    <span class="span-block">上午</span>
+                    <span class="span-block">上午 {{ item.morninngTotal===0?'':item.morninngTotal+'人'}}</span>
                     <!-- <span class="span-block">{{item.morninngWork}}</span> -->
-                    <span class="span-block">{{ item.morninngTotal===0?'':'共'+item.morninngTotal+'人'}}</span>
+                    <!-- <span class="span-block">{{ item.morninngTotal===0?'':item.morninngTotal+'人'}}</span> -->
                     </div>
                   </td>
                   <td v-if="item.morninng.length === 0">
@@ -70,7 +70,7 @@
                           </div>
                           <div class="flex-item error" v-show="!item.morninngWork">
                             <span>
-                              没有设置预约
+                              没有开启预约
                             </span>
                           </div>
                           <!-- 就诊状态 -->
@@ -132,8 +132,8 @@
                 <tr>
                   <td class="width">
                     <div class="half-day">
-                      <span class="span-block">下午</span>
-                      <span class="span-block">{{item.noonTotal===0?'':'共'+item.noonTotal+'人'}}</span>
+                      <span class="span-block">下午 {{item.noonTotal===0?'':item.noonTotal+'人'}}</span>
+                      <!-- <span>{{item.noonTotal===0?'':item.noonTotal+'人'}}</span> -->
                       <!-- <span class="span-block">{{item.noonWork}}</span> -->
                     </div>
                   </td>
@@ -155,7 +155,7 @@
                           </div>
                           <div class="flex-item error" v-show="!item.noonWork">
                             <span>
-                              没有设置预约
+                              没有开启预约
                             </span>
                           </div>
                           <!-- 就诊状态 -->
@@ -517,20 +517,23 @@ export default {
     computeColor (val) {
       let color
       switch (val) {
-        case 1:
+        case 1: // 已预约
           color = '#4cc191'
           break
-        case 2:
-          color = '#1991fc'
+        case 2: // 已就诊
+          color = '#33b2f2'
           break
-        case 3:
-          color = '#e87070'
+        case 3: // 已取消
+          color = '#efa13a'
           break
-        case 4:
-          color = '#e87070'
+        case 4: // 失约
+          color = '#ff7d43'
+          break
+        case 5: // -已评论
+          color = '#999'
           break
         default:
-          color = '#4cc191'
+          color = '#59d8a1'
           break
       }
       return color
@@ -1110,25 +1113,34 @@ button[disabled]{
     color:#041421;
   }
   button{
-    border: none;
+    // border: none;
     outline: none;
   }
   .order-sick-head{
     margin-bottom: 20px;
     .button{
+      box-sizing: border-box;
+      line-height: 1;
+      white-space: nowrap;
+      border:1px solid #1991fc;
       background-color: #1991fc;
       color: #fff;
-      padding: 6px 8px;
-      border-radius: 3px;
+      padding: 7px 8px;
+      border-radius: 2px;
       font-size: 16px;
       cursor: pointer;
       margin-right: 10px;
+      border: none;
+    }
+    button:hover{
+      opacity: 0.9;
     }
     .activebutton{
       background-color: transparent;
       color: #666;
-      padding: 6px 8px;
-      border-radius: 3px;
+      border: none;
+      padding: 7px 8px;
+      border-radius: 2px;
       font-size: 16px;
       cursor: pointer;
       margin-right: 10px;
@@ -1248,13 +1260,20 @@ button[disabled]{
   min-width: 100px;
 }
 .contant-btn{
-  padding: 3px 5px;
+  box-sizing: border-box;
+  padding: 5px 5px;
   background: #1991fc;
-  border-radius: 3px;
+  border-radius: 2px;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
   color: #fff;
   width: 72px;
   font-size: 14px;
+  border:1px solid #1991fc;
+}
+.contant-btn:hover{
+  opacity: 0.9;
 }
 .order-action{
   min-width: 155px;
@@ -1289,22 +1308,58 @@ button[disabled]{
   margin-top:10px;
 }
 .open-order{
-  padding: 3px 5px;
+  box-sizing: border-box;
+  border:1px solid #1991fc;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 5px 5px;
   background: #1991fc;
-  border-radius: 3px;
+  border-radius: 2px;
   cursor: pointer;
   color: #fff;
   width: 72px;
   font-size: 14px;
 }
+.open-order:hover{
+  opacity: 0.9;
+  // box-sizing: border-box;
+  // border:1px solid #1991fc;
+  // line-height: 1;
+  // white-space: nowrap;
+  // padding: 5px 5px;
+  // background: #1991fc;
+  // border-radius: 2px;
+  // cursor: pointer;
+  // color: #fff;
+  // width: 72px;
+  // font-size: 14px;
+}
 .close-order{
-  padding: 3px 5px;
-  border-radius: 3px;
+  padding: 5px 5px;
+  box-sizing: border-box;
+  line-height: 1;
+  white-space: nowrap;
+  border:1px solid #e87070;
+  border-radius: 2px;
   cursor: pointer;
   color: #fff;
   width: 72px;
   font-size: 14px;
   background: #e87070;
+}
+.close-order:hover{
+  opacity: 0.9;
+  // padding: 5px 5px;
+  // box-sizing: border-box;
+  // line-height: 1;
+  // white-space: nowrap;
+  // border:1px solid #e87070;
+  // border-radius: 2px;
+  // cursor: pointer;
+  // color: #fff;
+  // width: 72px;
+  // font-size: 14px;
+  // background: #e87070;
 }
 .loading-min-height{
   min-height: 700px;

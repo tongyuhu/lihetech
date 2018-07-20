@@ -737,7 +737,10 @@ export default {
     padding: 20px 0 20px 24px;
   }
   .check-date-btn{
-    border:none;
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border: 1px solid #fff;
     background-color:#fff;
     cursor: pointer;
     font-size:18px;
@@ -745,6 +748,20 @@ export default {
     width:64px;
     height: 36px;
     outline:none;
+  }
+  .check-date-btn:hover{
+    opacity: 0.9;
+    // box-sizing: border-box;
+    // line-height: 1;
+    // white-space: nowrap;
+    // border: 1px solid #fff;
+    // background-color:#fff;
+    // cursor: pointer;
+    // font-size:18px;
+    // color:#666;
+    // width:64px;
+    // height: 36px;
+    // outline:none;
   }
   .check-status{
     padding: 0px 0 20px 24px;
@@ -755,6 +772,7 @@ export default {
     display: inline-block;
   }
   .checked{
+    border-color: #1991fc;
     background-color:#1991fc;
     color:#fff;
     border-radius:2px;

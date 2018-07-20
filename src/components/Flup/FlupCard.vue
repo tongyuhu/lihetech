@@ -78,6 +78,7 @@
         </el-form>
       </el-card>
     </div>
+    <!-- 身体指标 -->
     <div class="bottom-gap">
       <el-card>
         <div class="card-head-title">
@@ -230,6 +231,7 @@
       </el-card>
 
     </div>
+    <!-- 日常情况 -->
     <div class="bottom-gap">
       <el-card>
         <div class="card-head-title">
@@ -303,6 +305,7 @@
         </div>
       </el-card>
     </div>
+    <!-- 生活习惯 -->
     <div class="bottom-gap">
       <el-card>
         <div class="card-head-title">
@@ -511,6 +514,7 @@
         </div>
       </el-card>
     </div>
+    <!-- 近期用药情况 -->
     <div class="bottom-gap">
       <el-card>
         <div class="card-head-title">
@@ -675,7 +679,7 @@
     <div class="submit-btn-wrap" v-if="submitBtn">
       <button class="submit-btn" @click="submitData">提交</button>
     </div>
-
+    <!-- 西药处方 -->
     <el-dialog
       title="西药处方"
       :visible.sync="addMedicineDialog"
@@ -683,6 +687,7 @@
       center>
       <medicine @addMedicine="addMedicineHandler"></medicine>
     </el-dialog>
+    <!-- 高血压病中医辩证分型表 -->
     <el-dialog
       title="高血压病中医辩证分型表"
       :visible.sync="chineseMedicineDialog"
@@ -1642,7 +1647,10 @@ export default {
   }
   .submit-btn{
     background: #1991fc;
-    border:none;
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border:1px solid #1991fc;
     border-radius: 2px;
     cursor: pointer;
     outline: none;
@@ -1650,17 +1658,51 @@ export default {
     width: 200px;
     height: 30px;
   }
+  .submit-btn:hover{
+    opacity: 0.9;
+    // background: #1991fc;
+    // box-sizing: border-box;
+    // line-height: 1;
+    // white-space: nowrap;
+    // border:1px solid #1991fc;
+    // border-radius: 2px;
+    // cursor: pointer;
+    // outline: none;
+    // color: #fff;
+    // width: 200px;
+    // height: 30px;
+  }
   .add-btn{
     background: #1991fc;
     outline: none;
-    border:none;
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border:1px solid #1991fc;
     color: #fff;
     border-radius: 2px;
-    padding: 3px;
+    padding: 5px;
     width: 60px;
     text-align: center;
     vertical-align: middle;
     cursor: pointer;
+  }
+  .add-btn:hover{
+    opacity: 0.9;
+    // background: #1991fc;
+    // outline: none;
+    // border:none;
+    // box-sizing: border-box;
+    // line-height: 1;
+    // white-space: nowrap;
+    // border:1px solid #1991fc;
+    // color: #fff;
+    // border-radius: 2px;
+    // padding: 5px;
+    // width: 60px;
+    // text-align: center;
+    // vertical-align: middle;
+    // cursor: pointer;
   }
   select{
     // width: 100%;

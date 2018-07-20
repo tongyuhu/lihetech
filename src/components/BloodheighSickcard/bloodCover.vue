@@ -28,7 +28,7 @@
           <span class="status-span"
           v-for="(item,index) in status" :key="item.value">
             <f-button
-            :width="86"
+            :width="75"
             :height="24"
             :isChecked="item.default"
             @checked='changeStatus(index)'>{{item.label}}</f-button>
@@ -1544,7 +1544,7 @@ export default {
             // if (item.id === 1) {
             //   this.$set(this.bloodTrendState, 'total', item.highNum)
             // }
-            
+
             if (this._.toNumber(item.id) === 2) {
               this.$set(this.bloodTrendState, 'normal', item.highNum)
             }
@@ -2046,7 +2046,10 @@ export default {
     padding: 20px 0 20px 24px;
   }
   .check-date-btn{
-    border:none;
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border:1px solid #fff;
     background-color:#fff;
     cursor: pointer;
     font-size:18px;
@@ -2054,6 +2057,20 @@ export default {
     width:64px;
     height: 36px;
     outline:none;
+  }
+  .check-date-btn:hover{
+    opacity: 0.9;
+    /* box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border:1px solid #fff;
+    background-color:#fff;
+    cursor: pointer;
+    font-size:18px;
+    color:#666;
+    width:64px;
+    height: 36px;
+    outline:none; */
   }
   .check-status{
     padding: 0px 0 20px 24px;
@@ -2065,7 +2082,11 @@ export default {
     /* margin-right: 10px; */
   }
   .checked{
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
     background-color:#1991fc;
+    border-color: #1991fc;
     color:#fff;
     border-radius:2px;
   }
@@ -2118,7 +2139,7 @@ export default {
     font-size: 14px;
   }
   .status-span{
-    margin-right: 2px;
+    margin-right: 8px;
     margin-bottom: 5px;
   }
   button{

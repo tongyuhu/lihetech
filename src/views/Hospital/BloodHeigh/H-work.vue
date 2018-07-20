@@ -834,6 +834,7 @@ export default {
 .el-button{
   /* font-size:14px; */
   padding:7px 10px;
+  border-radius:2px;
 }
 /* .table-col{
   color:#1991fc;

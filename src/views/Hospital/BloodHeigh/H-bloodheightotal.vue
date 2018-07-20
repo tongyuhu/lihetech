@@ -584,17 +584,37 @@ p {
   color:#041421;
 }
 .check-date-btn{
-  border:none;
+  box-sizing: border-box;
+  border:1px solid #f4f6f9;
   background-color:#f4f6f9;
+  line-height:1;
+  white-space: nowrap;
   cursor: pointer;
   font-size:18px;
   color:#666;
   width:64px;
   height: 36px;
   outline:none;
+  border-radius:2px;
+}
+.check-date-btn:hover{
+  opacity: 0.9;
+  /* box-sizing: border-box;
+  border:1px solid #f4f6f9;
+  background-color:#f4f6f9;
+  line-height:1;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size:18px;
+  color:#666;
+  width:64px;
+  height: 36px;
+  outline:none;
+  border-radius:2px; */
 }
 .checked{
   background-color:#1991fc;
+  border-color:#1991fc;
   color:#fff;
   border-radius:2px;
 }
