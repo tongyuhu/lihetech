@@ -36,6 +36,6 @@ export default {
   /* height: 350px; */
   background: #f4f6f9;
   padding-top:15px;
-  padding-left: 20px;
+  /* padding-left: 20px; */
 }
 </style>

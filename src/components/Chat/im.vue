@@ -28,7 +28,7 @@
             :total="friendsList.length">
               <div>
                 <ul>
-                  <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
+                  <li class="chart-friend" v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
                     ref="friendImg"
@@ -48,7 +48,7 @@
         <chatPane
         title="群组"
         icon="icon-group">
-          <div class="im-panes">
+          <div class="im-panes im-group">
             暂无群组
           </div>
         </chatPane>
@@ -56,7 +56,7 @@
         <chatPane
         title="历史消息"
         icon="icon-msg">
-          <div class="im-panes">
+          <div class="im-panes im-msg">
             暂无数据
           </div>
         </chatPane>
@@ -172,7 +172,7 @@ export default {
       list-style: none;
       margin:0;
       padding:0;
-      margin-left: 20px;
+      // margin-left: 20px;
     }
     li{
       display: block;
@@ -245,12 +245,13 @@ export default {
       text-align: left;
     }
     &-panes{
-      margin-left:10px;
+      // margin-left:10px;
       height: 330px;
       overflow: hidden;
       color: #041421;
       li{
-        margin-bottom: 10px;
+        // margin-bottom: 10px;
+        padding:8px 0 8px 20px;
         height: 36px;
       }
       li:nth-child(1){
@@ -308,11 +309,18 @@ export default {
       }
       @include initul
     }
+    &-group{
+      padding-left:20px;
+    }
+    &-msg{
+      padding-left:20px;
+    }
     &-footer{
       @include initul(left);
       li{
         display: inline-block;
-        width: 20%;
+        // width: 20%;
+        padding: 0 10px;
       }
       padding-top:10px;
       border-top:1px solid #fff;
@@ -326,6 +334,15 @@ export default {
     display: inline-block;
     margin-bottom: 20px;
     vertical-align: middle;
+  }
+  .chart-friend{
+    // padding-left: 20px;
+    // background: rgb(236, 232, 232);
+    // opacity: 0.2;
+  }
+  .chart-friend:hover{
+    background: rgb(236, 232, 232);
+    // opacity: 0.2;
   }
 </style>
 

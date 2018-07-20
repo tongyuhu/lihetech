@@ -794,7 +794,7 @@ export default {
   }
   span{
     display: inline-block;
-    margin-right: 10px;
+    // margin-right: 10px;
   }
 
   table{
@@ -816,14 +816,31 @@ export default {
 .order-setting{
   margin-bottom: 20px;
   button{
-    border: none;
+    box-sizing: border-box;
+    line-height: 1;
+    white-space: nowrap;
+    border:1px solid #1991fc;
     background: #1991fc;
-    padding: 6px 8px;
+    padding: 8px 10px;
     color: #fff;
-    border-radius: 3px;
+    border-radius: 2px;
     cursor: pointer;
     margin-right: 15px;
     font-size: 14px;
+  }
+  button:hover{
+    opacity: 0.9;
+    // box-sizing: border-box;
+    // line-height: 1;
+    // white-space: nowrap;
+    // border:1px solid #1991fc;
+    // background: #1991fc;
+    // padding: 8px 10px;
+    // color: #fff;
+    // border-radius: 3px;
+    // cursor: pointer;
+    // margin-right: 15px;
+    // font-size: 14px;
   }
 }
 .dialog-title{
@@ -842,7 +859,10 @@ export default {
   margin-top:10px;
 }
 .group-btn-active{
-  border:none;
+  box-sizing: border-box;
+  line-height: 1;
+  white-space: nowrap;
+  border:1px solid #1991fc;
   border-radius: 2px;
   outline: none;
   padding:5px;
@@ -851,9 +871,29 @@ export default {
   cursor: pointer;
   margin-left: 3px;
   margin-right: 3px;
+  padding:5px 5px;
+  text-align: center;
+}
+.group-btn-active:hover{
+  opacity: 0.9;
+  // box-sizing: border-box;
+  // line-height: 1;
+  // white-space: nowrap;
+  // border:1px solid #1991fc;
+  // border-radius: 2px;
+  // outline: none;
+  // padding:5px;
+  // background-color: #1991fc;
+  // color:#fff;
+  // cursor: pointer;
+  // margin-left: 3px;
+  // margin-right: 3px;
 }
 .group-btn{
-  border:none;
+  box-sizing: border-box;
+  line-height: 1;
+  white-space: nowrap;
+  border:1px solid #f4f6f9;
   border-radius: 2px;
   outline: none;
   padding:5px;
@@ -862,6 +902,23 @@ export default {
   cursor: pointer;
   margin-left: 3px;
   margin-right: 3px;
+  padding:5px 5px;
+  text-align: center;
+}
+.group-btn:hover{
+  opacity: 0.8;
+  // box-sizing: border-box;
+  // line-height: 1;
+  // white-space: nowrap;
+  // border:1px solid #f4f6f9;
+  // border-radius: 2px;
+  // outline: none;
+  // padding:5px;
+  // background-color: #f4f6f9;
+  // color:#041421;
+  // cursor: pointer;
+  // margin-left: 3px;
+  // margin-right: 3px;
 }
 .loading-min-height{
   min-height: 700px;

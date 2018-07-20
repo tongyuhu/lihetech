@@ -905,15 +905,22 @@ export default {
       button{
         cursor: pointer;
         // margin-left: 10px;
-        background-color: #1991fc;
+        // background-color: #1991fc;
         // box-shadow:2px 2px 2px rgb(146, 187, 146);
-        border:none;
+        background: #1991fc;
+        border:1px solid #1991fc;
+        box-sizing: border-box;
+        line-height: 1;
+        white-space: nowrap;
         outline: none;
         border-radius: 2px;
         color: #fff;
         width: 84px;
         height: 30px;
         // border:
+      }
+      button:hover{
+        opacity: 0.9;
       }
     }
   }

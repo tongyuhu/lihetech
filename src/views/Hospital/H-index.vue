@@ -692,6 +692,17 @@
       border-radius: 50%;
       // z-index: 199;
     }
+    &-icon-btn:hover{
+      opacity: 0.9;
+      // border: none;
+      // outline: none;
+      // cursor: pointer;
+      // width: 90px;
+      // height: 90px;
+      // background: url('~icon/hospital-icon2-05.png') no-repeat center;
+      // border-radius: 50%;
+      // z-index: 199;
+    }
     &-icon{
       // z-index: 199;
       // display: inline-block;

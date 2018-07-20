@@ -3,7 +3,7 @@
     <div @click="toggle" class="fold-title">
       <span class="iconfont icon-arrowright" v-if="!show"></span>
       <span class="iconfont icon-arrowdown" v-if="show"></span>
-      <span>
+      <span class="flod-title-text">
         {{title}}{{total ? '('+total+')': ''}}
       </span>
     </div>
@@ -45,6 +45,10 @@ export default {
     cursor: pointer;
     margin-bottom: 10px;
     user-select: none; 
+    padding-left: 20px;
+    // &-text{
+    //   display: inline-block;
+    // }
   }
 }
 </style>
