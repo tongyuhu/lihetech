@@ -181,7 +181,7 @@ export default {
     // color: #fff;
     cursor: pointer;
     &:hover{
-      color: #fff;
+      // color: #fff;
       background-color: $bgcoloropen ; 
     }
     &-name{
