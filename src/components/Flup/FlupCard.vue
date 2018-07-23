@@ -9,8 +9,14 @@
             <el-button @click="call" type="text" size="mini">
               <i class="iconfont icon-xiaoxi icon-msg-color"></i>
             </el-button>
-            <el-button :disabled="upBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupUp">上次随访</el-button>
-            <el-button :disabled="nextBtn" v-if="!submitBtn" type="primary" size="mini" @click="FlupDn">下次随访</el-button>
+            <el-button :disabled="upBtn" v-if="!submitBtn" class="left-btn-radius" type="primary" size="mini" @click="FlupUp">
+              <span class="el-icon-arrow-left"></span>
+              查看上次随访
+            </el-button>
+            <el-button :disabled="nextBtn" v-if="!submitBtn" type="primary" size="mini" class="right-btn-radius" @click="FlupDn">
+              查看下次随访
+              <span class="el-icon-arrow-right"></span>
+            </el-button>
           </div>
           <!-- <div class="head-title-right">
             <el-button @click="call" type="text" size="mini">
@@ -1739,55 +1745,13 @@ export default {
     color: #f96767;
     // font-size: 18px;
   }
-  // .my-input{
-  //   border:none;
-  //   outline: none;
-  //   background: transparent;
-  //   font-size: 14px;
-  //   height: 28px;
-  //   border:1px solid #dcdfe6;
-  //   border-radius: 4px;
-  //   width: 100%;
-  //   padding-left: 60px;
-  // }
-  // .my-input-wrap{
-  //   position: relative;
-  //   max-width: 1080px;
-  //   // border:1px solid #dcdfe6;
-  // }
-  // // .my-input:focus .my-input-wrap{
-  // //   border:1px solid #1991fc;
-  // //   border-radius: 4px;
-  // // }
-  // .my-input:focus {
-  //   border:1px solid #1991fc;
-  //   border-radius: 4px;
-  // }
-  // .my-input-q{
-  //   position: absolute;
-  //   top:0;
-  //   left: 5px;
-  //   height: 100%;
-  //   text-align: center;
-  //   line-height: 1;
-  //   vertical-align: baseline;
-  //   display: inline-block;
-  //   font-size: 14px;
-  //   padding-top: 10px;
-  //   // display: table-cell;
-  // }
-  // .my-input-h{
-  //   position: absolute;
-  //   right: 5px;
-  //   top:0;
-  //   height: 100%;
-  //   font-size: 14px;
-  //   padding-top: 10px;
-  // }
-  // .my-input:focus .my-input-wrap{
-  //   border:1px solid #1991fc;
-  //   border-radius: 4px;
-  // }
+  .left-btn-radius {
+    border-radius: 20px 0 0 20px;
+  }
+  .right-btn-radius {
+    border-radius:0 20px 20px 0;
+    margin-left: 0;
+  }
 </style>
 <style lang="scss">
   .elinput-wrap-onetext .el-input--suffix .el-input__inner {
