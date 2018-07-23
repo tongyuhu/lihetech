@@ -8,7 +8,6 @@ import axios from '@/api/axios'
 import {rongFriendApi} from '@/api/views/rong'
 import {getAdminInfo} from '@/api/components/login'
 // import {imgExists} from '@/untils/untils'
-// import {checkimgApi} from './../api/components/checkimg'
 Vue.use(Vuex)
 
 // return publicStatic.onlineStatic + '/static/user.png'
@@ -65,9 +64,6 @@ export const store = new Vuex.Store({
   getters: {
     adminImg: state => {
       if (_.has(state.adminInfo, 'headPortraitUrl')) {
-        // axios(checkimgApi(process.env.IMG_URL + state.adminInfo.headPortraitUrl))
-        // .then(res => {
-        //   console.log('获取医生头像成功')
         return process.env.IMG_URL + state.adminInfo.headPortraitUrl
         // })
         // .catch(error => {
@@ -91,7 +87,6 @@ export const store = new Vuex.Store({
       let current = _.find(state.friendsList, function (item) {
         return item.currentChat === true
       })
-      // axios(checkimgApi(current.userImg)).then(res => {
       if (_.has(current, 'userImg')) {
         return current.userImg
       } else {

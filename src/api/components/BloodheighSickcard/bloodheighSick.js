@@ -1,4 +1,7 @@
-// 病人基本信息
+/**
+ * @param {obj userId,adminHospitalId,pageNum,pageSize} params
+ * @description 病人基本信息
+ */
 export const bloodheighSickDataApi = (params) => {
   return {
     method: 'post',
@@ -13,6 +16,11 @@ export const bloodheighSickDataApi = (params) => {
     outtime: 10000
   }
 }
+/**
+ *
+ * @param {obj } params userId,userCasesCardId
+ * @description 根据用户id和病历卡id获取用户基本信息
+ */
 export const bloodheighSickApi = (params) => {
   return {
     method: 'post',
@@ -23,8 +31,7 @@ export const bloodheighSickApi = (params) => {
   }
 }
 /**
- *
- * @param {病史3、遗传史4、糖尿病并发症5、高血压并发症6} params
+ * @param {number 病史3、遗传史4、糖尿病并发症5、高血压并发症6} params
  */
 export const sickApi = (params) => {
   return {
@@ -40,6 +47,11 @@ export const sickApi = (params) => {
     outtime: 10000
   }
 }
+/**
+ *
+ * @param {obj} params
+ * @description 病历卡-修改或者添加
+ */
 export const modifyCardApi = (params) => {
   return {
     method: 'post',
@@ -49,6 +61,11 @@ export const modifyCardApi = (params) => {
     outtime: 10000
   }
 }
+/**
+ *
+ * @param {number 1:高血压,2:糖尿病} params
+ * @description 国家疾病编码库
+ */
 export const sickCodeApi = (params) => {
   return {
     method: 'post',

@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {obj} params
+ * @description 用药
+ */
 export const useDrugApi = (params) => {
   return {
     method: 'post',

@@ -5,7 +5,6 @@
             <Hhospitalmsg></Hhospitalmsg>
             <HSugerheightotal></HSugerheightotal>
             <HsugerWork></HsugerWork>
-            <sugerSicklist></sugerSicklist>
           </el-col>
       </el-row>
   </div>
@@ -15,14 +14,12 @@
 // import Bus from '@/bus'
 import HSugerheightotal from './H-sugerheightotal'
 import HsugerWork from './H-sugerWork'
-import sugerSicklist from './H-sugerSicklist.vue'
 import Hhospitalmsg from '@/views/Hospital/H-hospitalMsg.vue'
 export default {
   name: 'H-bloodheigh',
   components: {
     HSugerheightotal,
     HsugerWork,
-    sugerSicklist,
     Hhospitalmsg
   },
   data () {

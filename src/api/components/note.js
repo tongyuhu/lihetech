@@ -1,3 +1,6 @@
+/**
+ * @description 今日笔记
+ */
 export const noteApi = (param) => {
   return {
     method: 'post',

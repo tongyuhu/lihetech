@@ -43,7 +43,6 @@
 
 <script>
 // import {deepcopy} from '@/untils/untils'
-// import {tipsApi} from './../api/components/accountSetting'
 // import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
   name: 'accountSetting',
@@ -318,30 +317,6 @@ export default {
   //     },
   //     deep: true
   //   }
-  // },
-  // mounted () {
-  //   this.$axios(tipsApi)
-  //   .then(res => {
-  //     this.tips = res.data.tips
-  //   })
-  //   if (this.$store.state.adminInfo) {
-  //     if (this.$store.state.adminInfo.adminType === 1 || this.$store.state.adminInfo.adminType === 2) {
-  //       this.doctorListData.forEach(item => {
-  //         item.root = true
-  //         item.delete = true
-  //       })
-  //     }
-  //     if (this.$store.state.adminInfo.adminType === 3 || this.$store.state.adminInfo.adminType === 4) {
-  //       // this.doctorListData.indexOf
-  //       this.doctorListData.forEach(item => {
-  //         if (item.id === this.$store.state.adminInfo.id) {
-  //           item.root = true
-  //           item.delete = false
-  //         }
-  //       })
-  //     }
-  //   }
-  //   // console.log(this.$router.currentRoute.path, 11)
   // }
 }
 </script>

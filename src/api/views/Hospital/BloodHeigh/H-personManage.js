@@ -1,3 +1,6 @@
+/**
+ * @description 查询医生列表
+ */
 export const getDoctorListAPI = (parmas) => {
   return {
     method: 'post',
@@ -13,6 +16,11 @@ export const getDoctorListAPI = (parmas) => {
     timeout: 10000
   }
 }
+/**
+ *
+ * @param {object} parmas
+ * @description 查询病人用户列表
+ */
 export const getSickListAPI = (parmas) => {
   return {
     method: 'post',
@@ -28,6 +36,11 @@ export const getSickListAPI = (parmas) => {
     timeout: 10000
   }
 }
+/**
+ *
+ * @param {object} parmas
+ * @description 修改 管理员-医生-专家-信息
+ */
 export const editDoctorAPI = (parmas) => {
   return {
     method: 'post',
@@ -37,6 +50,11 @@ export const editDoctorAPI = (parmas) => {
     timeout: 10000
   }
 }
+/**
+ *
+ * @param {object} parmas
+ * @description 账户停用或者启用
+ */
 export const doctorEnabledAPI = (parmas) => {
   return {
     method: 'post',

@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {obj} params
+ * @description 血压与BMI
+ */
 export const BMIApi = (params) => {
   let req = {}
   req = {

@@ -1,4 +1,8 @@
-
+/**
+ *
+ * @param {obj} params
+ * @description 血压历史
+ */
 export const originalApi = (params) => {
   return {
     method: 'post',

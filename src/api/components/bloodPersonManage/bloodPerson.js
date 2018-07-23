@@ -1,3 +1,12 @@
+/**
+ *
+ * @param {Object} obj
+ * @description
+ * 高血压管理 分层查询
+ * pageNum页码（默认1）
+  pageSize每页显示数量（默认5）
+  dangerLevel number 级别 0-未分级 1~3级
+ */
 export const layerSickApi = (obj) => {
   return {
     method: 'post',
@@ -5,6 +14,11 @@ export const layerSickApi = (obj) => {
     data: obj
   }
 }
+/**
+ *
+ * @param {object} obj
+ * @description 高血压易患人群
+ */
 export const easyApi = (obj) => {
   return {
     method: 'post',

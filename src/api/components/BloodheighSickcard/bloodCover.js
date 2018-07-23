@@ -1,4 +1,17 @@
 import {dateFormat, daybefor} from './../../../untils/date'
+/**
+ *
+ * @param {object} params
+ * @example params={
+ *  'userId': params.userId,
+    'adminHospitalId': params.adminHospitalId,
+    'bpMeasureTime': params.bpMeasureTime,
+    'pageNum': params.pageNum || 1,
+    'pageSize': params.pageSize || 10
+ * }
+ * @param {Number 0:最近,1:日,2:周,3:月} data
+ * @description 血压趋势
+ */
 export const bloodheighSickDataApi = (params, data) => {
   // 最近
   if (data === 0) {
@@ -65,6 +78,13 @@ export const bloodheighSickDataApi = (params, data) => {
     }
   }
 }
+/**
+ *
+ * @param {object} params
+ * @param {Number} type
+ * @param {Date} date
+ * @description 行为分数和高血压比例日周月
+ */
 export const updateBehaviourRateApi = (params, type, date) => {
   // 日
   if (type === 0) {
@@ -117,6 +137,13 @@ export const updateBehaviourRateApi = (params, type, date) => {
     }
   }
 }
+/**
+ *
+ * @param {object} params
+ * @param {Number} type
+ * @param {Date} date
+ * @description 血压状态统计（微高、高、危险
+ */
 export const updatebloodTrendStateApi = (params, type, date) => {
   // date = dateFormat(date, 0, 1)
   console.log('after', date)

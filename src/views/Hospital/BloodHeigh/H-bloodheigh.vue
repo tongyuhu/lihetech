@@ -6,7 +6,6 @@
             <Hhospitalmsg></Hhospitalmsg>
             <HBloodheightotal></HBloodheightotal>
             <!-- <HWork></HWork> -->
-            <bloodSickLists></bloodSickLists>
             <!-- <bloodSicklist></bloodSicklist> -->
           </el-col>
       </el-row>
@@ -17,7 +16,6 @@
 import Hhospitalmsg from '@/views/Hospital/H-hospitalMsg.vue'
 import HBloodheightotal from './H-bloodheightotal'
 import HWork from './H-work'
-import bloodSicklist from './H-bloodSicklist.vue'
 import bloodSickLists from './H-bloodSickLists.vue'
 // import Bus from '@/bus'
 // import face from '@/components/BloodheighSickcard/facediagnosis'
@@ -29,7 +27,6 @@ export default {
     Hhospitalmsg,
     HBloodheightotal,
     HWork,
-    bloodSicklist,
     bloodSickLists
     // face
     // medicine
