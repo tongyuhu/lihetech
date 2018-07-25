@@ -157,6 +157,7 @@ export const store = new Vuex.Store({
           if (_.has(item, 'history')) {
             state.history = item.history
           } else {
+            item.history = []
             state.history = []
           }
           item.currentChat = true
@@ -206,18 +207,21 @@ export const store = new Vuex.Store({
       // console.log('message', message, state.history)
       // state.history.push(message)
     },
+    // 发送消息
     sendcurrentMsg (state, message) {
       state.friendsList.forEach(item => {
         if (item.userId === message.targetId) {
           if (_.has(item, 'history')) {
             item.history.push(message)
-            console.log('添加消息', message)
+            // state.history = item.history
+            console.log('添加消息本来有history', message)
             // console.log('添加消息', message)
           } else {
             item.history = []
             item.history.push(message)
-            console.log('添加消息', message)
+            console.log('添加消息本来没有history', message)
           }
+          state.history = item.history
         }
       })
     },

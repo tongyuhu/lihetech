@@ -99,7 +99,7 @@
 
       <!-- 写信息 -->
       <div class="chart-wrap-msg">
-        <textarea class="textarea" v-model="readyMsg"></textarea>
+        <textarea class="textarea" v-model="readyMsg" v-on:keyup.enter.ctrl="sendMsg"></textarea>
       </div>
 
       <!-- 发送按钮 -->
@@ -176,29 +176,19 @@ export default {
         this.sethistory(current.history)
       },
       deep: true
+    },
+    chartList: {
+      handler: function (val, oldVal) {
+        if (val.length < 2) {
+          this.showList = false
+        } else {
+          this.showList = true
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
-  // watch: {
-  //   historyMsg: {
-  //     handler: function (val, oldVal) {
-  //       let vm = this
-  //       // if (val !== oldVal) {
-  //       this.$nextTick(() => {
-  //         setTimeout(function () {
-  //           let container = vm.$el.querySelector('#chatWidow')
-  //           container.scrollTop = container.scrollHeight
-  //           console.log('container.scrollTop', container.scrollTop)
-  //           console.log('container.scrollHeight', container.scrollHeight)
-  //           // container.scrollIntoView()
-  //         }, 1500)
-  //           // document.getElementById('chatMessage').scrollIntoView()
-  //           // document.getElementById('chatMessage').scrollTop = document.getElementById('chatMessage').scrollHeight
-  //       })
-  //       // }
-  //     },
-  //     deep: true
-  //   }
-  // },
   methods: {
     ...mapActions([
       'setaddChatFriend'
@@ -234,6 +224,7 @@ export default {
     sendMsg () {
       // console.log('historyMsg', this.historyMsg)
       let vm = this
+      this.showEmoji = false
       // vm.historyMsg = []
       let canSend = false
       vm.readyMsg = this._.trim(vm.readyMsg)
@@ -415,7 +406,7 @@ export default {
                   info = '不在聊天室中'
                   break
                 default :
-                  info = x
+                  info = 'x'
                   break
               }
               console.log('发送失败:' + info)
@@ -443,8 +434,43 @@ export default {
     infiniteHandler ($state) {
       let vm = this
       new Promise(function (resolve, reject) {
-        vm.getHistroyMsgRong(vm.currentChat.userId)
-        resolve('success')
+        let timestrap = null
+        let count = 20
+        let targetuserId = vm.currentChat.userId
+        let userId = targetuserId
+      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+        RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
+          onSuccess: function (list, hasMsg) {
+            vm.sethistory(vm.currentChat.history)
+            // vm.getCurrentFriendMsg(msgObj)
+            console.log('历史消息VM', vm.currentChat)
+            if (vm._.has(vm.currentChat, 'history')) {
+              if (vm.currentChat.history.length === 0) {
+                vm.sethistory(list)
+              } else {
+                vm.sethistory(vm._.concat(list, vm.currentChat.history))
+              }
+            }
+            let newChat = vm.currentChat
+            newChat.history = vm.historyMsg
+            newChat.hasHistroy = hasMsg
+            vm.addChatFriend(newChat)
+            console.log('历史消息', list, hasMsg)
+            console.log('历史消息bend', vm.historyMsg)
+            vm.isTriggerFirstLoad = false
+          // if (!hasMsg) {
+          //   vm.noMoreHistroy = true
+          // }
+            resolve('success')
+          },
+          onError: function (error) {
+            resolve('error')
+            console.log('历史消息获取失败', error)
+        // APP未开启消息漫游或处理异常
+        // throw new ERROR ......
+          }
+        })
+        // vm.getHistroyMsgRong(vm.currentChat.userId)
       }).then(function (resolve) {
         if (resolve === 'success') {
           if (!vm.isTriggerFirstLoad) {
@@ -455,6 +481,13 @@ export default {
               $state.loaded()
             }
           }
+        }
+        if (resolve === 'error') {
+          vm.$message({
+            message: '获取历史消息失败',
+            type: 'error'
+          })
+          $state.loaded()
         }
       })
     },
@@ -648,19 +681,6 @@ export default {
     },
     callVoice () {
       this.callVideo(true)
-    }
-  },
-  watch: {
-    chartList: {
-      handler: function (val, oldVal) {
-        if (val.length < 2) {
-          this.showList = false
-        } else {
-          this.showList = true
-        }
-      },
-      deep: true,
-      immediate: true
     }
   },
   mounted () {

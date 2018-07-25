@@ -127,30 +127,11 @@ export default {
       this.$emit('closeIM')
     },
     chartWith (friend) {
-      let vm = this
       friend.hasMsg = false
       this.clearNewmsg()
       this.addChatFriend(friend)
       this.changeChatFriend(friend)
       this.openChatWindow()
-      // let history = []
-      // vm.sethistory(history)
-      // friend.hasMsg = false
-      // if (this._.has(friend, 'history')) {
-      //   history = friend.history
-      //   vm.addChatFriend(friend)
-      //   vm.changeChatFriend(friend)
-      // } else {
-      //   friend.history = []
-      //   vm.addChatFriend(friend)
-      //   vm.changeChatFriend(friend)
-      // }
-      // vm.sethistory(history)
-      // console.log('好友xiaoxi ', friend)
-      // friend.history = []
-      // 获取历史消息
-
-      // vm.openChatWindow()
     }
   },
   mounted () {

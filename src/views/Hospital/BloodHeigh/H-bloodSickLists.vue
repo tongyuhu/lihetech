@@ -728,14 +728,18 @@ export default {
     call (row, isuserId) {
       console.log('聊天对象', row)
       let rongId
+      let img = ''
       if (isuserId) {
         rongId = 'member_' + row.userId
       } else {
         rongId = 'member_' + row.id
       }
+      if (this._.has(row, 'userImage')) {
+        img = row.userImage
+      }
       let sick = {
         userId: rongId,
-        userImg: '',
+        userImg: img,
         userName: row.realName || '患者',
         hasMsg: false,
         currentChat: false
