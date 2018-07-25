@@ -5,6 +5,7 @@
           <el-col :span="24">
             <Hhospitalmsg></Hhospitalmsg>
             <HBloodheightotal></HBloodheightotal>
+            <bloodSickLists></bloodSickLists>
             <!-- <HWork></HWork> -->
             <!-- <bloodSicklist></bloodSicklist> -->
           </el-col>

@@ -36,21 +36,18 @@
                     label="分层依据"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
-                      <span> {{scope.row.dangerLevelDisease}}</span>                          
-                      <span> {{scope.row.dangerLevelOrgan}}</span>                          
+                      <span> {{scope.row.dangerLevelDisease}}</span>                        
+                      <span> {{scope.row.dangerLevelOrgan}}</span>                    
                       <span> {{scope.row.dangerLevelDanger}}</span>                         
-                      <!-- <span> {{scope.row.dangerLevelDisease?'临床疾病':''}}</span>                           
-                      <span> {{scope.row.dangerLevelOrgan?'靶器官损坏':''}}</span>                           
-                      <span> {{scope.row.dangerLevelDanger?'危险因素':''}}</span>                            -->
                     </template>
                 </el-table-column>
                 <el-table-column
                     prop="dangerousCount"
                     label="近七日严重次数"
                     label-class-name="tableTitle">
-                    <!-- <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                           
-                    </template> -->
+                    <template slot-scope="scope">   
+                      <span> {{scope.row.dangerousCount===0?'无':scope.row.dangerousCount}}</span>                           
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="joinHospitalTime"
@@ -140,9 +137,9 @@
                     prop="dangerousCount"
                     label="近七日严重次数"
                     label-class-name="tableTitle">
-                    <!-- <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                           
-                    </template> -->
+                    <template slot-scope="scope">
+                      <span> {{scope.row.dangerousCount===0?'无':scope.row.dangerousCount}}</span>  
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="joinHospitalTime"
@@ -232,9 +229,9 @@
                     prop="dangerousCount"
                     label="近七日严重次数"
                     label-class-name="tableTitle">
-                    <!-- <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> {{scope.row.bastThan}}%</span>                           
-                    </template> -->
+                    <template slot-scope="scope">
+                      <span> {{scope.row.dangerousCount===0?'无':scope.row.dangerousCount}}</span>  
+                    </template>
                 </el-table-column>
                 <el-table-column
                     prop="joinHospitalTime"
