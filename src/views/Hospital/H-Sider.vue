@@ -209,9 +209,9 @@ export default {
       session('itemtab', '')
     },
     goHome () {
-      this.$router.push({
-        name: 'Home'
-      })
+      // this.$router.push({
+      //   name: 'Home'
+      // })
     }
   },
   mounted () {
@@ -282,7 +282,7 @@ export default {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
+    cursor: default;
   }
 </style>
 
