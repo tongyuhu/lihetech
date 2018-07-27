@@ -191,15 +191,18 @@
       <div class="empty-div">
       </div>
     </div>
-    <imgfloat
-    :imgsrc="checklistimgUrl"
-    ref="checklistimg">
-    </imgfloat>
+    <!-- v-if="showBigImg" -->
       <!-- <checkList
       :list="checklist" :row="true">
 
       </checkList> -->
     </el-dialog> 
+    <imgfloat
+    :imgsrc="checklistimgUrl"
+    v-if="showBigImg"
+    @close="closeImgFloat"
+    ref="checklistimg">
+    </imgfloat>
   </div>
 </template>
 
@@ -252,6 +255,7 @@ export default {
       checklistimgUrl: '',
       // 体检单
       showchecklist: false,
+      showBigImg: false,
       checklist: [],
       cardArr: [],
       cardData: {},
@@ -371,16 +375,21 @@ export default {
     handleClose () {
       this.histroyCard = false
     },
+    closeImgFloat () {
+      this.showBigImg = false
+    },
     openChecklist () {
       this.showchecklist = true
     },
     showchecklistimg (url) {
       this.checklistimgUrl = url
       // Bus.$emit('showbigimg')
-      let vm = this
-      this.$nextTick(function () {
-        vm.$refs.checklistimg.showBig()
-      })
+      // let vm = this
+      this.showBigImg = true
+      console.log('打开大图？', this.showBigImg)
+      // this.$nextTick(function () {
+      //   vm.$refs.checklistimg.showBig()
+      // })
       // this.$refs.checklistimg.showBig()
     }
   },

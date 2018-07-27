@@ -15,6 +15,9 @@
     </div>
     <imgfloat
     :imgsrc="bigImgsrc"
+    v-if="showBigImg"
+    @close="closeBigImg"
+    backgroundColor="rgba(65, 61, 61, 0.7)"
     ref="chatimg">
     </imgfloat>
     <!-- <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
@@ -106,11 +109,15 @@ export default {
     showBig (src) {
       let vm = this
       this.bigImgsrc = src
-      this.$nextTick(function () {
-        vm.$refs.chatimg.showBig()
-      })
+      this.showBigImg = true
+      // this.$nextTick(function () {
+      //   vm.$refs.chatimg.showBig()
+      // })
       // Bus.$emit('showbigimg')
       // this.showBigImg = true
+    },
+    closeBigImg () {
+      this.showBigImg = false
     },
     // closeBig () {
     //   this.showBigImg = false

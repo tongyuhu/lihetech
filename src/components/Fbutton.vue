@@ -47,6 +47,7 @@ export default {
 button{
   /* padding: 2px 0; */
   vertical-align: baseline;
+  margin-right: 10px;
 }
 button:hover{
   /* padding: 2px 0; */

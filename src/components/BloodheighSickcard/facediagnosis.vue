@@ -651,93 +651,6 @@
           </div>
         </div>
 
-        <!-- <div class="case-right">
-          <div class="case-right-main">
-            <tabs
-            v-model="activeIndex"
-            @checkd="changeTab">
-              <pane
-              label="西药处方">
-                <div class="pane-bg">
-                </div>
-                <div class="pane-bgc">
-                  <searchMedicine
-                  @medicineList="changeMedicineList"></searchMedicine>
-                </div>
-                <div class="medicenelist">
-                  <el-table
-                  ref="multipleTable"
-                  :data="medicineList"
-                  tooltip-effect="dark"
-                  style="width: 100%"
-                  max-height="550"
-                  @selection-change="handleSelectionChange">
-                    <el-table-column
-                      type="selection"
-                      width="55">
-                    </el-table-column>
-                    <el-table-column
-                      prop="name"
-                      label="名称"
-                      show-overflow-tooltip>
-                    </el-table-column>
-                    <el-table-column
-                      prop="spec"
-                      label="规格"
-                      show-overflow-tooltip>
-                    </el-table-column>
-                    <el-table-column
-                      prop="kucun"
-                      label="库存"
-                      width="65"
-                      show-overflow-tooltip>
-                    </el-table-column>
-                    <el-table-column
-                      prop="price"
-                      label="单价"
-                      width="65"
-                      show-overflow-tooltip>
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <div class="add-sure">
-                  <el-button type="primary" @click="addsure">确认添加</el-button>
-                </div>
-              </pane>
-              <pane
-              label="运动">
-                <div class="pane-bg">
-                </div>
-                <div class="pane-bgc">
-                  <div
-                  v-for="(sport,index) in addSportData" :key="index">
-                    <addSport
-                    :title="sport.title"
-                    :subtitle="sport.subtitle"
-                    :itemlist="sport.itemlist"
-                    :initNum="sport.initNum"
-                    :step="sport.step"
-                    :index="index"
-                    @addsport="addsports"
-                    ></addSport>
-                  </div>
-                </div>
-              </pane>
-              <pane
-              label="饮食">
-                <div class="pane-bg">
-                </div>
-                <div class="pane-bgc">
-                    <addFood
-                    v-for="(food,index) in addFoodData" :key="index"
-                    :food="food.food"
-                    @addfood="addfoods">
-                    </addFood>
-                </div>
-              </pane>
-            </tabs>
-          </div>
-        </div>   -->
       </div>
       <el-dialog
         title="西药处方"
@@ -1336,7 +1249,8 @@ export default {
       let vm = this
       let obj = {}
       obj.userId = this.sickID
-      obj.doctorDiagnos = this.medication.diagnosisMsg
+      // obj.doctorDiagnos = this.medication.diagnosisMsg
+      obj.doctorDiagnos = this.medication.doctorTip
       obj.lastTime = dateFormat(this.medication.lastTime, 0, true)
       obj.yearsSick = this._.isNaN(parseInt(this.medication.year)) ? null : parseInt(this.medication.year)
       obj.monthSick = this._.isNaN(parseInt(this.medication.month)) ? null : parseInt(this.medication.month)
