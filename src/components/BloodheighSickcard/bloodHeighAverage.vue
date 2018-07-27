@@ -3,7 +3,7 @@
     <div class="margin-bottom">
       <el-card :body-style="{ padding: '0px' }">
         <div class="card-header">
-            <p class="title">血压趋势</p>
+            <p class="title">血压平均水平</p>
         </div>
         <div class="check-date">
           <el-row type="flex" justify="start">
@@ -102,7 +102,9 @@ export default {
         danger: ''
       },
       trendBtnPre: true,
-      trendBtnNext: true
+      trendBtnNext: true,
+      bpMeasureTime: '',
+      bpMeasureState: ''
     }
   },
   methods: {
@@ -328,15 +330,15 @@ export default {
       })
       this.bloodTrendDate[index].isChecked = true
       this.bloodTrendChecked = index
-      this.updatebloodTrendData(index, this.statusArr)
-      console.log('index, this.statusArr', index, this.statusArr)
+      this.updatebloodTrendData(index)
     },
     updatebloodTrendData (index, status) {
       let vm = this
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': this.statusArr || ''
+        'bpMeasureTime': this.bpMeasureTime || '',
+        'bpMeasureState': this.bpMeasureState || ''
       }
       let bloodTrend = echarts.init(document.getElementById('bloodHeighAverage'))
       if (index === 0) {
@@ -591,7 +593,8 @@ export default {
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': vm.bpMeasureTime || '',
+        'bpMeasureTime': this.bpMeasureTime || '',
+        'bpMeasureState': this.bpMeasureState || '',
         'pageNum': vm.bloodTrendData.pageNum
 
       }
