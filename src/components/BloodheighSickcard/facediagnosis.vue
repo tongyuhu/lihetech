@@ -705,9 +705,19 @@
             <span>医嘱：{{medication.doctorTip}}</span>
           </p>
           <p>
-            <span>西药处方：{{medication.doctorTip}}</span>
+            <span>西药处方</span>
           </p>
           <div>
+            <!-- <table>
+              <tr v-for="(item,index) in printdoctorMedicine" :key="index">
+                <td>{{item.name}}</td>
+                <td>{{item.use}}</td>
+                <td>{{item.method}}</td>
+                <td>{{item.times}}</td>
+                <td>{{item.long}}</td>
+                <td>{{item.total}}</td>
+              </tr>
+            </table> -->
             <el-table
             ref="multipleTable"
             :data="printdoctorMedicine"
@@ -752,11 +762,6 @@
                 width="95"
                 align="center">
               </el-table-column>
-              <!-- <el-table-column
-                prop="tip"
-                label="备注"
-                align="center">
-              </el-table-column> -->
             </el-table>
           </div>
         </div>
@@ -1435,8 +1440,10 @@ export default {
         this.printdoctorMedicine.push(obj)
       })
       console.log('打印药品', this.printdoctorMedicine)
-      var windows = print(document.getElementById('print').innerHTML)
-      windows.close()
+      this.$nextTick(function () {
+        var windows = print(document.getElementById('print').innerHTML)
+        windows.close()
+      })
       // // this.complete()
       // // if (this.canPrint) {
       // var headhtml = '<html><head></head><body>'
