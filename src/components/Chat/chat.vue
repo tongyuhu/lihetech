@@ -487,6 +487,8 @@ export default {
             message: '获取历史消息失败',
             type: 'error'
           })
+          // $state.complete()
+          vm.isTriggerFirstLoad = false
           $state.loaded()
         }
       })
