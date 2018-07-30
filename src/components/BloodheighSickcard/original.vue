@@ -89,29 +89,40 @@ export default {
       }
       this.$axios(originalApi(params))
       .then(res => {
-        if (res.data.data) {
-          this.original = []
-          res.data.data.forEach(item => {
-            if (this._.has(item, 'bpMeasureTimes')) {
-              item.bpMeasureTime = this.bpMeasureTime(item.bpMeasureTimes)
-            }
-            if (this._.has(item, 'measureTime')) {
-              item.date = this.time(item.measureTime).date
-              item.time = this.time(item.measureTime).time
-            }
-            if (this._.has(item, 'bpType')) {
-              item.bpType = this.bpType(item.bpType)
-            }
-            if (this._.has(item, 'recordType')) {
-              item.recordType = this.recordType(item.recordType)
-            }
-            this.original.push(item)
-          })
-          this.recordCount = res.data.recordCount
-          this.pageSize = res.data.pageSize
-          this.pageNum = res.data.pageNum
+        if (this._.has(res.data, 'data')) {
+          if (res.data.data) {
+            this.original = []
+
+            res.data.data.forEach(item => {
+              if (this._.has(item, 'bpMeasureTimes')) {
+                item.bpMeasureTime = this.bpMeasureTime(item.bpMeasureTimes)
+              }
+              if (this._.has(item, 'measureTime')) {
+                item.date = this.time(item.measureTime).date
+                item.time = this.time(item.measureTime).time
+              }
+              if (this._.has(item, 'bpType')) {
+                item.bpType = this.bpType(item.bpType)
+              }
+              if (this._.has(item, 'recordType')) {
+                item.recordType = this.recordType(item.recordType)
+              }
+              this.original.push(item)
+            })
+            this.recordCount = res.data.recordCount
+            this.pageSize = res.data.pageSize
+            this.pageNum = res.data.pageNum
+            this.loading = false
+
+            console.log('原始数据', this.original)
+          }
+        }
+        if (res.data.code === '1001') {
           this.loading = false
-          console.log('原始数据', this.original)
+          this.$message({
+            message: '获取原始数据失败',
+            type: 'error'
+          })
         }
       })
       .catch(err => {

@@ -54,8 +54,8 @@
     </div>
 
     <el-row :gutter="8" class="margin-bottom">
-      <el-col :span="12" v-show="false">
-        <!-- 血压与饮食 -->
+      <!-- 血压与饮食 -->
+      <!-- <el-col :span="12" v-show="false">
         <div>
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
@@ -82,14 +82,13 @@
                   </div>
                   <div class="flex-btn" >
                     <el-button :disabled="foodBtnPre" @click="bloodFoodPer" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                    <!-- <el-button @click="bloodFoodNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                 </div>
               </el-row>
             </div>
           </el-card>
         </div>
-      </el-col>
+      </el-col> -->
       <el-col :span="10">
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
@@ -113,8 +112,8 @@
       <el-col :span="14">
         <BMI :sickID="sickID" :hospitalId="hospitalId"></BMI>
       </el-col>
-      <el-col :span="14" v-show="false">
-        <!-- 血压与运动 -->
+      <!-- 血压与运动 -->
+      <!-- <el-col :span="14" v-show="false">
         <div>
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
@@ -133,35 +132,9 @@
             </div>
             <div>
               <el-row type="flex">
-                <!-- <el-col>
-                  <div id='bloodSport' :style="{width:'auto',height:'700px'}"></div>
-                </el-col>
-                <el-col :span="3">
-                  <div class="middle-wrap">
-                    <div class="middle">
-                      <div class="checked-kaluli">
-                        <span class="check-all-span">
-                          <button class="check-all-btn" @click="issSportKaluliChecked()">
-                            <span :class="{'check-all-btn-icon':!bloodsportChecked.kaluli,'check-all-btn-icon-active':bloodsportChecked.kaluli}"></span>
-                            <span>卡路里</span>
-                          </button>
-                        </span>
-                      </div>
-                      <div class="checked-score">
-                        <span class="check-all-span">
-                          <button class="check-all-btn" @click="isSportScoreChecked()">
-                            <span :class="{'check-all-btn-icon':!bloodsportChecked.score,'check-all-btn-icon-active':bloodsportChecked.score}"></span>
-                            <span>分数</span>
-                          </button>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </el-col> -->
                 <div class="flex">
                   <div class="flex-btn-left">
                     <el-button :disabled="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                    <!-- <el-button v-show="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                   <div class="chart-min-width kaluli-wrap">
                     <div class="kaluli-btn-wrap">
@@ -178,14 +151,13 @@
                   </div>
                   <div class="flex-btn">
                     <el-button :disabled="sportBtnPre" @click="bloodSportPer" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                    <!-- <el-button v-show="sportBtnNext" @click="bloodSportNext" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                   </div>
                 </div>
               </el-row>
             </div>
           </el-card>
         </div>
-      </el-col>
+      </el-col> -->
 
     </el-row>
   </div>
@@ -2164,7 +2136,7 @@ export default {
     }
   },
   mounted () {
-    let vm = this
+    // let vm = this
     // 初始化血压分布图
     this.coverChecked.date[0].isChecked = true
     this.updateCover(this.coverChecked.date[0].value)
@@ -2176,149 +2148,149 @@ export default {
     let bloodHistogram = echarts.init(document.getElementById('bloodHistogram'))
     bloodHistogram.setOption(this.bloodHistogramOption())
 
-    this.bloodfoodChecked.date[0].isChecked = true
-    this.bloodfoodChecked.kaluli = true
-    this.updateFood(this.bloodfoodChecked.date[0].date)
-    let bloodFood = echarts.init(document.getElementById('bloodFood'))
-    bloodFood.setOption(this.bloodFoodOption('kaluli'))
+    // this.bloodfoodChecked.date[0].isChecked = true
+    // this.bloodfoodChecked.kaluli = true
+    // this.updateFood(this.bloodfoodChecked.date[0].date)
+    // let bloodFood = echarts.init(document.getElementById('bloodFood'))
+    // bloodFood.setOption(this.bloodFoodOption('kaluli'))
 
-    this.bloodsportChecked.date[0].isChecked = true
-    this.bloodsportChecked.kaluli = true
-    this.updateSport(this.bloodsportChecked.date[0].date)
-    let bloodSport = echarts.init(document.getElementById('bloodSport'))
-    bloodSport.setOption(this.bloodSportOption('kaluli'))
+    // this.bloodsportChecked.date[0].isChecked = true
+    // this.bloodsportChecked.kaluli = true
+    // this.updateSport(this.bloodsportChecked.date[0].date)
+    // let bloodSport = echarts.init(document.getElementById('bloodSport'))
+    // bloodSport.setOption(this.bloodSportOption('kaluli'))
 
-    bloodFood.on('datazoom', function (chartsparams) {
-      if (chartsparams.end === 100) {
-        if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
-          return
-        }
-        vm.bloodfoodData.pageNum ++
-        let params = {
-          'userId': vm.sickID,
-          'adminHospitalId': vm.hospitalId,
-          'bpMeasureTime': vm.bpMeasureTime || '',
-          'pageNum': vm.bloodfoodData.pageNum,
-          'pageSize': 5
-        }
-        vm.$axios(bloodfoodApi(params))
-          .then(res => {
-            let bloodFood = echarts.init(document.getElementById('bloodFood'))
-            bloodFood.showLoading(
-              {
-                text: '加载中...',
-                color: '#1991fc',
-                textColor: '#000',
-                maskColor: 'rgba(255, 255, 255, 0.8)',
-                zlevel: 0
-              }
-            )
-            if (vm.bloodfoodData.pageNum <= res.data.pages) {
-              if (res.data.data.length !== 0) {
-                res.data.data.forEach((item, index) => {
-                  if (!item.systolic) {
-                    item.systolic = 0
-                  }
-                  if (!item.diastolic) {
-                    item.diastolic = 0
-                  }
-                  if (!item.calories) {
-                    item.calories = 0
-                  }
-                  if (!item.foodScore) {
-                    item.foodScore = 0
-                  }
-                  if (!item.bpType) {
-                    item.bpType = 0
-                  }
-                  vm.bloodfoodData.x.push(item.createTime)
-                  vm.bloodfoodData.systolic.push(item.systolic)
-                  vm.bloodfoodData.diastolic.push(item.diastolic)
-                  vm.bloodfoodData.foodScore.push(item.foodScore)
-                  vm.bloodfoodData.calories.push(item.calories)
-                  vm.bloodfoodData.bpType.push(item.bpType)
-                })
-              }
-            }
-            if (vm.bloodfoodChecked.kaluli) {
-              bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 85))
-            }
-            if (vm.bloodfoodChecked.score) {
-              bloodFood.setOption(vm.bloodFoodOption('score', 50, 85))
-            }
-            // bloodFood.setOption(vm.bloodFoodOption(50, 80))
-            bloodFood.hideLoading()
-          })
-      }
-    })
-    bloodSport.on('datazoom', function (chartsparams) {
-      // let vm = this
-      // console.log('num', vm.bloodsportData.pageNum)
-      // console.log('num', vm.bloodsportData)
-      if (chartsparams.end === 100) {
-        // console.log('num', vm.bloodsportData.pageNum)
-        if (vm.bloodsportData.pageNum >= vm.bloodsportData.pages) {
-          return
-        }
-        vm.bloodsportData.pageNum ++
+    // bloodFood.on('datazoom', function (chartsparams) {
+    //   if (chartsparams.end === 100) {
+    //     if (vm.bloodfoodData.pageNum >= vm.bloodfoodData.pages) {
+    //       return
+    //     }
+    //     vm.bloodfoodData.pageNum ++
+    //     let params = {
+    //       'userId': vm.sickID,
+    //       'adminHospitalId': vm.hospitalId,
+    //       'bpMeasureTime': vm.bpMeasureTime || '',
+    //       'pageNum': vm.bloodfoodData.pageNum,
+    //       'pageSize': 5
+    //     }
+    //     vm.$axios(bloodfoodApi(params))
+    //       .then(res => {
+    //         let bloodFood = echarts.init(document.getElementById('bloodFood'))
+    //         bloodFood.showLoading(
+    //           {
+    //             text: '加载中...',
+    //             color: '#1991fc',
+    //             textColor: '#000',
+    //             maskColor: 'rgba(255, 255, 255, 0.8)',
+    //             zlevel: 0
+    //           }
+    //         )
+    //         if (vm.bloodfoodData.pageNum <= res.data.pages) {
+    //           if (res.data.data.length !== 0) {
+    //             res.data.data.forEach((item, index) => {
+    //               if (!item.systolic) {
+    //                 item.systolic = 0
+    //               }
+    //               if (!item.diastolic) {
+    //                 item.diastolic = 0
+    //               }
+    //               if (!item.calories) {
+    //                 item.calories = 0
+    //               }
+    //               if (!item.foodScore) {
+    //                 item.foodScore = 0
+    //               }
+    //               if (!item.bpType) {
+    //                 item.bpType = 0
+    //               }
+    //               vm.bloodfoodData.x.push(item.createTime)
+    //               vm.bloodfoodData.systolic.push(item.systolic)
+    //               vm.bloodfoodData.diastolic.push(item.diastolic)
+    //               vm.bloodfoodData.foodScore.push(item.foodScore)
+    //               vm.bloodfoodData.calories.push(item.calories)
+    //               vm.bloodfoodData.bpType.push(item.bpType)
+    //             })
+    //           }
+    //         }
+    //         if (vm.bloodfoodChecked.kaluli) {
+    //           bloodFood.setOption(vm.bloodFoodOption('kaluli', 50, 85))
+    //         }
+    //         if (vm.bloodfoodChecked.score) {
+    //           bloodFood.setOption(vm.bloodFoodOption('score', 50, 85))
+    //         }
+    //         // bloodFood.setOption(vm.bloodFoodOption(50, 80))
+    //         bloodFood.hideLoading()
+    //       })
+    //   }
+    // })
+    // bloodSport.on('datazoom', function (chartsparams) {
+    //   // let vm = this
+    //   // console.log('num', vm.bloodsportData.pageNum)
+    //   // console.log('num', vm.bloodsportData)
+    //   if (chartsparams.end === 100) {
+    //     // console.log('num', vm.bloodsportData.pageNum)
+    //     if (vm.bloodsportData.pageNum >= vm.bloodsportData.pages) {
+    //       return
+    //     }
+    //     vm.bloodsportData.pageNum ++
 
-        let params = {
-          'userId': vm.sickID,
-          'adminHospitalId': vm.hospitalId,
-          'bpMeasureTime': vm.bpMeasureTime || '',
-          'pageNum': vm.bloodsportData.pageNum,
-          'pageSize': 5
-        }
-        vm.$axios(bloodsportApi(params))
-          .then(res => {
-            let bloodSport = echarts.init(document.getElementById('bloodSport'))
-            bloodSport.showLoading(
-              {
-                text: '加载中...',
-                color: '#1991fc',
-                textColor: '#000',
-                maskColor: 'rgba(255, 255, 255, 0.8)',
-                zlevel: 0
-              }
-            )
-            if (vm.bloodsportData.pageNum <= res.data.pages) {
-              if (res.data.data.length !== 0) {
-                res.data.data.forEach((item, index) => {
-                  if (!item.systolic) {
-                    item.systolic = 0
-                  }
-                  if (!item.diastolic) {
-                    item.diastolic = 0
-                  }
-                  if (!item.calories) {
-                    item.calories = 0
-                  }
-                  if (!item.foodScore) {
-                    item.foodScore = 0
-                  }
-                  if (!item.bpType) {
-                    item.bpType = 0
-                  }
-                  vm.bloodsportData.x.push(item.createTime)
-                  vm.bloodsportData.systolic.push(item.systolic)
-                  vm.bloodsportData.diastolic.push(item.diastolic)
-                  vm.bloodsportData.movementScore.push(item.movementScore)
-                  vm.bloodsportData.calories.push(item.calories)
-                  vm.bloodsportData.bpType.push(item.bpType)
-                })
-              }
-            }
-            if (vm.bloodsportChecked.kaluli) {
-              bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 85))
-            }
-            if (vm.bloodsportChecked.score) {
-              bloodSport.setOption(vm.bloodSportOption('score', 50, 85))
-            }
+    //     let params = {
+    //       'userId': vm.sickID,
+    //       'adminHospitalId': vm.hospitalId,
+    //       'bpMeasureTime': vm.bpMeasureTime || '',
+    //       'pageNum': vm.bloodsportData.pageNum,
+    //       'pageSize': 5
+    //     }
+    //     vm.$axios(bloodsportApi(params))
+    //       .then(res => {
+    //         let bloodSport = echarts.init(document.getElementById('bloodSport'))
+    //         bloodSport.showLoading(
+    //           {
+    //             text: '加载中...',
+    //             color: '#1991fc',
+    //             textColor: '#000',
+    //             maskColor: 'rgba(255, 255, 255, 0.8)',
+    //             zlevel: 0
+    //           }
+    //         )
+    //         if (vm.bloodsportData.pageNum <= res.data.pages) {
+    //           if (res.data.data.length !== 0) {
+    //             res.data.data.forEach((item, index) => {
+    //               if (!item.systolic) {
+    //                 item.systolic = 0
+    //               }
+    //               if (!item.diastolic) {
+    //                 item.diastolic = 0
+    //               }
+    //               if (!item.calories) {
+    //                 item.calories = 0
+    //               }
+    //               if (!item.foodScore) {
+    //                 item.foodScore = 0
+    //               }
+    //               if (!item.bpType) {
+    //                 item.bpType = 0
+    //               }
+    //               vm.bloodsportData.x.push(item.createTime)
+    //               vm.bloodsportData.systolic.push(item.systolic)
+    //               vm.bloodsportData.diastolic.push(item.diastolic)
+    //               vm.bloodsportData.movementScore.push(item.movementScore)
+    //               vm.bloodsportData.calories.push(item.calories)
+    //               vm.bloodsportData.bpType.push(item.bpType)
+    //             })
+    //           }
+    //         }
+    //         if (vm.bloodsportChecked.kaluli) {
+    //           bloodSport.setOption(vm.bloodSportOption('kaluli', 50, 85))
+    //         }
+    //         if (vm.bloodsportChecked.score) {
+    //           bloodSport.setOption(vm.bloodSportOption('score', 50, 85))
+    //         }
 
-            bloodSport.hideLoading()
-          })
-      }
-    })
+    //         bloodSport.hideLoading()
+    //       })
+    //   }
+    // })
   }
 }
 </script>
