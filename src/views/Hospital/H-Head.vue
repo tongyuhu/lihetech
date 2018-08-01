@@ -37,14 +37,13 @@
         label-width="90px" 
         :label-position="labelPosition"
         >
-          <el-form-item prop="oldPassword" label="原始密码">
+          <!-- <el-form-item prop="oldPassword" label="原始密码">
             <el-input
               :autofocus="true"
               placeholder="原始密码"
               v-model="changePasswordForm.oldPassword">
-              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item prop="newPassword1" label="新密码">
             <el-input
               :autofocus="true"
