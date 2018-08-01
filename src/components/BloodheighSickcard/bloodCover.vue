@@ -452,7 +452,13 @@ export default {
       trendBtnPre: true,
       trendBtnNext: true,
       behaviourBtnPre: true,
-      behaviourBtnNext: true
+      behaviourBtnNext: true,
+      lastBloodTrendChecked: null,
+      lastaxisValue: null,
+      lastdataIndex: null,
+      lastbpMeasureTime: '',
+      lastbpMeasureState: ''
+
     }
   },
   methods: {
@@ -864,7 +870,8 @@ export default {
           axisPointer: {
             animation: false
           },
-          alwaysShowContent: true,
+          hideDelay: 2000,
+          // alwaysShowContent: true,
           backgroundColor: 'rgba(250,250,250,0.7)',
           textStyle: {
             color: '#000'
@@ -875,14 +882,22 @@ export default {
             // if (a[0].dataIndex === vm.bloodTrendIndex) {
               // vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
             // } else {
-            if (vm.bloodTrendChecked === 2) {
-              vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
-            } else {
-              vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+            if (vm.bloodTrendChecked !== vm.lastBloodTrendChecked || vm.lastaxisValue !== a[0].axisValue || vm.lastdataIndex !== a[0].dataIndex || vm.lastbpMeasureTime !== vm.bpMeasureTime || vm.lastbpMeasureState !== vm.bpMeasureState) {
+              if (vm.bloodTrendChecked === 2) {
+                vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
+              } else {
+                vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+              }
+              vm.lastBloodTrendChecked = vm.bloodTrendChecked
+              vm.lastaxisValue = a[0].axisValue
+              vm.lastdataIndex = a[0].dataIndex
+              vm.lastbpMeasureTime = vm.bpMeasureTime
+              vm.lastbpMeasureState = vm.bpMeasureState
+              // console.log(a)
             }
+            // console.log(vm.bloodTrendChecked, vm.lastBloodTrendChecked, '', vm.lastaxisValue, a[0].axisValue, '', vm.lastdataIndex, a[0].dataIndex, '是否和上次数据相等')
             // }
             vm.bloodTrendIndex = a.dataIndex
-            console.log(a)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
@@ -1886,13 +1901,13 @@ export default {
       handler: function (val) {
         let a = false
         let b = false
-        this.statusType.move.forEach(item => {
+        this.statusType.medicine.forEach(item => {
           if (item.status) {
             this.bpMeasureTime = item.value
             a = true
           }
         })
-        this.statusType.medicine.forEach(item => {
+        this.statusType.move.forEach(item => {
           if (item.status) {
             this.bpMeasureState = item.value
             b = true
