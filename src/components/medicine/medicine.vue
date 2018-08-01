@@ -4,7 +4,7 @@
     @medicineList="changeMedicineList"></searchMedicine>
     <div class="medicenelist">
       <el-table
-      ref="multipleTable"
+      ref="medicinemultipleTable"
       :data="medicineList"
       tooltip-effect="dark"
       style="width: 100%"
@@ -70,6 +70,8 @@ export default {
         // item.price = item.medicineId
         vm.medicineList.push(item)
       })
+      // this.multipleSelection = []
+      // this.$refs.medicinemultipleTable.clearSelection()
       // console.log('this.changeMedicineList', this.medicineList)
     },
     handleSelectionChange (val) {
@@ -92,7 +94,9 @@ export default {
       }
       this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)
       this.$emit('addMedicine', this.doctorMedicine)
-      this.$refs.multipleTable.clearSelection()
+      this.multipleSelection = []
+      this.doctorMedicine = []
+      this.$refs.medicinemultipleTable.clearSelection()
     }
   }
 }
