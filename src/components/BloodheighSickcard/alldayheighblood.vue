@@ -220,7 +220,7 @@
           <!-- 盐敏感可能性 -->
           <tr>
             <th>盐敏感可能性</th>
-            <td colspan="12">盐敏感可能性中度</td>
+            <td colspan="12">{{salt}}</td>
           </tr>
         </table>
       </div>
@@ -235,25 +235,25 @@
           <tr>
             <th>24小时</th>
             <td>{{ABPM.oneday.avgSystolic}}/{{ABPM.oneday.avgDiastolic}}</td>
-            <td>{{ABPM.oneday.bptype}}</td>
+            <td>{{bptype(ABPM.oneday.bpType)}}</td>
             <td>{{ABPM.oneday.referValue}}</td>
           </tr>
           <tr>
             <th>白天</th>
             <td>{{ABPM.day.avgSystolic}}/{{ABPM.day.avgDiastolic}}</td>
-            <td>{{ABPM.day.bptype}}</td>
+            <td>{{bptype(ABPM.day.bpType)}}</td>
             <td>{{ABPM.day.referValue}}</td>
           </tr>
           <tr>
             <th>夜间</th>
             <td>{{ABPM.night.avgSystolic}}/{{ABPM.night.avgDiastolic}}</td>
-            <td>{{ABPM.night.bptype}}</td>
+            <td>{{bptype(ABPM.night.bpType)}}</td>
             <td>{{ABPM.night.referValue}}</td>
           </tr>
           <tr>
             <th>清晨</th>
             <td>{{ABPM.moring.avgSystolic}}/{{ABPM.moring.avgDiastolic}}</td>
-            <td>{{ABPM.moring.bptype}}</td>
+            <td>{{bptype(ABPM.moring.bpType)}}</td>
             <td>{{ABPM.moring.referValue}}</td>
           </tr>
         </table>
@@ -410,7 +410,8 @@ export default {
         }
       },
       summary: null,
-      risk: null
+      risk: null,
+      salt: ''
     }
   },
   methods: {
@@ -442,9 +443,10 @@ export default {
   },
   mounted () {
     let date = new Date()
-    date = daybefor(date, 1, true)
-    let start = date + ' 03:20:00'
-    let end = date + ' 24:00:00'
+    let yesterday = daybefor(date, 1, true)
+    let today = daybefor(date, 0, true)
+    let start = today + ' 06:20:00'
+    let end = yesterday + ' 23:00:00'
     let params = {
       'userId': this.sickID,
       // 'userId': 11,
