@@ -11,7 +11,7 @@
           :clearable="false"
           format="yyyy 第 WW 周"
           placeholder="请选择周"
-          :firstDayOfWeek='firstDayOfWeek'
+          :picker-options="pickerOptions"
           @change="checkHistoryTime"
           v-show="checkOrderBtn">
         </el-date-picker>
@@ -470,6 +470,9 @@ export default {
       // currentOrder: [],
       // 预约历史选择周
       firstDayOfWeek: 1,
+      pickerOptions: {
+        firstDayOfWeek: 1
+      },
       // 预约历史选择的周一时间
       currentOrderTime: '',
       // 当前预约列表
@@ -795,12 +798,14 @@ export default {
       return data
     },
     checkHistoryTime (val, init) {
+      console.log(this.currentOrderTime, '周起始日11')
+      console.log(dateFormat(val, 0, true), '周起始日')
       val = dateFormat(val, 0, true)
       let nowDay = new Date()
       let time = {
       }
       nowDay = dateFormat(nowDay, 0, true)
-      nowDay = daybefor(nowDay, 1, true)
+      // nowDay = daybefor(nowDay, 1, true)
       if (this._.gt(val, nowDay)) {
         this.$message({
           showClose: true,
@@ -809,11 +814,11 @@ export default {
         })
         this.currentOrderTime = ''
       } else {
-        let weekday = daybefor(val, -6, true)
+        let weekday = daybefor(val, -5, true)
         if (this._.gt(weekday, nowDay)) {
           weekday = nowDay
         }
-        time.start = val
+        time.start = daybefor(val, 1, true)
         time.end = weekday
       }
       if (this.currentOrderTime !== '' || init) {

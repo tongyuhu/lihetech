@@ -21,11 +21,7 @@ export const orderSettingApi = (parmars) => {
   return {
     method: 'post',
     url: '/make/order/setUp',
-    data: {
-      'weeks': parmars.weeks,
-      'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
-      'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
-    }
+    data: parmars
   }
 }
 /**

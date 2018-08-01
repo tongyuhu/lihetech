@@ -9,9 +9,9 @@
           <thead class="thead">
             <th>日期</th>
             <th>编辑</th>
-            <th>编辑</th>
+            <!-- <th>编辑</th> -->
           </thead>
-          <tbody class="tbody" v-for="(item,index) in orderlist" :key="item.time">
+          <tbody class="tbody" v-for="(item,index) in orderlist" :key="index">
             <tr>
               <td rowspan="2">{{item.time}}</td>
               <td>上午预约
@@ -22,14 +22,15 @@
                   @change="morningStateChange(item.time,item.morning.order)">
                 </el-switch>
               </td>
-              <td>
+              <!-- <td>
                 <span>上午：{{item.morning.time ? item.morning.time:'/'}}</span>
-                <!-- <span>下午：{{item.noon ? item.noon:'/'}}</span> -->
                 <el-button @click="editTime(index,'morning')" type="text" icon="el-icon-edit-outline">编辑</el-button>
-              </td>
+              </td> -->
             </tr>
             <tr>
-              <td>下午预约
+              <td>
+                <span>下午预约</span>
+                
                 <el-switch
                   v-model="item.noon.order"
                   active-color="#f1f1f1"
@@ -37,11 +38,10 @@
                   @change="noonStateChange(item.time,item.noon.order)">
                 </el-switch>
               </td>
-              <td>
-                <!-- <span>上午：{{item.morning ? item.morning:'/'}}</span> -->
+              <!-- <td>
                 <span>下午：{{item.noon.time ? item.noon.time:'/'}}</span>
                 <el-button @click="editTime(index,'noon')" type="text" icon="el-icon-edit-outline">编辑</el-button>
-              </td>
+              </td> -->
             </tr>
           </tbody>
         </table>
@@ -119,9 +119,41 @@
             {{item.time}}
           </button>
         </div>
-        <div>
-          <span>上午</span>
-          <el-time-select
+        <div class="flex">
+          <div class="flex gap-right-large">
+            <div class="group-switch-wrap gap-right"><span>上午</span></div>
+            <div>
+              <el-switch
+                v-model="settingGroupSlotType.morninig"
+                active-color="#1991fc"
+                inactive-color="#f1f1f1"
+                @change="settingGroupStateChange(0)">
+              </el-switch>
+            </div>
+          </div>
+          <div class="flex">
+            <div class="group-switch-wrap gap-right">
+              <span>下午</span>
+            </div>
+            <div>
+              <el-switch
+                v-model="settingGroupSlotType.noon"
+                active-color="#1991fc"
+                inactive-color="#f1f1f1"
+                @change="settingGroupStateChange(1)">
+              </el-switch>
+            </div>
+          </div>
+        </div>
+        <div >
+          <!-- <span>上午</span>
+          <el-switch
+            v-model="settingGroupSlotType.morninig"
+            active-color="#f1f1f1"
+            inactive-color="#1991fc"
+            @change="settingGroupStateChange(0)">
+          </el-switch> -->
+          <!-- <el-time-select
           :style="{'width':'150px'}"
           v-model="settingGroupMorning.start"
           :picker-options="{
@@ -140,11 +172,17 @@
             end: '12:00',
           }">
 
-          </el-time-select>
+          </el-time-select> -->
         </div>
         <div>
-          <span>下午</span>
-          <el-time-select
+          <!-- <span>下午</span>
+          <el-switch
+            v-model="settingGroupSlotType.noon"
+            active-color="#f1f1f1"
+            inactive-color="#1991fc"
+            @change="settingGroupStateChange(1)">
+          </el-switch> -->
+          <!-- <el-time-select
           :style="{'width':'150px'}"
           v-model="settingGroupNoon.start"
           :picker-options="{
@@ -162,7 +200,7 @@
             step: '00:30',
             end: '24:00',
           }">
-          </el-time-select>
+          </el-time-select> -->
         </div>
       </div>
       <div slot="footer">
@@ -196,6 +234,11 @@ export default {
         end: ''
       },
       settingGroup: false,
+
+      settingGroupSlotType: {
+        morninig: false,
+        noon: false
+      },
       settingGroupMorning: {
         start: '',
         end: ''
@@ -331,54 +374,70 @@ export default {
           type: 'warning'
         })
       } else {
-        let edit = true
-        let morning = this._.gt(this.settingGroupMorning.start, this.settingGroupMorning.end)
-        let noon = this._.gt(this.settingGroupNoon.start, this.settingGroupNoon.end)
-        let hasMorning = !this.settingGroupMorning.start || !this.settingGroupMorning.end
-        let hasNoon = !this.settingGroupNoon.start || !this.settingGroupNoon.end
-        if (hasMorning && hasNoon) {
-          edit = false
+        let edit = false
+        if (!this.settingGroupSlotType.morninig && !this.settingGroupSlotType.noon) {
           this.$message({
-            message: '请完善设置',
+            message: '请选择开启预约时段',
             type: 'warning'
           })
+        } else {
+          edit = true
         }
-        if (morning || noon) {
-          edit = false
-          this.$message({
-            message: '起始时间不能大于结束时间,请重新设置',
-            type: 'warning'
-          })
-          // this.settingGroupMorning.start = ''
-          // this.settingGroupMorning.end = ''
-          // this.settingGroupNoon.start = ''
-          // this.settingGroupNoon.end = ''
-        }
+        // let morning = this._.gt(this.settingGroupMorning.start, this.settingGroupMorning.end)
+        // let noon = this._.gt(this.settingGroupNoon.start, this.settingGroupNoon.end)
+        // let hasMorning = !this.settingGroupMorning.start || !this.settingGroupMorning.end
+        // let hasNoon = !this.settingGroupNoon.start || !this.settingGroupNoon.end
+        // if (hasMorning && hasNoon) {
+        //   edit = false
+        //   this.$message({
+        //     message: '请完善设置',
+        //     type: 'warning'
+        //   })
+        // }
+        // if (morning || noon) {
+        //   edit = false
+        //   this.$message({
+        //     message: '起始时间不能大于结束时间,请重新设置',
+        //     type: 'warning'
+        //   })
+        //   // this.settingGroupMorning.start = ''
+        //   // this.settingGroupMorning.end = ''
+        //   // this.settingGroupNoon.start = ''
+        //   // this.settingGroupNoon.end = ''
+        // }
         if (edit) {
           let parmars = {
-            'weeks': this.cheeckedweek.join(','),
-            'startEndPeriodTimeMor': this.settingGroupMorning.start + '-' + this.settingGroupMorning.end,
-            'startEndPeriodTimeAftn': this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+            'weeks': this.cheeckedweek.join(',')
+            // 'startEndPeriodTimeMor': this.settingGroupMorning.start + '-' + this.settingGroupMorning.end,
+            // 'startEndPeriodTimeAftn': this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
           }
-          if (!hasMorning) {
-            parmars.startEndPeriodTimeMor = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+          if (this.settingGroupSlotType.morninig && this.settingGroupSlotType.noon) {
+            parmars.slotType = 3
+          } else if (this.settingGroupSlotType.morninig && !this.settingGroupSlotType.noon) {
+            parmars.slotType = 1
+          } else if (!this.settingGroupSlotType.morninig && this.settingGroupSlotType.noon) {
+            parmars.slotType = 2
           }
-          if (!hasNoon) {
-            parmars.startEndPeriodTimeAftn = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
-          }
+          console.log(parmars, '批量设置')
+        //   if (!hasMorning) {
+        //     parmars.startEndPeriodTimeMor = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+        //   }
+        //   if (!hasNoon) {
+        //     parmars.startEndPeriodTimeAftn = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+        //   }
           this.$axios(orderSettingApi(parmars))
           .then(res => {
             if (res.data.code === '1001') {
               let orderWeekList = []
               this.cheeckedweek.forEach(item => {
-                if (!hasMorning) {
+                if (this.settingGroupSlotType.morninig) {
                   let morning = {
                     slotType: 1,
                     weekDay: item
                   }
                   orderWeekList.push(morning)
                 }
-                if (!hasNoon) {
+                if (this.settingGroupSlotType.noon) {
                   let noon = {
                     slotType: 2,
                     weekDay: item
@@ -393,7 +452,7 @@ export default {
                   console.log('设置的日期', orderWeekList)
                   console.log('失败的日期', res.data.data)
                   console.log('成功的日期', finalList)
-                  finalList.forEach(item => {
+                  res.data.data.forEach(item => {
                     if (this._.has(item, 'weekDay')) {
                       errorText += this.judgeWeek(item.weekDay)
                     }
@@ -405,18 +464,21 @@ export default {
                         errorText += '下午，'
                       }
                     }
+                  })
+                  finalList.forEach(item => {
                     if (item.slotType === 1) {
-                      this.orderlist[item.weekDay - 1].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+                      this.orderlist[item.weekDay - 1].morning.order = !this.settingGroupSlotType.morninig
                     }
                     if (item.slotType === 2) {
-                      this.orderlist[item.weekDay - 1].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+                      this.orderlist[item.weekDay - 1].noon.order = !this.settingGroupSlotType.noon
                     }
                   })
                   errorText += '设置失败'
                   this.$message({
                     showClose: true,
                     message: errorText,
-                    type: 'warning'
+                    type: 'warning',
+                    duration: 5000
                   })
                 } else {
                   this.$message({
@@ -434,11 +496,12 @@ export default {
                 type: 'success'
               })
               this.cheeckedweek.forEach(item => {
-                if (!hasMorning) {
-                  this.orderlist[item - 1].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
+                if (this.settingGroupSlotType.morninig) {
+                  this.orderlist[item - 1].morning.order = !this.settingGroupSlotType.morninig
+                  // this.orderlist[item - 1].morning.time = this.settingGroupMorning.start + '-' + this.settingGroupMorning.end
                 }
-                if (!hasNoon) {
-                  this.orderlist[item - 1].noon.time = this.settingGroupNoon.start + '-' + this.settingGroupNoon.end
+                if (this.settingGroupSlotType.noon) {
+                  this.orderlist[item - 1].noon.order = !this.settingGroupSlotType.noon
                 }
               })
             }
@@ -746,6 +809,9 @@ export default {
         week = '周日'
       }
       return week
+    },
+    settingGroupStateChange () {
+
     }
   },
   mounted () {
@@ -923,6 +989,26 @@ export default {
 .loading-min-height{
   min-height: 700px;
   width: 100%;
+}
+.flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.group-switch-wrap{
+  text-align: center;
+  display: table-cell;
+  vertical-align: middle;
+}
+.group-switch-wrap span{
+  display: inline-block;
+  padding-top:7px;
+}
+.gap-right-large{
+  margin-right: 35px;
+}
+.gap-right{
+  margin-right: 8px;
 }
 </style>
 
