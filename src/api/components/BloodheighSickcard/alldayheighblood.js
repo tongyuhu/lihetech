@@ -18,7 +18,7 @@ export const alldayHeighBloodApi = (params, data) => {
     data: {
       'userId': params.userId,
       'adminHospitalId': params.adminHospitalId,
-      'bpMeasureTime': params.bpMeasureTime || '',
+      // 'bpMeasureTime': params.bpMeasureTime || '',
       'getupTime': params.getupTime,
       'sleepTime': params.sleepTime,
       'pageNum': params.pageNum || 1,

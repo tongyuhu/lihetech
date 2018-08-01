@@ -196,17 +196,17 @@
           <!-- 变异系数 -->
           <tr>
             <th>变异系数</th>
-            <td>{{ABPM.day.sickRadioSystolic}}</td>
-            <td>{{ABPM.day.sickRadioDiastolic}}</td>
+            <td>{{ABPM.day.sickRadioSystolic?ABPM.day.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.day.sickRadioDiastolic?ABPM.day.sickRadioDiastolic.toFixed(2):''}}</td>
             <td></td>
-            <td>{{ABPM.night.sickRadioSystolic}}</td>
-            <td>{{ABPM.night.sickRadioDiastolic}}</td>
+            <td>{{ABPM.night.sickRadioSystolic?ABPM.night.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.night.sickRadioDiastolic?ABPM.night.sickRadioDiastolic.toFixed(2):''}}</td>
             <td></td>
-            <td>{{ABPM.moring.sickRadioSystolic}}</td>
-            <td>{{ABPM.moring.sickRadioDiastolic}}</td>
+            <td>{{ABPM.moring.sickRadioSystolic?ABPM.moring.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.moring.sickRadioDiastolic?ABPM.moring.sickRadioDiastolic.toFixed(2):""}}</td>
             <td></td>
-            <td>{{ABPM.oneday.sickRadioSystolic}}</td>
-            <td>{{ABPM.oneday.sickRadioDiastolic}}</td>
+            <td>{{ABPM.oneday.sickRadioSystolic?ABPM.oneday.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.oneday.sickRadioDiastolic?ABPM.oneday.sickRadioDiastolic.toFixed(2):""}}</td>
             <td></td>
           </tr>
           <!-- 动脉硬化指数 -->
