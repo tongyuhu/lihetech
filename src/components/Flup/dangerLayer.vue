@@ -1292,6 +1292,7 @@ export default {
             message: '评估成功',
             type: 'success'
           })
+          window.scrollTo(0, 0)
           // this.$router.go(-1)
         } else {
           this.$message({
@@ -1726,6 +1727,7 @@ export default {
   outline: none;
   color: #1991fc;
   // padding: 3px 5px;
+  font-size: 14px;
   cursor: pointer;
   background: transparent;
   padding: 0;
@@ -1749,6 +1751,7 @@ export default {
 .submit-btn-wrap{
   margin: 0 auto;
   text-align: center;
+  margin-top:30px;
 }
 .submit-btn{
   background: #1991fc;
@@ -1761,7 +1764,8 @@ export default {
   outline: none;
   color: #fff;
   width: 200px;
-  height: 30px;
+  height: 36px;
+  font-size: 18px;
 }
 .submit-btn:hover{
   opacity: 0.9;

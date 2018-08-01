@@ -1650,6 +1650,7 @@ export default {
   .submit-btn-wrap{
     margin: 0 auto;
     text-align: center;
+    margin-top:30px;
   }
   .submit-btn{
     background: #1991fc;
@@ -1662,7 +1663,8 @@ export default {
     outline: none;
     color: #fff;
     width: 200px;
-    height: 30px;
+    height: 36px;
+    font-size: 18px;
   }
   .submit-btn:hover{
     opacity: 0.9;
@@ -1781,6 +1783,19 @@ export default {
   .radio-box .el-checkbox{
     margin-left:10px;
   }
+  .el-checkbox {
+    color: #606266;
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    line-height: 1.5;}
 </style>
 
 
