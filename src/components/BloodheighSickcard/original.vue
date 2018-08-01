@@ -85,7 +85,7 @@ export default {
         pageNum: this.pageNum
       }
       if (this.month) {
-        params.measureMonthTime = this.month
+        params.measureMonthTime = this.time(this.month).month
       }
       this.$axios(originalApi(params))
       .then(res => {
@@ -226,7 +226,9 @@ export default {
     time (val) {
       let date = val.slice(0, 10)
       let time = val.slice(11)
+      let month = val.slice(0, 7)
       return {
+        'month': month,
         'date': date,
         'time': time
       }
@@ -257,6 +259,9 @@ export default {
     }
   },
   mounted () {
+    let nowtime = new Date()
+    this.month = dateFormat(nowtime, 0, true)
+    this.month = this.time(dateFormat(nowtime, 0, true)).month
     this.getOriginalData()
     // console.log(this.month)
   }
