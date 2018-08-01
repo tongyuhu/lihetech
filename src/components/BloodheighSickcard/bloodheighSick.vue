@@ -2,7 +2,10 @@
   <div ref="sickcard">
     <!-- {{showcard}} -->
     <!-- 头部 -->
-    <div class="sick-card-head clear">
+    <div class="sick-card-head clear" v-if="showcard">
+      <div class="sick-card-head-right">
+        <p>{{createTime}}</p>
+      </div>
       <div class="sick-card-head-left">
         <p class="name">{{name}}</p>
         <div class="sick-card-head-left-msg">
@@ -11,9 +14,6 @@
           <span>电话:{{mobile?mobile :faceDATA.mobile}}</span>
           <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
         </div>
-      </div>
-      <div class="sick-card-head-right">
-        <p>{{createTime}}</p>
       </div>
     </div>
     <!-- 选项卡 -->
@@ -686,19 +686,26 @@ export default {
     /* width: 100%; */
   }
   .sick-card-head-left{
-    float: left;
+    /* float: left; */
+    /* width: 70%; */
     color:#666;
     font-size:14px;
   }
   .sick-card-head-left-msg{
     margin-top:10px;
   }
+  .sick-card-head-left-msg span{
+    margin-top:5px;
+  }
   .sick-card-head-left span{
-    display:inline-block;
-    margin-right:30px;
+    /* display:inline-block; */
+    margin-right:20px;
+    width: 100%;
+    word-wrap: break-word;
+    line-height: 1.5;
   }
   .sick-card-head-right{
-    float: right;
+    text-align: right;
   }
   .name{
     font-size:32px;
