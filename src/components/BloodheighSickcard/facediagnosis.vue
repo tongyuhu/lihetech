@@ -11,7 +11,9 @@
 
         <div class="case-left">
           <div class="case-left-img">
-            <img :src="info.img" alt="">
+            <div class="case-left-img-wrap">
+              <img :src="info.img" alt="">
+            </div>
           </div>
           <div class="case-left-type">
             <span class="case-left-type-name">{{info.name}}</span>
@@ -67,12 +69,11 @@
               <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.BMI" size="mini"></el-input>
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.BMI" class="padding"> -->
             </div>
-            <div class="case-left-msg-single">
+            <!-- <div class="case-left-msg-single">
               <span class="label">体温：</span>
               <span v-if="!showEditMsg">{{info.tem ? info.tem+'℃':''}}</span>
               <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.tem" size="mini"></el-input>
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.tem" class="padding"> -->
-            </div>
+            </div> -->
             <div class="case-left-msg-single">
               <span class="label">血压：</span>
               <span v-if="!showEditMsg">{{info.bloodHeigh}}</span>
@@ -91,8 +92,8 @@
             <!-- <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button> -->
           </div>
           <div>
-            <el-button type="text" size="mini">体检表</el-button>
             <el-button @click="openChecklist" type="text" size="mini">体检单</el-button>
+            <el-button @click="flupHistory" type="text" size="mini">随访记录</el-button>
           </div>
 
         </div> 
@@ -1013,7 +1014,8 @@ export default {
       adminHospitalId: null,
       bloodSickCodeList: [],
       bloodSickCode: null,
-      sugerSickCodeList: []
+      sugerSickCodeList: [],
+      adminIdMainDoctor: null
     }
   },
   watch: {
@@ -1104,6 +1106,9 @@ export default {
           if (res.data.data) {
             if (this._.has(res.data.data, 'adminHospitalId')) {
               this.adminHospitalId = res.data.data.adminHospitalId
+            }
+            if (this._.has(res.data.data, 'adminIdMainDoctor')) {
+              this.adminIdMainDoctor = res.data.data.adminIdMainDoctor
             }
             if (this._.has(res.data.data, 'realName')) {
               this.info.name = res.data.data.realName
@@ -1698,6 +1703,21 @@ export default {
         }
       })
       console.log('诊断编码', val)
+    },
+    flupHistory () {
+      let obj = {}
+      obj.isFollowUp = true
+      obj.adminIdMainDoctor = this.adminIdMainDoctor
+      obj.userId = this.sickID
+      obj.userFollowUpId = null
+      obj.userName = this.info.name
+      obj.userHealthDiaryId = null
+      obj.adminHospitalId = this.adminHospitalId
+      this.SET_FLUP_INFO(obj)
+      // console.log('随访', val, obj)
+      this.$router.push({
+        name: 'FlupCard'
+      })
     }
   },
   computed: {
@@ -1707,350 +1727,350 @@ export default {
     // hospitalId () {
     //   return this.$route.params.hospitalId
     // },
-    ...mapState(['adminInfo', 'userCasesCardId', 'userMakeOrderDoctorId']),
+    ...mapState(['adminInfo', 'userCasesCardId', 'userMakeOrderDoctorId'])
     // 姓名
-    name () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'realName')) {
-          return this.cardData.realName
-        } else {
-          return null
-        }
-      }
-    },
-    // 头像
-    img () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userImage')) {
-          return this.cardData.userImage
-        } else {
-          return ''
-        }
-      }
-    },
-    // 性别this._.has()
-    sex () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'sex')) {
-          if (this.cardData.sex === 1) {
-            return '男'
-          }
-          if (this.cardData.sex === 0) {
-            return '女'
-          }
-        } else {
-          return '男'
-        }
-      }
-    },
-    // 年龄
-    age () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'birthDate')) {
-          let b = dateFormat(new Date())
-          let a = dateFormat(this.cardData.birthDate, 0, true)
-          b = parseInt(b.slice(0, 4))
-          a = parseInt(a.slice(0, 4))
-          console.log('age', b - a)
-          // return this.cardData.age
-          return (b - a) + ''
-        } else {
-          return null
-        }
-      }
-    },
-    // 电话
-    mobile () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'mobile')) {
-          return this.cardData.mobile
-        } else {
-          return null
-        }
-      }
-    },
-    // 医生诊断
-    doctorDiagnos () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'doctorDiagnos')) {
-          return this.cardData.doctorDiagnos
-        } else {
-          return null
-        }
-      }
-    },
-    // 身高
-    height () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'height')) {
-            return this.cardData.userBody.height
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    },
-    // 体重
-    weight () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'weight')) {
-            return this.cardData.userBody.weight
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    },
-    // 疾病史
-    sysIllnessHistoryNameDisease () {
-      // this.cardData
-      console.log('this.cardData', this.cardData)
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdDisease')) {
-            // let list = []
-            // this.
-            let sicklist = this.cardData.userBody.sysIllnessHistoryIdDisease.split(',')
-            // console.log('sysIllnessHistoryIdDisease', sicklist)
-            sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            return sicklist
-            // return this.cardData.userBody.sysIllnessHistoryNameDisease
-          } else {
-            return []
-          }
-        } else {
-          return []
-        }
-      }
-    },
-    // 家族遗传史
-    sysIllnessHistoryNameGenetic () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdGenetic')) {
-            let sicklist = this.cardData.userBody.sysIllnessHistoryIdGenetic.split(',')
-            sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            return sicklist
-          } else {
-            return []
-          }
-        } else {
-          return []
-        }
-      }
-    },
-    // 生活喜好
-    habits () {
-      let habits = []
-      let str = ''
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          // if (this._.has(this.cardData.userBody, 'highSaltStatus')) {
-          //   if (this.cardData.userBody.highSaltStatus === 1) {
-          //     habits.push('长期膳食高盐')
-          //   }
-          //   if (this.cardData.userBody.highSaltStatus === 2) {
-          //     habits.push('无长期膳食高盐')
-          //   }
-          // }
-          if (this._.has(this.cardData.userBody, 'sleepStatus')) {
-            if (this.cardData.userBody.sleepStatus === 1) {
-              this.medication.sleepStatus = '1'
-              habits.push('睡眠规律')
-            }
-            if (this.cardData.userBody.sleepStatus === 2) {
-              this.medication.sleepStatus = '2'
-              habits.push('睡眠不规律')
-            }
-          }
-          if (this._.has(this.cardData.userBody, 'smoking')) {
-            if (this.cardData.userBody.smoking === 1) {
-              this.medication.smoking = '1'
-              habits.push('抽烟')
-            }
-            if (this.cardData.userBody.smoking === 2) {
-              this.medication.smoking = '2'
-              habits.push('不抽烟')
-            }
-            if (this.cardData.userBody.smoking === 3) {
-              this.medication.smoking = '3'
-              habits.push('已戒烟')
-            }
-          }
-          if (this._.has(this.cardData.userBody, 'is23Sleep')) {
-            if (this.cardData.userBody.is23Sleep) {
-              this.medication.is23Sleep = '1'
-              habits.push('23点前睡觉')
-            }
-            if (!this.cardData.userBody.is23Sleep) {
-              this.medication.is23Sleep = '0'
-              habits.push('没有23点前睡觉')
-            }
-          }
-          // if (this._.has(this.cardData.userBody, 'dietStatus')) {
-          //   if (this.cardData.userBody.dietStatus === 1) {
-          //     habits.push('饮食规律')
-          //   }
-          //   if (this.cardData.userBody.dietStatus === 2) {
-          //     habits.push('饮食不规律')
-          //   }
-          // }
-          // if (this._.has(this.cardData.userBody, 'medicineStatus')) {
-          //   if (this.cardData.userBody.medicineStatus === 1) {
-          //     habits.push('长期服用止痛药或镇定催眠药')
-          //   }
-          //   if (this.cardData.userBody.medicineStatus === 2) {
-          //     habits.push('没有长期服用止痛药或镇定催眠药')
-          //   }
-          // }
-          // if (this._.has(this.cardData.userBody, 'urineStatus')) {
-          //   if (this.cardData.userBody.urineStatus === 1) {
-          //     habits.push('大小便正常')
-          //   }
-          //   if (this.cardData.userBody.urineStatus === 2) {
-          //     habits.push('大小便不正常')
-          //   }
-          // }
-          if (this._.has(this.cardData.userBody, 'drinking')) {
-            if (this.cardData.userBody.drinking === 1) {
-              this.medication.drinking = '1'
-              habits.push('从不饮酒')
-            }
-            if (this.cardData.userBody.drinking === 2) {
-              this.medication.drinking = '2'
-              habits.push('偶尔饮酒')
-            }
-            if (this.cardData.userBody.drinking === 3) {
-              this.medication.drinking = '3'
-              habits.push('经常饮酒')
-            }
-            if (this.cardData.userBody.drinking === 4) {
-              this.medication.drinking = '4'
-              habits.push('每天饮酒')
-            }
-          }
-        }
-      }
-      if (habits.length !== 0) {
-        str = habits.join('、')
-      }
-      return str
-    },
-    // 血压并发症
-    sysIllnessHistoryNameBpConcurrent () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdBpConcurrent')) {
-            let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
-            sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            return sicklist
-          } else {
-            return []
-          }
-        } else {
-          return []
-        }
-      }
-    },
-    createTime () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userBody')) {
-          if (this._.has(this.cardData.userBody, 'createTime')) {
-            return this.cardData.userBody.createTime
-          } else {
-            return ''
-          }
-        } else {
-          return ''
-        }
-      }
-    },
-    readme () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userCasesCard')) {
-          if (this._.has(this.cardData.userCasesCard, 'readme')) {
-            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
-            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            // return sicklist
-            return this.cardData.userCasesCard.readme
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    },
-    longtimeyear () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userCasesCard')) {
-          if (this._.has(this.cardData.userCasesCard, 'yearsSick')) {
-            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
-            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            // return sicklist
-            return this.cardData.userCasesCard.yearsSick
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    },
-    longtimemonth () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userCasesCard')) {
-          if (this._.has(this.cardData.userCasesCard, 'monthSick')) {
-            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
-            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            // return sicklist
-            return this.cardData.userCasesCard.monthSick
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    },
-    longtimeday () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userCasesCard')) {
-          if (this._.has(this.cardData.userCasesCard, 'daySick')) {
-            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
-            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            // return sicklist
-            return this.cardData.userCasesCard.daySick
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    },
-    lastDate () {
-      if (this.cardData) {
-        if (this._.has(this.cardData, 'userCasesCard')) {
-          if (this._.has(this.cardData.userCasesCard, 'lastTime')) {
-            // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
-            // sicklist = this._.uniqWith(sicklist, this._.isEqual)
-            // return sicklist
-            return this.cardData.userCasesCard.lastTime
-          } else {
-            return null
-          }
-        } else {
-          return null
-        }
-      }
-    }
+    // name () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'realName')) {
+    //       return this.cardData.realName
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // // 头像
+    // img () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userImage')) {
+    //       return this.cardData.userImage
+    //     } else {
+    //       return ''
+    //     }
+    //   }
+    // },
+    // // 性别this._.has()
+    // sex () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'sex')) {
+    //       if (this.cardData.sex === 1) {
+    //         return '男'
+    //       }
+    //       if (this.cardData.sex === 0) {
+    //         return '女'
+    //       }
+    //     } else {
+    //       return '男'
+    //     }
+    //   }
+    // },
+    // // 年龄
+    // age () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'birthDate')) {
+    //       let b = dateFormat(new Date())
+    //       let a = dateFormat(this.cardData.birthDate, 0, true)
+    //       b = parseInt(b.slice(0, 4))
+    //       a = parseInt(a.slice(0, 4))
+    //       console.log('age', b - a)
+    //       // return this.cardData.age
+    //       return (b - a) + ''
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // // 电话
+    // mobile () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'mobile')) {
+    //       return this.cardData.mobile
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // // 医生诊断
+    // doctorDiagnos () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'doctorDiagnos')) {
+    //       return this.cardData.doctorDiagnos
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // // 身高
+    // height () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       if (this._.has(this.cardData.userBody, 'height')) {
+    //         return this.cardData.userBody.height
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // // 体重
+    // weight () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       if (this._.has(this.cardData.userBody, 'weight')) {
+    //         return this.cardData.userBody.weight
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // // 疾病史
+    // sysIllnessHistoryNameDisease () {
+    //   // this.cardData
+    //   console.log('this.cardData', this.cardData)
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdDisease')) {
+    //         // let list = []
+    //         // this.
+    //         let sicklist = this.cardData.userBody.sysIllnessHistoryIdDisease.split(',')
+    //         // console.log('sysIllnessHistoryIdDisease', sicklist)
+    //         sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         return sicklist
+    //         // return this.cardData.userBody.sysIllnessHistoryNameDisease
+    //       } else {
+    //         return []
+    //       }
+    //     } else {
+    //       return []
+    //     }
+    //   }
+    // },
+    // // 家族遗传史
+    // sysIllnessHistoryNameGenetic () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdGenetic')) {
+    //         let sicklist = this.cardData.userBody.sysIllnessHistoryIdGenetic.split(',')
+    //         sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         return sicklist
+    //       } else {
+    //         return []
+    //       }
+    //     } else {
+    //       return []
+    //     }
+    //   }
+    // },
+    // // 生活喜好
+    // habits () {
+    //   let habits = []
+    //   let str = ''
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       // if (this._.has(this.cardData.userBody, 'highSaltStatus')) {
+    //       //   if (this.cardData.userBody.highSaltStatus === 1) {
+    //       //     habits.push('长期膳食高盐')
+    //       //   }
+    //       //   if (this.cardData.userBody.highSaltStatus === 2) {
+    //       //     habits.push('无长期膳食高盐')
+    //       //   }
+    //       // }
+    //       if (this._.has(this.cardData.userBody, 'sleepStatus')) {
+    //         if (this.cardData.userBody.sleepStatus === 1) {
+    //           this.medication.sleepStatus = '1'
+    //           habits.push('睡眠规律')
+    //         }
+    //         if (this.cardData.userBody.sleepStatus === 2) {
+    //           this.medication.sleepStatus = '2'
+    //           habits.push('睡眠不规律')
+    //         }
+    //       }
+    //       if (this._.has(this.cardData.userBody, 'smoking')) {
+    //         if (this.cardData.userBody.smoking === 1) {
+    //           this.medication.smoking = '1'
+    //           habits.push('抽烟')
+    //         }
+    //         if (this.cardData.userBody.smoking === 2) {
+    //           this.medication.smoking = '2'
+    //           habits.push('不抽烟')
+    //         }
+    //         if (this.cardData.userBody.smoking === 3) {
+    //           this.medication.smoking = '3'
+    //           habits.push('已戒烟')
+    //         }
+    //       }
+    //       if (this._.has(this.cardData.userBody, 'is23Sleep')) {
+    //         if (this.cardData.userBody.is23Sleep) {
+    //           this.medication.is23Sleep = '1'
+    //           habits.push('23点前睡觉')
+    //         }
+    //         if (!this.cardData.userBody.is23Sleep) {
+    //           this.medication.is23Sleep = '0'
+    //           habits.push('没有23点前睡觉')
+    //         }
+    //       }
+    //       // if (this._.has(this.cardData.userBody, 'dietStatus')) {
+    //       //   if (this.cardData.userBody.dietStatus === 1) {
+    //       //     habits.push('饮食规律')
+    //       //   }
+    //       //   if (this.cardData.userBody.dietStatus === 2) {
+    //       //     habits.push('饮食不规律')
+    //       //   }
+    //       // }
+    //       // if (this._.has(this.cardData.userBody, 'medicineStatus')) {
+    //       //   if (this.cardData.userBody.medicineStatus === 1) {
+    //       //     habits.push('长期服用止痛药或镇定催眠药')
+    //       //   }
+    //       //   if (this.cardData.userBody.medicineStatus === 2) {
+    //       //     habits.push('没有长期服用止痛药或镇定催眠药')
+    //       //   }
+    //       // }
+    //       // if (this._.has(this.cardData.userBody, 'urineStatus')) {
+    //       //   if (this.cardData.userBody.urineStatus === 1) {
+    //       //     habits.push('大小便正常')
+    //       //   }
+    //       //   if (this.cardData.userBody.urineStatus === 2) {
+    //       //     habits.push('大小便不正常')
+    //       //   }
+    //       // }
+    //       if (this._.has(this.cardData.userBody, 'drinking')) {
+    //         if (this.cardData.userBody.drinking === 1) {
+    //           this.medication.drinking = '1'
+    //           habits.push('从不饮酒')
+    //         }
+    //         if (this.cardData.userBody.drinking === 2) {
+    //           this.medication.drinking = '2'
+    //           habits.push('偶尔饮酒')
+    //         }
+    //         if (this.cardData.userBody.drinking === 3) {
+    //           this.medication.drinking = '3'
+    //           habits.push('经常饮酒')
+    //         }
+    //         if (this.cardData.userBody.drinking === 4) {
+    //           this.medication.drinking = '4'
+    //           habits.push('每天饮酒')
+    //         }
+    //       }
+    //     }
+    //   }
+    //   if (habits.length !== 0) {
+    //     str = habits.join('、')
+    //   }
+    //   return str
+    // },
+    // // 血压并发症
+    // sysIllnessHistoryNameBpConcurrent () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       if (this._.has(this.cardData.userBody, 'sysIllnessHistoryIdBpConcurrent')) {
+    //         let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+    //         sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         return sicklist
+    //       } else {
+    //         return []
+    //       }
+    //     } else {
+    //       return []
+    //     }
+    //   }
+    // },
+    // createTime () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userBody')) {
+    //       if (this._.has(this.cardData.userBody, 'createTime')) {
+    //         return this.cardData.userBody.createTime
+    //       } else {
+    //         return ''
+    //       }
+    //     } else {
+    //       return ''
+    //     }
+    //   }
+    // },
+    // readme () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userCasesCard')) {
+    //       if (this._.has(this.cardData.userCasesCard, 'readme')) {
+    //         // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+    //         // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         // return sicklist
+    //         return this.cardData.userCasesCard.readme
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // longtimeyear () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userCasesCard')) {
+    //       if (this._.has(this.cardData.userCasesCard, 'yearsSick')) {
+    //         // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+    //         // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         // return sicklist
+    //         return this.cardData.userCasesCard.yearsSick
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // longtimemonth () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userCasesCard')) {
+    //       if (this._.has(this.cardData.userCasesCard, 'monthSick')) {
+    //         // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+    //         // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         // return sicklist
+    //         return this.cardData.userCasesCard.monthSick
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // longtimeday () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userCasesCard')) {
+    //       if (this._.has(this.cardData.userCasesCard, 'daySick')) {
+    //         // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+    //         // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         // return sicklist
+    //         return this.cardData.userCasesCard.daySick
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // },
+    // lastDate () {
+    //   if (this.cardData) {
+    //     if (this._.has(this.cardData, 'userCasesCard')) {
+    //       if (this._.has(this.cardData.userCasesCard, 'lastTime')) {
+    //         // let sicklist = this.cardData.userBody.sysIllnessHistoryIdBpConcurrent.split(',')
+    //         // sicklist = this._.uniqWith(sicklist, this._.isEqual)
+    //         // return sicklist
+    //         return this.cardData.userCasesCard.lastTime
+    //       } else {
+    //         return null
+    //       }
+    //     } else {
+    //       return null
+    //     }
+    //   }
+    // }
   },
   mounted () {
     console.log('this.router', this.$route)
@@ -2141,8 +2161,8 @@ export default {
   },
   destroyed () {
     // console.log('销毁后', this.info)
-    this.setuserCasesCardId(null)
-    this.setuserMakeOrderDoctorId(null)
+    // this.setuserCasesCardId(null)
+    // this.setuserMakeOrderDoctorId(null)
     // console.log('销毁后', this.userCasesCardId)
     // console.log('销毁后', this.userMakeOrderDoctorId)
   }
@@ -2401,10 +2421,15 @@ export default {
     }
     img{
       width: 120px;
+      // height: 120px;
+      border-radius: 120px;
     }
     &-img{
       margin-top:36px;
       text-align: center;
+      &-wrap{
+        // border-radius: 50%;
+      }
     }
     &-type{
       margin: 10px 0 20px 0;
