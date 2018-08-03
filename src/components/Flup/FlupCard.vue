@@ -1012,7 +1012,7 @@ export default {
           if (val.pages === 1) {
             this.nextBtn = true
             this.upBtn = true
-          } else if (val.pages === 0) {
+          } else if (val.pages <= 0) {
             this.nextBtn = true
             this.upBtn = true
           } else {
@@ -1174,165 +1174,167 @@ export default {
       params.pageSize = this.page.pageSize
       this.$axios(FlupCardApi(params))
       .then(res => {
-        if (res.data.data.length > 0) {
-          // if (this._.has(res.data.data[0], 'realName')) {
-          //   this.info.name = res.data.data[0].realName
-          // }
-          if (this._.has(res.data.data[0], 'followUpWay')) {
-            this.flupMethods = this._.toNumber(res.data.data[0].followUpWay)
-          }
-          if (this._.has(res.data.data[0], 'followUpTime')) {
-            this.flupTime = res.data.data[0].followUpTime
-          }
-          if (this._.has(res.data.data[0], 'followUpUnderTime')) {
-            this.nextFlupTime = res.data.data[0].followUpUnderTime
-          }
-        // 身体指标
-          if (this._.has(res.data.data[0], 'systolic')) {
-            this.body.heighBlood = res.data.data[0].systolic
-          }
-          if (this._.has(res.data.data[0], 'diastolic')) {
-            this.body.lowBlood = res.data.data[0].diastolic
-          }
-          if (this._.has(res.data.data[0], 'dangerLevel')) {
-            this.body.dangerLayer = this._.toNumber(res.data.data[0].dangerLevel)
-          }
-          if (this._.has(res.data.data[0], 'height')) {
-            this.body.heigh = this._.toNumber(res.data.data[0].height)
-          }
-          if (this._.has(res.data.data[0], 'weight')) {
-            this.body.weight = this._.toNumber(res.data.data[0].weight)
-          }
-          if (this._.has(res.data.data[0], 'pulse')) {
-            this.body.heart = this._.toNumber(res.data.data[0].pulse)
-          }
-          if (this._.has(res.data.data[0], 'bmi')) {
-            this.body.health = this._.toNumber(res.data.data[0].bmi)
-          }
-          if (this._.has(res.data.data[0], 'userHealthDiary')) {
-            // 日常情况
-            if (this._.has(res.data.data[0].userHealthDiary, 'smokingToday')) {
-              this.daily.smoke = this._.toNumber(res.data.data[0].userHealthDiary.smokingToday)
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'drinkingToday')) {
-              this.daily.drink = this._.toNumber(res.data.data[0].userHealthDiary.drinkingToday)
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'sleepToday')) {
-              this.daily.sleep = this._.toNumber(res.data.data[0].userHealthDiary.sleepToday)
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'movementToday')) {
-              this.daily.sport = this._.toNumber(res.data.data[0].userHealthDiary.movementToday)
-            }
-            // 生活习惯
-            if (this._.has(res.data.data[0].userHealthDiary, 'isOntimeMedicat')) {
-              this.life.medicine = this._.toNumber(res.data.data[0].userHealthDiary.isOntimeMedicat)
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'moodToday')) {
-              this.life.mood = this._.toNumber(res.data.data[0].userHealthDiary.moodToday)
-            }
-            // if (this._.has(res.data.data[0].userHealthDiary, 'moodToday')) {
-            //   this.life.doctor = res.data.data[0].userHealthDiary.moodToday
+        if (this._.has(res.data, 'data')) {
+          if (res.data.data.length > 0) {
+            // if (this._.has(res.data.data[0], 'realName')) {
+            //   this.info.name = res.data.data[0].realName
             // }
-            if (this._.has(res.data.data[0].userHealthDiary, 'eatSaltToday')) {
-              this.life.salt = this._.toNumber(res.data.data[0].userHealthDiary.eatSaltToday)
+            if (this._.has(res.data.data[0], 'followUpWay')) {
+              this.flupMethods = this._.toNumber(res.data.data[0].followUpWay)
             }
-            if (this._.has(res.data.data[0].userHealthDiary, 'presentSymptoms')) {
-              this.life.symptom = (res.data.data[0].userHealthDiary.presentSymptoms + '').split(',').map(item => {
-                return this._.toNumber(item)
-              })
+            if (this._.has(res.data.data[0], 'followUpTime')) {
+              this.flupTime = res.data.data[0].followUpTime
             }
-            if (this._.has(res.data.data[0].userHealthDiary, 'andhairClinical')) {
-              // if (res.data.data[0].userHealthDiary.andhairClinical) {
-              this.life.bed = (res.data.data[0].userHealthDiary.andhairClinical + '').split(',').map(item => {
-                return this._.toNumber(item)
-              })
+            if (this._.has(res.data.data[0], 'followUpUnderTime')) {
+              this.nextFlupTime = res.data.data[0].followUpUnderTime
+            }
+          // 身体指标
+            if (this._.has(res.data.data[0], 'systolic')) {
+              this.body.heighBlood = res.data.data[0].systolic
+            }
+            if (this._.has(res.data.data[0], 'diastolic')) {
+              this.body.lowBlood = res.data.data[0].diastolic
+            }
+            if (this._.has(res.data.data[0], 'dangerLevel')) {
+              this.body.dangerLayer = this._.toNumber(res.data.data[0].dangerLevel)
+            }
+            if (this._.has(res.data.data[0], 'height')) {
+              this.body.heigh = this._.toNumber(res.data.data[0].height)
+            }
+            if (this._.has(res.data.data[0], 'weight')) {
+              this.body.weight = this._.toNumber(res.data.data[0].weight)
+            }
+            if (this._.has(res.data.data[0], 'pulse')) {
+              this.body.heart = this._.toNumber(res.data.data[0].pulse)
+            }
+            if (this._.has(res.data.data[0], 'bmi')) {
+              this.body.health = this._.toNumber(res.data.data[0].bmi)
+            }
+            if (this._.has(res.data.data[0], 'userHealthDiary')) {
+              // 日常情况
+              if (this._.has(res.data.data[0].userHealthDiary, 'smokingToday')) {
+                this.daily.smoke = this._.toNumber(res.data.data[0].userHealthDiary.smokingToday)
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'drinkingToday')) {
+                this.daily.drink = this._.toNumber(res.data.data[0].userHealthDiary.drinkingToday)
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'sleepToday')) {
+                this.daily.sleep = this._.toNumber(res.data.data[0].userHealthDiary.sleepToday)
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'movementToday')) {
+                this.daily.sport = this._.toNumber(res.data.data[0].userHealthDiary.movementToday)
+              }
+              // 生活习惯
+              if (this._.has(res.data.data[0].userHealthDiary, 'isOntimeMedicat')) {
+                this.life.medicine = this._.toNumber(res.data.data[0].userHealthDiary.isOntimeMedicat)
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'moodToday')) {
+                this.life.mood = this._.toNumber(res.data.data[0].userHealthDiary.moodToday)
+              }
+              // if (this._.has(res.data.data[0].userHealthDiary, 'moodToday')) {
+              //   this.life.doctor = res.data.data[0].userHealthDiary.moodToday
               // }
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeIdentify')) {
-              this.life.chinese = (res.data.data[0].userHealthDiary.inDoctoeIdentify + '').split(',').map(item => {
-                return this._.toNumber(item)
-              })
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'nonMedicineTreatment')) {
-              this.life.unmedicine = (res.data.data[0].userHealthDiary.nonMedicineTreatment + '').split(',').map(item => {
-                return this._.toNumber(item)
-              })
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeCare')) {
-              this.life.direct = (res.data.data[0].userHealthDiary.inDoctoeCare + '').split(',').map(item => {
-                return this._.toNumber(item)
-              })
-            }
-            if (this._.has(res.data.data[0].userHealthDiary, 'healthPrescriptionAdvice')) {
-              this.life.suggest = (res.data.data[0].userHealthDiary.healthPrescriptionAdvice + '').split(',').map(item => {
-                return this._.toNumber(item)
-              })
-            }
-          }
-          if (this._.has(res.data.data[0], 'userFollowUpMedicationList')) {
-            if (res.data.data[0].userFollowUpMedicationList.length > 0) {
-              let medicinelist = []
-              res.data.data[0].userFollowUpMedicationList.forEach(item => {
-                let obj = {}
-                if (this._.has(item, 'id')) {
-                  obj.changeid = item.id
-                }
-                // else {
-                //   obj.changeid = null
+              if (this._.has(res.data.data[0].userHealthDiary, 'eatSaltToday')) {
+                this.life.salt = this._.toNumber(res.data.data[0].userHealthDiary.eatSaltToday)
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'presentSymptoms')) {
+                this.life.symptom = (res.data.data[0].userHealthDiary.presentSymptoms + '').split(',').map(item => {
+                  return this._.toNumber(item)
+                })
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'andhairClinical')) {
+                // if (res.data.data[0].userHealthDiary.andhairClinical) {
+                this.life.bed = (res.data.data[0].userHealthDiary.andhairClinical + '').split(',').map(item => {
+                  return this._.toNumber(item)
+                })
                 // }
-                if (this._.has(item, 'medicineType')) {
-                  obj.medicineType = item.medicineType
-                } else {
-                  obj.medicineType = null
-                }
-                if (this._.has(item, 'medicineName')) {
-                  obj.name = item.medicineName
-                } else {
-                  obj.name = null
-                }
-                if (this._.has(item, 'medicineId')) {
-                  obj.medicineId = item.medicineId
-                } else {
-                  obj.medicineId = null
-                }
-                if (this._.has(item, 'everyDosage')) {
-                  obj.singleuse = item.everyDosage
-                  obj.everyDosage = item.everyDosage
-                } else {
-                  obj.singleuse = null
-                  obj.everyDosage = null
-                }
-                if (this._.has(item, 'unit')) {
-                  obj.singleuseUnit = this.medicineunit(item.unit)
-                } else {
-                  obj.singleuseUnit = ''
-                }
-                if (this._.has(item, 'usageOff')) {
-                  obj.usemethod = this.medicineunit(item.usageOff)
-                } else {
-                  obj.usemethod = ''
-                }
-                if (this._.has(item, 'usageTimes')) {
-                  obj.usetimes = item.usageTimes
-                } else {
-                  obj.usetimes = null
-                }
-                if (this._.has(item, 'totalNumber')) {
-                  obj.usetotal = parseInt(item.totalNumber)
-                } else {
-                  obj.usetotal = null
-                }
-                if (this._.has(item, 'remark')) {
-                  obj.tip = item.remark
-                } else {
-                  obj.tip = null
-                }
-                medicinelist.push(obj)
-                // if (this._.has(item, 'totalNumber')) {
-                //   obj.uselong = item.totalNumber
-                // }
-              })
-              this.doctorMedicine = medicinelist
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeIdentify')) {
+                this.life.chinese = (res.data.data[0].userHealthDiary.inDoctoeIdentify + '').split(',').map(item => {
+                  return this._.toNumber(item)
+                })
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'nonMedicineTreatment')) {
+                this.life.unmedicine = (res.data.data[0].userHealthDiary.nonMedicineTreatment + '').split(',').map(item => {
+                  return this._.toNumber(item)
+                })
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'inDoctoeCare')) {
+                this.life.direct = (res.data.data[0].userHealthDiary.inDoctoeCare + '').split(',').map(item => {
+                  return this._.toNumber(item)
+                })
+              }
+              if (this._.has(res.data.data[0].userHealthDiary, 'healthPrescriptionAdvice')) {
+                this.life.suggest = (res.data.data[0].userHealthDiary.healthPrescriptionAdvice + '').split(',').map(item => {
+                  return this._.toNumber(item)
+                })
+              }
+            }
+            if (this._.has(res.data.data[0], 'userFollowUpMedicationList')) {
+              if (res.data.data[0].userFollowUpMedicationList.length > 0) {
+                let medicinelist = []
+                res.data.data[0].userFollowUpMedicationList.forEach(item => {
+                  let obj = {}
+                  if (this._.has(item, 'id')) {
+                    obj.changeid = item.id
+                  }
+                  // else {
+                  //   obj.changeid = null
+                  // }
+                  if (this._.has(item, 'medicineType')) {
+                    obj.medicineType = item.medicineType
+                  } else {
+                    obj.medicineType = null
+                  }
+                  if (this._.has(item, 'medicineName')) {
+                    obj.name = item.medicineName
+                  } else {
+                    obj.name = null
+                  }
+                  if (this._.has(item, 'medicineId')) {
+                    obj.medicineId = item.medicineId
+                  } else {
+                    obj.medicineId = null
+                  }
+                  if (this._.has(item, 'everyDosage')) {
+                    obj.singleuse = item.everyDosage
+                    obj.everyDosage = item.everyDosage
+                  } else {
+                    obj.singleuse = null
+                    obj.everyDosage = null
+                  }
+                  if (this._.has(item, 'unit')) {
+                    obj.singleuseUnit = this.medicineunit(item.unit)
+                  } else {
+                    obj.singleuseUnit = ''
+                  }
+                  if (this._.has(item, 'usageOff')) {
+                    obj.usemethod = this.medicineunit(item.usageOff)
+                  } else {
+                    obj.usemethod = ''
+                  }
+                  if (this._.has(item, 'usageTimes')) {
+                    obj.usetimes = item.usageTimes
+                  } else {
+                    obj.usetimes = null
+                  }
+                  if (this._.has(item, 'totalNumber')) {
+                    obj.usetotal = parseInt(item.totalNumber)
+                  } else {
+                    obj.usetotal = null
+                  }
+                  if (this._.has(item, 'remark')) {
+                    obj.tip = item.remark
+                  } else {
+                    obj.tip = null
+                  }
+                  medicinelist.push(obj)
+                  // if (this._.has(item, 'totalNumber')) {
+                  //   obj.uselong = item.totalNumber
+                  // }
+                })
+                this.doctorMedicine = medicinelist
+              }
             }
           }
         }
