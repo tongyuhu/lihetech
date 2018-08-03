@@ -1347,6 +1347,12 @@ export default {
             this.bloodTrendState.heigh = 0
             this.bloodTrendState.danger = 1
           }
+          if (this.bloodTrendData.bptype.length === 0) {
+            this.bloodTrendState.total = 0
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 0
+          }
           // this.updatebloodTrendState()
           if (res.data.data) {
             if (res.data.data.length !== 0) {
@@ -1482,6 +1488,12 @@ export default {
             this.bloodTrendState.normal = 0
             this.bloodTrendState.heigh = 0
             this.bloodTrendState.danger = 1
+          }
+          if (this.bloodTrendData.bptype.length === 0) {
+            this.bloodTrendState.total = 0
+            this.bloodTrendState.normal = 0
+            this.bloodTrendState.heigh = 0
+            this.bloodTrendState.danger = 0
           }
           return
         }
