@@ -7,7 +7,7 @@
       <div class="table">
         <table>
           <tr>
-            <th width="150px">行为指数</th>
+            <th>名称</th>
             <th>
               图形
             </th>
@@ -20,28 +20,51 @@
           </tr>
           <tr>
             <td class="icon-normal">
-              {{sysTypeName}}</td>
-            <td>
-              <img :src="sysSimpleImage" alt="暂无波形图" height="200px">
+              <div>
+                {{sysTypeName}}
+              </div>
             </td>
-            <td>
-              <img :src="sysBpImage" alt="暂无波形图" height="200px">
+            <td class="img">
+              <div>
+                <img v-if="sysSimpleImage" :src="sysSimpleImage" alt="波形图加载失败">
+                <span v-else>暂无波形图</span>
+              </div>
+            </td>
+            <td class="img">
+              <div>
+                <img v-if="sysBpImage" :src="sysBpImage" alt="波形图加载失败">
+                <span v-else>暂无波形图</span>
+              </div>
             </td>
             
             <td>
-              <p>{{sysImageAnalyze}}</p>
+              <div>
+                <p>{{sysImageAnalyze}}</p>
+              </div>
             </td>
           </tr>
           <tr>
-            <td class="icon-self">{{userTypeName}}</td>
+            <td class="icon-self">
+              <div>
+                {{userTypeName}}
+              </div>
+            </td>
             <td class="img">
-              <img :src="userSimpleImage" alt="暂无波形图" height="200px">
+              <div>
+                <img v-if="userSimpleImage" :src="userSimpleImage" alt="暂无波形图">
+                <span v-else>暂无波形图</span>
+              </div>
+            </td>
+            <td class="img">
+              <div>
+                <img v-if="userBpImage" :src="userBpImage" alt="暂无波形图">
+                <span v-else>暂无波形图</span>
+              </div>
             </td>
             <td>
-              <img :src="userBpImage" alt="暂无波形图" height="200px">
-            </td>
-            <td>
-              <p>{{userImageAnalyze}}</p>
+              <div>
+                <p>{{userImageAnalyze}}</p>
+              </div>
             </td>
           </tr>
         </table>
@@ -155,8 +178,8 @@ export default {
       .then(res => {
         if (res.data.data) {
           if (res.data.data.userDoubleArm) {
-            if (res.data.data.userDoubleArm.typeName) {
-              this.userTypeName = res.data.data.userDoubleArm.typeName || ''
+            if (res.data.data.userDoubleArm.armName) {
+              this.userTypeName = res.data.data.userDoubleArm.armName || ''
             }
             if (res.data.data.userDoubleArm.conditionPredict) {
               this.userImageAnalyze = res.data.data.userDoubleArm.conditionPredict || ''
@@ -188,8 +211,8 @@ export default {
             if (res.data.data.sysDoubleArm.imageAnalyze) {
               this.sysImageAnalyze = res.data.data.sysDoubleArm.imageAnalyze || ''
             }
-            if (res.data.data.sysDoubleArm.typeName) {
-              this.sysTypeName = res.data.data.sysDoubleArm.typeName || ''
+            if (res.data.data.sysDoubleArm.armName) {
+              this.sysTypeName = res.data.data.sysDoubleArm.armName || ''
             }
             if (res.data.data.sysDoubleArm.simpleImage) {
               this.sysSimpleImage = process.env.IMG_URL + res.data.data.sysDoubleArm.simpleImage || ''
@@ -242,6 +265,13 @@ export default {
     padding: 15px 0;
     text-align: center;
     vertical-align: middle;
+  }
+  td div{
+    min-width: 200px;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .red-text{
     color:#e87070;
@@ -347,6 +377,8 @@ export default {
     min-width: 80px;
   }
   .img img{
+    min-height: 80px;
     min-width: 50px;
+    max-height: 200px;
   }
 </style>
