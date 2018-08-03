@@ -690,10 +690,11 @@
       height: 90px;
       background: url('~icon/hospital-icon2-05.png') no-repeat center;
       border-radius: 50%;
+      // background-color: #1991fc;
       // z-index: 199;
     }
     &-icon-btn:hover{
-      opacity: 0.9;
+      opacity: 0.95;
       // border: none;
       // outline: none;
       // cursor: pointer;
