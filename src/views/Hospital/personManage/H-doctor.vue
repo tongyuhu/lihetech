@@ -23,11 +23,11 @@
         style="width:100%"
         border
         @selection-change="doctorSelectionChange">
-          <el-table-column
+          <!-- <el-table-column
           type="selection"
           width="55"
           align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           label="序号"
           type="index"
@@ -462,6 +462,10 @@ export default {
               })
             }
             if (res.data.code === '0000') {
+              vm.$message({
+                message: '修改成功',
+                type: 'success'
+              })
               this.getDoctorList()
               vm.modifyDoctor = false
             }
