@@ -452,6 +452,7 @@ import {orderApi, orderSettingApi, closeorderApi} from '@/api/components/order/o
 // import {dateFormat, daybefor, computeWeekday} from '@/untils/date.js'
 // import Bus from '@/bus.js'
 import {mapMutations} from 'vuex'
+import session from '@/untils/session'
 export default {
   name: 'orderSick',
   data () {
@@ -544,7 +545,7 @@ export default {
     // 会诊
     diagnosis (val) {
       console.log('会诊信息', val)
-
+      session('sickcardTabIndex', 0)
       this.SET_CURRENT_SICK_DATA({
         sickID: val.userId,
         hospitalId: val.adminHospitalId

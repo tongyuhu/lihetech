@@ -340,9 +340,10 @@
                     align="center"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> 
-                        {{scope.row.systolicAvg}}/{{scope.row.systolicAvg}}
-                        </span>                           
+                      <!-- <span v-if="scope.row.bastThan">  -->
+                      <span> 
+                        {{scope.row.systolicAvg}}/{{scope.row.diastolicAvg}}
+                      </span>                           
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -433,9 +434,9 @@
                     align="center"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
-                      <span v-if="scope.row.bastThan"> 
-                        {{scope.row.systolicAvg}}/{{scope.row.systolicAvg}}
-                        </span>                           
+                      <span> 
+                        {{scope.row.systolicAvg}}/{{scope.row.diastolicAvg}}
+                      </span>                           
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -496,6 +497,7 @@ import {layerSickApi, easyApi} from '@/api/components/bloodPersonManage/bloodPer
 import {careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
 // import mpages from '@/components/cutpage.vue'
 import {mapMutations, mapState} from 'vuex'
+import session from '@/untils/session'
 // import Bus from '@/bus.js'
 export default {
   name: 'H-layer',
@@ -616,21 +618,21 @@ export default {
       this.getlayerData({
         dangerLevel: 3,
         pageNum: val,
-        pageSize: this.noLevelPageSize
+        pageSize: this.threeLevelPageSize
       })
     },
-    twoLevelCurrentChange (val) {   // 未分层页数变化
+    twoLevelCurrentChange (val) {   // 二级管理页数变化
       this.getlayerData({
         dangerLevel: 2,
         pageNum: val,
-        pageSize: this.noLevelPageSize
+        pageSize: this.twoLevelPageSize
       })
     },
-    oneLevelCurrentChange (val) {   // 未分层页数变化
+    oneLevelCurrentChange (val) {   // 一级管理页数变化
       this.getlayerData({
         dangerLevel: 1,
         pageNum: val,
-        pageSize: this.noLevelPageSize
+        pageSize: this.oneLevelPageSize
       })
     },
     easyCurrentChange (val) {   // 未分层页数变化
@@ -672,18 +674,22 @@ export default {
         if (res.data.data.length > 0) {
           if (params.dangerLevel === 0) {
             this.noLevelData = res.data.data
+            this.noLevelTotal = res.data.recordCount
             this.noLevelLoading = false
           }
           if (params.dangerLevel === 1) {
             this.oneLevelData = res.data.data
+            this.oneLevelTotal = res.data.recordCount
             this.oneLevelLoading = false
           }
           if (params.dangerLevel === 2) {
             this.twoLevelData = res.data.data
+            this.twoLevelTotal = res.data.recordCount
             this.twoLevelLoading = false
           }
           if (params.dangerLevel === 3) {
             this.threeLevelData = res.data.data
+            this.threeLevelTotal = res.data.recordCount
             this.threeLevelLoading = false
           }
         }
@@ -729,6 +735,7 @@ export default {
     //   })
     // },
     diagnose (row, isuserId) {
+      session('sickcardTabIndex', 0)
       let id
       if (isuserId) {
         id = row.userId
@@ -738,12 +745,14 @@ export default {
       console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
-          sickID: id
+          sickID: id,
+          name: row.realName
         }})
       this.SET_CURRENT_SICK_DATA({
         sickID: id,
         hospitalId: row.adminHospitalId
       })
+      this.SET_SICK_CARD(false)
     },
     call (row, isuserId) {
       console.log('聊天对象', row)
@@ -771,11 +780,15 @@ export default {
     },
     assessmentLayer (val) {
       let obj = {}
+      if (this._.has(val, 'realName')) {
+        obj.userName = val.realName
+      } else {
+        obj.userName = ''
+      }
       obj.isFollowUp = false
       obj.adminIdMainDoctor = null
       obj.userId = val.id
       obj.userFollowUpId = val.id
-      obj.userName = val.realName
       obj.userHealthDiaryId = null
       obj.adminHospitalId = val.adminHospitalId
       console.log('分层评估', obj)

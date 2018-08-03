@@ -381,6 +381,7 @@ import {
 import mpages from '@/components/cutpage.vue'
 import {mapMutations, mapState} from 'vuex'
 import Bus from '@/bus.js'
+import session from '@/untils/session'
 export default {
   name: 'H-work',
   components: {
@@ -628,6 +629,7 @@ export default {
       })
     },
     newdiagnose (row, val) {
+      session('sickcardTabIndex', 0)
       let userId
       let id
       // if (val) {
