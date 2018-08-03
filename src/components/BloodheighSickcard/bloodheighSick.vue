@@ -47,7 +47,7 @@
               </div>
               <div class="sick-history-bottom">
                 <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
-                <button><span>体检表</span></button>
+                <button @click="flupHistory"><span>随访记录</span></button>
                 <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button> -->
                 <button @click="openChecklist"><span>检查单</span></button>
               </div>
@@ -223,7 +223,7 @@ import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 import checkList from '@/components/checklist'
 import imgfloat from '@/components/imgFloat'
-
+import session from '@/untils/session'
 // import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
@@ -274,11 +274,15 @@ export default {
       showcard: true,
       histroyCard: false,
       huizhen: null,
-      face: null
+      face: null,
+      // sickID: null,
+      // name: null,
+      // adminHospitalId: null,
+      adminIdMainDoctor: null
     }
   },
   methods: {
-    ...mapMutations(['SET_SICK_CARD']),
+    ...mapMutations(['SET_SICK_CARD', 'SET_FLUP_INFO']),
     tabs (index) {
       switch (index) {
         case 0:
@@ -306,6 +310,8 @@ export default {
     },
     changeTab (index) {
       this.tabs(index)
+      session('sickcardTabIndex', index)
+      // console.log('sessionsickcardTabIndex', session('sickcardTabIndex'))
     },
     checkSuger () {
     },
@@ -327,15 +333,14 @@ export default {
         this.checklist = []
         if (res.data) {
           if (res.data.data) {
+            if (this._.has(res.data.data, 'adminIdDoctor')) {
+              this.adminIdDoctor = res.data.data.adminIdDoctor
+            } else {
+              this.adminIdDoctor = ''
+            }
+
             this.totalPage = res.data.pages
             console.log('病历卡总页数', this.totalPage)
-            if (this.totalPage < 1) {
-              // console.log('page', this.totalPage)
-              // this.showcard = false
-              // this.SET_SICK_CARD(true)
-            }
-              // this.pages =
-            this.SET_SICK_CARD(false)
             if (res.data.data.length !== 0) {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
@@ -391,6 +396,21 @@ export default {
       //   vm.$refs.checklistimg.showBig()
       // })
       // this.$refs.checklistimg.showBig()
+    },
+    flupHistory () {
+      let obj = {}
+      obj.isFollowUp = true
+      obj.adminIdMainDoctor = this.adminIdMainDoctor
+      obj.userId = this.sickID
+      obj.userName = this.name
+      obj.adminHospitalId = this.hospitalId
+      obj.userFollowUpId = null
+      obj.userHealthDiaryId = null
+      this.SET_FLUP_INFO(obj)
+      console.log('随访', obj)
+      this.$router.push({
+        name: 'FlupCard'
+      })
     }
   },
   computed: {
@@ -408,12 +428,13 @@ export default {
       if (this.cardData) {
         if (this.cardData.realName) {
           return this.cardData.realName
+        } else {
+          return this.$route.params.name
         }
       }
     },
     // 性别
     sex: {
-
       get: function () {
         if (this.cardData) {
           if (this.cardData.sex === 1) {
@@ -598,6 +619,9 @@ export default {
     }
   },
   created () {
+    if (session('sickcardTabIndex')) {
+      this.activeIndex = parseInt(session('sickcardTabIndex')) + 1
+    }
     this.getCardData()
   },
   mounted () {
@@ -609,7 +633,7 @@ export default {
     //   vm.showcard = false
     //   // vm.getCardData()
     //   console.log('huizhen1', vm.showcard)
-    //   console.log('huizhen', vm.huizhen)
+    // console.log('name', vm.name, this.$route.params.name)
     // })
   }
 }
