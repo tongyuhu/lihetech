@@ -51,18 +51,22 @@
           <div class="card-head-title">
             <p>身体指标</p>
           </div>
-          <div class="gap-bottom">
+          <div class="">
             <el-row :gutter="20">
-              <el-col :span="6">
-                <span>出生日期</span>
-                <el-date-picker
-                  v-model="birthDate"
-                  type="date"
-                  size="small"
-                  format="yyyy-MM-dd"
-                  value-format="yyyy-MM-dd"
-                  placeholder="选择日期">
-                </el-date-picker>
+              <el-col :span="4">
+                <!-- <span>生日</span> -->
+                <el-form-item label="出生日期" label-width="70px">
+                  <el-date-picker
+                    v-model="birthDate"
+                    type="date"
+                    size="small"
+                    format="yyyy-MM-dd"
+                    value-format="yyyy-MM-dd"
+                    :style="{width:'130px'}"
+                    placeholder="选择日期">
+                  </el-date-picker>
+                </el-form-item>
+                
                 <!-- <numberinput
                 v-model="birthDate"
                 :leftOffset="45"
@@ -82,64 +86,130 @@
                   </template>
                 </el-input> -->
               </el-col>
-              <el-col :span="6">
-                <numberinput
-                v-model="height"
-                :leftOffset="45"
-                :rightOffset="30">
-                  <template slot="left">
-                    <span>
-                    身高：
-                    </span>
-                  </template>
-                  <template slot="right">
-                    <span>
-                    cm
-                    </span>
-                  </template>
-                </numberinput>
-                <!-- <el-input placeholder="" v-model="body" size="small">
-                  <template slot="prefix">
-                    <span class="input-tip">身高：</span>
-                  </template>
-                  <template slot="suffix">
-                    <span class="input-tip">cm</span>
-                  </template>
-                </el-input> -->
+              <el-col :span="4">
+                <el-form-item label="" label-width="0px">
+                  <numberinput
+                  v-model="height"
+                  :leftOffset="45"
+                  :rightOffset="30">
+                    <template slot="left">
+                      <span>
+                      身高：
+                      </span>
+                    </template>
+                    <template slot="right">
+                      <span>
+                      cm
+                      </span>
+                    </template>
+                  </numberinput>
+                </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <numberinput
-                v-model="weight"
-                :leftOffset="45"
-                :rightOffset="30">
-                  <template slot="left">
-                    <span>
-                    体重：
-                    </span>
-                  </template>
-                  <template slot="right">
-                    <span>
-                    kg
-                    </span>
-                  </template>
-                </numberinput>
+              <el-col :span="4">
+                <el-form-item label="" label-width="0px">
+                  <numberinput
+                  v-model="weight"
+                  :leftOffset="45"
+                  :rightOffset="30">
+                    <template slot="left">
+                      <span>
+                      体重：
+                      </span>
+                    </template>
+                    <template slot="right">
+                      <span>
+                      kg
+                      </span>
+                    </template>
+                  </numberinput>
+                </el-form-item>
               </el-col>
-              <el-col :span="6">
-                <numberinput
-                v-model="waistWai"
-                :leftOffset="45"
-                :rightOffset="30">
-                  <template slot="left">
-                    <span>
-                    胸围：
-                    </span>
-                  </template>
-                  <template slot="right">
-                    <span>
-                    尺
-                    </span>
-                  </template>
-                </numberinput>
+              <el-col :span="4">
+                <el-form-item label="" label-width="0px">
+                  <numberinput
+                  v-model="waistWai"
+                  :leftOffset="45"
+                  :rightOffset="30">
+                    <template slot="left">
+                      <span>
+                      胸围：
+                      </span>
+                    </template>
+                    <template slot="right">
+                      <span>
+                      尺
+                      </span>
+                    </template>
+                  </numberinput>
+                </el-form-item>
+              </el-col>
+              <el-col :span="4">
+                <!-- <div class="line-block"> -->
+                  <!-- <span>历史最高压</span> -->
+                  <!-- <el-form-item label="历史最高压" label-width="85px"> -->
+                    <!-- <div class="line-block"> -->
+                      <el-form-item label="" label-width="0px">
+                        <numberinput
+                        v-model="systolicMaxHistory"
+                        :leftOffset="120"
+                        :rightOffset="0">
+                          <template slot="left">
+                            <span>
+                            历史最高收缩压：
+                            </span>
+                          </template>
+                          <!-- <template slot="right">
+                            <span>
+                            cm
+                            </span>
+                          </template> -->
+                        </numberinput>
+                      </el-form-item>
+                    <!-- </div> -->
+                  <!-- </el-form-item> -->
+                <!-- </div> -->
+              </el-col>
+              <el-col :span="4">
+                <!-- <div class="line-block"> -->
+                  <!-- <el-form-item label="" label-width="0px"> -->
+                    <!-- <div class="line-block"> -->
+                      <el-form-item label="" label-width="0px">
+                        <numberinput
+                        v-model="diastolicMaxHistory"
+                        :leftOffset="120"
+                        :rightOffset="0">
+                          <template slot="left">
+                            <span>
+                            历史最高舒张压：
+                            </span>
+                          </template>
+                          <!-- <template slot="right">
+                            <span>
+                            cm
+                            </span>
+                          </template> -->
+                        </numberinput>
+                      </el-form-item>
+                    <!-- </div> -->
+                    <!-- <div class="line-block">
+                      <numberinput
+                      v-model="height"
+                      :leftOffset="45"
+                      :rightOffset="30">
+                        <template slot="left">
+                          <span>
+                          身高：
+                          </span>
+                        </template>
+                        <template slot="right">
+                          <span>
+                          cm
+                          </span>
+                        </template>
+                      </numberinput>
+                    </div> -->
+                  <!-- </el-form-item> -->
+                <!-- </div> -->
               </el-col>
             </el-row>
           </div>
@@ -191,6 +261,46 @@
               </el-form-item>
 
             </div>
+          </div>
+          <div>
+            <!-- <div class="line-block">
+              <el-form-item label="历史最高压" label-width="85px">
+                <div class="line-block gap-right">
+                  <numberinput
+                  v-model="height"
+                  :leftOffset="45"
+                  :rightOffset="30">
+                    <template slot="left">
+                      <span>
+                      身高：
+                      </span>
+                    </template>
+                    <template slot="right">
+                      <span>
+                      cm
+                      </span>
+                    </template>
+                  </numberinput>
+                </div>
+                <div class="line-block">
+                  <numberinput
+                  v-model="height"
+                  :leftOffset="45"
+                  :rightOffset="30">
+                    <template slot="left">
+                      <span>
+                      身高：
+                      </span>
+                    </template>
+                    <template slot="right">
+                      <span>
+                      cm
+                      </span>
+                    </template>
+                  </numberinput>
+                </div>
+              </el-form-item>
+            </div> -->
           </div>
         </el-card>
       </div>
@@ -959,8 +1069,6 @@ export default {
       //   bloodhistroy: null
       // },
       imgarr: [
-        // 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531740671333&di=f26a31e505e2a2d6bd1a5e4b03334b02&imgtype=0&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffaedab64034f78f00549571175310a55b2191c96.jpg', 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=fa47cd471c3075484fd0980fa42871d5&imgtype=0&src=http%3A%2F%2Fh.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2F342ac65c103853434cc02dda9f13b07eca80883a.jpg',
-        // 'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1531820093362&di=789a8bfd582e29315ca2a71b5047d815&imgtype=0&src=http%3A%2F%2Fe.hiphotos.baidu.com%2Fimage%2Fpic%2Fitem%2Ffcfaaf51f3deb48fd0e9be27fc1f3a292cf57842.jpg'
       ],
       imgDialog: false,
       currentCheckItem: '',
@@ -1026,6 +1134,8 @@ export default {
       sysIllnessHistoryIdGenetic: null, // 家族遗传病史 id集合
       userId: null, // 患者id
       adminHospitalId: null, // 诊所id
+      // systolicMaxHistory: null, // 收缩压 历史最高
+      // diastolicMaxHistory: null, // 舒张压 历史最高
       result: {
         disease: null,
         dangerLevel: null,
@@ -1133,6 +1243,12 @@ export default {
       }
       if (this.smoking !== null) {
         obj.smoking = this.smoking
+      }
+      if (this.systolicMaxHistory !== null) {
+        obj.systolicMaxHistory = this.systolicMaxHistory
+      }
+      if (this.diastolicMaxHistory !== null) {
+        obj.diastolicMaxHistory = this.diastolicMaxHistory
       }
       if (this.heartVesselsFamilyHistory !== null) {
         obj.heartVesselsFamilyHistory = this.heartVesselsFamilyHistory
@@ -1380,6 +1496,12 @@ export default {
             }
             if (this._.has(resdata.userBody, 'smoking')) {
               this.smoking = parseInt(resdata.userBody.smoking)
+            }
+            if (this._.has(resdata.userBody, 'systolicMaxHistory')) {
+              this.systolicMaxHistory = parseInt(resdata.userBody.systolicMaxHistory)
+            }
+            if (this._.has(resdata.userBody, 'diastolicMaxHistory')) {
+              this.diastolicMaxHistory = parseInt(resdata.userBody.diastolicMaxHistory)
             }
             if (this._.has(resdata.userBody, 'heartVesselsFamilyHistory')) {
               this.heartVesselsFamilyHistory = parseInt(resdata.userBody.heartVesselsFamilyHistory)
