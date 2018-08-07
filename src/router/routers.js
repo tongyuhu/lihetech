@@ -12,6 +12,11 @@ const baseroutes = [
     component: (resolve) => require(['../components/404.vue'], resolve)
   },
   {
+    path: '/500',
+    name: '500',
+    component: (resolve) => require(['../components/500.vue'], resolve)
+  },
+  {
     path: '/401',
     name: '401',
     component: (resolve) => require(['../components/401.vue'], resolve)
