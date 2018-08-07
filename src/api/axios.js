@@ -193,7 +193,7 @@ axios.interceptors.response.use(
           // sessionStorage.clear()
           // window.location.href = '/BPWatch/admin/login/page'
           // location.reload()
-          // router.replace({path: '/login'})
+          // router.replace({name: '500'})
           err.message = '服务器内部错误'
           break
         case 501:
