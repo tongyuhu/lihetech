@@ -153,7 +153,7 @@ export default {
           axisPointer: {
             animation: false
           },
-          alwaysShowContent: true,
+          // alwaysShowContent: true,
           backgroundColor: 'rgba(250,250,250,0.7)',
           textStyle: {
             color: '#000'
