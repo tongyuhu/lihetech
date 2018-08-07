@@ -70,7 +70,7 @@
                           </div>
                           <div class="flex-item error" v-show="!item.morninngWork">
                             <span>
-                              没有开启预约
+                              未开启预约
                             </span>
                           </div>
                           <!-- 就诊状态 -->
@@ -155,7 +155,7 @@
                           </div>
                           <div class="flex-item error" v-show="!item.noonWork">
                             <span>
-                              没有开启预约
+                              未开启预约
                             </span>
                           </div>
                           <!-- 就诊状态 -->
