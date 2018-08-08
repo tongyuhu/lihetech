@@ -295,7 +295,7 @@ export default {
             console.log('发送失败:' + info)
             vm.$message({
               showClose: true,
-              message: '发送失败，请刷新浏览器恢复聊天系统',
+              message: '发送失败',
               type: 'error'
             })
           }
@@ -409,6 +409,11 @@ export default {
                   info = 'x'
                   break
               }
+              vm.$message({
+                showClose: true,
+                message: '发送失败',
+                type: 'error'
+              })
               console.log('发送失败:' + info)
             }
           })
