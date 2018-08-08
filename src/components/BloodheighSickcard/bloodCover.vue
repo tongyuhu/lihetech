@@ -18,22 +18,6 @@
           </el-row>
         </div>
         <!-- 状态选择 -->
-        <!-- <div class="check-status">
-          <span class="check-all-span">
-            <button class="check-all-btn" @click="checkAllHandle()">
-              <span :class="{'check-all-btn-icon':!ischeckAll,'check-all-btn-icon-active':ischeckAll}"></span>
-              <span>全选</span>
-            </button>
-          </span>
-          <span
-          v-for="(item,index) in status" :key="item.value">
-            <f-button
-            :width="75"
-            :height="24"
-            :isChecked="item.default"
-            @checked='changeStatus(index)'>{{item.label}}</f-button>
-          </span>
-        </div> -->
         <div class="check-status">
           <span>测量状态统计：</span>
           <span class="status-span">
@@ -63,177 +47,58 @@
         </div>
         <div>
           <el-row>
-            <!-- <el-col :span="14"> -->
-              <div class="flex">
-                <div class="flex widthone">
-                  <div class="flex-btn-left">
-                    <el-button v-show="showtrendBtn" :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
-                  </div>
-                  <div class="chart-min-width">
-                    <div id='bloodTrend' :style="{width:'auto',height:'300px'}"></div>
-                  </div>
-                  <div class="flex-btn">
-                    <!-- <el-button :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
-                    <el-button v-show="showtrendBtn" :disabled="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                  </div>
+            <div class="flex">
+              <div class="flex widthone">
+                <div class="flex-btn-left">
+                  <el-button v-show="showtrendBtn" :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
                 </div>
-
+                <div class="chart-min-width">
+                  <div id='bloodTrend' :style="{width:'auto',height:'300px'}"></div>
+                </div>
+                <div class="flex-btn">
+                  <el-button v-show="showtrendBtn" :disabled="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
+                </div>
+              </div>
+              <div>
+                <div class="blood-trend-right-text">
+                  <span>{{tipDate}}</span>
+                </div>
                 <div class="blood-trend-right">
-
-                  <div class="clear">
-                    <div class="blood-trend-item totalbg">
-                      <p>{{this.bloodTrendState.total}}</p>
-                      <p>总测量次数</p>
-                    </div>
-                    <div class="blood-trend-item normalbg">
-                      <p>{{this.bloodTrendState.normal}}</p>
-                      <p>正常偏高次数</p>
-                      <p>121/81~139/89</p>
-                    </div>
+                  <div class="blood-trend-item totalbg">
+                    <p>{{this.bloodTrendState.total}}</p>
+                    <p>总测量次数</p>
                   </div>
-                  <div class="clear">
-                    <div class="blood-trend-item heighbg">
-                      <p>{{this.bloodTrendState.heigh}}</p>
-                      <p>高血压次数</p>
-                      <p>140/90~179/109</p>
-                    </div>
-                    <div class="blood-trend-item dangerbg">
-                      <p class="danger-text">{{this.bloodTrendState.danger}}</p>
-                      <p>危险次数</p>
-                      <p>>179/109</p>
-                    </div>
+                  <div class="blood-trend-item normalbg">
+                    <p>{{this.bloodTrendState.normal}}</p>
+                    <p>正常偏高次数</p>
+                    <p>121/81~139/89</p>
+                  </div>
+                </div>
+                <div class="blood-trend-right">
+                  <div class="blood-trend-item heighbg">
+                    <p>{{this.bloodTrendState.heigh}}</p>
+                    <p>高血压次数</p>
+                    <p>140/90~179/109</p>
+                  </div>
+                  <div class="blood-trend-item dangerbg">
+                    <p class="danger-text">{{this.bloodTrendState.danger}}</p>
+                    <p>危险次数</p>
+                    <p>>179/109</p>
                   </div>
                 </div>
               </div>
-
-            <!-- </el-col> -->
-            <!-- <el-col class="wrap" :span="10"> -->
-            <!-- </el-col> -->
-          </el-row>
-          <!-- <div class="bloodTrend-chart">
-            <div class="blood-trend-left">
-              <div id='bloodTrend' :style="{width:'auto',height:'400px'}"></div>
             </div>
-            <div class="blood-trend-right">
-              <div class="clear">
-                <div class="blood-trend-item">
-                  <p>{{this.bloodTrendState.total}}</p>
-                  <p>总测量次数</p>
-                </div>
-                <div class="blood-trend-item">
-                  <p>{{this.bloodTrendState.normal}}</p>
-                  <p>正常偏高次数</p>
-                  <p>121/81~139/89</p>
-                </div>
-              </div>
-              <div class="clear">
-                <div class="blood-trend-item">
-                  <p>{{this.bloodTrendState.heigh}}</p>
-                  <p>高血压次数</p>
-                  <p>121/81~139/89</p>
-                </div>
-                <div class="blood-trend-item">
-                  <p class="danger-text">{{this.bloodTrendState.danger}}</p>
-                  <p>危险次数</p>
-                  <p>>179/109</p>
-                </div>
-              </div>
-            </div> -->
-            <!-- <div class="footer"></div> -->
-          <!-- </div> -->
+          </el-row>
         </div>
       </el-card>
     </div>
-
-    <!-- 血压与行为分数 -->
-    <!-- <div class="blood-cover" v-show="false">
-      <el-card :body-style="{ 'padding': '0px' ,'padding-bottom':'20px'}">
-        <div class="card-header">
-          <p class="title">血压与行为分数</p>
-        </div>
-        <div class="check-date">
-          <el-row type="flex" justify="start">
-            <button v-for="(item,index) in bloodAndBehaviourDate" 
-            :key="item.date" 
-            class="check-date-btn" 
-            :class="{checked:item.isChecked}" 
-            @click="updateBehaviourChecked(index)"
-            >
-              {{item.date}}
-            </button>
-          </el-row>
-        </div>
-        <div class="chart">
-          <el-row>
-            <el-col>
-              <div class="flex">
-                <div class="flex-btn-left">
-                  <el-button :disabled="behaviourBtnNext" @click="bloodBehaviorNext" type="text" icon="el-icon-arrow-left" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                </div>
-                <div class="chart-min-width">
-                  <div id='bloodBehaviourBlood' :style="{width:'auto',height:'600px'}"></div>
-                </div>
-                <div class="flex-btn">
-                  <el-button :disabled="behaviourBtnPre" @click="bloodBehaviorPer" type="text" icon="el-icon-arrow-right" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
-                </div>
-              </div>
-            </el-col>
-            <el-col v-if="false">
-              <div class="table">
-                <table>
-                  <tr>
-                    <th>行为指数</th>
-                    <td>
-                      <p>优(>90)</p>
-                      <p>{{BehaviourRate.behaveLevel.behaveOptimal}}</p>
-                    </td>
-                    <td>
-                      <p>良(80-90)</p>
-                      <p>{{BehaviourRate.behaveLevel.behaveGood}}</p>
-                    </td>
-                    <td>
-                      <p>中(60-80)</p>
-                      <p>{{BehaviourRate.behaveLevel.behaveMedium}}</p>
-                    </td>
-                    <td>
-                      <p>差(60)</p>
-                      <p>{{BehaviourRate.behaveLevel.behavePoor}}</p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>高血压比例</th>
-                    <td>
-                      <p>{{BehaviourRate.bpLevel.bpOptimal}}</p>
-                    </td>
-                    <td>
-                      <p>{{BehaviourRate.bpLevel.bpGood}}</p>
-                    </td>
-                    <td>
-                      <p>{{BehaviourRate.bpLevel.bpMedium}}</p>
-                    </td>
-                    <td>
-                      <p>{{BehaviourRate.bpLevel.bpPoor}}</p>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </el-col>
-          </el-row>
-        </div>
-      </el-card>
-    </div> -->
-
-    
-
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
 import {dateFromWeek, dateFormat} from '@/untils/date'
-// updateBehaviourRateApi
 import {bloodheighSickDataApi, updatebloodTrendStateApi} from '@/api/components/BloodheighSickcard/bloodCover'
-// import { deepcopy } from './../../untils/untils'
 export default {
   props: {
     sickID: {
@@ -247,70 +112,8 @@ export default {
     return {
       showtrendBtn: true,
       // 是否全选状态
-      ischeckAll: true,
+      // ischeckAll: true,
       // 血压趋势 状态 按钮数据
-      status: [
-        {
-          label: '日常',
-          value: '1',
-          default: true
-        },
-        {
-          label: '睡前',
-          value: '2',
-          default: true
-        },
-        {
-          label: '浅睡眠',
-          value: '3',
-          default: true
-        },
-        {
-          label: '深睡眠',
-          value: '4',
-          default: true
-        },
-        {
-          label: '醒来',
-          value: '5',
-          default: true
-        },
-        {
-          label: '运动后',
-          value: '6',
-          default: true
-        },
-        {
-          label: '餐后',
-          value: '7',
-          default: true
-        },
-        {
-          label: '入厕后',
-          value: '8',
-          default: true
-        },
-        {
-          label: '喝酒后',
-          value: '9',
-          default: true
-        },
-        {
-          label: '情绪波动',
-          value: '10',
-          default: true
-        },
-        {
-          label: '生病',
-          value: '11',
-          default: true
-        },
-        {
-          label: '抽烟后',
-          value: '12',
-          default: true
-        }
-      ],
       statusType: {
         move: [
           {
@@ -371,57 +174,8 @@ export default {
           isChecked: false
         }
       ],
-      // 血压与行为分数 图表数据
-      bloodAndBehaviourData: {
-        date: [],
-        week: [],
-        avgSystolic: [],
-        avgDiastolic: [],
-        avgBehaveScore: [],
-        pages: 1,
-        pageNum: 1,
-        index: 0,
-        bpType: [],
-        currentPage: 1,
-        pageSize: 15
-      },
-      // 血压与行为分数 选择按钮
-      bloodAndBehaviourDate: [
-        {
-          date: '日',
-          value: 'day',
-          isChecked: false
-        },
-        {
-          date: '周',
-          value: 'week',
-          isChecked: false
-        },
-        {
-          date: '月',
-          value: 'month',
-          isChecked: false
-        }
-      ],
-      // 血压与行为分数 当前选择的日期按钮
-      behaviourChecked: null,
-      dataIndex: 0,  // 初始化行为指数 选择域
+      dataIndex: 0,  // 初始化 选择域
       // chartA: {date: ''},
-      // 行为指数 高血压比例数据
-      BehaviourRate: {
-        behaveLevel: {
-          behaveGood: '',
-          behaveMedium: '',
-          behaveOptimal: '',
-          behavePoor: ''
-        },
-        bpLevel: {
-          bpGood: '',
-          bpMedium: '',
-          bpOptimal: '',
-          bpPoor: ''
-        }
-      },
       // 血压趋势 当前选择的日期按钮
       bloodTrendChecked: null,
       // 当前选择的状态
@@ -451,380 +205,16 @@ export default {
       },
       trendBtnPre: true,
       trendBtnNext: true,
-      behaviourBtnPre: true,
-      behaviourBtnNext: true,
       lastBloodTrendChecked: null,
       lastaxisValue: null,
       lastdataIndex: null,
       lastbpMeasureTime: '',
-      lastbpMeasureState: ''
-
+      lastbpMeasureState: '',
+      showtip: true,
+      tipDate: ''
     }
   },
   methods: {
-    checkAllHandle () {
-      if (!this.ischeckAll) {
-        this.status.forEach(item => {
-          item.default = true
-        })
-        this.changeStatus('all')
-      } else {
-        this.status.forEach(item => {
-          item.default = false
-        })
-      }
-      this.ischeckAll = !this.ischeckAll
-      // this.updatebloodTrendData(this.bloodTrendChecked, this.statusArr)
-    },
-    // bloodBehaviourBloodOption (start, end) {
-    //   let vm = this
-    //   let zoomstart = 0
-    //   let zoomend = 100
-    //   let x1 = ''
-    //   if (start) {
-    //     zoomstart = start
-    //   }
-    //   if (end) {
-    //     zoomend = end
-    //   }
-    //   let option = {
-    //     color: ['#8ecefc', '#e6f5fe', '#8ecefc'],
-    //     dataZoom: [
-    //       {
-    //         type: 'slider',
-    //         xAxisIndex: [0, 1],
-    //         // disabled: false,
-    //         show: false,
-    //         realtime: true,
-    //         start: zoomstart,
-    //         end: zoomend,
-    //         zoomlock: true,
-    //         minValueSpan: 10,
-    //         maxValueSpan: 15,
-    //         throttle: 500,
-    //         filterMode: 'empty',
-    //         zoomOnMouseWheel: false
-    //       }
-    //     ],
-    //     tooltip: {
-    //       trigger: 'axis',
-    //       axisPointer: {
-    //         animation: false
-    //       },
-    //       // alwaysShowContent: true,
-    //       backgroundColor: 'rgba(250,250,250,0.7)',
-    //       textStyle: {
-    //         color: '#000'
-    //       },
-    //       // triggerOn: 'click',
-    //       triggerOn: 'mousemove|click',
-    //       formatter: function (a) {
-    //         if (a[0].dataIndex === vm.dataIndex) {
-    //         } else {
-    //           vm.updateBehaviourRateDate(a[0].axisValue, a[0].dataIndex)
-    //         }
-    //         vm.dataIndex = a[0].dataIndex
-    //         // console.log(a)
-    //         // return (
-    //         //     a[0]['axisValueLabel'] + '<br>' +
-    //         //     a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-    //         //     a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-    //         //     a[2]['seriesName'] + ': ' + a[2]['value']
-    //         // )
-    //         return (
-    //             a[0]['axisValueLabel'] + '<br>' +
-    //             '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
-    //             a[0]['seriesName'] + ': ' + a[0]['value'] + '<br>' +
-    //             '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[1]['color'] + '"></span>' +
-    //             a[1]['seriesName'] + ': ' + a[1]['value'] + '<br>' +
-    //             '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
-    //             a[2]['seriesName'] + ': ' + a[2]['value']
-    //         )
-    //       }
-    //     },
-    //     axisPointer: {
-    //       link: [{
-    //         xAxisIndex: 'all'
-    //       }],
-    //       lineStyle: {
-    //         color: '#fff',
-    //         width: 0
-    //       }
-    //     },
-    //     grid: [
-    //       { // 直角坐标系内绘图网格
-    //         //   show: false,
-    //         top: '5%',
-    //         left: '90',
-    //         right: '80',
-    //         width: 'auto',
-    //         height: 'auto',
-    //         bottom: '55%'
-    //       },
-    //       {
-    //         top: '55%',
-    //         left: '90',
-    //         right: '80',
-    //         width: 'auto',
-    //         height: 'auto',
-    //         bottom: '40px'
-    //       }
-    //     ],
-    //     xAxis: [
-
-    //       { // 直角坐标系grid的x轴
-    //         gridIndex: 0,
-    //         type: 'category',
-    //         boundaryGap: false,
-    //         axisLabel: {
-    //           show: false,
-    //           interval: 0, // 显示x轴数据
-    //           showMinLabel: true,
-    //           showMaxLabel: true,
-    //           align: 'center',
-    //           rotate: 0,
-    //           formatter: function (val) {
-    //             let value
-    //             let time = val.slice(0, 4)
-    //             if (vm._.eq(time, x1)) {
-    //               value = val.slice(5)
-    //               x1 = time
-    //               return value
-    //             } else {
-    //               let arr = []
-    //               arr.push(time)
-    //               arr.push(val.slice(5))
-    //               x1 = time
-    //               return arr.join('\n')
-    //             }
-    //             // return value
-    //           }
-    //           // rotate: 330
-    //         },
-    //         axisLine: {
-    //           lineStyle: {
-    //             color: '#999'
-    //           }
-    //         },
-    //         // min: 0,
-    //         axisTick: {
-    //           show: false
-    //         },
-    //         // 血压横坐标
-    //         // data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-    //         data: vm.bloodAndBehaviourData.date
-    //       },
-    //       { // 直角坐标系grid的x轴
-    //         type: 'category',
-    //         gridIndex: 1,
-    //         boundaryGap: false,
-    //         axisLabel: {
-    //           interval: 0, // 显示x轴数据
-    //           showMinLabel: true,
-    //           showMaxLabel: true,
-    //           align: 'center',
-    //           rotate: 0,
-    //           formatter: function (val) {
-    //             let value
-    //             let time = val.slice(0, 4)
-    //             if (vm._.eq(time, x1)) {
-    //               value = val.slice(5)
-    //               x1 = time
-    //               return value
-    //             } else {
-    //               let arr = []
-    //               arr.push(val.slice(5))
-    //               arr.push(time)
-    //               x1 = time
-    //               return arr.join('\n')
-    //             }
-    //             // return value
-    //           }
-    //         },
-    //         axisLine: {
-    //           lineStyle: {
-    //             color: '#999'
-    //           }
-    //         },
-    //         axisTick: {
-    //           show: false
-    //         },
-    //         // 行为分数横坐标
-    //         // data: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00']
-    //         data: vm.bloodAndBehaviourData.date
-    //         // data: vm.bloodAndBehaviourData.date
-    //       }
-    //     ],
-    //     yAxis: [{ // 直角坐标系grid的y轴
-    //       name: '血压',
-    //       gridIndex: 0,
-    //       nameLocation: 'end',
-    //       type: 'value',
-    //       axisLine: {
-    //         onZero: false,
-    //         lineStyle: {
-    //           color: '#999'
-    //         }
-    //       },
-    //       axisTick: {
-    //         show: false
-    //       },
-    //       splitLine: { // y轴网格显示
-    //         show: true
-    //       },
-    //       nameTextStyle: { // 坐标轴名样式
-    //         color: '#666',
-    //         fontSize: 12,
-    //         align: 'left'
-    //       },
-    //       boundaryGap: true,
-    //       splitNumber: 3, // 坐标轴分割段数
-    //       minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-    //         // interval: 50, // 强制设置坐标轴分割间隔。
-    //       data: ['0', '120', '140', '180']
-    //     },
-    //     { // 直角坐标系grid的y轴
-    //       name: '行为分数',
-    //       gridIndex: 1,
-    //       nameLocation: 'end',
-    //       type: 'value',
-    //       axisLine: {
-    //         onZero: false,
-    //         lineStyle: {
-    //           color: '#999'
-    //         }
-    //       },
-    //       axisTick: {
-    //         show: false
-    //       },
-    //       splitLine: { // y轴网格显示
-    //         show: true
-    //       },
-    //       nameTextStyle: { // 坐标轴名样式
-    //         color: '#666',
-    //         fontSize: 12,
-    //         align: 'left'
-    //       },
-    //       boundaryGap: true,
-    //       splitNumber: 3, // 坐标轴分割段数
-    //       minInterval: 40, // 自动计算的坐标轴最小间隔大小。例如可以设置成1保证坐标轴分割刻度显示成整数。
-    //         // interval: 50, // 强制设置坐标轴分割间隔。
-    //       data: ['0', '120', '140', '180']
-    //     }
-    //     ],
-    //     series: [
-
-    //       {
-    //         xAxisIndex: 0,
-    //         yAxisIndex: 0,
-    //         name: '舒张压',
-    //         type: 'line',
-    //         // smooth: true,
-    //         // smoothMonotone: 'x',
-    //         lineStyle: {
-    //           normal: {
-    //             width: 2,
-    //             color: '#32b77a'
-    //           }
-    //         },
-    //         symbol: 'circle',
-    //         symbolSize: 6,
-    //         itemStyle: {
-    //           normal: {
-    //             color: function (param) {
-    //               let index = vm.bloodAndBehaviourData.bpType[param.dataIndex]
-    //               return vm.computeDangerColor(index)
-    //             }
-    //           }
-    //         },
-    //         // areaStyle: {
-    //         //   normal: {
-    //         //     color: '#e6f5fe',
-    //         //     origin: 'auto',
-    //         //     shadowColor: '#e6f5fe'
-    //         //   }
-    //         // },
-    //         data: vm.bloodAndBehaviourData.avgDiastolic
-    //         // data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
-    //       },
-    //       {
-    //         xAxisIndex: 0,
-    //         yAxisIndex: 0,
-    //         name: '收缩压',
-    //         type: 'line',
-    //         // smooth: true,
-    //         // smoothMonotone: 'x',
-    //         lineStyle: {
-    //           normal: {
-    //             width: 2,
-    //             color: '#228ec4'
-    //           }
-    //         },
-    //         symbol: 'circle',
-    //         symbolSize: 6,
-    //         itemStyle: {
-    //           normal: {
-    //             color: function (param) {
-    //               let index = vm.bloodAndBehaviourData.bpType[param.dataIndex]
-    //               // console.log('itemstyle', param.dataIndex)
-    //               return vm.computeDangerColor(index)
-    //             }
-    //           }
-    //         },
-    //         // areaStyle: {
-    //         //   normal: {
-    //         //     color: '#def3f2',
-    //         //     origin: 'auto',
-    //         //     shadowColor: '#def3f2'
-    //         //   }
-    //         // },
-    //         // data: [34, 55, 54, 76, 60, 75, 72, 16, 55, 74, 36, 10]
-    //         data: vm.bloodAndBehaviourData.avgSystolic
-
-    //       },
-    //       {
-    //         xAxisIndex: 1,
-    //         yAxisIndex: 1,
-    //         name: '行为分数',
-    //         type: 'line',
-    //         // smooth: true,
-    //         // smoothMonotone: 'x',
-    //         lineStyle: {
-    //           normal: {
-    //             width: 2,
-    //             color: '#228ec4'
-    //           }
-    //         },
-    //         symbol: 'circle',
-    //         symbolSize: 6,
-    //         itemStyle: {
-    //           normal: {
-    //             color: function (param) {
-    //               let index = vm.bloodAndBehaviourData.bpType[param.dataIndex]
-    //               console.log('itemstyle', param.dataIndex)
-    //               return vm.computeDangerColor(index)
-    //             }
-    //           }
-    //         },
-    //         // areaStyle: {
-    //         //   normal: {
-    //         //     color: '#e6f5fe',
-    //         //     origin: 'auto',
-    //         //     shadowColor: '#e6f5fe'
-    //         //   }
-    //         // },
-    //         // data: [44, 65, 74, 86, 70, 85, 92, 56, 75, 84, 66, 50]
-    //         data: vm.bloodAndBehaviourData.avgBehaveScore
-    //       }
-    //     ],
-    //     textStyle: {
-    //       color: '#666',
-    //       fontSize: 12
-    //     }
-    //   }
-    //   return option
-    // },
-
     bloodTrendOption (start, end) {
       let vm = this
       let zoomstart = 0
@@ -871,7 +261,7 @@ export default {
             animation: false
           },
           hideDelay: 2000,
-          // alwaysShowContent: true,
+          // alwaysShowContent: vm.showtip,
           backgroundColor: 'rgba(250,250,250,0.7)',
           textStyle: {
             color: '#000'
@@ -893,11 +283,18 @@ export default {
               vm.lastdataIndex = a[0].dataIndex
               vm.lastbpMeasureTime = vm.bpMeasureTime
               vm.lastbpMeasureState = vm.bpMeasureState
+              vm.tipDate = a[0].axisValue
               // console.log(a)
             }
             // console.log(vm.bloodTrendChecked, vm.lastBloodTrendChecked, '', vm.lastaxisValue, a[0].axisValue, '', vm.lastdataIndex, a[0].dataIndex, '是否和上次数据相等')
             // }
             vm.bloodTrendIndex = a.dataIndex
+            // setTimeout(function () {
+            //   vm.bloodTrendState.total = 0
+            //   vm.bloodTrendState.normal = 0
+            //   vm.bloodTrendState.heigh = 0
+            //   vm.bloodTrendState.danger = 0
+            // }, 2000)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
@@ -1096,181 +493,6 @@ export default {
         }
       }
     },
-    // 整理后
-    // 日期选择
-    // updateBehaviourChecked (index) {
-    //   // let vm = this
-    //   this.bloodAndBehaviourDate.forEach(item => {
-    //     item.isChecked = false
-    //   })
-    //   this.bloodAndBehaviourDate[index].isChecked = true
-    //   this.behaviourChecked = index
-    //   this.updateBehaviourData(index)
-    // },
-    // // 更新数据 index 为0,1,2分别代表日周月
-    // updateBehaviourData (index, pageNum) {
-    //   // if (this.bloodAndBehaviourData.index !== index) {
-    //   // this.bloodAndBehaviourData.date = []
-    //   // this.bloodAndBehaviourData.week = []
-    //   // this.bloodAndBehaviourData.avgSystolic = []
-    //   // this.bloodAndBehaviourData.avgDiastolic = []
-    //   // }
-    //   // this.bloodAndBehaviourData.index = index
-    //   let vm = this
-    //   let params = {
-    //     'userId': vm.sickID,
-    //     'adminHospitalId': vm.hospitalId,
-    //     'bpMeasureTime': vm.bpMeasureTime || '',
-    //     'pageNum': pageNum,
-    //     pageSize: this.bloodAndBehaviourData.pageSize
-    //   }
-    //   this.bloodAndBehaviourData.date = []
-    //   this.bloodAndBehaviourData.week = []
-    //   this.bloodAndBehaviourData.avgSystolic = []
-    //   this.bloodAndBehaviourData.avgDiastolic = []
-    //   this.bpType = []
-    //   if (index === 0) {
-    //     vm.bloodAndBehaviourData.pageNum = 1
-    //     this.$axios(bloodheighSickDataApi(params, 1))
-    //     .then(res => {
-    //       res.data.data.forEach((item, index) => {
-    //         if (!item.description) {
-    //           item.description = '2018-04-26 11:20:39'
-    //         }
-    //         this.$set(this.bloodAndBehaviourData.date, index, item.description)
-    //         this.$set(this.bloodAndBehaviourData.avgSystolic, index, item.avgSystolic)
-    //         this.$set(this.bloodAndBehaviourData.avgDiastolic, index, item.avgDiastolic)
-    //         if (item.bpType) {
-    //           this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
-    //         } else {
-    //           this.$set(this.bloodAndBehaviourData.bpType, index, 0)
-    //         }
-    //         // if (index === 0) {
-    //           //   this.$set(this.chartA, 'date', item.description)
-    //         // }
-    //         if (!item.avgBehaveScore) {
-    //           item.avgBehaveScore = 0
-    //         }
-    //         this.$set(this.bloodAndBehaviourData.avgBehaveScore, index, item.avgBehaveScore)
-    //       })
-    //       this.bloodAndBehaviourData.date = this.bloodAndBehaviourData.date.reverse()
-    //       // this.bloodAndBehaviourData.week = this.bloodAndBehaviourData.week.reverse()
-    //       this.bloodAndBehaviourData.avgSystolic = this.bloodAndBehaviourData.avgSystolic.reverse()
-    //       this.bloodAndBehaviourData.avgDiastolic = this.bloodAndBehaviourData.avgDiastolic.reverse()
-    //       this.bloodAndBehaviourData.pages = res.data.pages
-    //       this.bloodAndBehaviourData.pageNum = res.data.pageNum
-    //       this.bloodAndBehaviourData.currentPage = 1
-    //       this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
-    //       let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //       let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
-    //       bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
-    //       this.bpType = this.bpType.reverse()
-    //       if (res.data.data) {
-    //         if (res.data.data.length !== 0) {
-    //           this.updateBehaviourRateDate(res.data.data[0].description)
-    //         }
-    //       }
-    //     })
-    //   }
-    //   if (index === 1) {
-    //     vm.bloodAndBehaviourData.pageNum = 1
-    //     this.$axios(bloodheighSickDataApi(params, 2))
-    //     .then(res => {
-    //       res.data.data.forEach(item => {
-    //         this.computeYearWeek(this._.toString(item.yearWeek))
-    //         let week = this.computeYearWeek(this._.toString(item.yearWeek))[0] + '-' + this.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
-
-    //         this.bloodAndBehaviourData.date.push(week)
-    //         this.bloodAndBehaviourData.week.push(this._.toString(item.yearWeek))
-    //         this.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
-    //         this.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
-    //         if (!item.avgBehaveScore) {
-    //           item.avgBehaveScore = 0
-    //         }
-    //         this.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
-    //         if (item.bpType) {
-    //           this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
-    //         } else {
-    //           this.$set(this.bloodAndBehaviourData.bpType, index, 0)
-    //         }
-    //       })
-    //       this.bloodAndBehaviourData.date = this.bloodAndBehaviourData.date.reverse()
-    //       this.bloodAndBehaviourData.week = this.bloodAndBehaviourData.week.reverse()
-    //       this.bloodAndBehaviourData.avgSystolic = this.bloodAndBehaviourData.avgSystolic.reverse()
-    //       this.bloodAndBehaviourData.avgDiastolic = this.bloodAndBehaviourData.avgDiastolic.reverse()
-    //       this.bpType = this.bpType.reverse()
-    //       this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
-    //       this.bloodAndBehaviourData.currentPage = 1
-    //       let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
-    //       // let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
-    //       let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //       bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, 100))
-    //         // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
-
-    //       if (res.data.data) {
-    //         if (res.data.data.length !== 0) {
-    //           this.updateBehaviourRateDate(res.data.data[0].description)
-    //         }
-    //       }
-    //     })
-    //   }
-    //   if (index === 2) {
-    //     vm.bloodAndBehaviourData.pageNum = 1
-    //     this.$axios(bloodheighSickDataApi(params, 3))
-    //     .then(res => {
-    //       res.data.data.forEach(item => {
-    //         this.bloodAndBehaviourData.date.push(item.description)
-    //         this.bloodAndBehaviourData.avgSystolic.push(item.avgSystolic)
-    //         this.bloodAndBehaviourData.avgDiastolic.push(item.avgDiastolic)
-    //         if (!item.avgBehaveScore) {
-    //           item.avgBehaveScore = 0
-    //         }
-    //         if (item.bpType) {
-    //           this.$set(this.bloodAndBehaviourData.bpType, index, item.bpType)
-    //         } else {
-    //           this.$set(this.bloodAndBehaviourData.bpType, index, 0)
-    //         }
-    //         this.bloodAndBehaviourData.avgBehaveScore.push(item.avgBehaveScore)
-    //         // bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption())
-    //       })
-    //       this.bloodAndBehaviourData.date = this.bloodAndBehaviourData.date.reverse()
-    //       // this.bloodAndBehaviourData.week = this.bloodAndBehaviourData.week.reverse()
-    //       this.bloodAndBehaviourData.avgSystolic = this.bloodAndBehaviourData.avgSystolic.reverse()
-    //       this.bloodAndBehaviourData.avgDiastolic = this.bloodAndBehaviourData.avgDiastolic.reverse()
-    //       this.bpType = this.bpType.reverse()
-    //       let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //       this.$set(this.bloodAndBehaviourData, 'pages', res.data.pages)
-    //       this.bloodAndBehaviourData.currentPage = 1
-    //       let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
-    //         // let position = this.computeStartend(this.bloodAndBehaviourData.pageNum, res.data.pages)
-    //       bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
-    //       if (res.data.data) {
-    //         if (res.data.data.length !== 0) {
-    //           this.updateBehaviourRateDate(res.data.data[0].description)
-    //         }
-    //       }
-    //     })
-    //   }
-    //   console.log(this.bloodAndBehaviourData)
-    // },
-    // updateBehaviourRateDate (date, index) {
-    //   if (this.behaviourChecked === 1) {
-    //     let yearweek = this.computeYearWeek(this.bloodAndBehaviourData.week[index])
-    //     date = dateFromWeek(yearweek[0], yearweek[1])
-    //   }
-    //   let vm = this
-    //   let params = {
-    //     'userId': vm.sickID,
-    //     'adminHospitalId': vm.hospitalId,
-    //     'bpMeasureTime': vm.bpMeasureTime || '',
-    //     'pageNum': this.bloodAndBehaviourData.pageNum
-    //     // 'pageSize': params.pageSize
-    //   }
-    //   this.$axios(updateBehaviourRateApi(params, this.behaviourChecked, date))
-    //   .then(res => {
-    //     this.BehaviourRate = res.data.data
-    //   })
-    // },
     updatebloodTrendChecked (index) {
       if (index === 0) {
         this.showtrendBtn = false
@@ -1283,20 +505,11 @@ export default {
       this.bloodTrendDate[index].isChecked = true
       this.bloodTrendChecked = index
       this.updatebloodTrendData(index, this.statusArr)
+      // let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
+      // bloodTrend.dispatchAction({
+      //   type: 'hideTip'
+      // })
       console.log('index, this.statusArr', index, this.statusArr)
-    },
-    changeStatus (index) {
-      if (index !== 'all') {
-        this.status[index].default = !this.status[index].default
-      }
-      let arr = []
-      this.status.forEach(item => {
-        if (item.default) {
-          arr.push(item.value)
-        }
-      })
-      this.statusArr = arr.join(',')
-      this.updatebloodTrendData(this.bloodTrendChecked, this.statusArr)
     },
     // 0最近 1日  2周  3月
     updatebloodTrendData (index, status) {
@@ -1308,6 +521,12 @@ export default {
         'bpMeasureState': this.bpMeasureState || ''
       }
       let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
+      // this.$nextTick(function () {
+      //   bloodTrend.dispatchAction({
+      //     type: 'hideTip'
+      //   })
+      // })
+      vm.tipDate = ''
       if (index === 0) {
         vm.bloodTrendData.pageNum = 1
         this.$axios(bloodheighSickDataApi(params, 0))
@@ -1636,92 +855,6 @@ export default {
       }
       return color
     },
-    // bloodBehaviorNext () {
-    //   // let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //   let vm = this
-    //   if (vm.bloodAndBehaviourData.currentPage > vm.bloodAndBehaviourData.pageNum) {
-    //     vm.bloodAndBehaviourData.currentPage = vm.bloodAndBehaviourData.pageNum
-    //   }
-    //   if (vm.bloodAndBehaviourData.currentPage < vm.bloodAndBehaviourData.pages) {
-    //     vm.bloodAndBehaviourData.currentPage ++
-    //   }
-    //   if (vm.bloodAndBehaviourData.pageNum >= vm.bloodAndBehaviourData.pages) {
-    //     let position = this.computeStartend(vm.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
-    //     // console.log()
-    //     let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //     bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
-    //     return
-    //   }
-    //   vm.bloodAndBehaviourData.pageNum ++
-    //   let params = {
-    //     'userId': vm.sickID,
-    //     'adminHospitalId': vm.hospitalId,
-    //     'bpMeasureTime': vm.bpMeasureTime || '',
-    //     'pageNum': vm.bloodAndBehaviourData.pageNum,
-    //     pageSize: this.bloodAndBehaviourData.pageSize
-    //   }
-    //   vm.$axios(bloodheighSickDataApi(params, vm.behaviourChecked + 1))
-    //       .then(res => {
-    //         let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //         bloodBehaviourBlood.showLoading(
-    //           {
-    //             text: '加载中...',
-    //             color: '#1991fc',
-    //             textColor: '#000',
-    //             maskColor: 'rgba(255, 255, 255, 0.8)',
-    //             zlevel: 0
-    //           }
-    //         )
-    //         if (vm.bloodAndBehaviourData.pageNum <= res.data.pages) {
-    //           if (res.data.data.length !== 0) {
-    //             res.data.data.forEach((item, index) => {
-    //               if (!item.description) {
-    //                 item.description = 0
-    //               }
-    //               if (vm.behaviourChecked === 0 || vm.behaviourChecked === 2) {
-    //                 vm.bloodAndBehaviourData.date.unshift(item.description)
-    //               }
-    //               if (vm.behaviourChecked === 1) {
-    //                 vm.computeYearWeek(this._.toString(item.yearWeek))
-    //                 let week = vm.computeYearWeek(this._.toString(item.yearWeek))[0] + '-' + vm.computeYearWeek(this._.toString(item.yearWeek))[1] + '周'
-    //                 vm.bloodAndBehaviourData.date.unshift(week)
-    //                 vm.bloodAndBehaviourData.week.unshift(this._.toString(item.yearWeek))
-    //                 // vm.bloodAndBehaviourData.date.unshift(item.description)
-    //               }
-    //               vm.bloodAndBehaviourData.avgSystolic.unshift(item.avgSystolic)
-    //               vm.bloodAndBehaviourData.avgDiastolic.unshift(item.avgDiastolic)
-    //               if (!item.avgBehaveScore) {
-    //                 item.avgBehaveScore = 0
-    //               }
-    //               vm.bloodAndBehaviourData.avgBehaveScore.unshift(item.avgBehaveScore)
-    //               if (item.bpType) {
-    //                 vm.bloodAndBehaviourData.bpType.unshift(item.bpType)
-    //               } else {
-    //                 vm.bloodAndBehaviourData.bpType.unshift(0)
-    //               }
-    //               vm.bloodAndBehaviourData.pages = res.data.pages
-    //               vm.bloodAndBehaviourData.pageNum = res.data.pageNum
-    //             })
-    //           }
-    //         }
-    //         // if(vm.bloodAndBehaviourData.currentPage <)
-    //         let position = vm.computeStartend(vm.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
-    //         // let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //         bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
-    //         // bloodBehaviourBlood.setOption(vm.bloodBehaviourBloodOption(50, 85))
-    //         bloodBehaviourBlood.hideLoading()
-    //         console.log('nextbloodAndBehaviourData', this.bloodAndBehaviourData)
-    //       })
-    // },
-    // bloodBehaviorPer () {
-    //   this.bloodAndBehaviourData.currentPage --
-    //   if (this.bloodAndBehaviourData.currentPage < 1) {
-    //     this.bloodAndBehaviourData.currentPage = 1
-    //   }
-    //   let bloodBehaviourBlood = echarts.init(document.getElementById('bloodBehaviourBlood'))
-    //   let position = this.computeStartend(this.bloodAndBehaviourData.currentPage, this.bloodAndBehaviourData.pageNum)
-    //   bloodBehaviourBlood.setOption(this.bloodBehaviourBloodOption(position.start, position.end))
-    // },
     bloodTrendNext () {
       let vm = this
       if (vm.bloodTrendData.currentPage > vm.bloodTrendData.pageNum) {
@@ -1847,47 +980,10 @@ export default {
         }
       })
       console.log('选择状态', type, index, this.statusType)
+      this.tipDate = ''
     }
   },
   watch: {
-    status: {
-      handler (val) {
-        let vm = this
-        let all = true
-        val.forEach(function (item) {
-          if (!item.default) {
-            all = false
-          }
-        })
-        if (all) {
-          vm.ischeckAll = true
-        } else {
-          vm.ischeckAll = false
-        }
-      },
-      deep: true
-    },
-    bloodAndBehaviourData: {
-      handler: function (val) {
-        if (val.pages < 2) {
-          this.behaviourBtnNext = true
-          this.behaviourBtnPre = true
-        } else {
-          if (val.currentPage === val.pages) {
-            this.behaviourBtnNext = true
-          } else {
-            this.behaviourBtnNext = false
-          }
-          if (val.currentPage !== 1) {
-            this.behaviourBtnPre = false
-          } else {
-            this.behaviourBtnPre = true
-          }
-        }
-      },
-      deep: true,
-      immediate: true
-    },
     bloodTrendData: {
       handler: function (val) {
         if (val.pages < 2) {
@@ -1938,11 +1034,8 @@ export default {
     }
   },
   mounted () {
-    // let vm = this
     this.updatebloodTrendChecked(0)
     this.dataIndex = 0
-    // this.updateBehaviourChecked(0)
-    // this.updateBehaviourData(0)
   }
 }
 </script>
@@ -2158,6 +1251,7 @@ export default {
     /* flex-direction: column; */
     align-items: center;
     justify-content: space-around;
+    /* flex-direction: column; */
     /* display: table-cell; */
     /* vertical-align: middle; */
     /* top:50%; */
@@ -2166,6 +1260,12 @@ export default {
     /* position: absolute; */
     /* top:0; */
     /* right: 0; */
+  }
+  .blood-trend-right-text span{
+    display: inline-block;
+    padding-left: 10px;
+    font-size: 12px;
+    color: #666;
   }
   .footer{
     background-color: #e87070;
