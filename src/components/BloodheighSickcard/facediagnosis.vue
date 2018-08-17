@@ -40,33 +40,117 @@
               <!-- <input type="text" v-if="showEditMsg" v-model="info.sex"> -->
             <!-- </div> -->
             <div class="case-left-msg-single">
-              <span class="label">电话：</span>
+              <span v-if="!showEditMsg" class="label">电话：</span>
               <span v-if="!showEditMsg">{{info.phone ? info.phone:''}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.phone" size="mini"></el-input>
+
+              <numberinput
+              v-model="copyInfo.phone"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="5"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  电话：
+                  </span>
+                </template>
+              </numberinput>
+              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.phone" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
-              <span class="label">年龄：</span>
+              <span v-if="!showEditMsg" class="label">年龄：</span>
               <span v-if="!showEditMsg">{{info.age ? info.age+'岁':''}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.age" size="mini"></el-input>
+
+              <numberinput
+              v-model="copyInfo.age"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="20"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  年龄：
+                  </span>
+                </template>
+                <template slot="right">
+                  <span>
+                  岁
+                  </span>
+                </template>
+              </numberinput>
+              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.age" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
-              <span class="label">身高：</span>
+              <span v-if="!showEditMsg" class="label">身高：</span>
               <span v-if="!showEditMsg">{{info.heigh ? info.heigh+'cm':''}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.heigh" size="mini"></el-input>
+              <numberinput
+              v-model="copyInfo.heigh"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="20"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  身高：
+                  </span>
+                </template>
+                <template slot="right">
+                  <span>
+                  cm
+                  </span>
+                </template>
+              </numberinput>
+              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.heigh" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.heigh" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
-              <span class="label">体重：</span>
+              <span v-if="!showEditMsg" class="label">体重：</span>
               <span v-if="!showEditMsg">{{info.weight ? info.weight+'kg':''}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.weight" size="mini"></el-input>
+
+              <numberinput
+              v-model="copyInfo.weight"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="20"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  体重：
+                  </span>
+                </template>
+                <template slot="right">
+                  <span>
+                  kg
+                  </span>
+                </template>
+              </numberinput>
+              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.weight" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.weight" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
-              <span class="label"> BMI： </span>
+              <span v-if="!showEditMsg" class="label"> BMI： </span>
               <span v-if="!showEditMsg">{{info.BMI}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.BMI" size="mini"></el-input>
+
+              <numberinput
+              v-model="copyInfo.BMI"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="10"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  BMI：
+                  </span>
+                </template>
+                <!-- <template slot="right">
+                  <span>
+                  kg
+                  </span>
+                </template> -->
+              </numberinput>
+              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.BMI" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.BMI" class="padding"> -->
             </div>
             <!-- <div class="case-left-msg-single">
@@ -75,21 +159,77 @@
               <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.tem" size="mini"></el-input>
             </div> -->
             <div class="case-left-msg-single">
-              <span class="label">血压：</span>
+              <span v-if="!showEditMsg" class="label">血压：</span>
               <span v-if="!showEditMsg">{{info.bloodHeigh}}</span>
-              <el-input class="el-input-cls-xueya" placeholder="高压" v-if="showEditMsg" v-model.number="copyInfo.bloodHeighBlood" size="mini"></el-input>
+
+              <numberinput
+              class="gap-bottom-large"
+              v-model="copyInfo.bloodHeighBlood"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="10"
+              :height="28"
+              >
+                <template slot="left">
+                  <span>
+                  高压:
+                  </span>
+                </template>
+                <!-- <template slot="right">
+                  <span>
+                  min
+                  </span>
+                </template> -->
+              </numberinput>
+              <numberinput
+              v-model="copyInfo.bloodLowBlood"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="10"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  低压:
+                  </span>
+                </template>
+                <!-- <template slot="right">
+                  <span>
+                  min
+                  </span>
+                </template> -->
+              </numberinput>
+              <!-- <el-input class="el-input-cls-xueya" placeholder="高压" v-if="showEditMsg" v-model.number="copyInfo.bloodHeighBlood" size="mini"></el-input>
               <span v-if="showEditMsg">/</span>
-              <el-input class="el-input-cls-xueya" placeholder="低压" v-if="showEditMsg" v-model.number="copyInfo.bloodLowBlood" size="mini"></el-input>
+              <el-input class="el-input-cls-xueya" placeholder="低压" v-if="showEditMsg" v-model.number="copyInfo.bloodLowBlood" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.lazy="copyInfo.bloodHeigh" class="padding"> -->
             </div>
             <div class="case-left-msg-single">
-              <span class="label">脉搏：</span>
+              <span v-if="!showEditMsg" class="label">脉搏：</span>
               <span v-if="!showEditMsg">{{info.pulse ? info.pulse+'/min':''}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.pulse" size="mini"></el-input>
+              <numberinput
+              v-model="copyInfo.pulse"
+              v-if="showEditMsg" 
+              :leftOffset="40"
+              :rightOffset="10"
+              :height="28">
+                <template slot="left">
+                  <span>
+                  脉搏：
+                  </span>
+                </template>
+                <template slot="right">
+                  <span>
+                  min
+                  </span>
+                </template>
+              </numberinput>
+              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.pulse" size="mini"></el-input> -->
               <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.pulse" class="padding"> -->
             </div>
-            <!-- <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button> -->
-            <!-- <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button> -->
+          </div>
+          <div class="gap-bottom">
+            <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button>
+            <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button>
           </div>
           <div>
             <el-button @click="openChecklist" type="text" size="mini">体检单</el-button>
@@ -2393,7 +2533,12 @@ export default {
   // .case-left {float: left;margin-left: -100%;height: 500px;width: $left-width; background-color: #1991fc}  
   // .case-right{float: left;margin-left: -$right-width;height: 500px;width: $right-width;background-color: #69dada}
   .case-main{height:100%; min-height: 750px;}  
-  .case-left {height: 100%;min-height: 750px;min-width: $left-width; background-color: #fff;}  
+  .case-left {
+  height: 100%;
+  min-height: 750px;
+  min-width: $left-width; 
+  background-color: #fff;
+  }  
   .case-right{height: 770px;min-height: 750px;min-width: $right-width;background-color: #fff;}
   .margin-top{
     margin-top:20px;
@@ -2412,6 +2557,10 @@ export default {
     // padding-bottom: 20px;
     height: inherit;
     color: #666;
+    min-height: 750px;
+    min-width: $left-width; 
+    max-width: 250px; 
+    background-color: #fff;
     input{
       width: 80px;
     }
@@ -2453,7 +2602,8 @@ export default {
     &-msg{
       margin-bottom: 20px;
       text-align: left;
-      margin-left: 36px;
+      margin-left: 24px;
+      margin-right: 24px;
       &-single{
         margin-bottom: 20px;
         color: $font-color;
@@ -2691,6 +2841,9 @@ export default {
 }
 .gap-bottom{
   margin-bottom: 10px;
+}
+.gap-bottom-large{
+  margin-bottom: 20px;
 }
 .fist-line{
   padding-left: 75px;

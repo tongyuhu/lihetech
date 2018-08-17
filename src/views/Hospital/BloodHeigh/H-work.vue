@@ -437,7 +437,8 @@ export default {
         'changeChatFriend',
         'openChatWindow',
         'setuserCasesCardId',
-        'SET_CURRENT_SICK_DATA'
+        'SET_CURRENT_SICK_DATA',
+        'setuserMakeOrderDoctorId'
       ]),
     sortSickList (arr) {
       let copyArr = arr
@@ -649,7 +650,8 @@ export default {
         userCasesCardId: row.id
       })
       this.setuserCasesCardId(row.id)
-      Bus.$emit('modifySickCard', {modify: true, cardid: id})
+      this.setuserMakeOrderDoctorId(null)
+      // Bus.$emit('modifySickCard', {modify: true, cardid: id})
       this.SET_SICK_CARD(true)
     },
     diagnose (row, val) {
@@ -696,16 +698,16 @@ export default {
       currentPage: this.newAskCurrentPage,
       pageSize: this.newAskPageSize
     })
-    this.badsickRequest({
-      hospitalId: this.adminHospitalId,
-      currentPage: this.badsickCurrentPage,
-      pageSize: this.badsickPageSize
-    })
-    this.nolistenRequest({
-      hospitalId: this.adminHospitalId,
-      currentPage: this.nolistenCurrentPage,
-      pageSize: this.nolistenPageSize
-    })
+    // this.badsickRequest({
+    //   hospitalId: this.adminHospitalId,
+    //   currentPage: this.badsickCurrentPage,
+    //   pageSize: this.badsickPageSize
+    // })
+    // this.nolistenRequest({
+    //   hospitalId: this.adminHospitalId,
+    //   currentPage: this.nolistenCurrentPage,
+    //   pageSize: this.nolistenPageSize
+    // })
   }
 }
 </script>
