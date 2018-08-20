@@ -597,6 +597,24 @@ export default {
       console.log('选择的周', this.cheeckedweek)
     },
     initlist () {
+      let data = this.nextSunday()
+      this.start = data[0]
+      this.end = data[6]
+      this.orderlist = []
+      data.forEach(item => {
+        let order = {
+          morning: {
+            order: true,
+            time: ''
+          },
+          noon: {
+            order: true,
+            time: ''
+          },
+          time: item
+        }
+        this.orderlist.push(order)
+      })
       this.loading = true
       this.$axios(settingDataApi({
         weekDay: null,
@@ -733,6 +751,7 @@ export default {
             message: res.data.msg,
             type: 'warning'
           })
+          this.initlist()
         }
       })
     },
@@ -776,12 +795,12 @@ export default {
           this.initlist()
         } else {
           // this.orderlist[week].morning.order = !this.orderlist[week].morning.order
-          this.initlist()
           this.$message({
             showClose: true,
             message: res.data.msg,
             type: 'warning'
           })
+          this.initlist()
         }
       })
     },
@@ -815,34 +834,23 @@ export default {
     }
   },
   mounted () {
-    let data = this.nextSunday()
-    this.start = data[0]
-    this.end = data[6]
+    // let data = this.nextSunday()
+    // this.start = data[0]
+    // this.end = data[6]
     // data.forEach(item => {
     //   let order = {
-    //     order: false,
-    //     morning: '',
-    //     noon: '',
+    //     morning: {
+    //       order: true,
+    //       time: ''
+    //     },
+    //     noon: {
+    //       order: true,
+    //       time: ''
+    //     },
     //     time: item
     //   }
-    //   this.order.push(order)
+    //   this.orderlist.push(order)
     // })
-    // this.init()
-    // let orderlist = []
-    data.forEach(item => {
-      let order = {
-        morning: {
-          order: true,
-          time: ''
-        },
-        noon: {
-          order: true,
-          time: ''
-        },
-        time: item
-      }
-      this.orderlist.push(order)
-    })
     this.initlist()
   }
 }
