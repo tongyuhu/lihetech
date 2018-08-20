@@ -21,8 +21,8 @@
             <!-- <span class="case-left-type-se">治疗中</span> -->
           </div>
           <div class="case-left-btn">
-            <el-button type="primary" @click="histroySickcard" size="mini" :style="{'font-size':'12px'}">历史病历</el-button>
-            <el-button type="primary" @click="completeInfo" sizi="mini" :style="{'font-size':'12px'}">完善信息</el-button>
+            <el-button type="primary" @click="histroySickcard" size="mini">历史病历</el-button>
+            <el-button type="primary" @click="completeInfo" size="mini">完善信息</el-button>
           </div>
           <div class="case-left-msg">
             <!-- <div class="case-left-msg-single">
@@ -670,7 +670,7 @@
                   <div class="case-main-rp-title">
                     <span class="iconfont icon-bixutian must"></span>
                     <span>RP</span>
-                    <el-button @click="openAddMedicineDialog" type="primary">添加</el-button>
+                    <el-button @click="openAddMedicineDialog" type="primary" size="mini">添加</el-button>
                   </div>
                   <!-- max-height="400" -->
                   <el-table
@@ -817,8 +817,8 @@
               </div>
 
               <div class="submit-btn">
-                <el-button type="primary" @click="complete">完成就诊</el-button>
-                <el-button type="primary" @click="dayin">打印处方</el-button>
+                <el-button type="primary" @click="complete" size="mini">完成就诊</el-button>
+                <el-button type="primary" @click="dayin" size="mini">打印处方</el-button>
               </div>
             </div>
           </div>
@@ -1634,7 +1634,8 @@ export default {
       })
       console.log('打印药品', this.printdoctorMedicine)
       this.$nextTick(function () {
-        var windows = print(document.getElementById('print').innerHTML)
+        let el = document.getElementById('print').innerHTML
+        var windows = print(el)
         windows.close()
       })
       // // this.complete()
