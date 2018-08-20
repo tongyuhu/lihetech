@@ -272,29 +272,24 @@ export default {
             // if (a[0].dataIndex === vm.bloodTrendIndex) {
               // vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
             // } else {
-            if (vm.bloodTrendChecked !== vm.lastBloodTrendChecked || vm.lastaxisValue !== a[0].axisValue || vm.lastdataIndex !== a[0].dataIndex || vm.lastbpMeasureTime !== vm.bpMeasureTime || vm.lastbpMeasureState !== vm.bpMeasureState) {
-              if (vm.bloodTrendChecked === 2) {
-                vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
-              } else {
-                vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+
+            if (vm.bloodTrendChecked !== 0) {
+              if (vm.bloodTrendChecked !== vm.lastBloodTrendChecked || vm.lastaxisValue !== a[0].axisValue || vm.lastdataIndex !== a[0].dataIndex || vm.lastbpMeasureTime !== vm.bpMeasureTime || vm.lastbpMeasureState !== vm.bpMeasureState) {
+                if (vm.bloodTrendChecked === 2) {
+                  vm.updatebloodTrendState(vm.bloodTrendData.week[a[0].dataIndex], a[0].dataIndex)
+                } else {
+                  vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
+                }
+                vm.lastBloodTrendChecked = vm.bloodTrendChecked
+                vm.lastaxisValue = a[0].axisValue
+                vm.lastdataIndex = a[0].dataIndex
+                vm.lastbpMeasureTime = vm.bpMeasureTime
+                vm.lastbpMeasureState = vm.bpMeasureState
+                vm.tipDate = a[0].axisValue
+                // console.log(a)
               }
-              vm.lastBloodTrendChecked = vm.bloodTrendChecked
-              vm.lastaxisValue = a[0].axisValue
-              vm.lastdataIndex = a[0].dataIndex
-              vm.lastbpMeasureTime = vm.bpMeasureTime
-              vm.lastbpMeasureState = vm.bpMeasureState
-              vm.tipDate = a[0].axisValue
-              // console.log(a)
+              vm.bloodTrendIndex = a.dataIndex
             }
-            // console.log(vm.bloodTrendChecked, vm.lastBloodTrendChecked, '', vm.lastaxisValue, a[0].axisValue, '', vm.lastdataIndex, a[0].dataIndex, '是否和上次数据相等')
-            // }
-            vm.bloodTrendIndex = a.dataIndex
-            // setTimeout(function () {
-            //   vm.bloodTrendState.total = 0
-            //   vm.bloodTrendState.normal = 0
-            //   vm.bloodTrendState.heigh = 0
-            //   vm.bloodTrendState.danger = 0
-            // }, 2000)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
@@ -551,32 +546,57 @@ export default {
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
           this.bloodTrendState.total = 1
-          if (this.bloodTrendData.bptype[0] === 2) {
-            this.bloodTrendState.normal = 1
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[0] === 3 || this.bloodTrendData.bptype[0] === 4) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 1
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[0] === 5) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 1
-          }
+          console.log('最近bptype', this.bloodTrendData.bptype)
+          // if (this.bloodTrendData.bptype[0] === 2) {
+          //   this.bloodTrendState.normal = 1
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[0] === 3 || this.bloodTrendData.bptype[0] === 4) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 1
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[0] === 5) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 1
+          // }
           if (this.bloodTrendData.bptype.length === 0) {
             this.bloodTrendState.total = 0
             this.bloodTrendState.normal = 0
             this.bloodTrendState.heigh = 0
             this.bloodTrendState.danger = 0
+          } else {
+            let n = 0
+            let h = 0
+            let d = 0
+            let t = 0
+            this.bloodTrendData.bptype.forEach(item => {
+              if (item === 2) {
+                n++
+                t++
+              }
+              if (item === 3 || item === 4) {
+                h++
+                t++
+              }
+              if (item === 5) {
+                d++
+                t++
+              }
+            })
+            this.bloodTrendState.total = t
+            this.bloodTrendState.normal = n
+            this.bloodTrendState.heigh = h
+            this.bloodTrendState.danger = d
+            console.log('最近bptypeshuju', this.bloodTrendState.total, this.bloodTrendState.normal, this.bloodTrendState.heigh, this.bloodTrendState.danger)
           }
           // this.updatebloodTrendState()
           if (res.data.data) {
             if (res.data.data.length !== 0) {
               // this.updatebloodTrendState(res.data.data[0].measureTime, 0)
-              this.updatebloodTrendState(false, false, true)
+              // this.updatebloodTrendState(false, false, true)
             }
           }
         })
@@ -686,35 +706,35 @@ export default {
         this.bloodTrendState.danger = 0
       } else {
         if (this.bloodTrendChecked === 0) {
-          this.bloodTrendState.total = 1
+          // this.bloodTrendState.total = 1
           // }
-          if (this.bloodTrendData.bptype[index] === 1) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[index] === 2) {
-            this.bloodTrendState.normal = 1
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 1
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[index] === 5) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 1
-          }
-          if (this.bloodTrendData.bptype.length === 0) {
-            this.bloodTrendState.total = 0
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 0
-          }
-          return
+          // if (this.bloodTrendData.bptype[index] === 1) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[index] === 2) {
+          //   this.bloodTrendState.normal = 1
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[index] === 3 || this.bloodTrendData.bptype[index] === 4) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 1
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[index] === 5) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 1
+          // }
+          // if (this.bloodTrendData.bptype.length === 0) {
+          //   this.bloodTrendState.total = 0
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 0
+          // }
+          // return
         }
         if (this.bloodTrendChecked === 2) {
           // date = dateFormat(date, 0, 1)
@@ -814,19 +834,19 @@ export default {
       return page
     },
     // computeStartend (pageNum, pages) {
-    //   let page = {
-    //   }
-    //   if (pageNum === 1 && pages === 1) {
-    //     page.start = 0
-    //     page.end = 100
-    //   } else if (pageNum === 1) {
-    //     page.start = 0
-    //     page.end = parseInt((pageNum / pages) * 100)
-    //   } else if (pageNum < pages || pageNum === pages) {
-    //     page.start = parseInt(((pageNum - 1) / pages) * 100)
-    //     page.end = parseInt((pageNum / pages) * 100)
-    //   }
-    //   return page
+      //   let page = {
+      //   }
+      //   if (pageNum === 1 && pages === 1) {
+      //     page.start = 0
+      //     page.end = 100
+      //   } else if (pageNum === 1) {
+      //     page.start = 0
+      //     page.end = parseInt((pageNum / pages) * 100)
+      //   } else if (pageNum < pages || pageNum === pages) {
+      //     page.start = parseInt(((pageNum - 1) / pages) * 100)
+      //     page.end = parseInt((pageNum / pages) * 100)
+      //   }
+      //   return page
     // },
     computeDangerColor (bptype) {
       let type = this._.toNumber(bptype)
