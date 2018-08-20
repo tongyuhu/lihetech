@@ -672,7 +672,8 @@
                 prop="delete"
                 label="编辑"
                 width="100"
-                align="center">
+                align="center"
+                v-if="submitBtn">
                 <template slot-scope="scope">
                   <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
                 </template>
