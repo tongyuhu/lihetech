@@ -11,7 +11,7 @@
             {{item.date}}
           </button>
         </el-row>
-        <p class="heightblood-total">高血压患者({{ heightbloodTotal }}人)</p>
+        <p class="heightblood-total">血压分布({{ heightbloodTotal }}人)</p>
     
         <el-row :gutter="8">
             <el-col :span='12' v-loading="HBcoverLoading">
