@@ -1635,7 +1635,7 @@ export default {
       })
       console.log('打印药品', this.printdoctorMedicine)
       this.$nextTick(function () {
-        let el = document.getElementById('print')
+        // let el = document.getElementById('print')
         // let el = document.getElementById('print').innerHTML
         // var windows = print(el)
         // windows.close()
@@ -1645,7 +1645,6 @@ export default {
           // 继承原来的所有样式
           targetStyles: ['*']
         })
-        // printJS('print', 'html')
       })
       // // this.complete()
       // // if (this.canPrint) {
@@ -2715,14 +2714,17 @@ export default {
     position: relative;
     span{
       display: inline-block;
-      margin-top:10px;
-      margin-bottom:10px;
+      margin-top:15px;
+      margin-bottom:15px;
       margin-right: 30px;
     }
-    &-footer{
-      position: absolute;
-      bottom: 5px;
-      right: 150px;
+    .print-footer{
+      // position: absolute;
+      margin-top:15px;
+      text-align: right;
+      width: 100%;
+      // bottom: 25px;
+      // right: 150px;
     }
   }
   @media print {
