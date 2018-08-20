@@ -546,6 +546,7 @@ export default {
         isCallVideo = CallType.MEDIA_VEDIO
         vm.changeCurrentIsVideo(true)
       }
+      console.log('通话id', vm.currentChat.userId)
       var params = {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,

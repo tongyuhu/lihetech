@@ -3,7 +3,7 @@
     <!-- <span v-if="isTextMsg">{{textMsg}}</span> -->
     <span v-if="isTextMsg" v-html="textMsg"></span>
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig(imgsrc)" alt="无法获取图片">
-    <button class="voice-msg" v-if="isVoiceMsg" @click="playVoice"><span class="iconfont icon-yuyin"></span></button>
+    <button :class="{'voice-msg':true}" v-if="isVoiceMsg" @click="playVoice"><span :class="{'iconfont':true, 'icon-yuyin':true,'voice':playVoiceAnimation}"></span></button>
     <div v-if="isLocationMsg" class="location-img-wrap">
       <!-- <img class="location-img" v-if="isLocationMsg" :src="locationMsg" @click="showBig(locationMsg)" alt="无法获取图片">
       <span class="location-name">{{locationName}}</span> -->
@@ -62,8 +62,8 @@ export default {
       locationMsg: [],
       locationName: '',
       locationid: '',
-      bigImgsrc: ''
-
+      bigImgsrc: '',
+      playVoiceAnimation: false
     }
   },
   watch: {
@@ -158,10 +158,15 @@ export default {
       let vm = this
       let duration = vm.voiceFile.length / 1024
       // 预加载
+      vm.playVoiceAnimation = true
       RongIMLib.RongIMVoice.preLoaded(vm.voiceFile, function () {
         // 播放声音
         RongIMLib.RongIMVoice.play(vm.voiceFile, duration)
       })
+      console.log('语音时长', duration)
+      setTimeout(function () {
+        vm.playVoiceAnimation = false
+      }, duration)
     }
   },
   mounted () {
@@ -213,6 +218,26 @@ export default {
   outline: none;
   font-size: 18px;
   width: 50px;
+}
+.voice{
+  animation: playvoice 1.5s infinite;
+}
+@keyframes playvoice {
+  0%{
+    opacity: 0.5;
+    transform:scale(0.5);
+    font-size:12px;
+  }
+  50%{
+    opacity: 0.8;
+    transform:scale(0.8);
+    font-size:13px;
+  }
+  100%{
+    opacity: 1;
+    transform:scale(1.1);
+    font-size:14px;
+  }
 }
 .location-img-wrap{
   position: relative;
