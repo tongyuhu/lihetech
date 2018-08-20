@@ -742,16 +742,16 @@ export default {
             message: '设置成功',
             type: 'success'
           })
-          this.initlist()
+          // this.initlist()
         } else {
-          // this.orderlist[week].morning.order = !this.orderlist[week].morning.order
-          this.initlist()
+          this.orderlist[week - 1].morning.order = !this.orderlist[week - 1].morning.order
+          // this.initlist()
           this.$message({
             showClose: true,
             message: res.data.msg,
             type: 'warning'
           })
-          this.initlist()
+          // this.initlist()
         }
       })
     },
@@ -792,15 +792,15 @@ export default {
             message: '设置成功',
             type: 'success'
           })
-          this.initlist()
+          // this.initlist()
         } else {
-          // this.orderlist[week].morning.order = !this.orderlist[week].morning.order
+          this.orderlist[week - 1].noon.order = !this.orderlist[week - 1].noon.order
           this.$message({
             showClose: true,
             message: res.data.msg,
             type: 'warning'
           })
-          this.initlist()
+          // this.initlist()
         }
       })
     },
