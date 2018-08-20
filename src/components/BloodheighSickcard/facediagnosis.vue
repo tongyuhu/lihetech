@@ -835,6 +835,7 @@
 
 
       <div id="print" class="print">
+      <!-- <div id="print"> -->
         <div class="title">
           <p>上海立阖泰科技</p>
           <p>门诊检查单</p>
@@ -881,7 +882,7 @@
             <span>西药处方</span>
           </p>
           <div>
-            <!-- <table>
+            <table>
               <tr v-for="(item,index) in printdoctorMedicine" :key="index">
                 <td>{{item.name}}</td>
                 <td>{{item.use}}</td>
@@ -890,8 +891,8 @@
                 <td>{{item.long}}</td>
                 <td>{{item.total}}</td>
               </tr>
-            </table> -->
-            <el-table
+            </table>
+            <!-- <el-table
             ref="multipleTable"
             :data="printdoctorMedicine"
             tooltip-effect="dark"
@@ -935,7 +936,7 @@
                 width="95"
                 align="center">
               </el-table-column>
-            </el-table>
+            </el-table> -->
           </div>
         </div>
         <div class="print-footer">
@@ -1634,9 +1635,17 @@ export default {
       })
       console.log('打印药品', this.printdoctorMedicine)
       this.$nextTick(function () {
-        let el = document.getElementById('print').innerHTML
-        var windows = print(el)
-        windows.close()
+        let el = document.getElementById('print')
+        // let el = document.getElementById('print').innerHTML
+        // var windows = print(el)
+        // windows.close()
+        printJS({
+          printable: 'print',
+          type: 'html',
+          // 继承原来的所有样式
+          targetStyles: ['*']
+        })
+        // printJS('print', 'html')
       })
       // // this.complete()
       // // if (this.canPrint) {
@@ -2685,7 +2694,20 @@ export default {
     }
   }
   .print{
-    display: none;
+    // display: none;
+    z-index: -1000;
+    .title{
+      font-size: 24px;
+      text-align: center;
+      padding-top: 66px;
+      padding-bottom: 30px;
+    }
+    .title p{
+      margin-bottom: 15px;
+    }
+    td{
+      padding:7px;
+    }
     div:nth-last-child(n+2){
       border-bottom: 1px solid #eaeaea;
     }
