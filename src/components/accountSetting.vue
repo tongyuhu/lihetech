@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 // import {deepcopy} from '@/untils/untils'
 // import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
@@ -56,6 +57,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setFriendsListActon'
+    ]),
     isExist (arr, element) {
       for (var i = 0; i < this.length; i++) {
         if (this._.eq(arr[i], element)) {
@@ -133,7 +137,7 @@ export default {
       this.ercodeimg = false
       // }
     })
-  }
+  },
   // data () {
   //   var checkEmail = (rule, value, callback) => {
   //     let emailrule = /^\w+((-\w+)|(\.\w+))*\\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
@@ -318,6 +322,10 @@ export default {
   //     deep: true
   //   }
   // }
+  beforeRouteLeave (to, from, next) {
+    this.setFriendsListActon()
+    next()
+  }
 }
 </script>
 
