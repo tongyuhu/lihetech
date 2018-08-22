@@ -282,7 +282,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['SET_SICK_CARD', 'SET_FLUP_INFO']),
+    ...mapMutations(['SET_SICK_CARD', 'SET_FLUP_INFO', 'changeCurrentSickInfo']),
     tabs (index) {
       switch (index) {
         case 0:
@@ -358,6 +358,7 @@ export default {
                 })
               }
             }
+            this.changeCurrentSickInfo(res.data.data[0])
             // console.log('病历卡体检单', res.data.data[0])
             console.log('病历卡体检单', this.checklist)
           }

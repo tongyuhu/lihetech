@@ -1,513 +1,358 @@
 <template>
-    <div class="case-wrap" v-if="showface">
-      <div class="case-head clear">
-        <!-- <div class="case-head-btn">
-          <el-button type="primary" @click="complete">完成就诊</el-button>
-          <el-button type="primary" @click="dayin">打印处方</el-button>
-        </div> -->
-      </div>
+    <div class="face-wrap">
+      <div class="case-wrap" v-if="showface">
+        <div class="case-head clear">
+          <!-- <div class="case-head-btn">
+            <el-button type="primary" @click="complete">完成就诊</el-button>
+            <el-button type="primary" @click="dayin">打印处方</el-button>
+          </div> -->
+        </div>
 
-      <div class="face-case">
+        <div class="face-case">
 
-        <div class="case-left">
-          <div class="case-left-img">
-            <div class="case-left-img-wrap">
-              <img :src="info.img" alt="">
-            </div>
-          </div>
-          <div class="case-left-type">
-            <span class="case-left-type-name">{{info.name}}</span>
-            <span>性别:{{medication.sex==='man' ? '男' :'女'}}</span>
-            <!-- <span class="case-left-type-se">治疗中</span> -->
-          </div>
-          <div class="case-left-btn">
-            <el-button type="primary" @click="histroySickcard" size="mini">历史病历</el-button>
-            <el-button type="primary" @click="completeInfo" size="mini">完善信息</el-button>
-          </div>
-          <div class="case-left-msg">
-            <!-- <div class="case-left-msg-single">
-              <span class="label">性别：</span>
-              <span v-if="!showEditMsg">{{info.sex === 'man' ? '男' : '女'}}</span>
-
-              <el-select class="el-input-cls" v-if="showEditMsg" v-model="copyInfo.sex" size="mini">
-                <el-option label="男" value="man"></el-option>
-                <el-option label="女" value="woman"></el-option>
-              </el-select> -->
-              <!-- <select v-if="showEditMsg" v-model="copyInfo.sex">
-                <option value="man">男</option>
-                <option value="woman">女</option>
-              </select> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model="info.sex"> -->
-            <!-- </div> -->
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label">电话：</span>
-              <span v-if="!showEditMsg">{{info.phone ? info.phone:''}}</span>
-
-              <numberinput
-              v-model="copyInfo.phone"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="5"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  电话：
-                  </span>
-                </template>
-              </numberinput>
-              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.phone" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
-            </div>
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label">年龄：</span>
-              <span v-if="!showEditMsg">{{info.age ? info.age+'岁':''}}</span>
-
-              <numberinput
-              v-model="copyInfo.age"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="20"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  年龄：
-                  </span>
-                </template>
-                <template slot="right">
-                  <span>
-                  岁
-                  </span>
-                </template>
-              </numberinput>
-              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.age" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
-            </div>
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label">身高：</span>
-              <span v-if="!showEditMsg">{{info.heigh ? info.heigh+'cm':''}}</span>
-              <numberinput
-              v-model="copyInfo.heigh"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="20"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  身高：
-                  </span>
-                </template>
-                <template slot="right">
-                  <span>
-                  cm
-                  </span>
-                </template>
-              </numberinput>
-              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.heigh" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.heigh" class="padding"> -->
-            </div>
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label">体重：</span>
-              <span v-if="!showEditMsg">{{info.weight ? info.weight+'kg':''}}</span>
-
-              <numberinput
-              v-model="copyInfo.weight"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="20"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  体重：
-                  </span>
-                </template>
-                <template slot="right">
-                  <span>
-                  kg
-                  </span>
-                </template>
-              </numberinput>
-              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.weight" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.weight" class="padding"> -->
-            </div>
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label"> BMI： </span>
-              <span v-if="!showEditMsg">{{info.BMI}}</span>
-
-              <numberinput
-              v-model="copyInfo.BMI"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="10"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  BMI：
-                  </span>
-                </template>
-                <!-- <template slot="right">
-                  <span>
-                  kg
-                  </span>
-                </template> -->
-              </numberinput>
-              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.BMI" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.BMI" class="padding"> -->
-            </div>
-            <!-- <div class="case-left-msg-single">
-              <span class="label">体温：</span>
-              <span v-if="!showEditMsg">{{info.tem ? info.tem+'℃':''}}</span>
-              <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.tem" size="mini"></el-input>
-            </div> -->
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label">血压：</span>
-              <span v-if="!showEditMsg">{{info.bloodHeigh}}</span>
-
-              <numberinput
-              class="gap-bottom-large"
-              v-model="copyInfo.bloodHeighBlood"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="10"
-              :height="28"
-              >
-                <template slot="left">
-                  <span>
-                  高压:
-                  </span>
-                </template>
-                <!-- <template slot="right">
-                  <span>
-                  min
-                  </span>
-                </template> -->
-              </numberinput>
-              <numberinput
-              v-model="copyInfo.bloodLowBlood"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="10"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  低压:
-                  </span>
-                </template>
-                <!-- <template slot="right">
-                  <span>
-                  min
-                  </span>
-                </template> -->
-              </numberinput>
-              <!-- <el-input class="el-input-cls-xueya" placeholder="高压" v-if="showEditMsg" v-model.number="copyInfo.bloodHeighBlood" size="mini"></el-input>
-              <span v-if="showEditMsg">/</span>
-              <el-input class="el-input-cls-xueya" placeholder="低压" v-if="showEditMsg" v-model.number="copyInfo.bloodLowBlood" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.lazy="copyInfo.bloodHeigh" class="padding"> -->
-            </div>
-            <div class="case-left-msg-single">
-              <span v-if="!showEditMsg" class="label">脉搏：</span>
-              <span v-if="!showEditMsg">{{info.pulse ? info.pulse+'/min':''}}</span>
-              <numberinput
-              v-model="copyInfo.pulse"
-              v-if="showEditMsg" 
-              :leftOffset="40"
-              :rightOffset="10"
-              :height="28">
-                <template slot="left">
-                  <span>
-                  脉搏：
-                  </span>
-                </template>
-                <template slot="right">
-                  <span>
-                  min
-                  </span>
-                </template>
-              </numberinput>
-              <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.pulse" size="mini"></el-input> -->
-              <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.pulse" class="padding"> -->
-            </div>
-          </div>
-          <div class="gap-bottom">
-            <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button>
-            <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button>
-          </div>
-          <div>
-            <el-button @click="openChecklist" type="text" size="mini">体检单</el-button>
-            <el-button @click="flupHistory" type="text" size="mini">随访记录</el-button>
-          </div>
-
-        </div> 
-
-        <div class="case face">
-          <div class="case-main">
-            <div class="case-main-content">
-              <div class="case-main-title">
-                <span>上海立阖泰医疗统一处方笺</span>
+          <div class="case-left">
+            <div class="case-left-img">
+              <div class="case-left-img-wrap">
+                <img :src="info.img" alt="">
               </div>
-              <div>
-                <el-form
-                label-width="45px" 
-                :label-position="labelPosition">
-                <!-- <div class="flex"> -->
-                <div class="fist-line">
-                  <div class="line-block  gap-right">
-                    <div class="line-block">
-                      <span class="iconfont icon-bixutian must"></span>
-                    </div>
-                    <div class="line-block">
-                      <el-form-item label="" label-width="8px">
-                        <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100%'}">
-                          <el-option label="初诊" value="1"></el-option>
-                          <el-option label="复诊" value="0"></el-option>
-                        </el-select>
-                      </el-form-item>
-                    </div>
-                  </div>
-                  <div class="line-block gap-right">
-                    <!-- <el-form-item label="患病时长：" label-width="85px"> -->
-                      <el-form-item label="患病开始时间：" label-width="113px">
-                        <el-date-picker
-                          v-model="medication.bloodPressureSickStart"
-                          type="month"
-                          size="mini"
-                          value-format="yyyy-MM"
-                          placeholder="选择月">
-                        </el-date-picker>
-                      </el-form-item>
-                      
-                      <!-- <div class="line-block color-face">
-                        患病开始时间：
-                      </div>
-                      <div class="line-block">
-                        <el-date-picker
-                          v-model="medication.bloodPressureSickStart"
-                          type="month"
-                          size="mini"
-                          value-format="yyyy-MM"
-                          placeholder="选择月">
-                        </el-date-picker>
-                      </div> -->
-                      <!-- <div class="line-block sick-time-width color-face">
-                        <numberinput
-                        v-model="medication.year"
-                        :leftOffset="5"
-                        :rightOffset="20"
-                        :height="28">
-                          <template slot="right">
-                            <span>
-                            年
-                            </span>
-                          </template>
-                        </numberinput>
-                      </div>
-                      <div class="line-block sick-time-width color-face">
-                        <numberinput
-                        v-model="medication.month"
-                        :leftOffset="5"
-                        :rightOffset="20"
-                        :height="28">
-                          <template slot="right">
-                            <span>
-                            月
-                            </span>
-                          </template>
-                        </numberinput>
-                      </div>
-                      <div class="line-block sick-time-width color-face">
-                        <numberinput
-                        v-model="medication.day"
-                        :leftOffset="5"
-                        :rightOffset="20"
-                        :height="28">
-                          <template slot="right">
-                            <span>
-                            天
-                            </span>
-                          </template>
-                        </numberinput>
-                      </div> -->
-                  </div>
+            </div>
+            <div class="case-left-type">
+              <span class="case-left-type-name">{{info.name}}</span>
+              <span>性别:{{medication.sex==='man' ? '男' :'女'}}</span>
+              <!-- <span class="case-left-type-se">治疗中</span> -->
+            </div>
+            <div class="case-left-btn">
+              <el-button type="primary" @click="histroySickcard" size="mini">历史病历</el-button>
+              <el-button type="primary" @click="completeInfo" size="mini">完善信息</el-button>
+            </div>
+            <div class="case-left-msg">
+              <!-- <div class="case-left-msg-single">
+                <span class="label">性别：</span>
+                <span v-if="!showEditMsg">{{info.sex === 'man' ? '男' : '女'}}</span>
 
-                  <div class="line-block color-face">
-                    <el-form-item label="" label-width="18px">
+                <el-select class="el-input-cls" v-if="showEditMsg" v-model="copyInfo.sex" size="mini">
+                  <el-option label="男" value="man"></el-option>
+                  <el-option label="女" value="woman"></el-option>
+                </el-select> -->
+                <!-- <select v-if="showEditMsg" v-model="copyInfo.sex">
+                  <option value="man">男</option>
+                  <option value="woman">女</option>
+                </select> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model="info.sex"> -->
+              <!-- </div> -->
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label">电话：</span>
+                <span v-if="!showEditMsg">{{info.phone ? info.phone:''}}</span>
 
-                      <div class="line-block  flex flex-between">
-                        <div class="flex gap-right">
-                          <span>当前分层：</span>
-                          <span :style="{'color':computeDanger(medication.dangerLevel)}">{{medication.dangerLevel?danger(medication.dangerLevel):'未分层'}}</span>
-                        </div>
-                        <div>
-                          <span>
-                            <el-button @click="goLayer" type="text" size="mini" style="{'height':'24px'}">重新分层</el-button>
-                          </span>
-                        </div>
-                      </div>
-                    </el-form-item>
-                  </div>
-                </div>
-                <div class="gap-bottom">
-                  <el-form-item label="主述：" label-width="101px">
-                    <el-input v-model="medication.symptom" size="mini" placeholder="请输入症状"></el-input>
-                  </el-form-item>
-                </div>
-                <div class="gap-bottom">
-                  <el-form-item label="现病史：" label-width="101px">
-                    <div class="el-select-wrap">
-                      <el-select size="mini" 
-                      v-model="medication.sickHistroy" 
-                      multiple 
-                      placeholder="请选择病史"
-                      :loading="loading"
-                      >                
-                        <el-option
-                          v-for="(item,index) in bingshiList"
-                          :key="index"
-                          :label="item.illnessName"
-                          :value="item.id">
-                        </el-option>
-                      </el-select>
+                <numberinput
+                v-model="copyInfo.phone"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="5"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    电话：
+                    </span>
+                  </template>
+                </numberinput>
+                <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.phone" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
+              </div>
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label">年龄：</span>
+                <span v-if="!showEditMsg">{{info.age ? info.age+'岁':''}}</span>
 
-                    </div>
-                  </el-form-item>
-                </div>
-                <div class="gap-bottom">
-                  <el-form-item label="遗传史：" label-width="101px">
-                    <div class="el-select-wrap">
-                      <el-select size="mini" 
-                      v-model="medication.inhereHistroy" 
-                      multiple 
-                      placeholder="请选择遗传史"
-                      :loading="loading">
-                        <el-option
-                          v-for="(item,index) in yichuanshiList"
-                          :key="index"
-                          :label="item.illnessName"
-                          :value="item.id">
-                        </el-option>
-                      </el-select>
+                <numberinput
+                v-model="copyInfo.age"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="20"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    年龄：
+                    </span>
+                  </template>
+                  <template slot="right">
+                    <span>
+                    岁
+                    </span>
+                  </template>
+                </numberinput>
+                <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.age" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.age" class="padding"> -->
+              </div>
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label">身高：</span>
+                <span v-if="!showEditMsg">{{info.heigh ? info.heigh+'cm':''}}</span>
+                <numberinput
+                v-model="copyInfo.heigh"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="20"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    身高：
+                    </span>
+                  </template>
+                  <template slot="right">
+                    <span>
+                    cm
+                    </span>
+                  </template>
+                </numberinput>
+                <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.heigh" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.heigh" class="padding"> -->
+              </div>
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label">体重：</span>
+                <span v-if="!showEditMsg">{{info.weight ? info.weight+'kg':''}}</span>
 
-                    </div>
-                  </el-form-item>
+                <numberinput
+                v-model="copyInfo.weight"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="20"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    体重：
+                    </span>
+                  </template>
+                  <template slot="right">
+                    <span>
+                    kg
+                    </span>
+                  </template>
+                </numberinput>
+                <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.weight" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.weight" class="padding"> -->
+              </div>
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label"> BMI： </span>
+                <span v-if="!showEditMsg">{{info.BMI}}</span>
+
+                <numberinput
+                v-model="copyInfo.BMI"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="10"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    BMI：
+                    </span>
+                  </template>
+                  <!-- <template slot="right">
+                    <span>
+                    kg
+                    </span>
+                  </template> -->
+                </numberinput>
+                <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.BMI" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.BMI" class="padding"> -->
+              </div>
+              <!-- <div class="case-left-msg-single">
+                <span class="label">体温：</span>
+                <span v-if="!showEditMsg">{{info.tem ? info.tem+'℃':''}}</span>
+                <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.tem" size="mini"></el-input>
+              </div> -->
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label">血压：</span>
+                <span v-if="!showEditMsg">{{info.bloodHeigh}}</span>
+
+                <numberinput
+                class="gap-bottom-large"
+                v-model="copyInfo.bloodHeighBlood"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="10"
+                :height="28"
+                >
+                  <template slot="left">
+                    <span>
+                    高压:
+                    </span>
+                  </template>
+                  <!-- <template slot="right">
+                    <span>
+                    min
+                    </span>
+                  </template> -->
+                </numberinput>
+                <numberinput
+                v-model="copyInfo.bloodLowBlood"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="10"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    低压:
+                    </span>
+                  </template>
+                  <!-- <template slot="right">
+                    <span>
+                    min
+                    </span>
+                  </template> -->
+                </numberinput>
+                <!-- <el-input class="el-input-cls-xueya" placeholder="高压" v-if="showEditMsg" v-model.number="copyInfo.bloodHeighBlood" size="mini"></el-input>
+                <span v-if="showEditMsg">/</span>
+                <el-input class="el-input-cls-xueya" placeholder="低压" v-if="showEditMsg" v-model.number="copyInfo.bloodLowBlood" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.lazy="copyInfo.bloodHeigh" class="padding"> -->
+              </div>
+              <div class="case-left-msg-single">
+                <span v-if="!showEditMsg" class="label">脉搏：</span>
+                <span v-if="!showEditMsg">{{info.pulse ? info.pulse+'/min':''}}</span>
+                <numberinput
+                v-model="copyInfo.pulse"
+                v-if="showEditMsg" 
+                :leftOffset="40"
+                :rightOffset="10"
+                :height="28">
+                  <template slot="left">
+                    <span>
+                    脉搏：
+                    </span>
+                  </template>
+                  <template slot="right">
+                    <span>
+                    min
+                    </span>
+                  </template>
+                </numberinput>
+                <!-- <el-input class="el-input-cls" v-if="showEditMsg" v-model.number="copyInfo.pulse" size="mini"></el-input> -->
+                <!-- <input type="text" v-if="showEditMsg" v-model.number="copyInfo.pulse" class="padding"> -->
+              </div>
+            </div>
+            <div class="gap-bottom">
+              <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button>
+              <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button>
+            </div>
+            <div>
+              <el-button @click="openChecklist" type="text" size="mini">体检单</el-button>
+              <el-button @click="flupHistory" type="text" size="mini">随访记录</el-button>
+            </div>
+
+          </div> 
+
+          <div class="case face">
+            <div class="case-main">
+              <div class="case-main-content">
+                <div class="case-main-title">
+                  <span>上海立阖泰医疗统一处方笺</span>
                 </div>
                 <div>
-                  <el-form-item label="检查项目：" label-width="101px">
-                    <el-select
-                      v-model="medication.checkItem"
-                      size="mini"
-                      :style="{'width':'100%'}"
-                      multiple
-                      filterable
-                      allow-create
-                      default-first-option
-                      placeholder="请添写项目标签"
-                      no-data-text="填写标签按Enter确认">
-                    </el-select>
-                  </el-form-item>
-                </div>
-                <div class="flex">
-                  <div>
-                    <span class="iconfont icon-bixutian must"></span>
-                  </div>
-                  <div class="gap-right">
-                    <el-form-item label="诊断编码：" label-width="85px">
-                      <el-select v-model="bloodSickCode" placeholder="请选择" @change="sickCodeChange" size="mini" :style="{'width':'100%'}">
-                        <el-option
-                          v-for="item in bloodSickCodeList"
-                          :key="item.id"
-                          :label="item.diseaseCode"
-                          :value="item.id"
-                          >
-                          <span style="float: left">{{ item.diseaseCode }}</span>
-                          <span style="float: right; color: #8492a6; font-size: 13px">{{ item.diseaseName }}</span>
-                        </el-option>
-                      </el-select>
-                      <!-- <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
-                        <el-option label="I13.251" value="1"></el-option>
-                        <el-option label="I13.908" value="0"></el-option>
-                      </el-select> -->
-                    </el-form-item>
-                  </div>
-                  <div class="flex-grow">
-                    <el-form-item label="确诊疾病：" label-width="85px">
-                      <el-input disabled v-model="medication.sureSick" :style="{'width':'100%'}" size="mini"></el-input>
-                    </el-form-item>
-                  </div>
-                </div>
-                <div class="flex">
-                  <div>
-                    <span class="iconfont icon-bixutian must"></span>
-                  </div>
-                  <div class="flex-grow">
-                    <el-form-item label="医嘱：" label-width="85px">
-                      <el-input v-model="medication.doctorTip" placeholder="请输入医嘱" size="mini"></el-input>
-                    </el-form-item>
-                  </div>
-                </div>
-                
-                <el-row :gutter="10">
-                  <!-- <el-col :span="6">
-                    <el-form-item label="姓名">
-                      <el-input v-model="medication.name" size="mini"></el-input>
-                    </el-form-item>
-                  </el-col> -->
-
-                  <!-- <el-col :span="11">
-                    <el-form-item label="患病时长" label-width="68px"
-                    >
-                      <div class="pick-date-wrap">
-                            <input v-number-only v-model.number="medication.year" type="text">
-                            <span>年</span>
-                          <input v-number-only v-model.number="medication.month" type="text">
-                          <span>月</span>
-                          <input v-number-only v-model.number="medication.day" type="text">
-                          <span>天</span>
+                  <el-form
+                  label-width="45px" 
+                  :label-position="labelPosition">
+                  <!-- <div class="flex"> -->
+                  <div class="fist-line">
+                    <div class="line-block  gap-right">
+                      <div class="line-block">
+                        <span class="iconfont icon-bixutian must"></span>
                       </div>
-                    </el-form-item>
-                  </el-col> -->
-
-                  <!-- <el-col :span="7">
-                    <el-form-item label="电话" label-width="45px">
-                      <el-input v-model.number="medication.phone" size="mini"></el-input>
-                    </el-form-item>
-                  </el-col> -->
-                </el-row>
-                <el-row :gutter="10">
-                  <!-- <el-col :span="6">
-                    <el-form-item label="性别" label-width="45px">
-                      <el-select v-model="medication.sex" placeholder="性别" size="mini">
-                        <el-option label="男" value="man"></el-option>
-                        <el-option label="女" value="woman"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col> -->
-
-                  <!-- <el-col :span="6">
-                    <el-form-item label="" label-width="8px">
-                      <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
-                        <el-option label="初诊" value="1"></el-option>
-                        <el-option label="复诊" value="0"></el-option>
-                      </el-select>
-                    </el-form-item>
-
-                  </el-col> -->
-
-                  <!-- <el-col :span="12">
-                    <div class="time-picker">
-                      <el-form-item label="上次就诊时间" label-width="100px">
-                        <el-date-picker
-                          size="mini"
-                          v-model="medication.lastTime"
-                          type="date"
-                          placeholder="选择日期">
-                        </el-date-picker>
-                      </el-form-item>
-
+                      <div class="line-block">
+                        <el-form-item label="" label-width="8px">
+                          <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100%'}">
+                            <el-option label="初诊" value="1"></el-option>
+                            <el-option label="复诊" value="0"></el-option>
+                          </el-select>
+                        </el-form-item>
+                      </div>
                     </div>
-                  </el-col> -->
-                </el-row>
-                <el-row>
-                  <!-- <el-col>
-                    <el-form-item label="病史" label-width="60px">
+                    <div class="line-block gap-right">
+                      <!-- <el-form-item label="患病时长：" label-width="85px"> -->
+                        <el-form-item label="患病开始时间：" label-width="113px">
+                          <el-date-picker
+                            v-model="medication.bloodPressureSickStart"
+                            type="month"
+                            size="mini"
+                            value-format="yyyy-MM"
+                            placeholder="选择月">
+                          </el-date-picker>
+                        </el-form-item>
+                        
+                        <!-- <div class="line-block color-face">
+                          患病开始时间：
+                        </div>
+                        <div class="line-block">
+                          <el-date-picker
+                            v-model="medication.bloodPressureSickStart"
+                            type="month"
+                            size="mini"
+                            value-format="yyyy-MM"
+                            placeholder="选择月">
+                          </el-date-picker>
+                        </div> -->
+                        <!-- <div class="line-block sick-time-width color-face">
+                          <numberinput
+                          v-model="medication.year"
+                          :leftOffset="5"
+                          :rightOffset="20"
+                          :height="28">
+                            <template slot="right">
+                              <span>
+                              年
+                              </span>
+                            </template>
+                          </numberinput>
+                        </div>
+                        <div class="line-block sick-time-width color-face">
+                          <numberinput
+                          v-model="medication.month"
+                          :leftOffset="5"
+                          :rightOffset="20"
+                          :height="28">
+                            <template slot="right">
+                              <span>
+                              月
+                              </span>
+                            </template>
+                          </numberinput>
+                        </div>
+                        <div class="line-block sick-time-width color-face">
+                          <numberinput
+                          v-model="medication.day"
+                          :leftOffset="5"
+                          :rightOffset="20"
+                          :height="28">
+                            <template slot="right">
+                              <span>
+                              天
+                              </span>
+                            </template>
+                          </numberinput>
+                        </div> -->
+                    </div>
+
+                    <div class="line-block color-face">
+                      <el-form-item label="" label-width="18px">
+
+                        <div class="line-block  flex flex-between">
+                          <div class="flex gap-right">
+                            <span>当前分层：</span>
+                            <span :style="{'color':computeDanger(medication.dangerLevel)}">{{medication.dangerLevel?danger(medication.dangerLevel):'未分层'}}</span>
+                          </div>
+                          <div>
+                            <span>
+                              <el-button @click="goLayer" type="text" size="mini" style="{'height':'24px'}">重新分层</el-button>
+                            </span>
+                          </div>
+                        </div>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="gap-bottom">
+                    <el-form-item label="主述：" label-width="101px">
+                      <el-input v-model="medication.symptom" size="mini" placeholder="请输入症状"></el-input>
+                    </el-form-item>
+                  </div>
+                  <div class="gap-bottom">
+                    <el-form-item label="现病史：" label-width="101px">
                       <div class="el-select-wrap">
                         <el-select size="mini" 
                         v-model="medication.sickHistroy" 
@@ -525,11 +370,9 @@
 
                       </div>
                     </el-form-item>
-                  </el-col> -->
-                </el-row>
-                <el-row>
-                  <!-- <el-col>
-                    <el-form-item label="遗传史" label-width="60px">
+                  </div>
+                  <div class="gap-bottom">
+                    <el-form-item label="遗传史：" label-width="101px">
                       <div class="el-select-wrap">
                         <el-select size="mini" 
                         v-model="medication.inhereHistroy" 
@@ -546,88 +389,13 @@
 
                       </div>
                     </el-form-item>
-                  </el-col> -->
-                </el-row>
-                <!-- <el-row>
-                  <el-col>
-                    <el-form-item label="并发症" label-width="60px">
-                      <div class="el-select-wrap">
-                        <el-select size="mini" 
-                        v-model="medication.complication" 
-                        multiple 
-                        placeholder="请选择并发症"
-                        :loading="loading">
-                          <el-option
-                            v-for="item in gaoxueyabingfazhengList"
-                            :key="item.id"
-                            :label="item.illnessName"
-                            :value="item.id">
-                          </el-option>
-                        </el-select>
-
-                      </div>
-                    </el-form-item>
-                  </el-col>
-                </el-row> -->
- 
-                
-                <!-- <el-row :gutter="10">
-                  <el-col :span="12">
-                    <el-form-item label="抽烟情况" label-width="68px">
-                      <el-select v-model="medication.smoking" placeholder="抽烟情况" size="mini">
-                        <el-option label="抽烟" value="1"></el-option>
-                        <el-option label="不抽烟" value="2"></el-option>
-                        <el-option label="已戒烟" value="3"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="喝酒情况" label-width="68px">
-                      <el-select v-model="medication.drinking" placeholder="请选择" size="mini">
-                        <el-option label="从不喝酒" value="1"></el-option>
-                        <el-option label="偶尔喝酒" value="2"></el-option>
-                        <el-option label="经常喝酒" value="3"></el-option>
-                        <el-option label="每天喝酒" value="4"></el-option>
-                      </el-select>
-                    </el-form-item>
-
-                  </el-col>
-                </el-row>
-                <el-row :gutter="10">
-                  <el-col :span="12">
-                    <el-form-item label="入寝时间" label-width="68px">
-                      <el-select v-model="medication.is23Sleep" placeholder="请选择" size="mini">
-                        <el-option-group
-                        label="是否23点之前休息">
-                          <el-option label="23点之前" value="1"></el-option>
-                          <el-option label="23点之后" value="0"></el-option>
-
-                        </el-option-group>
-                      </el-select>
-                    </el-form-item>
-
-                  </el-col>
-                  <el-col :span="12">
-                    <el-form-item label="睡眠规律" label-width="68px">
-                      <el-select v-model="medication.sleepStatus" placeholder="请选择" size="mini">
-                        <el-option-group
-                        label="睡眠规律不规律">
-                          <el-option label="规律" value="1"></el-option>
-                          <el-option label="不规律" value="2"></el-option>
-                        </el-option-group>
-                      </el-select>
-                    </el-form-item>
-
-                  </el-col>
-
-                </el-row> -->
-
-                <el-row :gutter="10">
-                  <!-- <el-col :span="12">
-                    <el-form-item label="检查项目" label-width="68px">
+                  </div>
+                  <div>
+                    <el-form-item label="检查项目：" label-width="101px">
                       <el-select
                         v-model="medication.checkItem"
                         size="mini"
+                        :style="{'width':'100%'}"
                         multiple
                         filterable
                         allow-create
@@ -636,194 +404,428 @@
                         no-data-text="填写标签按Enter确认">
                       </el-select>
                     </el-form-item>
-                  </el-col> -->
-                  <!-- <el-col :span="12">
-                    <el-form-item label="确诊疾病" label-width="68px">
-                      <el-input v-model="medication.sureSick" size="mini"></el-input>
-                    </el-form-item>
-
-                  </el-col> -->
-                </el-row>
-                <el-row>
-                  <!-- <el-col>
-                    <el-form-item label="自述" label-width="68px">
-                      <el-input v-model="medication.symptom" size="mini"></el-input>
-                    </el-form-item>
-                  </el-col> -->
-                </el-row>
-                <!-- <el-row>
-                  <el-col>
-                    <el-form-item label="诊断信息" label-width="68px">
-                      <el-input v-model="medication.diagnosisMsg" size="mini"></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row> -->
-                <el-row>
-                  <!-- <el-col>
-                    <el-form-item label="医嘱" label-width="68px">
-                      <el-input v-model="medication.doctorTip" size="mini"></el-input>
-                    </el-form-item>
-                  </el-col> -->
-                </el-row>
-                </el-form>
-                <div class="case-main-rp">
-                  <div class="case-main-rp-title">
-                    <span class="iconfont icon-bixutian must"></span>
-                    <span>RP</span>
-                    <el-button @click="openAddMedicineDialog" type="primary" size="mini">添加</el-button>
                   </div>
-                  <!-- max-height="400" -->
-                  <el-table
-                  ref="multipleTable"
-                  :data="doctorMedicine"
-                  tooltip-effect="dark"
-                  style="width: 100%"
-                  border
-                  >
-                    <el-table-column
-                      type="index"
-                      label="序号"
-                      width="55">
-                    </el-table-column>
-                    <el-table-column
-                      show-overflow-tooltip
-                      prop="name"
-                      label="名称">
-                    </el-table-column>
-                    <el-table-column
-                      prop="singleuse"
-                      label="单次用量"
-                      width="100"
+                  <div class="flex">
+                    <div>
+                      <span class="iconfont icon-bixutian must"></span>
+                    </div>
+                    <div class="gap-right">
+                      <el-form-item label="诊断编码：" label-width="85px">
+                        <el-select v-model="bloodSickCode" placeholder="请选择" @change="sickCodeChange" size="mini" :style="{'width':'100%'}">
+                          <el-option
+                            v-for="item in bloodSickCodeList"
+                            :key="item.id"
+                            :label="item.diseaseCode"
+                            :value="item.id"
+                            >
+                            <span style="float: left">{{ item.diseaseCode }}</span>
+                            <span style="float: right; color: #8492a6; font-size: 13px">{{ item.diseaseName }}</span>
+                          </el-option>
+                        </el-select>
+                        <!-- <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                          <el-option label="I13.251" value="1"></el-option>
+                          <el-option label="I13.908" value="0"></el-option>
+                        </el-select> -->
+                      </el-form-item>
+                    </div>
+                    <div class="flex-grow">
+                      <el-form-item label="确诊疾病：" label-width="85px">
+                        <el-input disabled v-model="medication.sureSick" :style="{'width':'100%'}" size="mini"></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  <div class="flex">
+                    <div>
+                      <span class="iconfont icon-bixutian must"></span>
+                    </div>
+                    <div class="flex-grow">
+                      <el-form-item label="医嘱：" label-width="85px">
+                        <el-input v-model="medication.doctorTip" placeholder="请输入医嘱" size="mini"></el-input>
+                      </el-form-item>
+                    </div>
+                  </div>
+                  
+                  <el-row :gutter="10">
+                    <!-- <el-col :span="6">
+                      <el-form-item label="姓名">
+                        <el-input v-model="medication.name" size="mini"></el-input>
+                      </el-form-item>
+                    </el-col> -->
+
+                    <!-- <el-col :span="11">
+                      <el-form-item label="患病时长" label-width="68px"
                       >
-                      <template slot-scope="scope">
-                        <numberinput
-                        v-model="scope.row.singleuse"
-                        :leftOffset="5"
-                        :rightOffset="40"
-                        :height="28"
+                        <div class="pick-date-wrap">
+                              <input v-number-only v-model.number="medication.year" type="text">
+                              <span>年</span>
+                            <input v-number-only v-model.number="medication.month" type="text">
+                            <span>月</span>
+                            <input v-number-only v-model.number="medication.day" type="text">
+                            <span>天</span>
+                        </div>
+                      </el-form-item>
+                    </el-col> -->
+
+                    <!-- <el-col :span="7">
+                      <el-form-item label="电话" label-width="45px">
+                        <el-input v-model.number="medication.phone" size="mini"></el-input>
+                      </el-form-item>
+                    </el-col> -->
+                  </el-row>
+                  <el-row :gutter="10">
+                    <!-- <el-col :span="6">
+                      <el-form-item label="性别" label-width="45px">
+                        <el-select v-model="medication.sex" placeholder="性别" size="mini">
+                          <el-option label="男" value="man"></el-option>
+                          <el-option label="女" value="woman"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col> -->
+
+                    <!-- <el-col :span="6">
+                      <el-form-item label="" label-width="8px">
+                        <el-select v-model="medication.isfirst" placeholder="请选择" size="mini">
+                          <el-option label="初诊" value="1"></el-option>
+                          <el-option label="复诊" value="0"></el-option>
+                        </el-select>
+                      </el-form-item>
+
+                    </el-col> -->
+
+                    <!-- <el-col :span="12">
+                      <div class="time-picker">
+                        <el-form-item label="上次就诊时间" label-width="100px">
+                          <el-date-picker
+                            size="mini"
+                            v-model="medication.lastTime"
+                            type="date"
+                            placeholder="选择日期">
+                          </el-date-picker>
+                        </el-form-item>
+
+                      </div>
+                    </el-col> -->
+                  </el-row>
+                  <el-row>
+                    <!-- <el-col>
+                      <el-form-item label="病史" label-width="60px">
+                        <div class="el-select-wrap">
+                          <el-select size="mini" 
+                          v-model="medication.sickHistroy" 
+                          multiple 
+                          placeholder="请选择病史"
+                          :loading="loading"
+                          >                
+                            <el-option
+                              v-for="(item,index) in bingshiList"
+                              :key="index"
+                              :label="item.illnessName"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+
+                        </div>
+                      </el-form-item>
+                    </el-col> -->
+                  </el-row>
+                  <el-row>
+                    <!-- <el-col>
+                      <el-form-item label="遗传史" label-width="60px">
+                        <div class="el-select-wrap">
+                          <el-select size="mini" 
+                          v-model="medication.inhereHistroy" 
+                          multiple 
+                          placeholder="请选择遗传史"
+                          :loading="loading">
+                            <el-option
+                              v-for="(item,index) in yichuanshiList"
+                              :key="index"
+                              :label="item.illnessName"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+
+                        </div>
+                      </el-form-item>
+                    </el-col> -->
+                  </el-row>
+                  <!-- <el-row>
+                    <el-col>
+                      <el-form-item label="并发症" label-width="60px">
+                        <div class="el-select-wrap">
+                          <el-select size="mini" 
+                          v-model="medication.complication" 
+                          multiple 
+                          placeholder="请选择并发症"
+                          :loading="loading">
+                            <el-option
+                              v-for="item in gaoxueyabingfazhengList"
+                              :key="item.id"
+                              :label="item.illnessName"
+                              :value="item.id">
+                            </el-option>
+                          </el-select>
+
+                        </div>
+                      </el-form-item>
+                    </el-col>
+                  </el-row> -->
+  
+                  
+                  <!-- <el-row :gutter="10">
+                    <el-col :span="12">
+                      <el-form-item label="抽烟情况" label-width="68px">
+                        <el-select v-model="medication.smoking" placeholder="抽烟情况" size="mini">
+                          <el-option label="抽烟" value="1"></el-option>
+                          <el-option label="不抽烟" value="2"></el-option>
+                          <el-option label="已戒烟" value="3"></el-option>
+                        </el-select>
+                      </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="喝酒情况" label-width="68px">
+                        <el-select v-model="medication.drinking" placeholder="请选择" size="mini">
+                          <el-option label="从不喝酒" value="1"></el-option>
+                          <el-option label="偶尔喝酒" value="2"></el-option>
+                          <el-option label="经常喝酒" value="3"></el-option>
+                          <el-option label="每天喝酒" value="4"></el-option>
+                        </el-select>
+                      </el-form-item>
+
+                    </el-col>
+                  </el-row>
+                  <el-row :gutter="10">
+                    <el-col :span="12">
+                      <el-form-item label="入寝时间" label-width="68px">
+                        <el-select v-model="medication.is23Sleep" placeholder="请选择" size="mini">
+                          <el-option-group
+                          label="是否23点之前休息">
+                            <el-option label="23点之前" value="1"></el-option>
+                            <el-option label="23点之后" value="0"></el-option>
+
+                          </el-option-group>
+                        </el-select>
+                      </el-form-item>
+
+                    </el-col>
+                    <el-col :span="12">
+                      <el-form-item label="睡眠规律" label-width="68px">
+                        <el-select v-model="medication.sleepStatus" placeholder="请选择" size="mini">
+                          <el-option-group
+                          label="睡眠规律不规律">
+                            <el-option label="规律" value="1"></el-option>
+                            <el-option label="不规律" value="2"></el-option>
+                          </el-option-group>
+                        </el-select>
+                      </el-form-item>
+
+                    </el-col>
+
+                  </el-row> -->
+
+                  <el-row :gutter="10">
+                    <!-- <el-col :span="12">
+                      <el-form-item label="检查项目" label-width="68px">
+                        <el-select
+                          v-model="medication.checkItem"
+                          size="mini"
+                          multiple
+                          filterable
+                          allow-create
+                          default-first-option
+                          placeholder="请添写项目标签"
+                          no-data-text="填写标签按Enter确认">
+                        </el-select>
+                      </el-form-item>
+                    </el-col> -->
+                    <!-- <el-col :span="12">
+                      <el-form-item label="确诊疾病" label-width="68px">
+                        <el-input v-model="medication.sureSick" size="mini"></el-input>
+                      </el-form-item>
+
+                    </el-col> -->
+                  </el-row>
+                  <el-row>
+                    <!-- <el-col>
+                      <el-form-item label="自述" label-width="68px">
+                        <el-input v-model="medication.symptom" size="mini"></el-input>
+                      </el-form-item>
+                    </el-col> -->
+                  </el-row>
+                  <!-- <el-row>
+                    <el-col>
+                      <el-form-item label="诊断信息" label-width="68px">
+                        <el-input v-model="medication.diagnosisMsg" size="mini"></el-input>
+                      </el-form-item>
+                    </el-col>
+                  </el-row> -->
+                  <el-row>
+                    <!-- <el-col>
+                      <el-form-item label="医嘱" label-width="68px">
+                        <el-input v-model="medication.doctorTip" size="mini"></el-input>
+                      </el-form-item>
+                    </el-col> -->
+                  </el-row>
+                  </el-form>
+                  <div class="case-main-rp">
+                    <div class="case-main-rp-title">
+                      <span class="iconfont icon-bixutian must"></span>
+                      <span>RP</span>
+                      <el-button @click="openAddMedicineDialog" type="primary" size="mini">添加</el-button>
+                    </div>
+                    <!-- max-height="400" -->
+                    <el-table
+                    ref="multipleTable"
+                    :data="doctorMedicine"
+                    tooltip-effect="dark"
+                    style="width: 100%"
+                    border
+                    >
+                      <el-table-column
+                        type="index"
+                        label="序号"
+                        width="55">
+                      </el-table-column>
+                      <el-table-column
+                        show-overflow-tooltip
+                        prop="name"
+                        label="名称">
+                      </el-table-column>
+                      <el-table-column
+                        prop="singleuse"
+                        label="单次用量"
+                        width="100"
                         >
-                          <template slot="right">
-                            <select slot="suffix" v-model="scope.row.singleuseUnit">
+                        <template slot-scope="scope">
+                          <numberinput
+                          v-model="scope.row.singleuse"
+                          :leftOffset="5"
+                          :rightOffset="40"
+                          :height="28"
+                          >
+                            <template slot="right">
+                              <select slot="suffix" v-model="scope.row.singleuseUnit">
+                              <option value="pian">片</option>
+                              <option value="li">粒</option>
+                              <option value="ke">颗</option>
+                              <option value="zhi">支</option>
+                            </select>
+                            </template>
+                          </numberinput>
+                          <!-- <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
+                          <select class="use-num" v-model="scope.row.singleuseUnit">
                             <option value="pian">片</option>
                             <option value="li">粒</option>
                             <option value="ke">颗</option>
                             <option value="zhi">支</option>
+                          </select> -->
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="usemethod"
+                        label="用法"
+                        width="75">
+                        <template slot-scope="scope">
+                          <select v-model="scope.row.usemethod">
+                            <option value="mouse">口服</option>
+                            <option value="in">注射</option>
+                            <option value="out">外涂</option>
                           </select>
-                          </template>
-                        </numberinput>
-                        <!-- <input v-number-only  type="text"  v-model.number="scope.row.singleuse" class="table-input use-num single-use">
-                        <select class="use-num" v-model="scope.row.singleuseUnit">
-                          <option value="pian">片</option>
-                          <option value="li">粒</option>
-                          <option value="ke">颗</option>
-                          <option value="zhi">支</option>
-                        </select> -->
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="usemethod"
-                      label="用法"
-                      width="75">
-                      <template slot-scope="scope">
-                        <select v-model="scope.row.usemethod">
-                          <option value="mouse">口服</option>
-                          <option value="in">注射</option>
-                          <option value="out">外涂</option>
-                        </select>
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="usetimes"
-                      label="频度"
-                      width="100">
-                      <template slot-scope="scope">
-                        <numberinput
-                        v-model="scope.row.usetimes"
-                        :leftOffset="5"
-                        :rightOffset="40"
-                        :height="28">
-                          <template slot="right">
-                            <span>
-                            次/天
-                            </span>
-                          </template>
-                        </numberinput>
-                        <!-- <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天 -->
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="uselong"
-                      label="天数"
-                      width="95">
-                      <template slot-scope="scope">
-                        <numberinput
-                        v-model="scope.row.uselong"
-                        :leftOffset="5"
-                        :rightOffset="20"
-                        :height="28">
-                          <template slot="right">
-                            <span>
-                            天
-                            </span>
-                          </template>
-                        </numberinput>
-                        <!-- <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use"> -->
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="usetotal"
-                      label="总量"
-                      width="95">
-                      <template slot-scope="scope">
-                        <numberinput
-                        v-model="scope.row.usetotal"
-                        :leftOffset="5"
-                        :rightOffset="20"
-                        :height="28">
-                          <template slot="right">
-                            <span>
-                            盒
-                            </span>
-                          </template>
-                        </numberinput>
-                        <!-- <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒 -->
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="tip"
-                      label="备注">
-                      <template slot-scope="scope">
-                        <el-input v-model="scope.row.tip"
-                        size="mini"></el-input>
-                        <!-- <input v-model="scope.row.tip" type="text" class="table-input  width-tip" > -->
-                      </template>
-                    </el-table-column>
-                    <el-table-column
-                      prop="delete"
-                      label="编辑"
-                      width="100"
-                      align="center">
-                      <template slot-scope="scope">
-                        <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </div>
-                <div>
-                  <div class="case-main-footer">
-                    医生：{{adminInfo.name}}
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="usetimes"
+                        label="频度"
+                        width="100">
+                        <template slot-scope="scope">
+                          <numberinput
+                          v-model="scope.row.usetimes"
+                          :leftOffset="5"
+                          :rightOffset="40"
+                          :height="28">
+                            <template slot="right">
+                              <span>
+                              次/天
+                              </span>
+                            </template>
+                          </numberinput>
+                          <!-- <input v-number-only type="text" v-model.number="scope.row.usetimes" class="table-input use-num single-use">次/天 -->
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="uselong"
+                        label="天数"
+                        width="95">
+                        <template slot-scope="scope">
+                          <numberinput
+                          v-model="scope.row.uselong"
+                          :leftOffset="5"
+                          :rightOffset="20"
+                          :height="28">
+                            <template slot="right">
+                              <span>
+                              天
+                              </span>
+                            </template>
+                          </numberinput>
+                          <!-- <input v-number-only v-model.number="scope.row.uselong" type="text" class="table-input use-num single-use"> -->
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="usetotal"
+                        label="总量"
+                        width="95">
+                        <template slot-scope="scope">
+                          <numberinput
+                          v-model="scope.row.usetotal"
+                          :leftOffset="5"
+                          :rightOffset="20"
+                          :height="28">
+                            <template slot="right">
+                              <span>
+                              盒
+                              </span>
+                            </template>
+                          </numberinput>
+                          <!-- <input v-number-only v-model.number="scope.row.usetotal" type="text" class="table-input use-num single-use">盒 -->
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="tip"
+                        label="备注">
+                        <template slot-scope="scope">
+                          <el-input v-model="scope.row.tip"
+                          size="mini"></el-input>
+                          <!-- <input v-model="scope.row.tip" type="text" class="table-input  width-tip" > -->
+                        </template>
+                      </el-table-column>
+                      <el-table-column
+                        prop="delete"
+                        label="编辑"
+                        width="100"
+                        align="center">
+                        <template slot-scope="scope">
+                          <el-button size="mini" type="danger" @click="deleteMedicine(scope.$index, doctorMedicine)">删除</el-button>
+                        </template>
+                      </el-table-column>
+                    </el-table>
+                  </div>
+                  <div>
+                    <div class="case-main-footer">
+                      医生：{{adminInfo.name}}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div class="submit-btn">
-                <el-button type="primary" @click="complete" size="mini">完成就诊</el-button>
-                <el-button type="primary" @click="dayin" size="mini">打印处方</el-button>
+                <div class="submit-btn">
+                  <el-button type="primary" @click="complete" size="mini">完成就诊</el-button>
+                  <el-button type="primary" @click="dayin" size="mini">打印处方</el-button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
       <el-dialog
         title="西药处方"
@@ -833,114 +835,115 @@
         <medicine @addMedicine="addMedicineHandler"></medicine>
       </el-dialog>
 
-
-      <div id="print" class="print">
-      <!-- <div id="print"> -->
-        <div class="title">
-          <p>上海立阖泰科技</p>
-          <p>门诊检查单</p>
-        </div>
-        <div class="bottom-boder cardnum">
-          <span>医疗证/医保卡号：</span>
-        </div>
-        <div class="bottom-boder">
-          <div class="base-info">
-            <span>姓名：{{info.name}}</span>
-            <span>性别：{{info.sex === 'man' ? '男':'女'}}</span>
-            <span>年龄：{{info.age?info.age+'岁':''}}</span>
-            <!-- <span>科室：{{footerData.type}}</span> -->
-            <!-- <span>费别：{{footerData.total}}</span> -->
+      <div class="print-wrap">
+        <div id="print" class="print">
+        <!-- <div id="print"> -->
+          <div class="title">
+            <p>上海立阖泰科技</p>
+            <p>门诊检查单</p>
           </div>
-          <!-- <div class="info-card">
-            <span>电话：{{medication.phone}}</span>
-          </div> -->
-          <div class="info-card">
-            <span>诊断：{{medication.sureSick}}</span>
-            <span>开具时间：{{currentDate}}</span>
+          <div class="bottom-boder cardnum">
+            <span>医疗证/医保卡号：</span>
           </div>
-        </div>
-        <div class="bottom-boder diagnos">
-          <p>
-            <span>主诉：{{medication.symptom}}</span>
-          </p>
-          <p>
-            <span>现病史：{{bingshiStr}}</span>
-          </p>
-          <p>
-            <span>遗传史：{{yichuanshiStr}}</span>
-          </p>
-          <!-- <p>
-            <span>过敏史：</span>
-          </p> -->
-          <p>
-            <span>检查项目：{{jianchaxiangmu}}</span>
-          </p>
-          <p>
-            <span>医嘱：{{medication.doctorTip}}</span>
-          </p>
-          <p>
-            <span>西药处方</span>
-          </p>
-          <div>
-            <table>
-              <tr v-for="(item,index) in printdoctorMedicine" :key="index">
-                <td>{{item.name}}</td>
-                <td>{{item.use}}</td>
-                <td>{{item.method}}</td>
-                <td>{{item.times}}</td>
-                <td>{{item.long}}</td>
-                <td>{{item.total}}</td>
-              </tr>
-            </table>
-            <!-- <el-table
-            ref="multipleTable"
-            :data="printdoctorMedicine"
-            tooltip-effect="dark"
-            style="width: 100%"
-            border
-            >
-              <el-table-column
-                show-overflow-tooltip
-                prop="name"
-                label="名称"
-                align="center">
-              </el-table-column>
-              <el-table-column
-                prop="use"
-                label="单次用量"
-                width="100"
-                align="center"
-                >
-              </el-table-column>
-              <el-table-column
-                prop="method"
-                label="用法"
-                width="75"
-                align="center">
-              </el-table-column>
-              <el-table-column
-                prop="times"
-                label="频度"
-                width="100"
-                align="center">
-              </el-table-column>
-              <el-table-column
-                prop="long"
-                label="天数"
-                width="95"
-                align="center">
-              </el-table-column>
-              <el-table-column
-                prop="total"
-                label="总量"
-                width="95"
-                align="center">
-              </el-table-column>
-            </el-table> -->
+          <div class="bottom-boder">
+            <div class="base-info">
+              <span>姓名：{{info.name}}</span>
+              <span>性别：{{info.sex === 'man' ? '男':'女'}}</span>
+              <span>年龄：{{info.age?info.age+'岁':''}}</span>
+              <!-- <span>科室：{{footerData.type}}</span> -->
+              <!-- <span>费别：{{footerData.total}}</span> -->
+            </div>
+            <!-- <div class="info-card">
+              <span>电话：{{medication.phone}}</span>
+            </div> -->
+            <div class="info-card">
+              <span>诊断：{{medication.sureSick}}</span>
+              <span>开具时间：{{currentDate}}</span>
+            </div>
           </div>
-        </div>
-        <div class="print-footer">
-          <p>签字医生：{{adminInfo.name}}</p>
+          <div class="bottom-boder diagnos">
+            <p>
+              <span>主诉：{{medication.symptom}}</span>
+            </p>
+            <p>
+              <span>现病史：{{bingshiStr}}</span>
+            </p>
+            <p>
+              <span>遗传史：{{yichuanshiStr}}</span>
+            </p>
+            <!-- <p>
+              <span>过敏史：</span>
+            </p> -->
+            <p>
+              <span>检查项目：{{jianchaxiangmu}}</span>
+            </p>
+            <p>
+              <span>医嘱：{{medication.doctorTip}}</span>
+            </p>
+            <p>
+              <span>西药处方</span>
+            </p>
+            <div>
+              <table>
+                <tr v-for="(item,index) in printdoctorMedicine" :key="index">
+                  <td>{{item.name}}</td>
+                  <td>{{item.use}}</td>
+                  <td>{{item.method}}</td>
+                  <td>{{item.times}}</td>
+                  <td>{{item.long}}</td>
+                  <td>{{item.total}}</td>
+                </tr>
+              </table>
+              <!-- <el-table
+              ref="multipleTable"
+              :data="printdoctorMedicine"
+              tooltip-effect="dark"
+              style="width: 100%"
+              border
+              >
+                <el-table-column
+                  show-overflow-tooltip
+                  prop="name"
+                  label="名称"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="use"
+                  label="单次用量"
+                  width="100"
+                  align="center"
+                  >
+                </el-table-column>
+                <el-table-column
+                  prop="method"
+                  label="用法"
+                  width="75"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="times"
+                  label="频度"
+                  width="100"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="long"
+                  label="天数"
+                  width="95"
+                  align="center">
+                </el-table-column>
+                <el-table-column
+                  prop="total"
+                  label="总量"
+                  width="95"
+                  align="center">
+                </el-table-column>
+              </el-table> -->
+            </div>
+          </div>
+          <div class="print-footer">
+            <p>签字医生：{{adminInfo.name}}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1224,7 +1227,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setuserCasesCardId', 'setuserMakeOrderDoctorId', 'SET_FLUP_INFO']),
+    ...mapMutations(['setuserCasesCardId', 'setuserMakeOrderDoctorId', 'SET_FLUP_INFO', 'changeCurrentSickInfo']),
     handleInput (e) {
       this.val = e.target.value.replace(/-?[1-9]\d*/g, '')
       // e.target.value = e.target.value.replace(/-?[1-9]\d*/g, '')
@@ -1364,6 +1367,7 @@ export default {
               'userDetectReportList': userDetectReportList
             })
             // this.medication.lastTime = this.lastDate
+            this.changeCurrentSickInfo(this.cardData)
           }
         }
       })
@@ -2324,6 +2328,15 @@ export default {
   $border-color-input:#eaeaea;
   // $border-color-input:#ebeef5;
   $border-radius:4px;
+  .face-wrap{
+    position: relative;
+  }
+  .print-wrap{
+    position: absolute;
+    width: 100%;
+    top:0;
+    z-index: -999;
+  }
   .must{
     color:#f96767;
   }
