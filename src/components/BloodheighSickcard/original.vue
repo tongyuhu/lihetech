@@ -20,20 +20,27 @@
           </div>
           <div class="original-table" v-loading="loading">
             <table>
-              <tr>
-                <th>日期</th>
-                <th>血压值</th>
-                <th>血压类型</th>
-                <th>测量类型</th>
-                <th>测量时间</th>
-              </tr>
-              <tr v-for="(ori,index) in original" :key="index">
-                <th>{{ori.date}}</th>
-                <td><p>{{ori.diastolic}}/{{ori.systolic}}</p></td>
-                <td><p>{{ori.bpType}}</p></td>
-                <td><p>{{ori.recordType}}</p></td>
-                <td><p>{{ori.time}}</p></td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>血压值</th>
+                  <th>血压类型</th>
+                  <th>测量类型</th>
+                  <th>测量时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" v-if="original.length === 0">暂无数据</td>
+                </tr>
+                <tr v-for="(ori,index) in original" :key="index">
+                  <th>{{ori.date}}</th>
+                  <td><p>{{ori.diastolic}}/{{ori.systolic}}</p></td>
+                  <td><p>{{ori.bpType}}</p></td>
+                  <td><p>{{ori.recordType}}</p></td>
+                  <td><p>{{ori.time}}</p></td>
+                </tr>
+              </tbody>
             </table>
           </div>
           <div class="page">
@@ -73,7 +80,6 @@ export default {
       pageNum: 1,
       recordCount: 0,
       original: []
-
     }
   },
   methods: {
@@ -92,7 +98,6 @@ export default {
         if (this._.has(res.data, 'data')) {
           if (res.data.data) {
             this.original = []
-
             res.data.data.forEach(item => {
               if (this._.has(item, 'bpMeasureTimes')) {
                 item.bpMeasureTime = this.bpMeasureTime(item.bpMeasureTimes)
@@ -312,6 +317,9 @@ export default {
     padding: 15px 0;
     text-align: center;
     vertical-align: middle;
+  }
+  tr:nth-child(n+2):hover{
+    background-color: #ebeef5;
   }
   .original-table{
     margin-top:20px;
