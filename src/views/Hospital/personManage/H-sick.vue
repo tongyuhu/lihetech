@@ -156,6 +156,7 @@
 
 <script>
 import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {mapActions} from 'vuex'
 export default {
   name: 'sick-manage',
   data () {
@@ -182,7 +183,9 @@ export default {
   },
 
   methods: {
+    ...mapActions(['setFriendsListActon']),
     confirmAddSick () {
+      this.setFriendsListActon()
       this.showAddSick = false
     },
     checkedblood () {
