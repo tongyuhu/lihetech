@@ -1,5 +1,5 @@
-const onlineStatic = '.'
-// const onlineStatic = '/BPWatch/web'
+// const onlineStatic = '.'
+const onlineStatic = '/BPWatch/web'
 export default{
   onlineStatic
 }
