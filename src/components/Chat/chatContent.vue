@@ -166,7 +166,7 @@ export default {
       console.log('语音时长', duration)
       setTimeout(function () {
         vm.playVoiceAnimation = false
-      }, duration)
+      }, duration * 1000)
     }
   },
   mounted () {
