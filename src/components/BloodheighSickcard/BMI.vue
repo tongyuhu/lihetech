@@ -25,6 +25,7 @@
 
 <script>
 import echarts from 'echarts'
+import {mapState} from 'vuex'
 import {BMIApi} from '@/api/components/BloodheighSickcard/BMI'
 export default {
   name: 'BMI',
@@ -52,6 +53,9 @@ export default {
       BMIBtnNext: true
     }
   },
+  computed: {
+    ...mapState(['currentSickInfo'])
+  },
   methods: {
     updateBMI () {
       let params = {
@@ -74,7 +78,16 @@ export default {
                   item.diastolic = 0
                 }
                 if (!item.bmi) {
-                  item.bmi = 0
+                  console.log('otherposition', this.currentSickInfo)
+                  if (this._.has(this.currentSickInfo, 'BMI')) {
+                    item.bmi = this.currentSickInfo.BMI
+                  } else if (this._.has(this.currentSickInfo, 'userBody')) {
+                    if (this._.has(this.currentSickInfo.userBody, 'bmi')) {
+                      item.bmi = this.currentSickInfo.userBody.bmi
+                    }
+                  } else {
+                    item.bmi = 0
+                  }
                 }
                 if (!item.bpType) {
                   item.bpType = 0
@@ -140,6 +153,11 @@ export default {
           },
           triggerOn: 'mousemove|click',
           formatter: function (a) {
+            a.forEach(item => {
+              if (!item['value']) {
+                item['value'] = '未知'
+              }
+            })
             return (
                 a[0]['axisValueLabel'] + '<br>' +
                 '<span style="display: inline-block; margin-right: 5px; border-radius: 10px; width: 9px; height: 9px; background-color: ' + a[0]['color'] + '"></span>' +
@@ -499,7 +517,16 @@ export default {
                   item.diastolic = 0
                 }
                 if (!item.bmi) {
-                  item.bmi = 0
+                  // console.log('otherposition', this.currentSickInfo)
+                  if (this._.has(this.currentSickInfo, 'BMI')) {
+                    item.bmi = this.currentSickInfo.BMI
+                  } else if (this._.has(this.currentSickInfo, 'userBody')) {
+                    if (this._.has(this.currentSickInfo.userBody, 'bmi')) {
+                      item.bmi = this.currentSickInfo.userBody.bmi
+                    }
+                  } else {
+                    item.bmi = 0
+                  }
                 }
                 if (!item.bpType) {
                   item.bpType = 0
