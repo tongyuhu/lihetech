@@ -22,6 +22,9 @@ export const store = new Vuex.Store({
       userName: null,
       adminHospitalId: null
     },
+    currentSickInfo: {
+
+    },
     adminInfo: {},
     // 病历卡id
     userCasesCardId: null,
@@ -291,6 +294,9 @@ export const store = new Vuex.Store({
     // 打开、关闭im窗口
     changeImStatus (state, val) {
       state.imStatus = val
+    },
+    changeCurrentSickInfo (state, info) {
+      state.currentSickInfo = info
     }
   },
   actions: {
