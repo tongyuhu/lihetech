@@ -236,6 +236,7 @@ export default {
       if (canSend) {
         console.log('当前聊天', vm.currentChat)
         let targetId = vm.currentChat.userId
+        // let targetId = 'member_49'
         let conversationtype = RongIMLib.ConversationType.PRIVATE
         let msg = new RongIMLib.TextMessage({content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg), extra: '附加信息'})
         // let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
@@ -537,30 +538,33 @@ export default {
     },
     callVideo (isvoice) {
       let vm = this
-      let isCallVideo
+      let currentCallType
       var CallType = RongIMLib.VoIPMediaType
       if (isvoice) {
-        isCallVideo = CallType.MEDIA_AUDIO
+        currentCallType = CallType.MEDIA_AUDIO
         vm.changeCurrentIsVideo(false)
       } else {
-        isCallVideo = CallType.MEDIA_VEDIO
+        currentCallType = CallType.MEDIA_VEDIO
         vm.changeCurrentIsVideo(true)
       }
       console.log('通话id', vm.currentChat.userId)
       var params = {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
-        // conversationType: 1,
-        conversationType: RongIMLib.ConversationType.PRIVATE,
+        conversationType: 1,
+        // conversationType: RongIMLib.ConversationType.PRIVATE,
         // 会话目标 Id，群 Id 或者 userId。
         targetId: vm.currentChat.userId,
+        inviteUserIds: vm.currentChat.userId,
+        // targetId: 'admin_5',
+        // inviteUserIds: 'admin_5',
         // targetId: 'member_49',
         // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
         // inviteUserIds: inviteUserIds,
         // 音频类型
         // CallType.MEDIA_VEDIO
         // CallType.MEDIA_AUDIO
-        // mediaType: CallType.MEDIA_AUDIO
-        mediaType: isCallVideo
+        // mediaType: RongIMLib.VoIPMediaType.MEDIA_VEDIO
+        mediaType: currentCallType
       }
       vm.getInvite(true) // 改变状态显示接收消息
       vm.getVideoMsg() // 打开显示接收消息窗口
@@ -995,6 +999,7 @@ export default {
     span{
       cursor: pointer;
       padding:1px;
+      // font-size: 18px;
     }
   }
 </style>

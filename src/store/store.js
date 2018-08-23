@@ -22,6 +22,7 @@ export const store = new Vuex.Store({
       userName: null,
       adminHospitalId: null
     },
+    // 当前病历卡病人信息
     currentSickInfo: {
 
     },

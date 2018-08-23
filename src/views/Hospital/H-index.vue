@@ -140,7 +140,8 @@
           isCallVideo = CallType.MEDIA_AUDIO
         }
         let params = {
-          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊
+          conversationType: 1, // 单聊
+          // conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊
           targetId: targetId,
           // 音频类型
           // CallType.MEDIA_VEDIO
@@ -160,7 +161,7 @@
           targetId = this.currentVideo.targetId
         }
         var params = {
-          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
+          conversationType: 1, // 单聊,
           'targetId': targetId
         }
         RongCallLib.reject(params)
@@ -172,7 +173,7 @@
           targetId = this.currentVideo.targetId
         }
         var params = {
-          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
+          conversationType: 1, // 单聊,
           'targetId': targetId
         }
         RongCallLib.hungup(params, function (error, summary) {
@@ -186,7 +187,7 @@
           targetId = this.currentVideo.targetId
         }
         var params = {
-          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
+          conversationType: 1, // 单聊,
           'targetId': targetId
         }
         RongCallLib.hungup(params, function (error, summary) {
