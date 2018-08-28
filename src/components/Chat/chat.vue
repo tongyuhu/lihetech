@@ -1,8 +1,8 @@
 <template>
   <div class="chart-window clear" v-drag="'chart'">
   
-    <div class="chart-window-left" v-show="false">
-      <!-- 左侧聊天好友列表 -->
+    <!-- 左侧聊天好友列表 -->
+    <!-- <div class="chart-window-left" v-show="false">
       <ul>
         <li v-for="item in chartList" :key="item.id">
           <span class="name">
@@ -16,7 +16,7 @@
           </el-button>
         </li>
       </ul>
-    </div>
+    </div> -->
 
 
     <div class="chart-window-right chart-wrap" >
@@ -58,7 +58,7 @@
           :who="item.senderUserId ? item.senderUserId:''"
           :type="item.content.messageName"
           >
-            <chatContent :message="item"></chatContent>
+            <chatContent :message="item" :key="item.sentTime"></chatContent>
           </chartMessage>
         </chartMessageGroup>
       </div>
@@ -106,17 +106,10 @@
       <div class="chart-wrap-send">
         <div>
           <!-- <button @click="sendMsg">关闭</button> -->
-          <button @click="sendMsg">发送</button>
+          <button @click.stop.prevent="sendMsg">发送</button>
         </div>
       </div>
     </div>
-
-    
-
-
-    <!-- <div>
-      <video src=""></video>
-    </div> -->
   </div>
 </template>
 
@@ -129,7 +122,7 @@ import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
 import {uploadFileApi} from '@/api/components/editAdmin.js'
 import InfiniteLoading from 'vue-infinite-loading'
 export default {
-  name: 'chart',
+  name: 'chartwindow',
   props: {
   },
   components: {
@@ -149,7 +142,8 @@ export default {
       imgArr: [],
       noMoreHistroy: false,
       showEmoji: false,
-      emojiList: []
+      emojiList: [],
+      currentChartMsgList: []
     }
   },
   computed: {
@@ -161,22 +155,23 @@ export default {
       historyMsg: 'history',
       adminInfo: 'adminInfo',
       chatfriend: 'chatfriend',
-      friendsList: 'friendsList'
+      friendsList: 'friendsList',
+      RongCallLibFunction: 'RongCallLibFunction'
     })
     // historyMsg () {
     //   return this.currentChat.history
     // }
   },
   watch: {
-    friendsList: {
-      handler: function (val) {
-        let current = this._.find(this.friendsList, function (item) {
-          return item.currentChat === true
-        })
-        this.sethistory(current.history)
-      },
-      deep: true
-    },
+    // friendsList: {
+    //   handler: function (val) {
+    //     let current = this._.find(this.friendsList, function (item) {
+    //       return item.currentChat === true
+    //     })
+    //     this.sethistory(current.history)
+    //   },
+    //   deep: true
+    // },
     chartList: {
       handler: function (val, oldVal) {
         if (val.length < 2) {
@@ -242,11 +237,13 @@ export default {
         // let msg = new RongIMLib.TextMessage({content: vm.readyMsg, extra: '附加信息'})
         RongIMLib.RongIMClient.getInstance().sendMessage(conversationtype, targetId, msg, {
           onSuccess: function (message) {
+            let time = new Date()
             let msgObj = {
               content: {
                 messageName: 'TextMessage',
                 // messageType: 'TextMessage',
-                content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg)
+                content: RongIMLib.RongIMEmoji.symbolToEmoji(vm.readyMsg),
+                sentTime: time.getTime()
               },
               senderUserId: vm.rongUserId,
               'targetId': targetId
@@ -379,11 +376,11 @@ export default {
               // let newChat = vm.currentChat
               // newChat.history = vm.historyMsg
               // vm.addChatFriend(newChat)
-              console.log('Send successfully')
+              console.log('Send successfully image')
               // vm.historyMsg = vm.currentChat.history
               // vm.sethistory(vm.historyMsg)
               vm.readyMsg = ''
-              console.log('Send successfully')
+              // console.log('Send successfully')
             },
             onError: function (errorCode, message) {
               var info = ''
@@ -439,27 +436,58 @@ export default {
     // 加载更多
     infiniteHandler ($state) {
       let vm = this
+      // var params = {
+      //   conversationType: RongIMLib.ConversationType.PRIVATE, // 会话类型
+      //   targetId: vm.currentChat.userId, // 目标 Id
+      //   timestamp: 1535421956503 // 清除时间点
+      // }
+      // RongIMLib.RongIMClient.getInstance().clearRemoteHistoryMessages(params, {
+      //   onSuccess: function () {
+      //     console.log('清除成功')
+      //     // 清除成功
+      //   },
+      //   onError: function (error) {
+      //     // 请排查：单群聊消息云存储是否开通
+      //     console.log(error)
+      //   }
+      // })
+      // vm.sethistory([])
       new Promise(function (resolve, reject) {
         let timestrap = null
         let count = 20
         let targetuserId = vm.currentChat.userId
         let userId = targetuserId
-      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+        // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
         RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
           onSuccess: function (list, hasMsg) {
-            vm.sethistory(vm.currentChat.history)
+            // vm.sethistory(vm.currentChat.history)
             // vm.getCurrentFriendMsg(msgObj)
             console.log('历史消息VM', vm.currentChat)
+            // if(firstAddMore)
+            let historyList = []
             if (vm._.has(vm.currentChat, 'history')) {
               if (vm.currentChat.history.length === 0) {
-                vm.sethistory(list)
+                // vm.sethistory(list)
+                historyList = list
               } else {
-                vm.sethistory(vm._.concat(list, vm.currentChat.history))
+                // vm.sethistory(list)
+                if (vm._.has(vm.currentChat, 'firstAddMore')) {
+                  if (vm.currentChat.firstAddMore) {
+                    historyList = list
+                  } else {
+                    historyList = vm._.concat(list, vm.currentChat.history)
+                  }
+                }
+                // vm.sethistory(vm._.concat(list, vm.currentChat.history))
+                // vm.currentChartMsgList = vm._.concat(list, vm.currentChartMsgList)
+                // vm.sethistory(vm.currentChartMsgList)
               }
             }
+            vm.sethistory(historyList)
             let newChat = vm.currentChat
-            newChat.history = vm.historyMsg
+            newChat.history = historyList
             newChat.hasHistroy = hasMsg
+            newChat.firstAddMore = false
             vm.addChatFriend(newChat)
             console.log('历史消息', list, hasMsg)
             console.log('历史消息bend', vm.historyMsg)
@@ -508,26 +536,22 @@ export default {
       // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
       RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
         onSuccess: function (list, hasMsg) {
-          vm.sethistory(vm.currentChat.history)
-            // vm.getCurrentFriendMsg(msgObj)
           console.log('历史消息VM', vm.currentChat)
           if (vm._.has(vm.currentChat, 'history')) {
             if (vm.currentChat.history.length === 0) {
               vm.sethistory(list)
+              console.log('加载更多add1')
             } else {
-              vm.sethistory(vm._.concat(list, vm.currentChat.history))
+              console.log('加载更多add2')
+              vm.sethistory(list)
             }
           }
           let newChat = vm.currentChat
-          newChat.history = vm.historyMsg
+          newChat.history = list
           newChat.hasHistroy = hasMsg
           vm.addChatFriend(newChat)
           console.log('历史消息', list, hasMsg)
-          console.log('历史消息bend', vm.historyMsg)
           vm.isTriggerFirstLoad = false
-          // if (!hasMsg) {
-          //   vm.noMoreHistroy = true
-          // }
         },
         onError: function (error) {
           console.log('历史消息获取失败', error)
@@ -550,20 +574,14 @@ export default {
       console.log('通话id', vm.currentChat.userId)
       var params = {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
-        conversationType: 1,
-        // conversationType: RongIMLib.ConversationType.PRIVATE,
+        conversationType: RongIMLib.ConversationType.PRIVATE,
         // 会话目标 Id，群 Id 或者 userId。
         targetId: vm.currentChat.userId,
-        inviteUserIds: vm.currentChat.userId,
-        // targetId: 'admin_5',
-        // inviteUserIds: 'admin_5',
-        // targetId: 'member_49',
+        inviteUserIds: [vm.currentChat.userId],
         // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。
-        // inviteUserIds: inviteUserIds,
         // 音频类型
         // CallType.MEDIA_VEDIO
         // CallType.MEDIA_AUDIO
-        // mediaType: RongIMLib.VoIPMediaType.MEDIA_VEDIO
         mediaType: currentCallType
       }
       vm.getInvite(true) // 改变状态显示接收消息
@@ -580,7 +598,8 @@ export default {
         targetUser.userName = null
       }
       vm.changeCurrentVideo(targetUser)
-      RongCallLib.call(params, function (error) {
+
+      vm.RongCallLibFunction.call(params, function (error) {
         console.log('发送视频失败', error)
         vm.closeVideoMsg()  // 关闭提醒窗口
         if (error.code === 4) {
@@ -693,13 +712,29 @@ export default {
     },
     callVoice () {
       this.callVideo(true)
+    },
+    scrollToButtom () {
+      let vm = this
+      this.$nextTick(() => {
+        setTimeout(function () {
+          let container = vm.$el.querySelector('#chatWidow')
+          container.scrollTop = container.scrollHeight
+          // console.log('container.scrollTop', container.scrollTop)
+          // console.log('container.scrollHeight', container.scrollHeight)
+            // container.scrollIntoView()
+        }, 100)
+      })
     }
   },
-  mounted () {
+  created () {
+    let vm = this
     this.emojiList = RongIMLib.RongIMEmoji.list
     this.emojiList.forEach(item => {
       item.html = RongIMLib.RongIMEmoji.symbolToHTML(item.symbol)
     })
+    // this.getHistroyMsgRong(vm.currentChat.userId)
+  },
+  mounted () {
     // let vm = this
     // Bus.$on('history', (val) => {
     //   vm.historyMsg = val

@@ -101,10 +101,10 @@ export default {
     hungCall () {
       // this.close()
       // document.getElementById('videoChat').innerHTML = ''
-      document.getElementById('videoChat').innerHTML = ''
-      document.getElementById('selfVideo').innerHTML = ''
       this.closeVideo()
       this.$emit('hungcall')
+      document.getElementById('videoChat').innerHTML = ''
+      document.getElementById('selfVideo').innerHTML = ''
     },
     noVoice () {
       this.$emit('mute')

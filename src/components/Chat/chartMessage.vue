@@ -72,12 +72,32 @@ export default {
       handler: function (val) {
         if (this.who === this.rongUserId) {
           this.cls = false
+          if (this.type === 'ImageMessage') {
+            this.nobg = true
+            this.chatclass = ''
+          } else {
+            if (this.cls) {
+              this.chatclass = 'left-angle'
+            } else {
+              this.chatclass = 'right-angle'
+            }
+          }
           if (this.adminImg) {
             this.userImgChat = imgExists(this.adminImg, publicStatic.onlineStatic + '/static/user.png')
           }
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
+          if (this.type === 'ImageMessage') {
+            this.nobg = true
+            this.chatclass = ''
+          } else {
+            if (this.cls) {
+              this.chatclass = 'left-angle'
+            } else {
+              this.chatclass = 'right-angle'
+            }
+          }
           if (this.currentChatImg) {
             this.userImgChat = imgExists(this.currentChatImg, publicStatic.onlineStatic + '/static/user.png')
           }
@@ -86,19 +106,19 @@ export default {
       immediate: true
     }
   },
-  mounted () {
-    if (this.type === 'ImageMessage') {
-      this.nobg = true
-      this.chatclass = ''
-      // this.cls = '0000'
-    } else {
-      if (this.cls) {
-        this.chatclass = 'left-angle'
-      } else {
-        this.chatclass = 'right-angle'
-      }
-    }
-    this.userImgChat = imgExists(this.userImgChat, publicStatic.onlineStatic + '/static/user.png')
+  created () {
+    // if (this.type === 'ImageMessage') {
+    //   this.nobg = true
+    //   this.chatclass = ''
+    //   // this.cls = '0000'
+    // } else {
+    //   if (this.cls) {
+    //     this.chatclass = 'left-angle'
+    //   } else {
+    //     this.chatclass = 'right-angle'
+    //   }
+    // }
+    // this.userImgChat = imgExists(this.userImgChat, publicStatic.onlineStatic + '/static/user.png')
   }
 
 }

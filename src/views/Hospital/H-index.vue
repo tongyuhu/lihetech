@@ -23,6 +23,7 @@
     <chat
     v-if="chatStatus"
     ></chat>
+    <!-- :key="keyTime" -->
     <videoChat
     ref="videochatref"
     v-show="video"
@@ -51,6 +52,7 @@
   import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import position from '@/components/Chat/postion.vue'
+  import {findComponentsDownward} from '@/untils/untils'
   export default {
     name: 'H-index',
     components: {
@@ -80,11 +82,16 @@
         hasVideoMsg: 'hasVideoMsg',
         currentVideo: 'currentVideo',
         currentIsVideo: 'currentIsVideo',
-        imStatus: 'imStatus'
+        imStatus: 'imStatus',
+        RongCallLibFunction: 'RongCallLibFunction'
       }),
       ...mapGetters([
         'currentChat'
-      ])
+      ]),
+      keyTime () {
+        let date = new Date()
+        return date.getTime()
+      }
     },
     methods: {
       ...mapMutations([
@@ -102,7 +109,8 @@
         'changeCurrentVideo',
         'getInvite',
         'changeCurrentIsVideo',
-        'changeImStatus'
+        'changeImStatus',
+        'changeRongCallLibFunction'
       ]),
       ...mapActions([
         'setRongUserIdAction',
@@ -119,7 +127,7 @@
       chatWith (history) {
         Bus.$emit('history', history)
         this.openChatWindow()
-        this.chatStatus = true
+        // this.chatStatus = true
       },
       closeVideoChat () {
         // if (this.currentVideo) {
@@ -127,6 +135,7 @@
         // }
         this.closeVideo()
       },
+      // 接通
       connectCall () {
         let targetId
         if (this.currentVideo) {
@@ -140,8 +149,8 @@
           isCallVideo = CallType.MEDIA_AUDIO
         }
         let params = {
-          conversationType: 1, // 单聊
-          // conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊
+          // conversationType: 1, // 单聊
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊
           targetId: targetId,
           // 音频类型
           // CallType.MEDIA_VEDIO
@@ -150,7 +159,7 @@
           // mediaType: CallType.MEDIA_VEDIO
         }
         // }
-        RongCallLib.accept(params)
+        this.RongCallLibFunction.accept(params)
         this.openVideo() // 打开视频窗口
         this.closeVideoMsg()  // 关闭提醒窗口
       },
@@ -161,55 +170,89 @@
           targetId = this.currentVideo.targetId
         }
         var params = {
-          conversationType: 1, // 单聊,
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
           'targetId': targetId
         }
-        RongCallLib.reject(params)
+        this.RongCallLibFunction.reject(params)
         this.closeVideoMsg()
       },
+      // 挂断
       hungup () {
+        // this.closeVideoMsg()
         let targetId
         if (this.currentVideo) {
           targetId = this.currentVideo.targetId
         }
         var params = {
-          conversationType: 1, // 单聊,
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
           'targetId': targetId
         }
-        RongCallLib.hungup(params, function (error, summary) {
+        this.RongCallLibFunction.hungup(params, function (error, summary) {
           console.log('挂断', summary)
         })
-        // this.closeVideoChat()
+        // this.closeVideoMsg()
       },
+      // 取消
       cancelCall () {
         let targetId
+        this.closeVideoMsg() // 收到接收命令关闭提醒窗口
         if (this.currentVideo) {
           targetId = this.currentVideo.targetId
         }
         var params = {
-          conversationType: 1, // 单聊,
+          conversationType: RongIMLib.ConversationType.PRIVATE, // 单聊,
           'targetId': targetId
         }
-        RongCallLib.hungup(params, function (error, summary) {
+        this.RongCallLibFunction.hungup(params, function (error, summary) {
           console.log('挂断', summary)
         })
-        this.closeVideoMsg() // 收到接收命令关闭提醒窗口
+        // RongCallLib.reject(params)
       },
       // 静音
       muteChat () {
-        RongCallLib.mute()
+        this.RongCallLibFunction.mute()
       },
       // 取消静音
       unmuteChat () {
-        RongCallLib.unmute()
+        this.RongCallLibFunction.unmute()
       },
       videoToAudio () {
         this.changeCurrentIsVideo(false)
-        RongCallLib.videoToAudio()
+        this.RongCallLibFunction.videoToAudio()
       },
       audioToVideo () {
         this.changeCurrentIsVideo(true)
-        RongCallLib.audioToVideo()
+        this.RongCallLibFunction.audioToVideo()
+      },
+      addMsgToHistroy (message) {
+        let vm = this
+        let currentId = ''
+        if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
+          currentId = ''
+        } else {  // 当前有聊天窗口
+          currentId = vm.currentChat.userId
+        }
+        if (message.senderUserId === currentId) { // 当前聊天用户是否和消息来源一致
+          console.log('收到的消息是当前聊天对象', vm.currentChat)
+          vm.getCurrentFriendMsg(message)
+        } else {  //
+          vm.friendsList.forEach(function (item) {
+            if (item.userId === message.senderUserId) {
+              console.log('收到的消息不是当前聊天对象', message)
+              let obj = {
+                'friendId': message.senderUserId,
+                'message': message
+              }
+              vm.getFriendMsg(obj)
+            }
+          })
+        }
+        if (vm.chatStatus) {
+          let chatwindow = findComponentsDownward(this, 'chartwindow')
+          chatwindow[0].scrollToButtom()
+        }
+        // console.log('chart组件', chatwindow)
+        // scrollToButtom
       }
     },
     watch: {
@@ -244,16 +287,12 @@
       }
     },
     mounted () {
-      // console.log('ONLINE_STATIC', this.ONLINE_STATIC)
-      // window['SCHEMETYPE'] = 'http'
       let vm = this
       vm.setFriendsListActon() // 获取好友列表
       vm.token = vm.adminInfo.rongCloudToken
-      // let RongIMLib = RongIMLib
-      // console.log('RongIMLib', RongIMLib)
-      let config = {
-        protobuf: publicStatic.onlineStatic + '/static/protobuf-2.2.8.min.js'
-      }
+      // let config = {
+      //   protobuf: publicStatic.onlineStatic + '/static/protobuf-2.2.8.min.js'
+      // }
       // 初始化
       RongIMLib.RongIMClient.init(vm.appKey)
       // RongIMLib.RongIMClient.init(this.appKey, null, config)
@@ -296,107 +335,18 @@
             // 判断消息类型
           switch (message.messageType) {
             case RongIMClient.MessageType.TextMessage:
-              console.log(message)
-              let currentId = ''
-              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
-                currentId = ''
-              } else {  // 当前有聊天窗口
-                currentId = vm.currentChat.userId
-              }
-              if (message.senderUserId === currentId) { // 当前聊天用户是否和消息来源一致
-                console.log('是当前聊天对象？', vm.currentChat)
-                vm.getCurrentFriendMsg(message)
-              } else {  //
-                // console.log('zhixing')
-                vm.friendsList.forEach(function (item) {
-                  if (item.userId === message.senderUserId) {
-                    console.log('收到的消息', message)
-                    let obj = {
-                      'friendId': message.senderUserId,
-                      'message': message
-                    }
-                    vm.getFriendMsg(obj)
-                  }
-                })
-              }
-              if (vm.chatStatus) {
-                vm.$nextTick(() => {
-                  setTimeout(function () {
-                    let container = vm.$el.querySelector('#chatWidow')
-                    container.scrollTop = container.scrollHeight
-                    // console.log('container.scrollTop', container.scrollTop)
-                    // console.log('container.scrollHeight', container.scrollHeight)
-                    // container.scrollIntoView()
-                  }, 100)
-                })
-              }
+              vm.addMsgToHistroy(message)
               // message.content.content => 消息内容
               break
             case RongIMClient.MessageType.VoiceMessage:
               console.log('收到语音消息', message)
                     // 对声音进行预加载
                     // message.content.content 格式为 AMR 格式的 base64 码
-
-              let currentvoiceId = ''
-              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
-                currentvoiceId = ''
-              } else {  // 当前有聊天窗口
-                currentvoiceId = vm.currentChat.userId
-              }
-              if (message.senderUserId === currentvoiceId) { // 当前聊天用户是否和消息来源一致
-                vm.getCurrentFriendMsg(message)
-              } else {  //
-                vm.friendsList.forEach(function (item) {
-                  if (item.userId === message.senderUserId) {
-                    let obj = {
-                      'friendId': message.senderUserId,
-                      'message': message
-                    }
-                    vm.getFriendMsg(obj)
-                  }
-                })
-              }
-              if (vm.chatStatus) {
-                vm.$nextTick(() => {
-                  setTimeout(function () {
-                    let container = vm.$el.querySelector('#chatWidow')
-                    container.scrollTop = container.scrollHeight
-                  }, 100)
-                })
-              }
+              vm.addMsgToHistroy(message)
               break
             case RongIMClient.MessageType.ImageMessage:
               console.log('图片消息', message)
-              let currentIdImg = ''
-  
-              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
-                currentIdImg = ''
-              } else {  // 当前有聊天窗口
-                currentIdImg = vm.currentChat.userId
-              }
-              if (message.senderUserId === currentIdImg) { // 当前聊天用户是否和消息来源一致
-                vm.getCurrentFriendMsg(message)
-              } else {  //
-                vm.friendsList.forEach(function (item) {
-                  if (item.userId === message.senderUserId) {
-                    console.log('收到的消息', message)
-                    let obj = {
-                      'friendId': message.senderUserId,
-                      'message': message
-                    }
-                    vm.getFriendMsg(obj)
-                  }
-                })
-              }
-              vm.$nextTick(() => {
-                setTimeout(function () {
-                  let container = vm.$el.querySelector('#chatWidow')
-                  container.scrollTop = container.scrollHeight
-                  console.log('container.scrollTop', container.scrollTop)
-                  console.log('container.scrollHeight', container.scrollHeight)
-                  // container.scrollIntoView()
-                }, 100)
-              })
+              vm.addMsgToHistroy(message)
                   // message.content.content => 图片缩略图 base64。
                   // message.content.imageUri => 原图 URL。
               break
@@ -405,34 +355,8 @@
               break
             case RongIMClient.MessageType.LocationMessage:
               console.log('收到位置信息', message)
-
-              let currentlocationId = ''
-              if (!(vm._.has(vm.currentChat, 'userId'))) { // 当前是否打开聊天窗口
-                currentlocationId = ''
-              } else {  // 当前有聊天窗口
-                currentlocationId = vm.currentChat.userId
-              }
-              if (message.senderUserId === currentlocationId) { // 当前聊天用户是否和消息来源一致
-                vm.getCurrentFriendMsg(message)
-              } else {  //
-                vm.friendsList.forEach(function (item) {
-                  if (item.userId === message.senderUserId) {
-                    let obj = {
-                      'friendId': message.senderUserId,
-                      'message': message
-                    }
-                    vm.getFriendMsg(obj)
-                  }
-                })
-              }
-              if (vm.chatStatus) {
-                vm.$nextTick(() => {
-                  setTimeout(function () {
-                    let container = vm.$el.querySelector('#chatWidow')
-                    container.scrollTop = container.scrollHeight
-                  }, 100)
-                })
-              }
+              vm.addMsgToHistroy(message)
+  
                   // message.content.latiude => 纬度。
                   // message.content.longitude => 经度。
                   // message.content.content => 位置图片 base64。
@@ -466,7 +390,7 @@
         }
       })
       // 登录
-      RongIMLib.RongIMClient.connect(this.token, {
+      RongIMLib.RongIMClient.connect(vm.token, {
         onSuccess: function (userId) {
           console.log('融云管理员id是' + userId)
           vm.setRongUserId(userId)
@@ -489,24 +413,6 @@
             },
             onError: function (error) {
                 // error => 获取总未读数错误码。
-            }
-          })
-  
-          // 获取历史消息
-          let timestrap = null
-          let count = 20
-          console.log('RongIMLib.ConversationType.PRIVATE', RongIMLib.ConversationType.PRIVATE)
-          // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
-          RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, '5277', timestrap, count, {
-            onSuccess: function (list, hasMsg) {
-            // hasMsg为boolean值，如果为true则表示还有剩余历史消息可拉取，为false的话表示没有剩余历史消息可供拉取。
-            // list 为拉取到的历史消息列表
-              console.log('历史消息', list, hasMsg)
-            },
-            onError: function (error) {
-              console.log('历史消息获取失败', error)
-            // APP未开启消息漫游或处理异常
-            // throw new ERROR ......
             }
           })
         },
@@ -549,7 +455,8 @@
         frameRate: 15,
         RongIMLib: RongIMLib
       }
-      RongCallLib = RongCallLib.init(callconfig)
+      // RongCallLib = RongCallLib.init(callconfig)
+      vm.changeRongCallLibFunction(RongCallLib.init(callconfig))
       let watcher = function (result) {
         console.log('监听语音视频', result)
         if (result.type === 'added') {
@@ -593,6 +500,7 @@
           vm.friendVideoDomID = null
           document.getElementById('selfVideo').innerHTML = ''
           document.getElementById('videoChat').innerHTML = ''
+          vm.closeVideoChat()
         }
   
         // result.userId  //大窗口
@@ -600,11 +508,11 @@
         // result.type === removed 加入
         // result.data 是要添加/移除的dom节点
 
-      // result => {type: 'added', data: ''}
+        // result => {type: 'added', data: ''}
       }
       // console.log('RongCallLib2', RongCallLib)
-      RongCallLib.videoWatch(watcher)
-      RongCallLib.commandWatch(function (command) {
+      vm.RongCallLibFunction.videoWatch(watcher)
+      vm.RongCallLibFunction.commandWatch(function (command) {
         console.log('命令监听', command)
         if (command) {
           // 接收到邀请视频信息
@@ -634,28 +542,151 @@
           }
           // 对方挂断通话
           if (command.messageType === 'HungupMessage') {
-            vm.hungup()
             vm.closeVideo()
             vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
             vm.$message({
               showClose: true,
-              message: '对方挂断了视频通话',
+              message: '对方挂断',
               type: 'warning'
             })
+            vm.hungup()
             console.log('对方挂断', command)
           }
           // 对方拒绝通话
           if (command.messageType === 'SummaryMessage') {
-            if (command.content.status === 5) {
-              vm.hungup()
-              vm.closeVideo()
-              vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+            // if (command.content.status === 5 || command.content.status === 15) {
+            //   vm.hungup()
+            //   vm.closeVideo()
+            //   vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+            //   vm.$message({
+            //     showClose: true,
+            //     message: '未接通',
+            //     type: 'warning'
+            //   })
+            // }
+  
+            vm.closeVideo()
+            vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
+            if (command.content.status === 4) {
               vm.$message({
                 showClose: true,
-                message: '未接通',
+                message: '对方忙,请稍后再打',
                 type: 'warning'
               })
             }
+            if (command.content.status === 1) {
+              // vm.$message({
+              //   showClose: true,
+              //   message: '己方取消已发出的通话请求',
+              //   type: 'warning'
+              // })
+            }
+            if (command.content.status === 2) {
+              // vm.$message({
+              //   showClose: true,
+              //   message: '己方拒绝收到的通话请求',
+              //   type: 'warning'
+              // })
+            }
+            if (command.content.status === 3) {
+              // vm.$message({
+              //   showClose: true,
+              //   message: '己方挂断',
+              //   type: 'warning'
+              // })
+            }
+            if (command.content.status === 4) {
+              // vm.$message({
+              //   showClose: true,
+              //   message: '已方忙碌',
+              //   type: 'warning'
+              // })
+            }
+            if (command.content.status === 5) {
+              // vm.$message({
+              //   showClose: true,
+              //   message: '己方未接听',
+              //   type: 'warning'
+              // })
+            }
+            if (command.content.status === 6) {
+              vm.$message({
+                showClose: true,
+                message: '己方不支持当前引擎',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 7) {
+              vm.$message({
+                showClose: true,
+                message: '己方网络出错',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 8) {
+              vm.$message({
+                showClose: true,
+                message: '其他设备已处理',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 11) {
+              vm.$message({
+                showClose: true,
+                message: '对方取消已发出的通话请求',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 12) {
+              vm.$message({
+                showClose: true,
+                message: '对方拒绝收到的通话请求',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 13) {
+              vm.$message({
+                showClose: true,
+                message: '对方挂断通话',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 14) {
+              vm.$message({
+                showClose: true,
+                message: '对方忙碌',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 15) {
+              vm.$message({
+                showClose: true,
+                message: '对方未接听',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 16) {
+              vm.$message({
+                showClose: true,
+                message: '对方不支持当前引擎',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 17) {
+              vm.$message({
+                showClose: true,
+                message: '网络错误',
+                type: 'warning'
+              })
+            }
+            if (command.content.status === 18) {
+              vm.$message({
+                showClose: true,
+                message: 'CallLib 不可以用',
+                type: 'warning'
+              })
+            }
+            vm.hungup()
             // vm.closeVideoMsg() // 收到接收命令关闭提醒窗口
             // vm.$message({
             //   showClose: true,
@@ -671,7 +702,10 @@
         }
       // command => 消息指令;
       })
-
+      // var RongCallCommon.CallVideoProfile = 20 //代表240p
+      // var RongCallCommon.CallVideoProfile = 40 //代表480p
+      // var RongCallCommon.CallVideoProfile = 50 //代表720p
+      // RongCallLib.setVideoProfile(50)
       RongIMLib.RongIMEmoji.init({
         size: 18
       })

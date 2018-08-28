@@ -63,7 +63,8 @@ export const store = new Vuex.Store({
     // 当前是视频聊天
     currentIsVideo: true,
     // 邀请音视频
-    invite: true
+    invite: true,
+    RongCallLibFunction: null
   },
   getters: {
     adminImg: state => {
@@ -164,6 +165,22 @@ export const store = new Vuex.Store({
             item.history = []
             state.history = []
           }
+          let timestrap = null
+          let count = 20
+          let userId = friend.userId
+          // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+          // RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
+          //   onSuccess: function (list, hasMsg) {
+          //     console.log('历史消息VM', list)
+          //     item.history = _.concat(list, item.history)
+          //   },
+          //   onError: function (error) {
+          //     console.log('历史消息获取失败', error)
+          //   // APP未开启消息漫游或处理异常
+          //   // throw new ERROR ......
+          //   }
+          // })
+          state.history = item.history
           item.currentChat = true
         } else {
           item.currentChat = false
@@ -177,14 +194,15 @@ export const store = new Vuex.Store({
           item.hasMsg = true
           state.newmsg = true
           if (_.has(item, 'history')) {
-            item.history.push(obj.message)
+            // item.history.push(obj.message)
             console.log('添加消息', obj.message)
             // console.log('添加消息', message)
           } else {
             item.history = []
-            item.history.push(obj.message)
+            // item.history.push(obj.message)
             console.log('添加消息', obj.message)
           }
+          item.history.push(obj.message)
         }
       })
       // Object.assign({}, obj)
@@ -251,7 +269,7 @@ export const store = new Vuex.Store({
           item.currentChat = false
         })
       }
-      console.log('是否清除当前聊天', state.chatfriend, state.friendsList)
+      // console.log('是否清除当前聊天', state.chatfriend, state.friendsList)
     },
     clearNewmsg (state) {
       state.newmsg = false
@@ -298,6 +316,9 @@ export const store = new Vuex.Store({
     },
     changeCurrentSickInfo (state, info) {
       state.currentSickInfo = info
+    },
+    changeRongCallLibFunction (state, lib) {
+      state.RongCallLibFunction = lib
     }
   },
   actions: {
@@ -331,6 +352,7 @@ export const store = new Vuex.Store({
                 obj.currentChat = false
                 obj.history = []
                 obj.hasHistroy = true
+                obj.firstAddMore = true
                 if (_.has(item, 'userImage')) {
                   obj.userImg = process.env.IMG_URL + item.userImage
                   // obj.userImg = imgExists(process.env.IMG_URL + item.userImage, publicStatic.onlineStatic + '/static/user.png')
@@ -354,6 +376,38 @@ export const store = new Vuex.Store({
       .then(res => {
         if (res.data.data) {
           content.commit('SET_ADMIN_INFO', res.data.data)
+        }
+      })
+    },
+    getHistroyMsg (context, targetuserId) {
+      let timestrap = null
+      let count = 20
+      let userId = targetuserId
+      // 请确保单群聊消息云存储服务开通，且开通后有过收发消息记录
+      RongIMLib.RongIMClient.getInstance().getHistoryMessages(RongIMLib.ConversationType.PRIVATE, userId, timestrap, count, {
+        onSuccess: function (list, hasMsg) {
+          if (_.has(context.getters.currentChat, 'history')) {
+            if (context.getters.currentChat.history.length === 0) {
+              context.commit('sethistory', list)
+            } else {
+              context.commit('sethistory', _.concat(list, context.getters.currentChat.history))
+            }
+          }
+          let newChat = context.getters.currentChat
+          newChat.history = context.getters.historyMsg
+          newChat.hasHistroy = hasMsg
+          context.commit('addChatFriend', newChat)
+          // console.log('历史消息', list, hasMsg)
+          // console.log('历史消息bend', state.historyMsg)
+          // state.isTriggerFirstLoad = false
+          // if (!hasMsg) {
+          //   vm.noMoreHistroy = true
+          // }
+        },
+        onError: function (error) {
+          console.log('历史消息获取失败', error)
+        // APP未开启消息漫游或处理异常
+        // throw new ERROR ......
         }
       })
     }

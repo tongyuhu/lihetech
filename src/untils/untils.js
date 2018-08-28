@@ -210,8 +210,8 @@ export function imgExists (checkimgsrc, errorsrc) {
   let ImgObj = new Image() // 判断图片是否存在
   ImgObj.src = checkimgsrc
   // myWindow.getElementById('image-test').appendChild(ImgObj)
-  console.log('用户头像地址', checkimgsrc)
-  console.log('用户头像', ImgObj, ImgObj.fileSize, ImgObj.width, ImgObj.height)
+  // console.log('用户头像地址', checkimgsrc)
+  // console.log('用户头像', ImgObj, ImgObj.fileSize, ImgObj.width, ImgObj.height)
 
   // 没有图片，则返回
   if (!checkimgsrc) {
