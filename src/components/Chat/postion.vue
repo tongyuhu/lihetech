@@ -32,19 +32,11 @@ export default {
     }
   },
   mounted () {
-    // window.onLoad = function () {
-    //   var map = new AMap.Map('container')
-    //   }
-    //   var url = 'http://webapi.amap.com/maps?v=1.4.6&key=2cfe1d4f0a4041df6e7e3635c9b25f52&callback=onLoad'
-    //   var jsapi = doc.createElement('script')
-    //   jsapi.charset = 'utf-8'
-    //   jsapi.src = url
-    //   document.head.appendChild(jsapi)
     let vm = this
     console.log('map', vm.id, vm.center)
-    var map = new AMap.Map(vm.id)
+    // var map = new AMap.Map(vm.id)
     var map = new AMap.Map(vm.id, {
-      zoom: 14, // 级别
+      zoom: vm.zoom, // 级别
       center: vm.center, // 中心点坐标
       viewMode: '3D'// 使用3D视图
     })

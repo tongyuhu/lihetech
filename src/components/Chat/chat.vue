@@ -317,6 +317,8 @@ export default {
       formdata.append('files', file)
       let base64Str
       let image = new Image()
+      let size = file.size / 1024
+
       image.src = window.URL.createObjectURL(file)
       // image.src = window.URL.createObjectURL(files.item(dd))
       image.onload = function () {
@@ -327,7 +329,15 @@ export default {
         w = 200
         h = w / scale
         // 默认图片质量为0.7，quality值越小，所绘制出的图像越模糊
-        let quality = 0.7
+        let quality
+        if (size < 30) {
+          quality = 1
+        } else {
+          quality = 25 / size
+          // if (quality < 0.1) {
+          //   quality = 0.1
+          // }
+        }
         // 生成canvas
         let canvas = document.createElement('canvas')
         let ctx = canvas.getContext('2d')
@@ -341,10 +351,16 @@ export default {
         ctx.drawImage(image, 0, 0, w, h)
         let ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()// 图片格式
         // let base64 = canvas.toDataURL('image/' + ext, quality)
-        let base64 = canvas.toDataURL('image/' + ext, quality)
+        let base64 = canvas.toDataURL('image/' + 'jpeg', quality)
+        // let base64 = canvas.toDataURL('image/' + ext, quality)
         let base = base64.split(',')
         let str = base[1]
         base64Str = str
+        if (base64Str.length / 1024 > 30) {
+
+        }
+        console.log('图片大小', file.size / 1024, file)
+        console.log('图片大小suolv', base64Str.length / 1024)
         // 回调函数返回base64的值
       }
 
@@ -576,6 +592,8 @@ export default {
         // 会话类型，请参考: http://rongcloud.cn/docs/web_api_demo.html#conversation_type
         conversationType: RongIMLib.ConversationType.PRIVATE,
         // 会话目标 Id，群 Id 或者 userId。
+        // targetId: 'admin_5',
+        // inviteUserIds: ['admin_5'],
         targetId: vm.currentChat.userId,
         inviteUserIds: [vm.currentChat.userId],
         // 被邀请人 Id , 多人视频填写多个 userId 最多支持 7 人, 一对一和 targetId 值一致。

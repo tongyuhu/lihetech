@@ -3,7 +3,12 @@
     <!-- <span v-if="isTextMsg">{{textMsg}}</span> -->
     <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig(imgsrc)" alt="无法获取图片">
     <span v-if="isTextMsg" v-html="textMsg"></span>
-    <button :class="{'voice-msg':true}" v-if="isVoiceMsg" @click="playVoice"><span :class="{'iconfont':true, 'icon-yuyin':true,'voice':playVoiceAnimation}"></span></button>
+    <span>
+      <button :class="{'voice-msg':true}" v-if="isVoiceMsg" @click="playVoice">
+        <span :class="{'iconfont':true, 'icon-yuyin':true,'voice':playVoiceAnimation}"></span>
+        </button>
+      <span v-if="isVoiceMsg">{{voiceTime}}"</span>
+    </span>
     <div v-if="isLocationMsg" class="location-img-wrap">
       <!-- <img class="location-img" v-if="isLocationMsg" :src="locationMsg" @click="showBig(locationMsg)" alt="无法获取图片">
       <span class="location-name">{{locationName}}</span> -->
@@ -63,51 +68,54 @@ export default {
       locationName: '',
       locationid: '',
       bigImgsrc: '',
-      playVoiceAnimation: false
+      playVoiceAnimation: false,
+      voiceTime: ''
     }
   },
-  // watch: {
-  //   message: {
-  //     handler: function (val) {
-  //       switch (val.content.messageName) {
-  //         case 'TextMessage':
-  //           this.isTextMsg = true
-  //         // if (this.this.message.content.content) {
-  //           this.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(this.message.content.content)
-  //         // }
-  //           break
-  //         case 'ImageMessage':
-  //           this.isImgMsg = true
-  //           if (this.message.content.content) {
-  //             this.imgsrc = 'data:image/jpg;base64,' + this.message.content.content
-  //           }
-  //           if (this.message.content.imageUri) {
-  //             this.imgsrc = this.message.content.imageUri
-  //           }
-  //           break
-  //         case 'VoiceMessage':
-  //           this.isVoiceMsg = true
-  //           this.voiceFile = this.message.content.content
-  //           break
-  //         case 'LocationMessage':
-  //           this.isLocationMsg = true
-  //           this.locationMsg.push(this.message.content.longitude)
-  //           this.locationMsg.push(this.message.content.latitude)
-  //           this.locationName = this.message.content.poi
-  //           this.locationid = this.message.messageId
-  //           break
-  //       }
-  //     },
-  //     deep: true,
-  //     immediate: true
-  //   }
-  // },
+  watch: {
+    message: {
+      handler: function (val) {
+        switch (val.content.messageName) {
+          case 'TextMessage':
+            this.isTextMsg = true
+          // if (this.this.message.content.content) {
+            this.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(this.message.content.content + '')
+          // }
+            break
+          case 'ImageMessage':
+            this.isImgMsg = true
+            if (this.message.content.content) {
+              this.imgsrc = 'data:image/jpg;base64,' + this.message.content.content
+            }
+            if (this.message.content.imageUri) {
+              this.imgsrc = this.message.content.imageUri
+            }
+            break
+          case 'VoiceMessage':
+            this.isVoiceMsg = true
+            this.voiceFile = this.message.content.content
+            let duration = this.voiceFile.length / 1024
+            this.voiceTime = parseInt(duration)
+            break
+          case 'LocationMessage':
+            this.isLocationMsg = true
+            this.locationMsg.push(this.message.content.longitude)
+            this.locationMsg.push(this.message.content.latitude)
+            this.locationName = this.message.content.poi
+            this.locationid = this.message.messageId
+            break
+        }
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   computed: {
 
   },
   methods: {
     showBig (src) {
-      let vm = this
+      // let vm = this
       this.bigImgsrc = src
       this.showBigImg = true
       // this.$nextTick(function () {
@@ -127,9 +135,7 @@ export default {
       switch (vm.message.content.messageName) {
         case 'TextMessage':
           vm.isTextMsg = true
-          // if (vm.vm.message.content.content) {
-          // vm.textMsg = vm.message.content.content
-          vm.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(vm.message.content.content)
+          vm.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(vm.message.content.content + '')
           // }
           break
         case 'ImageMessage':
@@ -144,12 +150,16 @@ export default {
         case 'VoiceMessage':
           vm.isVoiceMsg = true
           vm.voiceFile = vm.message.content.content
+          let duration = vm.voiceFile.length / 1024
+          this.voiceTime = parseInt(duration)
           break
         case 'LocationMessage':
           vm.isLocationMsg = true
-          vm.locationMsg.push(vm.message.content.latitude)
-          vm.locationMsg.push(vm.message.content.longitude)
+          vm.locationMsg = [vm.message.content.latitude, vm.message.content.longitude]
+          // vm.locationMsg.push(vm.message.content.latitude)
+          // vm.locationMsg.push(vm.message.content.longitude)
           vm.locationName = vm.message.content.poi
+          this.locationid = this.message.messageId
           break
       }
       // if(message.messageType)
@@ -157,6 +167,7 @@ export default {
     playVoice () {
       let vm = this
       let duration = vm.voiceFile.length / 1024
+      // this.voiceTime = parseInt(duration)
       // 预加载
       vm.playVoiceAnimation = true
       RongIMLib.RongIMVoice.preLoaded(vm.voiceFile, function () {
@@ -170,8 +181,8 @@ export default {
     }
   },
   mounted () {
-    let vm = this
-    vm.showmsg()
+    // let vm = this
+    // vm.showmsg()
     // console.log('message', vm.message)
     // console.log('messagename', vm.message.content.messageName)
   }

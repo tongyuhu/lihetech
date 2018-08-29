@@ -250,8 +250,8 @@
         if (vm.chatStatus) {
           let chatwindow = findComponentsDownward(this, 'chartwindow')
           chatwindow[0].scrollToButtom()
+          console.log('chart组件', chatwindow)
         }
-        // console.log('chart组件', chatwindow)
         // scrollToButtom
       }
     },
