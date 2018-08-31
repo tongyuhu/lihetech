@@ -746,7 +746,7 @@ export default {
   },
   created () {
     let vm = this
-    this.emojiList = RongIMLib.RongIMEmoji.list
+    vm.emojiList = RongIMLib.RongIMEmoji.list
     this.emojiList.forEach(item => {
       item.html = RongIMLib.RongIMEmoji.symbolToHTML(item.symbol)
     })
