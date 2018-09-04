@@ -501,7 +501,8 @@ export default {
         'changeChatFriend',
         'openChatWindow',
         'setuserMakeOrderDoctorId',
-        'SET_CURRENT_SICK_DATA'
+        'SET_CURRENT_SICK_DATA',
+        'setuserCasesCardId'
       ]),
     checkHistory () {
       this.checkOrderBtn = true
@@ -550,6 +551,7 @@ export default {
         sickID: val.userId,
         hospitalId: val.adminHospitalId
       })
+      this.setuserCasesCardId(null)
       this.$router.push({
         name: 'bloodheighSick',
         params: {
