@@ -39,7 +39,7 @@
 <script>
 import {mapState, mapMutations} from 'vuex'
 import {imgExists} from '@/untils/untils'
-import publicStatic from '@/publicData/const.js'
+// import publicStatic from '@/publicData/const.js'
 export default {
   name: 'connectbtn',
   data () {
@@ -62,7 +62,7 @@ export default {
       'getVideoMsg'
     ]),
     imgExist (url) {
-      return imgExists(url, publicStatic.onlineStatic + '/static/user.png')
+      return imgExists(url, process.env.IMG_URL_LOCALHOST + '/static/user.png')
     },
     connect () {
       this.$emit('connect')

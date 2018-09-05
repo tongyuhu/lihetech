@@ -208,6 +208,17 @@ export function imgExists (checkimgsrc, errorsrc) {
   // let html = ' <div id="image-test"></div>'
   // myWindow.document.write(html)
   let ImgObj = new Image() // 判断图片是否存在
+  ImgObj.onload = function () {
+    console.log('img is loaded')
+    // if (!checkimgsrc) {
+    //   return errorsrc
+    // }
+    // if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+    //   return checkimgsrc
+    // } else {
+    //   return errorsrc
+    // }
+  }
   ImgObj.src = checkimgsrc
   // myWindow.getElementById('image-test').appendChild(ImgObj)
   // console.log('用户头像地址', checkimgsrc)

@@ -49,7 +49,7 @@
   import videoChat from '@/components/Chat/video.vue'
   import connectBtn from '@/components/Chat/connectBtn.vue'
   import Bus from '@/bus.js'
-  import publicStatic from '@/publicData/const.js'
+  // import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
   import position from '@/components/Chat/postion.vue'
   import {findComponentsDownward} from '@/untils/untils'

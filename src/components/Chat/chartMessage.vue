@@ -3,7 +3,7 @@
       <div :class="[cls ? 'left' : 'right']">
         <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
           <div class="avatar-wrap">
-            <img class="avatar" :src="userImgChat" alt="头像" ref="onerrorimg">
+            <img class="avatar" :src="userImgChat" alt="" onerror="./static/user.png">
           </div>
           <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
             <div :class="[nobg?'no-bg':'']">
@@ -28,7 +28,7 @@
 
 <script>
 // import img from '~icon/hospital-icon2-04.png'
-import publicStatic from '@/publicData/const.js'
+// import publicStatic from '@/publicData/const.js'
 import {mapState, mapGetters} from 'vuex'
 import {imgExists} from '@/untils/untils.js'
 export default {
@@ -40,7 +40,7 @@ export default {
     },
     userImg: {
       type: [String],
-      default: publicStatic.onlineStatic + '/static/user.png'
+      default: process.env.IMG_URL_LOCALHOST + '/static/user.png'
     },
     moreMessage: {
       type: [Boolean],
@@ -76,14 +76,16 @@ export default {
             this.nobg = true
             this.chatclass = ''
           } else {
-            if (this.cls) {
-              this.chatclass = 'left-angle'
-            } else {
-              this.chatclass = 'right-angle'
-            }
+            // if (this.cls) {
+              // this.chatclass = 'left-angle'
+            // } else {
+            this.chatclass = 'right-angle'
+            // }
           }
           if (this.adminImg) {
-            this.userImgChat = imgExists(this.adminImg, publicStatic.onlineStatic + '/static/user.png')
+            // this.userImgChat = this.adminImg
+            this.userImgChat = imgExists(this.adminImg, process.env.IMG_URL_LOCALHOST + '/static/user.png')
+            // this.userImgChat = imgExists(this.adminImg, process.env.IMG_URL_LOCALHOST + '/static/admin.jpg')
           }
         }
         if (this.who !== this.rongUserId) {
@@ -92,18 +94,19 @@ export default {
             this.nobg = true
             this.chatclass = ''
           } else {
-            if (this.cls) {
-              this.chatclass = 'left-angle'
-            } else {
-              this.chatclass = 'right-angle'
-            }
+            this.chatclass = 'left-angle'
+            // if (this.cls) {
+              // } else {
+                //   this.chatclass = 'right-angle'
+            // }
           }
           if (this.currentChatImg) {
-            this.userImgChat = imgExists(this.currentChatImg, publicStatic.onlineStatic + '/static/user.png')
+            this.userImgChat = imgExists(this.currentChatImg, process.env.IMG_URL_LOCALHOST + '/static/user.png')
           }
         }
       },
-      immediate: true
+      immediate: true,
+      deep: true
     }
   },
   created () {

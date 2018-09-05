@@ -65,7 +65,7 @@
 <script>
 import {mapMutations, mapState} from 'vuex'
 import {imgExists} from '@/untils/untils'
-import publicStatic from '@/publicData/const.js'
+// import publicStatic from '@/publicData/const.js'
 export default {
   name: 'videochat',
   props: {
@@ -85,7 +85,7 @@ export default {
   methods: {
     ...mapMutations(['closeVideo']),
     imgExist (url) {
-      return imgExists(url, publicStatic.onlineStatic + '/static/user.png')
+      return imgExists(url, process.env.IMG_URL_LOCALHOST + '/static/user.png')
     },
     close () {
       document.getElementById('videoChat').innerHTML = ''
