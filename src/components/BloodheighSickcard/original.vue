@@ -222,6 +222,9 @@ export default {
         case 5:
           type = '危险血压'
           break
+        case 6:
+          type = '低血压'
+          break
         default:
           type = '未知'
           break

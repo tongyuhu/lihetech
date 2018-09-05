@@ -567,6 +567,9 @@ export default {
         case 5:
           color = '#f96767' // 危险
           break
+        case 6:
+          color = '##9ac3e4' // 低血压
+          break
         case 0:
           color = '#191918'
           break

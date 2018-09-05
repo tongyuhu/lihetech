@@ -434,6 +434,9 @@ export default {
         case 5:
           type = '危险血压'
           break
+        case 6:
+          type = '低血压'
+          break
         default:
           type = ''
           break
@@ -455,6 +458,7 @@ export default {
       'getupTime': start,
       'sleepTime': end
     }
+    // 获取24小时动态报告
     this.$axios(alldayHeighBloodApi(params))
     .then(res => {
       let data = res.data.data
@@ -493,6 +497,12 @@ export default {
 </script>
 
 <style scoped>
+  /* 卡片头部标题 */
+  .card-header{
+    margin: 0 20px 0 20px;
+    border-bottom:1px solid #ebeef5;
+    height: 28px;
+  }
   .title{
   /* margin-left:20px; */
   margin-top:24px;
@@ -500,17 +510,14 @@ export default {
   font-size:20px;
   color:#666
   }
-  .card-header{
-    margin: 0 20px 0 20px;
-    border-bottom:1px solid #ebeef5;
-    height: 28px;
-  }
+  /* 表格容器 上边距 */
   .table-box{
       margin:20px;
     /* padding:20px;
     overflow:hidden; */
     /* width: 100%； */
   }
+  /* 表格 */
   table{
     /* height: 200px; */
     border:1px solid #eaeaea;
@@ -535,15 +542,18 @@ export default {
     color:#666;
     font-size:14px;
   }
+  /* 分析容器 */
   .analysis-wrap{
     margin-top:8px;
   }
   .analysis{
     padding:20px;
   }
+  /* 总分析 */
   .summary{
     line-height: 1.5;
   }
+  /* 评估容器 */
   .risk{
     line-height: 1.5;
   }

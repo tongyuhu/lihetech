@@ -334,6 +334,9 @@ export default {
           case 5:
             type = 'dangerBg'
             break
+          case 6:
+            type = 'dangerBg'
+            break
           default:
             type = 'nullBg'
         }

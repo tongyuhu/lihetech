@@ -232,6 +232,7 @@ export default {
 </script>
 
 <style scoped>
+  /* 卡片标题 */
   .title{
     /* margin-left:20px; */
     margin-top:24px;
@@ -244,7 +245,13 @@ export default {
     border-bottom:1px solid #ebeef5;
     height: 28px;
   }
-   table{
+  /* 表格样式 */
+  .table{
+    margin-top:20px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  table{
     /* height: 200px; */
     border:1px solid #eaeaea;
     background-color: #fff;
@@ -266,15 +273,13 @@ export default {
     text-align: center;
     vertical-align: middle;
   }
+  /* 设置表格最小宽高 */
   td div{
     min-width: 200px;
     min-height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-  .red-text{
-    color:#e87070;
   }
   table p{
     font-size: 14px;
@@ -283,11 +288,8 @@ export default {
     padding: 0;
     padding-bottom: 10px;
   }
-  .table{
-    margin-top:20px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+  
+  /* 标准数据上标 */
   .icon-normal{
     position: relative;
   }
@@ -316,6 +318,7 @@ export default {
     color: #fff;
     padding:3px;
   }
+  /* 自身数据上标 */
   .icon-self{
     position: relative;
   }
@@ -344,16 +347,13 @@ export default {
     color: #fff;
     padding:5px;
   }
+  /* 分析报告容器 */
   .report-box{
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
   }
-  .report-box p{
-    color: #666;
-    font-size: 14px;
-    line-height: 24px;
-  }
+  
   .report-box div:nth-child(2){
     margin-bottom: 24px;
   }
@@ -364,15 +364,24 @@ export default {
     margin-top:12px;
     padding: 10px;
   }
-  .red-text{
-    color: #e87070;
+  .report-box p{
+    color: #666;
+    font-size: 14px;
+    line-height: 24px;
   }
+  /* 评估文字颜色 */
+  .red-text{
+    color:#e87070;
+  }
+  /* 加粗文字 */
   .blod-text{
     font-weight: bold;
   }
+  /* 评估结果百分比文字 */
   .a-text{
     font-size: 24px;
   }
+  /* 图片大小限制 */
   .img{
     min-width: 80px;
   }
