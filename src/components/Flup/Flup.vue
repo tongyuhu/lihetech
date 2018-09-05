@@ -254,7 +254,7 @@ export default {
         params.pageSize = this.unfinishedPageSize
         params.isFollowUp = 0
       }
-      params.adminIdMainDoctor = 3
+      params.adminIdMainDoctor = this.adminInfo.id
       this.$axios(FlupListApi(params))
       .then(res => {
         if (val) {
