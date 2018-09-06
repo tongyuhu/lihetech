@@ -257,7 +257,7 @@
                       </div>
                       <div class="line-block">
                         <el-form-item label="" label-width="8px">
-                          <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100%'}">
+                          <el-select v-model="medication.isfirst" placeholder="请选择" size="mini" :style="{'width':'100px'}">
                             <el-option label="初诊" value="1"></el-option>
                             <el-option label="复诊" value="0"></el-option>
                           </el-select>
@@ -272,7 +272,8 @@
                             type="month"
                             size="mini"
                             value-format="yyyy-MM"
-                            placeholder="选择月">
+                            placeholder="选择月"
+                            :style="{'width':'120px'}">
                           </el-date-picker>
                         </el-form-item>
                         

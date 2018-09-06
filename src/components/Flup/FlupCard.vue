@@ -30,7 +30,7 @@
           <span class="iconfont icon-bixutian must"></span>
           <div class="inline-block flup-methods-4 right-gap">
             <el-form-item label="随访方式" label-width="68px">
-              <el-select v-model="flupMethods" size="small" placeholder="请选择" style="{'width':'60px'}">
+              <el-select v-model="flupMethods" size="small" placeholder="请选择" :style="{'width':'150px'}">
                 <el-option
                   label="远程随访"
                   :value="1">
