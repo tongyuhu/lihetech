@@ -3,7 +3,7 @@
     <div id="video-drag"></div>
     <div v-if="!currentIsVideo" class="audio-wrap">
       <div>
-        <img class="user-img" :src="imgExist(currentVideo.userImg)" alt="">
+        <img class="user-img" :src="currentVideo.userImg+''" :onerror="userimgerror">
       </div>
       <div class="audio-tip">
         <span>语音通话中...</span>
@@ -64,7 +64,7 @@
 
 <script>
 import {mapMutations, mapState} from 'vuex'
-import {imgExists} from '@/untils/untils'
+import userimg from 'icon/user.png'
 // import publicStatic from '@/publicData/const.js'
 export default {
   name: 'videochat',
@@ -73,7 +73,8 @@ export default {
   },
   data () {
     return {
-      voice: true
+      voice: true,
+      userimgerror: 'this.src="' + userimg + '"'
     }
   },
   computed: {
@@ -84,9 +85,6 @@ export default {
   },
   methods: {
     ...mapMutations(['closeVideo']),
-    imgExist (url) {
-      return imgExists(url, process.env.IMG_URL_LOCALHOST + '/static/user.png')
-    },
     close () {
       document.getElementById('videoChat').innerHTML = ''
       document.getElementById('selfVideo').innerHTML = ''

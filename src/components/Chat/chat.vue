@@ -478,7 +478,7 @@ export default {
           onSuccess: function (list, hasMsg) {
             // vm.sethistory(vm.currentChat.history)
             // vm.getCurrentFriendMsg(msgObj)
-            console.log('历史消息VM', vm.currentChat)
+            // console.log('历史消息VM', vm.currentChat)
             // if(firstAddMore)
             let historyList = []
             if (vm._.has(vm.currentChat, 'history')) {

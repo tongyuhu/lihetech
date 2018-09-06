@@ -20,7 +20,9 @@
           <span class="head-right">{{ adminName }}</span>
         </div>
         <div class="head-right">
-            <img :src="adminHeadImg" alt=""  class="admin-icon" width="34px" height="34px">
+            <img :src="adminHeadImg+''" :onerror="onerrorimg"  class="admin-icon" width="34px" height="34px">
+            <!-- <img :src="adminHeadImg" alt="" onerror="./../../../../static/user.png"  class="admin-icon
+            " width="34px" height="34px"> -->
         </div>
   
       <el-dialog
@@ -72,9 +74,8 @@
 
 <script>
 import {mapState} from 'vuex'
+import adminheadimg from 'icon/admin.jpg'
 import {editAdminApi} from '@/api/components/editAdmin.js'
-import {imgExists} from '@/untils/untils.js'
-// import publicStatic from '@/publicData/const.js'
 export default {
   name: 'H-Head',
   data () {
@@ -133,11 +134,13 @@ export default {
           //  {min: 11, message: '请输入正确的电话', trigger: 'blur'}
         ]
       },
-      adminHeadImg: ''
+      adminHeadImg: '',
+      onerrorimg: 'this.src="' + adminheadimg + '"'
+      // onerrorimg: 'this.src="' + require('~icon/admin.jpg') + '"'
     }
   },
   computed: {
-    ...mapState(['adminInfo', 'adminImg']),
+    ...mapState(['adminInfo']),
     adminName () {
       if (!this.$store.state.adminInfo.username) {
         if (!this.$store.state.adminInfo.name) {
@@ -171,9 +174,6 @@ export default {
   methods: {
     validateFieldForm (val) {
       console.log('密码修改', val)
-    },
-    imgExists (url, errurl) {
-      return imgExists(url, errurl)
     },
     show () {
       this.isshow = !this.isshow
@@ -257,8 +257,8 @@ export default {
     adminAccount () {
     }
   },
-  mounted () {
-    console.log('headPortraitUrl', this.adminInfo.headPortraitUrl)
+  created () {
+    console.log('headPortraitUrl', this.adminImg, this.adminInfo.headPortraitUrl)
     if (this._.has(this.adminInfo, 'headPortraitUrl')) {
       if (this.adminInfo.headPortraitUrl.length !== 0) {
         this.adminIcon = process.env.IMG_URL + this.adminInfo.headPortraitUrl
@@ -266,7 +266,7 @@ export default {
     } else {
       this.adminIcon = null
     }
-    this.adminHeadImg = this.imgExists(process.env.IMG_URL + this.adminImg, process.env.IMG_URL_LOCALHOST + '/static/admin.jpg')
+    this.adminHeadImg = this.adminIcon
   }
 }
 </script>
@@ -332,7 +332,7 @@ export default {
       width: 34px;
       height: 34px;
     } */
-   .admin-icon{
+  .admin-icon{
       /* width: 34px; */
       /* height: 34px; */
       border-radius: 50%;
@@ -341,31 +341,36 @@ export default {
       display:inline;
       vertical-align:middle;
       margin-right: 5px;
-   }
-   /* .btn{
-     color: #fff;
-     display: block;
-     margin: 0;
-     margin-top:5px;
-     width: 80px;
-     text-align: center;
-   } */
-   .setting{
-     color: #666;
-   }
-   .el-dropdown-link{
-     cursor: pointer;
-   }
-   .el-dropdown-menu{
-     background-color: 
-       #1991fc;
-     /* color: #1991fc; */
-   }
-   .dropdown {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-    }
+  }
+  /* .admin-icon ::after{
+    width: 34px;
+    height: 34px;
+    background: url('~icon/admin.jpg');
+  } */
+  /* .btn{
+    color: #fff;
+    display: block;
+    margin: 0;
+    margin-top:5px;
+    width: 80px;
+    text-align: center;
+  } */
+  .setting{
+    color: #666;
+  }
+  .el-dropdown-link{
+    cursor: pointer;
+  }
+  .el-dropdown-menu{
+    background-color: 
+      #1991fc;
+    /* color: #1991fc; */
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
 .dropdown-content {
   display: none;
   position: absolute;

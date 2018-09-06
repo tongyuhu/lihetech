@@ -32,7 +32,7 @@
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
                     ref="friendImg"
-                    :src="imgExist(friend.userImg)" alt="">
+                    :src="friend.userImg+''" :onerror="userimgerror">
                     <!-- :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt=""> -->
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
@@ -80,8 +80,8 @@ import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
 import {mapState, mapMutations} from 'vuex'
+import userimg from 'icon/user.png'
 // import publicStatic from '@/publicData/const.js'
-import {imgExists} from '@/untils/untils'
 export default {
   name: 'im',
   components: {
@@ -99,7 +99,8 @@ export default {
   },
   data () {
     return {
-      message: ''
+      message: '',
+      userimgerror: 'this.src="' + userimg + '"'
       // publicStatic: publicStatic
     }
   },
@@ -120,10 +121,6 @@ export default {
       'sethistory',
       'clearNewmsg'
     ]),
-    imgExist (url) {
-      let err = process.env.IMG_URL_LOCALHOST + '/static/user.png'
-      return imgExists(url, err)
-    },
     closeIM () {
       this.$emit('closeIM')
     },

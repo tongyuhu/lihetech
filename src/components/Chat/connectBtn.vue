@@ -5,7 +5,7 @@
       <div class="user-img-wrap">
         <div class="dot"></div>
         <div class="pulse"></div>
-        <img class="user-img" :src="imgExist(currentVideo.userImg)" alt="">
+        <img class="user-img" :src="currentVideo.userImg+''" :onerror="userimgerror">
       </div>
       <div class="tip">
         {{currentVideo.userName?currentVideo.userName:'患者'}}邀请您进行{{currentIsVideo?'视频':'语音'}}聊天...
@@ -38,14 +38,15 @@
 
 <script>
 import {mapState, mapMutations} from 'vuex'
-import {imgExists} from '@/untils/untils'
+import userimg from 'icon/user.png'
 // import publicStatic from '@/publicData/const.js'
 export default {
   name: 'connectbtn',
   data () {
     return {
       tip: '视频聊天邀请中...',
-      voicetip: '语音聊天邀请中...'
+      voicetip: '语音聊天邀请中...',
+      userimgerror: 'this.src="' + userimg + '"'
     }
   },
   computed: {
@@ -61,9 +62,6 @@ export default {
       'closeVideoMsg',
       'getVideoMsg'
     ]),
-    imgExist (url) {
-      return imgExists(url, process.env.IMG_URL_LOCALHOST + '/static/user.png')
-    },
     connect () {
       this.$emit('connect')
     },

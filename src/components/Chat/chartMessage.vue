@@ -3,7 +3,7 @@
       <div :class="[cls ? 'left' : 'right']">
         <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
           <div class="avatar-wrap">
-            <img class="avatar" :src="userImgChat" alt="" onerror="./static/user.png">
+            <img class="avatar" :src="userImgChat+''" :onerror="errorimg">
           </div>
           <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
             <div :class="[nobg?'no-bg':'']">
@@ -18,19 +18,12 @@
       </div> -->
       
   </div>
-
-    <!-- <div class="flex">
-      <div>
-
-      </div>
-    </div> -->
 </template>
 
 <script>
-// import img from '~icon/hospital-icon2-04.png'
-// import publicStatic from '@/publicData/const.js'
 import {mapState, mapGetters} from 'vuex'
-import {imgExists} from '@/untils/untils.js'
+import userimg from 'icon/user.png'
+import adminimg from 'icon/admin.jpg'
 export default {
   name: 'chartmessage',
   props: {
@@ -39,8 +32,8 @@ export default {
       default: 'other'
     },
     userImg: {
-      type: [String],
-      default: process.env.IMG_URL_LOCALHOST + '/static/user.png'
+      type: [String]
+      // default: process.env.IMG_URL_LOCALHOST + '/static/user.png'
     },
     moreMessage: {
       type: [Boolean],
@@ -56,12 +49,16 @@ export default {
       cls: false,
       nobg: false,
       chatclass: '',
-      userImgChat: this.userImg
+      userImgChat: this.userImg,
+      userimgerror: 'this.src="' + userimg + '"',
+      adminimgerror: 'this.src="' + adminimg + '"',
+      errorimg: ''
     }
   },
   computed: {
     ...mapState([
-      'rongUserId'
+      'rongUserId',
+      'adminInfo'
     ]),
     ...mapGetters(['adminImg', 'currentChatImg'])
   },
@@ -82,11 +79,14 @@ export default {
             this.chatclass = 'right-angle'
             // }
           }
-          if (this.adminImg) {
-            // this.userImgChat = this.adminImg
-            this.userImgChat = imgExists(this.adminImg, process.env.IMG_URL_LOCALHOST + '/static/user.png')
-            // this.userImgChat = imgExists(this.adminImg, process.env.IMG_URL_LOCALHOST + '/static/admin.jpg')
+          if (this._.has(this.adminInfo, 'headPortraitUrl')) {
+            if (this.adminInfo.headPortraitUrl.length !== 0) {
+              this.userImgChat = process.env.IMG_URL + this.adminInfo.headPortraitUrl
+
+              this.errorimg = this.adminimgerror
+            }
           }
+          this.errorimg = this.adminimgerror
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
@@ -95,14 +95,11 @@ export default {
             this.chatclass = ''
           } else {
             this.chatclass = 'left-angle'
-            // if (this.cls) {
-              // } else {
-                //   this.chatclass = 'right-angle'
-            // }
           }
           if (this.currentChatImg) {
-            this.userImgChat = imgExists(this.currentChatImg, process.env.IMG_URL_LOCALHOST + '/static/user.png')
+            this.userImgChat = this.currentChatImg
           }
+          this.errorimg = this.userimgerror
         }
       },
       immediate: true,
@@ -110,18 +107,6 @@ export default {
     }
   },
   created () {
-    // if (this.type === 'ImageMessage') {
-    //   this.nobg = true
-    //   this.chatclass = ''
-    //   // this.cls = '0000'
-    // } else {
-    //   if (this.cls) {
-    //     this.chatclass = 'left-angle'
-    //   } else {
-    //     this.chatclass = 'right-angle'
-    //   }
-    // }
-    // this.userImgChat = imgExists(this.userImgChat, publicStatic.onlineStatic + '/static/user.png')
   }
 
 }
