@@ -357,7 +357,7 @@
                 </el-select>
               </el-form-item>
             </div>
-            <div class="inline-block flup-methods-3 right-gap">
+            <!-- <div class="inline-block flup-methods-3 right-gap">
               <el-form-item label="遵医行为：" label-width="85px">
                 <el-select v-model="life.doctor" size="small" placeholder="请选择" style="{'width':'60px'}">
                   <el-option
@@ -374,7 +374,7 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-            </div>
+            </div> -->
             <div class="inline-block flup-methods-3 right-gap">
               <el-form-item label="摄盐情况：" label-width="85px">
                 <el-select v-model="life.salt" size="small" placeholder="请选择" style="{'width':'60px'}">
