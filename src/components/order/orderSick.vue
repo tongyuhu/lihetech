@@ -36,182 +36,173 @@
             <th colspan="3">预约详情</th>
           </thead>
           <tbody class="tbody" v-for="(item,index) in orderList" :key="index">
-                <!-- 周数 -->
-                <tr>
-                  <th :rowspan="item.morninng.length + item.noon.length + 5">
-                      <span>{{item.dayTime}} {{item.weekDay}}</span>
-                  </th>
-                </tr>
-                <!-- 上午工作时间 -->
-                <tr>
-                  <td class="width">
-                    <div class="half-day">
+            <!-- 周数 -->
+            <tr>
+              <th :rowspan="item.morninng.length + item.noon.length + 5">
+                  <span>{{item.dayTime}} {{item.weekDay}}</span>
+              </th>
+            </tr>
+            <!-- 上午工作时间 -->
+            <tr>
+              <td class="width">
+                <div class="half-day">
 
-                    <span class="span-block">上午 {{ item.morninngTotal===0?'':item.morninngTotal+'人'}}</span>
-                    <!-- <span class="span-block">{{item.morninngWork}}</span> -->
-                    <!-- <span class="span-block">{{ item.morninngTotal===0?'':item.morninngTotal+'人'}}</span> -->
-                    </div>
-                  </td>
-                  <td v-if="item.morninng.length === 0">
-                    <div class="table-content">
-                      <!-- <div class="text-center order-time-width">
-                        
-                      </div> -->
-                      <div class="table-content-border min-height no-order">
-                        <div class="detials-order">
-                          <!-- 姓名 -->
-                          <div class="oder-name ">
-                          </div>
-                          <!-- 就诊项目 -->
-                          <div class="flex-item" v-show="item.morninngWork">
-                            <span>
-                              暂无预约
-                            </span>
-                          </div>
-                          <div class="flex-item error" v-show="!item.morninngWork">
-                            <span>
-                              未开启预约
-                            </span>
-                          </div>
-                          <!-- 就诊状态 -->
-                          <div class="order-status">
-                          </div>
-                          <!-- 操作 -->
-                          <div class="no-order-action">
-                            <!-- <button class="contant-btn" @click="openEditTime(item.weekDay,'morning')">编辑时间</button> -->
-                            <!-- <button v-if="!item.morninngStop"  :class="{'open-order':!item.morninngStop,'close-order':item.morninngStop}" 
-                            @click="closeOrder(item.weekDay,1,index)">{{item.morninngStop?'开启':'关闭'}}预约</button> -->
-                            <button :disabled="!item.morninngStop" :class="{'open-order':true}" 
-                            @click="closeOpenOrder(item.weekDay,1,index,false)">开启预约</button>
-                            <button :disabled="item.morninngStop" :class="{'close-order':true}" 
-                            @click="closeOpenOrder(item.weekDay,1,index,true)">关闭预约</button>
-                          </div>                         
-                        </div>
+                <span class="span-block">上午 {{ item.morninngTotal===0?'':item.morninngTotal+'人'}}</span>
+                </div>
+              </td>
+              <td v-if="item.morninng.length === 0">
+                <div class="table-content">
+                  <div class="table-content-border min-height no-order">
+                    <div class="detials-order">
+                      <!-- 姓名 -->
+                      <div class="oder-name ">
                       </div>
-                    </div>
-                  </td>
-                  <td v-else class="table-td-div">
-                    <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
-                      <!-- 预约时间 -->
-                      <!-- <div class="text-center order-time-width">
+                      <!-- 就诊项目 -->
+                      <div class="flex-item" v-show="item.morninngWork">
                         <span>
-                          {{morning.makeOrderDate.slice(10,16)}}
+                          暂无预约
                         </span>
-                      </div> -->
-                      <div class="table-content-border min-height ">
-                        <div class="detials-order">
-                        <!-- <div class="detials-order" v-for="(morningPerson,index) in item.morninng" :key="index"> -->
-                          <!-- 姓名 -->
-                          <div class="oder-name ">
-                            {{morning.name}}
-                            <!-- 15899932665 -->
-                          </div>
-                          <!-- 就诊项目 -->
-                          <div class="flex-item">
-                            <span>
-                              {{morning.seeSpecialty}}
-                            </span>
-                          </div>
-                          <!-- 就诊状态 -->
-                          <div class="order-status">
-                            <span :style="{'color':computeColor(morning.makeOrderState)}">
-                              {{oderStutas(morning.makeOrderState)}}</span>
-                          </div>
-                          <!-- 操作 -->
-                          <div class="order-action">
-                            <button class="contant-btn" @click="diagnosis(morning)">会诊</button>
-                            <button class="contant-btn" @click="contact(morning.userId,morning.name)">联系</button>
-                          </div>                         
-                        </div>
                       </div>
+                      <div class="flex-item error" v-show="!item.morninngWork">
+                        <span>
+                          未开启预约
+                        </span>
+                      </div>
+                      <!-- 就诊状态 -->
+                      <div class="order-status">
+                      </div>
+                      <!-- 操作 -->
+                      <div class="no-order-action">
+                        <button :disabled="!item.morninngStop" :class="{'open-order':true}" 
+                        @click="closeOpenOrder(item.weekDay,1,index,false)">开启预约</button>
+                        <button :disabled="item.morninngStop" :class="{'close-order':true}" 
+                        @click="closeOpenOrder(item.weekDay,1,index,true)">关闭预约</button>
+                      </div>                         
                     </div>
-                  </td>
-                </tr>
-                
-                <!-- 下午工作时间 -->
-                <tr>
-                  <td class="width">
-                    <div class="half-day">
-                      <span class="span-block">下午 {{item.noonTotal===0?'':item.noonTotal+'人'}}</span>
-                      <!-- <span>{{item.noonTotal===0?'':item.noonTotal+'人'}}</span> -->
-                      <!-- <span class="span-block">{{item.noonWork}}</span> -->
+                  </div>
+                </div>
+              </td>
+              <td v-else class="table-td-div">
+                <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
+                  <!-- 预约时间 -->
+                  <!-- <div class="text-center order-time-width">
+                    <span>
+                      {{morning.makeOrderDate.slice(10,16)}}
+                    </span>
+                  </div> -->
+                  <div class="table-content-border min-height ">
+                    <div class="detials-order">
+                    <!-- <div class="detials-order" v-for="(morningPerson,index) in item.morninng" :key="index"> -->
+                      <!-- 姓名 -->
+                      <div class="oder-name ">
+                        {{morning.name}}
+                        <!-- 15899932665 -->
+                      </div>
+                      <!-- 就诊项目 -->
+                      <div class="flex-item">
+                        <span>
+                          {{morning.seeSpecialty}}
+                        </span>
+                      </div>
+                      <!-- 就诊状态 -->
+                      <div class="order-status">
+                        <span :style="{'color':computeColor(morning.makeOrderState)}">
+                          {{oderStutas(morning.makeOrderState)}}</span>
+                      </div>
+                      <!-- 操作 -->
+                      <div class="order-action">
+                        <button class="contant-btn" @click="diagnosis(morning)">会诊</button>
+                        <button class="contant-btn" @click="contact(morning.userId,morning.name)">联系</button>
+                      </div>                         
                     </div>
-                  </td>
-                  <td v-if="item.noon.length === 0">
-                    <div class="table-content">
-                      <!-- <div class="text-center order-time-width">
-                        
-                      </div> -->
-                      <div class="table-content-border min-height no-order">
-                        <div class="detials-order">
-                          <!-- 姓名 -->
-                          <div class="oder-name ">
-                          </div>
-                          <!-- 就诊项目 -->
-                          <div class="flex-item" v-show="item.noonWork">
-                            <span>
-                              暂无预约
-                            </span>
-                          </div>
-                          <div class="flex-item error" v-show="!item.noonWork">
-                            <span>
-                              未开启预约
-                            </span>
-                          </div>
-                          <!-- 就诊状态 -->
-                          <div class="order-status">
-                          </div>
-                          <!-- 操作 -->
-                          <div class="no-order-action">
-                            <!-- <button class="contant-btn" @click="openEditTime(item.weekDay,'noon')">编辑时间</button>
-                            <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button> -->
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <!-- 下午工作时间 -->
+            <tr>
+              <td class="width">
+                <div class="half-day">
+                  <span class="span-block">下午 {{item.noonTotal===0?'':item.noonTotal+'人'}}</span>
+                  <!-- <span>{{item.noonTotal===0?'':item.noonTotal+'人'}}</span> -->
+                  <!-- <span class="span-block">{{item.noonWork}}</span> -->
+                </div>
+              </td>
+              <td v-if="item.noon.length === 0">
+                <div class="table-content">
+                  <!-- <div class="text-center order-time-width">
+                    
+                  </div> -->
+                  <div class="table-content-border min-height no-order">
+                    <div class="detials-order">
+                      <!-- 姓名 -->
+                      <div class="oder-name ">
+                      </div>
+                      <!-- 就诊项目 -->
+                      <div class="flex-item" v-show="item.noonWork">
+                        <span>
+                          暂无预约
+                        </span>
+                      </div>
+                      <div class="flex-item error" v-show="!item.noonWork">
+                        <span>
+                          未开启预约
+                        </span>
+                      </div>
+                      <!-- 就诊状态 -->
+                      <div class="order-status">
+                      </div>
+                      <!-- 操作 -->
+                      <div class="no-order-action">
+                        <!-- <button class="contant-btn" @click="openEditTime(item.weekDay,'noon')">编辑时间</button>
+                        <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button> -->
 
-                            <button :disabled="!item.noonStop" :class="{'open-order':true}" 
-                            @click="closeOpenOrder(item.weekDay,2,index,false)">开启预约</button>
-                            <button :disabled="item.noonStop" :class="{'close-order':true}" 
-                            @click="closeOpenOrder(item.weekDay,2,index,true)">关闭预约</button>
-                          </div>                         
-                        </div>
-                      </div>
+                        <button :disabled="!item.noonStop" :class="{'open-order':true}" 
+                        @click="closeOpenOrder(item.weekDay,2,index,false)">开启预约</button>
+                        <button :disabled="item.noonStop" :class="{'close-order':true}" 
+                        @click="closeOpenOrder(item.weekDay,2,index,true)">关闭预约</button>
+                      </div>                         
                     </div>
-                  </td>
-                  <td v-else class="table-td-div">
-                    <div v-for="noon in item.noon" :key="noon.id" class="table-content">
-                      <!-- 预约时间 -->
-                      <!-- <div class="text-center order-time-width">
+                  </div>
+                </div>
+              </td>
+              <td v-else class="table-td-div">
+                <div v-for="noon in item.noon" :key="noon.id" class="table-content">
+                  <!-- 预约时间 -->
+                  <!-- <div class="text-center order-time-width">
+                    <span>
+                      {{noon.startEndPeriodTime}}
+                    </span>
+                  </div> -->
+                  <div class="table-content-border min-height ">
+                    <div class="detials-order">
+                    <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->
+                      <!-- 姓名 -->
+                      <div class="oder-name ">
+                        {{noon.name}}
+                        <!-- 15899932665 -->
+                      </div>
+                      <!-- 就诊项目 -->
+                      <div class="flex-item">
                         <span>
-                          {{noon.startEndPeriodTime}}
+                          {{noon.seeSpecialty}}
                         </span>
-                      </div> -->
-                      <div class="table-content-border min-height ">
-                        <div class="detials-order">
-                        <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->
-                          <!-- 姓名 -->
-                          <div class="oder-name ">
-                            {{noon.name}}
-                            <!-- 15899932665 -->
-                          </div>
-                          <!-- 就诊项目 -->
-                          <div class="flex-item">
-                            <span>
-                              {{noon.seeSpecialty}}
-                            </span>
-                          </div>
-                          <!-- 就诊状态 -->
-                          <div class="order-status">
-                            <span :style="{'color':computeColor(noon.makeOrderState)}"
-                            >{{oderStutas(noon.makeOrderState)}}</span>
-                          </div>
-                          <!-- 操作 -->
-                          <div class="order-action">
-                            <button class="contant-btn" @click="diagnosis(noon)">会诊</button>
-                            <button class="contant-btn" @click="contact(noon.userId,noon.name)">联系</button>
-                          </div>                         
-                        </div>
                       </div>
+                      <!-- 就诊状态 -->
+                      <div class="order-status">
+                        <span :style="{'color':computeColor(noon.makeOrderState)}"
+                        >{{oderStutas(noon.makeOrderState)}}</span>
+                      </div>
+                      <!-- 操作 -->
+                      <div class="order-action">
+                        <button class="contant-btn" @click="diagnosis(noon)">会诊</button>
+                        <button class="contant-btn" @click="contact(noon.userId,noon.name)">联系</button>
+                      </div>                         
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </div>
+              </td>
+            </tr>
 
           </tbody>
             <!-- </tr> -->
@@ -1269,7 +1260,7 @@ button[disabled]{
 }
 .contant-btn{
   box-sizing: border-box;
-  padding: 5px 5px;
+  padding: 7px 5px;
   background: #1991fc;
   border-radius: 2px;
   line-height: 1;
@@ -1277,7 +1268,7 @@ button[disabled]{
   cursor: pointer;
   color: #fff;
   width: 72px;
-  font-size: 14px;
+  font-size: 12px;
   border:1px solid #1991fc;
 }
 .contant-btn:hover{
@@ -1320,13 +1311,13 @@ button[disabled]{
   border:1px solid #1991fc;
   line-height: 1;
   white-space: nowrap;
-  padding: 5px 5px;
+  padding: 7px 5px;
   background: #1991fc;
   border-radius: 2px;
   cursor: pointer;
   color: #fff;
   width: 72px;
-  font-size: 14px;
+  font-size: 12px;
 }
 .open-order:hover{
   opacity: 0.9;
@@ -1343,7 +1334,7 @@ button[disabled]{
   // font-size: 14px;
 }
 .close-order{
-  padding: 5px 5px;
+  padding: 7px 5px;
   box-sizing: border-box;
   line-height: 1;
   white-space: nowrap;
@@ -1352,7 +1343,7 @@ button[disabled]{
   cursor: pointer;
   color: #fff;
   width: 72px;
-  font-size: 14px;
+  font-size: 12px;
   background: #e87070;
 }
 .close-order:hover{
