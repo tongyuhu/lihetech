@@ -23,7 +23,9 @@
         v-model="activeIndex"
         :hassuger="isSugerHeigh"
         @checkSuger="checkSuger"
-        @checkd="changeTab">
+        @checkd="changeTab"
+        :tabcss="{'margin-right':'35px'}"
+        >
           <pane
           label="病历" >
             <!-- 病人简历 start  -->

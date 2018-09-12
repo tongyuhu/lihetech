@@ -1,11 +1,14 @@
 <template>
-  <div class="tabs">
-    <div class="tabs-bar">
+  <div class="tabs-wrap">
+    <div class="tabs-bar"
+    :style="css">
       <div
       v-for="(item,index) in navList"
       :class="tabCls(item)"
       :key="index"
-      @click="handleChange(index)">
+      @click="handleChange(index)"
+      :style="tabcss"
+      >
         {{item.label}}
       </div>
       <div class="has-suger" v-if="hassuger">
@@ -26,7 +29,9 @@ export default {
     },
     hassuger: {
       type: Boolean
-    }
+    },
+    css: null,
+    tabcss: null
   },
   data () {
     return {
@@ -109,17 +114,20 @@ export default {
   [v-cloak]{
     display: none;
   }
-  .tabs{
-    margin-top:24px;
+  .tabs-wrap{
+    /* margin-top:24px; */
     position: relative;
+    /* padding: 0 20px; */
     /* font-size:20px;
     color:#666;
     background-color: #fff; */
   }
   .tabs-bar{
+    padding:0 20px;
     font-size:20px;
     color:#666;
     background-color: #fff;
+    border-bottom: 1px solid #eaeaea;
   }
   .tabs-bar::after{
     content:'';
@@ -133,8 +141,8 @@ export default {
     display: inline-block;
     padding: 20px 0 10px 0;
     /* margin:20px 0px 10px 24px; */
-    margin-left: 24px;
-    margin-right: 34px;
+    /* margin-left: 24px; */
+    margin-right: 20px;
     /* background-color: #fff; */
     /* border:1px solid #d7dde4; */
     cursor: pointer;
@@ -158,7 +166,7 @@ export default {
     width: 100%;
     background-color: #3399ff;
     position: absolute;
-    bottom:0;
+    bottom:-2px;
     margin: 0 auto;
     /* transform: translateX(25%); */
     /* left:50%; */
@@ -166,6 +174,7 @@ export default {
     /* right:0; */
   }
   .tab-content{
+    /* margin:0 20px; */
     margin-top:12px;
   }
   .has-suger{
