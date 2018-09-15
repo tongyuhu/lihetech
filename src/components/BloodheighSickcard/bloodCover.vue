@@ -71,7 +71,7 @@
                   <div class="blood-trend-item normalbg">
                     <p>{{this.bloodTrendState.normal}}</p>
                     <p>正常偏高次数</p>
-                    <p>121/81~139/89</p>
+                    <p>120/80~139/89</p>
                   </div>
                 </div>
                 <div class="blood-trend-right">
@@ -575,16 +575,14 @@ export default {
             this.bloodTrendData.bptype.forEach(item => {
               if (item === 2) {
                 n++
-                t++
               }
               if (item === 3 || item === 4) {
                 h++
-                t++
               }
               if (item === 5) {
                 d++
-                t++
               }
+              t++
             })
             this.bloodTrendState.total = t
             this.bloodTrendState.normal = n
@@ -783,8 +781,12 @@ export default {
             //   this.$set(this.bloodTrendState, 'total', item.highNum)
             // }
 
+            if (this._.toNumber(item.id) === 1) {
+              heigh = heigh + item.highNum
+            }
             if (this._.toNumber(item.id) === 2) {
               this.$set(this.bloodTrendState, 'normal', item.highNum)
+              heigh = heigh + item.highNum
             }
             if (this._.toNumber(item.id) === 3) {
               heigh = heigh + item.highNum
@@ -796,7 +798,10 @@ export default {
             }
             this.$set(this.bloodTrendState, 'heigh', heigh)
             if (this._.toNumber(item.id) === 5) {
+              heigh = heigh + item.highNum
               this.$set(this.bloodTrendState, 'danger', item.highNum)
+            } else {
+              heigh = heigh + item.highNum
             }
           })
           this.$set(this.bloodTrendState, 'total', total)
