@@ -6,6 +6,9 @@
     </div>
     <div class="text-wrap">
       <p>该页面不存在(´･ω･`)</p>
+      <p>
+        <a href="https://lhtwell.com/BPWatch/admin/login/page">前往首页</a>
+      </p>
       <!-- <p>该页面不存在(´･ω･`),点此→<a href="http://www.klmai.cn" target="_blank">回到首页</a></p> -->
     </div>
   </div>
@@ -82,6 +85,13 @@
 .text-wrap{
   text-align: center;
   margin:30px auto;
+}
+.text-wrap a{
+  display: inline-block;
+  padding:10px;
+  color: #1991fc;
+  outline: none;
+  text-decoration: none;
 }
 </style>
 
