@@ -5,7 +5,7 @@
         <div class="case-left">
           <!-- 头像 -->
           <div class="case-left-img">
-              <img :src="info.img" alt="">
+              <img :src="info.img" alt="" :onerror="defaultimg">
           </div>
           <!-- 病人姓名性别 -->
           <div class="case-left-type">
@@ -176,9 +176,9 @@
             <el-button type="primary" v-if="showEditMsg" size="mini" @click="cancelInfo">取消</el-button>
             <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button>
           </div>
-          <div>
-            <el-button @click="openChecklist" type="text" size="mini">体检单</el-button>
-            <el-button @click="flupHistory" type="text" size="mini">随访记录</el-button>
+          <div class="bottom-btn-wrap">
+            <el-button @click="openChecklist" type="text" :style="{'font-size':'16px','padding':'10px 0'}" size="mini">体检单</el-button>
+            <el-button @click="flupHistory" type="text" :style="{'font-size':'16px','padding':'10px 0'}" size="mini">随访记录</el-button>
           </div>
         </div> 
         <!-- 处方主体 -->
@@ -192,8 +192,8 @@
               <el-form
               label-width="45px" 
               :label-position="labelPosition">
-                <div class="fist-line">
-                  <div class="line-block  gap-right">
+                <div class="fist-line ">
+                  <div class="line-block  gap-right gap-bottom">
                     <div class="line-block">
                       <span class="iconfont icon-bixutian must"></span>
                     </div>
@@ -206,7 +206,7 @@
                       </el-form-item>
                     </div>
                   </div>
-                  <div class="line-block gap-right">
+                  <div class="line-block gap-right gap-bottom">
                     <!-- <el-form-item label="患病时长：" label-width="85px"> -->
                       <el-form-item label="患病开始时间：" label-width="113px">
                         <el-date-picker
@@ -219,7 +219,7 @@
                         </el-date-picker>
                       </el-form-item>
                   </div>
-                  <div class="line-block">
+                  <div class="line-block gap-bottom">
                     <el-form-item label="" label-width="28px">
                       <div class="line-block  flex flex-between">
                         <div class="flex gap-right">
@@ -279,7 +279,7 @@
                     </div>
                   </el-form-item>
                 </div>
-                <div>
+                <div class="gap-bottom">
                   <el-form-item label="检查项目：" label-width="101px">
                     <el-select
                       v-model="medication.checkItem"
@@ -294,7 +294,7 @@
                     </el-select>
                   </el-form-item>
                 </div>
-                <div class="flex">
+                <div class="flex gap-bottom">
                   <div>
                     <span class="iconfont icon-bixutian must"></span>
                   </div>
@@ -323,7 +323,7 @@
                     </el-form-item>
                   </div>
                 </div>
-                <div class="flex">
+                <div class="flex gap-bottom">
                   <div>
                     <span class="iconfont icon-bixutian must"></span>
                   </div>
@@ -757,6 +757,7 @@ import {bloodheighSickApi, sickApi, modifyCardApi, sickCodeApi} from '@/api/comp
 import {mapState, mapMutations} from 'vuex'
 // import Bus from '@/bus.js'
 import {dateFormat} from '@/untils/date.js'
+import userimg from 'icon/defaultUser.png'
 // import { print } from '@/untils/print.js'
 // import {bloodheighSickDataApi, bloodheighSickApi, sickApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
 export default {
@@ -802,6 +803,7 @@ export default {
   },
   data () {
     return {
+      defaultimg: 'this.src="' + userimg + '"',
       currentDate: '',
       labelPosition: 'right',
       rightlabel: 'right',
@@ -1665,17 +1667,17 @@ export default {
           console.log('未添加用药')
         } else if (result.code === '0000') {
           console.log('添加用药', result.data)
-          this.rightdata.planAdjustCycle = result.data.planAdjustCycle
-          this.rightdata.planUseCycle = result.data.planUseCycle
-          this.rightdata.planAdjustMethod = result.data.planAdjustMethod
-          this.rightdata.planMedSuggest = result.data.planMedSuggest
-          this.rightdata.planMatters = result.data.planMatters
-          this.rightdata.isMedicine = result.data.isMedicine
+          this.rightdata.planAdjustCycle = result.data.planAdjustCycle || '无'
+          this.rightdata.planUseCycle = result.data.planUseCycle || '无'
+          this.rightdata.planAdjustMethod = result.data.planAdjustMethod || '无'
+          this.rightdata.planMedSuggest = result.data.planMedSuggest || '无'
+          this.rightdata.planMatters = result.data.planMatters || '无'
+          this.rightdata.isMedicine = result.data.isMedicine || '无'
           if (this._.has(result.data, 'sysMedicineAnalysisEntity')) {
-            this.rightdata.planAnalysisSum = result.data.sysMedicineAnalysisEntity.planAnalysisSum
+            this.rightdata.planAnalysisSum = result.data.sysMedicineAnalysisEntity.planAnalysisSum || '无'
           }
           if (this._.has(result.data, 'sysMedicineList')) {
-            this.rightdata.sysMedicineList = result.data.sysMedicineList
+            this.rightdata.sysMedicineList = result.data.sysMedicineList || '无'
             // console.log('建议用药', this.rightdata.sysMedicineList)
           }
         }
@@ -1894,10 +1896,15 @@ export default {
         color: $font-color;
       }
     }
+    .bottom-btn-wrap{
+      text-align: left;
+      margin-left: 20px;
+    }
   }
   // 处方主体
   .case{
     min-width: 630px;
+    // flex-grow:1;
     background-color: #fff;
     border-left:8px solid #f4f6f9;
     border-right:8px solid #f4f6f9;
