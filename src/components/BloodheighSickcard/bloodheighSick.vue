@@ -95,11 +95,10 @@
             <!-- <useDrug :sickID="sickID" :hospitalId="hospitalId"></useDrug> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="useDrug"></component>
           </pane>
-          <pane
+          <!-- <pane
           label="心血管评估">
-            <!-- <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="assessment"></component>
-          </pane>
+          </pane> -->
           <!-- <pane
           label="24小时动态血压">
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
@@ -298,16 +297,19 @@ export default {
           this.useDrug = 'useDrug'
           break
         case 3:
-          this.assessment = 'assessment'
+          this.original = 'original'
           break
+        // case 3:
+        //   this.assessment = 'assessment'
+        //   break
         // case 4:
         //   this.alldayheighblood = 'alldayheighblood'
         //   break
-        case 4:
-          this.original = 'original'
-          break
-        case 6:
-          break
+        // case 4:
+        //   this.original = 'original'
+        //   break
+        // case 6:
+        //   break
       }
     },
     changeTab (index) {
