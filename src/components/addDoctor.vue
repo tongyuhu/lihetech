@@ -91,11 +91,11 @@ export default {
       }
     }
     var checkPass = (rule, value, callback) => {
-      let passrule = /^[a-zA-Z]\w{5,8}$/
+      let passrule = /^[a-zA-Z]\w{5,17}$/
       if (!value) {
         return callback(new Error('密码不能为空'))
       } else if (!passrule.exec(value)) {
-        callback(new Error('请输入6~9密码，以字母开头,可包含数字和下划线'))
+        callback(new Error('请输入6~18密码，以字母开头,可包含数字和下划线'))
       } else {
         callback()
       }
