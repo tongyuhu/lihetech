@@ -23,7 +23,7 @@
                     prop="realName"
                     label="姓名"
                     width="100"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
@@ -35,7 +35,7 @@
                 <el-table-column
                     prop="dangerLevelDisease"
                     label="分层依据"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <span> {{scope.row.dangerLevelDisease}}</span>                        
@@ -46,7 +46,7 @@
                 <el-table-column
                     prop="dangerousCount"
                     label="近七日严重次数"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <span> {{scope.row.dangerousCount===0?'无':scope.row.dangerousCount}}</span>                           
@@ -55,14 +55,14 @@
                 <el-table-column
                     prop="joinHospitalTime"
                     label="加入时间"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
                     prop="action"
                     label=""
                     width="275px"
-                    align="center">
+                    align="left">
                     <template slot-scope="scope">
                         <el-button 
                         size="mini" 
@@ -116,7 +116,7 @@
                     prop="realName"
                     label="姓名"
                     width="100"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
@@ -128,7 +128,7 @@
                 <el-table-column
                     prop="dangerLevelDisease"
                     label="分层依据"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <span> {{scope.row.dangerLevelDisease}}</span>                          
@@ -142,7 +142,7 @@
                 <el-table-column
                     prop="dangerousCount"
                     label="近七日严重次数"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <span> {{scope.row.dangerousCount===0?'无':scope.row.dangerousCount}}</span>  
@@ -151,14 +151,14 @@
                 <el-table-column
                     prop="joinHospitalTime"
                     label="加入时间"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
                     prop="action"
                     label=""
                     width="275px"
-                    align="center">
+                    align="left">
                     <template slot-scope="scope">
                         <el-button 
                         size="mini" 
@@ -212,7 +212,7 @@
                     prop="realName"
                     label="姓名"
                     width="100"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
@@ -224,7 +224,7 @@
                 <el-table-column
                     prop="dangerLevelDisease"
                     label="分层依据"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <span> {{scope.row.dangerLevelDisease}}</span>                          
@@ -238,7 +238,7 @@
                 <el-table-column
                     prop="dangerousCount"
                     label="近七日严重次数"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <span> {{scope.row.dangerousCount===0?'无':scope.row.dangerousCount}}</span>  
@@ -247,14 +247,14 @@
                 <el-table-column
                     prop="joinHospitalTime"
                     label="加入时间"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
                     prop="action"
                     label=""
                     width="275px"
-                    align="center">
+                    align="left">
                     <template slot-scope="scope">
                         <el-button 
                         size="mini" 
@@ -311,7 +311,7 @@
                     prop="realName"
                     label="姓名"
                     width="100"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="diagnose(scope.row)"
@@ -323,7 +323,7 @@
                 <el-table-column
                     prop="dangerLevelDanger"
                     label="危险因素"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <span> {{scope.row.dangerLevelDisease}}</span>                          
@@ -337,7 +337,7 @@
                 <el-table-column
                     prop="dangerousCount"
                     label="近7日平均血压"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <!-- <span v-if="scope.row.bastThan">  -->
@@ -349,14 +349,14 @@
                 <el-table-column
                     prop="joinHospitalTime"
                     label="加入时间"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
                     prop="action"
                     label=""
                     width="275px"
-                    align="center">
+                    align="left">
                     <template slot-scope="scope">
                         <el-button 
                         size="mini" 
@@ -413,7 +413,7 @@
                     prop="realName"
                     label="姓名"
                     width="100"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
                       <el-button type="text" @click="assessmentLayer(scope.row)"
@@ -425,13 +425,13 @@
                 <el-table-column
                     prop="age"
                     label="年龄"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
                     prop="dangerousCount"
                     label="近7日平均血压"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">   
                       <span> 
@@ -442,14 +442,14 @@
                 <el-table-column
                     prop="joinHospitalTime"
                     label="加入时间"
-                    align="center"
+                    align="left"
                     label-class-name="tableTitle">
                 </el-table-column>
                 <el-table-column
                     prop="action"
                     label=""
                     width="275px"
-                    align="center">
+                    align="left">
                     <template slot-scope="scope">
                         <!-- <el-button 
                         size="mini" 
@@ -816,7 +816,7 @@ export default {
   margin-top: 30px;
 }
 .workhead {
-  margin-left: 24px;
+  margin-left: 26px;
   margin-top: 20px;
   margin-bottom: 10px;
   font-size: 24px;
@@ -872,7 +872,8 @@ export default {
   margin-top:24px;
   margin-bottom:2px;
   font-size:20px;
-  color:#666
+  color:#666;
+  padding-left:10px;
 }
 .card-header{
   margin: 0 20px 0 20px;

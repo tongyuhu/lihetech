@@ -1,5 +1,5 @@
 <template>
-  <div class="danger-layer">
+  <div class="danger-layer" id="danger-layer">
     <div class="gap-bottom">
       <el-card>
         <div>
@@ -34,11 +34,11 @@
                 <span class="red-text">{{result.danger?result.danger:'暂无'}}</span>
               </div>
               <div class="line-block gap-right">
-                <span>靶器官损害：</span>
+                <span class="line-block">靶器官损害：</span>
                 <span class="red-text">{{result.organDamage?result.organDamage:'暂无'}}</span>
               </div>
               <div class="line-block gap-right">
-                <span>临床疾患：</span>
+                <span class="line-block">临床疾患：</span>
                 <span class="red-text">{{result.disease?result.disease:'暂无'}}</span>
               </div>
             </div>
@@ -49,175 +49,143 @@
     <el-form>
       <!-- 身体指标 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>身体指标</p>
           </div>
           <div class="card-main">
-            <div class="">
+            <div>
               <el-row :gutter="20">
                 <el-col :span="4">
-                  <!-- <span>生日</span> -->
-                  <el-form-item label="出生日期" label-width="70px">
-                    <el-date-picker
-                      v-model="birthDate"
-                      type="date"
-                      size="small"
-                      format="yyyy-MM-dd"
-                      value-format="yyyy-MM-dd"
-                      :style="{width:'130px'}"
-                      placeholder="选择日期">
-                    </el-date-picker>
-                  </el-form-item>
+                  <div class="gap-bottom">
+                    <el-form-item label="出生日期" label-width="70px">
+                      <el-date-picker
+                        v-model="birthDate"
+                        type="date"
+                        size="small"
+                        format="yyyy-MM-dd"
+                        value-format="yyyy-MM-dd"
+                        :style="{width:'130px'}"
+                        placeholder="选择日期">
+                      </el-date-picker>
+                    </el-form-item>
+                  </div>
+                </el-col>
+                <el-col :span="4">
+                  <div class="gap-bottom">
+
+                    <el-form-item label="" label-width="0px">
+                      <numberinput
+                      v-model="height"
+                      :leftOffset="45"
+                      :rightOffset="30">
+                        <template slot="left">
+                          <span>
+                          身高：
+                          </span>
+                        </template>
+                        <template slot="right">
+                          <span>
+                          cm
+                          </span>
+                        </template>
+                      </numberinput>
+                    </el-form-item>
+                  </div>
                   
-                  <!-- <numberinput
-                  v-model="birthDate"
-                  :leftOffset="45"
-                  :rightOffset="5">
-                    <template slot="left">
-                      <span>
-                      年龄：
-                      </span>
-                    </template>
-                  </numberinput> -->
-                  <!-- <el-input placeholder="" v-model="body" size="small">
-                    <template slot="prefix">
-                      <span class="input-tip">年龄：</span>
-                    </template>
-                    <template slot="suffix">
-                      <span class="input-tip">cm</span>
-                    </template>
-                  </el-input> -->
                 </el-col>
                 <el-col :span="4">
-                  <el-form-item label="" label-width="0px">
-                    <numberinput
-                    v-model="height"
-                    :leftOffset="45"
-                    :rightOffset="30">
-                      <template slot="left">
-                        <span>
-                        身高：
-                        </span>
-                      </template>
-                      <template slot="right">
-                        <span>
-                        cm
-                        </span>
-                      </template>
-                    </numberinput>
-                  </el-form-item>
+                  <div class="gap-bottom">
+
+                    <el-form-item label="" label-width="0px">
+                      <numberinput
+                      v-model="weight"
+                      :leftOffset="45"
+                      :rightOffset="30">
+                        <template slot="left">
+                          <span>
+                          体重：
+                          </span>
+                        </template>
+                        <template slot="right">
+                          <span>
+                          kg
+                          </span>
+                        </template>
+                      </numberinput>
+                    </el-form-item>
+                  </div>
                 </el-col>
                 <el-col :span="4">
-                  <el-form-item label="" label-width="0px">
-                    <numberinput
-                    v-model="weight"
-                    :leftOffset="45"
-                    :rightOffset="30">
-                      <template slot="left">
-                        <span>
-                        体重：
-                        </span>
-                      </template>
-                      <template slot="right">
-                        <span>
-                        kg
-                        </span>
-                      </template>
-                    </numberinput>
-                  </el-form-item>
+                  <div class="gap-bottom">
+
+                    <el-form-item label="" label-width="0px">
+                      <numberinput
+                      v-model="waistWai"
+                      :leftOffset="45"
+                      :rightOffset="30">
+                        <template slot="left">
+                          <span>
+                          胸围：
+                          </span>
+                        </template>
+                        <template slot="right">
+                          <span>
+                          尺
+                          </span>
+                        </template>
+                      </numberinput>
+                    </el-form-item>
+                  </div>
                 </el-col>
                 <el-col :span="4">
-                  <el-form-item label="" label-width="0px">
-                    <numberinput
-                    v-model="waistWai"
-                    :leftOffset="45"
-                    :rightOffset="30">
-                      <template slot="left">
-                        <span>
-                        胸围：
-                        </span>
-                      </template>
-                      <template slot="right">
-                        <span>
-                        尺
-                        </span>
-                      </template>
-                    </numberinput>
-                  </el-form-item>
+                  <div class="gap-bottom">
+
+                    <el-form-item label="" label-width="0px">
+                      <numberinput
+                      v-model="systolicMaxHistory"
+                      :leftOffset="120"
+                      :rightOffset="0">
+                        <template slot="left">
+                          <span>
+                          历史最高收缩压：
+                          </span>
+                        </template>
+                        <!-- <template slot="right">
+                          <span>
+                          cm
+                          </span>
+                        </template> -->
+                      </numberinput>
+                    </el-form-item>
+                  </div>
                 </el-col>
                 <el-col :span="4">
-                  <!-- <div class="line-block"> -->
-                    <!-- <span>历史最高压</span> -->
-                    <!-- <el-form-item label="历史最高压" label-width="85px"> -->
-                      <!-- <div class="line-block"> -->
-                        <el-form-item label="" label-width="0px">
-                          <numberinput
-                          v-model="systolicMaxHistory"
-                          :leftOffset="120"
-                          :rightOffset="0">
-                            <template slot="left">
-                              <span>
-                              历史最高收缩压：
-                              </span>
-                            </template>
-                            <!-- <template slot="right">
-                              <span>
-                              cm
-                              </span>
-                            </template> -->
-                          </numberinput>
-                        </el-form-item>
-                      <!-- </div> -->
-                    <!-- </el-form-item> -->
-                  <!-- </div> -->
-                </el-col>
-                <el-col :span="4">
-                  <!-- <div class="line-block"> -->
-                    <!-- <el-form-item label="" label-width="0px"> -->
-                      <!-- <div class="line-block"> -->
-                        <el-form-item label="" label-width="0px">
-                          <numberinput
-                          v-model="diastolicMaxHistory"
-                          :leftOffset="120"
-                          :rightOffset="0">
-                            <template slot="left">
-                              <span>
-                              历史最高舒张压：
-                              </span>
-                            </template>
-                            <!-- <template slot="right">
-                              <span>
-                              cm
-                              </span>
-                            </template> -->
-                          </numberinput>
-                        </el-form-item>
-                      <!-- </div> -->
-                      <!-- <div class="line-block">
-                        <numberinput
-                        v-model="height"
-                        :leftOffset="45"
-                        :rightOffset="30">
-                          <template slot="left">
-                            <span>
-                            身高：
-                            </span>
-                          </template>
-                          <template slot="right">
-                            <span>
-                            cm
-                            </span>
-                          </template>
-                        </numberinput>
-                      </div> -->
-                    <!-- </el-form-item> -->
-                  <!-- </div> -->
+                  <div class="gap-bottom">
+
+                    <el-form-item label="" label-width="0px">
+                      <numberinput
+                      v-model="diastolicMaxHistory"
+                      :leftOffset="120"
+                      :rightOffset="0">
+                        <template slot="left">
+                          <span>
+                          历史最高舒张压：
+                          </span>
+                        </template>
+                        <!-- <template slot="right">
+                          <span>
+                          cm
+                          </span>
+                        </template> -->
+                      </numberinput>
+                    </el-form-item>
+                  </div>
                 </el-col>
               </el-row>
             </div>
             <div>
-              <div class="line-block">
+              <div class="line-block gap-bottom">
                 <el-form-item label="性别" label-width="40px">
                   <el-select v-model="sex" size="small" placeholder="请选择" style="{'width':'60px'}">
                     <el-option
@@ -231,7 +199,7 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <div class="line-block">
+              <div class="line-block gap-bottom">
                 <el-form-item label="是否吸烟" label-width="110px">
                   <el-select v-model="smoking" size="small" placeholder="请选择" style="{'width':'60px'}">
                     <el-option
@@ -249,7 +217,7 @@
                   </el-select>
                 </el-form-item>
               </div>
-              <div class="line-block">
+              <div class="line-block gap-bottom">
                 <el-form-item label="早发心血管病家族史" label-width="170px">
                   <el-select v-model="heartVesselsFamilyHistory" size="small" placeholder="请选择" style="{'width':'60px'}">
                     <el-option
@@ -310,46 +278,53 @@
       </div>
       <!-- 血脂 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>血脂</p>
             <span>
               TC正常值&lt;5.7
-            </span>|
+            </span><span class="line">|</span>
             <span>
               HDL-C正常值&lt;1.0
-            </span>|
+            </span><span class="line">|</span>
             <span>
                LDL-C正常值&lt;=3.3
             </span>
           </div>
           <div class="card-main">
-            <div class="gap-bottom">
+            <div>
               <el-row :gutter="20">
-                  <div class="radio-box line-block">
-                    <div class="line-block">
-                      <span>总胆固醇(mg/24h)：</span>
-                    </div>
-                    <div class="line-block">
-                      <!-- <div class="line-block gap-right">
-                        <el-radio-group 
-                          v-model="cholesterolTotal"
-                          size="small">
-                          <el-radio :label="1">mmol/L</el-radio>
-                          <el-radio :label="2">mg/dl</el-radio>
-                        </el-radio-group>
-                      </div> -->
+                  <div class="radio-box line-block gap-bottom">
+                    <el-form-item label="总胆固醇(mg/24h)：" label-width="140px">
                       <el-radio-group 
                         v-model="cholesterolTotal"
                         size="small">
                         <el-radio :label="1">&gt;5.7</el-radio>
                         <el-radio :label="2">&lt;=5.7</el-radio>
-                        <!-- <el-radio :label="3">&gt;6.9</el-radio> -->
                       </el-radio-group>
+                    </el-form-item>
+                    <!-- <div class="line-block">
+                      <span>总胆固醇(mg/24h)：</span>
                     </div>
-                  </div>
-                  <div class="radio-box line-block">
                     <div class="line-block">
+                      <el-radio-group 
+                        v-model="cholesterolTotal"
+                        size="small">
+                        <el-radio :label="1">&gt;5.7</el-radio>
+                        <el-radio :label="2">&lt;=5.7</el-radio>
+                      </el-radio-group>
+                    </div> -->
+                  </div>
+                  <div class="radio-box line-block gap-bottom">
+                    <el-form-item label="高密度脂蛋白胆固醇：" label-width="160px">
+                      <el-radio-group 
+                        v-model="highProteinCholesterol"
+                        size="small">
+                        <el-radio :label="1">&lt;1.0</el-radio>
+                        <el-radio :label="2">&gt;=1.0</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                    <!-- <div class="line-block">
                       <span>高密度脂蛋白胆固醇：</span>
                     </div>
                     <div class="line-block">
@@ -358,12 +333,19 @@
                         size="small">
                         <el-radio :label="1">&lt;1.0</el-radio>
                         <el-radio :label="2">&gt;=1.0</el-radio>
-                        <!-- <el-radio :label="3">&gt;6.9</el-radio> -->
                       </el-radio-group>
-                    </div>
+                    </div> -->
                   </div>
-                  <div class="radio-box line-block">
-                    <div class="line-block">
+                  <div class="radio-box line-block gap-bottom">
+                    <el-form-item label="低密度脂蛋白胆固醇：" label-width="160px">
+                      <el-radio-group 
+                        v-model="lowProteinCholesterol"
+                        size="small">
+                        <el-radio :label="1">&gt;3.3</el-radio>
+                        <el-radio :label="2">&lt;=3.3</el-radio>
+                      </el-radio-group>
+                    </el-form-item>
+                    <!-- <div class="line-block">
                       <span>低密度脂蛋白胆固醇：</span>
                     </div>
                     <div class="line-block">
@@ -373,7 +355,7 @@
                         <el-radio :label="1">&gt;3.3</el-radio>
                         <el-radio :label="2">&lt;=3.3</el-radio>
                       </el-radio-group>
-                    </div>
+                    </div> -->
                   </div>
               </el-row>
             </div>
@@ -387,7 +369,7 @@
                 </a> -->
                 <button @click.prevent="openCheckItemDialog('bloodFatUrls')" 
                 :class="['check-btn',bloodFatUrls.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   血生化-血脂
                 </button>
               </div>
@@ -397,14 +379,22 @@
       </div>
       <!-- 血同型半胱氨酸（Hcy） -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>血同型半胱氨酸（Hcy）</p>
             <span>正常值&lt;10</span>
           </div>
           <div class="card-main">
             <div class="radio-box line-block gap-bottom">
-              <div class="line-block">
+              <el-form-item label="血同型半胱氨酸(Hcy)：" label-width="160px">
+                <el-radio-group 
+                  v-model="hcy"
+                  size="small">
+                  <el-radio :label="1">&gt;=10umol/L</el-radio>
+                  <el-radio :label="2">&lt;10umol/L</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <!-- <div class="line-block">
                 <span>血同型半胱氨酸(Hcy)：</span>
               </div>
               <div class="line-block">
@@ -413,9 +403,8 @@
                   size="small">
                   <el-radio :label="1">&gt;=10umol/L</el-radio>
                   <el-radio :label="2">&lt;10umol/L</el-radio>
-                  <!-- <el-radio :label="3">&gt;6.9</el-radio> -->
                 </el-radio-group>
-              </div>
+              </div> -->
             </div>
             <!-- <div class="gap-bottom">
               <div class="width">
@@ -446,7 +435,7 @@
                 </a> -->
                 <button @click.prevent="openCheckItemDialog('hcyUrls')" 
                 :class="['check-btn',hcyUrls.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   同型半胱氨酸测定
                 </button>
               </div>
@@ -456,14 +445,23 @@
       </div>
       <!-- 血糖评估 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>血糖评估</p>
           </div>
           <div class="card-main">
-            <div class="gap-bottom">
-              <div class="radio-box line-block">
-                  <div class="line-block">
+            <div>
+              <div class="radio-box line-block gap-bottom">
+                    <el-form-item label="空腹血糖(mmol/L)：" label-width="160px">
+                    <el-radio-group 
+                      v-model="bloodSugarEmpty"
+                      size="small">
+                      <el-radio :label="1">&lt;6.1</el-radio>
+                      <el-radio :label="2">6.1-6.9</el-radio>
+                      <el-radio :label="3">&gt;6.9</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <!-- <div class="line-block">
                     <span>空腹血糖(mmol/L)：</span>
                   </div>
                   <div class="line-block">
@@ -474,10 +472,19 @@
                       <el-radio :label="2">6.1-6.9</el-radio>
                       <el-radio :label="3">&gt;6.9</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
-              <div class="radio-box line-block">
-                  <div class="line-block">
+              <div class="radio-box line-block gap-bottom" >
+                  <el-form-item label="餐后两小时血糖(mmol/L)：" label-width="180px">
+                    <el-radio-group 
+                      v-model="bloodSugarAfterMealTwo"
+                      size="small">
+                      <el-radio :label="1">&lt;7.8</el-radio>
+                      <el-radio :label="2">7.8-11.0</el-radio>
+                      <el-radio :label="3">&gt;11.0</el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <!-- <div class="line-block">
                     <span>餐后两小时血糖(mmol/L)：</span>
                   </div>
                   <div class="line-block">
@@ -488,10 +495,19 @@
                       <el-radio :label="2">7.8-11.0</el-radio>
                       <el-radio :label="3">&gt;11.0</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
-              <div class="radio-box line-block">
-                  <div class="line-block">
+              <div class="radio-box line-block gap-bottom">
+                <el-form-item label="糖化血红蛋白(mmol/L)：" label-width="180px">
+                  <el-radio-group 
+                      v-model="sugarBloodProtein"
+                      size="small">
+                      <el-radio :label="1">&lt;6.5%</el-radio>
+                      <!-- <el-radio :label="2">6.1-6.9</el-radio> -->
+                      <el-radio :label="2">&gt;=6.5%</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>糖化血红蛋白(mmol/L)：</span>
                   </div>
                   <div class="line-block">
@@ -499,10 +515,9 @@
                       v-model="sugarBloodProtein"
                       size="small">
                       <el-radio :label="1">&lt;6.5%</el-radio>
-                      <!-- <el-radio :label="2">6.1-6.9</el-radio> -->
                       <el-radio :label="2">&gt;=6.5%</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div>
@@ -510,17 +525,17 @@
                 <span>检查单：</span>
                 <button @click.prevent="openCheckItemDialog('bloodSugarEmptyUrl')" 
                 :class="['check-btn',bloodSugarEmptyUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   空腹血糖
                 </button>
                 <button @click.prevent="openCheckItemDialog('bloodSugarAfterMealTwoUrl')" 
                 :class="['check-btn',bloodSugarAfterMealTwoUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   餐后2小时血糖
                 </button>
                 <button @click.prevent="openCheckItemDialog('sugarBloodProteinUrl')" 
                 :class="['check-btn',sugarBloodProteinUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   糖化血红蛋白HbA1c
                 </button>
                 <!-- <a :class="['a-upload','gap-right',bloodSugarEmptyUrl?'hasapload':'unapload']" title="上传"> 
@@ -557,15 +572,15 @@
       </div>
       <!-- 肾脏评估 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>肾脏评估</p>
             <span>
               血清肌酐 正常值&lt;115
-            </span>|
+            </span><span class="line">|</span>
             <span>
               肾小球滤过率 正常值&gt;60
-            </span>|
+            </span><span class="line">|</span>
             <span>
               蛋白尿值(mg/24h)正常值&lt;30
             </span>
@@ -573,7 +588,22 @@
           <div class="card-main">
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="血清肌酐：" label-width="90px">
+                  <el-radio-group 
+                        v-model="serumCreatinineUnit"
+                        size="small">
+                        <el-radio :label="1">umol/L</el-radio>
+                        <el-radio :label="2">mg/dl</el-radio>
+                      </el-radio-group>
+                  <el-radio-group 
+                      v-model="serumCreatinineType"
+                      size="small">
+                      <el-radio :label="1">{{serum.lowvalue}}</el-radio>
+                      <el-radio :label="2">{{serum.middlehvalue}}</el-radio>
+                      <el-radio :label="3">{{serum.heighvalue}}</el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>血清肌酐：</span>
                   </div>
                   <div class="line-block">
@@ -591,14 +621,22 @@
                       <el-radio :label="1">{{serum.lowvalue}}</el-radio>
                       <el-radio :label="2">{{serum.middlehvalue}}</el-radio>
                       <el-radio :label="3">{{serum.heighvalue}}</el-radio>
-                      <!-- <el-radio :label="3">估算的肾小球滤过率&lt;60(eGFR降低)</el-radio> -->
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="估算的肾小球滤过率&lt;60(eGFR降低)：" label-width="255px">
+                  <el-radio-group 
+                    v-model="egfr"
+                    size="small">
+                    <el-radio :label="1">是</el-radio>
+                    <el-radio :label="0">否</el-radio>
+                    <!-- <el-radio :label="3">&gt;300</el-radio> -->
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>估算的肾小球滤过率&lt;60(eGFR降低)：</span>
                   </div>
                   <div class="line-block">
@@ -607,14 +645,22 @@
                       size="small">
                       <el-radio :label="1">是</el-radio>
                       <el-radio :label="0">否</el-radio>
-                      <!-- <el-radio :label="3">&gt;300</el-radio> -->
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="蛋白尿值(mg/24h)：" label-width="140px">
+                  <el-radio-group 
+                    v-model="proteinUrineType"
+                    size="small">
+                    <el-radio :label="1">&lt;30</el-radio>
+                    <el-radio :label="2">30-300</el-radio>
+                    <el-radio :label="3">&gt;300</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>蛋白尿值(mg/24h)：</span>
                   </div>
                   <div class="line-block">
@@ -625,7 +671,7 @@
                       <el-radio :label="2">30-300</el-radio>
                       <el-radio :label="3">&gt;300</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div>
@@ -633,17 +679,17 @@
                 <span>检查单：</span>
                 <button @click.prevent="openCheckItemDialog('bloodCreatinineUrls')" 
                 :class="['check-btn',bloodCreatinineUrls.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   血生化-血肌酐
                 </button>
                 <button @click.prevent="openCheckItemDialog('routineUrineUrls')" 
                 :class="['check-btn',routineUrineUrls.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   尿常规
                 </button>
                 <button @click.prevent="openCheckItemDialog('routineProteinUrls')" 
                 :class="['check-btn',routineProteinUrls.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   尿蛋白
                 </button>
                 
@@ -669,14 +715,22 @@
       </div>
       <!-- 心脏评估 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>心脏评估</p>
           </div>
           <div class="card-main">
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="心电图指标：" label-width="100px">
+                  <el-radio-group 
+                    v-model="ecgType"
+                    size="small">
+                    <el-radio :label="1">Sokolow-lyon&gt;38mm或cornell&gt;2440mm.ms(左心室肥厚)</el-radio>
+                    <el-radio :label="2">正常</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>心电图指标：</span>
                   </div>
                   <div class="line-block">
@@ -686,12 +740,21 @@
                       <el-radio :label="1">Sokolow-lyon&gt;38mm或cornell&gt;2440mm.ms(左心室肥厚)</el-radio>
                       <el-radio :label="2">正常</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="超声心动图LVMI指标(g/m2)：" label-width="200px">
+                  <el-radio-group 
+                    v-model="lvmlType"
+                    size="small">
+                    <el-radio :label="1">&gt;=125(左心室肥厚)</el-radio>
+                    <!-- <el-radio :label="2">30-300</el-radio> -->
+                    <el-radio :label="2">&lt;125</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>超声心动图LVMI指标(g/m2)：</span>
                   </div>
                   <div class="line-block">
@@ -699,15 +762,22 @@
                       v-model="lvmlType"
                       size="small">
                       <el-radio :label="1">&gt;=125(左心室肥厚)</el-radio>
-                      <!-- <el-radio :label="2">30-300</el-radio> -->
                       <el-radio :label="2">&lt;125</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="心脏扩大：" label-width="90px">
+                  <el-radio-group 
+                    v-model="heartExpandType"
+                    size="small">
+                    <el-radio :label="1">左右心房、心室任一增大</el-radio>
+                    <el-radio :label="2">无增大</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>心脏扩大：</span>
                   </div>
                   <div class="line-block">
@@ -717,12 +787,23 @@
                       <el-radio :label="1">左右心房、心室任一增大</el-radio>
                       <el-radio :label="2">无增大</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="已确诊心脏疾病：" label-width="130px">
+                  <el-radio-group 
+                    v-model="heartDisease"
+                    size="small">
+                    <el-radio :label="1">心肌梗死史</el-radio>
+                    <el-radio :label="2">心绞痛</el-radio>
+                    <el-radio :label="3">冠状动脉血运重建史</el-radio>
+                    <el-radio :label="4">慢性心力衰竭</el-radio>
+                    <el-radio :label="0">未知</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>已确诊心脏疾病：</span>
                   </div>
                   <div class="line-block">
@@ -735,25 +816,25 @@
                       <el-radio :label="4">慢性心力衰竭</el-radio>
                       <el-radio :label="0">未知</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div>
-              <div class="line-block gap-bottom">
+              <div class="line-block">
                 <span>检查单：</span>
                 <button @click.prevent="openCheckItemDialog('heartFigureUrl')" 
                 :class="['check-btn',heartFigureUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   心电图
                 </button>
                 <button @click.prevent="openCheckItemDialog('heartUltrasonicUrl')" 
                 :class="['check-btn',heartUltrasonicUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   超声心动图（心脏彩超）
                 </button>
                 <button @click.prevent="openCheckItemDialog('xChestUrl')" 
                 :class="['check-btn',xChestUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   X线胸片
                 </button>
                 <!-- <a :class="['a-upload','gap-right',heartFigureUrl?'hasapload':'unapload']" title="上传"> 
@@ -776,22 +857,22 @@
                 <span>高级检查单：</span>
                 <button @click.prevent="openCheckItemDialog('heartMrlMraUrl')" 
                 :class="['check-btn',heartMrlMraUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   心脏MRI 磁共振血管造影 (MRA)
                 </button>
                 <button @click.prevent="openCheckItemDialog('ctaUrl')" 
                 :class="['check-btn',ctaUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   计算机断层扫描血管造影
                 </button>
                 <button @click.prevent="openCheckItemDialog('heartWithUrl')" 
                 :class="['check-btn',heartWithUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   心脏同位素显像
                 </button>
                 <button @click.prevent="openCheckItemDialog('movementUrl')" 
                 :class="['check-btn',movementUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   运动实验 或冠状动脉造影
                 </button>
                 <!-- <a :class="['a-upload','gap-right',heartMrlMraUrl?'hasapload':'unapload']" title="上传"> 
@@ -821,15 +902,23 @@
       </div>
       <!-- 外周血管评估 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>外周血管评估</p>
           </div>
           <div class="card-main">
             <div class="gap-bottom line-block">
-              <span>靶器官损害</span>
+              <span class="line-block radio-box-title">靶器官损害</span>
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="颈-股动脉脉搏波 速度(m/s)：" label-width="200px">
+                  <el-radio-group 
+                    v-model="neckStocksSpeedType"
+                    size="small">
+                    <el-radio :label="1">&gt;=12(动脉硬化)</el-radio>
+                    <el-radio :label="2">&lt;12</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>颈-股动脉脉搏波 速度(m/s)：</span>
                   </div>
                   <div class="line-block">
@@ -839,12 +928,21 @@
                       <el-radio :label="1">&gt;=12(动脉硬化)</el-radio>
                       <el-radio :label="2">&lt;12</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="踝臂血压指数：" label-width="110px">
+                  <el-radio-group 
+                    v-model="ankleArmIndex"
+                    size="small">
+                    <el-radio :label="1">&lt;0.9(动脉硬化)</el-radio>
+                    <!-- <el-radio :label="2">30-300</el-radio> -->
+                    <el-radio :label="2">&gt;=0.9</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>踝臂血压指数：</span>
                   </div>
                   <div class="line-block">
@@ -852,15 +950,22 @@
                       v-model="ankleArmIndex"
                       size="small">
                       <el-radio :label="1">&lt;0.9(动脉硬化)</el-radio>
-                      <!-- <el-radio :label="2">30-300</el-radio> -->
                       <el-radio :label="2">&gt;=0.9</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="颈动脉超声(IMT)：" label-width="130px">
+                  <el-radio-group 
+                    v-model="imtType"
+                    size="small">
+                    <el-radio :label="1">&gt;=0.9mm或动脉粥样板块</el-radio>
+                    <el-radio :label="2">&lt;0.9mm</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>颈动脉超声(IMT)：</span>
                   </div>
                   <div class="line-block">
@@ -870,13 +975,23 @@
                       <el-radio :label="1">&gt;=0.9mm或动脉粥样板块</el-radio>
                       <el-radio :label="2">&lt;0.9mm</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div class="gap-bottom">
-              <span>临床疾患</span>
+              <span class="line-block radio-box-title">临床疾患</span>
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="外周血管疾病：" label-width="110px">
+                  <el-radio-group 
+                    v-model="outsideVesselsDisease"
+                    size="small">
+                    <el-radio :label="1">动脉瘤、狭窄、闭塞、栓塞、主动脉夹层</el-radio>
+                    <el-radio :label="2">血管外伤、血管瘤、下肢溃疡</el-radio>
+                    <el-radio :label="3">静脉血栓、形成、曲张、动静脉内瘘</el-radio>
+                    <el-radio :label="0">未知</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>外周血管疾病：</span>
                   </div>
                   <div class="line-block">
@@ -888,7 +1003,7 @@
                       <el-radio :label="3">静脉血栓、形成、曲张、动静脉内瘘</el-radio>
                       <el-radio :label="0">未知</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div>
@@ -896,22 +1011,22 @@
                 <span>检查单：</span>
                 <button @click.prevent="openCheckItemDialog('neckSoundUrl')" 
                 :class="['check-btn',neckSoundUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   颈动脉超声
                 </button>
                 <button @click.prevent="openCheckItemDialog('pulseSpeedUrl')" 
                 :class="['check-btn',pulseSpeedUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   脉搏波传导速度
                 </button>
                 <button @click.prevent="openCheckItemDialog('ankleArmNumUrl')" 
                 :class="['check-btn',ankleArmNumUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   踝臂指数
                 </button>
                 <button @click.prevent="openCheckItemDialog('otherVesselsUrl')" 
                 :class="['check-btn',otherVesselsUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   其它血管检查项
                 </button>
                 <!-- <a :class="['a-upload','gap-right',neckSoundUrl?'hasapload':'unapload']" title="上传"> 
@@ -941,14 +1056,24 @@
       </div>
       <!-- 脑评估 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>脑评估</p>
           </div>
           <div class="card-main">
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="脑血管疾病：" label-width="100px">
+                  <el-radio-group 
+                    v-model="brainDiseaseType"
+                    size="small">
+                    <el-radio :label="1">脑出血</el-radio>
+                    <el-radio :label="2">缺血性脑卒中</el-radio>
+                    <el-radio :label="3">短暂性脑缺血发作</el-radio>
+                    <el-radio :label="0">未知</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>脑血管疾病：</span>
                   </div>
                   <div class="line-block">
@@ -960,7 +1085,7 @@
                       <el-radio :label="3">短暂性脑缺血发作</el-radio>
                       <el-radio :label="0">未知</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div>
@@ -968,17 +1093,17 @@
                 <span>检查单：</span>
                 <button @click.prevent="openCheckItemDialog('brainMriMraUrl')" 
                 :class="['check-btn',brainMriMraUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   头颅MRI MRA
                 </button>
                 <button @click.prevent="openCheckItemDialog('brainCtaUrl')" 
                 :class="['check-btn',brainCtaUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   CTA
                 </button>
                 <button @click.prevent="openCheckItemDialog('spiritStateUrl')" 
                 :class="['check-btn',spiritStateUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   精神状态量表
                 </button>
                 <!-- <a :class="['a-upload','gap-right',brainMriMraUrl?'hasapload':'unapload']" title="上传"> 
@@ -1003,14 +1128,26 @@
       </div>
       <!-- 眼底评估 -->
       <div class="gap-bottom">
-        <el-card :body-style="{'padding':'0 0px 20px 0px'}">
+        <el-card :body-style="{'padding':'0 0px 0px 0px'}">
           <div class="card-head-title">
             <p>眼底评估</p>
           </div>
           <div class="card-main">
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                  <div class="line-block">
+                <el-form-item label="Keith-Wagnar分级：" label-width="140px">
+                  <el-radio-group 
+                    v-model="keithWagnarLevel"
+                    size="small">
+                    <el-radio :label="6">正常</el-radio>
+                    <el-radio :label="1">Ⅰ视网膜动脉痉挛期</el-radio>
+                    <el-radio :label="2">Ⅱ级视网膜动脉硬化期</el-radio>
+                    <el-radio :label="3">Ⅲ视网膜病变期(出血、渗出)</el-radio>
+                    <el-radio :label="4">Ⅳ视神经视网膜病变期(视乳头水肿)</el-radio>
+                    <el-radio :label="5">Ⅴ失明</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+                  <!-- <div class="line-block">
                     <span>Keith-Wagnar分级：</span>
                   </div>
                   <div class="line-block">
@@ -1024,7 +1161,7 @@
                       <el-radio :label="4">Ⅳ视神经视网膜病变期(视乳头水肿)</el-radio>
                       <el-radio :label="5">Ⅴ失明</el-radio>
                     </el-radio-group>
-                  </div>
+                  </div> -->
               </div>
             </div>
             <div>
@@ -1032,7 +1169,7 @@
                 <span>检查单：</span>
                 <button @click.prevent="openCheckItemDialog('fundusUrl')" 
                 :class="['check-btn',fundusUrl.length!==0?'hasapload':'unapload']">
-                  <span class="iconfont icon-chakanwenjian icon"></span>
+                  <!-- <span class="iconfont icon-chakanwenjian icon"></span> -->
                   眼底检查(高分辨率眼底成像系统)
                 </button>
                 <!-- <a :class="['a-upload',fundusUrl?'hasapload':'unapload']" title="上传"> 
@@ -1846,29 +1983,34 @@ export default {
   display: inline-block;
   color: #041421;
   font-size: 20px;
-  margin-top:40px;
+  margin-top:20px;
   margin-left: 20px;
 }
 .gap-bottom{
-  margin-bottom: 8px;
+  margin-bottom: 20px;
 }
 .card-head-title{
-  background-color: #1991fc;
-  border-bottom:1px solid #ebeef5;
-  padding-bottom: 10px;
-  padding-top:10px;
+  background-color: #d1e9fe;
+  border-bottom:1px solid #d1e9fe;
+  height: 50px;
+  line-height: 50px;
   font-size: 20px;
   margin-bottom: 15px;
   padding-left: 20px;
-  border-radius: 5px;
-  // color: #1991fc;
-  // color: #666;
-  color: #fff;
+  // border-radius: 5px 0;
+  border-top-left-radius:5px;
+  border-top-right-radius:5px;
+  color: #333;
+  .line{
+    font-size: 16px;
+  }
   p{
     display: inline-block;
+    margin-right: 10px;
   }
   span{
     font-size: 14px;
+    color: #666;
   }
 }
 .card-main{
@@ -1878,7 +2020,7 @@ export default {
   display: inline-block;
 }
 .gap-right{
-  margin-right: 20px;
+  margin-right: 40px;
 }
 .danger-btn-text{
   color: #fff;
@@ -1905,9 +2047,40 @@ export default {
   // padding: 3px 5px;
   font-size: 14px;
   cursor: pointer;
-  background: transparent;
-  padding: 0;
+  background: #f4f6f9;
+  padding: 0 15px;
+  height: 28px;
+  margin-right: 15px;
+  line-height: 28px;
+  border-radius: 15px;
+  margin-bottom: 20px;
 }
+.check-btn:hover{
+  background: #1991fc;
+  color: #fff;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 15px;
+  height: 28px;
+  margin-right: 15px;
+  line-height: 28px;
+  border-radius: 15px;
+  margin-bottom: 20px;
+}
+// .check-btn :hover{
+//   border: none;
+//   outline: none;
+//   color: #fff;
+//   // padding: 3px 5px;
+//   font-size: 14px;
+//   cursor: pointer;
+//   background: #1991fc;
+//   padding: 0;
+//   margin-right: 15px;
+//   line-height: 1.5;
+// }
 .icon{
   font-size: 12px;
 }
@@ -1916,12 +2089,15 @@ export default {
 }
 .radio-box{
   border:1px solid #dcdfe6;
-  height: 30px;
+  // height: 30px;
   border-radius: 4px;
-  line-height: 32px;
+  // line-height: 32px;
   // line-height: 1;
   // width: 97%;
+  // padding: 9px 10px 7px 10px;
   padding: 0 10px;
+  margin-right: 10px;
+  // margin-bottom: 20px;
   // padding: 7px 5px;
 }
 .submit-btn-wrap{
@@ -2004,5 +2180,46 @@ export default {
     max-height: 100%;
   }
 }
+.radio-box-title{
+  padding:0px 10px 10px 0;
+}
+// .el-form-item{
+//   margin-bottom: 0;
+// }
+// .el-form-item__content{
+//   line-height: 32px;
+// }
+// .el-form-item__label{
+//   line-height: 32px;
+// }
 </style>
 
+<style>
+#danger-layer .el-form-item{
+  margin-bottom: 0;
+}
+#danger-layer .el-form-item__content{
+  line-height: 32px;
+}
+#danger-layer .el-form-item__label{
+  line-height: 32px;
+}
+#danger-layer .el-radio {
+    color: #606266;
+    font-weight: 500;
+    line-height: 30px;
+    position: relative;
+    cursor: pointer;
+    display: inline-block;
+    white-space: nowrap;
+    outline: none;
+    font-size: 14px;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    /* padding: 0 7px; */
+}
+#danger-layer .el-radio + .el-radio {
+    margin-left: 20px;
+}
+</style>

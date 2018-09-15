@@ -4,16 +4,15 @@
       <el-card :body-style="{padding: '18px 20px 0 20px'}">
         <div class="head-title">
           <div>
-
             <span>{{info.name}}</span>
             <el-button @click="call" type="text" size="mini">
               <i class="iconfont icon-xiaoxi icon-msg-color"></i>
             </el-button>
-            <el-button :disabled="upBtn" v-if="!submitBtn" class="left-btn-radius" type="primary" size="mini" @click="FlupUp">
+            <el-button :disabled="upBtn" v-if="!submitBtn" class="left-btn-radius" :type="upBtn?'info':'primary'" size="mini" @click="FlupUp">
               <span class="el-icon-arrow-left"></span>
               查看上次随访
             </el-button>
-            <el-button :disabled="nextBtn" v-if="!submitBtn" type="primary" size="mini" class="right-btn-radius" @click="FlupDn">
+            <el-button  :disabled="nextBtn" v-if="!submitBtn" :type="upBtn?'info':'primary'" size="mini" class="right-btn-radius" @click="FlupDn">
               查看下次随访
               <span class="el-icon-arrow-right"></span>
             </el-button>
@@ -90,10 +89,10 @@
         <div class="card-head-title">
           <p>身体指标</p>
         </div>
-        <div class="bottom-gap">
+        <div>
           <el-row :gutter="20">
             <el-col :span="5">
-              <div class="elinput-wrap-small">
+              <div class="elinput-wrap-small bottom-gap">
                 <numberinput
                 v-model="body.heighBlood"
                 :leftOffset="60"
@@ -118,7 +117,7 @@
 
             </el-col>
             <el-col :span="5">
-              <div class="elinput-wrap-small">
+              <div class="elinput-wrap-small bottom-gap">
                 <numberinput
                 v-model="body.lowBlood"
                 :leftOffset="60"
@@ -141,8 +140,8 @@
               </div>
 
             </el-col>
-            <el-col :span="14">
-              <div class="radio-box flex-between">
+            <el-col :span="14"  :xl="24">
+              <div class="radio-box flex-between bottom-gap">
                 <div class="flex">
                   <div class="check-box-title">
                     <span class="iconfont icon-bixutian must"></span>
@@ -166,8 +165,9 @@
                 <div class="question-btn">
                   <!-- <el-button type="text" size="mini"> -->
                     <button
-                    @click="dangerLayerHandler">
-                      <i class="el-icon-question" :style="{'color':'#999','font-size':'16px','height':'16px'}"></i>
+                    @click="dangerLayerHandler"
+                    >
+                      <i class="el-icon-question" :style="{'color':'#1991fc','font-size':'16px','height':'16px'}"></i>
                       分层评估
                     </button>
                   <!-- </el-button> -->
@@ -278,7 +278,7 @@
             </el-col>
             <el-col :span="6">
               <div class="radio-box flex">
-                <div class="check-box-title">
+                <div class="check-box-title input-tip">
                 睡眠质量：
                 </div>
                 <div>
@@ -1436,7 +1436,7 @@ export default {
         }
         obj.medicineType = item.medicineType
         obj.medicineName = item.name
-        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse) + ''
+        obj.everyDosage = this._.isNaN(parseInt(item.singleuse)) ? null : parseInt(item.singleuse)
         obj.unit = this.medicineunit(item.singleuseUnit)
         obj.usageTimes = this._.isNaN(parseInt(item.usetimes)) ? null : parseInt(item.usetimes) + ''
         obj.usageOff = this.medicineunit(item.usemethod)
@@ -1531,6 +1531,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  button[disabled]{
+    cursor: not-allowed;
+    background: #a5a5a5;
+    border:1px solid #a5a5a5;
+  }
   .flup-card{
     font-size: 14px;
   }
@@ -1570,9 +1575,9 @@ export default {
   }
   .input-tip{
     display: inline-block;
-    color: #041421;
+    color: #606266;
     font-size: 14px;
-    line-height: 32px;
+    // line-height: 32px;
     // width: 100px;
   }
   .elinput-wrap .el-input--prefix .el-input__inner {
@@ -1582,7 +1587,7 @@ export default {
     padding-right: 65px;
   }
   .bottom-gap{
-    margin-bottom: 8px;
+    margin-bottom: 20px;
   }
   .right-gap{
     margin-right: 15px;
@@ -1638,7 +1643,8 @@ export default {
       outline: none;
       cursor: pointer;
       padding: 0;
-      color: #606266;
+      color: #1991fc;
+      font-size: 14px;
     }
   }
   .check-box-title{
@@ -1755,7 +1761,7 @@ export default {
   }
   .right-btn-radius {
     border-radius:0 20px 20px 0;
-    margin-left: 0;
+    margin-left: -4px;
   }
 </style>
 <style lang="scss">

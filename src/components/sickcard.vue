@@ -10,9 +10,6 @@
                 <th class="table-head">用户自述</th>
                 <td> 
                   最近总是恶心、呕吐、浑身无力、四肢无力最近总是恶心、
-           
-            
-                 
                   <el-button size="mini" type="text" class="table-btn" @click="play">
                     <i class="play"></i>播放
                   </el-button>

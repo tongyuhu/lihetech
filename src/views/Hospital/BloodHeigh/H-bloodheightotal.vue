@@ -565,7 +565,7 @@ p {
   color:#666
 }
 .card-header{
-  margin: 0 20px 0 20px;
+  margin: 0 20px 0 26px;
   border-bottom:1px solid #ebeef5;
   height: 28px;
 }

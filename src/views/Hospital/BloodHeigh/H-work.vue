@@ -35,7 +35,7 @@
                     align="left">
                     <template slot-scope="scope">
                       <el-button type="text" @click="newdiagnose(scope.row,'useUserId')"
-                      :style="{'color':'#1991fc'}">
+                      :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
                     </template>
@@ -44,12 +44,14 @@
                     prop="createTime"
                     label="问诊时间"
                     label-class-name="tableTitle"
+                    align="left"
                     width="200">
                 </el-table-column>
                 <el-table-column
                     prop="readme"
                     label="咨询主题"
-                    label-class-name="tableTitle">
+                    label-class-name="tableTitle"
+                    align="left">
                 </el-table-column>
                 <el-table-column
                     prop="action"
@@ -97,6 +99,7 @@
                       prop="realName"
                       label="姓名"
                       width="100"
+                      align="left"
                       label-class-name="tableTitle">
                       <template slot-scope="scope">
                         <el-button type="text" @click="diagnose(scope.row)"

@@ -1073,7 +1073,18 @@ export default {
 <style lang="scss" scoped>
 button[disabled]{
   cursor: not-allowed;
-  // not-allowed
+  background: #a5a5a5;
+  border:1px solid #a5a5a5;
+  box-sizing: border-box;
+  box-sizing: border-box;
+  line-height: 1;
+  white-space: nowrap;
+  padding: 7px 5px;
+  border-radius: 2px;
+  color: #fff;
+  width: 72px;
+  font-size: 12px;
+// not-allowed
 }
 .order-sick{
   font-size: 14px;

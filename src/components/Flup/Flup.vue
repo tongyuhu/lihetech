@@ -24,7 +24,7 @@
                     align="left">
                     <template slot-scope="scope">
                       <el-button type="text" @click="flupHandler(scope.row)"
-                      :style="{'color':'#1991fc'}">
+                      :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
                     </template>
@@ -108,7 +108,7 @@
                     align="left">
                     <template slot-scope="scope">
                       <el-button type="text" @click="flupHandler(scope.row,true)"
-                      :style="{'color':'#1991fc'}">
+                      :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
                     </template>
@@ -353,13 +353,14 @@ export default {
   .head-title{
     font-size: 24px;
     color: #041421;
-    margin-left: 12px;
+    margin-left: 30px;
     margin-bottom: 10px;
   }
   .card-head-title{
     border-bottom:1px solid #ebeef5;
     padding-bottom: 10px;
     font-size: 20px;
+    padding-left: 10px;
   }
   .unfinished{
     color: #e87070;
