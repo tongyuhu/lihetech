@@ -286,7 +286,7 @@ let doctorRouters = [
     path: '/Hospital/',
     name: 'hospital',
     component: hospital,
-    redirect: 'hospital/order',
+    redirect: 'hospital/booldheigh',
     meta: {
       requireAuth: true,
       name: '诊所主页',

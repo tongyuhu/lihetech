@@ -220,11 +220,11 @@ export default {
     //  1-超级管理员 2-医院诊所 3-医生 4-护士
     if (this._.has(this.adminInfo, 'adminType')) {
       if (this.adminInfo.adminType === 3) {
-        this.orderMenu.open = true
+        this.bloodHeighMenu.open = true
+        this.menu.push(this.bloodHeighMenu)
         this.menu.push(this.orderMenu)
         this.menu.push(this.diagonseMenu)
         this.menu.push(this.FlupMenu)
-        this.menu.push(this.bloodHeighMenu)
         this.menu.push(this.personManage)
       }
       if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
@@ -236,9 +236,9 @@ export default {
       }
       if (this.adminInfo.adminType === 4) {
         // this.menu.push(this.orderMenu)
-        this.FlupMenu.open = true
-        this.menu.push(this.FlupMenu)
+        this.bloodHeighMenu.open = true
         this.menu.push(this.bloodHeighMenu)
+        this.menu.push(this.FlupMenu)
         this.menu.push(this.personManage)
       }
     }
