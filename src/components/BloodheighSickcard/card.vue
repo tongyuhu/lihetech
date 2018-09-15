@@ -142,7 +142,7 @@
           <td colspan="2" class="table-head side-left">医生信息</td>
           <td>
             <span>
-              李那那  上海张江高科诊所  糖尿病慢性病家庭医生
+              <!-- 李那那  上海张江高科诊所  糖尿病慢性病家庭医生 -->
             </span>
           </td>
         </tr>
