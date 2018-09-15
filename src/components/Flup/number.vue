@@ -114,6 +114,7 @@ export default {
     box-sizing: border-box;
     /* max-width: 1080px; */
     width: 100%;
+    color: #606266;
     /* position: absolute; */
     /* top:0; */
     /* padding-left: 60px; */
@@ -123,6 +124,7 @@ export default {
     /* max-width: 1080px; */
     height: 100%;
     width: 100%;
+    color: #606266;
   }
   .feng-input:focus {
     border:1px solid #1991fc;
