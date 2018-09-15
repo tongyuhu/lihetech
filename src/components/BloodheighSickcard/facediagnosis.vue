@@ -527,8 +527,7 @@
                     <span v-if="!rightdata.isMedicine">{{rightdata.sysMedicineList}}</span>
                     <div v-else class="line-block" v-for="(item,index) in rightdata.sysMedicineList"
                     :key="index">
-                    <!-- {{item}} -->
-                      <span>{{item.medicineName}}:当日最大剂量不超过{{item.medicineDoseMax}}mg</span>
+                      <span>{{item.medicineName?item.medicineName+':当日最大剂量不超过':''}}{{item.medicineDoseMax?item.medicineDoseMax+'mg':""}}</span>
                       <table class="table">
                         <thead>
                           <tr>
@@ -564,10 +563,10 @@
                         </thead>
                         <tbody>
                           <tr>
-                            <td>{{item.medicineInitialDose}}</td>
-                            <td>{{item.medicineAdjustDoseOne}}</td>
-                            <td>{{item.medicineAdjustDoseTwo}}</td>
-                            <td>{{item.medicineAdjustDoseThree}}</td>
+                            <td>{{item.medicineInitialDose?item.medicineInitialDose:"无"}}</td>
+                            <td>{{item.medicineAdjustDoseOne?item.medicineAdjustDoseOne:"无"}}</td>
+                            <td>{{item.medicineAdjustDoseTwo?item.medicineAdjustDoseTwo:"无"}}</td>
+                            <td>{{item.medicineAdjustDoseThree?item.medicineAdjustDoseThree:"无"}}</td>
                           </tr>
                         </tbody>
                       </table>
@@ -596,23 +595,23 @@
                 <div class="pane-item ins">
                   <div>
                     <span class="case-right-use-method-title">适应证与用法用量:</span>
-                    <span>{{item.medicineUseSymptoms}}</span>
+                    <span>{{item.medicineUseSymptoms?item.medicineUseSymptoms:'无'}}</span>
                   </div>
                   <div>
                     <span class="case-right-use-method-title">不良反应:</span>
-                    <span>{{item.medicineUntowardEffect}}</span>
+                    <span>{{item.medicineUntowardEffect?item.medicineUntowardEffect:'无'}}</span>
                   </div>
                   <div>
                     <span class="case-right-use-method-title">禁忌症:</span>
-                    <span>{{item.medicineTaboo}}</span>
+                    <span>{{item.medicineTaboo?item.medicineTaboo:'无'}}</span>
                   </div>
                   <div>
                     <span class="case-right-use-method-title">药品相互作用:</span>
-                    <span>{{item.medicineInteraction}}</span>
+                    <span>{{item.medicineInteraction?item.medicineInteraction:'无'}}</span>
                   </div>
                   <div>
                     <span class="case-right-use-method-title">备注:</span>
-                    <span>{{item.medicineNote}}</span>
+                    <span>{{item.medicineNote?item.medicineNote:'无'}}</span>
                   </div>
                 </div>
               </pane>
@@ -1904,7 +1903,7 @@ export default {
   // 处方主体
   .case{
     min-width: 630px;
-    // flex-grow:1;
+    flex-grow:1;
     background-color: #fff;
     border-left:8px solid #f4f6f9;
     border-right:8px solid #f4f6f9;

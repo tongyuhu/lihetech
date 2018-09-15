@@ -25,6 +25,7 @@
         @checkSuger="checkSuger"
         @checkd="changeTab"
         :tabcss="{'margin-right':'35px'}"
+        :style="{'min-width':'1300px'}"
         >
           <pane
           label="病历" >

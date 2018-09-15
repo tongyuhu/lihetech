@@ -141,13 +141,13 @@
 
             </el-col>
             <el-col :span="14"  :xl="24">
-              <div class="radio-box flex-between bottom-gap">
-                <div class="flex">
-                  <div class="check-box-title">
-                    <span class="iconfont icon-bixutian must"></span>
-                  危险分层：
-                  </div>
+              <div class="bottom-gap">
+                <div class="flex radio-box" id="flup-radio-box">
                   <div>
+                    <div class="check-box-title">
+                      <span class="iconfont icon-bixutian must"></span>
+                        危险分层：
+                    </div>
                     <el-radio-group 
                       v-model="body.dangerLayer"
                       size="small">
@@ -160,17 +160,14 @@
                       <!-- <el-radio :label="9">高危</el-radio> -->
                     </el-radio-group>
                   </div>
-
-                </div>
-                <div class="question-btn">
-                  <!-- <el-button type="text" size="mini"> -->
+                  <div class="question-btn">
                     <button
                     @click="dangerLayerHandler"
                     >
                       <i class="el-icon-question" :style="{'color':'#1991fc','font-size':'16px','height':'16px'}"></i>
                       分层评估
                     </button>
-                  <!-- </el-button> -->
+                  </div>
                 </div>
               </div>
             </el-col>
@@ -444,7 +441,7 @@
               </div>
               <div class="question-btn">
                 <button @click.prevent="openChinese">
-                  <i class="el-icon-question" :style="{'color':'#999','font-size':'16px','height':'16px'}"></i>
+                  <i class="el-icon-question" :style="{'color':'#1991fc','font-size':'16px','height':'16px'}"></i>
                   <span>中医辩证分型判断标准</span>
                 </button>
               </div>
@@ -1628,15 +1625,23 @@ export default {
     // height: 30px;
     border-radius: 4px;
     // line-height: 32px;
-    line-height: 1;
-    width: 97%;
-    padding: 0 10px;
-    padding: 7px 5px;
+    // line-height: 1;
+    // width: 97%;
+    // padding: 0 10px;
+    padding: 5px 5px 6px 5px;
+    box-sizing: border-box;
   }
   .question-btn{
     // align-self: flex-end;
     // justify-self: flex-end;
+    // vertical-align: text-top;
+    padding: 0;
+    margin: 0;
     padding-right:10px;
+    padding-left: 20px;
+    white-space: nowrap;
+    // line-height: 1.5;
+    // height: 16px;
     button{
       background: transparent;
       border:none;
@@ -1645,10 +1650,18 @@ export default {
       padding: 0;
       color: #1991fc;
       font-size: 14px;
+      margin: 0;
+      border:none;
+      // padding: 0;
     }
   }
   .check-box-title{
     min-width: 75px;
+    color: #606266;
+    // vertical-align: text-top;
+    white-space: nowrap;
+    // line-height: 1.5;
+    display: inline-block;
   }
   .check-box-title-large{
     min-width: 115px;
@@ -1805,6 +1818,10 @@ export default {
     -ms-user-select: none;
     user-select: none;
     line-height: 1.5;}
+    #flup-radio-box .el-radio {
+      margin-left: 15px;
+      // padding-top: 10px;
+    }
 </style>
 
 
