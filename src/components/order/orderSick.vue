@@ -58,12 +58,12 @@
                       <div class="oder-name ">
                       </div>
                       <!-- 就诊项目 -->
-                      <div class="flex-item" v-show="item.morninngWork">
+                      <div class="flex-item" v-if="!item.morninngStop">
                         <span>
                           暂无预约
                         </span>
                       </div>
-                      <div class="flex-item error" v-show="!item.morninngWork">
+                      <div class="flex-item error" v-else>
                         <span>
                           未开启预约
                         </span>
@@ -85,14 +85,8 @@
               <td v-else class="table-td-div">
                 <div v-for="morning in item.morninng" :key="morning.id" class="table-content">
                   <!-- 预约时间 -->
-                  <!-- <div class="text-center order-time-width">
-                    <span>
-                      {{morning.makeOrderDate.slice(10,16)}}
-                    </span>
-                  </div> -->
                   <div class="table-content-border min-height ">
                     <div class="detials-order">
-                    <!-- <div class="detials-order" v-for="(morningPerson,index) in item.morninng" :key="index"> -->
                       <!-- 姓名 -->
                       <div class="oder-name ">
                         {{morning.name}}
@@ -124,27 +118,22 @@
               <td class="width">
                 <div class="half-day">
                   <span class="span-block">下午 {{item.noonTotal===0?'':item.noonTotal+'人'}}</span>
-                  <!-- <span>{{item.noonTotal===0?'':item.noonTotal+'人'}}</span> -->
-                  <!-- <span class="span-block">{{item.noonWork}}</span> -->
                 </div>
               </td>
               <td v-if="item.noon.length === 0">
                 <div class="table-content">
-                  <!-- <div class="text-center order-time-width">
-                    
-                  </div> -->
                   <div class="table-content-border min-height no-order">
                     <div class="detials-order">
                       <!-- 姓名 -->
                       <div class="oder-name ">
                       </div>
                       <!-- 就诊项目 -->
-                      <div class="flex-item" v-show="item.noonWork">
+                      <div class="flex-item" v-if="!item.noonStop">
                         <span>
                           暂无预约
                         </span>
                       </div>
-                      <div class="flex-item error" v-show="!item.noonWork">
+                      <div class="flex-item error" v-else>
                         <span>
                           未开启预约
                         </span>
@@ -154,9 +143,6 @@
                       </div>
                       <!-- 操作 -->
                       <div class="no-order-action">
-                        <!-- <button class="contant-btn" @click="openEditTime(item.weekDay,'noon')">编辑时间</button>
-                        <button v-if="!item.noonStop" :class="{'open-order':!item.noonStop,'close-order':item.noonStop}"  @click="closeOrder(item.weekDay,2,index)">{{item.noonStop?'开启':'关闭'}}预约</button> -->
-
                         <button :disabled="!item.noonStop" :class="{'open-order':true}" 
                         @click="closeOpenOrder(item.weekDay,2,index,false)">开启预约</button>
                         <button :disabled="item.noonStop" :class="{'close-order':true}" 
@@ -169,14 +155,8 @@
               <td v-else class="table-td-div">
                 <div v-for="noon in item.noon" :key="noon.id" class="table-content">
                   <!-- 预约时间 -->
-                  <!-- <div class="text-center order-time-width">
-                    <span>
-                      {{noon.startEndPeriodTime}}
-                    </span>
-                  </div> -->
                   <div class="table-content-border min-height ">
                     <div class="detials-order">
-                    <!-- <div class="detials-order" v-for="noonPerson in item.noon" :key="noonPerson.id"> -->
                       <!-- 姓名 -->
                       <div class="oder-name ">
                         {{noon.name}}
