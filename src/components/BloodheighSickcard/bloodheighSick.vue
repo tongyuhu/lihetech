@@ -2,6 +2,7 @@
   <div ref="sickcard">
     <!-- {{showcard}} -->
     <!-- 头部 -->
+    
     <div class="sick-card-head clear" v-if="showcard">
       <div class="sick-card-head-right">
         <p>{{createTime}}</p>
@@ -25,7 +26,7 @@
         @checkSuger="checkSuger"
         @checkd="changeTab"
         :tabcss="{'margin-right':'35px'}"
-        :style="{'min-width':'1300px'}"
+        :style="{'min-width':'1250px'}"
         >
           <pane
           label="病历" >
@@ -53,6 +54,7 @@
                 <button @click="flupHistory"><span>随访记录</span></button>
                 <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button> -->
                 <button @click="openChecklist"><span>检查单</span></button>
+                <button @click="openDailyImg"><span>日常照片</span></button>
               </div>
             </div>
             <!-- 病人简历 end  -->
@@ -159,6 +161,20 @@
       >
       </card>
     </el-dialog>
+
+    <el-dialog
+    :visible.sync="dailyImg"
+    width="80%">
+      <span slot="title" class="dialog-title">
+        日常照片
+      </span>
+      <!-- 照片start  -->
+      <div class="open-sick-history">
+        <dailyImg :sickID="sickID"></dailyImg>
+      </div>
+      <!--  end  -->
+      <!-- 病历卡 -->
+    </el-dialog>
     <el-dialog
     width="80%"
     :visible.sync="showchecklist"
@@ -221,6 +237,7 @@ import alldayheighblood from './alldayheighblood'
 import report from './report'
 import original from './original'
 import card from './card'
+import dailyImg from './dailyImg'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
 import checkList from '@/components/checklist'
@@ -244,7 +261,8 @@ export default {
     healthForm,
     face,
     checkList,
-    imgfloat
+    imgfloat,
+    dailyImg
   },
   data () {
     return {
@@ -280,7 +298,8 @@ export default {
       // sickID: null,
       // name: null,
       // adminHospitalId: null,
-      adminIdMainDoctor: null
+      adminIdMainDoctor: null,
+      dailyImg: false
     }
   },
   methods: {
@@ -417,6 +436,9 @@ export default {
       this.$router.push({
         name: 'FlupCard'
       })
+    },
+    openDailyImg () {
+      this.dailyImg = true
     }
   },
   computed: {
@@ -706,9 +728,11 @@ export default {
     *writing-mode: tb-rl;
   } */
   .sick-card-head{
+    /* min-width: 1250px; */
+    /* width: 100%; */
     background-color:#fff;
     padding:30px 20px 30px 30px;
-    box-shadow: 2px 2px 2px 2px #0000000d;
+    /* box-shadow: 2px 2px 2px 2px #0000000d; */
   }
   .sick-card-head p{
     margin:0;
@@ -824,6 +848,19 @@ export default {
     width:14px;
     height: 16px;
     background:url("~icon/hospital-icon-30.png") no-repeat;
+    left:-16px;
+    top:1px;
+  }
+  .sick-history-bottom button:nth-child(3) span{
+    position: relative;
+  }
+  .sick-history-bottom button:nth-child(3) span:before{
+    position: absolute;
+    content:"";
+    display: block;
+    width:14px;
+    height: 16px;
+    background:url("~icon/hospital-icon-29.png") no-repeat;
     left:-16px;
     top:1px;
   }
