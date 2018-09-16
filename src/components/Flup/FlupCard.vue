@@ -274,11 +274,11 @@
               </div>
             </el-col>
             <el-col :span="6">
-              <div class="radio-box flex">
-                <div class="check-box-title input-tip">
-                睡眠质量：
-                </div>
-                <div>
+              <div class="radio-box flex" :style="{'min-height':'32px'}">
+                <!-- <div> -->
+                  <div class="check-box-title input-tip">
+                  睡眠质量：
+                  </div>
                   <el-radio-group 
                     v-model="daily.sleep"
                     size="small">
@@ -286,7 +286,7 @@
                     <el-radio :label="2">一般</el-radio>
                     <el-radio :label="3">差</el-radio>
                   </el-radio-group>
-                </div>
+                <!-- </div> -->
               </div>
             </el-col>
             <el-col :span="6">
@@ -1662,6 +1662,7 @@ export default {
     white-space: nowrap;
     // line-height: 1.5;
     display: inline-block;
+    // height: 32px;
   }
   .check-box-title-large{
     min-width: 115px;

@@ -177,7 +177,7 @@
             <el-button type="primary" v-if="showEditMsg" size="mini" @click="saveInfo">保存</el-button>
           </div>
           <div class="bottom-btn-wrap">
-            <el-button @click="openChecklist" type="text" :style="{'font-size':'16px','padding':'10px 0'}" size="mini">体检单</el-button>
+            <el-button @click="openChecklist" type="text" :style="{'font-size':'16px','padding':'10px 0'}" size="mini">检查单</el-button>
             <el-button @click="flupHistory" type="text" :style="{'font-size':'16px','padding':'10px 0'}" size="mini">随访记录</el-button>
           </div>
         </div> 
@@ -578,7 +578,15 @@
                   </li>
                   <li>
                     <span class="case-right-use-method-title">注意事项：</span>
-                    <span>{{rightdata.planMatters}}</span>
+                    <span class="line-block">
+                      1.如果发生低血压，请酌情减量或减少种类，在多联用药时要将要去掉的品种逐步减少到最低用药量，再停用，以免发生血压大幅度起伏。一般减少的幅度，也是按照图示表格进行梯次减少。
+                    </span>
+                    <span class="line-block">
+                      2.如果有肾功能不全，肝功能不全者，可能需要减量，起始剂量和调整剂量可在目前基础上减半，尽量小剂量联用，注意有些药物不可切开。
+                    </span>
+                    <span class="line-block">
+                      3.如果有肾功能不全，肝功能不全者，可能需要减量，起始剂量和调整剂量可在目前基础上减半，尽量小剂量联用，注意有些药物不可切开。
+                    </span>
                   </li>
                 </ul>
               </div>
@@ -1489,7 +1497,7 @@ export default {
         return parseInt(val)
       }
     },
-    // 打开体检单弹窗
+    // 打开检查单弹窗
     openChecklist () {
       this.$emit('openchecklist')
     },

@@ -31,15 +31,15 @@
             <div>
               <div class="line-block gap-right">
                 <span>危险因素：</span>
-                <span class="red-text">{{result.danger?result.danger:'暂无'}}</span>
+                <span class="red-text">{{result.dangerLevelDanger?result.dangerLevelDanger:'暂无'}}</span>
               </div>
               <div class="line-block gap-right">
                 <span class="line-block">靶器官损害：</span>
-                <span class="red-text">{{result.organDamage?result.organDamage:'暂无'}}</span>
+                <span class="red-text">{{result.dangerLevelOrgan?result.dangerLevelOrgan:'暂无'}}</span>
               </div>
               <div class="line-block gap-right">
                 <span class="line-block">临床疾患：</span>
-                <span class="red-text">{{result.disease?result.disease:'暂无'}}</span>
+                <span class="red-text">{{result.dangerLevelDisease?result.dangerLevelDisease:'暂无'}}</span>
               </div>
             </div>
           </div>
@@ -285,7 +285,7 @@
               TC正常值&lt;5.7
             </span><span class="line">|</span>
             <span>
-              HDL-C正常值&lt;1.0
+              HDL-C正常值&gt;1.0
             </span><span class="line">|</span>
             <span>
                LDL-C正常值&lt;=3.3
@@ -295,7 +295,7 @@
             <div>
               <el-row :gutter="20">
                   <div class="radio-box line-block gap-bottom">
-                    <el-form-item label="总胆固醇(mg/24h)：" label-width="140px">
+                    <el-form-item label="总胆固醇(mg/24h)：" label-width="145px">
                       <el-radio-group 
                         v-model="cholesterolTotal"
                         size="small">
@@ -386,7 +386,7 @@
           </div>
           <div class="card-main">
             <div class="radio-box line-block gap-bottom">
-              <el-form-item label="血同型半胱氨酸(Hcy)：" label-width="160px">
+              <el-form-item label="血同型半胱氨酸(Hcy)：" label-width="165px">
                 <el-radio-group 
                   v-model="hcy"
                   size="small">
@@ -452,7 +452,7 @@
           <div class="card-main">
             <div>
               <div class="radio-box line-block gap-bottom">
-                    <el-form-item label="空腹血糖(mmol/L)：" label-width="160px">
+                    <el-form-item label="空腹血糖(mmol/L)：" label-width="150px">
                     <el-radio-group 
                       v-model="bloodSugarEmpty"
                       size="small">
@@ -475,7 +475,7 @@
                   </div> -->
               </div>
               <div class="radio-box line-block gap-bottom" >
-                  <el-form-item label="餐后两小时血糖(mmol/L)：" label-width="180px">
+                  <el-form-item label="餐后两小时血糖(mmol/L)：" label-width="190px">
                     <el-radio-group 
                       v-model="bloodSugarAfterMealTwo"
                       size="small">
@@ -651,7 +651,7 @@
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                <el-form-item label="蛋白尿值(mg/24h)：" label-width="140px">
+                <el-form-item label="蛋白尿值(mg/24h)：" label-width="145px">
                   <el-radio-group 
                     v-model="proteinUrineType"
                     size="small">
@@ -745,7 +745,7 @@
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                <el-form-item label="超声心动图LVMI指标(g/m2)：" label-width="200px">
+                <el-form-item label="超声心动图LVMI指标(g/m2)：" label-width="205px">
                   <el-radio-group 
                     v-model="lvmlType"
                     size="small">
@@ -933,7 +933,7 @@
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                <el-form-item label="踝臂血压指数：" label-width="110px">
+                <el-form-item label="踝臂血压指数：" label-width="120px">
                   <el-radio-group 
                     v-model="ankleArmIndex"
                     size="small">
@@ -957,7 +957,7 @@
             </div>
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                <el-form-item label="颈动脉超声(IMT)：" label-width="130px">
+                <el-form-item label="颈动脉超声(IMT)：" label-width="140px">
                   <el-radio-group 
                     v-model="imtType"
                     size="small">
@@ -981,7 +981,7 @@
             <div class="gap-bottom">
               <span class="line-block radio-box-title">临床疾患</span>
               <div class="radio-box line-block">
-                <el-form-item label="外周血管疾病：" label-width="110px">
+                <el-form-item label="外周血管疾病：" label-width="120px">
                   <el-radio-group 
                     v-model="outsideVesselsDisease"
                     size="small">
@@ -1135,7 +1135,7 @@
           <div class="card-main">
             <div class="gap-bottom line-block">
               <div class="radio-box line-block">
-                <el-form-item label="Keith-Wagnar分级：" label-width="140px">
+                <el-form-item label="Keith-Wagnar分级：" label-width="150px">
                   <el-radio-group 
                     v-model="keithWagnarLevel"
                     size="small">
@@ -1313,10 +1313,10 @@ export default {
       // systolicMaxHistory: null, // 收缩压 历史最高
       // diastolicMaxHistory: null, // 舒张压 历史最高
       result: {
-        disease: null,
+        dangerLevelDisease: null,
         dangerLevel: null,
-        organDamage: null, // 靶器官 信息
-        danger: null
+        dangerLevelOrgan: null, // 靶器官 信息
+        dangerLevelDanger: null
       },
       showResult: false,
       serum: {
@@ -1598,20 +1598,23 @@ export default {
       let type = this._.toNumber(val)
       let color = ''
       switch (type) {
-        case 5:
-          color = '#33b2f2'// 正常
-          break
         case 1:
           color = '#59d8a1'// 低危
           break
         case 2:
-          color = '#efa13a'// -中危
+          color = '#efa13a'// 中危
           break
         case 3:
           color = '#ff7d43' // 高危
           break
         case 4:
           color = '#f96767' // 很高危
+          break
+        case 5:
+          color = '#33b2f2'// 正常
+          break
+        case 6:
+          color = '#9ac3e4' // 易患人群
           break
         default:
           color = '#666'
@@ -1622,9 +1625,6 @@ export default {
       val = this._.toNumber(val)
       let text = ''
       switch (val) {
-        case 5:
-          text = '正常'// 正常
-          break
         case 1:
           text = '低危'// 低危
           break
@@ -1636,6 +1636,12 @@ export default {
           break
         case 4:
           text = '很高危' // 很高危
+          break
+        case 5:
+          text = '正常'// 正常
+          break
+        case 6:
+          text = '易患人群'// 易患人群
           break
         default:
           text = '未知'

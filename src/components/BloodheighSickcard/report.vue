@@ -423,6 +423,9 @@ export default {
         let e = this._.findIndex(data, function (item) {
           return vm._.toNumber(item.bpType === 5)
         })
+        let f = this._.findIndex(data, function (item) {
+          return vm._.toNumber(item.bpType === 6)
+        })
         if (a === -1) {
           data.splice(0, 0, {
             'bpType': 1,
@@ -453,6 +456,12 @@ export default {
             'countBest': 0
           })
         }
+        if (f === -1) {
+          data.splice(5, 0, {
+            'bpType': 6,
+            'countBest': 0
+          })
+        }
       }
       let arr = []
       data.forEach(item => {
@@ -471,11 +480,14 @@ export default {
         if (this._.toNumber(item.bpType) === 5) {
           arr.push({value: item.countBest, name: '危险'})
         }
+        if (this._.toNumber(item.bpType) === 6) {
+          arr.push({value: item.countBest, name: '低血压'})
+        }
       })
-      let namearr = ['正常', '正常高值', '轻度', '中度', '危险']
-      if (arr.length !== 5) {
+      let namearr = ['正常', '正常高值', '轻度', '中度', '危险', '低血压']
+      if (arr.length !== 6) {
         arr.forEach(item => {
-          if (item.name === '正常' || '正常高值' || '轻度' || '中度' || '危险') {
+          if (item.name === '正常' || '正常高值' || '轻度' || '中度' || '危险' || '低血压') {
             namearr = this._.filter(namearr, function (val) {
               return val !== item.name
             })
@@ -807,15 +819,15 @@ export default {
     bloodCoverOption () {
       let vm = this
       let color = []
-      let hascolor = ['#33b2f2', '#59d8a1', '#efa13a', '#ff7d43', '#f96767']
-      let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      let hascolor = ['#33b2f2', '#59d8a1', '#efa13a', '#ff7d43', '#f96767', '#9ac3e4']
+      let nullcolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
       let count = 0
       this.formatCoverData(this.coverData).forEach((item) => {
         if (item.value === 0) {
           count++
         }
       })
-      if (count !== 5) {
+      if (count !== 6) {
         color = hascolor
       } else {
         color = nullcolor
@@ -828,7 +840,7 @@ export default {
           orient: 'vertical',
           left: '50%',
           top: 'center',
-          data: ['正常', '正常高值', '轻度', '中度', '危险'],
+          data: ['正常', '正常高值', '轻度', '中度', '危险', '低血压'],
           selectedMode: false,
           // formatter: (name) => {
           //   let i = 0
@@ -894,9 +906,9 @@ export default {
     },
     bloodHistogramOption () {
       // let areaColor = ['#33b2f2', '#59D8A1', '#efa13a', '#ff7d43', '#f96767']
-      let areaColor = ['#0099FF', '#59D8A2', '#efa13a', '#ff7d43', '#e21b1b']
+      let areaColor = ['#0099FF', '#59D8A2', '#efa13a', '#ff7d43', '#e21b1b', '#9ac3e4']
       return {
-        color: ['#33b2f2', '#59d8a1', '#efa13a', '#ff7d43', '#f96767'],
+        color: ['#33b2f2', '#59d8a1', '#efa13a', '#ff7d43', '#f96767', '#9ac3e4'],
         tooltip: {
           show: false
         },
@@ -927,6 +939,10 @@ export default {
             {
               name: '危险',
               icon: 'roundRect'
+            },
+            {
+              name: '低血压',
+              icon: 'roundRect'
             }
           ]
         },
@@ -948,7 +964,7 @@ export default {
           axisTick: {
             show: false
           },
-          min: 60,
+          min: 30,
           max: 120,
           minInterval: 10
         }],
@@ -964,7 +980,7 @@ export default {
             axisTick: {
               show: false
             },
-            min: 90
+            min: 60
           }
         ],
         series: [
@@ -1078,11 +1094,33 @@ export default {
                 color: areaColor[4]
               }
             },
-            z: 1,
+            z: 6,
             data: [
                 [0, 210],
                 [120, 210],
                 [120, 0]
+            ]
+          },
+          {
+            type: 'line',
+            name: '低血压',
+            symbol: 'none',
+            lineStyle: {
+              normal: {
+                width: 0,
+                color: areaColor[5]
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: '#9ac3e4'
+              }
+            },
+            z: 15,
+            data: [
+                [0, 90],
+                [60, 90],
+                [60, 0]
             ]
           },
           {
@@ -1892,7 +1930,7 @@ export default {
           color = '#f96767' // 危险
           break
         case 6:
-          color = '##9ac3e4' // 低血压
+          color = '#9ac3e4' // 低血压
           break
         case 0:
           color = '#191918'

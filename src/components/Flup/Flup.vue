@@ -308,6 +308,9 @@ export default {
         case 5:
           layer = '正常'
           break
+        case 6:
+          layer = '易患人群'
+          break
         case 0:
           layer = '未知'
           break

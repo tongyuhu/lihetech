@@ -214,17 +214,32 @@ export default {
               break
             }
             case 1: {
-              sickTypelist1.push('原发性高血压')
+              sickTypelist1.push('1级高血压')
               // item.sicktype = '原发性高血压'
               break
             }
             case 2: {
-              sickTypelist1.push('继发性高血压')
+              sickTypelist1.push('2级高血压')
               // item.sicktype = '继发性高血压'
               break
             }
             case 3: {
+              sickTypelist1.push('3级高血压')
+              // item.sicktype = '正常'
+              break
+            }
+            case 4: {
               sickTypelist1.push('正常')
+              // item.sicktype = '正常'
+              break
+            }
+            case 5: {
+              sickTypelist1.push('正常高值')
+              // item.sicktype = '正常'
+              break
+            }
+            case 6: {
+              sickTypelist1.push('低压')
               // item.sicktype = '正常'
               break
             }
@@ -272,8 +287,9 @@ export default {
             }
           }
           sickTypelist1 = this._.uniqWith(sickTypelist1, this._.isEqual)
-          sickTypelist2 = this._.uniqWith(sickTypelist2, this._.isEqual)
-          item.sicktype = '高血压：' + sickTypelist1.join('、') + '；糖尿病：' + sickTypelist2.join('、')
+          // sickTypelist2 = this._.uniqWith(sickTypelist2, this._.isEqual)
+          // item.sicktype = '高血压：' + sickTypelist1.join('、') + '；糖尿病：' + sickTypelist2.join('、')
+          item.sicktype = sickTypelist1.join('、')
 
           // }
         })
