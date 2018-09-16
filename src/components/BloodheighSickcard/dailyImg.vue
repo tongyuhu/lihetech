@@ -7,7 +7,7 @@
       <el-collapse-item v-for="(item,index) in imgList" :key="index" :title="item.time" :name="index">
         <div class="img-list">
           <div class="inline-block" v-for="img in item.imgs" :key="img.time">
-            <img :src="img" alt="1" @click="showchecklistimg(img)">
+            <img :src="img" alt="加载失败" @click="showchecklistimg(img)">
           </div>
         </div>
       </el-collapse-item>
@@ -52,7 +52,7 @@ export default {
       imgUrl: '',
       imgList: [],
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 5,
       total: 0
     }
   },
@@ -77,7 +77,7 @@ export default {
       let parmas = {
         userId: this.sickID,
         adminHospitalId: this.adminInfo.adminHospitalId,
-        pageSize: 10,
+        pageSize: this.pageSize,
         pageNum: page
       }
       this.$axios(dailyImgApi(parmas))
