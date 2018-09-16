@@ -715,80 +715,84 @@ export default {
     // },
     formmater (data) {
       let vm = this
-      data.forEach(item => {
-        item.weekDay = vm.week(item.weekDay)
-        if (!(this._.has(item, 'adminMakeOrderTotalList'))) {
-          item.adminMakeOrderTotalList = []
-        }
-        if (item.adminMakeOrderTotalList.length === 0) {
-          item.morninng = []
-          item.noon = []
-          item.morninngStop = true
-          item.noonStop = true
-          item.morninngWork = ''
-          item.noonWork = ''
-          item.morninngTotal = 0
-          item.noonTotal = 0
-        } else if (item.adminMakeOrderTotalList.length === 2) {
-          item.adminMakeOrderTotalList.forEach(half => {
-            if (half.slotType === 1) {
-              if (this._.has(half, 'userMakeOrderDoctorList')) {
-                item.morninng = half.userMakeOrderDoctorList
+      if (data instanceof Array) {
+        data.forEach(item => {
+          item.weekDay = vm.week(item.weekDay)
+          if (!(this._.has(item, 'adminMakeOrderTotalList'))) {
+            item.adminMakeOrderTotalList = []
+          }
+          if (item.adminMakeOrderTotalList.length === 0) {
+            item.morninng = []
+            item.noon = []
+            item.morninngStop = true
+            item.noonStop = true
+            item.morninngWork = ''
+            item.noonWork = ''
+            item.morninngTotal = 0
+            item.noonTotal = 0
+          } else if (item.adminMakeOrderTotalList.length === 2) {
+            item.adminMakeOrderTotalList.forEach(half => {
+              if (half.slotType === 1) {
+                if (this._.has(half, 'userMakeOrderDoctorList')) {
+                  item.morninng = half.userMakeOrderDoctorList
+                } else {
+                  item.morninng = []
+                }
+                item.morninngWork = half.startEndPeriodTime
+                item.morninngStop = half.isStop
+                item.morninngTotal = half.totalNumber
+              }
+              if (half.slotType === 2) {
+                if (this._.has(half, 'userMakeOrderDoctorList')) {
+                  item.noon = half.userMakeOrderDoctorList
+                } else {
+                  item.noon = []
+                }
+                // item.noon = half.userMakeOrderDoctorList
+                item.noonWork = half.startEndPeriodTime
+                item.noonTotal = half.totalNumber
+                item.noonStop = half.isStop
+              }
+            })
+          } else if (item.adminMakeOrderTotalList.length === 1) {
+            if (item.adminMakeOrderTotalList[0].slotType === 1) {
+              if (this._.has(item.adminMakeOrderTotalList[0], 'userMakeOrderDoctorList')) {
+                item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
               } else {
                 item.morninng = []
               }
-              item.morninngWork = half.startEndPeriodTime
-              item.morninngStop = half.isStop
-              item.morninngTotal = half.totalNumber
-            }
-            if (half.slotType === 2) {
-              if (this._.has(half, 'userMakeOrderDoctorList')) {
-                item.noon = half.userMakeOrderDoctorList
+              // item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
+              item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+              item.morninngStop = item.adminMakeOrderTotalList[0].isStop
+              item.morninngTotal = item.adminMakeOrderTotalList[0].totalNumber
+              item.noon = []
+              item.noonWork = ''
+              item.noonTotal = 0
+              item.noonStop = true
+            } else {
+              // item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
+              if (this._.has(item.adminMakeOrderTotalList[0], 'userMakeOrderDoctorList')) {
+                item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
               } else {
                 item.noon = []
+                // item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+                // item.morninngWork = ''
+                // item.noonStop = item.adminMakeOrderTotalList[0].isStop
+                // item.morninngStop = true
               }
-              // item.noon = half.userMakeOrderDoctorList
-              item.noonWork = half.startEndPeriodTime
-              item.noonTotal = half.totalNumber
-              item.noonStop = half.isStop
-            }
-          })
-        } else if (item.adminMakeOrderTotalList.length === 1) {
-          if (item.adminMakeOrderTotalList[0].slotType === 1) {
-            if (this._.has(item.adminMakeOrderTotalList[0], 'userMakeOrderDoctorList')) {
-              item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
-            } else {
+              item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
+              item.noonStop = item.adminMakeOrderTotalList[0].isStop
+              item.noonTotal = item.adminMakeOrderTotalList[0].totalNumber
               item.morninng = []
+              item.morninngWork = ''
+              item.morninngStop = true
+              item.morninngTotal = 0
             }
-            // item.morninng = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
-            item.morninngWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
-            item.morninngStop = item.adminMakeOrderTotalList[0].isStop
-            item.morninngTotal = item.adminMakeOrderTotalList[0].totalNumber
-            item.noon = []
-            item.noonWork = ''
-            item.noonTotal = 0
-            item.noonStop = true
-          } else {
-            // item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
-            if (this._.has(item.adminMakeOrderTotalList[0], 'userMakeOrderDoctorList')) {
-              item.noon = item.adminMakeOrderTotalList[0].userMakeOrderDoctorList
-            } else {
-              item.noon = []
-              // item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
-              // item.morninngWork = ''
-              // item.noonStop = item.adminMakeOrderTotalList[0].isStop
-              // item.morninngStop = true
-            }
-            item.noonWork = item.adminMakeOrderTotalList[0].startEndPeriodTime
-            item.noonStop = item.adminMakeOrderTotalList[0].isStop
-            item.noonTotal = item.adminMakeOrderTotalList[0].totalNumber
-            item.morninng = []
-            item.morninngWork = ''
-            item.morninngStop = true
-            item.morninngTotal = 0
           }
-        }
-      })
+        })
+      } else {
+        return []
+      }
       return data
     },
     checkHistoryTime (val, init) {

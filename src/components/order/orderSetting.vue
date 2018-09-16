@@ -565,7 +565,7 @@ export default {
       let befortoday = daybefor(today, befor, true)
       let week = computeWeekday(befortoday)
       if (week === '周日') {
-        return today
+        // return today
       } else {
         while (week !== '周日') {
           befor--
@@ -597,7 +597,10 @@ export default {
       console.log('选择的周', this.cheeckedweek)
     },
     initlist () {
-      let data = this.nextSunday()
+      // let vm = this
+      // let data = vm.nextSunday()
+      let data = ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+      console.log('initlist', data)
       this.start = data[0]
       this.end = data[6]
       this.orderlist = []
