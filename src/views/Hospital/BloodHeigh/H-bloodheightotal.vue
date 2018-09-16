@@ -101,19 +101,6 @@ export default {
 
       ],
       sickTrendData: [
-        92,
-        55,
-        47,
-        47,
-        0,
-        49,
-        98,
-        89,
-        36,
-        78,
-        48,
-        86,
-        1
       ],
       heightbloodTotal: 0,
       sickTrendDataX: [
@@ -128,15 +115,15 @@ export default {
     HBcoverOption () {
       let vm = this
       let count = 0
-      let color = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
-      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
-      let nocolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
-      this.sickDistributionData.forEach(item => {
-        if (this._.toNumber(item.value) === 0) {
+      let color = ['#81cefc', '#9ac3e4', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let hascolor = ['#81cefc', '#9ac3e4', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let nocolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      vm.sickDistributionData.forEach(item => {
+        if (item.value === 0) {
           count++
         }
       })
-      if (count === 4) {
+      if (count === 5) {
         color = nocolor
       } else {
         color = hascolor
@@ -152,7 +139,7 @@ export default {
           orient: 'vertical',
           left: '50%',
           top: 'center',
-          data: ['正常', '偏高', '高', '危险'],
+          data: ['正常', '正常高压', '轻度高血压', '中度高血压', '危险'],
           selectedMode: false,
           formatter: (name) => {
             let i = 0
@@ -185,7 +172,7 @@ export default {
               normal: {
                 position: 'inner',
                 formatter: function (params) {
-                  if (vm._.toNumber(params.value) === 0) {
+                  if (params.value === 0) {
                     return ''
                   } else {
                     return params.percent + '%'
@@ -454,11 +441,15 @@ export default {
             })
             this.sickDistributionData.push({
               'value': coverData.normalHighCount,
-              'name': '偏高'
+              'name': '正常高压'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.moderateHighCount,
+              'name': '中度高血压'
             })
             this.sickDistributionData.push({
               'value': coverData.mildHighCount,
-              'name': '高'
+              'name': '轻度高血压'
             })
             this.sickDistributionData.push({
               'value': coverData.dangerCount,
