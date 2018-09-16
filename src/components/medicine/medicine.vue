@@ -9,7 +9,9 @@
       tooltip-effect="dark"
       style="width: 100%"
       max-height="550"
-      @selection-change="handleSelectionChange">
+      @selection-change="handleSelectionChange"
+      >
+      <!-- @setCurrentRow="handleSelectionChange" -->
         <el-table-column
           type="selection"
           width="55">
@@ -89,6 +91,7 @@ export default {
           item.usetotal = ''
           item.tip = ''
           this.doctorMedicine.push(item)
+          console.log('要添加的药品item', item)
           console.log('要添加的药品', this.doctorMedicine)
         })
       }

@@ -1508,6 +1508,7 @@ export default {
     // 添加药品
     addMedicineHandler (list) {
       this.doctorMedicine = this._.concat(this.doctorMedicine, list)
+      this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)
       console.log('药品列表', this.doctorMedicine)
       this.addMedicineDialog = false
     },
@@ -1673,7 +1674,7 @@ export default {
         if (result.code === '1010') {
           console.log('未添加用药')
         } else if (result.code === '0000') {
-          console.log('添加用药', result.data)
+          console.log('用户用药智能分析数据获取', result.data)
           this.rightdata.planAdjustCycle = result.data.planAdjustCycle || '无'
           this.rightdata.planUseCycle = result.data.planUseCycle || '无'
           this.rightdata.planAdjustMethod = result.data.planAdjustMethod || '无'
