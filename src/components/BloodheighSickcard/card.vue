@@ -110,39 +110,43 @@
             </div>
           </td>
         </tr>
-        <tr v-show="false">
-          <!-- <td>3</td> -->
+        <!-- <tr v-if="false">
           <td class="table-head">运动</td>
           <td>
             {{movement}}
-            <!-- <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
+            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
             <el-button type="text" size="mini" class="table-btn" @click="addSport()" v-if="currentpage === 1">
               <i class="add"></i>添加
-            </el-button> -->
+            </el-button>
           </td>
-        </tr>
-        <tr v-show="false">
-          <!-- <td>4</td> -->
+        </tr> -->
+        <!-- <tr v-if="false">
           <td class="table-head">饮食</td>
           <td>
             <span>
               {{diet}}
             </span>
-            <!-- <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
+            <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
             <el-button type="text" size="mini" class="table-btn" @click="addFood()" v-if="currentpage === 1">
               <i class="add"></i>添加
-            </el-button> -->
+            </el-button>
           </td>
-        </tr>
+        </tr> -->
         <tr>
           <td colspan="2" class="table-head side-left">医生信息</td>
           <td>
-            <span>
-              <!-- 李那那  上海张江高科诊所  糖尿病慢性病家庭医生 -->
+            <span class="doctor-msg">
+              {{adminInfo.name}}
+            </span>
+            <span class="doctor-msg">
+              {{adminInfo.hospital.address}}
+            </span>
+            <span class="doctor-msg">
+              {{adminInfo.adminNote}}
             </span>
           </td>
         </tr>
@@ -192,6 +196,7 @@ import medicine from './../medicine/medicine'
 import addMedicine from './../addMedicine'
 import addSport from './../addSport'
 import addFood from './../addFood'
+import {mapState} from 'vuex'
 // import index from 'vue'
 export default {
   components: {
@@ -240,6 +245,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['adminInfo']),
     readme () {
       if (this.sickData) {
         if (this.sickData.readme) {
@@ -691,5 +697,9 @@ export default {
   .delete-medicine-btn i:after{
     transform:rotate(45deg);
     -webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-ms-transform:rotate(45deg);
+  }
+  .doctor-msg{
+    display: inline-block;
+    padding:0 10px;
   }
 </style>
