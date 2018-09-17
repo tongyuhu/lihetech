@@ -1,6 +1,6 @@
 <template>
   <div class="wrap">
-    <div class="noimg" v-if="total < 0">
+    <div class="noimg" v-if="total < 1">
       <span>暂无照片</span>
     </div>
     <el-collapse v-model="activeNames" @change="handleChange">

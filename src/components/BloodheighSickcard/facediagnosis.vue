@@ -1509,6 +1509,24 @@ export default {
     addMedicineHandler (list) {
       this.doctorMedicine = this._.concat(this.doctorMedicine, list)
       this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)
+      // let ready = this._.uniqWith(this.doctorMedicine, this._.isEqual)
+      // ready.forEach(item => {
+      //   let i = 0
+      //   this.doctorMedicine.forEach(medicine => {
+      //     if (item.medicineId === medicine.medicineId) {
+      //       i++
+      //     }
+      //   })
+      //   if (i > 1) {
+      //     this.$message({
+      //       showClose: true,
+      //       message: '同类药不能重复添加',
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
+
+      // this.doctorMedicine
       console.log('药品列表', this.doctorMedicine)
       this.addMedicineDialog = false
     },
