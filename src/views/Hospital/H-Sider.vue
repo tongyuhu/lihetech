@@ -1,6 +1,7 @@
 <template>
   <div class="sider">
     <div class="head-logo">
+      <!-- logo -->
       <img src="~icon/hospital-icon-01.png" alt="logo" class="head-logo-img" @click="goHome">
     </div>
     <!-- <div
@@ -10,24 +11,25 @@
     > -->
     <!-- <wmenu
     :menu="menu"> -->
-      <wmenu-group 
-        v-for="(item,index) in menu"
-        :key="item.id"
-        :iconName="item.iconName"
-        :title="item.title"
-        :routerName="item.routerName"
-        :open="item.open"
-        :hasMsg="item.hasMsg"
-        :index="index"
-        @checked="checkedMenu">
-        <wmenuitem
-        v-for="i in item.child"
-        :key="i.title"
-        :title="i.title"
-        :id="i.id"
-        :routerName="i.routerName"
-        @activeitemmenu="goanchor"></wmenuitem>
-      </wmenu-group>
+    <!-- 左侧导航 -->
+    <wmenu-group 
+      v-for="(item,index) in menu"
+      :key="item.id"
+      :iconName="item.iconName"
+      :title="item.title"
+      :routerName="item.routerName"
+      :open="item.open"
+      :hasMsg="item.hasMsg"
+      :index="index"
+      @checked="checkedMenu">
+      <wmenuitem
+      v-for="i in item.child"
+      :key="i.title"
+      :title="i.title"
+      :id="i.id"
+      :routerName="i.routerName"
+      @activeitemmenu="goanchor"></wmenuitem>
+    </wmenu-group>
     <!-- </wmenu> -->
     <!-- </div> -->
   </div>
@@ -49,6 +51,7 @@ export default {
   },
   data () {
     return {
+      // 高血压管理
       bloodHeighMenu: {
         iconName: 'heigh-blood',
         title: '高血压管理',
@@ -77,6 +80,7 @@ export default {
         //   }
         // ]
       },
+      // 问诊
       diagonseMenu: {
         iconName: 'diagonse',
         title: '问诊',
@@ -109,6 +113,7 @@ export default {
         //     // }
         // ]
       },
+      // 预约管理
       orderMenu: {
           // id: 4,
         iconName: 'order',
@@ -116,6 +121,7 @@ export default {
         routerName: 'order',
         open: false
       },
+      // 人员管理
       personManage: {
         id: 5,
         iconName: 'admin',
@@ -135,6 +141,7 @@ export default {
           }
         ]
       },
+      // 随访
       FlupMenu: {
         iconName: 'flup',
         title: '随访',
@@ -148,6 +155,9 @@ export default {
     ...mapState(['adminInfo'])
   },
   methods: {
+    /**
+     * @description 选择二级菜单
+     */
     goanchor (obj) {
       if (this._.has(obj, 'id')) {
         let id = obj.id
@@ -204,8 +214,13 @@ export default {
       session('itemtab', obj)
       // console.log(step)
     },
+    /**
+     * @description 选择一级菜单
+     */
     checkedMenu (val) {
+      // 设置session 一级
       session('tabindex', val.index)
+      // 设置session 二级
       session('itemtab', '')
     },
     goHome () {
@@ -215,7 +230,7 @@ export default {
     }
   },
   mounted () {
-    // if(this.adminInfo)
+    // 权限管理
     // console.log('医生信息', this.adminInfo)
     //  1-超级管理员 2-医院诊所 3-医生 4-护士
     if (this._.has(this.adminInfo, 'adminType')) {

@@ -9,6 +9,7 @@
     </div>
     <div class="loading-min-height" v-loading="loading">
       <el-card>
+        <!-- 模糊搜索 -->
         <div class="card-head clear">
           <!-- <div class="card-head-left sick-type-btn">
             <button :class="{'sick-type-checked':checkblood}" @click="checkedblood">高血压</button>
@@ -84,6 +85,7 @@
             </template>
           </el-table-column> -->
         </el-table>
+        <!-- 分页 -->
         <div class="page">
           <el-pagination
           @size-change="handleSizeChange"
@@ -98,7 +100,7 @@
       </el-card>
     </div>
     <div class="dialog">
-
+      <!-- 编辑患者弹窗 -->
       <el-dialog
         :visible.sync="modifySick"
         width="456px"
@@ -125,6 +127,7 @@
           <el-button type="primary" size="small" @click="modifySick = false">取 消</el-button>
         </span>
       </el-dialog>
+      <!-- 删除患者弹窗 -->
       <el-dialog
         :visible.sync="confirmDelete"
         width="456px"
@@ -135,6 +138,7 @@
           <el-button type="primary" size="small" @click="cancelDeleteHandle">取 消</el-button>
         </span>
       </el-dialog>
+      <!-- 添加患者二维码 -->
       <el-dialog
         :visible.sync="showAddSick"
         width="456px"
@@ -161,45 +165,66 @@ export default {
   name: 'sick-manage',
   data () {
     return {
+      // 加载动画
       loading: false,
       checkblood: true,
       // sicktype: 'bloodPressureType',
       sickList: [
       ],
+      // 删除患者列表
       readyDelete: [],
+      // 模糊搜索
       searchSickMsg: null,
+      // 分页
       currentPage: 1,
       totalpage: null,
       pageSize: 10,
+      // 编辑患者弹窗
       modifySick: false,
+
       editSickName: '',
       editSickPhone: '',
       editSickPerson: '',
       editSickAddress: '',
+      // 删除 患者 弹窗
       confirmDelete: false,
+      // 二维码弹窗
       showAddSick: false,
+      // 二维码
       addSickImg: ''
     }
   },
 
   methods: {
     ...mapActions(['setFriendsListActon']),
+    /**
+     * @description 确认添加患者 更新聊天列表
+     */
     confirmAddSick () {
       this.setFriendsListActon()
       this.showAddSick = false
     },
+    /**
+     * @description 选择高血压列表
+     */
     checkedblood () {
       // this.sicktype = 'bloodPressureType'
       this.checkblood = true
       this.currentPage = 1
       this.getSickList()
     },
+    /**
+     * @description 选择糖尿病列表
+     */
     checkedsuger () {
       // this.sicktype = 'diabetesType'
       this.checkblood = false
       this.currentPage = 1
       this.getSickList()
     },
+    /**
+     * @description 初始化患者列表 转换患者类型
+     */
     formatterSickList (list) {
       if (list.length === 0) {
         return list
@@ -296,11 +321,17 @@ export default {
       }
       return list
     },
+    /**
+     * @param {array} selection 选择的列表
+     * @description 选择患者
+     */
     SickSelectionChange (selection) {
       this.readyDelete = selection
       console.log('deletearr', this.readyDelete)
     },
-    // 查询
+    /**
+     * @description 模糊查询
+     */
     selectName () {
       if (!this.searchSickMsg) {
         this.getSickList()
@@ -330,38 +361,57 @@ export default {
       console.log('sickList', this.sickList)
       console.log(this.searchSickMsg)
     },
+    /**
+     * @param {number} val 每页条数
+     * @description 每页条数变化
+     */
     handleSizeChange (val) {
       this.pageSize = val
       this.getSickList()
       console.log(`每页 ${val} 条`)
     },
+    /**
+     * @param {number} val 页数
+     * @description 页数变化
+     */
     handleCurrentChange (val) {
       this.currentPage = val
       this.getSickList()
       console.log(`当前页: ${val}`)
     },
-    // 编辑患者 打开弹窗
+    /**
+     * @description 编辑患者弹窗
+     */
     editSick (Sick) {
       this.modifySick = true
       console.log(Sick)
     },
-    // 删除患者
+    /**
+     * @description 打开删除弹窗
+     */
     deleteSick () {
       if (this.readyDelete.length !== 0) {
         this.confirmDelete = true
       }
     },
-    // 确认删除
+    /**
+     * @description 确认删除患者
+     */
     confirmDeleteHandle () {
       this.sickList = this._.differenceWith(this.sickList, this.readyDelete, this._.isEqual)
       this.confirmDelete = false
     },
-    // 取消删除
+    /**
+     * @description 取消删除
+     */
     cancelDeleteHandle () {
       this.readyDelete = []
       this.$refs.sicklist.clearSelection()
       this.confirmDelete = false
     },
+    /**
+     * @description 添加患者二维码
+     */
     addSick () {
       this.showAddSick = true
       this.$axios({
@@ -372,6 +422,9 @@ export default {
         this.addSickImg = res.data.data
       })
     },
+    /**
+     * @description 获取患者列表
+     */
     getSickList () {
       this.loading = true
       let param = {

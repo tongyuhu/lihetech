@@ -495,17 +495,13 @@
 <script>
 import {layerSickApi, easyApi} from '@/api/components/bloodPersonManage/bloodPerson.js'
 import {careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
-// import mpages from '@/components/cutpage.vue'
 import {mapMutations, mapState} from 'vuex'
 import session from '@/untils/session'
-// import Bus from '@/bus.js'
 export default {
   name: 'H-layer',
-  // components: {
-  //   mpages
-  // },
   data () {
     return {
+      // 所属医院id
       adminHospitalId: null,
       // 未分层
       noLevelData: [],
@@ -543,7 +539,7 @@ export default {
   computed: {
     ...mapState({
       admin: state => state.adminInfo,
-      userCasesCardId: state => state.userCasesCardId
+      userCasesCardId: state => state.userCasesCardId  // 病历卡id
     })
   },
   methods: {
@@ -556,6 +552,11 @@ export default {
         'SET_CURRENT_SICK_DATA',
         'SET_FLUP_INFO'
       ]),
+    /**
+     * @param {array} arr 需要排序的数组
+     * @returns arr
+     * @description 根据关注排序数组
+     * */
     sortSickList (arr) {
       let copyArr = arr
       let topArr = []
@@ -569,6 +570,11 @@ export default {
       })
       return topArr
     },
+    /**
+     * @param {obj} val 关注的患者
+     * @param {array} data 关注患者所在的数组
+     * @param {boolean} isuserId val.id 或者 val.userid
+     */
     isCare (val, data, isuserId) {
       let arr = data
       console.log(arr)
@@ -607,6 +613,10 @@ export default {
         }
       })
     },
+    /**
+     * @param {number} val 页数
+     * @description 未分层页数变化
+     */
     noLevelCurrentChange (val) {   // 未分层页数变化
       this.getlayerData({
         dangerLevel: 0,
@@ -614,6 +624,10 @@ export default {
         pageSize: this.noLevelPageSize
       })
     },
+    /**
+     * @param {number} val 页数
+     * @description 三级管理页数变化
+     */
     threeLevelCurrentChange (val) {   // 三级管理页数变化
       this.getlayerData({
         dangerLevel: 3,
@@ -621,6 +635,10 @@ export default {
         pageSize: this.threeLevelPageSize
       })
     },
+     /**
+     * @param {number} val 页数
+     * @description 二级管理页数变化
+     */
     twoLevelCurrentChange (val) {   // 二级管理页数变化
       this.getlayerData({
         dangerLevel: 2,
@@ -628,6 +646,10 @@ export default {
         pageSize: this.twoLevelPageSize
       })
     },
+    /**
+     * @param {number} val 页数
+     * @description 一级管理页数变化
+     */
     oneLevelCurrentChange (val) {   // 一级管理页数变化
       this.getlayerData({
         dangerLevel: 1,
@@ -635,6 +657,10 @@ export default {
         pageSize: this.oneLevelPageSize
       })
     },
+    /**
+     * @param {number} val 页数
+     * @description 未分层页数变化
+     */
     easyCurrentChange (val) {   // 未分层页数变化
       this.easySickLoading = true
       this.$axios(easyApi({
@@ -652,6 +678,15 @@ export default {
         this.easySickLoading = false
       })
     },
+    /**
+     * @param {obj} params
+     * {
+        dangerLevel: 1一级 2 二级 3三级 0未分层,
+        pageNum: 页数,
+        pageSize: 每页数量
+      }
+     * @description 获取分层数据
+     */
     getlayerData (params) {
       if (params.dangerLevel === 0) {
         this.noLevelLoading = true
@@ -722,19 +757,13 @@ export default {
         }
       })
     },
-    // newdiagnose (row, val) {
-    //   let userId
-    //   userId = row.userId
-    //   this.$router.push({name: 'bloodheighSick',
-    //     params: {
-    //       sickID: userId
-    //     }})
-    //   this.SET_CURRENT_SICK_DATA({
-    //     sickID: userId,
-    //     hospitalId: row.adminHospitalId
-    //   })
-    // },
+    /**
+     * @param {obj} row 诊断的患者
+     * @param {boolean} isuserId 用id或userid
+     * @description 诊断患者
+     */
     diagnose (row, isuserId) {
+      // 初始化诊断界面选项卡选择为第一个
       session('sickcardTabIndex', 0)
       let id
       if (isuserId) {
@@ -742,7 +771,7 @@ export default {
       } else {
         id = row.id
       }
-      console.log(row)
+      // console.log(row)
       this.$router.push({name: 'bloodheighSick',
         params: {
           sickID: id,
@@ -754,6 +783,11 @@ export default {
       })
       this.SET_SICK_CARD(false)
     },
+    /**
+     * @param {obj} row 联系的患者
+     * @param {boolean} isuserId 用id或userid
+     * @description 联系患者
+     */
     call (row, isuserId) {
       console.log('聊天对象', row)
       let rongId
@@ -778,6 +812,10 @@ export default {
       this.changeChatFriend(sick)
       this.openChatWindow()
     },
+    /**
+     * @param {obj} val 分层患者
+     * @description 前往分层页面
+     */
     assessmentLayer (val) {
       let obj = {}
       if (this._.has(val, 'realName')) {
@@ -799,9 +837,11 @@ export default {
     }
   },
   mounted () {
+    // 获取医院id
     if (this.admin && this.admin.adminHospitalId) {
       this.adminHospitalId = this.admin.adminHospitalId
     }
+    // 初始化数据
     this.noLevelCurrentChange(1)
     this.threeLevelCurrentChange(1)
     this.twoLevelCurrentChange(1)

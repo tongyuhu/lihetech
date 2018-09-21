@@ -3,13 +3,11 @@
     <!-- 工作台 start -->
     <div class="workhead">
       <span>当前问诊</span>
-        <el-button type="text" @click="msgTipBtn"  class="work-msg">
-          <!-- <i class="work-icon"></i> -->
-          <!-- <el-badge :is-dot="showMsgTip">
+        <!-- <el-button type="text" @click="msgTipBtn"  class="work-msg">
+          <el-badge :is-dot="showMsgTip">
               <i class="iconfont icon-xin iconfont-tip"></i>
-          </el-badge> -->
-          <!-- <i :class="{workMsgtip:showMsgTip}"></i> -->
-        </el-button>
+          </el-badge>
+        </el-button> -->
     </div>
     <div>
     <!-- 工作台 end -->
@@ -80,8 +78,9 @@
         </el-card>
       </div>
       <!-- 患者最新问诊  end -->
-      <div v-if="false">
 
+      <!-- 以下暂不用 -->
+      <div v-if="false">
         <!-- 严重患者 start -->
         <div class="bottom-margin" id="bloodbad">
           <el-card :body-style="{ padding: '0px' }">
@@ -381,56 +380,61 @@ import {
   badsickDataApi,
   noListenDoctorDataApi,
   careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
-import mpages from '@/components/cutpage.vue'
+// import mpages from '@/components/cutpage.vue'
 import {mapMutations, mapState} from 'vuex'
-import Bus from '@/bus.js'
+// import Bus from '@/bus.js'
 import session from '@/untils/session'
 export default {
   name: 'H-work',
   components: {
-    mpages
+    // mpages
   },
   data () {
     return {
-      showMsgTip: true,    // 初始化时需设置为false
+      showMsgTip: true,    // 初始化时需设置为false  消息提醒tip
+      // 严重患者比率
       badSickRate: '',
-      noListenDoctorRate: '',
-      unperfectMsgRate: '',
-      unperfectMsgData: [],
-      unperfectTableLoading: false,
-
-      currentPage: 1,
-      totalSize: 15,
-      // 整理后数据
-      newsickaskData: [],
+      // 严重患者数据
       badsickData: [],
-      // badsickTotal:'',
-      noListenDoctorData: [],
-
-      adminHospitalId: '',
-      careState: '',
-      // 分页数据
-      newAskCurrentPage: 1,
-      newAskPageSize: 10,
-      newAskTotal: 1,
-      newSickTableLoading: false,
-
+      // 严重患者分页
       badsickCurrentPage: 1,
       badsickPageSize: 5,
       badsickTotal: 1,
       badSickTableLoading: false,
+      // 建档不完整患者数据
+      unperfectMsgRate: '',
+      unperfectMsgData: [],
+      unperfectTableLoading: false,
+      // 建档不完整患者分页
+      currentPage: 1,
+      totalSize: 15,
 
+      // 未遵医嘱者比率
+      noListenDoctorRate: '',
       nolistenCurrentPage: 1,
       nolistenPageSize: 5,
       nolistenTotal: 1,
-      noListenTableLoading: false
+      noListenTableLoading: false,
+      // 未遵医嘱数据
+      noListenDoctorData: [],
+
+      // badsickTotal:'',
+      // 最新患者数据
+      newsickaskData: [],
+      // 患者最新问诊分页数据
+      newAskCurrentPage: 1,
+      newAskPageSize: 10,
+      newAskTotal: 1,
+      newSickTableLoading: false,
+      // 所属医院id
+      adminHospitalId: ''
+      // careState: ''
     }
   },
   computed: {
     ...mapState({
       admin: state => state.adminInfo,
-      userCasesCardId: state => state.userCasesCardId
-
+      userCasesCardId: state => state.userCasesCardId  // 病历卡id
     })
   },
   methods: {
@@ -443,6 +447,9 @@ export default {
         'SET_CURRENT_SICK_DATA',
         'setuserMakeOrderDoctorId'
       ]),
+    /**
+     * @description 关注排序
+     */
     sortSickList (arr) {
       let copyArr = arr
       let topArr = []
@@ -456,6 +463,11 @@ export default {
       })
       return topArr
     },
+    /**
+     * @param {number} val 0-3
+     * @returns {string}
+     * @description 高血压类型
+     */
     confirmSickType (val) {
       let type
       switch (val) {
@@ -476,6 +488,9 @@ export default {
       }
       return type
     },
+    /**
+     * @description 关注
+     */
     isCare (val, data) {
       let arr = data
       console.log(arr)
@@ -513,7 +528,10 @@ export default {
         }
       })
     },
-    // 获取最新问诊
+    /**
+     * @param {obj} params 请求数据字段
+     * @description 获取最新问诊
+     */
     newAskRequest (params) {
       this.newSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -537,6 +555,9 @@ export default {
     newAskSizeChange (val) {  // 患者最新问诊  每页显示数量变化
       console.log(`每页 ${val} 条`)
     },
+    /** @param {number} val 页数
+     * @description 患者最新问诊页数变化
+     */
     newAskCurrentChange (val) {   // 患者最新问诊页数变化
       this.newAskRequest({
         hospitalId: this.adminHospitalId,
@@ -544,7 +565,39 @@ export default {
         pageSize: this.newAskPageSize
       })
     },
-    // 获取严重患者
+    /**
+     * @param {obj} row 患者信息
+     * @description 患者最新问诊 问诊
+     */
+    newdiagnose (row, val) {
+      session('sickcardTabIndex', 0)
+      let userId
+      // let id
+      // if (val) {
+      userId = row.userId
+      // id = row.id
+      // } else {
+        // userId = row.id
+      // }
+      console.log('carssdadd', row)
+      this.$router.push({name: 'bloodheighSick',
+        params: {
+          sickID: userId
+        }})
+      this.SET_CURRENT_SICK_DATA({
+        sickID: userId,
+        hospitalId: row.adminHospitalId,
+        userCasesCardId: row.id
+      })
+      this.setuserCasesCardId(row.id)
+      this.setuserMakeOrderDoctorId(null)
+      // Bus.$emit('modifySickCard', {modify: true, cardid: id})
+      this.SET_SICK_CARD(true)
+    },
+    /**
+     * @param {obj} params 请求数据字段
+     * @description 获取严重患者
+     */
     badsickRequest (params) {
       this.badSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -578,7 +631,10 @@ export default {
         pageSize: this.badsickPageSize
       })
     },
-    // 获取未遵医嘱
+    /**
+     * @param {obj} params 请求数据字段
+     * @description 获取未遵医嘱
+     */
     nolistenRequest (params) {
       this.noListenTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -627,36 +683,13 @@ export default {
     unperfectChangepage (val) {   // 患者最新问诊页数变化
       console.log(`当前页: ${val}`)
     },
+    // 废弃
     msgTipBtn () {
       this.$router.push({
         name: 'accountSetting'
       })
     },
-    newdiagnose (row, val) {
-      session('sickcardTabIndex', 0)
-      let userId
-      let id
-      // if (val) {
-      userId = row.userId
-      id = row.id
-      // } else {
-        // userId = row.id
-      // }
-      console.log('carssdadd', row)
-      this.$router.push({name: 'bloodheighSick',
-        params: {
-          sickID: userId
-        }})
-      this.SET_CURRENT_SICK_DATA({
-        sickID: userId,
-        hospitalId: row.adminHospitalId,
-        userCasesCardId: row.id
-      })
-      this.setuserCasesCardId(row.id)
-      this.setuserMakeOrderDoctorId(null)
-      // Bus.$emit('modifySickCard', {modify: true, cardid: id})
-      this.SET_SICK_CARD(true)
-    },
+
     diagnose (row, val) {
       let id
       // if (val) {
@@ -674,6 +707,10 @@ export default {
         hospitalId: row.adminHospitalId
       })
     },
+    /**
+     * @param {obj} row 联系患者
+     * @description 联系
+     */
     call (row) {
       console.log('聊天对象', row)
       let rongId = 'member_' + row.id
@@ -696,6 +733,7 @@ export default {
     if (this.admin && this.admin.adminHospitalId) {
       this.adminHospitalId = this.admin.adminHospitalId
     }
+    // 初始化数据
     this.newAskRequest({
       hospitalId: this.adminHospitalId,
       currentPage: this.newAskCurrentPage,

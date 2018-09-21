@@ -47,9 +47,12 @@ export default {
   },
   data () {
     return {
+      // 默认打开第一条照片列表
       activeNames: [0],
+      // 默认关闭大图
       showBigImg: false,
       imgUrl: '',
+      // 图片列表
       imgList: [],
       currentPage: 1,
       pageSize: 5,
@@ -63,14 +66,20 @@ export default {
     handleChange (val) {
       console.log(val)
     },
+    // 打开大图
     showchecklistimg (url) {
       this.imgUrl = url
       this.showBigImg = true
       console.log('打开大图？', this.showBigImg)
     },
+    // 关闭大图
     closeImgFloat () {
       this.showBigImg = false
     },
+    /**
+     * 获取图片列表
+     * @param page 当前页数
+     */
     getData (page) {
       let vm = this
       vm.imgList = []
@@ -107,8 +116,6 @@ export default {
   created () {
     this.getData(1)
   }
-  // mounted () {
-  // }
 }
 </script>
 

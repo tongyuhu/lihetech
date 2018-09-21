@@ -6,6 +6,7 @@
         <div class="card-header">
             <p class="title">血压趋势</p>
         </div>
+        <!-- 日期选择 -->
         <div class="check-date">
           <el-row type="flex" justify="start">
             <button v-for="(item,index) in bloodTrendDate" 
@@ -49,25 +50,31 @@
           <el-row>
             <div class="flex">
               <div class="flex widthone">
+                <!-- 左翻页按钮 -->
                 <div class="flex-btn-left">
                   <el-button v-show="showtrendBtn" :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
                 </div>
+                <!-- 趋势图 -->
                 <div class="chart-min-width">
                   <div id='bloodTrend' :style="{width:'auto',height:'300px'}"></div>
                 </div>
+                <!-- 右翻页按钮 -->
                 <div class="flex-btn">
                   <el-button v-show="showtrendBtn" :disabled="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                 </div>
               </div>
               <div>
+                <!-- 日期tip -->
                 <div class="blood-trend-right-text">
                   <span>{{tipDate}}</span>
                 </div>
                 <div class="blood-trend-right">
+                  <!-- 总测量次数 -->
                   <div class="blood-trend-item totalbg">
                     <p>{{this.bloodTrendState.total}}</p>
                     <p>总测量次数</p>
                   </div>
+                  <!-- 正常偏高次数 -->
                   <div class="blood-trend-item normalbg">
                     <p>{{this.bloodTrendState.normal}}</p>
                     <p>正常偏高次数</p>
@@ -110,6 +117,7 @@ export default {
   },
   data () {
     return {
+      // 是否显示左右翻页按钮
       showtrendBtn: true,
       // 是否全选状态
       // ischeckAll: true,
@@ -853,6 +861,11 @@ export default {
       //   }
       //   return page
     // },
+    /**
+     * @param {number} bptype 血压bptype
+     * @returns 色值
+     * @description 血压颜色
+     */
     computeDangerColor (bptype) {
       let type = this._.toNumber(bptype)
       let color = ''

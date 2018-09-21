@@ -4,6 +4,7 @@
       <div class="card-header">
         <p class="title">ABPM统计表 动态分析报告</p>
       </div>
+      <!-- 24小时血压 -->
       <div class="table-box">
         <table>
           <tr>
@@ -224,6 +225,7 @@
           </tr>
         </table>
       </div>
+      <!-- 24小时均值 -->
       <div class="table-box">
         <table>
           <tr>
@@ -259,6 +261,7 @@
         </table>
       </div>
     </el-card>
+    <!-- 分析 -->
     <div class="analysis-wrap">
       <el-card :body-style="{ padding: '0px'}">
         <div class="analysis">
@@ -292,6 +295,7 @@ export default {
   data () {
     return {
       ABPM: {
+        // 白天
         day: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -321,6 +325,7 @@ export default {
           bptype: '',
           referValue: ''
         },
+        // 晚上
         night: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -350,6 +355,7 @@ export default {
           bptype: '',
           referValue: ''
         },
+        // 清晨
         moring: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -379,6 +385,7 @@ export default {
           bptype: '',
           referValue: ''
         },
+        // 24小时
         oneday: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -409,8 +416,11 @@ export default {
           referValue: ''
         }
       },
+      // 总的分析
       summary: null,
+      // 风险比率
       risk: null,
+      // 盐敏感可能性
       salt: ''
     }
   },

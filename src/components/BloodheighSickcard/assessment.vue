@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 心血管评估 -->
     <el-card :body-style="{ padding: '0px' }">
       <div class="card-header">
         <p class="title">心血管评估</p>
@@ -18,9 +19,11 @@
               症状
             </th>
           </tr>
+          <!-- 系统波形 -->
           <tr>
             <td class="icon-normal">
               <div>
+                <!-- 波形名称 -->
                 {{sysTypeName}}
               </div>
             </td>
@@ -43,6 +46,7 @@
               </div>
             </td>
           </tr>
+          <!-- 用户波形 -->
           <tr>
             <td class="icon-self">
               <div>
@@ -117,12 +121,14 @@ export default {
       'truebuzheng': truebuzheng,
       'quexue': quexue,
       'truequexue': truequexue,
-      userTypeName: '',
-      userImageAnalyze: '',
-      userConditionPredict: '',
-      userSimpleImage: '',
-      userBpImage: '',
-      dangerRate: '',
+      // 用户
+      userTypeName: '', // 波形名称
+      userImageAnalyze: '', // 波形解析
+      userConditionPredict: '',  // 病情分析
+      userSimpleImage: '',  // 波形模型图
+      userBpImage: '', // 用户实际血压图形
+      dangerRate: '', // 10年心血管风险评估
+      // 系统分析
       sysSimpleImage: '',
       sysBpImage: '',
       sysConditionPredict: '',
@@ -169,6 +175,9 @@ export default {
       }
       return img
     },
+    /**
+     * @description 获取评估数据
+     */
     getAssessmentData () {
       let params = {
         'userId': this.sickID,

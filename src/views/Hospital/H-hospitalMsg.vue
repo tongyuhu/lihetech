@@ -25,6 +25,7 @@ export default {
     ...mapState({
       admin: state => state.adminInfo
     }),
+    // 医院名字
     hospitalName () {
       if (this.admin && this.admin.hospital.department) {
         return this.admin.hospital.department
@@ -32,6 +33,7 @@ export default {
         return '暂无数据'
       }
     },
+    // 医院地址
     hospitalAddress () {
       if (this.admin && this.admin.hospital.address) {
         return this.admin.address
@@ -39,6 +41,7 @@ export default {
         return ''
       }
     },
+    // 医院人员
     hospitalDoctorNum () {
       if (this.admin && this.admin.hospitalDoctorNum) {
         return this.admin + '名医生,' + this.admin + '名护士'

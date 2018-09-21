@@ -1,29 +1,32 @@
 <template>
   <div class="container">
     <div class="container-head">
+      <!-- 头部信息 -->
       <H-Head></H-Head>
     </div>
     <div class="container-sider">
+      <!-- 侧边导航 -->
       <H-Sider></H-Sider>
     </div>
     <div class="container-main">
+      <!-- 主要内容 -->
       <router-view v-cloak></router-view>
     </div>
-    <!-- <div class="has-message-animation"> -->
-
+    <!-- 聊天icon显示、动画 -->
     <div :class="{'container-footer':true ,'has-message-animation':newmsg}">
         <button class="chat-icon-btn" @click="showFriendWindow">
         </button>
-      <!-- <div class="chat-icon"></div> -->
     </div>
+    <!-- 联系人列表 -->
     <im
     v-show="imStatus"
     @closeIM="closeIMhandle"
     @chat="chatWith"></im>
+    <!-- 聊天窗口 -->
     <chat
     v-if="chatStatus"
     ></chat>
-    <!-- :key="keyTime" -->
+    <!-- 视频窗口 -->
     <videoChat
     ref="videochatref"
     v-show="video"
@@ -33,6 +36,7 @@
     @unmute="unmuteChat"
     @toAudio="videoToAudio"
     @toVideo="audioToVideo"></videoChat>
+    <!-- 响铃 和 接听按钮 -->
     <connectBtn
     v-if="hasVideoMsg"
     @connect="connectCall"
@@ -42,8 +46,8 @@
 
 </template>
 <script>
-  import HHead from './../Hospital/H-Head.vue'
-  import HSider from './../Hospital/H-Sider.vue'
+  import HHead from './H-Head.vue'
+  import HSider from './H-Sider.vue'
   import chat from '@/components/Chat/chat.vue'
   import im from '@/components/Chat/im.vue'
   import videoChat from '@/components/Chat/video.vue'
@@ -51,7 +55,7 @@
   import Bus from '@/bus.js'
   // import publicStatic from '@/publicData/const.js'
   import {mapState, mapGetters, mapMutations, mapActions} from 'vuex'
-  import position from '@/components/Chat/postion.vue'
+  // import position from '@/components/Chat/postion.vue'
   import {findComponentsDownward} from '@/untils/untils'
   export default {
     name: 'H-index',
@@ -61,14 +65,18 @@
       chat,
       im,
       videoChat,
-      connectBtn,
-      position
+      connectBtn
+      // position
     },
     data () {
       return {
+        // 融云appkey
         appKey: 'pwe86ga5pv726',
+        // 用户融云token
         token: '',
+        // 视频自己窗口的dom id
         selfVideoDomID: null,
+        // 聊天对象的DOM id
         friendVideoDomID: null
       }
     },
@@ -116,26 +124,40 @@
         'setRongUserIdAction',
         'setFriendsListActon'
       ]),
+      /**
+       * @description 打开好友列表
+       */
       showFriendWindow () {
         this.closeAnimation()
         // this.setFriendsListActon()
         this.changeImStatus(true)
       },
+      /**
+       * @description 关闭聊天列表
+       */
       closeIMhandle () {
         this.changeImStatus(false)
       },
+      /**
+       * @description 打开聊天窗口
+       */
       chatWith (history) {
         Bus.$emit('history', history)
         this.openChatWindow()
         // this.chatStatus = true
       },
+      /**
+       * @description 关闭视频通话
+       */
       closeVideoChat () {
         // if (this.currentVideo) {
           // this.hungup()
         // }
         this.closeVideo()
       },
-      // 接通
+      /**
+       * @description 接通音视频
+       */
       connectCall () {
         let targetId
         if (this.currentVideo) {
@@ -163,7 +185,9 @@
         this.openVideo() // 打开视频窗口
         this.closeVideoMsg()  // 关闭提醒窗口
       },
-      // 拒绝通话
+      /**
+       * @description 拒绝通话
+       */
       rejectCall () {
         let targetId
         if (this.currentVideo) {
@@ -176,7 +200,9 @@
         this.RongCallLibFunction.reject(params)
         this.closeVideoMsg()
       },
-      // 挂断
+      /**
+       * @description 视频转音频
+       */
       hungup () {
         // this.closeVideoMsg()
         let targetId
@@ -192,7 +218,9 @@
         })
         // this.closeVideoMsg()
       },
-      // 取消
+      /**
+       * @description 取消
+       */
       cancelCall () {
         let targetId
         this.closeVideoMsg() // 收到接收命令关闭提醒窗口
@@ -208,22 +236,36 @@
         })
         // RongCallLib.reject(params)
       },
-      // 静音
+      /**
+       * @description 静音
+       */
       muteChat () {
         this.RongCallLibFunction.mute()
       },
-      // 取消静音
+      /**
+       * @description 取消静音
+       */
       unmuteChat () {
         this.RongCallLibFunction.unmute()
       },
+      /**
+       * @description 视频转音频
+       */
       videoToAudio () {
         this.changeCurrentIsVideo(false)
         this.RongCallLibFunction.videoToAudio()
       },
+      /**
+       * @description 音频转视频
+       */
       audioToVideo () {
         this.changeCurrentIsVideo(true)
         this.RongCallLibFunction.audioToVideo()
       },
+      /**
+       * @param {obj} message 消息
+       * @description 添加消息到联系人历史消息
+       */
       addMsgToHistroy (message) {
         let vm = this
         let currentId = ''
@@ -441,7 +483,7 @@
           console.log(errorCode)
         }
       })
-
+      // 视频通话配置
       let callconfig = {
         // 发起音视频超时时间, 默认 15000 毫秒
         timeout: 15000,
@@ -456,7 +498,9 @@
         RongIMLib: RongIMLib
       }
       // RongCallLib = RongCallLib.init(callconfig)
+      // 初始化通话
       vm.changeRongCallLibFunction(RongCallLib.init(callconfig))
+      // 监听语音视频
       let watcher = function (result) {
         console.log('监听语音视频', result)
         if (result.type === 'added') {
@@ -512,6 +556,7 @@
       }
       // console.log('RongCallLib2', RongCallLib)
       vm.RongCallLibFunction.videoWatch(watcher)
+      // 消息命令监听
       vm.RongCallLibFunction.commandWatch(function (command) {
         console.log('命令监听', command)
         if (command) {
@@ -706,9 +751,11 @@
       // var RongCallCommon.CallVideoProfile = 40 //代表480p
       // var RongCallCommon.CallVideoProfile = 50 //代表720p
       // RongCallLib.setVideoProfile(50)
+      // 表情
       RongIMLib.RongIMEmoji.init({
         size: 18
       })
+      // 音频
       RongIMLib.RongIMVoice.init()
       // console.log('表情库', vm.emojiList)
     }

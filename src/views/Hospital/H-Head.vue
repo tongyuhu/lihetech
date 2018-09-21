@@ -6,6 +6,7 @@
         
         <div class="dropdown head-right ma" @click.self="show">
           <span @click.self="show" class="setting"><i class="el-icon-setting setting"></i>账户设置</span>
+          <!-- 遮罩 用来关闭下拉 -->
           <div class="shade" v-show="showshade" @click="isshowshade"></div>
           <div class="dropdown-content" :class="{show:isshow}">
             <button class="setting-btn" @click="lookMsg">我的二维码</button>
@@ -14,17 +15,17 @@
             <button class="setting-btn" @click="exit">退出</button>
           </div>
         </div>
-
-        
+        <!-- 姓名 -->
         <div class="head-right ma">
           <span class="head-right">{{ adminName }}</span>
         </div>
+        <!-- 头像 -->
         <div class="head-right">
             <img :src="adminHeadImg+''" :onerror="onerrorimg"  class="admin-icon" width="34px" height="34px">
             <!-- <img :src="adminHeadImg" alt="" onerror="./../../../../static/user.png"  class="admin-icon
             " width="34px" height="34px"> -->
         </div>
-  
+      <!-- 修改密码弹窗 -->
       <el-dialog
         title="修改密码"
         :visible.sync="changePasswordDialog"
@@ -141,6 +142,7 @@ export default {
   },
   computed: {
     ...mapState(['adminInfo']),
+    // 姓名
     adminName () {
       if (!this.$store.state.adminInfo.username) {
         if (!this.$store.state.adminInfo.name) {
@@ -150,6 +152,7 @@ export default {
         return this.$store.state.adminInfo.name || this.$store.state.adminInfo.username
       }
     },
+    // 职位
     adminRoot () {
       let adminRoot = ''
       switch (this.$store.state.adminInfo.adminType) {
@@ -175,14 +178,23 @@ export default {
     validateFieldForm (val) {
       console.log('密码修改', val)
     },
+    /**
+     * @description 打开下拉项 和 遮罩层
+     */
     show () {
       this.isshow = !this.isshow
       this.showshade = true
     },
+    /**
+     * @description 隐藏遮罩层 和 下拉选项
+     */
     isshowshade () {
       this.isshow = false
       this.showshade = false
     },
+    /**
+     * @description 打开二维码页面
+     */
     lookMsg () {
       // this.$router.replace({
       //   name: 'accountSetting'
@@ -192,12 +204,18 @@ export default {
         name: 'accountSetting'
       })
     },
+    /**
+     * @description 前往编辑资料页面
+     */
     editDoc () {
       this.isshowshade()
       this.$router.push({
         name: 'editAdmin'
       })
     },
+    /**
+     * @description 打开修改密码弹窗
+     */
     changePasswordDialogHandle () {
       this.isshowshade()
       this.changePasswordDialog = true
@@ -206,6 +224,9 @@ export default {
       }, 50)
       // changpasswordRef
     },
+    /**
+     * @description 修改密码
+     */
     changePassword (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -235,6 +256,9 @@ export default {
         }
       })
     },
+    /**
+     * @description 登出
+     */
     exit () {
       this.isshowshade()
       this.$axios({
@@ -282,56 +306,56 @@ export default {
     visibility:hidden;
     height:0
   }
-    .head{
-      height: 80px;
-      position:relative;
-      box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
-    .head-logo{
-      float: left;
-      width: 250px;
-      background-color: #1991fc;
-      height: 80px;
-      position:relative;
-    }
-    .head-logo-img{
-      display: block;
-      margin-left: 40px;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    p{
-        margin: 0;
-        text-align: center;
-    }
-    .head-left{
-      float: left;
-      vertical-align: middle;
-      margin-left: 24px;
-      position: absolute;
-      top: 50%;
-      left: 250px;
-      transform: translateY(-50%);
-      font-size: 14px;
-    }
-    .head-right{
-      font-size: 14px;
-      float: right;
+  .head{
+    height: 80px;
+    position:relative;
+    box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  .head-logo{
+    float: left;
+    width: 250px;
+    background-color: #1991fc;
+    height: 80px;
+    position:relative;
+  }
+  .head-logo-img{
+    display: block;
+    margin-left: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  p{
+      margin: 0;
       text-align: center;
-      color: #666;
-      vertical-align: middle;
-      line-height: 80px;
-      /* position: absolute;
-      top: 50%;
-      right: 250px;
-      transform: translateY(-50%); */
-    }
-    /* .admin-icon-wrap{
-      width: 34px;
-      height: 34px;
-    } */
+  }
+  .head-left{
+    float: left;
+    vertical-align: middle;
+    margin-left: 24px;
+    position: absolute;
+    top: 50%;
+    left: 250px;
+    transform: translateY(-50%);
+    font-size: 14px;
+  }
+  .head-right{
+    font-size: 14px;
+    float: right;
+    text-align: center;
+    color: #666;
+    vertical-align: middle;
+    line-height: 80px;
+    /* position: absolute;
+    top: 50%;
+    right: 250px;
+    transform: translateY(-50%); */
+  }
+  /* .admin-icon-wrap{
+    width: 34px;
+    height: 34px;
+  } */
   .admin-icon{
       /* width: 34px; */
       /* height: 34px; */
@@ -400,6 +424,7 @@ export default {
   left: 0;
   height: 100%;
   width: 100%;
+  content: '';
   /* background-color: black; */
   z-index: 998;
   cursor: default;
