@@ -4,9 +4,6 @@
       <span>高血压患者</span>
     </div>
     <div>
-    <!--  end -->
-
-      
       <!-- 三级管理  start -->
       <div class="bottom-margin" id="threeLevel">
         <el-card :body-style="{ padding: '0px' }">
@@ -64,6 +61,8 @@
                     width="275px"
                     align="left">
                     <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="assessmentLayer(scope.row)" 
+                        :style="{'width':'80px','color':'#fff'}">分层评估</el-button>
                         <el-button 
                         size="mini" 
                         type="primary" 
@@ -160,6 +159,8 @@
                     width="275px"
                     align="left">
                     <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="assessmentLayer(scope.row)" 
+                        :style="{'width':'80px','color':'#fff'}">分层评估</el-button>
                         <el-button 
                         size="mini" 
                         type="primary" 
@@ -256,6 +257,8 @@
                     width="275px"
                     align="left">
                     <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="assessmentLayer(scope.row)" 
+                        :style="{'width':'80px','color':'#fff'}">分层评估</el-button>
                         <el-button 
                         size="mini" 
                         type="primary" 
@@ -358,6 +361,8 @@
                     width="275px"
                     align="left">
                     <template slot-scope="scope">
+                      <el-button size="mini" type="primary" @click="assessmentLayer(scope.row)" 
+                        :style="{'width':'80px','color':'#fff'}">分层评估</el-button>
                         <el-button 
                         size="mini" 
                         type="primary" 
@@ -487,13 +492,92 @@
         </el-card>
       </div>
       <!-- 未分层  end -->
+      <!-- 正常人群  start -->
+      <div class="workhead">
+        <span>正常人群</span>
+      </div>
+      <div class="bottom-margin" id="noLevel">
+        <el-card :body-style="{ padding: '0px' }">
+          <div class="table">
+            <el-table 
+            :data='normalSickData'
+            style="width: 100%"
+            row-class-name="table-row"
+            v-loading="normalSickLoading">
+                <el-table-column
+                    prop="realName"
+                    label="姓名"
+                    width="100"
+                    align="left"
+                    label-class-name="tableTitle">
+                    <template slot-scope="scope">
+                      <el-button type="text" @click="assessmentLayer(scope.row)"
+                      :style="{'color':'#1991fc','padding':0}">
+                        {{scope.row.realName}}
+                      </el-button>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="age"
+                    label="年龄"
+                    align="left"
+                    label-class-name="tableTitle">
+                </el-table-column>
+                <el-table-column
+                    prop="dangerousCount"
+                    label="近7日平均血压"
+                    align="left"
+                    label-class-name="tableTitle">
+                    <template slot-scope="scope">   
+                      <span> 
+                        {{scope.row.systolicAvg}}/{{scope.row.diastolicAvg}}
+                      </span>                           
+                    </template>
+                </el-table-column>
+                <el-table-column
+                    prop="joinHospitalTime"
+                    label="加入时间"
+                    align="left"
+                    label-class-name="tableTitle">
+                </el-table-column>
+                <el-table-column
+                    prop="action"
+                    label=""
+                    width="275px"
+                    align="left">
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="primary" @click="assessmentLayer(scope.row)" 
+                        :style="{'width':'80px','color':'#fff'}">分层评估</el-button>
+
+                        <button class="telephone-btn" @click="call(scope.row)">
+                          <i class="iconfont icon-xiaoxi icon-msg-color"></i>
+                        </button>
+                    </template>
+                </el-table-column>
+            </el-table>
+          </div>
+          <div class="page">
+            <el-pagination
+              class="el-pagination"
+              @current-change="normalCurrentChange"
+              :current-page.sync="normalSickCurrentPage"
+              :page-size="normalSickPageSize"
+              layout="total, prev, pager, next, jumper"
+              :total="normalSickTotal"
+              prev-text="上一页"
+              next-text="下一页">
+            </el-pagination>
+          </div>
+        </el-card>
+      </div>
+      <!-- 正常人群  end -->
     </div>
     
   </div>
 </template>
 
 <script>
-import {layerSickApi, easyApi} from '@/api/components/bloodPersonManage/bloodPerson.js'
+import {layerSickApi} from '@/api/components/bloodPersonManage/bloodPerson.js'
 import {careApi} from '@/api/views/Hospital/BloodHeigh/H-work'
 import {mapMutations, mapState} from 'vuex'
 import session from '@/untils/session'
@@ -532,7 +616,13 @@ export default {
       easySickLoading: false,
       easySickPageSize: 5,
       easySickTotal: 1,
-      easySickCurrentPage: 1
+      easySickCurrentPage: 1,
+      // 正常
+      normalSickData: [],
+      normalSickLoading: false,
+      normalSickPageSize: 5,
+      normalSickTotal: 1,
+      normalSickCurrentPage: 1
 
     }
   },
@@ -659,29 +749,45 @@ export default {
     },
     /**
      * @param {number} val 页数
+     * @description 一级管理页数变化
+     */
+    normalCurrentChange (val) {   // 正常页数变化
+      this.getlayerData({
+        dangerLevel: 5,
+        pageNum: val,
+        pageSize: this.normalSickPageSize
+      })
+    },
+    /**
+     * @param {number} val 页数
      * @description 未分层页数变化
      */
-    easyCurrentChange (val) {   // 未分层页数变化
-      this.easySickLoading = true
-      this.$axios(easyApi({
+    easyCurrentChange (val) {   // 易患页数变化
+      this.getlayerData({
+        dangerLevel: 6,
         pageNum: val,
         pageSize: this.easySickPageSize
-      }))
-      .then(res => {
-        if (res.data.data.length > 0) {
-          this.easySickData = res.data.data
-        }
-        this.easySickLoading = false
       })
-      .catch(err => {
-        console.log(err)
-        this.easySickLoading = false
-      })
+      // this.easySickLoading = true
+      // this.$axios(easyApi({
+      //   pageNum: val,
+      //   pageSize: this.easySickPageSize
+      // }))
+      // .then(res => {
+      //   if (res.data.data.length > 0) {
+      //     this.easySickData = res.data.data
+      //   }
+      //   this.easySickLoading = false
+      // })
+      // .catch(err => {
+      //   console.log(err)
+      //   this.easySickLoading = false
+      // })
     },
     /**
      * @param {obj} params
      * {
-        dangerLevel: 1一级 2 二级 3三级 0未分层,
+        dangerLevel: 1一级 2 二级 3三级 0未分层,  5-正常 6-易患人群
         pageNum: 页数,
         pageSize: 每页数量
       }
@@ -699,6 +805,12 @@ export default {
       }
       if (params.dangerLevel === 3) {
         this.threeLevelLoading = true
+      }
+      if (params.dangerLevel === 5) {
+        this.normalSickLoading = true
+      }
+      if (params.dangerLevel === 6) {
+        this.easySickLoading = true
       }
       this.$axios(layerSickApi({
         dangerLevel: params.dangerLevel,
@@ -727,6 +839,16 @@ export default {
             this.threeLevelTotal = res.data.recordCount
             this.threeLevelLoading = false
           }
+          if (params.dangerLevel === 5) {
+            this.normalSickData = res.data.data
+            this.normalSickTotal = res.data.recordCount
+            this.normalSickLoading = false
+          }
+          if (params.dangerLevel === 6) {
+            this.easySickData = res.data.data
+            this.easySickTotal = res.data.recordCount
+            this.easySickLoading = false
+          }
         }
         if (params.dangerLevel === 0) {
           this.noLevelLoading = false
@@ -739,6 +861,12 @@ export default {
         }
         if (params.dangerLevel === 3) {
           this.threeLevelLoading = false
+        }
+        if (params.dangerLevel === 5) {
+          this.normalSickLoading = false
+        }
+        if (params.dangerLevel === 6) {
+          this.easySickLoading = false
         }
       })
       .catch(err => {
@@ -754,6 +882,12 @@ export default {
         }
         if (params.dangerLevel === 3) {
           this.threeLevelLoading = false
+        }
+        if (params.dangerLevel === 5) {
+          this.normalSickLoading = false
+        }
+        if (params.dangerLevel === 6) {
+          this.easySickLoading = false
         }
       })
     },
@@ -847,6 +981,7 @@ export default {
     this.twoLevelCurrentChange(1)
     this.oneLevelCurrentChange(1)
     this.easyCurrentChange(1)
+    this.normalCurrentChange(1)
   }
 }
 </script>
