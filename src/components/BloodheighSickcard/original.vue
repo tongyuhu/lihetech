@@ -11,10 +11,10 @@
               type="month"
               format="yyyy-MM"
               value-format="yyyy-MM"
-              :clearable='true'
               size="mini"
               :style="{width:'120px'}"
               placeholder="选择月"
+              :clearable='false'
               @change="checkTime">
             </el-date-picker>
           </div>
