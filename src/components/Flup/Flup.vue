@@ -23,7 +23,7 @@
                     width="100"
                     align="left">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="flupHandler(scope.row)"
+                      <el-button type="text" @click="diagnose(scope.row)"
                       :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
@@ -107,7 +107,7 @@
                     width="100"
                     align="left">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="flupHandler(scope.row,true)"
+                      <el-button type="text" @click="diagnose(scope.row)"
                       :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
@@ -176,6 +176,7 @@
 <script>
 import {FlupListApi} from '@/api/components/Flup/Flup.js'
 import {mapState, mapMutations} from 'vuex'
+import session from '@/untils/session'
 export default {
   name: 'Flup',
   data () {
@@ -217,7 +218,9 @@ export default {
     ...mapMutations(['SET_FLUP_INFO',
       'addChatFriend',
       'changeChatFriend',
-      'openChatWindow'
+      'openChatWindow',
+      'SET_CURRENT_SICK_DATA',
+      'SET_FLUP_INFO'
     ]),
     flupHandler (val, flup) {
       let obj = {}
@@ -237,6 +240,33 @@ export default {
       this.$router.push({
         name: 'FlupCard'
       })
+    },
+    /**
+     * @param {obj} row 诊断的患者
+     * @param {boolean} isuserId 用id或userid
+     * @description 诊断患者
+     */
+    diagnose (row) {
+      // 初始化诊断界面选项卡选择为第一个
+      console.log('随访病人', row)
+      session('sickcardTabIndex', 0)
+      let id
+      // if (isuserId) {
+      id = row.userId
+      // } else {
+      //   id = row.id
+      // }
+      // console.log(row)
+      this.$router.push({name: 'bloodheighSick',
+        params: {
+          sickID: id,
+          name: row.realName
+        }})
+      this.SET_CURRENT_SICK_DATA({
+        sickID: id,
+        hospitalId: row.adminHospitalId
+      })
+      this.SET_SICK_CARD(false)
     },
     /**
      * @description val===true 已随访 反之

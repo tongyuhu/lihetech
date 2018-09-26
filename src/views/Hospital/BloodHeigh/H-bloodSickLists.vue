@@ -421,7 +421,7 @@
                     align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="assessmentLayer(scope.row)"
+                      <el-button type="text" @click="diagnose(scope.row)"
                       :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
@@ -511,7 +511,7 @@
                     align="left"
                     label-class-name="tableTitle">
                     <template slot-scope="scope">
-                      <el-button type="text" @click="assessmentLayer(scope.row)"
+                      <el-button type="text" @click="diagnose(scope.row)"
                       :style="{'color':'#1991fc','padding':0}">
                         {{scope.row.realName}}
                       </el-button>
