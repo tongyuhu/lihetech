@@ -49,6 +49,7 @@
         <div>
           <el-row>
             <div class="flex">
+              <!-- 左侧折线图 -->
               <div class="flex widthone">
                 <!-- 左翻页按钮 -->
                 <div class="flex-btn-left">
@@ -63,6 +64,7 @@
                   <el-button v-show="showtrendBtn" :disabled="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
                 </div>
               </div>
+              <!-- 右侧数据显示 -->
               <div>
                 <!-- 日期tip -->
                 <div class="blood-trend-right-text">
@@ -105,7 +107,7 @@
 <script>
 import echarts from 'echarts'
 import {dateFromWeek, dateFormat} from '@/untils/date'
-import {bloodheighSickDataApi, updatebloodTrendStateApi} from '@/api/components/BloodheighSickcard/bloodCover'
+import {bloodTrendDataApi, updatebloodTrendStateApi} from '@/api/components/BloodheighSickcard/bloodCover'
 export default {
   props: {
     sickID: {
@@ -188,7 +190,9 @@ export default {
       bloodTrendChecked: null,
       // 当前选择的状态
       statusArr: '',
+      // 1-未药 2-服药2小时内 3-服药2小时后
       bpMeasureTime: '',
+      // 1-静止 2-运动 3-情绪波动
       bpMeasureState: '',
       // 血压趋势 图表数据
       bloodTrendData: {
@@ -211,18 +215,27 @@ export default {
         heigh: '',
         danger: ''
       },
+      // 上一页禁用
       trendBtnPre: true,
+      // 下一页禁用
       trendBtnNext: true,
+      // 折线图tooltip选择状态  如果相同则不更新数据 不同更新数据
       lastBloodTrendChecked: null,
       lastaxisValue: null,
       lastdataIndex: null,
       lastbpMeasureTime: '',
       lastbpMeasureState: '',
+      // 右侧时间tip 最近显示无
       showtip: true,
+      // 右侧时间tip 最近显示无
       tipDate: ''
     }
   },
   methods: {
+    /**
+     * @param {number} start 开始位置， end 结束位置
+     * @description 血压趋势折线图
+     */
     bloodTrendOption (start, end) {
       let vm = this
       let zoomstart = 0
@@ -277,10 +290,8 @@ export default {
           // triggerOn: 'click',
           triggerOn: 'mousemove|click',
           formatter: function (a) {
-            // if (a[0].dataIndex === vm.bloodTrendIndex) {
-              // vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
-            // } else {
-
+            // a[0].axisValue 时间
+            // a[0].dataIndex 选择第几个数据
             if (vm.bloodTrendChecked !== 0) {
               if (vm.bloodTrendChecked !== vm.lastBloodTrendChecked || vm.lastaxisValue !== a[0].axisValue || vm.lastdataIndex !== a[0].dataIndex || vm.lastbpMeasureTime !== vm.bpMeasureTime || vm.lastbpMeasureState !== vm.bpMeasureState) {
                 if (vm.bloodTrendChecked === 2) {
@@ -294,9 +305,9 @@ export default {
                 vm.lastbpMeasureTime = vm.bpMeasureTime
                 vm.lastbpMeasureState = vm.bpMeasureState
                 vm.tipDate = a[0].axisValue
-                // console.log(a)
               }
               vm.bloodTrendIndex = a.dataIndex
+              console.log(a)
             }
             return (
                 a[0]['axisValueLabel'] + '<br>' +
@@ -496,6 +507,10 @@ export default {
         }
       }
     },
+    /**
+     * @param {nunber} index 选择日期的index 0最近 1日  2周  3月
+     * @description 选择日期按钮
+     */
     updatebloodTrendChecked (index) {
       if (index === 0) {
         this.showtrendBtn = false
@@ -514,25 +529,23 @@ export default {
       // })
       console.log('index, this.statusArr', index, this.statusArr)
     },
-    // 0最近 1日  2周  3月
+    /**
+     * @param {number} index 0最近 1日  2周  3月
+     * @description 选择日期更新数据
+     */
     updatebloodTrendData (index, status) {
       let vm = this
       let params = {
         'userId': vm.sickID,
         'adminHospitalId': vm.hospitalId,
-        'bpMeasureTime': this.bpMeasureTime || '',
-        'bpMeasureState': this.bpMeasureState || ''
+        'bpMeasureTime': vm.bpMeasureTime || '',
+        'bpMeasureState': vm.bpMeasureState || ''
       }
       let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
-      // this.$nextTick(function () {
-      //   bloodTrend.dispatchAction({
-      //     type: 'hideTip'
-      //   })
-      // })
       vm.tipDate = ''
       if (index === 0) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 0))
+        this.$axios(bloodTrendDataApi(params, 0))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -609,7 +622,7 @@ export default {
       }
       if (index === 1) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 1))
+        this.$axios(bloodTrendDataApi(params, 1))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -633,15 +646,29 @@ export default {
           // bloodTrend.setOption(this.bloodTrendOption())
           if (res.data.data) {
             if (res.data.data.length !== 0) {
+              // 点击日周月默认显示最后一条数据信息
+              bloodTrend.dispatchAction({
+                type: 'showTip',
+                  // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                seriesIndex: 1,
+                  // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                dataIndex: this.bloodTrendData.date.length - 1
+                  // 可选，数据名称，在有 dataIndex 的时候忽略
+                  // name?: string,
+                  // 本次显示 tooltip 的位置。只在本次 action 中生效。
+                  // 缺省则使用 option 中定义的 tooltip 位置。
+                  // position: Array.<number>|string|Function,
+              })
               // this.updatebloodTrendState(res.data.data[0].description)
-              this.updatebloodTrendState(false, false, true)
+              // this.updatebloodTrendState(this.bloodTrendData.date[-1])
+              // this.updatebloodTrendState(false, -1)
             }
           }
         })
       }
       if (index === 2) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 2))
+        this.$axios(bloodTrendDataApi(params, 2))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.week = []
@@ -669,14 +696,28 @@ export default {
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(false, false, true)
+              bloodTrend.dispatchAction({
+                type: 'showTip',
+                  // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                seriesIndex: 1,
+                  // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                dataIndex: this.bloodTrendData.week.length - 1
+                  // 可选，数据名称，在有 dataIndex 的时候忽略
+                  // name?: string,
+                  // 本次显示 tooltip 的位置。只在本次 action 中生效。
+                  // 缺省则使用 option 中定义的 tooltip 位置。
+                  // position: Array.<number>|string|Function,
+              })
+              // this.updatebloodTrendState(false, -1)
+              // this.updatebloodTrendState(res.data.data[-1].description)
+              // this.updatebloodTrendState(this.bloodTrendData.date[-1])
             }
           }
         })
       }
       if (index === 3) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 3))
+        this.$axios(bloodTrendDataApi(params, 3))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -698,12 +739,32 @@ export default {
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
           if (res.data.data) {
             if (res.data.data.length !== 0) {
-              this.updatebloodTrendState(false, false, true)
+              bloodTrend.dispatchAction({
+                type: 'showTip',
+                  // 系列的 index，在 tooltip 的 trigger 为 axis 的时候可选。
+                seriesIndex: 1,
+                  // 数据的 index，如果不指定也可以通过 name 属性根据名称指定数据
+                dataIndex: this.bloodTrendData.date.length - 1
+                  // 可选，数据名称，在有 dataIndex 的时候忽略
+                  // name?: string,
+                  // 本次显示 tooltip 的位置。只在本次 action 中生效。
+                  // 缺省则使用 option 中定义的 tooltip 位置。
+                  // position: Array.<number>|string|Function,
+              })
+              // this.updatebloodTrendState(false, -1)
+              // this.updatebloodTrendState(res.data.data[-1].description)
+              // this.updatebloodTrendState(this.bloodTrendData.date[-1])
             }
           }
         })
       }
     },
+    /**
+     * @param {date} date 开始日期
+     * @param {index} index 选择数据的索引 弃用
+     * @param {boolean} showzero 第一次选择日期右侧数据显示为0
+     * @description 更新测量状态
+     */
     updatebloodTrendState (date, index, showzero) {
       if (showzero) {
         this.bloodTrendState.total = 0
@@ -742,9 +803,8 @@ export default {
           // }
           // return
         }
+        // 周时间
         if (this.bloodTrendChecked === 2) {
-          // date = dateFormat(date, 0, 1)
-          // let yearweek = this.computeYearWeek(this.bloodTrendData.week[index])
           let yearweek = this.computeYearWeek(date)
           date = dateFromWeek(yearweek[0], yearweek[1])
         }
@@ -755,15 +815,19 @@ export default {
           'bpMeasureTime': this.bpMeasureTime || '',
           'bpMeasureState': this.bpMeasureState || ''
         }
+        // 用户信息 // 0 最近 1 日 2周 3月  //开始日期
         this.$axios(updatebloodTrendStateApi(params, this.bloodTrendChecked, date))
         .then(res => {
-          let total = 0
-          let heigh = 0
+          let total = 0  // 正常
+          let heigh = 0  // 高血压次
+          let normal = 0 // 正常偏高
+          let danger = 0  // 危险
           // let a = this._.findIndex(res.data.data, function (o) {
           //   return o.id === 1
           // })
+          // 没有返回值归0
           let b = this._.findIndex(res.data.data, function (o) {
-            return o.id === 2
+            return o.id === 2  // id  1：正常 2：正常高值 3：轻度高血压 4：中度高血压 5-危险血压
           })
           let c = this._.findIndex(res.data.data, function (o) {
             return o.id === 3 || o.id === 4
@@ -774,15 +838,22 @@ export default {
           // if (a === -1) {
           //   this.$set(this.bloodTrendState, 'normal', 0)
           // }
+          // 正常偏高次数
           if (b === -1) {
             this.$set(this.bloodTrendState, 'normal', 0)
           }
+          // 高血压次数
           if (c === -1) {
             this.$set(this.bloodTrendState, 'heigh', 0)
           }
+          // 危险次数
           if (d === -1) {
             this.$set(this.bloodTrendState, 'danger', 0)
           }
+          // if (d === -1) {
+          this.$set(this.bloodTrendState, 'total', 0)
+          // }
+          // 有返回值计算
           res.data.data.forEach(item => {
             total += item.highNum
             // if (item.id === 1) {
@@ -790,32 +861,35 @@ export default {
             // }
 
             if (this._.toNumber(item.id) === 1) {
-              heigh = heigh + item.highNum
+              // heigh = heigh + item.highNum //正常
             }
             if (this._.toNumber(item.id) === 2) {
-              this.$set(this.bloodTrendState, 'normal', item.highNum)
-              heigh = heigh + item.highNum
+              normal = normal + item.highNum
             }
             if (this._.toNumber(item.id) === 3) {
               heigh = heigh + item.highNum
-              // this.$set(this.bloodTrendState, 'heigh', item.highNum)
             }
             if (this._.toNumber(item.id) === 4) {
               heigh = heigh + item.highNum
-              // this.$set(this.bloodTrendState, 'heigh', item.highNum)
             }
-            this.$set(this.bloodTrendState, 'heigh', heigh)
             if (this._.toNumber(item.id) === 5) {
-              heigh = heigh + item.highNum
-              this.$set(this.bloodTrendState, 'danger', item.highNum)
+              danger = danger + item.highNum
             } else {
-              heigh = heigh + item.highNum
+              // heigh = heigh + item.highNum
             }
           })
           this.$set(this.bloodTrendState, 'total', total)
+          this.$set(this.bloodTrendState, 'normal', normal)
+          this.$set(this.bloodTrendState, 'heigh', heigh)
+          this.$set(this.bloodTrendState, 'danger', danger)
         })
       }
     },
+    /**
+     * @param {date} value 时间
+     * @returns {array} [][0]年 [][1]周
+     * @description 计算年 周数
+     */
     computeYearWeek (value) {
       let time = value
       let year
@@ -831,6 +905,12 @@ export default {
       let arr = [year, week]
       return arr
     },
+    /**
+     * @param {number} pageNum 当前页数
+     * @param {number} pages 总页数
+     * @returns {object} .start 开始 .end 结束位置
+     * @description 计算折线图 开始结束位置
+     */
     computeStartend (pageNum, pages) {
       let page = {
       }
@@ -896,6 +976,9 @@ export default {
       }
       return color
     },
+    /**
+     * @description 上一页
+     */
     bloodTrendNext () {
       let vm = this
       if (vm.bloodTrendData.currentPage > vm.bloodTrendData.pageNum) {
@@ -919,7 +1002,7 @@ export default {
         'bpMeasureState': this.bpMeasureState || ''
 
       }
-      vm.$axios(bloodheighSickDataApi(params, vm.bloodTrendChecked))
+      vm.$axios(bloodTrendDataApi(params, vm.bloodTrendChecked))
       .then(res => {
         bloodTrend.showLoading(
           {
@@ -995,6 +1078,9 @@ export default {
         bloodTrend.hideLoading()
       })
     },
+    /**
+     * @description 下一页
+     */
     bloodTrendPer () {
       let vm = this
       let bloodTrend = echarts.init(document.getElementById('bloodTrend'))
