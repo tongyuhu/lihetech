@@ -4,6 +4,7 @@
         <div class="card-header">
           <p class="title">原始数据</p>
         </div>
+        <!-- 日期选择 -->
         <div class="original">
           <div>
             <el-date-picker
@@ -43,6 +44,7 @@
               </tbody>
             </table>
           </div>
+          <!-- 分页 -->
           <div class="page">
             <el-pagination
               class="el-pagination"
@@ -74,15 +76,20 @@ export default {
   },
   data () {
     return {
-      loading: false,
-      month: '',
+      loading: false,  // 加载动画
+      month: '', // 选择时间
+      // 页数
       pageSize: 10,
       pageNum: 1,
       recordCount: 0,
+      // 原始数据
       original: []
     }
   },
   methods: {
+    /**
+     * @description 获取原始数据
+     */
     getOriginalData () {
       this.loading = true
       let params = {
@@ -135,6 +142,9 @@ export default {
         this.loading = false
       })
     },
+    /**
+     * @description 测量状态
+     */
     bpMeasureTime (val) {
       let type
       switch (val) {
@@ -183,6 +193,9 @@ export default {
       }
       return type
     },
+    /**
+     * @description 测量方法
+     */
     recordType (val) {
       let type
       switch (val) {
@@ -201,6 +214,9 @@ export default {
       }
       return type
     },
+    /**
+     * @description 血压类型
+     */
     bpType (val) {
       let type
       switch (val) {
@@ -231,6 +247,9 @@ export default {
       }
       return type
     },
+    /**
+     * @description 截取时间
+     */
     time (val) {
       let date = val.slice(0, 10)
       let time = val.slice(11)
@@ -241,6 +260,9 @@ export default {
         'time': time
       }
     },
+    /**
+     * @description 选择时间
+     */
     checkTime () {
       let date = new Date()
       date = dateFormat(date, 0, true)
@@ -261,12 +283,16 @@ export default {
         this.getOriginalData()
       }
     },
+    /**
+     * @description 分页变化
+     */
     currentChange (page) {
       this.pageNum = page
       this.getOriginalData()
     }
   },
   mounted () {
+    // 初始化数据
     let nowtime = new Date()
     this.month = dateFormat(nowtime, 0, true)
     this.month = this.time(dateFormat(nowtime, 0, true)).month

@@ -52,7 +52,7 @@ export default {
   computed: {
     ...mapState([
       'hasVideoMsg',
-      'invite',
+      'invite',   // 主动邀请 或者被动邀请
       'currentIsVideo',
       'currentVideo'
     ])
@@ -62,12 +62,15 @@ export default {
       'closeVideoMsg',
       'getVideoMsg'
     ]),
+    // 接通
     connect () {
       this.$emit('connect')
     },
+    // 拒绝
     reject () {
       this.$emit('reject')
     },
+    // 取消
     cancel () {
       this.$emit('cancel')
     }

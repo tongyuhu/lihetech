@@ -72,13 +72,16 @@ export default {
   },
   data () {
     return {
-      showBigImg: false,
-      imgs: [],
-      index: 0
+      showBigImg: false, // 显示大图？
+      imgs: [], // 图片数组
+      index: 0 // 显示图片序列号
 
     }
   },
   methods: {
+    /**
+     * @description 关闭
+     */
     closeBig () {
       // this.showBigImg = false
       this.$emit('close')
@@ -86,18 +89,21 @@ export default {
     showBig () {
       // this.showBigImg = true
     },
+    /**
+     * @description 初始化图片数组
+     */
     imgarr () {
       let arr = []
       let imgArr = []
-      if (typeOf(this.imgsrc) === 'string') {
+      if (typeOf(this.imgsrc) === 'string') {  // 接收到字符串url
         if (this.imgsrc !== '') {
           imgArr.push(this.imgsrc)
         }
       }
-      if (typeOf(this.imgsrc) === 'array') {
+      if (typeOf(this.imgsrc) === 'array') {  // // 接收到数组url
         arr = this.imgsrc
       }
-      arr.forEach(item => {
+      arr.forEach(item => {  // 初始化图片显示
         // if (item) {
         let obj = {}
         obj.show = false
@@ -107,12 +113,19 @@ export default {
       })
       return imgArr
     },
+    /**
+     * @description 展示第一张图片
+     */
     initImg () {
       if (this.imgs.length > 0) {
         this.imgs[0].show = true
       }
       this.index = 0
     },
+    /**
+     * @description 展示图片
+     * @param {number} 显示第几张图片索引，从0开始
+     */
     showImg (i) {
       this.imgs.forEach((item, index) => {
         item.show = false
@@ -188,7 +201,7 @@ export default {
     // this.showBigImg = this.show
 
     this.imgs = this.imgarr()
-    this.initImg()
+    this.initImg()  // 展示第一张
     console.log('检查单arr', this.imgs)
     Bus.$on('showbigimg', () => {
       vm.showBig()

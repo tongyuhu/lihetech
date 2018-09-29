@@ -1,5 +1,5 @@
 /**
- * @param {obj userId,adminHospitalId,pageNum,pageSize} params
+ * @param {obj } userId,adminHospitalId,pageNum,pageSize
  * @description 病人基本信息
  */
 export const bloodheighSickDataApi = (params) => {

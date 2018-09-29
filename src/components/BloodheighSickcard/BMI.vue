@@ -7,12 +7,15 @@
       <div>
         <el-row type="flex">
           <div class="flex">
+            <!-- 下一页 -->
             <div class="flex-btn-left">
               <el-button :disabled="BMIBtnNext" @click="bloodBMINext" icon="el-icon-arrow-left"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
             </div>
+            <!-- BMI -->
             <div class="chart-min-width kaluli-wrap">
               <div id='bloodBMI' :style="{width:'auto',height:'500px'}"></div>
             </div>
+            <!-- 上一页 -->
             <div class="flex-btn">
               <el-button :disabled="BMIBtnPre" @click="bloodBMIPer" icon="el-icon-arrow-right"  type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
             </div>
@@ -40,16 +43,24 @@ export default {
   data () {
     return {
       bloodBMIData: {
+        // 血压横坐标
         x: [],
+        // 高压
         systolic: [],
+        // 低压
         diastolic: [],
+        // 血压级别
         bpType: [],
+        // BMI
         bmi: [],
+        // 总页数
         pages: 1,
         pageNum: 1,
         currentPage: 1
       },
+      // 上一页
       BMIBtnPre: true,
+      // 下一页
       BMIBtnNext: true
     }
   },
@@ -57,6 +68,9 @@ export default {
     ...mapState(['currentSickInfo'])
   },
   methods: {
+    /**
+     * @description 获取bmi数据
+     */
     updateBMI () {
       let params = {
         'userId': this.sickID,
@@ -111,6 +125,11 @@ export default {
         bloodBMI.setOption(this.bloodBMIOption(position.start, position.end))
       })
     },
+    /**
+     * @param {number} start 起始位置
+     * @param {number} end 结束位置
+     * @description 折线图配置
+     */
     bloodBMIOption (start, end) {
       let vm = this
       let x1 = ''
@@ -456,6 +475,9 @@ export default {
       }
       return option
     },
+    /**
+     * @description 下一页
+     */
     bloodBMIPer () {
       let vm = this
       let bloodBMI = echarts.init(document.getElementById('bloodBMI'))
@@ -467,6 +489,9 @@ export default {
 
       bloodBMI.setOption(vm.bloodBMIOption(position.start, position.end))
     },
+    /**
+     * @description 下一页
+     */
     bloodBMINext () {
       console.log('position1', this.bloodBMIData.currentPage, this.bloodBMIData.pageNum)
       console.log('position2', this.bloodBMIData.pages, this.bloodBMIData.pageNum)
@@ -547,6 +572,12 @@ export default {
           bloodBMI.hideLoading()
         })
     },
+    /**
+     * @param {number} pageNum 当前页数
+     * @param {number} pages 总页数
+     * @returns {object} page.start 开始 page.end 结束
+     * @description 计算折线图开始结束位置
+     */
     computeStartend (pageNum, pages) {
       let page = {
       }
@@ -562,6 +593,11 @@ export default {
       }
       return page
     },
+    /**
+     * @param {number} bptype 血压级别
+     * @returns {string} 色值
+     * @description 计算血压级别对应的颜色
+     */
     computeDanger (bptype) {
       let type = this._.toNumber(bptype)
       let color = ''

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 折叠好友列表 -->
     <div @click="toggle" class="fold-title">
       <span class="iconfont icon-arrowright" v-if="!show"></span>
       <span class="iconfont icon-arrowdown" v-if="show"></span>

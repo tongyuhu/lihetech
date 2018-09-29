@@ -14,13 +14,14 @@
     <div class="no-card" v-if="!hasCard">
       暂无病历卡
     </div>
+    <!-- 病历卡 -->
     <div v-if="hasCard">
       <table>
         <tr>
           <td colspan="2" class="table-head side-left">用户自述</td>
           <td>
             {{readme}}
-            <el-button size="mini" type="text" class="table-btn" @click="play(readme)">
+            <el-button size="mini" type="text" class="table-btn" v-if="readme" @click="play(readme)">
               <i class="play"></i>播放
             </el-button>
             <audio :src="readmeUrl" id="audio">
@@ -53,8 +54,6 @@
           <td>
             <div class="use-medicine">
               <!-- {{medicine}} -->
-
-
               <div v-if="medicine.length !==0" class="use-medicine-item" v-for="(item,index) in medicine" :key="index">
                 <div>
                   <div>
@@ -152,6 +151,7 @@
         </tr>
       </table>
     </div>
+    <!-- 添加用药 -->
     <el-dialog
       :visible.sync="medicineData.add"
       width="750px"
@@ -164,6 +164,7 @@
         <el-button type="primary" @click="sedAddmedicine">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 添加运动 -->
     <el-dialog
     :visible.sync="sportData.add"
     width="578px"
@@ -175,6 +176,7 @@
         <el-button type="primary" @click="sedAddsport">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 添加饮食 -->
     <el-dialog
     :visible.sync="foodData.add"
     width="456px"
@@ -206,6 +208,7 @@ export default {
     addFood
   },
   props: {
+    // 总页数
     totalPage: {
       // type: [Number, String],
       default: 0
@@ -221,7 +224,9 @@ export default {
   data () {
     return {
       currentpage: 1,
+      // 最新icon
       isnew: true,
+      // 总页数
       cardtotalPage: this.totalPage,
       medicineData: {
         add: false,
@@ -240,19 +245,24 @@ export default {
         data: []
 
       },
+      // 有病历卡显示病历卡没有显示无
       hasCard: true
       // totalPage: ''
     }
   },
   computed: {
     ...mapState(['adminInfo']),
+    // 用户自述
     readme () {
       if (this.sickData) {
         if (this.sickData.readme) {
           return this.sickData.readme
         }
+      } else {
+        return ''
       }
     },
+    // 用户自述url
     readmeUrl () {
       if (this.sickData) {
         if (this.sickData.readmeUrl) {
@@ -260,6 +270,7 @@ export default {
         }
       }
     },
+    // 系统分析
     systemAnalysis () {
       if (this.sickData) {
         if (this.sickData.systemAnalysis) {
@@ -267,6 +278,7 @@ export default {
         }
       }
     },
+    // 医生诊断
     doctorDiagnos () {
       if (this.sickData) {
         if (this.sickData.doctorDiagnos) {
@@ -281,6 +293,7 @@ export default {
         }
       }
     },
+    // 用药
     medicine () {
       if (this.sickData) {
         if (this.sickData.medicine) {
@@ -347,6 +360,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @description 翻页下一页
+     */
     next () {
       if (isNaN(this.currentpage)) {
         this.currentpage = parseInt(this.currentpage)
@@ -361,6 +377,9 @@ export default {
       this.currentpage ++
       this.$emit('preBtn', this.currentpage)
     },
+    /**
+     * @description 翻页上一页
+     */
     pre () {
       // console.log(this.currentpage)
       if (isNaN(this.currentpage)) {
@@ -376,6 +395,7 @@ export default {
 
       this.$emit('preBtn', this.currentpage)
     },
+    // 播放用户自述
     play (msg) {
       this.$nextTick(function () {
         // document.getElementById('audio').play()
@@ -388,6 +408,7 @@ export default {
     sendVoice () {
       console.log('发送语音')
     },
+    // 删除用药
     deleteMedicine () {
       this.medicineData.data.forEach((item, index) => {
         this.$set(item, 'showDelete', true)
@@ -397,6 +418,7 @@ export default {
       console.log('删除药')
       console.log(this.medicineData.data)
     },
+    // 取消删除
     cancelDelet () {
       this.medicineData.data.forEach((item, index) => {
         this.$set(item, 'showDelete', false)
@@ -406,6 +428,7 @@ export default {
     deleteMedicineHandle (medicine, index) {
       this.medicineData.data.splice(index, 1)
     },
+    // 添加用药
     addMedicineHandle (val) {
       console.log(val.list)
       this.medicineData.data.push(val.list)
@@ -652,7 +675,7 @@ export default {
     /* min-width: 80px; */
   }
   .use-medicine-item>div{
-     display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
   }

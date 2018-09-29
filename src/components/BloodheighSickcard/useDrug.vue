@@ -86,7 +86,9 @@ export default {
       // pageSize: 15,
       // pages: 1,
       // currentPage: 1,
+      // 加载动画
       loading: true,
+      // 用药上下页
       useDrugBtnPre: true,
       useDrugBtnNext: true,
       // 计算x轴坐标
@@ -122,7 +124,7 @@ export default {
       .then(res => {
         if (res.data.data) {
           let data = res.data.data
-          let computData = []
+          let computData = [] // 计算数据结果 二维数组  [0]x轴位置 [1]y时间 [2][0]高压 [2][1]低压 [2][2]血压类型 [3]用药集合
           if (this._.has(data, 'userBloodPressureList')) {
             if (data.userBloodPressureList.length > 0) {
               data.userBloodPressureList.forEach(item => {
@@ -229,7 +231,7 @@ export default {
             vm.xasis = vm.xasis.splice(0, 7)
           }
           vm.xasis = vm.xasis.reverse()
-          computData = vm.spliceData(computData)
+          computData = vm.spliceData(computData) // 截取7天数据
           console.log('用药splice', computData)
           vm.sourData = vm._.concat(computData.reverse(), vm.sourData)
           vm.optionData = vm.seriesItem(vm.formatterX(vm.sourData))
@@ -250,6 +252,11 @@ export default {
         this.page.pages = res.data.pages
       })
     },
+    /**
+     * @param {array} 数据
+     * @returns {array} 得到的7天数据
+     * @description 如果获取数据超过7天的，则截取数据为7天
+     */
     spliceData (arr) {
       let count = 0
       let base = null
@@ -265,32 +272,28 @@ export default {
       })
       return arr.splice(0, num)
     },
-    // 格式化数据 计算x轴坐标  **
+    /**
+     * @param {array} arr 原数据
+     * @returns {array}  数据x轴 [1]x轴坐标
+     * @description 计算x轴坐标
+     */
     formatterX (arr) {
       // let copydata = []
-      let copydata = JSON.parse(JSON.stringify(arr))
+      let copydata = JSON.parse(JSON.stringify(arr)) // 深拷贝
       let vm = this
       let initX = -1
       let takeMedicineTime = '0000000000000000'
-      // vm._(arr).forEach(function (value, index) {
       copydata.forEach(function (value, index) {
-        // let time = value[1]
         let T = new Date(value[1].replace(/-/g, '\/'))
         let time = T.getTime()
         let befortime = takeMedicineTime
-        // let befortime = vm.takeMedicineTime
-        // let copytime = new Date(value[1].replace(/\\-/g, '\\/'))
-        if (vm._.eq(time, befortime)) {
+        if (vm._.eq(time, befortime)) {  // 如果时间相同x坐标不便
           value[1] = initX
-          // value[1] = vm.initX
         } else {
           initX++
           value[1] = initX
-          // vm.initX++
-          // value[1] = vm.initX
         }
         takeMedicineTime = time
-        // vm.takeMedicineTime = time
       })
       return copydata
     },
@@ -304,6 +307,11 @@ export default {
       x = vm._.uniq(x)
       return x
     },
+    /**
+     * @param {date} time 08:01
+     * @returns {number}  481
+     * @description 转换时间为分
+     */
     transformtime (time) {  // 时间转value y轴**
       if (this._.isNumber(time)) {
         return time
@@ -425,6 +433,9 @@ export default {
 
       return arr
     },
+    /**
+     * @description 图表配置
+     */
     useDrugOption (start, end) {
       let vm = this
       let x1 = ''
@@ -793,45 +804,48 @@ export default {
               }
             },
             data: this.optionData
-          // data: [
-            //   {
-            //     value: [0, 0, '[120/120]', '[120/120]', 'time'],
-            //     label: {
-            //       normal: {
-            //         formatter: [
-            //           // '{bBg|[120/120]}{li|}{b|}{liBg|[120/120]}'
-            //           '{ccbBg|[120/120]}',
-            //           '{hr|}',
-            //           '{ccb|} {arb|}',
-            //           '{hr|}',
-            //           '{arbBg|[120/120]}'
-            //         ].join('\n')
-            //       }
-            //     }
-            //   },
-            //   {
-            //     value: [2, 1, '[120/120][120/120]'],
-            //     label: {
-            //       normal: {
-            //         formatter: [
-            //           // '{ccbBg|[120/120]}{ccb|}{arb|}{arbBg|[120/120]}'
-            //           '{ccbBg|[120/120]}',
-            //           '{hr|}',
-            //           '{ccb|} {arb|}',
-            //           '{hr|}',
-            //           '{arbBg|[120/120]}'
-            //         ].join('\n'),
-            //         rich: {
-            //         }
-            //       }
-            //     }
-            //   }
-          // ]
+            // data: [
+              //   {
+              //     value: [0, 0, '[120/120]', '[120/120]', 'time'],
+              //     label: {
+              //       normal: {
+              //         formatter: [
+              //           // '{bBg|[120/120]}{li|}{b|}{liBg|[120/120]}'
+              //           '{ccbBg|[120/120]}',
+              //           '{hr|}',
+              //           '{ccb|} {arb|}',
+              //           '{hr|}',
+              //           '{arbBg|[120/120]}'
+              //         ].join('\n')
+              //       }
+              //     }
+              //   },
+              //   {
+              //     value: [2, 1, '[120/120][120/120]'],
+              //     label: {
+              //       normal: {
+              //         formatter: [
+              //           // '{ccbBg|[120/120]}{ccb|}{arb|}{arbBg|[120/120]}'
+              //           '{ccbBg|[120/120]}',
+              //           '{hr|}',
+              //           '{ccb|} {arb|}',
+              //           '{hr|}',
+              //           '{arbBg|[120/120]}'
+              //         ].join('\n'),
+              //         rich: {
+              //         }
+              //       }
+              //     }
+              //   }
+            // ]
           }
         ]
       }
       return option
     },
+    /**
+     * @description 计算开始结束位置
+     */
     computeStartend (pageNum, pages) {
       let page = {
       }
@@ -847,6 +861,9 @@ export default {
       }
       return page
     },
+    /**
+     * @description 翻页
+     */
     useDrugPer () {
       let vm = this
       this.page.currentPage --

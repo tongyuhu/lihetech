@@ -47,6 +47,7 @@
             <div id='bloodHistogram'  :style="{width:'auto',height:'300px'}"></div>
           </el-card>
         </el-col>
+        <!-- 血压平均水平 -->
         <el-col :span="14">
           <bloodHeighAverage :sickID="sickID" :hospitalId="hospitalId"></bloodHeighAverage>
         </el-col>
@@ -89,6 +90,7 @@
           </el-card>
         </div>
       </el-col> -->
+      <!-- 血压直方图 -->
       <el-col :span="10">
           <el-card :body-style="{ padding: '0px' }">
             <div class="card-header">
@@ -109,6 +111,7 @@
             <div id='bloodHistogram'  :style="{width:'auto',height:'425px'}"></div>
           </el-card>
       </el-col>
+      <!-- 血压与BMI -->
       <el-col :span="14">
         <BMI :sickID="sickID" :hospitalId="hospitalId"></BMI>
       </el-col>
@@ -183,7 +186,6 @@ export default {
   },
   data () {
     return {
-      isChecked: false,
       checkDate: [
         {
           date: '一周',
@@ -211,12 +213,13 @@ export default {
           isChecked: false
         }
       ],
-      Data: [
-        {value: 335, name: '正常'},
-        {value: 310, name: '偏高'},
-        {value: 234, name: '高'},
-        {value: 135, name: '危险'}
-      ],
+      // Data: [
+      //   // {value: 335, name: '正常'},
+      //   // {value: 310, name: '偏高'},
+      //   // {value: 234, name: '高'},
+      //   // {value: 135, name: '危险'}
+      // ],
+      // 血压分布时间数据
       coverChecked: {
         date: [
           {
@@ -240,9 +243,12 @@ export default {
             isChecked: false
           }
         ],
+        // 选择的时间
         dateChecked: ''
       },
+      // 血压分布原数据
       coverData: [],
+      // 血压直方图时间数据
       histogramChecked: {
         date: [
           {
@@ -268,7 +274,9 @@ export default {
         ],
         dateChecked: ''
       },
+      // 血压直方图原数据
       histogramData: [],
+      // 以下血压与运动 血压与饮食暂不适用
       bloodfoodChecked: {
         date: [
           {
@@ -349,9 +357,15 @@ export default {
       },
       sportBtnPre: true,
       sportBtnNext: true
+      // isChecked: false // 全选
     }
   },
   methods: {
+    /**
+     * @param {obj} date date.value时间
+     * @param {number} index 选择coverChecked的index
+     * @description 血压分布时间选择
+     */
     iscoverChecked (date, index) {
       this.coverChecked.date.forEach(item => {
         item.isChecked = false
@@ -361,6 +375,11 @@ export default {
     },
     // 如果是选择固定时间 date 为按钮的value
     // 如果是自定义时间段 date 为起始时间 enddate为结束时间
+    /**
+     * @param {string|date}  oneweek/ twoweek /onemonth /threemonth 如果有enddate 则为开始时间
+     * @param {date} enddate 结束时间
+     * @description 更新血压分布
+     */
     updateCover (date, enddate) {
       let params = {
         'userId': this.sickID,
@@ -402,12 +421,13 @@ export default {
     },
     /**
      * @description 整理图表数据
-     * @param obj
-     * @returns Array
+     * @param {obj} data
+     * @returns {Array}
      * */
     formatCoverData (data) {
       let vm = this
-      if (data.length !== 5) {
+      // 如果不够6个数据 添加0数据到数组
+      if (data.length !== 6) {
         let a = this._.findIndex(data, function (item) {
           return vm._.toNumber(item.bpType === 1)
         })
@@ -484,6 +504,7 @@ export default {
           arr.push({value: item.countBest, name: '低血压'})
         }
       })
+      // 没数据添加0数据
       let namearr = ['正常', '正常高值', '轻度', '中度', '危险', '低血压']
       if (arr.length !== 6) {
         arr.forEach(item => {
@@ -499,6 +520,11 @@ export default {
       }
       return arr
     },
+    /**
+     * @param {obj} date date.value时间
+     * @param {number} index 选择histogramChecked的index
+     * @description 血压直方图时间选择
+     */
     isHistogramChecked (date, index) {
       this.histogramChecked.date.forEach(item => {
         item.isChecked = false
@@ -506,6 +532,11 @@ export default {
       this.histogramChecked.date[index].isChecked = true
       this.updateHistogram(date.value)
     },
+    /**
+     * @param {string|date}  oneweek/ twoweek /onemonth /threemonth 如果有enddate 则为开始时间
+     * @param {date} enddate 结束时间
+     * @description 更新直方图数据
+     */
     updateHistogram (date, enddate) {
       let params = {
         'userId': this.sickID,
@@ -545,6 +576,11 @@ export default {
         bloodHistogram.setOption(this.bloodHistogramOption())
       })
     },
+    /**
+     * @param {array} data
+     * @returns {array} [[120,80,2016-08]]
+     * @description 格式化直方图数据
+     */
     formatHistogram (data) {
       let arr = []
       if (data.length !== 0) {
@@ -558,264 +594,9 @@ export default {
       }
       return arr
     },
-    isfoodChecked (date, index) {
-      this.bloodfoodChecked.date.forEach(item => {
-        item.isChecked = false
-      })
-      this.bloodfoodChecked.date[index].isChecked = true
-      this.updateFood(date.value)
-    },
-    isFoodKaluliChecked () {
-      if (this.bloodfoodChecked.kaluli || !this.bloodfoodChecked.kaluli) {
-        this.bloodfoodChecked.kaluli = true
-        this.bloodfoodChecked.score = false
-      }
-      if (this.bloodfoodChecked.kaluli && !this.bloodfoodChecked.score) {
-        let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
-        // if (this.bloodfoodChecked.kaluli) {
-        bloodFood.setOption(this.bloodFoodOption('kaluli', position.start, position.end))
-        // }
-        // if (this.bloodfoodChecked.score) {
-        //   bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
-        // }
-        // bloodFood.setOption(this.bloodFoodOption('kaluli'))
-        // this.bloodFoodOption()
-      }
-    },
-    isFoodScoreChecked () {
-      if (!this.bloodfoodChecked.kaluli || this.bloodfoodChecked.kaluli) {
-        this.bloodfoodChecked.kaluli = false
-        this.bloodfoodChecked.score = true
-      }
-      if (!this.bloodfoodChecked.kaluli && this.bloodfoodChecked.score) {
-        let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        // bloodFood.setOption(this.bloodFoodOption('score'))
-        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
-          // if (vm.bloodfoodChecked.kaluli) {
-            // bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
-          // }
-          // if (vm.bloodfoodChecked.score) {
-        bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
-          // }
-        // this.bloodFoodOption('score')
-      }
-    },
-    updateFood (date, enddate) {
-      // if(pageNum){
-      //   this.bloodfoodData.pageNum =
-      // }
-      let params = {
-        'userId': this.sickID,
-        'adminHospitalId': this.hospitalId,
-        'pageNum': this.bloodfoodData.pageNum,
-        'pageSize': 10
-      }
-      let dateParams = {
-        label: '',
-        value: ''
-        // endtime: null
-      }
-      let nowtime = new Date()
-      // let nowtime = '2018-03-01'
-      if (enddate) {
-        dateParams = {
-          label: '',
-          value: date,
-          endtime: enddate
-        }
-      } else {
-        dateParams = {
-          label: date,
-          value: nowtime,
-          endtime: null
-        }
-      }
-      this.$axios(bloodfoodApi(params, dateParams))
-      .then(res => {
-        if (res.data) {
-          this.bloodfoodData.pages = res.data.pages
-          if (res.data.data) {
-            if (res.data.data.length !== 0) {
-              res.data.data.forEach((item, index) => {
-                if (!item.systolic) {
-                  item.systolic = 0
-                }
-                if (!item.diastolic) {
-                  item.diastolic = 0
-                }
-                if (!item.calories) {
-                  item.calories = 0
-                }
-                if (!item.foodScore) {
-                  item.foodScore = 0
-                }
-                if (!item.bpType) {
-                  item.bpType = 0
-                }
-                this.bloodfoodData.x.push(item.createTime)
-                this.bloodfoodData.systolic.push(item.systolic)
-                this.bloodfoodData.diastolic.push(item.diastolic)
-                this.bloodfoodData.foodScore.push(item.foodScore)
-                this.bloodfoodData.calories.push(item.calories)
-                this.bloodfoodData.bpType.push(item.bpType)
-              })
-            }
-          }
-          this.bloodfoodData.x = this.bloodfoodData.x.reverse()
-          this.bloodfoodData.systolic = this.bloodfoodData.systolic.reverse()
-          this.bloodfoodData.diastolic = this.bloodfoodData.diastolic.reverse()
-          this.bloodfoodData.foodScore = this.bloodfoodData.foodScore.reverse()
-          this.bloodfoodData.calories = this.bloodfoodData.calories.reverse()
-          this.bloodfoodData.bpType = this.bloodfoodData.bpType.reverse()
-        }
-        let state = ''
-        if (this.bloodfoodChecked.kaluli) {
-          state = 'kaluli'
-        }
-        if (this.bloodfoodChecked.score) {
-          state = 'score'
-        }
-        let bloodFood = echarts.init(document.getElementById('bloodFood'))
-        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
-        bloodFood.setOption(this.bloodFoodOption(state, position.start, position.end))
-      })
-    },
-    issportChecked (date, index) {
-      this.bloodsportChecked.date.forEach(item => {
-        item.isChecked = false
-      })
-      this.bloodsportChecked.date[index].isChecked = true
-      this.updateSport(date.value)
-    },
-    issSportKaluliChecked () {
-      if (this.bloodsportChecked.kaluli || !this.bloodsportChecked.kaluli) {
-        this.bloodsportChecked.kaluli = true
-        this.bloodsportChecked.score = false
-      }
-      if (this.bloodsportChecked.kaluli && !this.bloodsportChecked.score) {
-        let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
-          // if (vm.bloodsportChecked.kaluli) {
-        bloodSport.setOption(this.bloodSportOption('kaluli', position.start, position.end))
-          // }
-          // if (vm.bloodsportChecked.score) {
-            // bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
-          // }
-        // bloodSport.setOption(this.bloodSportOption('kaluli'))
-      }
-    },
-    isSportScoreChecked () {
-      if (!this.bloodsportChecked.kaluli || this.bloodsportChecked.kaluli) {
-        this.bloodsportChecked.kaluli = false
-        this.bloodsportChecked.score = true
-      }
-      if (!this.bloodsportChecked.kaluli && this.bloodsportChecked.score) {
-        let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
-          // if (vm.bloodsportChecked.kaluli) {
-            // bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
-          // }
-          // if (vm.bloodsportChecked.score) {
-        bloodSport.setOption(this.bloodSportOption('score', position.start, position.end))
-          // }
-        // bloodSport.setOption(this.bloodSportOption('score'))
-      }
-    },
-    checkAllHandle () {
-      this.isChecked = !this.isChecked
-    },
-    updateSport (date, enddate) {
-      let params = {
-        'userId': this.sickID,
-        'adminHospitalId': this.hospitalId,
-        'pageNum': this.bloodsportData.pageNum,
-        'pageSize': 10
-      }
-      let dateParams = {
-        label: '',
-        value: ''
-        // endtime: null
-      }
-      let nowtime = new Date()
-      // let nowtime = '2018-03-01'
-      if (enddate) {
-        dateParams = {
-          label: '',
-          value: date,
-          endtime: enddate
-        }
-      } else {
-        dateParams = {
-          label: date,
-          value: nowtime,
-          endtime: null
-        }
-      }
-      this.$axios(bloodsportApi(params, dateParams))
-      .then(res => {
-        if (res.data) {
-          this.$set(this.bloodsportData, 'pages', res.data.pages)
-          if (res.data.data) {
-            if (res.data.data.length !== 0) {
-              res.data.data.forEach((item, index) => {
-                if (!item.systolic) {
-                  item.systolic = 0
-                }
-                if (!item.diastolic) {
-                  item.diastolic = 0
-                }
-                if (!item.calories) {
-                  item.calories = 0
-                }
-                if (!item.movementScore) {
-                  item.movementScore = 0
-                }
-                if (!item.bpType) {
-                  item.bpType = 0
-                }
-                // this.$set(this.bloodsportData.x, index, item.createTime)
-                // this.$set(this.bloodsportData.systolic, index, item.systolic)
-                // this.$set(this.bloodsportData.diastolic, index, item.diastolic)
-                // this.$set(this.bloodsportData.movementScore, index, item.movementScore)
-                // this.$set(this.bloodsportData.calories, index, item.calories)
-                this.bloodsportData.x.push(item.createTime)
-                this.bloodsportData.systolic.push(item.systolic)
-                this.bloodsportData.diastolic.push(item.diastolic)
-                this.bloodsportData.movementScore.push(item.movementScore)
-                this.bloodsportData.calories.push(item.calories)
-                this.bloodsportData.bpType.push(item.bpType)
-              })
-            }
-          }
-          this.bloodsportData.x = this.bloodsportData.x.reverse()
-          this.bloodsportData.systolic = this.bloodsportData.systolic.reverse()
-          this.bloodsportData.diastolic = this.bloodsportData.diastolic.reverse()
-          this.bloodsportData.movementScore = this.bloodsportData.movementScore.reverse()
-          this.bloodsportData.calories = this.bloodsportData.calories.reverse()
-          this.bloodsportData.bpType = this.bloodsportData.bpType.reverse()
-        }
-        let state = ''
-        if (this.bloodsportChecked.kaluli) {
-          state = 'kaluli'
-        }
-        if (this.bloodsportChecked.score) {
-          state = 'score'
-        }
-        let bloodSport = echarts.init(document.getElementById('bloodSport'))
-        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
-        bloodSport.setOption(this.bloodSportOption(state, position.start, position.end))
-      })
-    },
-    changeStatus () {
-
-    },
-    updateDate (date, index) {
-      this.checkDate.forEach(item => {
-        item.isChecked = false
-      })
-      this.checkDate[index].isChecked = true
-    },
+    /**
+     * @description 血压分布饼图配置
+     */
     bloodCoverOption () {
       let vm = this
       let color = []
@@ -904,6 +685,9 @@ export default {
         }
       }
     },
+    /**
+     * @description 血压直方图配置
+     */
     bloodHistogramOption () {
       // let areaColor = ['#33b2f2', '#59D8A1', '#efa13a', '#ff7d43', '#f96767']
       let areaColor = ['#0099FF', '#59D8A2', '#efa13a', '#ff7d43', '#e21b1b', '#9ac3e4']
@@ -1179,6 +963,319 @@ export default {
       }
       // return option
     },
+    /**
+     * @param {number} pageNum 当前页数
+     * @param {number} pages 总页数
+     * @description 计算图表起始结束位置
+     */
+    computeStartend (pageNum, pages) {
+      let page = {
+      }
+      if (pageNum === 1 && pages === 1) {
+        page.start = 0
+        page.end = 100
+      } else if (pageNum === pages) {
+        page.start = 0
+        page.end = parseInt((1 / pages) * 100)
+      } else if (pageNum < pages) {
+        page.start = parseInt(((pages - pageNum) / pages) * 100)
+        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
+      }
+      return page
+    },
+    /**
+     * @description 计算血压等级对应的色值
+     */
+    computeDanger (bptype) {
+      let type = this._.toNumber(bptype)
+      let color = ''
+      switch (type) {
+        case 1:
+          color = '#33b2f2'// 正常
+          break
+        case 2:
+          color = '#59d8a1'// 正常高值
+          break
+        case 3:
+          color = '#efa13a'// 轻度
+          break
+        case 4:
+          color = '#ff7d43' // 中度
+          break
+        case 5:
+          color = '#f96767' // 危险
+          break
+        case 6:
+          color = '#9ac3e4' // 低血压
+          break
+        case 0:
+          color = '#191918'
+          break
+        default:
+          color = '#191918'
+      }
+      return color
+    },
+    isfoodChecked (date, index) {
+      this.bloodfoodChecked.date.forEach(item => {
+        item.isChecked = false
+      })
+      this.bloodfoodChecked.date[index].isChecked = true
+      this.updateFood(date.value)
+    },
+    isFoodKaluliChecked () {
+      if (this.bloodfoodChecked.kaluli || !this.bloodfoodChecked.kaluli) {
+        this.bloodfoodChecked.kaluli = true
+        this.bloodfoodChecked.score = false
+      }
+      if (this.bloodfoodChecked.kaluli && !this.bloodfoodChecked.score) {
+        let bloodFood = echarts.init(document.getElementById('bloodFood'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        // if (this.bloodfoodChecked.kaluli) {
+        bloodFood.setOption(this.bloodFoodOption('kaluli', position.start, position.end))
+        // }
+        // if (this.bloodfoodChecked.score) {
+        //   bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
+        // }
+        // bloodFood.setOption(this.bloodFoodOption('kaluli'))
+        // this.bloodFoodOption()
+      }
+    },
+    isFoodScoreChecked () {
+      if (!this.bloodfoodChecked.kaluli || this.bloodfoodChecked.kaluli) {
+        this.bloodfoodChecked.kaluli = false
+        this.bloodfoodChecked.score = true
+      }
+      if (!this.bloodfoodChecked.kaluli && this.bloodfoodChecked.score) {
+        let bloodFood = echarts.init(document.getElementById('bloodFood'))
+        // bloodFood.setOption(this.bloodFoodOption('score'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+          // if (vm.bloodfoodChecked.kaluli) {
+            // bloodFood.setOption(vm.bloodFoodOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodfoodChecked.score) {
+        bloodFood.setOption(this.bloodFoodOption('score', position.start, position.end))
+          // }
+        // this.bloodFoodOption('score')
+      }
+    },
+    updateFood (date, enddate) {
+      // if(pageNum){
+      //   this.bloodfoodData.pageNum =
+      // }
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId,
+        'pageNum': this.bloodfoodData.pageNum,
+        'pageSize': 10
+      }
+      let dateParams = {
+        label: '',
+        value: ''
+        // endtime: null
+      }
+      let nowtime = new Date()
+      // let nowtime = '2018-03-01'
+      if (enddate) {
+        dateParams = {
+          label: '',
+          value: date,
+          endtime: enddate
+        }
+      } else {
+        dateParams = {
+          label: date,
+          value: nowtime,
+          endtime: null
+        }
+      }
+      this.$axios(bloodfoodApi(params, dateParams))
+      .then(res => {
+        if (res.data) {
+          this.bloodfoodData.pages = res.data.pages
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.foodScore) {
+                  item.foodScore = 0
+                }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
+                this.bloodfoodData.x.push(item.createTime)
+                this.bloodfoodData.systolic.push(item.systolic)
+                this.bloodfoodData.diastolic.push(item.diastolic)
+                this.bloodfoodData.foodScore.push(item.foodScore)
+                this.bloodfoodData.calories.push(item.calories)
+                this.bloodfoodData.bpType.push(item.bpType)
+              })
+            }
+          }
+          this.bloodfoodData.x = this.bloodfoodData.x.reverse()
+          this.bloodfoodData.systolic = this.bloodfoodData.systolic.reverse()
+          this.bloodfoodData.diastolic = this.bloodfoodData.diastolic.reverse()
+          this.bloodfoodData.foodScore = this.bloodfoodData.foodScore.reverse()
+          this.bloodfoodData.calories = this.bloodfoodData.calories.reverse()
+          this.bloodfoodData.bpType = this.bloodfoodData.bpType.reverse()
+        }
+        let state = ''
+        if (this.bloodfoodChecked.kaluli) {
+          state = 'kaluli'
+        }
+        if (this.bloodfoodChecked.score) {
+          state = 'score'
+        }
+        let bloodFood = echarts.init(document.getElementById('bloodFood'))
+        let position = this.computeStartend(this.bloodfoodData.currentPage, this.bloodfoodData.pageNum)
+        bloodFood.setOption(this.bloodFoodOption(state, position.start, position.end))
+      })
+    },
+    issportChecked (date, index) {
+      this.bloodsportChecked.date.forEach(item => {
+        item.isChecked = false
+      })
+      this.bloodsportChecked.date[index].isChecked = true
+      this.updateSport(date.value)
+    },
+    issSportKaluliChecked () {
+      if (this.bloodsportChecked.kaluli || !this.bloodsportChecked.kaluli) {
+        this.bloodsportChecked.kaluli = true
+        this.bloodsportChecked.score = false
+      }
+      if (this.bloodsportChecked.kaluli && !this.bloodsportChecked.score) {
+        let bloodSport = echarts.init(document.getElementById('bloodSport'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          // if (vm.bloodsportChecked.kaluli) {
+        bloodSport.setOption(this.bloodSportOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodsportChecked.score) {
+            // bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
+          // }
+        // bloodSport.setOption(this.bloodSportOption('kaluli'))
+      }
+    },
+    isSportScoreChecked () {
+      if (!this.bloodsportChecked.kaluli || this.bloodsportChecked.kaluli) {
+        this.bloodsportChecked.kaluli = false
+        this.bloodsportChecked.score = true
+      }
+      if (!this.bloodsportChecked.kaluli && this.bloodsportChecked.score) {
+        let bloodSport = echarts.init(document.getElementById('bloodSport'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+          // if (vm.bloodsportChecked.kaluli) {
+            // bloodSport.setOption(vm.bloodSportOption('kaluli', position.start, position.end))
+          // }
+          // if (vm.bloodsportChecked.score) {
+        bloodSport.setOption(this.bloodSportOption('score', position.start, position.end))
+          // }
+        // bloodSport.setOption(this.bloodSportOption('score'))
+      }
+    },
+    // checkAllHandle () {
+    //   this.isChecked = !this.isChecked
+    // },
+    updateSport (date, enddate) {
+      let params = {
+        'userId': this.sickID,
+        'adminHospitalId': this.hospitalId,
+        'pageNum': this.bloodsportData.pageNum,
+        'pageSize': 10
+      }
+      let dateParams = {
+        label: '',
+        value: ''
+        // endtime: null
+      }
+      let nowtime = new Date()
+      // let nowtime = '2018-03-01'
+      if (enddate) {
+        dateParams = {
+          label: '',
+          value: date,
+          endtime: enddate
+        }
+      } else {
+        dateParams = {
+          label: date,
+          value: nowtime,
+          endtime: null
+        }
+      }
+      this.$axios(bloodsportApi(params, dateParams))
+      .then(res => {
+        if (res.data) {
+          this.$set(this.bloodsportData, 'pages', res.data.pages)
+          if (res.data.data) {
+            if (res.data.data.length !== 0) {
+              res.data.data.forEach((item, index) => {
+                if (!item.systolic) {
+                  item.systolic = 0
+                }
+                if (!item.diastolic) {
+                  item.diastolic = 0
+                }
+                if (!item.calories) {
+                  item.calories = 0
+                }
+                if (!item.movementScore) {
+                  item.movementScore = 0
+                }
+                if (!item.bpType) {
+                  item.bpType = 0
+                }
+                // this.$set(this.bloodsportData.x, index, item.createTime)
+                // this.$set(this.bloodsportData.systolic, index, item.systolic)
+                // this.$set(this.bloodsportData.diastolic, index, item.diastolic)
+                // this.$set(this.bloodsportData.movementScore, index, item.movementScore)
+                // this.$set(this.bloodsportData.calories, index, item.calories)
+                this.bloodsportData.x.push(item.createTime)
+                this.bloodsportData.systolic.push(item.systolic)
+                this.bloodsportData.diastolic.push(item.diastolic)
+                this.bloodsportData.movementScore.push(item.movementScore)
+                this.bloodsportData.calories.push(item.calories)
+                this.bloodsportData.bpType.push(item.bpType)
+              })
+            }
+          }
+          this.bloodsportData.x = this.bloodsportData.x.reverse()
+          this.bloodsportData.systolic = this.bloodsportData.systolic.reverse()
+          this.bloodsportData.diastolic = this.bloodsportData.diastolic.reverse()
+          this.bloodsportData.movementScore = this.bloodsportData.movementScore.reverse()
+          this.bloodsportData.calories = this.bloodsportData.calories.reverse()
+          this.bloodsportData.bpType = this.bloodsportData.bpType.reverse()
+        }
+        let state = ''
+        if (this.bloodsportChecked.kaluli) {
+          state = 'kaluli'
+        }
+        if (this.bloodsportChecked.score) {
+          state = 'score'
+        }
+        let bloodSport = echarts.init(document.getElementById('bloodSport'))
+        let position = this.computeStartend(this.bloodsportData.currentPage, this.bloodsportData.pageNum)
+        bloodSport.setOption(this.bloodSportOption(state, position.start, position.end))
+      })
+    },
+    changeStatus () {
+
+    },
+
+    updateDate (date, index) {
+      this.checkDate.forEach(item => {
+        item.isChecked = false
+      })
+      this.checkDate[index].isChecked = true
+    },
+    // 血压与饮食配置
     bloodFoodOption (state, start, end) {
       let vm = this
       let x1 = ''
@@ -1540,6 +1637,7 @@ export default {
       }
       return option
     },
+    // 血压与运动配置
     bloodSportOption (state, start, end) {
       let vm = this
       let x1 = ''
@@ -1895,51 +1993,7 @@ export default {
       }
       return option
     },
-    computeStartend (pageNum, pages) {
-      let page = {
-      }
-      if (pageNum === 1 && pages === 1) {
-        page.start = 0
-        page.end = 100
-      } else if (pageNum === pages) {
-        page.start = 0
-        page.end = parseInt((1 / pages) * 100)
-      } else if (pageNum < pages) {
-        page.start = parseInt(((pages - pageNum) / pages) * 100)
-        page.end = parseInt(((pages - pageNum + 1) / pages) * 100)
-      }
-      return page
-    },
-    computeDanger (bptype) {
-      let type = this._.toNumber(bptype)
-      let color = ''
-      switch (type) {
-        case 1:
-          color = '#33b2f2'// 正常
-          break
-        case 2:
-          color = '#59d8a1'// 正常高值
-          break
-        case 3:
-          color = '#efa13a'// 轻度
-          break
-        case 4:
-          color = '#ff7d43' // 中度
-          break
-        case 5:
-          color = '#f96767' // 危险
-          break
-        case 6:
-          color = '#9ac3e4' // 低血压
-          break
-        case 0:
-          color = '#191918'
-          break
-        default:
-          color = '#191918'
-      }
-      return color
-    },
+    // 血压与饮食下一页
     bloodFoodNext () {
       let vm = this
       let bloodFood = echarts.init(document.getElementById('bloodFood'))
@@ -2018,6 +2072,7 @@ export default {
           bloodFood.hideLoading()
         })
     },
+    // 血压与饮食前一页
     bloodFoodPer () {
       let vm = this
       let bloodFood = echarts.init(document.getElementById('bloodFood'))
@@ -2033,6 +2088,7 @@ export default {
         bloodFood.setOption(vm.bloodFoodOption('score', position.start, position.end))
       }
     },
+    // 血压与运动前一页
     bloodSportPer () {
       let vm = this
       let bloodSport = echarts.init(document.getElementById('bloodSport'))
@@ -2048,6 +2104,7 @@ export default {
         bloodSport.setOption(vm.bloodSportOption('score', position.start, position.end))
       }
     },
+    // 血压与运动下一页
     bloodSportNext () {
       console.log('position1', this.bloodsportData.currentPage, this.bloodsportData.pageNum)
       console.log('position2', this.bloodsportData.pages, this.bloodsportData.pageNum)

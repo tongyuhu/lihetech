@@ -32,30 +32,30 @@ export default {
     },
     disabled: Boolean,
     label: String,
-    leftOffset: {
+    leftOffset: {  // 左侧padding
       type: Number,
       default: 0
     },
-    rightOffset: {
+    rightOffset: {  // 右侧padding
       type: Number,
       default: 0
     },
-    height: {
+    height: {  // 高
       type: Number,
       default: 32
     },
-    number: {
+    number: {  // 是否只能输入数字
       type: Boolean,
       default: true
     }
   },
   data () {
     return {
-      currentValue: this.value
+      currentValue: this.value  // 输入框内容
     }
   },
   watch: {
-    currentValue: function (val) {
+    currentValue: function (val) { // 数值改变向父组件提交
       this.$emit('input', val)
       this.$emit('on-change', val)
     },
@@ -67,13 +67,19 @@ export default {
     }
   },
   methods: {
+    /**
+     * @description 初始化数据
+     */
     updateValue (val) {
       this.currentValue = val
     },
+    /**
+     * @description 输入框改变
+     */
     handleChange: function (event) {
       let vm = this
       let val = event.target.value.trim()
-      if (vm.number) {
+      if (vm.number) {  // 数字输入校验
         if (isValueNumber(val)) {
           let value = Number(val)
           vm.currentValue = value
@@ -87,6 +93,7 @@ export default {
           }
         }
       } else {
+        // 非数字不校验
         vm.currentValue = val
       }
       // isValueNumber(val)

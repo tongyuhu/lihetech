@@ -27,8 +27,8 @@ export default {
   data () {
     return {
       zoom: 14,
-      center: this.position,
-      id: this.mapId
+      center: this.position, // 地理位置坐标
+      id: this.mapId  // id
     }
   },
   mounted () {

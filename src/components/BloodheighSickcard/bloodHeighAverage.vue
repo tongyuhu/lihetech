@@ -5,6 +5,7 @@
         <div class="card-header">
             <p class="title">血压平均水平</p>
         </div>
+        <!-- 日期选择 -->
         <div class="check-date">
           <el-row type="flex" justify="start">
             <button v-for="(item,index) in bloodTrendDate" 
@@ -22,12 +23,15 @@
             <!-- <el-col :span="14"> -->
               <div class="flex">
                 <div class="flex widthone">
+                  <!-- 翻页按钮 -->
                   <div class="flex-btn-left">
                     <el-button v-show="showtrendBtn" :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'28px','color':'#999' ,'background':'#eaeaea'}"></el-button>
                   </div>
+                  <!-- 柱状图 -->
                   <div class="chart-min-width">
                     <div id='bloodHeighAverage' :style="{width:'auto',height:'300px'}"></div>
                   </div>
+                  <!-- 翻页按钮 -->
                   <div class="flex-btn">
                     <!-- <el-button :disabled="trendBtnNext" @click="bloodTrendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button> -->
                     <el-button v-show="showtrendBtn" :disabled="trendBtnPre" @click="bloodTrendPer" icon="el-icon-arrow-right" type="text" :style="{'font-size':'28px','color':'#999','background':'#eaeaea'}"></el-button>
@@ -44,7 +48,7 @@
 <script>
 import echarts from 'echarts'
 import {dateFormat} from '@/untils/date'
-import {bloodheighSickDataApi} from './../../api/components/BloodheighSickcard/bloodCover'
+import {bloodTrendDataApi} from '@/api/components/BloodheighSickcard/bloodCover'
 export default {
   name: 'bloodHeighAverage',
   props: {
@@ -57,7 +61,9 @@ export default {
   },
   data () {
     return {
+      // 显示翻页按钮
       showtrendBtn: true,
+      // 日期 选择数据
       bloodTrendDate: [
         {
           date: '最近',
@@ -80,7 +86,9 @@ export default {
           isChecked: false
         }
       ],
+      // 当前选择的日期
       bloodTrendChecked: null,
+      // 柱状图数据
       bloodTrendData: {
         date: [],
         week: [],
@@ -101,13 +109,21 @@ export default {
         heigh: '',
         danger: ''
       },
+      // 右侧翻页
       trendBtnPre: true,
+      // 左侧翻页
       trendBtnNext: true,
+      // 1-未药 2-服药2小时内 3-服药2小时后
       bpMeasureTime: '',
+      // 1-静止 2-运动 3-情绪波动
       bpMeasureState: ''
     }
   },
   methods: {
+    /**
+     * @param {number} start 开始位置 end 结束位置
+     * @description 柱状图配置
+     */
     bloodTrendOption (start, end) {
       let vm = this
       let zoomstart = 0
@@ -170,7 +186,7 @@ export default {
             //   vm.updatebloodTrendState(a[0].axisValue, a[0].dataIndex)
             // }
             // }
-            vm.bloodTrendIndex = a.dataIndex
+            // vm.bloodTrendIndex = a.dataIndex
             // console.log(a)
             return (
                 a[0]['axisValueLabel'] + '<br>' +
@@ -319,6 +335,10 @@ export default {
         }
       }
     },
+    /**
+     * @param {number} index 选择bloodTrendDate的index
+     * @description 选择按钮
+     */
     updatebloodTrendChecked (index) {
       if (index === 0) {
         this.showtrendBtn = false
@@ -332,6 +352,10 @@ export default {
       this.bloodTrendChecked = index
       this.updatebloodTrendData(index)
     },
+    /**
+     * @param {number} index  0最近 1日  2周  3月
+     * @description 更新数据
+     */
     updatebloodTrendData (index, status) {
       let vm = this
       let params = {
@@ -343,7 +367,7 @@ export default {
       let bloodTrend = echarts.init(document.getElementById('bloodHeighAverage'))
       if (index === 0) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 0))
+        this.$axios(bloodTrendDataApi(params, 0))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -367,23 +391,23 @@ export default {
           // bloodTrend.setOption(this.bloodTrendOption())
           let position = this.computeStartend(vm.bloodTrendData.currentPage, this.bloodTrendData.pageNum)
           bloodTrend.setOption(this.bloodTrendOption(position.start, 100))
-          this.bloodTrendState.total = 1
+          // this.bloodTrendState.total = 1
         // }
-          if (this.bloodTrendData.bptype[0] === 2) {
-            this.bloodTrendState.normal = 1
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[0] === 3 || this.bloodTrendData.bptype[0] === 4) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 1
-            this.bloodTrendState.danger = 0
-          }
-          if (this.bloodTrendData.bptype[0] === 5) {
-            this.bloodTrendState.normal = 0
-            this.bloodTrendState.heigh = 0
-            this.bloodTrendState.danger = 1
-          }
+          // if (this.bloodTrendData.bptype[0] === 2) {
+          //   this.bloodTrendState.normal = 1
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[0] === 3 || this.bloodTrendData.bptype[0] === 4) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 1
+          //   this.bloodTrendState.danger = 0
+          // }
+          // if (this.bloodTrendData.bptype[0] === 5) {
+          //   this.bloodTrendState.normal = 0
+          //   this.bloodTrendState.heigh = 0
+          //   this.bloodTrendState.danger = 1
+          // }
           // this.updatebloodTrendState()
           if (res.data.data) {
             if (res.data.data.length !== 0) {
@@ -395,7 +419,7 @@ export default {
       }
       if (index === 1) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 1))
+        this.$axios(bloodTrendDataApi(params, 1))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -437,7 +461,7 @@ export default {
       }
       if (index === 2) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 2))
+        this.$axios(bloodTrendDataApi(params, 2))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.week = []
@@ -482,7 +506,7 @@ export default {
       }
       if (index === 3) {
         vm.bloodTrendData.pageNum = 1
-        this.$axios(bloodheighSickDataApi(params, 3))
+        this.$axios(bloodTrendDataApi(params, 3))
         .then(res => {
           this.bloodTrendData.date = []
           this.bloodTrendData.systolic = []
@@ -518,6 +542,11 @@ export default {
         })
       }
     },
+    /**
+     * @param {date} value 时间
+     * @returns {array} [][0]年 [][1]周
+     * @description 计算年 周数
+     */
     computeYearWeek (value) {
       let time = value
       let year
@@ -533,6 +562,12 @@ export default {
       let arr = [year, week]
       return arr
     },
+    /**
+     * @param {number} pageNum 当前页数
+     * @param {number} pages 总页数
+     * @returns {object} .start 开始 .end 结束位置
+     * @description 计算折线图 开始结束位置
+     */
     computeStartend (pageNum, pages) {
       let page = {
       }
@@ -548,6 +583,11 @@ export default {
       }
       return page
     },
+    /**
+     * @param {number} bptype 血压bptype
+     * @returns 色值
+     * @description 血压颜色
+     */
     computeDanger (bptype) {
       let type = this._.toNumber(bptype)
       let color = ''
@@ -578,6 +618,9 @@ export default {
       }
       return color
     },
+    /**
+     * @description 上一页
+     */
     bloodTrendNext () {
       let vm = this
       if (vm.bloodTrendData.currentPage > vm.bloodTrendData.pageNum) {
@@ -601,7 +644,7 @@ export default {
         'pageNum': vm.bloodTrendData.pageNum
 
       }
-      vm.$axios(bloodheighSickDataApi(params, vm.bloodTrendChecked))
+      vm.$axios(bloodTrendDataApi(params, vm.bloodTrendChecked))
       .then(res => {
         bloodTrend.showLoading(
           {
@@ -677,6 +720,9 @@ export default {
         bloodTrend.hideLoading()
       })
     },
+    /**
+     * @description 下一页
+     */
     bloodTrendPer () {
       let vm = this
       let bloodTrend = echarts.init(document.getElementById('bloodHeighAverage'))

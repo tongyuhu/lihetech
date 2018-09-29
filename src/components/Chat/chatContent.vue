@@ -56,25 +56,25 @@ export default {
   },
   data () {
     return {
-      textMsg: '',
-      isLocationMsg: false,
-      isTextMsg: false,
-      isImgMsg: false,
-      isVoiceMsg: false,
-      imgsrc: '',
-      showBigImg: false,
-      voiceFile: '',
-      locationMsg: [],
-      locationName: '',
-      locationid: '',
-      bigImgsrc: '',
-      playVoiceAnimation: false,
-      voiceTime: ''
+      isLocationMsg: false, // 是否是地理位置
+      isTextMsg: false,  // 是否是文字消息
+      isImgMsg: false,  // 是否是图片消息
+      isVoiceMsg: false, // 是否是语音消息
+      textMsg: '', // 文字消息
+      imgsrc: '',  // 图片消息图片src
+      voiceFile: '', // 语音文件
+      locationMsg: [], // 地理位置消息
+      showBigImg: false,  // 是否展示大图
+      locationName: '', // 地理位置名称
+      locationid: '',  // 位置id
+      bigImgsrc: '',  // 大图src
+      playVoiceAnimation: false, // 是否播放语音动画
+      voiceTime: '' // 语音时长
     }
   },
   watch: {
     message: {
-      handler: function (val) {
+      handler: function (val) {  // 信息处理
         switch (val.content.messageName) {
           case 'TextMessage':
             this.isTextMsg = true
@@ -114,6 +114,9 @@ export default {
 
   },
   methods: {
+    /**
+     * @description 展示大图
+     */
     showBig (src) {
       // let vm = this
       this.bigImgsrc = src
@@ -124,12 +127,18 @@ export default {
       // Bus.$emit('showbigimg')
       // this.showBigImg = true
     },
+    /**
+     * @description 关闭大图
+     */
     closeBigImg () {
       this.showBigImg = false
     },
     // closeBig () {
     //   this.showBigImg = false
     // },
+    /**
+     * @description 显示信息
+     */
     showmsg () {
       let vm = this
       switch (vm.message.content.messageName) {
@@ -164,6 +173,9 @@ export default {
       }
       // if(message.messageType)
     },
+    /**
+     * @description 播放音频
+     */
     playVoice () {
       let vm = this
       let duration = vm.voiceFile.length / 1024

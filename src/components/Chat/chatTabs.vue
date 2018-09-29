@@ -28,11 +28,16 @@ export default {
   },
   data () {
     return {
-      panes: [],
+      panes: [], // pane集合
       currentIndex: 0
     }
   },
   methods: {
+    /**
+     * @param {obj} context 相对context 一般为当前组件this
+     * @param {string} componentName 查找的组件名字
+     * @description 向下查找指定组件
+     */
     findComponentsDownward (context, componentName) {
       return context.$children.reduce((components, child) => {
         if (child.$options.name === componentName) components.push(child)
@@ -40,6 +45,11 @@ export default {
         return components.concat(foundChilds)
       }, [])
     },
+    /**
+     * @param {obj} context 相对context 一般为当前组件this
+     * @param {string} componentName 查找的组件名字
+     * @description 查找同级指定组件
+     */
     findBrothersComponents (context, componentName) {
       let res = context.$parent.$children.filter(item => {
         return item.$options.name === componentName
@@ -48,9 +58,15 @@ export default {
       res.splice(index, 1)
       return res
     },
+    /**
+     * @description 获取pane集合
+     */
     getPanes () {
       return this.findComponentsDownward(this, 'impane')
     },
+    /**
+     * @description 初始化pane 没有index添加index
+     */
     initPanes () {
       let panes = this.getPanes()
       panes.forEach((pane, index) => {
@@ -58,6 +74,9 @@ export default {
       })
       return panes
     },
+    /**
+     * @description 添加pane到 this.panes
+     */
     panesArr () {
       this.initPanes().forEach(item => {
         let obj = {}
@@ -69,6 +88,10 @@ export default {
         obj = {}
       })
     },
+    /**
+     * @param {number} index 选择panes的index
+     * @description 选择pane
+     */
     checkPane (index, item) {
       this.currentIndex = index
       let pane = this.getPanes()[index]
@@ -78,6 +101,10 @@ export default {
         item.show = false
       })
     },
+    /**
+     * @param {} item 激活的pane
+     * @description 激活pane添加样式
+     */
     active (item) {
       let active = item.icon + '-active'
       if (item.index === this.currentIndex) {

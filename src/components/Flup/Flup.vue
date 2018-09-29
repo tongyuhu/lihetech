@@ -4,6 +4,7 @@
       <span>本月须随访用户</span>
     </div>
     <div class="gap">
+      <!-- 本月待随访用户 -->
       <el-card :body-style="{padding: '20px'}">
         <div>
           <div class="card-head-title unfinished">
@@ -88,6 +89,7 @@
       </el-card>
     </div>
     <div>
+      <!-- 本月已随访用户 -->
       <el-card :body-style="{padding: '20px'}">
         <div>
           <div class="card-head-title">
@@ -181,14 +183,17 @@ export default {
   name: 'Flup',
   data () {
     return {
+      // 待随访用户加载动画
       unfinishedLoading: false,
       unfinishedCurrentPage: 1,
       unfinishedPageSize: 10,
       unfinishedTotal: 20,
+      // 已随访加载动画
       finishedLoading: false,
       finishedCurrentPage: 1,
       finishedPageSize: 10,
       finishedTotal: 20,
+      // 带随访用户数据
       unfinishedFlupData: [
         // {
         //   realName: 'wa',
@@ -199,6 +204,7 @@ export default {
 
         // }
       ],
+      // 已随访用户数据
       finishedFlupData: [
         // {
         //   realName: 'wa',
@@ -222,6 +228,11 @@ export default {
       'SET_CURRENT_SICK_DATA',
       'SET_FLUP_INFO'
     ]),
+    /**
+     * @description 到随访页面
+     * @param {obj} val 用户数据
+     * @param {Boolean} flup true随访 false未随访
+     */
     flupHandler (val, flup) {
       let obj = {}
       if (flup) {
@@ -269,7 +280,8 @@ export default {
       this.SET_SICK_CARD(false)
     },
     /**
-     * @description val===true 已随访 反之
+     * @description 获取随访数据
+     * @param {boolean} val 已随访 true 未随访 false
      */
     getListData (val) {
       let params = {
@@ -297,6 +309,10 @@ export default {
         }
       })
     },
+    /**
+     * @description 联系用户
+     * @param {obj} row 聊天对象
+     */
     call (row) {
       console.log('聊天对象', row)
       let rongId = 'member_' + row.userId
@@ -312,14 +328,26 @@ export default {
       this.changeChatFriend(sick)
       this.openChatWindow()
     },
+    /**
+     * @description 带随访用户页数改变
+     * @param {number} 当前页数
+     */
     unfinishedPageChange (currentpage) {
       this.unfinishedCurrentPage = currentpage
       this.getListData(false)
     },
+    /**
+     * @description 已随访用户页数改变
+     * @param {number} 当前页数
+     */
     finishedPageChange (currentpage) {
       this.finishedCurrentPage = currentpage
       this.getListData(true)
     },
+    /**
+     * @description 分层等级
+     * @param {number} val 获取到的分层等级0-6
+     */
     layer (val) {
       let layer = ''
       switch (val) {
@@ -347,6 +375,10 @@ export default {
       }
       return layer
     },
+    /**
+     * @description 危险等级颜色
+     * @param {number} val 危险等级1-5
+     */
     computeDanger (val) {
       let type = this._.toNumber(val)
       let color = ''

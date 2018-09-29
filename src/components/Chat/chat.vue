@@ -133,17 +133,17 @@ export default {
   },
   data () {
     return {
-      readyMsg: null,
+      readyMsg: null, // 待发送消息
       // readySendMsg:null,
-      chartList: [
-      ],
-      showList: false,
-      isTriggerFirstLoad: false,
-      imgArr: [],
-      noMoreHistroy: false,
-      showEmoji: false,
-      emojiList: [],
-      currentChartMsgList: []
+      // chartList: [
+      // ],
+      // showList: false,
+      isTriggerFirstLoad: false,  // 是否第一次打开聊天窗口
+      // imgArr: [],
+      // noMoreHistroy: false,
+      showEmoji: false, // 显示表情列表
+      emojiList: []  // 表情列表数据
+      // currentChartMsgList: []
     }
   },
   computed: {
@@ -172,17 +172,17 @@ export default {
     //   },
     //   deep: true
     // },
-    chartList: {
-      handler: function (val, oldVal) {
-        if (val.length < 2) {
-          this.showList = false
-        } else {
-          this.showList = true
-        }
-      },
-      deep: true,
-      immediate: true
-    }
+    // chartList: {
+    //   handler: function (val, oldVal) {
+    //     if (val.length < 2) {
+    //       this.showList = false
+    //     } else {
+    //       this.showList = true
+    //     }
+    //   },
+    //   deep: true,
+    //   immediate: true
+    // }
   },
   methods: {
     ...mapActions([
@@ -202,11 +202,17 @@ export default {
       'changeCurrentIsVideo',
       'sendcurrentMsg'
     ]),
+    /**
+     * @description 打开表情列表
+     */
     showEmojiHandle () {
       // this.emojiList = RongIMLib.RongIMEmoji.list
       console.log('打开表情', this.emojiList)
       this.showEmoji = !this.showEmoji
     },
+    /**
+     * @description 添加表情到待发送消息
+     */
     addEmoji (emoji) {
       if (this.readyMsg) {
         this.readyMsg += RongIMLib.RongIMEmoji.emojiToSymbol(emoji.emoji)
@@ -216,6 +222,9 @@ export default {
         // this.sendMsg = emoji.emoji
       }
     },
+    /**
+     * @description 发送文本消息
+     */
     sendMsg () {
       // console.log('historyMsg', this.historyMsg)
       let vm = this
@@ -309,6 +318,9 @@ export default {
         }, 100)
       })
     },
+    /**
+     * @description 发送图片消息
+     */
     sendImgMsg: function (e) {
       // uploadFileApi
       let vm = this
@@ -445,11 +457,16 @@ export default {
         }, 100)
       })
     },
+    /**
+     * @description 关闭聊天窗口
+     */
     closeChart () {
       this.clearCurrentChat()
       this.closeChatWindow()
     },
-    // 加载更多
+    /**
+     * @description 加载更多消息
+     */
     infiniteHandler ($state) {
       let vm = this
       // var params = {
@@ -543,7 +560,7 @@ export default {
         }
       })
     },
-    // 获取历史消息
+    // 获取历史消息 暂不用
     getHistroyMsgRong (targetuserId) {
       let vm = this
       let timestrap = null
@@ -576,6 +593,9 @@ export default {
         }
       })
     },
+    /**
+     * @description 发送视频消息
+     */
     callVideo (isvoice) {
       let vm = this
       let currentCallType
@@ -728,6 +748,9 @@ export default {
         // do something...
       })
     },
+    /**
+     * @description 发送语音消息
+     */
     callVoice () {
       this.callVideo(true)
     },

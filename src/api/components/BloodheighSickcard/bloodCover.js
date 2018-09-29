@@ -9,10 +9,10 @@ import {dateFormat, daybefor} from './../../../untils/date'
     'pageNum': params.pageNum || 1,
     'pageSize': params.pageSize || 10
  * }
- * @param {Number 0:最近,1:日,2:周,3:月} data
+ * @param {Number} data 0:最近,1:日,2:周,3:月
  * @description 血压趋势
  */
-export const bloodheighSickDataApi = (params, date) => {
+export const bloodTrendDataApi = (params, date) => {
   let data = {}
   if (date === 0) {
     data = {
@@ -194,9 +194,9 @@ export const updateBehaviourRateApi = (params, type, date) => {
 }
 /**
  *
- * @param {object} params
- * @param {Number} type
- * @param {Date} date
+ * @param {object} params 用户信息
+ * @param {Number} type 0 最近 1 日 2周 3月
+ * @param {Date} date 开始日期
  * @description 血压状态统计（微高、高、危险
  */
 export const updatebloodTrendStateApi = (params, type, date) => {

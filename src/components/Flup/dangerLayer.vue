@@ -126,7 +126,7 @@
                       :rightOffset="30">
                         <template slot="left">
                           <span>
-                          胸围：
+                          腰围：
                           </span>
                         </template>
                         <template slot="right">
@@ -1184,9 +1184,11 @@
       </div>
 
     </el-form>
+    <!-- 提交按钮 -->
     <div class="submit-btn-wrap">
       <button class="submit-btn" @click.prevent="submit">提交</button>
     </div>
+    <!-- 查看检查单 -->
     <div v-if="imgDialog">
       <imgFloatCarousel
       :imgsrc="imgarr"
@@ -1244,10 +1246,9 @@ export default {
       //   smoke: null,
       //   bloodhistroy: null
       // },
-      imgarr: [
-      ],
-      imgDialog: false,
-      currentCheckItem: '',
+      imgarr: [], // 检查单图片列表
+      imgDialog: false, // 显示检查单弹窗
+      currentCheckItem: '', // 当前选择的检查单名字
       realName: null,
       sex: null,
       birthDate: null,
@@ -1318,7 +1319,7 @@ export default {
         dangerLevelOrgan: null, // 靶器官 信息
         dangerLevelDanger: null
       },
-      showResult: false,
+      showResult: false, // 是否展示结果
       serum: {
         unit: 1,
         heighvalue: '>133',
@@ -1334,7 +1335,7 @@ export default {
     ...mapState(['FlupInfo', 'adminInfo'])
   },
   watch: {
-    serumCreatinineUnit: {
+    serumCreatinineUnit: { // 转换单位转换数值
       handler: function (val) {
         if (val === 1) {
           this.serum.heighvalue = '>133'
@@ -1356,19 +1357,32 @@ export default {
       'changeChatFriend',
       'openChatWindow'
     ]),
+    /**
+     * @description 打开检查单弹窗
+     */
     openCheckItemDialog (val) {
       this.imgDialog = true
       this.imgarr = this[val]
       this.currentCheckItem = val
       console.log('检查单', this[val])
     },
+    /**
+     * @description 添加检查单
+     * @param {array} arr 添加后的检查单集合
+     */
     changeImgs (arr) {
       this[this.currentCheckItem] = arr
       console.log('添加体检单', this[this.currentCheckItem], arr)
     },
+    /**
+     * @description 关闭检查单弹窗
+     */
     closeImg () {
       this.imgDialog = false
     },
+    /**
+     * @description 上传检查单
+     */
     uploadFile: function (val, e) {
       // uploadFileApi
       // let vm = this
@@ -1393,6 +1407,9 @@ export default {
         return false
       })
     },
+    /**
+     * @description 提交数据
+     */
     submit () {
       console.log('分层数据', this.$data)
       let obj = {}
@@ -1594,6 +1611,10 @@ export default {
         }
       })
     },
+    /**
+     * @description 根据血压等级判断文本颜色
+     * @param {number} val 血压bptype
+     */
     computeDanger (val) {
       let type = this._.toNumber(val)
       let color = ''
@@ -1621,6 +1642,10 @@ export default {
       }
       return color
     },
+    /**
+     * @description 根据后台返回血压等级判断血压等级情况 转中文
+     * @param {number} val 血压bptype
+     */
     danger (val) {
       val = this._.toNumber(val)
       let text = ''
@@ -1648,6 +1673,9 @@ export default {
       }
       return text
     },
+    /**
+     * @description 获取分层数据
+     */
     getLayerData () {
       let obj = {}
       obj.userId = this.FlupInfo.userId
@@ -1925,6 +1953,9 @@ export default {
         }
       })
     },
+    /**
+     * @description 联系患者
+     */
     call () {
       // console.log('聊天对象', )
       let rongId = 'member_' + this.FlupInfo.userId
@@ -1940,6 +1971,10 @@ export default {
       this.changeChatFriend(sick)
       this.openChatWindow()
     },
+    /**
+     * @description 删除数组空白的元素
+     * @param {array} val 删选的数组
+     */
     deleteEmpty (val) {
       let arr = []
       val.forEach(item => {
@@ -1957,7 +1992,7 @@ export default {
     this.getLayerData()
   },
   mounted () {
-    console.log('fenceng数据', this.$data)
+    // console.log('fenceng数据', this.$data)
     // this.realName = this.FlupInfo.userName
     // console.log('store随访数据', this.FlupInfo)
     // console.log('store随访数据', this.FlupInfo)

@@ -103,11 +103,11 @@ export default {
     }
   },
   mounted () {
-    Bus.$on('closemenu', (val) => {
-      if (this.routerName === val) {
-        this.check()
-      }
-    })
+    // Bus.$on('closemenu', (val) => {
+    //   if (this.routerName === val) {
+    //     this.check()
+    //   }
+    // })
   }
 }
 </script>

@@ -3,7 +3,8 @@
     <div class="noimg" v-if="total < 1">
       <span>暂无照片</span>
     </div>
-    <el-collapse v-model="activeNames" @change="handleChange">
+    <!-- 日常照片 -->
+    <el-collapse v-model="activeNames" accordion @change="handleChange">
       <el-collapse-item v-for="(item,index) in imgList" :key="index" :title="item.time" :name="index">
         <div class="img-list">
           <div class="inline-block" v-for="img in item.imgs" :key="img.time">
@@ -12,6 +13,7 @@
         </div>
       </el-collapse-item>
     </el-collapse>
+    <!-- 翻页 -->
     <div class="page-wrap">
       <el-pagination
         class="el-pagination"
@@ -24,6 +26,7 @@
         next-text="下一页">
       </el-pagination>
     </div>
+    <!-- 查看大图 -->
     <imgfloat
     :imgsrc="imgUrl"
     v-if="showBigImg"
@@ -54,6 +57,7 @@ export default {
       imgUrl: '',
       // 图片列表
       imgList: [],
+      // 页码
       currentPage: 1,
       pageSize: 5,
       total: 0
@@ -109,11 +113,15 @@ export default {
         }
       })
     },
+    /**
+     * @description 改变页码更新数据
+     */
     pageChange (currentpage) {
       this.getData(currentpage)
     }
   },
   created () {
+    // 初始化数据
     this.getData(1)
   }
 }

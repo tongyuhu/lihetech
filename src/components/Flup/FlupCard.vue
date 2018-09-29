@@ -743,60 +743,61 @@ import {FlupCardApi, submitFlupApi} from '@/api/components/Flup/Flup.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
   name: 'FlupCard',
-
   components: {
     medicine,
     numberinput
   },
   data () {
     return {
-      loading: false,
-      addMedicineDialog: false,
-      chineseMedicineDialog: false,
-      flupMethods: null,
-      flupTime: null,
-      nextFlupTime: null,
+      loading: false,  // 加载动画
+      addMedicineDialog: false, // 添加用药弹窗开关
+      chineseMedicineDialog: false,  // 中医辩证分型判断标准 弹窗开关
+      // 页码
       page: {
         pageNum: 1,
         minPageNum: 1,
         pageSize: 5,
         pages: 1
       },
+      // 翻页按钮
       nextBtn: false,
       upBtn: false,
       info: {
-        name: null
+        name: null // 姓名
       },
-      body: {
-        heighBlood: null,
-        lowBlood: null,
-        dangerLayer: 0,
-        heigh: null,
-        weight: null,
-        heart: null,
-        health: null
+      flupMethods: null, // 随访方法
+      flupTime: null, // 随访时间
+      nextFlupTime: null, // 下次随访时间
+      body: { // 身体指标
+        heighBlood: null, // 收缩压
+        lowBlood: null, // 舒张压
+        dangerLayer: 0, // 危险分层
+        heigh: null,  // 身高
+        weight: null, // 体重
+        heart: null, // 心律
+        health: null // 体质指数
       },
-      daily: {
-        smoke: null,
-        drink: null,
-        sleep: null,
-        sport: null
+      daily: {  // 日常情况
+        smoke: null, // 日吸烟量
+        drink: null, // 日饮酒量
+        sleep: null, // 睡眠质量
+        sport: null  // 运动量
 
       },
-      life: {
-        medicine: null,
-        mood: null,
-        doctor: null,
-        salt: null,
-        symptom: [],
-        bed: [],
-        chinese: [],
-        unmedicine: [],
-        health: [],
-        direct: [],
-        suggest: []
+      life: { // 生活习惯
+        medicine: null, // 是否按时服药
+        mood: null, // 情绪
+        doctor: null, // 遵医行为
+        salt: null, // 摄盐情况
+        symptom: [], // 目前症状
+        bed: [], // 并发的临床情况
+        chinese: [], // 中医辨证分型
+        unmedicine: [], // 非药物治疗情况
+        health: [], // 健康教育
+        direct: [], // 中医保健指导
+        suggest: []  // 健康处方建议
       },
-      doctorMedicine: [
+      doctorMedicine: [ // 近期用药情况
         // {
         //   drugSpec: '5毫克x7',
         //   id: 1,
@@ -815,6 +816,7 @@ export default {
         //   usetotal: ''
         // }
       ],
+      // 并发的临床情况
       bingfalinchuang: [
         {
           label: '糖尿病',
@@ -865,6 +867,7 @@ export default {
           value: 0
         }
       ],
+      // 健康处方建议
       health: [
         {
           label: '去医院确定治疗方案',
@@ -959,6 +962,7 @@ export default {
           value: 22
         }
       ],
+      // 中医辨证分型
       chineseMedicine: [
         {
           type: '阴虚阳亢证',
@@ -997,7 +1001,7 @@ export default {
           value: 6
         }
       ],
-      submitBtn: false
+      submitBtn: false // 是否显示提交按钮
     }
   },
   computed: {
@@ -1067,22 +1071,41 @@ export default {
       'changeChatFriend',
       'openChatWindow'
     ]),
+    /**
+     * @description 打开添加药品弹窗
+     */
     addMedicine () {
       this.addMedicineDialog = true
     },
+    /**
+     * @description 添加药物到列表
+     * @param {array} medicinelist 添加的药物
+     */
     addMedicineHandler (medicinelist) {
       this.doctorMedicine = this._.concat(this.doctorMedicine, medicinelist)
       this.addMedicineDialog = false
     },
+    /**
+     * @description 删除药物
+     * @param {number} index 要删除的药物下标
+     * @param {array} rows 药物列表
+     */
     deleteMedicine (index, rows) {
       rows.splice(index, 1)
     },
+    /**
+     * @description 打开 中医辩证分型判断标准弹窗
+     */
     openChinese () {
       this.chineseMedicineDialog = true
     },
     inputchange (value) {
       console.log('input', value)
     },
+    /**
+     * @description 中医辩证分型判断标准弹窗选择的选项
+     * @param {array} val 选择的集合
+     */
     chineseMedicineSelectionChange (val) {
       let list = []
       console.log('zhongyi', val)
@@ -1093,11 +1116,18 @@ export default {
       }
       this.life.chinese = list
     },
+    /**
+     * @description 前往分层页面
+     */
     dangerLayerHandler () {
       this.$router.push({
         name: 'dangerLayer'
       })
     },
+    /**
+     * @description 转换药物单位
+     * @param {string} val 药物单位
+     */
     medicineunit (val) {
       let unit = ''
       switch (val) {
@@ -1160,6 +1190,9 @@ export default {
       }
       return unit
     },
+    /**
+     * @description 获取随访卡数据
+     */
     getFlupCardData () {
       console.log('FlupInfo', this.FlupInfo)
       this.loading = true
@@ -1343,6 +1376,9 @@ export default {
         // this.page.pageSize = res.data.pages * res.data.recordCount
       })
     },
+    /**
+     * @description 初始化数据归零
+     */
     initData () {
       // Object.assign(this.$data, this.$options.data())
       this.flupMethods = null
@@ -1381,6 +1417,9 @@ export default {
       this.doctorMedicine = [
       ]
     },
+    /**
+     * @description 提交数据
+     */
     submitData () {
       let submitObj = {}
       submitObj.isFollowUp = false
@@ -1471,6 +1510,9 @@ export default {
         }
       })
     },
+    /**
+     * @description 随访上一页
+     */
     FlupUp () {
       if (this.page.pageNum < this.page.pages) {
         this.page.pageNum ++
@@ -1480,6 +1522,9 @@ export default {
         // this.upBtn = false
       }
     },
+    /**
+     * @description 随访卡下一页
+     */
     FlupDn () {
       // Object.assign(this.$data, this.$options.data())
       // if (!this.isFollowUp) {

@@ -24,7 +24,7 @@
 <script>
 export default {
   props: {
-    value: {
+    value: {  // 初始化打开pane序列号
       type: [Number, String]
     },
     hassuger: {
@@ -35,7 +35,7 @@ export default {
   },
   data () {
     return {
-      navList: []
+      navList: [] // pane集合
     }
   },
   computed: {
@@ -49,11 +49,17 @@ export default {
     }
   },
   methods: {
+    /**
+     * @description 根据选择的pane更新css
+     */
     tabCls (item) {
       return ['tabs-tab', {
         'tabs-tab-active': item.panename === this.currentValue
       }]
     },
+    /**
+     * @description 遍历子组件获取名为pane的子组件
+     */
     getTabs () {
       // 获取组件名为 pane的子组件
       return this.$children.filter(function (item) {
@@ -64,14 +70,14 @@ export default {
       this.navList = []
       let vm = this
       this.getTabs().forEach((pane, index) => {
-        if (!pane.panename) {
+        if (!pane.panename) {  // 如果pane没name设置为indx+1
           pane.panename = index + 1
         }
         vm.navList.push({
           label: pane.label,
           panename: pane.panename || index + 1
         })
-        if (index === 0) {
+        if (index === 0) { // 初始化选择
           if (!vm.currentValue) {
             vm.currentValue = pane.panename || index + 1
           }
@@ -79,6 +85,9 @@ export default {
       })
       this.updateStatus()
     },
+    /**
+     * @description 选择pane更新显示pane 并向父组件提交
+     */
     updateStatus () {
       let tabs = this.getTabs()
       let vm = this
@@ -89,6 +98,10 @@ export default {
         }
       })
     },
+    /**
+     * @description 选择pane触发事件
+     * @param {number} index 选择的序列号 起始0
+     */
     handleChange: function (index) {
       let nav = this.navList[index]
       let panename = nav.panename
@@ -103,7 +116,7 @@ export default {
     value: function (val) {
       this.currentValue = val
     },
-    currentValue: function () {
+    currentValue: function () {  // 选择pane更新 currentValue 触发updateStatus
       this.updateStatus()
     }
   }

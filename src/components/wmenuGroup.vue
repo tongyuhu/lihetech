@@ -31,63 +31,71 @@ export default {
     fi
   },
   props: {
-    routerName: {
+    routerName: {  // router名
       type: String
     },
-    iconName: {
+    iconName: {  // icon名 配合icon.vue
       type: String,
       default: 'heigh-blood'
     },
-    title: {
+    title: {  // 导航名
       type: String,
       default: '导航名'
     },
-    open: {
+    open: {  // 打开状态
       type: Boolean,
       default: false
     },
-    hasMsg: {
+    hasMsg: {  // 有消息提示加红点  废弃
       type: Boolean,
       default: false
     },
-    index: {
+    index: {  // 菜单顺序序列号 必须
       type: Number
     }
   },
   data () {
     return {
-      afterClose: 'menu-close',
-      icon: '',
+      afterClose: 'menu-close',  // 标题后三角图标
+      icon: '',  // 完整的icon名
       isopen: this.open,
-      before: true,
-      checked: false,
-      fontcolor: false
+      before: true,  // 标题前的竖线
+      checked: false, // 选择状态
+      fontcolor: false // 字体颜色 选中和未选择状态
     }
   },
   computed: {
   },
   methods: {
+    /**
+     * @description 点击菜单进入相应路由
+     */
     toggle () {
       this.$router.push({
         name: this.routerName
       })
       // this.isopen = true
       this.isopen = !this.isopen
-      this.openChild()
+      this.openChild() // 打开子菜单
       let arr = this.findBrothersComponents(this, 'wmenu-group')
-      arr.forEach(item => {
+      arr.forEach(item => {  // 关闭同级菜单
         item.isopen = false
         item.closeChild()
       })
       let childs = findComponentsDownward(this, 'wmenuitem')
-      childs.forEach(item => {
+      childs.forEach(item => {  // 子菜单选择状态置为false
         item.isChecked = false
       })
-      if (this.isopen) {
+      if (this.isopen) {  // 选中提交
         this.$emit('checked', {'routerName': this.routerName, 'index': this.index})
       }
       console.log('执行父级')
     },
+    /**
+     * @description 完善标题前icon css名称
+     * @param {string} name 图标名称
+     * @param {boolean} type 打开或关闭状态
+     */
     completeIconName (name, type) {
       if (type) {
         return name + '-open'
@@ -95,12 +103,18 @@ export default {
         return name + '-close'
       }
     },
+    /**
+     * @description 打开子菜单
+     */
     openChild () {
       this.icon = this.completeIconName(this.iconName, true)
       this.afterClose = 'menu-open'
       this.fontcolor = true
       this.before = true
     },
+    /**
+     * @description 关闭子菜单
+     */
     closeChild () {
       this.icon = this.completeIconName(this.iconName, false)
       this.afterClose = 'menu-close'
@@ -114,14 +128,14 @@ export default {
       let index = res.indexOf(context)
       res.splice(index, 1)
       return res
-    },
-    check () {
-      this.isopen = false
-      this.openChild()
-      this.fontcolor = true
-      this.before = true
-      this.afterClose = 'menu-close'
     }
+    // check () {
+    //   this.isopen = false
+    //   this.openChild()
+    //   this.fontcolor = true
+    //   this.before = true
+    //   this.afterClose = 'menu-close'
+    // }
   },
   watch: {
   },
@@ -138,11 +152,11 @@ export default {
     }
   },
   mounted () {
-    Bus.$on('closemenu', (val) => {
-      if (this.routerName === val) {
-        this.check()
-      }
-    })
+    // Bus.$on('closemenu', (val) => {
+    //   if (this.routerName === val) {
+    //     this.check()
+    //   }
+    // })
   }
 }
 </script>

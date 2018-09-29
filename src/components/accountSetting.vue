@@ -52,8 +52,8 @@ export default {
       deleteTipsArr: [],
       showEdit: true,
       tipData: [{'checked': false}, {'checked': false}, {'checked': false}],
-      addSickImg: '',
-      ercodeimg: false
+      addSickImg: '', // 二维码图片
+      ercodeimg: false  // 图片链接 加载动画
     }
   },
   methods: {
@@ -68,61 +68,62 @@ export default {
           return -1
         }
       }
-    },
-    deleteCommonItem (soureArr, arr) {
-      if (soureArr.length === 0) {
-        return []
-      } else if (arr.length === 0) {
-        return soureArr
-      } else {
-        arr.forEach(item => {
-          let index = this.isExist(soureArr, item)
-          if (index !== -1) {
-            soureArr.splice(index, 1)
-          }
-        })
-        return soureArr
-      }
-    },
-    editTips () {
-      this.deleteTipsArr = []
-      this.showEdit = false
-    },
-    tipDataInit (arr) {
-      if (arr.length !== 0) {
-        arr.forEach(item => {
-          if (!this._.isObject(item)) {
-            item = {}
-          }
-          item.checked = false
-        })
-      }
-      return arr
-    },
-    cancelEdit () {
-      this.showEdit = true
-      this.deleteTipsArr = []
-      this.tipDataInit(this.tipData)
-    },
-    deleteTips () {
-      this.showEdit = true
-      this.tipData = this.deleteCommonItem(this.tipData, this.deleteTipsArr)
-      this.deleteTipsArr = []
-    },
-    checkTip (index) {
-      this.tipData[index].checked = !this.tipData[index].checked
-      let ready = this.tipData[index]
-      if (ready.checked) {
-        this.deleteTipsArr.push(ready)
-      }
-      if (!ready.checked) {
-        if (this._.indexOf(this.deleteTipsArr, ready) !== -1) {
-          this.deleteTipsArr.splice(this._.indexOf(this.deleteTipsArr, ready), 1)
-        }
-      }
     }
+    // deleteCommonItem (soureArr, arr) {
+    //   if (soureArr.length === 0) {
+    //     return []
+    //   } else if (arr.length === 0) {
+    //     return soureArr
+    //   } else {
+    //     arr.forEach(item => {
+    //       let index = this.isExist(soureArr, item)
+    //       if (index !== -1) {
+    //         soureArr.splice(index, 1)
+    //       }
+    //     })
+    //     return soureArr
+    //   }
+    // },
+    // editTips () {
+    //   this.deleteTipsArr = []
+    //   this.showEdit = false
+    // },
+    // tipDataInit (arr) {
+    //   if (arr.length !== 0) {
+    //     arr.forEach(item => {
+    //       if (!this._.isObject(item)) {
+    //         item = {}
+    //       }
+    //       item.checked = false
+    //     })
+    //   }
+    //   return arr
+    // },
+    // cancelEdit () {
+    //   this.showEdit = true
+    //   this.deleteTipsArr = []
+    //   this.tipDataInit(this.tipData)
+    // },
+    // deleteTips () {
+    //   this.showEdit = true
+    //   this.tipData = this.deleteCommonItem(this.tipData, this.deleteTipsArr)
+    //   this.deleteTipsArr = []
+    // },
+    // checkTip (index) {
+    //   this.tipData[index].checked = !this.tipData[index].checked
+    //   let ready = this.tipData[index]
+    //   if (ready.checked) {
+    //     this.deleteTipsArr.push(ready)
+    //   }
+    //   if (!ready.checked) {
+    //     if (this._.indexOf(this.deleteTipsArr, ready) !== -1) {
+    //       this.deleteTipsArr.splice(this._.indexOf(this.deleteTipsArr, ready), 1)
+    //     }
+    //   }
+    // }
   },
   mounted () {
+    // 加载二维码
     this.ercodeimg = true
     this.$axios({
       method: 'post',

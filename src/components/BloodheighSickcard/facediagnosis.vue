@@ -757,7 +757,7 @@ import medicine from '@/components/medicine/medicine.vue'
 import addMedicine from '@/components/addMedicine.vue'
 import addSport from '@/components/addSport.vue'
 import addFood from '@/components/addFood.vue'
-import searchMedicine from '@/components/searchMedicine.vue'
+// import searchMedicine from '@/components/searchMedicine.vue'
 import numberinput from '@/components/Flup/number'
 import usedruganalysisApi from '@/api/components/BloodheighSickcard/usedruganalysis'
 import {bloodheighSickApi, sickApi, modifyCardApi, sickCodeApi} from '@/api/components/BloodheighSickcard/bloodheighSick'
@@ -793,7 +793,7 @@ export default {
     pane,
     medicine,
     addMedicine,
-    searchMedicine,
+    // searchMedicine,
     addSport,
     addFood,
     numberinput
@@ -810,72 +810,77 @@ export default {
   },
   data () {
     return {
+      // 默认头像
       defaultimg: 'this.src="' + userimg + '"',
+      // 开具时间
       currentDate: '',
+      // 处方label位置
       labelPosition: 'right',
-      rightlabel: 'right',
+      // rightlabel: 'right',
+      // 面诊信息
       cardData: {},
       activeIndex: 1,
+      // 左侧完善信息
       showEditMsg: false,
       medicineList: [
-        // {
-        //   name: '王小虎',
-        //   spec: '上海市普陀',
-        //   kucun: '上海市普陀',
-        //   price: '上海市普518 弄'
-        // }
       ],
       multipleSelection: [],
+      // 病人信息
       info: {
-        name: '',
-        sex: 'man',
-        age: '',
-        heigh: null,
-        weight: null,
-        BMI: null,
-        tem: null,
+        name: '',  // 姓名
+        sex: 'man', // 性别
+        age: '', // 年龄
+        heigh: null, // 身高
+        weight: null, // 体重
+        BMI: null, // BMI
+        tem: null, // 体温
         // bloodHeigh: '',
-        pulse: '',
-        img: '',
-        bloodHeighBlood: null,
-        bloodLowBlood: null,
-        phone: ''
+        pulse: '', // 血压
+        img: '', // 头像
+        bloodHeighBlood: null, // 高压
+        bloodLowBlood: null, // 低压
+        phone: '' // 电话
       },
       copyInfo: {},
+      // 面诊数据
       medication: {
-        name: '',
+        name: '',  // 姓名
         sickDuration: '',
-        year: null,
-        month: null,
-        day: null,
-        phone: '',
-        sex: 'man',
-        isfirst: '1',
-        sickHistroy: [],
-        inhereHistroy: [],
-        habit: '',
-        checkItem: [],
-        complication: [],
-        sureSick: '',
-        lastTime: '',
-        symptom: '',
-        hospitalMsg: '',
-        doctorTip: '',
-        smoking: '',
-        drinking: '',
-        is23Sleep: '',
-        sleepStatus: '',
+        year: null,  // 患病时长 年
+        month: null, // 月
+        day: null,  // 日
+        phone: '',  // 电话
+        sex: 'man', // 性别
+        isfirst: '1', // 是不是初诊
+        sickHistroy: [], // 现病史
+        inhereHistroy: [],  // 遗传史
+        habit: '', // 爱好
+        checkItem: [], // 检查项目
+        complication: [],  // 高血压并发症
+        sureSick: '', // 确诊疾病
+        lastTime: '', // 上次就诊时间
+        symptom: '',   // 主诉
+        hospitalMsg: '',  // 医院信息
+        doctorTip: '',  // 医嘱
+        smoking: '', // 抽烟
+        drinking: '', // 喝酒
+        is23Sleep: '',  // 23点前睡觉
+        sleepStatus: '',  // 睡眠质量
         diagnosisMsg: '',
-        dangerLevel: '',
-        bloodPressureSickStart: ''
+        dangerLevel: '',  // 危险分层
+        bloodPressureSickStart: '' // 患病开始时间
       },
+      // 医生开药
       doctorMedicine: [],
+      // 打印药方
       printdoctorMedicine: [],
+
       footerData: {
         doctor: '',
         type: '',
         total: ''
       },
+      // 添加运动 暂不用
       addSportData: [
         {
           title: '最轻运动',
@@ -911,6 +916,7 @@ export default {
           num: null
         }
       ],
+      // 添加饮食 暂不用
       addFoodData: [
         {
           food: '减少钠盐',
@@ -937,16 +943,26 @@ export default {
           isChoose: false
         }
       ],
+      // 饮食
       foodlist: [],
+      // 病史列表
       bingshiList: [
       ],
+      // 遗传史列表
       yichuanshiList: [],
+      // 高血压并发症
       gaoxueyabingfazhengList: [],
+      // 选择的病史
       bingshi: [],
+      // 选择的遗传史
       yichuanshi: [],
+      // 打印病史数据
       bingshiStr: '',
+      // 打印遗传史数据
       yichuanshiStr: '',
+      // 打印检查项目
       jianchaxiangmu: '',
+      // 加载动画
       loading: false,
       // // 添加或修改病历
       // modify: false,
@@ -955,6 +971,7 @@ export default {
       year: [],
       month: [],
       day: [],
+      // 是否可以打印
       canPrint: false,
       addMedicineDialog: false,
       adminHospitalId: null,
@@ -962,7 +979,9 @@ export default {
       bloodSickCode: null,
       sugerSickCodeList: [],
       adminIdMainDoctor: null,
+      // 右侧tab默认打开第一个
       defaultpane: 1,
+      // 智能分析
       rightdata: {
         planAdjustCycle: '无',
         planUseCycle: '无',
@@ -1505,7 +1524,10 @@ export default {
     openAddMedicineDialog () {
       this.addMedicineDialog = true
     },
-    // 添加药品
+    /**
+     * @param {array} list 添加的药品列表
+     * @description 添加药品
+     */
     addMedicineHandler (list) {
       this.doctorMedicine = this._.concat(this.doctorMedicine, list)
       this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)

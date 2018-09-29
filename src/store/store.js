@@ -12,19 +12,20 @@ Vue.use(Vuex)
 // return publicStatic.onlineStatic + '/static/user.png'
 export const store = new Vuex.Store({
   state: {
-    FlupInfo: {
-      userHealthDiaryId: null,
-      userId: null,
-      adminIdMainDoctor: null,
-      userFollowUpId: null,
-      isFollowUp: null,
-      userName: null,
-      adminHospitalId: null
+    FlupInfo: {  // 跳转随访页面需要设置
+      userHealthDiaryId: null,  // 随访卡id 从随访列表跳转用
+      userId: null,  // 病人id
+      adminIdMainDoctor: null,  // 医生id
+      userFollowUpId: null,  // 医生随访用户表id 从随访列表跳转用
+      isFollowUp: null,  // 是否随访
+      userName: null,  // 病人姓名
+      adminHospitalId: null  // 医院id
     },
     // 当前病历卡病人信息
     currentSickInfo: {
 
     },
+    // 当前登录用户信息
     adminInfo: {},
     // 病历卡id
     userCasesCardId: null,
@@ -106,24 +107,31 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    // 设置当前登录的用户信息
     [SET_ADMIN_INFO] (state, info) {
       state.adminInfo = info
     },
+    // 显示病历卡 或者 面诊状态 跳转到病历卡页面需要
     [SET_SICK_CARD] (state, type) {
       state.showSickCard = type
     },
+    // 设置当前问诊病人信息 跳转到病历卡页面需要
     [SET_CURRENT_SICK_DATA] (state, obj) {
       state.currentSickData = obj
     },
+    /**
+     * @description 跳转随访页面需要设置
+     */
     [SET_FLUP_INFO] (state, obj) {
       state.FlupInfo = _.merge(state.FlupInfo, obj)
       // state.FlupInfo = obj
       console.log('store.', state.FlupInfo)
     },
-
+    // 设置用户病例卡 id  从患者最新问诊跳转到病历卡需要
     setuserCasesCardId (state, id) {
       state.userCasesCardId = id
     },
+    // 设置医生可预约id 从预约列表跳转到病历卡需要
     setuserMakeOrderDoctorId (state, id) {
       state.userMakeOrderDoctorId = id
     },
@@ -254,9 +262,11 @@ export const store = new Vuex.Store({
     closeAnimation (state) {
       state.newmsg = false
     },
+    // 设置好友列表
     setFriendsList (state, list) {
       state.friendsList = list
     },
+    // 清楚当前聊天
     clearCurrentChat (state) {
       if (state.friendsList.length > 0) {
         state.friendsList.forEach(item => {
@@ -270,6 +280,7 @@ export const store = new Vuex.Store({
       }
       // console.log('是否清除当前聊天', state.chatfriend, state.friendsList)
     },
+    // 关闭聊天动画
     clearNewmsg (state) {
       state.newmsg = false
     },
@@ -313,9 +324,11 @@ export const store = new Vuex.Store({
     changeImStatus (state, val) {
       state.imStatus = val
     },
+    // 设置当前病人病历卡信息
     changeCurrentSickInfo (state, info) {
       state.currentSickInfo = info
     },
+    // 设置融云calllib
     changeRongCallLibFunction (state, lib) {
       state.RongCallLibFunction = lib
     }

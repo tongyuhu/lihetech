@@ -606,7 +606,7 @@ export default {
       }
       return week
     },
-    // 上下午？
+    // 判断上下午？
     morninngNoon (val) {
       val = this._.toNumber(val)
       let time

@@ -1,6 +1,7 @@
 <template>
   <div class="video-chat-wrap" v-drag="'video-drag'">
     <div id="video-drag"></div>
+    <!-- 语音通话 -->
     <div v-if="!currentIsVideo" class="audio-wrap">
       <div>
         <img class="user-img" :src="currentVideo.userImg+''" :onerror="userimgerror">
@@ -30,12 +31,14 @@
       </div>
     </div>
     <div class="video-wrap" id="video-wrap">
+      <!-- 对方视频图像 -->
       <div id="videoChat">
 
       </div>
+      <!-- 自己视频 -->
       <div id="selfVideo">
       </div>
-
+      <!-- 视频通话 -->
       <div class="btn-wrap" v-if="currentIsVideo">
         <div class="voice-btn">
 
@@ -73,18 +76,21 @@ export default {
   },
   data () {
     return {
-      voice: true,
-      userimgerror: 'this.src="' + userimg + '"'
+      voice: true, // 是否静音
+      userimgerror: 'this.src="' + userimg + '"'  // 默认头像
     }
   },
   computed: {
     ...mapState([
-      'currentIsVideo',
+      'currentIsVideo',  // 是否是视频通话
       'currentVideo'
     ])
   },
   methods: {
     ...mapMutations(['closeVideo']),
+    /**
+     * @description 关闭通话
+     */
     close () {
       document.getElementById('videoChat').innerHTML = ''
       document.getElementById('selfVideo').innerHTML = ''
@@ -96,6 +102,9 @@ export default {
         document.getElementById('selfVideo').innerHTML = ''
       })
     },
+    /**
+     * @description 挂断通话
+     */
     hungCall () {
       // this.close()
       // document.getElementById('videoChat').innerHTML = ''
@@ -104,17 +113,29 @@ export default {
       document.getElementById('videoChat').innerHTML = ''
       document.getElementById('selfVideo').innerHTML = ''
     },
+    /**
+     * @description 静音
+     */
     noVoice () {
       this.$emit('mute')
       this.voice = false
     },
+    /**
+     * @description 取消静音
+     */
     hasVoice () {
       this.$emit('unmute')
       this.voice = true
     },
+    /**
+     * @description 转换音频
+     */
     toAudio () {
       this.$emit('toAudio')
     },
+    /**
+     * @description 转换视频
+     */
     toVideo () {
       this.$emit('toVideo')
     }

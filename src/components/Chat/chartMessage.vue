@@ -46,12 +46,12 @@ export default {
   },
   data () {
     return {
-      cls: false,
-      nobg: false,
-      chatclass: '',
-      userImgChat: this.userImg,
-      userimgerror: 'this.src="' + userimg + '"',
-      adminimgerror: 'this.src="' + adminimg + '"',
+      cls: false,  // true 左侧聊天classname   false右侧classname
+      nobg: false,  // 图片消息没有背景
+      chatclass: '', // 左右聊天小三角样式
+      userImgChat: this.userImg,  // 图片消息src
+      userimgerror: 'this.src="' + userimg + '"',  // 默认患者头像
+      adminimgerror: 'this.src="' + adminimg + '"', // 默认医生
       errorimg: ''
     }
   },
@@ -67,19 +67,20 @@ export default {
   watch: {
     who: {
       handler: function (val) {
+        // 如果是自己发出的消息
         if (this.who === this.rongUserId) {
           this.cls = false
-          if (this.type === 'ImageMessage') {
+          if (this.type === 'ImageMessage') {  // 图片消息去除背景和小三角
             this.nobg = true
             this.chatclass = ''
-          } else {
+          } else { // 否则加右侧小三角
             // if (this.cls) {
               // this.chatclass = 'left-angle'
             // } else {
             this.chatclass = 'right-angle'
             // }
           }
-          if (this._.has(this.adminInfo, 'headPortraitUrl')) {
+          if (this._.has(this.adminInfo, 'headPortraitUrl')) { // 有头像用头像
             if (this.adminInfo.headPortraitUrl.length !== 0) {
               this.userImgChat = process.env.IMG_URL + this.adminInfo.headPortraitUrl
 

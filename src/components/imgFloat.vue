@@ -57,14 +57,20 @@ export default {
   data () {
     return {
       // showBigImg: this.show,
-      imgrotate: 0
+      imgrotate: 0 // 旋转角度
     }
   },
   methods: {
+    /**
+     * @description 关闭大图
+     */
     closeBig () {
       // this.showBigImg = false
       this.$emit('close')
     },
+    /**
+     * @description 旋转
+     */
     rotate (val) {
       if (val === 0) {
         this.imgrotate = val
@@ -83,6 +89,9 @@ export default {
       console.log('naturalWidth', this.$refs.bigimg.naturalWidth, 'naturalHeight', this.$refs.bigimg.naturalHeight)
       console.log('width', this.$refs.bigimg.width, 'height', this.$refs.bigimg.height)
     },
+    /**
+     * @description 旋转 180 360
+     */
     imgdeg0 () {
       let vm = this
       this.$nextTick(function () {
@@ -95,6 +104,9 @@ export default {
         }
       })
     },
+    /**
+     * @description 旋转 90 270
+     */
     imgdeg1 () {
       for (let item of ratio) {
         if (this.$refs.bigimg.naturalWidth * item < screenH - 160 && this.$refs.bigimg.naturalHeight * item < screenW) {
@@ -104,6 +116,9 @@ export default {
         }
       }
     },
+    /**
+     * @description 放大
+     */
     enlargeHandler () {
       this.$nextTick(function () {
         this.$refs.bigimg.width = (this.$refs.bigimg.width) * 1.3
@@ -114,6 +129,9 @@ export default {
         // this.bigimg.marginTop = -(this.$refs.bigimg.offsetHeight) / 2
       })
     },
+    /**
+     * @description 缩小
+     */
     reduceHandler () {
       this.$nextTick(function () {
         this.$refs.bigimg.width = (this.$refs.bigimg.width) * 0.7

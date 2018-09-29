@@ -2,6 +2,7 @@
   <div>
     <searchMedicine
     @medicineList="changeMedicineList"></searchMedicine>
+    <!-- 药物列表 -->
     <div class="medicenelist">
       <el-table
       ref="medicinemultipleTable"
@@ -40,6 +41,7 @@
         </el-table-column>
       </el-table>
     </div>
+    <!-- 添加按钮 -->
     <div class="submit-btn-wrap">
       <button class="submit-btn" @click="addsure">确认添加</button>
     </div>
@@ -55,12 +57,16 @@ export default {
   },
   data () {
     return {
-      medicineList: [],
-      multipleSelection: [],
-      doctorMedicine: []
+      medicineList: [],  // 药物列表
+      multipleSelection: [], // 选择的药物列表
+      doctorMedicine: [] // 要添加的药物
     }
   },
   methods: {
+    /**
+     * @description 搜索的到的药物列表添加到药物列表
+     * @param {array} list 搜索到的药物
+     */
     changeMedicineList (list) {
       let vm = this
       vm.medicineList = []
@@ -76,10 +82,17 @@ export default {
       // this.$refs.medicinemultipleTable.clearSelection()
       // console.log('this.changeMedicineList', this.medicineList)
     },
+    /**
+     * @description 选择的药物
+     * @param {array} val 选择的药物
+     */
     handleSelectionChange (val) {
       this.multipleSelection = val
       console.log('val', val)
     },
+    /**
+     * @description 确认添加
+     */
     addsure () {
       if (this.multipleSelection.length !== 0) {
         this.multipleSelection.forEach(item => {
@@ -95,8 +108,9 @@ export default {
           console.log('要添加的药品', this.doctorMedicine)
         })
       }
-      this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)
-      this.$emit('addMedicine', this.doctorMedicine)
+      this.doctorMedicine = this._.uniqWith(this.doctorMedicine, this._.isEqual)  // 去除重复
+      this.$emit('addMedicine', this.doctorMedicine)  // 向父组件提交
+      // 清楚选择数据
       this.multipleSelection = []
       this.doctorMedicine = []
       this.$refs.medicinemultipleTable.clearSelection()

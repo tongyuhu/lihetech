@@ -556,8 +556,8 @@ export default {
       console.log(`每页 ${val} 条`)
     },
     /** @param {number} val 页数
-     * @description 患者最新问诊页数变化
-     */
+    * @description 患者最新问诊页数变化
+    */
     newAskCurrentChange (val) {   // 患者最新问诊页数变化
       this.newAskRequest({
         hospitalId: this.adminHospitalId,
@@ -566,9 +566,9 @@ export default {
       })
     },
     /**
-     * @param {obj} row 患者信息
-     * @description 患者最新问诊 问诊
-     */
+    * @param {obj} row 患者信息
+    * @description 患者最新问诊 问诊
+    */
     newdiagnose (row, val) {
       session('sickcardTabIndex', 0)
       let userId
@@ -595,9 +595,9 @@ export default {
       this.SET_SICK_CARD(true)
     },
     /**
-     * @param {obj} params 请求数据字段
-     * @description 获取严重患者
-     */
+    * @param {obj} params 请求数据字段
+    * @description 获取严重患者
+    */
     badsickRequest (params) {
       this.badSickTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId
@@ -632,9 +632,9 @@ export default {
       })
     },
     /**
-     * @param {obj} params 请求数据字段
-     * @description 获取未遵医嘱
-     */
+    * @param {obj} params 请求数据字段
+    * @description 获取未遵医嘱
+    */
     nolistenRequest (params) {
       this.noListenTableLoading = true
       params.hospitalId = params.hospitalId || this.adminHospitalId

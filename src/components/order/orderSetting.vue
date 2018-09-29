@@ -47,6 +47,7 @@
         </table>
       </el-card>
     </div>
+    <!-- 单个编辑预约 暂废弃 -->
     <el-dialog
     center
     width="500px"
@@ -103,7 +104,7 @@
         <el-button @click="settingSingleConfirm" type="primary">保存</el-button>
       </div>
     </el-dialog>
-    
+    <!-- 批量设置 -->
     <el-dialog
     center
     width="500px"
@@ -219,43 +220,44 @@ export default {
   name: 'orderSetting',
   data () {
     return {
-      loading: false,
-      showMorningEdit: true,
-      showNoonEdit: true,
+      loading: false,  // 加载动画
+      showMorningEdit: true,  // 展示上午编辑开关
+      showNoonEdit: true,  // 展示下午编辑开关
       start: '',
       end: '',
-      settingSingle: false,
-      settingSingleMorning: {
+      settingSingle: false, // 单个编辑预约
+      settingSingleMorning: {  // 单个编辑选择上午时间段
         start: '',
         end: ''
       },
-      settingSingleNoon: {
+      settingSingleNoon: {  // 单个编辑选择下午时间段
         start: '',
         end: ''
       },
-      settingGroup: false,
+      settingGroup: false, // 批量预约设置
 
-      settingGroupSlotType: {
+      settingGroupSlotType: {  // 批量编辑选择上下午开关
         morninig: false,
         noon: false
       },
-      settingGroupMorning: {
+      settingGroupMorning: { // 批量编辑选择上午时间段
         start: '',
         end: ''
       },
-      settingGroupNoon: {
+      settingGroupNoon: {  // 批量编辑选择下午时间段
         start: '',
         end: ''
       },
-      settingGroupTime: {
-        start: '',
-        end: ''
-      },
-      openOrder: '',
-      defaultvalue: null,
+      // settingGroupTime: {
+      //   start: '',
+      //   end: ''
+      // },
+      // openOrder: '',
+      // defaultvalue: null,
       // order: [],
-      index: null,
+      index: null,  // 单个编辑打开的天 1-7
       // week: [, '周二', '周三', '周四', '周五', '周六', '周日']
+      // 批量设置的选项
       week: [
         {
           time: '周一',
@@ -293,8 +295,8 @@ export default {
           value: 7
         }
       ],
-      cheeckedweek: [],
-      orderlist: []
+      cheeckedweek: [], // 选择设置的天
+      orderlist: []  // 预约列表 周一----周日
     }
   },
   methods: {
@@ -557,6 +559,10 @@ export default {
         }
       }
     },
+    /**
+     * @description 计算今天到下周日
+     * @returns {array} 到下周日的数组
+     */
     nextSunday () {
       let arr = []
       let day = 1
@@ -583,6 +589,10 @@ export default {
       }
       return arr
     },
+    /**
+     * @description 批量设置选择的天
+     * @param {number} index 选择week的index
+     */
     chooseWeek (index) {
       this.week[index].choose = !this.week[index].choose
       if (this.week[index].choose) {
@@ -596,6 +606,9 @@ export default {
       this.cheeckedweek = this._.uniq(this.cheeckedweek)
       console.log('选择的周', this.cheeckedweek)
     },
+    /**
+     * @description 初始化数据 获取数据
+     */
     initlist () {
       // let vm = this
       // let data = vm.nextSunday()
@@ -708,6 +721,11 @@ export default {
         this.loading = false
       })
     },
+    /**
+     * @description 上午预约状态改变
+     * @param {string} day 改变时间
+     * @param {boolean} state 改变状态
+     */
     morningStateChange (day, state) {
       let week = null
       if (day === '周一') {
@@ -758,6 +776,11 @@ export default {
         }
       })
     },
+    /**
+     * @description 下午预约状态改变
+     * @param {string} day 改变时间
+     * @param {boolean} state 改变状态
+     */
     noonStateChange (day, state) {
       let week = null
       if (day === '周一') {
@@ -807,6 +830,10 @@ export default {
         }
       })
     },
+    /**
+     * @description 判断周1-7对应周一-周日
+     * @param {number} day 1-7
+     */
     judgeWeek (day) {
       let week = null
       if (day === 1) {

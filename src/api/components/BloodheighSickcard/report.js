@@ -66,7 +66,7 @@ export const bloodCoverApi = (params, date) => {
 /**
  *
  * @param {obj} params
- * @param {obj date date.label = 'oneweek/twoweek/onemonth/threemonth'} date
+ * @param {obj}  date date.label = 'oneweek/twoweek/onemonth/threemonth'
  * @description 血压直方图
  */
 export const histogramApi = (params, date) => {

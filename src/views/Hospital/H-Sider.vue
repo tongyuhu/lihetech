@@ -37,7 +37,7 @@
 
 <script>
 
-import wmenu from '@/components/wmenu.vue'
+// import wmenu from '@/components/wmenu.vue'
 import wmenuGroup from '@/components/wmenuGroup.vue'
 import wmenuitem from '@/components/wmenuitem.vue'
 import {mapState} from 'vuex'
@@ -46,7 +46,7 @@ export default {
   name: 'H-Sider',
   components: {
     wmenuGroup,
-    wmenu,
+    // wmenu,
     wmenuitem
   },
   data () {
