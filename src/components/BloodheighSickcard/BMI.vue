@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="margin-bottom">
     <el-card :body-style="{ padding: '0px' }">
       <div class="card-header">
           <p class="title">血压与BMI</p>

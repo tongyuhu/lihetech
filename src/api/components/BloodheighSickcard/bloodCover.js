@@ -67,6 +67,7 @@ export const bloodTrendDataApi = (params, date) => {
     outtime: 10000
   }
 }
+
 // export const bloodheighSickDataApi = (params, data) => {
 //   // 最近
 //   if (data === 0) {
@@ -277,6 +278,48 @@ export const updatebloodTrendStateApi = (params, type, date) => {
       headers: { 'Content-type': 'application/x-www-form-urlencoded' },
       outtime: 10000
     }
+  }
+  if (type === 4) {
+    let monthStart = dateFormat(date, 0, 1)
+    let a = dateFormat(date, -1, 1)
+    let monthEnd = daybefor(a, 1, 1)
+    return {
+      method: 'post',
+      url: '/highBlood/bpStateNum',
+      data: {
+        'userId': params.userId,
+        'adminHospitalId': params.adminHospitalId,
+        'pageNum': params.pageNum || 1,
+        'pageSize': params.pageSize || 10,
+        'bpMeasureTime': params.bpMeasureTime,
+        'bpMeasureState': params.bpMeasureState,
+        'startDate': monthStart,
+        'endDate': monthEnd
+      },
+      headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+      outtime: 10000
+    }
+  }
+}
+/**
+ *
+ * @param {object} params 用户信息
+ * @description 血压状态统计（微高、高、危险
+ */
+export const updatebloodTrendTotalApi = (params) => {
+  return {
+    method: 'post',
+    url: '/highBlood/bpStateNum',
+    data: {
+      'userId': params.userId,
+      'adminHospitalId': params.adminHospitalId,
+      'bpMeasureTime': params.bpMeasureTime,
+      'bpMeasureState': params.bpMeasureState,
+      'startDate': params.startDate,
+      'endDate': params.enddate
+    },
+    headers: { 'Content-type': 'application/x-www-form-urlencoded' },
+    outtime: 10000
   }
 }
 // export const updatebloodTrendStateApi = (params, type, date) => {

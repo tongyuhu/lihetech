@@ -90,7 +90,28 @@
             <!-- 血压趋势 -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
             <!-- 血压分布 血压平均水平 血压直方图 血压与BMI -->
-            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
+            <el-row :gutter="2">
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="coverLine"></component>
+              </el-col>
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="coverBar"></component>
+              </el-col>
+            </el-row>
+            <el-row :gutter="2">
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="BMI"></component>
+              </el-col>
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="pie"></component>
+              </el-col>
+            </el-row>
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component> -->
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component> -->
             <!-- 24小时动态血压 -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
             
@@ -236,6 +257,11 @@ import tabs from './../tabs.vue'
 import pane from './../pane.vue'
 import note from './../note.vue'
 import bloodCover from './bloodCover'
+import bloodTrendChart from './bloodTrendChart.vue'
+import bloodPie from './bloodPie.vue'
+import BMI from './BMI.vue'
+import bloodAverageLine from './bloodAverageLine.vue'
+import bloodAverageBar from './bloodAverageBar.vue'
 import useDrug from './useDrug'
 import assessment from './assessment'
 import alldayheighblood from './alldayheighblood'
@@ -257,6 +283,11 @@ export default {
     pane,
     note,
     bloodCover,
+    bloodTrendChart,
+    bloodPie,
+    BMI,
+    bloodAverageLine,
+    bloodAverageBar,
     useDrug,
     assessment,
     alldayheighblood,
@@ -317,6 +348,14 @@ export default {
       huizhen: null,
       // 面诊组件
       face: null,
+      // BMI组件
+      BMI: '',
+      // 血压平均line组件
+      coverLine: '',
+      // 血压平均bar组件
+      coverBar: '',
+      // 饼图与直方图组件
+      pie: '',
       // sickID: null,
       // name: null,
       // adminHospitalId: null,
@@ -335,8 +374,13 @@ export default {
         case 0:
           break
         case 1:
-          this.bloodCover = 'bloodCover'
-          this.report = 'report'
+          // this.bloodCover = 'bloodCover'
+          this.bloodCover = 'bloodTrendChart'
+          // this.report = 'report'
+          this.pie = 'bloodPie'
+          this.BMI = 'BMI'
+          this.coverLine = 'bloodAverageLine'
+          this.coverBar = 'bloodAverageBar'
           this.alldayheighblood = 'alldayheighblood'
           break
         case 2:
