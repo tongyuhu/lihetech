@@ -1,3 +1,7 @@
+/**
+ * @param {Object} params
+ * @description  心血管风险评估api
+ */
 export const assessmentApi = (params, data) => {
   return {
     method: 'post',

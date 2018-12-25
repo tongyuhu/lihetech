@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {object} parmas
+ * @description 修改 管理员-医生-专家-信息
+ */
 export const editAdminApi = (parmas) => {
   // console.log(medicineType)
   return {
@@ -6,6 +11,11 @@ export const editAdminApi = (parmas) => {
     data: parmas
   }
 }
+/**
+ *
+ * @param {File} parmas
+ * @description 公共的上传文件接口
+ */
 export const uploadFileApi = (parmas) => {
   // console.log(medicineType)
   return {

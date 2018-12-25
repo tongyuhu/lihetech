@@ -1,7 +1,7 @@
-import { Message, MessageBox } from 'element-ui'
+import { Message } from 'element-ui'
 import axios from 'axios'
 import qs from 'qs' // formdata序列化
-// import router from './../router/index'
+import router from '@/router/index'
 // import { Message, MessageBox, Loading } from 'element-ui'
 // import Vue from 'vue'
 // axios 配置
@@ -117,14 +117,31 @@ axios.interceptors.response.use(
           // }, 3000)
           break
         case '1005':
-          MessageBox.alert('登录超时,请重新登录', '提示信息', {
-            'confirmButtonText': '确定'
-          }).then(() => {
-            sessionStorage.clear()
-            window.location.href = '/BPWatch/admin/login/page'
-            // router.push({path: '/login'})
-            location.reload()
+          Message({
+            type: 'warning',
+            message: '登录超时,请重新登录',
+            duration: 5000,
+            showClose: true
           })
+          window.location.href = '/BPWatch/admin/login/page'
+          // let errAction = new Promise(function (resolve, reject) {
+          //   setTimeout(function () {
+          //     // location.reload()
+          //     // MessageBox.alert('登录超时,请重新登录', '提示信息', {
+          //     //   'confirmButtonText': '确定'
+          //     // }).then(() => {
+          //     //   // sessionStorage.clear()
+          //     //   // router.push({path: '/login'})
+          //     //   window.location.href = '/BPWatch/admin/login/page'
+          //     //   location.reload()
+          //     //   resolve()
+          //     // })
+          //   }, 2000)
+          // })
+          // errAction.then(function () {
+          //   window.location.href = '/BPWatch/admin/login/page'
+          //   location.reload()
+          // })
           break
         case '-1006':
           Message({
@@ -147,7 +164,7 @@ axios.interceptors.response.use(
           break
 
         case 401:
-          sessionStorage.clear()
+          // sessionStorage.clear()
           window.location.href = '/BPWatch/admin/login/page'
           // router.replace({path: '/login'})
           location.reload()
@@ -160,17 +177,23 @@ axios.interceptors.response.use(
 
         case 404:
           err.message = `请求地址出错: ${err.response.config.url}`
+          router.replace({name: '404'})
           break
 
         case 408:
           err.message = '请求超时'
+          Message({
+            type: 'warning',
+            message: '请求超时',
+            duration: 5000,
+            showClose: true
+          })
           break
-
         case 500:
-          sessionStorage.clear()
+          // sessionStorage.clear()
           // window.location.href = '/BPWatch/admin/login/page'
           // location.reload()
-          // router.replace({path: '/login'})
+          // router.replace({name: '500'})
           err.message = '服务器内部错误'
           break
         case 501:

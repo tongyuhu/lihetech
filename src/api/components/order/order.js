@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {object} parmars
+ * @description 医生当前预约详情
+ */
 export const orderApi = (parmars) => {
   return {
     method: 'post',
@@ -9,17 +14,21 @@ export const orderApi = (parmars) => {
     }
   }
 }
+/**
+ * @description  预约设置
+ */
 export const orderSettingApi = (parmars) => {
   return {
     method: 'post',
     url: '/make/order/setUp',
-    data: {
-      'weeks': parmars.weeks,
-      'startEndPeriodTimeMor': parmars.startEndPeriodTimeMor,
-      'startEndPeriodTimeAftn': parmars.startEndPeriodTimeAftn
-    }
+    data: parmars
   }
 }
+/**
+ *
+ * @param {object} parmars
+ * @description 开启或关闭预约
+ */
 export const closeorderApi = (parmars) => {
   return {
     method: 'post',
@@ -31,6 +40,7 @@ export const closeorderApi = (parmars) => {
     }
   }
 }
+
 export const settingDataApi = (parmars) => {
   return {
     method: 'post',

@@ -1,53 +1,54 @@
 <template>
     <div class='tatalsick' id="bloodtotal">
-      <!-- <el-row> -->
-        <el-row type="flex" justify="start">
-          <button v-for="(item,index) in checkDate" 
-          :key="item.date" 
-          class="check-date-btn" 
-          :class="{checked:item.isChecked
-          }" 
-          @click="updateDate(item.value,index)">
-            {{item.date}}
-          </button>
-        </el-row>
-        <p class="heightblood-total">高血压患者({{ heightbloodTotal }}人)</p>
-    
-        <el-row :gutter="8">
-            <el-col :span='12' v-loading="HBcoverLoading">
-              <el-card :body-style="{ padding: '0px' }">
-                  <div class="card-header">
-                    <p class="title">患者分布</p>
-                  </div>
-                  <div id='HBcover'  :style="{width:'auto',height:'300px'}"></div>
-              </el-card>
-            </el-col>
-            <el-col :span='12' v-loading="HBtrendLoading">
-              <el-card :body-style="{ padding: '0px' }">
-                  
-                  <div class="card-header">
-                    <p class="title">患者走势</p>
-                  </div>
+      <!-- 时间日期选择 -->
+      <el-row type="flex" justify="start">
+        <button v-for="(item,index) in checkDate" 
+        :key="item.date" 
+        class="check-date-btn" 
+        :class="{checked:item.isChecked
+        }" 
+        @click="updateDate(item.value,index)">
+          {{item.date}}
+        </button>
+      </el-row>
+      <p class="heightblood-total">血压分布({{ heightbloodTotal }}人)</p>
+      <!-- 图表 -->
+      <el-row :gutter="8">
+        <!-- 患者分布 -->
+        <el-col :span='12' v-loading="HBcoverLoading">
+          <el-card :body-style="{ padding: '0px' }">
+              <div class="card-header">
+                <p class="title">患者分布</p>
+              </div>
+              <div id='HBcover'  :style="{width:'auto',height:'300px'}"></div>
+          </el-card>
+        </el-col>
+        <!-- 患者走势 -->
+        <el-col :span='12' v-loading="HBtrendLoading">
+          <el-card :body-style="{ padding: '0px' }">
+              
+              <div class="card-header">
+                <p class="title">患者走势</p>
+              </div>
 
-                <div class="flex widthone">
-                  <div class="flex-btn-left" v-show="showBtn">
-                    <el-button @click="trendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button>
-                    <!-- <el-button @click="trendPre" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button> -->
-                  </div>
-                  <div class="chart-min-width">
-                    <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div>
-                  </div>
-                  <div class="flex-btn" v-show="showBtn">
-                    <el-button @click="trendPre" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button>
-                    <!-- <el-button @click="trendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button> -->
-                  </div>
-                </div>
+            <div class="flex widthone">
+              <div class="flex-btn-left" v-show="showBtn">
+                <el-button @click="trendNext" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button>
+                <!-- <el-button @click="trendPre" icon="el-icon-arrow-left" type="text" :style="{'font-size':'16px','color':'#999' ,'background':'#eaeaea'}"></el-button> -->
+              </div>
+              <div class="chart-min-width">
+                <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div>
+              </div>
+              <div class="flex-btn" v-show="showBtn">
+                <el-button @click="trendPre" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button>
+                <!-- <el-button @click="trendNext" icon="el-icon-arrow-right" type="text" :style="{'font-size':'16px','color':'#999','background':'#eaeaea'}"></el-button> -->
+              </div>
+            </div>
 
-                  <!-- <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div> -->
-              </el-card>
-            </el-col>
-        </el-row>
-      <!-- </el-row>  -->
+              <!-- <div id='HBtrend' :style="{width:'auto',height:'300px'}"></div> -->
+          </el-card>
+        </el-col>
+      </el-row>
     </div>
 </template>
 
@@ -59,6 +60,7 @@ export default {
   name: 'H-bloodheighttotal',
   data () {
     return {
+      // 日期选择
       checkDate: [
         {
           date: '日',
@@ -81,62 +83,41 @@ export default {
           isChecked: false
         }
       ],
+      // 患者分布数据
       sickDistributionData: [
-        // {
-        //   'value': 36,
-        //   'name': '正常'
-        // },
-        // {
-        //   'value': 38,
-        //   'name': '偏高'
-        // },
-        // {
-        //   'value': 3,
-        //   'name': '高'
-        // },
-        // {
-        //   'value': 83,
-        //   'name': '危险'
-        // }
-
       ],
+      // 患者走势数据
       sickTrendData: [
-        92,
-        55,
-        47,
-        47,
-        0,
-        49,
-        98,
-        89,
-        36,
-        78,
-        48,
-        86,
-        1
       ],
+      // 标题患者分布总人数
       heightbloodTotal: 0,
+      // 患者走势x轴数据
       sickTrendDataX: [
       ],
-      clickTime: 0,
+      // clickTime: 0,
+      // 患者分布加载动画
       HBcoverLoading: false,
+      // 患者走势加载动画
       HBtrendLoading: false,
+      // 患者走势前后按钮显示
       showBtn: false
     }
   },
   methods: {
+    // 血压分布echarts option
     HBcoverOption () {
       let vm = this
       let count = 0
-      let color = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
-      let hascolor = ['#81cefc', '#7cedc4', '#f4e07a', '#ff8f8f']
-      let nocolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
-      this.sickDistributionData.forEach(item => {
-        if (this._.toNumber(item.value) === 0) {
+      let color = ['#81cefc', '#9ac3e4', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let hascolor = ['#81cefc', '#9ac3e4', '#7cedc4', '#f4e07a', '#ff8f8f']
+      let nocolor = ['#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea', '#eaeaea']
+      // 如果所有数据都为0 数据块颜色改为灰色
+      vm.sickDistributionData.forEach(item => {
+        if (item.value === 0) {
           count++
         }
       })
-      if (count === 4) {
+      if (count === 5) {
         color = nocolor
       } else {
         color = hascolor
@@ -148,11 +129,12 @@ export default {
         //   formatter: '{a} <br/>{b} : {c}人 <br/> {d}%'
         // },
         color: color,
+        // 图例
         legend: {
           orient: 'vertical',
           left: '50%',
           top: 'center',
-          data: ['正常', '偏高', '高', '危险'],
+          data: ['正常', '正常高压', '轻度高血压', '中度高血压', '危险'],
           selectedMode: false,
           formatter: (name) => {
             let i = 0
@@ -185,7 +167,7 @@ export default {
               normal: {
                 position: 'inner',
                 formatter: function (params) {
-                  if (vm._.toNumber(params.value) === 0) {
+                  if (params.value === 0) {
                     return ''
                   } else {
                     return params.percent + '%'
@@ -210,6 +192,7 @@ export default {
         }
       }
     },
+    // 血压趋势echarts option
     HBtrendOption (start, end) {
       let vm = this
       let x1 = ''
@@ -221,11 +204,6 @@ export default {
       if (end) {
         zoomend = end
       }
-      // if (this.sickTrendDataX.length < 5) {
-      //   zoomend = 100
-      // } else {
-      //   zoomend = 50
-      // }
       return {
         title: {
         // text: '控压走势',
@@ -247,12 +225,8 @@ export default {
           show: false,
           left: '100',
           right: '80',
-          // left: '10%',
-          // top: '40px',
-          // bottom: '24px',
           width: 'auto',
           height: 'auto'
-          // containLabel: true
         },
         legend: { // 图例组件
           show: true,
@@ -424,18 +398,25 @@ export default {
       }
       return obj
     },
+    /**
+     * @deprecated 更新整体患者分布与走势时间
+     * @param {string} date 日期
+     * @param {number} index 选择checkDate 的index
+     */
     updateDate (date, index) {
       this.checkDate.forEach(item => {
         item.isChecked = false
       })
       this.checkDate[index].isChecked = true
-      // console.log(this.startendDate(date))
-      // let time = this.startendDate(date)
       let trendtime = this.trendcheck(date)
       this.getCoverData(trendtime)
       this.getTrendData(trendtime)
       // console.log('更新整体患者分布与走势时间', this.sickDistributionData)
     },
+    /**
+     * @param {number} params 数据接口获取字段 1 2 3 4 / day week month year
+     * @description 获取血压分布数据
+     */
     getCoverData (params) {
       let obj = {
         periodTime: params
@@ -454,11 +435,15 @@ export default {
             })
             this.sickDistributionData.push({
               'value': coverData.normalHighCount,
-              'name': '偏高'
+              'name': '正常高压'
+            })
+            this.sickDistributionData.push({
+              'value': coverData.moderateHighCount,
+              'name': '中度高血压'
             })
             this.sickDistributionData.push({
               'value': coverData.mildHighCount,
-              'name': '高'
+              'name': '轻度高血压'
             })
             this.sickDistributionData.push({
               'value': coverData.dangerCount,
@@ -470,6 +455,12 @@ export default {
         HBcover.setOption(this.HBcoverOption())
       })
     },
+    /**
+     * @param {string} date
+     * day week month year
+     * @returns {number}
+     * 1 2 3 4
+     */
     trendcheck (date) {
       let periodTime = null
       switch (date) {
@@ -488,6 +479,10 @@ export default {
       }
       return periodTime
     },
+    /**
+     * @param {number} params 数据接口获取字段 1 2 3 4 / day week month year
+     * @description 获取血压趋势数据
+     */
     getTrendData (periodTime) {
       let vm = this
       let params = {
@@ -520,10 +515,16 @@ export default {
         }
       })
     },
+    /**
+     * @description 血压趋势前页
+     */
     trendPre () {
       let HBtrend = echarts.init(document.getElementById('HBtrend'))
       HBtrend.setOption(this.HBtrendOption(50, 100))
     },
+    /**
+     * @description 血压趋势下一页
+     */
     trendNext () {
       let HBtrend = echarts.init(document.getElementById('HBtrend'))
       HBtrend.setOption(this.HBtrendOption(0, 50))
@@ -565,7 +566,7 @@ p {
   color:#666
 }
 .card-header{
-  margin: 0 20px 0 20px;
+  margin: 0 20px 0 26px;
   border-bottom:1px solid #ebeef5;
   height: 28px;
 }
@@ -584,17 +585,37 @@ p {
   color:#041421;
 }
 .check-date-btn{
-  border:none;
+  box-sizing: border-box;
+  border:1px solid #f4f6f9;
   background-color:#f4f6f9;
+  line-height:1;
+  white-space: nowrap;
   cursor: pointer;
   font-size:18px;
   color:#666;
   width:64px;
   height: 36px;
   outline:none;
+  border-radius:2px;
+}
+.check-date-btn:hover{
+  opacity: 0.9;
+  /* box-sizing: border-box;
+  border:1px solid #f4f6f9;
+  background-color:#f4f6f9;
+  line-height:1;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size:18px;
+  color:#666;
+  width:64px;
+  height: 36px;
+  outline:none;
+  border-radius:2px; */
 }
 .checked{
   background-color:#1991fc;
+  border-color:#1991fc;
   color:#fff;
   border-radius:2px;
 }

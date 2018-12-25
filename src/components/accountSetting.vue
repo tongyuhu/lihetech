@@ -6,7 +6,7 @@
     <el-card :body-style="{ padding: '0px' }">
       <div>
         <div class="add-sick-img" v-loading="ercodeimg">
-          <img width="250px" :src="addSickImg" alt="二维码">
+          <img v-show="!ercodeimg" width="250px" :src="addSickImg" alt="二维码图片加载失败">
         </div>
         <!-- <img src="" alt=""> -->
       </div>
@@ -42,8 +42,8 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
 // import {deepcopy} from '@/untils/untils'
-// import {tipsApi} from './../api/components/accountSetting'
 // import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
 export default {
   name: 'accountSetting',
@@ -52,11 +52,14 @@ export default {
       deleteTipsArr: [],
       showEdit: true,
       tipData: [{'checked': false}, {'checked': false}, {'checked': false}],
-      addSickImg: '',
-      ercodeimg: false
+      addSickImg: '', // 二维码图片
+      ercodeimg: false  // 图片链接 加载动画
     }
   },
   methods: {
+    ...mapActions([
+      'setFriendsListActon'
+    ]),
     isExist (arr, element) {
       for (var i = 0; i < this.length; i++) {
         if (this._.eq(arr[i], element)) {
@@ -65,71 +68,77 @@ export default {
           return -1
         }
       }
-    },
-    deleteCommonItem (soureArr, arr) {
-      if (soureArr.length === 0) {
-        return []
-      } else if (arr.length === 0) {
-        return soureArr
-      } else {
-        arr.forEach(item => {
-          let index = this.isExist(soureArr, item)
-          if (index !== -1) {
-            soureArr.splice(index, 1)
-          }
-        })
-        return soureArr
-      }
-    },
-    editTips () {
-      this.deleteTipsArr = []
-      this.showEdit = false
-    },
-    tipDataInit (arr) {
-      if (arr.length !== 0) {
-        arr.forEach(item => {
-          if (!this._.isObject(item)) {
-            item = {}
-          }
-          item.checked = false
-        })
-      }
-      return arr
-    },
-    cancelEdit () {
-      this.showEdit = true
-      this.deleteTipsArr = []
-      this.tipDataInit(this.tipData)
-    },
-    deleteTips () {
-      this.showEdit = true
-      this.tipData = this.deleteCommonItem(this.tipData, this.deleteTipsArr)
-      this.deleteTipsArr = []
-    },
-    checkTip (index) {
-      this.tipData[index].checked = !this.tipData[index].checked
-      let ready = this.tipData[index]
-      if (ready.checked) {
-        this.deleteTipsArr.push(ready)
-      }
-      if (!ready.checked) {
-        if (this._.indexOf(this.deleteTipsArr, ready) !== -1) {
-          this.deleteTipsArr.splice(this._.indexOf(this.deleteTipsArr, ready), 1)
-        }
-      }
     }
+    // deleteCommonItem (soureArr, arr) {
+    //   if (soureArr.length === 0) {
+    //     return []
+    //   } else if (arr.length === 0) {
+    //     return soureArr
+    //   } else {
+    //     arr.forEach(item => {
+    //       let index = this.isExist(soureArr, item)
+    //       if (index !== -1) {
+    //         soureArr.splice(index, 1)
+    //       }
+    //     })
+    //     return soureArr
+    //   }
+    // },
+    // editTips () {
+    //   this.deleteTipsArr = []
+    //   this.showEdit = false
+    // },
+    // tipDataInit (arr) {
+    //   if (arr.length !== 0) {
+    //     arr.forEach(item => {
+    //       if (!this._.isObject(item)) {
+    //         item = {}
+    //       }
+    //       item.checked = false
+    //     })
+    //   }
+    //   return arr
+    // },
+    // cancelEdit () {
+    //   this.showEdit = true
+    //   this.deleteTipsArr = []
+    //   this.tipDataInit(this.tipData)
+    // },
+    // deleteTips () {
+    //   this.showEdit = true
+    //   this.tipData = this.deleteCommonItem(this.tipData, this.deleteTipsArr)
+    //   this.deleteTipsArr = []
+    // },
+    // checkTip (index) {
+    //   this.tipData[index].checked = !this.tipData[index].checked
+    //   let ready = this.tipData[index]
+    //   if (ready.checked) {
+    //     this.deleteTipsArr.push(ready)
+    //   }
+    //   if (!ready.checked) {
+    //     if (this._.indexOf(this.deleteTipsArr, ready) !== -1) {
+    //       this.deleteTipsArr.splice(this._.indexOf(this.deleteTipsArr, ready), 1)
+    //     }
+    //   }
+    // }
   },
   mounted () {
-    // this.ercodeimg = true
+    // 加载二维码
+    this.ercodeimg = true
     this.$axios({
       method: 'post',
       url: 'qrcode/url'
     })
     .then(res => {
       this.addSickImg = res.data.data
-      // this.ercodeimg = false
+      this.ercodeimg = false
     })
-  }
+    .catch(err => {
+      // if (err) {
+      this.ercodeimg = false
+      // }
+    })
+  },
   // data () {
   //   var checkEmail = (rule, value, callback) => {
   //     let emailrule = /^\w+((-\w+)|(\.\w+))*\\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/
@@ -313,40 +322,19 @@ export default {
   //     },
   //     deep: true
   //   }
-  // },
-  // mounted () {
-  //   this.$axios(tipsApi)
-  //   .then(res => {
-  //     this.tips = res.data.tips
-  //   })
-  //   if (this.$store.state.adminInfo) {
-  //     if (this.$store.state.adminInfo.adminType === 1 || this.$store.state.adminInfo.adminType === 2) {
-  //       this.doctorListData.forEach(item => {
-  //         item.root = true
-  //         item.delete = true
-  //       })
-  //     }
-  //     if (this.$store.state.adminInfo.adminType === 3 || this.$store.state.adminInfo.adminType === 4) {
-  //       // this.doctorListData.indexOf
-  //       this.doctorListData.forEach(item => {
-  //         if (item.id === this.$store.state.adminInfo.id) {
-  //           item.root = true
-  //           item.delete = false
-  //         }
-  //       })
-  //     }
-  //   }
-  //   // console.log(this.$router.currentRoute.path, 11)
   // }
+  beforeRouteLeave (to, from, next) {
+    this.setFriendsListActon()
+    next()
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-$url:'./../../hospitalImage/hospitalIcon/';
-    button{
-      border:none;
-      outline: none;
-    }
+  button{
+    border:none;
+    outline: none;
+  }
   .accountsetting{
     height: 100%;
   }
@@ -513,5 +501,7 @@ $url:'./../../hospitalImage/hospitalIcon/';
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+    min-height: 250px;
+    width: 100%;
   }
 </style>

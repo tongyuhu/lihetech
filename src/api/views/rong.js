@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {*} params
+ * @description 融云好友集合
+ */
 export const rongFriendApi = (params) => {
   return {
     method: 'post',

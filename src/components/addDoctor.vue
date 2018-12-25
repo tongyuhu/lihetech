@@ -91,17 +91,18 @@ export default {
       }
     }
     var checkPass = (rule, value, callback) => {
-      let passrule = /^[a-zA-Z]\w{5,8}$/
+      let passrule = /^[a-zA-Z]\w{5,17}$/
       if (!value) {
         return callback(new Error('密码不能为空'))
       } else if (!passrule.exec(value)) {
-        callback(new Error('请输入6~9密码，以字母开头,可包含数字和下划线'))
+        callback(new Error('请输入6~18密码，以字母开头,可包含数字和下划线'))
       } else {
         callback()
       }
     }
     return {
-      labelPosition: 'right',
+      labelPosition: 'right',  // 标签位置
+      // 表单数据
       addDoctorForm: {
         email: '',
         name: '',
@@ -110,6 +111,7 @@ export default {
         account: ''
       },
       dialogFormVisible: false,
+      // 校验规则
       rules: {
         email: [
             { validator: checkEmail, trigger: 'blur' }
@@ -138,6 +140,9 @@ export default {
     // ])
   },
   methods: {
+    /**
+     * @description 提交数据
+     */
     submitForm (formName) {
       // let vm = this
       this.$refs[formName].validate((valid) => {
@@ -177,6 +182,9 @@ export default {
       })
       // this.$router.go(-1)
     },
+    /**
+     * @description 重置表单 取消保存 返回上一页
+     */
     resetForm (formName) {
       this.$refs[formName].resetFields()
       this.$router.go(-1)
@@ -195,14 +203,14 @@ export default {
 </script>
 
 <style scoped>
-.add-doctor{
+/* .add-doctor{ */
   /* display: flex; */
   /* justify-content: center; */
   /* width: 40%; */
   /* padding-left: 20%; */
   /* padding-right: 20%; */
   /* height: 100%; */
-}
+/* } */
 .header{
   font-size: 24px;
   color:#041421;

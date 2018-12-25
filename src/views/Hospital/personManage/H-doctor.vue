@@ -4,10 +4,10 @@
       <div class="head-title">医生管理</div>
       <div class="head-edit-wrap">
         <button v-if="showEnabled" class="head-edit-button margin-right" @click="addDoctor">新增医生</button>
-        <!-- <button class="head-edit-button delete" @click="deleteDoctor">删除</button> -->
       </div>
     </div>
-    <div>
+    <!-- 医生管理列表 -->
+    <div class="loading-min-height" v-loading="loading">
       <el-card>
         <div class="search">
           <el-input placeholder="账号 \ 姓名 \ 电话" v-model="searchDoctorMsg" size="small"
@@ -23,11 +23,6 @@
         style="width:100%"
         border
         @selection-change="doctorSelectionChange">
-          <el-table-column
-          type="selection"
-          width="55"
-          align="center">
-          </el-table-column>
           <el-table-column
           label="序号"
           type="index"
@@ -68,17 +63,9 @@
               <span class="action-text"> <i class="el-icon-edit-outline"></i> 
               编辑</span>
               </el-button>
-              <!-- <el-switch
-              v-if="showEnabled"
-              v-model="scope.row.enabled"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              :width="30"
-              @change="doctorEnabled(scope.row)">
-              </el-switch>
-              <span v-if="showEnabled">停/启用</span> -->
             </template>
           </el-table-column>
+          <!-- 医院权限 -->
           <el-table-column
           prop=""
           label="启/停用"
@@ -93,7 +80,6 @@
               :width="40"
               @change="doctorEnabled(scope.row)">
               </el-switch>
-              <!-- <span>停/启用</span> -->
             </template>
           </el-table-column>
           <el-table-column
@@ -112,7 +98,6 @@
                 content="请修改密码以解除锁定状态">
               </el-popover>
               <el-button type="text" :style="{color:'#e87070'}" v-popover:popoverTip>查看</el-button>
-              <!-- <span>停/启用</span> -->
             </template>
           </el-table-column>
         </el-table>
@@ -129,6 +114,7 @@
         </div>
       </el-card>
     </div>
+    <!-- 修改信息 -->
     <div class="dialog">
       <!-- 修改医生 -->
       <el-dialog
@@ -159,9 +145,10 @@
           <el-form-item label="备注" prop="adminNote">
             <el-input type="text" v-model="editDoctorForm.adminNote" size="medium"></el-input>
           </el-form-item>
-          <el-form-item class="submit-btn">
-            <button @click.prevent="editDoctorConfirm('editDoctorFormref')">保存</button>
-            <button @click.prevent="editDoctorCancel('editDoctorFormref')">取消</button>
+          <el-form-item class="submit-btn"
+          label-width="0px" >
+            <el-button type="primary" size="small" @click.prevent="editDoctorConfirm('editDoctorFormref')">保存</el-button>
+            <el-button type="primary" size="small" @click.prevent="editDoctorCancel('editDoctorFormref')">取消</el-button>
           </el-form-item>
         </el-form>
 
@@ -177,9 +164,9 @@
         width="456px"
         center>
         <span slot="title" class="dialog-title">确定删除该医生记录吗？</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmDeleteHandle">确 定</button>
-          <button class="cancel" @click="cancelDeleteHandle">取 消</button>
+        <span slot="footer">
+          <el-button type="primary" size="small" @click="confirmDeleteHandle">确 定</el-button>
+          <el-button type="primary" size="small" @click="cancelDeleteHandle">取 消</el-button>
         </span>
       </el-dialog>
     </div>
@@ -192,6 +179,7 @@ import {mapState} from 'vuex'
 export default {
   name: 'accountSetting',
   data () {
+    // email检查
     var checkEmail = (rule, value, callback) => {
       let emailrule = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
       if (!value) {
@@ -205,6 +193,7 @@ export default {
         callback()
       }
     }
+    // 姓名检查
     var checkName = (rule, value, callback) => {
       let namerule = /^.{1,20}$/
       if (!value) {
@@ -216,6 +205,7 @@ export default {
         callback()
       }
     }
+    // 手机号
     var checkMobile = (rule, value, callback) => {
       let mobilerule = /((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)/
       if (!value) {
@@ -227,6 +217,7 @@ export default {
         callback()
       }
     }
+    // 备注
     var checkAdminNote = (rule, value, callback) => {
       // let accountRule = /[a-zA-Z0-9_]{4,15}$/
       let adminNoteRule = /^.{1,20}$/
@@ -239,6 +230,7 @@ export default {
         callback()
       }
     }
+    // 密码
     var checkPass = (rule, value, callback) => {
       let passrule = /^[a-zA-Z]\w{5,8}$/
       if (!value) {
@@ -251,36 +243,35 @@ export default {
       }
     }
     return {
+      // 编辑单元格宽度
       doctorEditCellWidth: 100,
+      // 医院权限
+      // 新增医生 医生启用  停用
       showEnabled: false,
       // 是否有账户锁定
       locked: false,
+      // 医生列表
       doctorList: [
-        // {
-        //   loginAccount: '2016-05-03',
-        //   doctorName: '王小虎',
-        //   doctorPhone: '上海市普陀区金沙江路 1518 弄',
-        //   doctorEmail: '上海市普陀区金沙江路 1518 弄',
-        //   doctorMark: '上海市普陀区金沙江路 1518 弄'
-        // },
       ],
+      // 选择要删除的医生
       readyDelete: [],
+      // 模糊搜索医生
       searchDoctorMsg: null,
+      // 页码
       currentPage: 1,
       pageSize: 10,
-      totalpage: null,
+      totalpage: 0,
+      // 加载动画
       loading: false,
+      // 修改医生弹窗显示
       modifyDoctor: false,
-      // editDoctorName: '',
-      // editDoctorPhone: '',
-      // editDoctorPerson: '',
-      // editDoctorEmail: '',
-      // editDoctorAddress: '',
-      // editDoctorNote: '',
+      // 医生id
       doctorId: '',
       roleId: '',
       confirmDelete: false,
+      // 修改医生label位置
       labelPosition: 'right',
+      // 修改医生表单数据
       editDoctorForm: {
         'id': null,
         'name': null,
@@ -291,6 +282,7 @@ export default {
         'adminNote': null,
         'password': null
       },
+      // 修改医生表单验证规则
       editDoctorRules: {
         name: [
           { validator: checkName, trigger: 'blur' }
@@ -311,12 +303,11 @@ export default {
           //  {min: 6, max: 9, message: '请输入6-9位密码', trigger: 'blur'}
         ]
       },
+      // 医生的默认基本信息
       editDoctorMsg: {
         'id': null,
         'name': null,
         'mobile': null,
-        // 'regionId': null,
-        // 'roleId': null,
         'email': null,
         'adminNote': null,
         'password': null
@@ -329,6 +320,9 @@ export default {
     ])
   },
   methods: {
+    /**
+     * @description 初始化医生列表选择状态为false
+     */
     formatterDoctorList (list) {
       if (list.length === 0) {
         return list
@@ -339,23 +333,22 @@ export default {
       }
       return list
     },
-    // 选择要删除的医生
+    /**
+     * @param {array} selection 选择的医生列表
+     * @description 选择医生
+     */
     doctorSelectionChange (selection) {
       this.readyDelete = selection
       console.log('delete', this.readyDelete)
     },
-    // 模糊搜索医生
+    /**
+     * @description 模糊搜索医生
+     */
     selectName () {
       if (!this.searchDoctorMsg) {
         this.getDoctorList()
       } else {
         let param = {}
-        // if (this._.isNumber(this.searchDoctorMsg) && this.searchDoctorMsg.length > 6) {
-        //   param.param = this.searchDoctorMsg
-        // } else {
-        //   param.name = this.searchDoctorMsg
-        // }
-
         param.pageSize = this.pageSize
         param.fields = this._.toString(this.searchDoctorMsg)
         this.$axios(getDoctorListAPI(param))
@@ -383,13 +376,11 @@ export default {
       this.getDoctorList()
       console.log(`当前页: ${val}`)
     },
-    // 编辑医生打开弹窗 信息
+    /**
+     * @param {object} doctor 医生信息
+     * @description 打开编辑医生弹窗 初始化医生信息
+     */
     editDoctor (doctor) {
-      // this.editDoctorName = doctor.name
-      // this.editDoctorPhone = ''
-      // this.editDoctorAddress = doctor.address
-      // this.doctorId = doctor.id
-      // this.roleId = doctor.roleId
       this.editDoctorForm.id = doctor.id
       this.editDoctorForm.name = doctor.name || ''
       this.editDoctorForm.mobile = doctor.mobile || ''
@@ -400,14 +391,15 @@ export default {
       this.editDoctorMsg.id = doctor.id
       this.editDoctorMsg.name = doctor.name || ''
       this.editDoctorMsg.mobile = doctor.mobile || ''
-      // this.editDoctorMsg.regionId = doctor.regionId
-      // this.editDoctorMsg.roleId = doctor.roleId
       this.editDoctorMsg.email = doctor.email || ''
       this.editDoctorMsg.adminNote = doctor.adminNote || ''
       this.editDoctorMsg.password = doctor.password || ''
       this.modifyDoctor = true
       console.log(doctor)
     },
+    /**
+     * @description 取消编辑医生
+     */
     editDoctorCancel () {
       this.editDoctorName = ''
       this.editDoctorPhone = ''
@@ -416,6 +408,10 @@ export default {
       this.roleId = ''
       this.modifyDoctor = false
     },
+    /**
+     * @param {string} formName 表单ref
+     * @description 确认编辑医生
+     */
     editDoctorConfirm (formName) {
       let vm = this
       vm.$refs[formName].validate((valid) => {
@@ -443,13 +439,6 @@ export default {
           } else {
             vm.editDoctorMsg.adminNote = vm.editDoctorForm.adminNote
           }
-          // let params = {
-          //   'id': vm.doctorId,
-          //   'name': vm.editDoctorMsg.name,
-          //   'mobile': vm.editDoctorMsg.mobile,
-          //   'regionId': vm.editDoctorMsg.regionId,
-          //   'roleId': vm.editDoctorMsg.roleId
-          // }
           console.log('editDoctorMsg', vm.editDoctorMsg)
           vm.$axios(editDoctorAPI(vm.editDoctorMsg))
           .then(res => {
@@ -460,6 +449,10 @@ export default {
               })
             }
             if (res.data.code === '0000') {
+              vm.$message({
+                message: '修改成功',
+                type: 'success'
+              })
               this.getDoctorList()
               vm.modifyDoctor = false
             }
@@ -469,35 +462,48 @@ export default {
         }
       })
     },
-    // 删除打开弹窗
+    /**
+     * @description 删除医生打开确认弹窗
+     */
     deleteDoctor () {
       if (this.readyDelete.length !== 0) {
         this.confirmDelete = true
       }
     },
-    // 确认删除
+    /**
+     * @description 确认删除
+     */
     confirmDeleteHandle () {
       this.doctorList = this._.differenceWith(this.doctorList, this.readyDelete, this._.isEqual)
       this.confirmDelete = false
     },
-    // 取消删除
+    /**
+     * @description  取消删除
+     */
     cancelDeleteHandle () {
       this.readyDelete = []
       this.$refs.doctorlist.clearSelection()
-      // this.doctorList = this.formatterDoctorList(this.doctorList)
       this.confirmDelete = false
     },
-    // 添加医生 跳转路由
+    /**
+     * @description 添加医生 跳转到添加页面
+     */
     addDoctor () {
       this.$router.push({
         name: 'addDoctor'
       })
     },
-    // 获取医生列表
+    /**
+     * @description 获取医生列表
+     */
     getDoctorList () {
+      this.loading = true
       let param = {
         pageNum: this.currentPage,
         pageSize: this.pageSize
+      }
+      if (this.searchDoctorMsg) {
+        param.fields = this.searchDoctorMsg
       }
       this.$axios(getDoctorListAPI(param))
       .then(res => {
@@ -516,10 +522,18 @@ export default {
             }
           }
         })
+        this.loading = false
         console.log('doctorList', this.doctorList)
-        // this.doctorList = this.formatterDoctorList(this.doctorList)
+      })
+      .catch(err => {
+        console.log(err, '获取医生列表失败')
+        this.loading = false
       })
     },
+    /**
+     * @param {obj} val 医生信息
+     * @description 停用、启用医生账号
+     */
     doctorEnabled (val, doctor) {
       console.log('停用', val, doctor)
       let param = {
@@ -538,27 +552,20 @@ export default {
             type: 'success'
           })
         } else {
-          // this.doctorList.forEach(item => {
-          //   if (item.id === val.id) {
-          //     item.enabled = !item.enabled
-          //   }
-          // })
           this.getDoctorList()
         }
       })
     }
   },
   mounted () {
+    /**
+     * 权限 医院有停用启用医生账号权限
+     */
     if (this.adminInfo.adminType === 1 || this.adminInfo.adminType === 2) {
       this.doctorEditCellWidth = 250
       this.showEnabled = true
     }
-    // this.showEnabled = true
-    // console.log('adminInfo', this.adminInfo)
     this.getDoctorList()
-  },
-  updated () {
-
   }
 }
 </script>
@@ -566,77 +573,6 @@ export default {
 
 
 <style lang="scss" scoped>
-// table{
-//   border-collapse:collapse;
-//   width: 100%;
-//   font-size: 14px;
-//   border: 1px solid #eaeaea;
-//   th, td{
-//   border: 1px solid #eaeaea;
-//   text-align: center;
-//   vertical-align: middle;
-//   min-height: 40px;
-//   height: 40px;
-//   line-height: 28px;
-//   // min-width: 80px;
-//   color: #666;
-//   }
-//   tr:nth-child(n+2):hover{
-//     background-color: #f5f7fa;
-//   }
-//   .checked{
-//     // max-width: 40px !important;
-//     text-align: center;
-
-//     // margin:0 auto;
-//     &>div{
-//       cursor: pointer;
-//       width: 20px;
-//       height: 20px;
-//     }
-//     & button{
-//       cursor: pointer;
-//       // width: 20px;
-//       // height: 20px;
-//       padding: 0;
-//       margin:0;
-//       background: #fff;
-//       // font-size: 0;
-//     }
-//     .checked-default{
-//        position: relative;
-//       cursor: pointer;
-//     }
-//     .checked-default::before{
-//       left: 0;
-//       cursor: pointer;
-//       bottom:0;
-//       position: absolute;
-//       content: '';
-//       display: block;
-//       width: 20px;
-//       height: 20px;
-//       background: url("~icon/hospital-icon-45.png") no-repeat;
-//     }
-//     .checked-icon{
-//       position: relative;
-//       cursor: pointer;
-//     }
-//     .checked-icon::before{
-//       left: 0;
-//       cursor: pointer;
-//       bottom:0;
-//       position: absolute;
-//       content: '';
-//       display: block;
-//       width: 20px;
-//       height: 20px;
-//       background: url("~icon/hospital-icon-44.png") no-repeat;
-//     }
-
-//   }
-// }
-
 input{
     -webkit-appearance: none;
     background-color: #fff;
@@ -737,20 +673,7 @@ button{
     font-weight: bold;
   }
   button{
-    width: 130px;
-      height: 36px;
-      line-height: 36px;
-      text-align: center;
-      font-size: 18px;
-      color:#fff;
-      opacity: 0.9;
-      background-color: #1991fc;
-      cursor: pointer;
-      border-radius: 2px;
-      border:1px solid #1991fc;
-      &:hover{
-        opacity: 1;
-      }
+    font-size: 14px;
   }
   .cancel{
     background-color: #fff;
@@ -763,9 +686,16 @@ button{
   width:300px;
   display:flex;
 }
-.submit-btn button{
-  margin-left: 10px;
-  margin-right:10px;
+.submit-btn{
+  text-align: center;
+}
+// .submit-btn button{
+//   margin-left: 10px;
+//   margin-right:10px;
+// }
+.loading-min-height{
+  min-height: 400px;
+  width: 100%;
 }
 </style>
 <style>

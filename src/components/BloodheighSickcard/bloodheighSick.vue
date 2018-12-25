@@ -1,8 +1,10 @@
 <template>
   <div ref="sickcard">
-    <!-- {{showcard}} -->
-    <!-- 头部 -->
-    <div class="sick-card-head clear">
+    <!-- 头部 基本信息 问诊页面不显示-->
+    <div class="sick-card-head clear" v-if="showcard">
+      <div class="sick-card-head-right">
+        <p>{{createTime}}</p>
+      </div>
       <div class="sick-card-head-left">
         <p class="name">{{name}}</p>
         <div class="sick-card-head-left-msg">
@@ -12,9 +14,6 @@
           <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
         </div>
       </div>
-      <div class="sick-card-head-right">
-        <p>{{createTime}}</p>
-      </div>
     </div>
     <!-- 选项卡 -->
     <div class="clear">
@@ -23,33 +22,37 @@
         v-model="activeIndex"
         :hassuger="isSugerHeigh"
         @checkSuger="checkSuger"
-        @checkd="changeTab">
+        @checkd="changeTab"
+        :tabcss="{'margin-right':'35px'}"
+        :style="{'min-width':'1250px'}"
+        >
           <pane
           label="病历" >
             <!-- 病人简历 start  -->
             <div class="sick-history" v-show="showcard">
               <div class="sick-history-top">
                 <div>
-                  <span>身高：{{height}}</span>
-                  <span>体重：{{weight}}</span>
+                  <span>身高：{{height?height:'无'}}</span>
+                  <span>体重：{{weight?weight:'无'}}</span>
                 </div>
                 <div>
-                  <span>病史：{{sysIllnessHistoryNameDisease}}</span>
-                  <span>遗传史：{{sysIllnessHistoryNameGenetic}}</span>
+                  <span>病史：{{sysIllnessHistoryNameDisease?sysIllnessHistoryNameDisease:'无'}}</span>
+                  <span>遗传史：{{sysIllnessHistoryNameGenetic?sysIllnessHistoryNameGenetic:'无'}}</span>
                 </div>
                 <div>
-                  <span>生活习惯：{{habits}}</span>
-                  <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent}}</span>
+                  <span>生活习惯：{{habits?habits:'无'}}</span>
+                  <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent?sysIllnessHistoryNameBpConcurrent:'无'}}</span>
                 </div>
                 <div>
-                  <span>检查项目：心电图、肾脏</span>
+                  <span>检查项目：{{checkItem?checkItem:'无'}}</span>
                 </div>
               </div>
               <div class="sick-history-bottom">
                 <!-- <router-link :to="{name:healthForm}" tag="a">体检表</router-link> -->
-                <button><span>体检表</span></button>
+                <button @click="flupHistory"><span>随访记录</span></button>
                 <!-- <button><span><router-link :to="{name:'healthForm'}" tag="span">体检表</router-link></span></button> -->
                 <button @click="openChecklist"><span>检查单</span></button>
+                <button @click="openDailyImg"><span>日常照片</span></button>
               </div>
             </div>
             <!-- 病人简历 end  -->
@@ -60,6 +63,7 @@
             :totalPage="totalPage"
             v-if="showcard">
             </card>
+            <!-- 面诊  -->
             <component
             ref="facediagnosis"
             v-if="!showcard"
@@ -71,10 +75,11 @@
             :hospitalId="hospitalId"
             :is="face"></component>
             <!-- 病历卡 end-->
-            <!-- 今日笔记 -->
-            <note
+            <!-- 今日笔记 暂不显示-->
+            <!-- <note
             :sickID="sickID" 
-            :hospitalId="hospitalId"></note>
+            :hospitalId="hospitalId">
+            </note> -->
             <!-- 今日笔记 end-->
 
           </pane>
@@ -82,24 +87,48 @@
           label="分析报告">
             <!-- <blood-cover :sickID="sickID" :hospitalId="hospitalId"></blood-cover> -->
             <!-- <bloodCover :sickID="sickID" :hospitalId="hospitalId"></bloodCover> -->
+            <!-- 血压趋势 -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="bloodCover"></component>
-            <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component>
+            <!-- 血压分布 血压平均水平 血压直方图 血压与BMI -->
+            <el-row :gutter="2">
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="coverLine"></component>
+              </el-col>
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="coverBar"></component>
+              </el-col>
+            </el-row>
+            <el-row :gutter="2">
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="BMI"></component>
+              </el-col>
+              <el-col :span="12">
+
+                <component :sickID="sickID" :hospitalId="hospitalId" :is="pie"></component>
+              </el-col>
+            </el-row>
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component> -->
+            <!-- <component :sickID="sickID" :hospitalId="hospitalId" :is="report"></component> -->
+            <!-- 24小时动态血压 -->
+            <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
+            
           </pane>
           <pane
           label="用药">
             <!-- <useDrug :sickID="sickID" :hospitalId="hospitalId"></useDrug> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="useDrug"></component>
           </pane>
-          <pane
+          <!-- <pane
           label="心血管评估">
-            <!-- <assessment :sickID="sickID" :hospitalId="hospitalId"></assessment> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="assessment"></component>
-          </pane>
-          <pane
+          </pane> -->
+          <!-- <pane
           label="24小时动态血压">
-            <!-- <alldayheighblood :sickID="sickID" :hospitalId="hospitalId"></alldayheighblood> -->
             <component :sickID="sickID" :hospitalId="hospitalId" :is="alldayheighblood"></component>
-          </pane>
+          </pane> -->
           <!-- <pane -->
           <!-- label="分析报告"> -->
             <!-- <report :sickID="sickID" :hospitalId="hospitalId"></report> -->
@@ -114,6 +143,7 @@
       </div>
     </div>
 
+    <!-- 历史病历 -->
     <el-dialog
     :visible.sync="histroyCard"
     width="80%"
@@ -125,19 +155,19 @@
       <div class="open-sick-history">
         <div class="sick-history-top">
           <div>
-            <span>身高：{{height}}</span>
-            <span>体重：{{weight}}</span>
+            <span>身高：{{height?height:'无'}}</span>
+            <span>体重：{{weight?weight:'无'}}</span>
           </div>
           <div>
-            <span>病史：{{sysIllnessHistoryNameDisease}}</span>
-            <span>遗传史：{{sysIllnessHistoryNameGenetic}}</span>
+            <span>病史：{{sysIllnessHistoryNameDisease?sysIllnessHistoryNameDisease:'无'}}</span>
+            <span>遗传史：{{sysIllnessHistoryNameGenetic?sysIllnessHistoryNameGenetic:'无'}}</span>
           </div>
           <div>
-            <span>生活习惯：{{habits}}</span>
-            <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent}}</span>
+            <span>生活习惯：{{habits?habits:'无'}}</span>
+            <span class="sick">并发症：{{sysIllnessHistoryNameBpConcurrent?sysIllnessHistoryNameBpConcurrent:'无'}}</span>
           </div>
           <div>
-            <span>检查项目：心电图、肾脏</span>
+            <span>检查项目：{{checkItem?checkItem:'无'}}</span>
           </div>
         </div>
         <div class="sick-history-bottom">
@@ -155,49 +185,68 @@
       >
       </card>
     </el-dialog>
+    <!-- 日常照片 -->
+    <el-dialog
+    :visible.sync="dailyImg"
+    width="80%">
+      <span slot="title" class="dialog-title">
+        日常照片
+      </span>
+      <!-- 照片start  -->
+      <div class="open-sick-history">
+        <dailyImg :sickID="sickID"></dailyImg>
+      </div>
+      <!--  end  -->
+      <!-- 病历卡 -->
+    </el-dialog>
+    <!-- 检查单 -->
     <el-dialog
     width="80%"
     :visible.sync="showchecklist"
     center>
 
-    <span slot="title" class="dialog-title">
-        检查单
-    </span>
-    <span slot="footer" v-if="checklist.length === 0 && faceDATA.userDetectReportList.length===0">
-      暂无检查单
-    </span>
+      <span slot="title" class="dialog-title">
+          检查单
+      </span>
+      <span slot="footer" v-if="checklist.length === 0 && faceDATA.userDetectReportList.length===0">
+        暂无检查单
+      </span>
 
-    <div class="check-list" v-if="faceDATA.userDetectReportList.length !==0">
-      <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
-        <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
+      <div class="check-list" v-if="faceDATA.userDetectReportList.length !==0">
+        <div v-for="(img,index) in faceDATA.userDetectReportList" :key="index">
+          <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
+        </div>
+        <div class="empty-div">
+        </div>
+        <div class="empty-div">
+        </div>
+        <div class="empty-div">
+        </div>
       </div>
-      <div class="empty-div">
+      <div class="check-list" v-else>
+        <div v-for="(img,index) in checklist" :key="index">
+          <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
+        </div>
+        <div class="empty-div">
+        </div>
+        <div class="empty-div">
+        </div>
+        <div class="empty-div">
+        </div>
       </div>
-      <div class="empty-div">
-      </div>
-      <div class="empty-div">
-      </div>
-    </div>
-    <div class="check-list" v-else>
-      <div v-for="(img,index) in checklist" :key="index">
-        <img class="check-img" :src="img.url" alt="" @click="showchecklistimg(img.url)">
-      </div>
-      <div class="empty-div">
-      </div>
-      <div class="empty-div">
-      </div>
-      <div class="empty-div">
-      </div>
-    </div>
+      <!-- v-if="showBigImg" -->
+        <!-- <checkList
+        :list="checklist" :row="true">
+
+        </checkList> -->
+    </el-dialog>
+    <!-- 大图 -->
     <imgfloat
     :imgsrc="checklistimgUrl"
+    v-if="showBigImg"
+    @close="closeImgFloat"
     ref="checklistimg">
     </imgfloat>
-      <!-- <checkList
-      :list="checklist" :row="true">
-
-      </checkList> -->
-    </el-dialog> 
   </div>
 </template>
 
@@ -208,16 +257,23 @@ import tabs from './../tabs.vue'
 import pane from './../pane.vue'
 import note from './../note.vue'
 import bloodCover from './bloodCover'
+import bloodTrendChart from './bloodTrendChart.vue'
+import bloodPie from './bloodPie.vue'
+import BMI from './BMI.vue'
+import bloodAverageLine from './bloodAverageLine.vue'
+import bloodAverageBar from './bloodAverageBar.vue'
 import useDrug from './useDrug'
 import assessment from './assessment'
 import alldayheighblood from './alldayheighblood'
 import report from './report'
 import original from './original'
 import card from './card'
+import dailyImg from './dailyImg'
 import healthForm from './../healthForm.vue'
 import face from '@/components/BloodheighSickcard/facediagnosis'
-import checkList from '@/components/checklist'
+// import checkList from '@/components/checklist'
 import imgfloat from '@/components/imgFloat'
+import session from '@/untils/session'
 // import Bus from '@/bus.js'
 import {mapState, mapMutations} from 'vuex'
 export default {
@@ -227,6 +283,11 @@ export default {
     pane,
     note,
     bloodCover,
+    bloodTrendChart,
+    bloodPie,
+    BMI,
+    bloodAverageLine,
+    bloodAverageBar,
     useDrug,
     assessment,
     alldayheighblood,
@@ -235,8 +296,9 @@ export default {
     card,
     healthForm,
     face,
-    checkList,
-    imgfloat
+    // checkList,
+    imgfloat,
+    dailyImg
   },
   data () {
     return {
@@ -244,67 +306,125 @@ export default {
         sex: null,
         age: null,
         mobile: null,
+        // 面诊检查单图片列表
         userDetectReportList: []
       },
+      // 大图url
       checklistimgUrl: '',
-      // 体检单
+      // 体检单弹窗
       showchecklist: false,
+      // 打开大图开关
+      showBigImg: false,
+      // 检查单图片列表
       checklist: [],
       cardArr: [],
+      // 病历卡数据
       cardData: {},
+      // 默认激活的tab
       activeIndex: 1,
       currentPage: 1,
+      // 病历卡总页数
       totalPage: null,
       pageSize: 1,
       // pages: 0,
+      // 显示糖尿病按钮
       isSugerHeigh: false,
+      // 血压趋势组件
       bloodCover: '',
+      // 用药组件
       useDrug: '',
+      // 评估组件
       assessment: '',
+      // 24小时动态血压组件
       alldayheighblood: '',
+      // 血压图表组件
       report: '',
+      // 原始数据组件
       original: '',
+      // 病历卡 面诊时显示面诊
       showcard: true,
+      // 历史病历弹窗开关
       histroyCard: false,
       huizhen: null,
-      face: null
+      // 面诊组件
+      face: null,
+      // BMI组件
+      BMI: '',
+      // 血压平均line组件
+      coverLine: '',
+      // 血压平均bar组件
+      coverBar: '',
+      // 饼图与直方图组件
+      pie: '',
+      // sickID: null,
+      // name: null,
+      // adminHospitalId: null,
+      adminIdMainDoctor: null,
+      // 日常照片弹窗开关
+      dailyImg: false
     }
   },
   methods: {
-    ...mapMutations(['SET_SICK_CARD']),
+    ...mapMutations(['SET_SICK_CARD', 'SET_FLUP_INFO', 'changeCurrentSickInfo']),
+    /**
+     * @description 切换tab卡
+     */
     tabs (index) {
       switch (index) {
         case 0:
           break
         case 1:
-          this.bloodCover = 'bloodCover'
-          this.report = 'report'
+          // this.bloodCover = 'bloodCover'
+          this.bloodCover = 'bloodTrendChart'
+          // this.report = 'report'
+          this.pie = 'bloodPie'
+          this.BMI = 'BMI'
+          this.coverLine = 'bloodAverageLine'
+          this.coverBar = 'bloodAverageBar'
+          this.alldayheighblood = 'alldayheighblood'
           break
         case 2:
           this.useDrug = 'useDrug'
           break
         case 3:
-          this.assessment = 'assessment'
-          break
-        case 4:
-          this.alldayheighblood = 'alldayheighblood'
-          break
-        case 5:
           this.original = 'original'
           break
-        case 6:
-          break
+        // case 3:
+        //   this.assessment = 'assessment'
+        //   break
+        // case 4:
+        //   this.alldayheighblood = 'alldayheighblood'
+        //   break
+        // case 4:
+        //   this.original = 'original'
+        //   break
+        // case 6:
+        //   break
       }
     },
+    /**
+     * @param {number} 选择的索引
+     * @description 选择tab
+     */
     changeTab (index) {
       this.tabs(index)
+      session('sickcardTabIndex', index)
+      // console.log('sessionsickcardTabIndex', session('sickcardTabIndex'))
     },
+    // 选择糖尿病
     checkSuger () {
     },
+    /**
+     * @param {number} currentpage 当前页数
+     * @description 病历卡翻页
+     */
     changePage (currentpage) {
       this.currentPage = currentpage
       this.getCardData()
     },
+    /**
+     * @description 获取病历卡信息
+     */
     getCardData () {
       // let vm = this
 
@@ -319,14 +439,14 @@ export default {
         this.checklist = []
         if (res.data) {
           if (res.data.data) {
-            this.totalPage = res.data.pages
-            if (this.totalPage < 1) {
-              // console.log('page', this.totalPage)
-              this.showcard = false
-              this.SET_SICK_CARD(true)
+            if (this._.has(res.data.data, 'adminIdDoctor')) {
+              this.adminIdDoctor = res.data.data.adminIdDoctor
+            } else {
+              this.adminIdDoctor = ''
             }
-              // this.pages =
-            this.SET_SICK_CARD(false)
+
+            this.totalPage = res.data.pages
+            console.log('病历卡总页数', this.totalPage)
             if (res.data.data.length !== 0) {
               this.cardData = Object.assign({}, {})
               this.cardData = Object.assign({}, res.data.data[0])
@@ -344,60 +464,115 @@ export default {
                 })
               }
             }
+            this.changeCurrentSickInfo(res.data.data[0])
             // console.log('病历卡体检单', res.data.data[0])
             console.log('病历卡体检单', this.checklist)
           }
         }
       })
     },
+    /**
+     * @description 设置面诊数据
+     */
     setfaceData (val) {
       // this.sex = val.sex
       // this.age = val.age
       // this.mobile = val.mobile
       this.faceDATA = val
     },
+    /**
+     * @description 完成问诊
+     */
     completeDiag () {
       this.getCardData()
       this.showcard = true
     },
+    /**
+     * @description 打开历史病历弹窗
+     */
     openHistroyCard () {
       this.histroyCard = true
     },
+    /**
+     * @description 关闭历史病历弹窗
+     */
     handleClose () {
       this.histroyCard = false
     },
+    /**
+     * @description 关闭大图
+     */
+    closeImgFloat () {
+      this.showBigImg = false
+    },
+    /**
+     * @description 打开检查按列表
+     */
     openChecklist () {
       this.showchecklist = true
     },
+    /**
+     * @param {string} 打开图片url
+     * @description 打开检查单大图
+     */
     showchecklistimg (url) {
       this.checklistimgUrl = url
       // Bus.$emit('showbigimg')
-      let vm = this
-      this.$nextTick(function () {
-        vm.$refs.checklistimg.showBig()
-      })
+      // let vm = this
+      this.showBigImg = true
+      console.log('打开大图？', this.showBigImg)
+      // this.$nextTick(function () {
+      //   vm.$refs.checklistimg.showBig()
+      // })
       // this.$refs.checklistimg.showBig()
+    },
+    /**
+     * @description 跳转随访页面
+     */
+    flupHistory () {
+      let obj = {}
+      obj.isFollowUp = true
+      obj.adminIdMainDoctor = this.adminIdMainDoctor
+      obj.userId = this.sickID
+      obj.userName = this.name
+      obj.adminHospitalId = this.hospitalId
+      obj.userFollowUpId = null
+      obj.userHealthDiaryId = null
+      this.SET_FLUP_INFO(obj)
+      console.log('随访', obj)
+      this.$router.push({
+        name: 'FlupCard'
+      })
+    },
+    /**
+     * @description 打开日常照片弹窗
+     */
+    openDailyImg () {
+      this.dailyImg = true
     }
   },
   computed: {
-    ...mapState(['showSickCard']),
+    ...mapState(['showSickCard', 'currentSickData']),
     sickID () {
-      return this.$route.params.sickID
+      return this.currentSickData.sickID
+      // return this.$route.params.sickID
     },
     hospitalId () {
-      return this.$route.params.hospitalId
+      return this.currentSickData.hospitalId
+      // return this.$route.params.hospitalId
     },
     // 姓名
     name () {
       if (this.cardData) {
         if (this.cardData.realName) {
           return this.cardData.realName
+        } else {
+          return this.$route.params.name
         }
       }
     },
     // 性别
     sex: {
-
       get: function () {
         if (this.cardData) {
           if (this.cardData.sex === 1) {
@@ -557,6 +732,15 @@ export default {
         }
       }
     },
+    checkItem () {
+      if (this.cardData) {
+        if (this.cardData.checkItem) {
+          return this.cardData.checkItem
+        }
+      } else {
+        return ''
+      }
+    },
     createTime () {
       if (this.cardData) {
         if (this.cardData.createTime) {
@@ -566,6 +750,7 @@ export default {
     }
   },
   watch: {
+    // 监控病历卡显示
     showSickCard: {
       handler: function (newval, oldval) {
         if (newval) {
@@ -582,6 +767,9 @@ export default {
     }
   },
   created () {
+    if (session('sickcardTabIndex')) {
+      this.activeIndex = parseInt(session('sickcardTabIndex')) + 1
+    }
     this.getCardData()
   },
   mounted () {
@@ -593,7 +781,7 @@ export default {
     //   vm.showcard = false
     //   // vm.getCardData()
     //   console.log('huizhen1', vm.showcard)
-    //   console.log('huizhen', vm.huizhen)
+    // console.log('name', vm.name, this.$route.params.name)
     // })
   }
 }
@@ -660,9 +848,11 @@ export default {
     *writing-mode: tb-rl;
   } */
   .sick-card-head{
+    /* min-width: 1250px; */
+    /* width: 100%; */
     background-color:#fff;
     padding:30px 20px 30px 30px;
-    box-shadow: 2px 2px 2px 2px #0000000d;
+    /* box-shadow: 2px 2px 2px 2px #0000000d; */
   }
   .sick-card-head p{
     margin:0;
@@ -670,19 +860,26 @@ export default {
     /* width: 100%; */
   }
   .sick-card-head-left{
-    float: left;
+    /* float: left; */
+    /* width: 70%; */
     color:#666;
     font-size:14px;
   }
   .sick-card-head-left-msg{
     margin-top:10px;
   }
+  .sick-card-head-left-msg span{
+    margin-top:5px;
+  }
   .sick-card-head-left span{
-    display:inline-block;
-    margin-right:30px;
+    /* display:inline-block; */
+    margin-right:20px;
+    width: 100%;
+    word-wrap: break-word;
+    line-height: 1.5;
   }
   .sick-card-head-right{
-    float: right;
+    text-align: right;
   }
   .name{
     font-size:32px;
@@ -771,6 +968,19 @@ export default {
     width:14px;
     height: 16px;
     background:url("~icon/hospital-icon-30.png") no-repeat;
+    left:-16px;
+    top:1px;
+  }
+  .sick-history-bottom button:nth-child(3) span{
+    position: relative;
+  }
+  .sick-history-bottom button:nth-child(3) span:before{
+    position: absolute;
+    content:"";
+    display: block;
+    width:14px;
+    height: 16px;
+    background:url("~icon/hospital-icon-29.png") no-repeat;
     left:-16px;
     top:1px;
   }

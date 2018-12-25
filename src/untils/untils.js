@@ -83,69 +83,33 @@ export const buildMenu = (array, ckey) => {
   return menuData
 }
 
-// sessionStorage
-export const session = (key, value) => {
+/**
+ *
+ * @param {session的键} key
+ * @param {session的值} value
+ * @description sessionStorage 两个参数设置session,传入key获取session
+ */
+export const session = function (key, value) {
   if (value === void (0)) {
-    let lsVal = sessionStorage.getItem(key)
+    var lsVal = sessionStorage.getItem(key)
     if (lsVal && lsVal.indexOf('autostringify-') === 0) {
       return JSON.parse(lsVal.split('autostringify-')[1])
     } else {
       return lsVal
     }
   } else {
-    if (typeof (val) === 'object' || Array.isArray(value)) {
+    if (typeof (value) === 'object' || Array.isArray(value)) {
       value = 'autostringify-' + JSON.stringify(value)
     }
     return sessionStorage.setItem(key, value)
   }
 }
-
-// export const instance = axios.create({
-//   baseURL: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital',
-//   timeout: 10000
-// })
-// instance.defaults.headers.post['Content-Type'] = 'application/json'
-
-// 错误处理
-// export const catchError = (error) => {
-//   if (error.response) {
-//     switch (error.response.status) {
-//       case 400:
-//         Vue.prototype.$message({
-//           message: error.response.data.message || '请求参数异常',
-//           type: 'error'
-//         })
-//         break
-//       case 401:
-//         sessionStorage.removeItem('user')
-//         Vue.prototype.$message({
-//           message: error.response.data.message || '密码或账号错误',
-//           type: 'warning',
-//           onClose: function () {
-//             location.reload()
-//           }
-//         })
-//         break
-//       case 403:
-//         Vue.prototype.$message({
-//           message: error.response.data.message || '无权访问',
-//           type: 'warning'
-//         })
-//         break
-//       default:
-//         Vue.prototype.$message({
-//           message: error.response.data.message || '服务端异常',
-//           type: 'error'
-//         })
-//     }
-//   }
-//   return Promise.reject(error)
-// }
-// instance.interceptors.response.use(response => {
-//   return response
-// }, catchError)
-
-// 向上寻找指定组件 context 为从哪儿开始 一般为this
+/**
+ *
+ * @param {寻找组件的相对位置,一般为this} context
+ * @param {组件名} componentName
+ * @description 向上寻找指定组件 context 为从哪儿开始 一般为this
+ */
 function findComponentUpward (context, componentName, componentNames) {
   if (typeof componentName === 'string') {
     componentNames = [componentName]
@@ -163,7 +127,12 @@ function findComponentUpward (context, componentName, componentNames) {
 }
 export {findComponentUpward}
 
-// Find component downward 向下寻找指定组件 返回第一个
+/**
+ *
+ * @param {寻找组件的相对位置,一般为this} context
+ * @param {组件名} componentName
+ * @description 向下寻找指定组件 返回第一个
+ */
 export function findComponentDownward (context, componentName) {
   const childrens = context.$children
   let children = null
@@ -183,7 +152,12 @@ export function findComponentDownward (context, componentName) {
   return children
 }
 
-// Find components downward 向下寻找指定组件 返回所有name相同的组件
+/**
+ *
+ * @param {寻找组件的相对位置,一般为this} context
+ * @param {组件名} componentName
+ * @description 向下寻找指定组件 返回所有name相同的组件
+ */
 export function findComponentsDownward (context, componentName) {
   return context.$children.reduce((components, child) => {
     if (child.$options.name === componentName) components.push(child)
@@ -192,7 +166,12 @@ export function findComponentsDownward (context, componentName) {
   }, [])
 }
 
-// Find components upward 向上寻找指定组件 返回所有name相同的组件
+/**
+ *
+ * @param {寻找组件的相对位置,一般为this} context
+ * @param {组件名} componentName
+ * @description 向上寻找指定组件 返回所有name相同的组件
+ */
 export function findComponentsUpward (context, componentName) {
   let parents = []
   const parent = context.$parent
@@ -204,7 +183,12 @@ export function findComponentsUpward (context, componentName) {
   }
 }
 
-// Find brothers components  寻找所有兄弟组件 不包括自身
+/**
+ *
+ * @param {寻找组件的相对位置,一般为this} context
+ * @param {兄弟组件的组件名} componentName
+ * @description 寻找所有兄弟组件 不包括自身
+ */
 export function findBrothersComponents (context, componentName) {
   let res = context.$parent.$children.filter(item => {
     return item.$options.name === componentName
@@ -212,4 +196,24 @@ export function findBrothersComponents (context, componentName) {
   let index = res.indexOf(context)
   res.splice(index, 1)
   return res
+}
+
+/**
+ *
+ * @param {需要检查图片的路径} checkimgsrc
+ * @param {图片不存在时的默认路径} errorsrc
+ */
+export function imgExists (checkimgsrc, errorsrc) {
+  let ImgObj = new Image()
+  ImgObj.src = checkimgsrc
+  let src = ''
+  if (!checkimgsrc) {
+    src = errorsrc
+  }
+  if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
+    src = checkimgsrc
+  } else {
+    src = errorsrc
+  }
+  return src
 }

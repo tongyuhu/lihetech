@@ -1,7 +1,7 @@
 <template>
   <div class="searchMedicine">
     <div class="title">
-    药品分类:
+    药品分类
     </div>
     <div class="search">
       <!-- 药品分类 -->
@@ -20,11 +20,9 @@
         placeholder="搜索药物"
         v-model="searchMedicine"
         size="mini">
-          <el-button slot="append" 
-          icon="el-icon-search" 
-          :style="{'background':'#fff','width': '44px','padding-left': '0px','padding-right': '0px'}"
-          @click="search">
-          </el-button>
+          <button slot="suffix" class="search-btn" @click="search">
+            <i class="el-icon-search search-icon" :style="{'color':'dcdfe6'}"></i>
+          </button>
       </el-input>
     </div>
   </div>
@@ -57,7 +55,8 @@ export default {
         }
       ],
       medicineList: [],
-      searchMedicine: ''
+      searchMedicine: '',
+      sickType: null
     }
   },
   methods: {
@@ -147,6 +146,7 @@ export default {
                 obj.drugSpec = item.drugSpec
                 obj.id = item.id
                 obj.medicineId = item.medicineId
+                obj.medicineType = this.sickType
                 // obj.makeEnterprise = item.makeEnterprise
                 // obj.medicineImgUrl = process.env.IMG_URL + item.medicineImgUrl
                 arr.push(obj)
@@ -157,7 +157,7 @@ export default {
         }
         // this.medicineList = arr
         // this.formetterMedicineList(this.medicineList)
-        console.log('list1', this.medicineList)
+        console.log('获取到的药品列表', this.medicineList)
         this.$emit('medicineList', this.medicineList)
         // console.log('arr', arr)
       })
@@ -188,7 +188,18 @@ export default {
   .title{
     display: inline-block;
     vertical-align: middle;
-    width: 90px;
+    // width: 80px;
+    padding-right: 10px;
+  }
+  .search-btn{
+    background: transparent;
+    border: none;
+    outline: none;
+    height: 100%;
+    cursor: pointer;
+  }
+  .search-icon{
+    color: #999;
   }
 </style>
 

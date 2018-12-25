@@ -4,6 +4,7 @@
         <div class="card-header">
           <p class="title">原始数据</p>
         </div>
+        <!-- 日期选择 -->
         <div class="original">
           <div>
             <el-date-picker
@@ -11,31 +12,39 @@
               type="month"
               format="yyyy-MM"
               value-format="yyyy-MM"
-              :clearable='true'
               size="mini"
               :style="{width:'120px'}"
               placeholder="选择月"
+              :clearable='false'
               @change="checkTime">
             </el-date-picker>
           </div>
-          <div class="original-table">
+          <div class="original-table" v-loading="loading">
             <table>
-              <tr>
-                <th>日期</th>
-                <th>血压值</th>
-                <th>血压类型</th>
-                <th>测量类型</th>
-                <th>测量时间</th>
-              </tr>
-              <tr v-for="(ori,index) in original" :key="index">
-                <th>{{ori.date}}</th>
-                <td><p>{{ori.diastolic}}/{{ori.systolic}}</p></td>
-                <td><p>{{ori.bpType}}</p></td>
-                <td><p>{{ori.recordType}}</p></td>
-                <td><p>{{ori.time}}</p></td>
-              </tr>
+              <thead>
+                <tr>
+                  <th>日期</th>
+                  <th>血压值</th>
+                  <th>血压类型</th>
+                  <th>测量类型</th>
+                  <th>测量时间</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td colspan="5" v-if="original.length === 0">暂无数据</td>
+                </tr>
+                <tr v-for="(ori,index) in original" :key="index">
+                  <th>{{ori.date}}</th>
+                  <td><p>{{ori.diastolic}}/{{ori.systolic}}</p></td>
+                  <td><p>{{ori.bpType}}</p></td>
+                  <td><p>{{ori.recordType}}</p></td>
+                  <td><p>{{ori.time}}</p></td>
+                </tr>
+              </tbody>
             </table>
           </div>
+          <!-- 分页 -->
           <div class="page">
             <el-pagination
               class="el-pagination"
@@ -67,51 +76,75 @@ export default {
   },
   data () {
     return {
-      month: '',
+      loading: false,  // 加载动画
+      month: '', // 选择时间
+      // 页数
       pageSize: 10,
       pageNum: 1,
       recordCount: 0,
+      // 原始数据
       original: []
-
     }
   },
   methods: {
+    /**
+     * @description 获取原始数据
+     */
     getOriginalData () {
+      this.loading = true
       let params = {
         userId: this.sickID,
         pageSize: this.pageSize,
         pageNum: this.pageNum
       }
       if (this.month) {
-        params.measureMonthTime = this.month
+        params.measureMonthTime = this.time(this.month).month
       }
       this.$axios(originalApi(params))
       .then(res => {
-        if (res.data.data) {
-          this.original = []
-          res.data.data.forEach(item => {
-            if (this._.has(item, 'bpMeasureTimes')) {
-              item.bpMeasureTime = this.bpMeasureTime(item.bpMeasureTimes)
-            }
-            if (this._.has(item, 'measureTime')) {
-              item.date = this.time(item.measureTime).date
-              item.time = this.time(item.measureTime).time
-            }
-            if (this._.has(item, 'bpType')) {
-              item.bpType = this.bpType(item.bpType)
-            }
-            if (this._.has(item, 'recordType')) {
-              item.recordType = this.recordType(item.recordType)
-            }
-            this.original.push(item)
+        if (this._.has(res.data, 'data')) {
+          if (res.data.data) {
+            this.original = []
+            res.data.data.forEach(item => {
+              if (this._.has(item, 'bpMeasureTimes')) {
+                item.bpMeasureTime = this.bpMeasureTime(item.bpMeasureTimes)
+              }
+              if (this._.has(item, 'measureTime')) {
+                item.date = this.time(item.measureTime).date
+                item.time = this.time(item.measureTime).time
+              }
+              if (this._.has(item, 'bpType')) {
+                item.bpType = this.bpType(item.bpType)
+              }
+              if (this._.has(item, 'recordType')) {
+                item.recordType = this.recordType(item.recordType)
+              }
+              this.original.push(item)
+            })
+            this.recordCount = res.data.recordCount
+            this.pageSize = res.data.pageSize
+            this.pageNum = res.data.pageNum
+            this.loading = false
+
+            console.log('原始数据', this.original)
+          }
+        }
+        if (res.data.code === '1001') {
+          this.loading = false
+          this.$message({
+            message: '获取原始数据失败',
+            type: 'error'
           })
-          this.recordCount = res.data.recordCount
-          this.pageSize = res.data.pageSize
-          this.pageNum = res.data.pageNum
-          console.log('原始数据', this.original)
         }
       })
+      .catch(err => {
+        console.log('获取原始数据失败', err)
+        this.loading = false
+      })
     },
+    /**
+     * @description 测量状态
+     */
     bpMeasureTime (val) {
       let type
       switch (val) {
@@ -160,6 +193,9 @@ export default {
       }
       return type
     },
+    /**
+     * @description 测量方法
+     */
     recordType (val) {
       let type
       switch (val) {
@@ -178,6 +214,9 @@ export default {
       }
       return type
     },
+    /**
+     * @description 血压类型
+     */
     bpType (val) {
       let type
       switch (val) {
@@ -199,20 +238,31 @@ export default {
         case 5:
           type = '危险血压'
           break
+        case 6:
+          type = '低血压'
+          break
         default:
           type = '未知'
           break
       }
       return type
     },
+    /**
+     * @description 截取时间
+     */
     time (val) {
       let date = val.slice(0, 10)
       let time = val.slice(11)
+      let month = val.slice(0, 7)
       return {
+        'month': month,
         'date': date,
         'time': time
       }
     },
+    /**
+     * @description 选择时间
+     */
     checkTime () {
       let date = new Date()
       date = dateFormat(date, 0, true)
@@ -233,12 +283,19 @@ export default {
         this.getOriginalData()
       }
     },
+    /**
+     * @description 分页变化
+     */
     currentChange (page) {
       this.pageNum = page
       this.getOriginalData()
     }
   },
   mounted () {
+    // 初始化数据
+    let nowtime = new Date()
+    this.month = dateFormat(nowtime, 0, true)
+    this.month = this.time(dateFormat(nowtime, 0, true)).month
     this.getOriginalData()
     // console.log(this.month)
   }
@@ -290,8 +347,12 @@ export default {
     text-align: center;
     vertical-align: middle;
   }
+  tr:nth-child(n+2):hover{
+    background-color: #ebeef5;
+  }
   .original-table{
     margin-top:20px;
+    /* min-height: 200px; */
   }
   .page {
   margin-top:26px;

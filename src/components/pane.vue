@@ -28,7 +28,7 @@ export default {
     }
   },
   watch: {
-    label () {
+    label () { // label 改变更新
       this.updateNav()
     }
   },

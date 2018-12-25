@@ -28,11 +28,12 @@
             :total="friendsList.length">
               <div>
                 <ul>
-                  <li v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
+                  <li class="chart-friend" v-for="(friend,index) in friendsList" :key="index" @click.stop="chartWith(friend)">
                     <!-- <el-badge :is-dot="friend.hasMsg" > -->
                     <img  class="friend-icon" 
                     ref="friendImg"
-                    :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt="">
+                    :src="friend.userImg+''" :onerror="userimgerror">
+                    <!-- :src="friend.userImg ? friend.userImg :publicStatic.onlineStatic+ '/static/user.png'" alt=""> -->
                     <span class="im-panes-name">{{friend.userName}}</span>
                     <el-badge class="mark" :is-dot="friend.hasMsg" />
                     <!-- </el-badge> -->
@@ -47,7 +48,7 @@
         <chatPane
         title="群组"
         icon="icon-group">
-          <div class="im-panes">
+          <div class="im-panes im-group">
             暂无群组
           </div>
         </chatPane>
@@ -55,7 +56,7 @@
         <chatPane
         title="历史消息"
         icon="icon-msg">
-          <div class="im-panes">
+          <div class="im-panes im-msg">
             暂无数据
           </div>
         </chatPane>
@@ -79,7 +80,8 @@ import flod from './fold'
 import chatTabs from './chatTabs'
 import chatPane from './chatPane'
 import {mapState, mapMutations} from 'vuex'
-import publicStatic from '@/publicData/const.js'
+import userimg from 'icon/user.png'
+// import publicStatic from '@/publicData/const.js'
 export default {
   name: 'im',
   components: {
@@ -98,7 +100,8 @@ export default {
   data () {
     return {
       message: '',
-      publicStatic: publicStatic
+      userimgerror: 'this.src="' + userimg + '"'
+      // publicStatic: publicStatic
     }
   },
   computed: {
@@ -122,44 +125,14 @@ export default {
       this.$emit('closeIM')
     },
     chartWith (friend) {
-      let vm = this
       friend.hasMsg = false
       this.clearNewmsg()
       this.addChatFriend(friend)
       this.changeChatFriend(friend)
       this.openChatWindow()
-      // let history = []
-      // vm.sethistory(history)
-      // friend.hasMsg = false
-      // if (this._.has(friend, 'history')) {
-      //   history = friend.history
-      //   vm.addChatFriend(friend)
-      //   vm.changeChatFriend(friend)
-      // } else {
-      //   friend.history = []
-      //   vm.addChatFriend(friend)
-      //   vm.changeChatFriend(friend)
-      // }
-      // vm.sethistory(history)
-      // console.log('好友xiaoxi ', friend)
-      // friend.history = []
-      // 获取历史消息
-
-      vm.openChatWindow()
-    },
-    imgExists (checkimg) {
-      let ImgObj = new Image() // 判断图片是否存在
-      ImgObj.src = checkimg
-      // 没有图片，则返回-1
-      if (ImgObj.fileSize > 0 || (ImgObj.width > 0 && ImgObj.height > 0)) {
-        return checkimg
-      } else {
-        return publicStatic.onlineStatic + '/static/user.png'
-      }
     }
   },
   mounted () {
-    this.imgExists()
   }
 }
 </script>
@@ -178,7 +151,7 @@ export default {
       list-style: none;
       margin:0;
       padding:0;
-      margin-left: 20px;
+      // margin-left: 20px;
     }
     li{
       display: block;
@@ -251,12 +224,13 @@ export default {
       text-align: left;
     }
     &-panes{
-      margin-left:10px;
+      // margin-left:10px;
       height: 330px;
       overflow: hidden;
       color: #041421;
       li{
-        margin-bottom: 10px;
+        // margin-bottom: 10px;
+        padding:8px 0 8px 20px;
         height: 36px;
       }
       li:nth-child(1){
@@ -314,11 +288,18 @@ export default {
       }
       @include initul
     }
+    &-group{
+      padding-left:20px;
+    }
+    &-msg{
+      padding-left:20px;
+    }
     &-footer{
       @include initul(left);
       li{
         display: inline-block;
-        width: 20%;
+        // width: 20%;
+        padding: 0 10px;
       }
       padding-top:10px;
       border-top:1px solid #fff;
@@ -332,6 +313,15 @@ export default {
     display: inline-block;
     margin-bottom: 20px;
     vertical-align: middle;
+  }
+  .chart-friend{
+    // padding-left: 20px;
+    // background: rgb(236, 232, 232);
+    // opacity: 0.2;
+  }
+  .chart-friend:hover{
+    background: rgb(236, 232, 232);
+    // opacity: 0.2;
   }
 </style>
 

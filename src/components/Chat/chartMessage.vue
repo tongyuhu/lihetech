@@ -2,8 +2,8 @@
   <div>
       <div :class="[cls ? 'left' : 'right']">
         <div  :class="['wrap',cls ? 'wrap-left':'wrap-right']">
-          <div>
-            <img class="avatar" :src="userImgChat" alt="头像" ref="onerrorimg">
+          <div class="avatar-wrap">
+            <img class="avatar" :src="userImgChat+''" :onerror="errorimg">
           </div>
           <div :class="['message-wrap',chatclass,nobg?'no-bg':'']">
             <div :class="[nobg?'no-bg':'']">
@@ -18,18 +18,12 @@
       </div> -->
       
   </div>
-
-    <!-- <div class="flex">
-      <div>
-
-      </div>
-    </div> -->
 </template>
 
 <script>
-// import img from '~icon/hospital-icon2-04.png'
-import publicStatic from '@/publicData/const.js'
 import {mapState, mapGetters} from 'vuex'
+import userimg from 'icon/user.png'
+import adminimg from 'icon/admin.jpg'
 export default {
   name: 'chartmessage',
   props: {
@@ -38,8 +32,8 @@ export default {
       default: 'other'
     },
     userImg: {
-      type: [String],
-      default: publicStatic.onlineStatic + '/static/user.png'
+      type: [String]
+      // default: process.env.IMG_URL_LOCALHOST + '/static/user.png'
     },
     moreMessage: {
       type: [Boolean],
@@ -52,71 +46,68 @@ export default {
   },
   data () {
     return {
-      cls: false,
-      nobg: false,
-      chatclass: '',
-      userImgChat: this.userImg
+      cls: false,  // true 左侧聊天classname   false右侧classname
+      nobg: false,  // 图片消息没有背景
+      chatclass: '', // 左右聊天小三角样式
+      userImgChat: this.userImg,  // 图片消息src
+      userimgerror: 'this.src="' + userimg + '"',  // 默认患者头像
+      adminimgerror: 'this.src="' + adminimg + '"', // 默认医生
+      errorimg: ''
     }
   },
   computed: {
     ...mapState([
-      'rongUserId'
+      'rongUserId',
+      'adminInfo'
     ]),
     ...mapGetters(['adminImg', 'currentChatImg'])
   },
   methods: {
-    imgExists () {
-      let vm = this
-      this.$nextTick(function () {
-        vm.$refs.onerrorimg.onerror = (e) => {
-          // 默认图片
-          let imgUrl = publicStatic.onlineStatic + '/static/user.png'
-          let img = new Image()
-          img.src = imgUrl
-            // 判断图片大小是否大于0 或者 图片高度与宽度都大于0
-          if (img.filesize > 0 || (img.width > 0 && img.height > 0)) {
-            vm.userImgChat = imgUrl
-          } else {
-            vm.userImgChat = imgUrl
-            // e.src = imgUrl
-            // 默认图片也不存在的时候
-          }
-        }
-      })
-    }
   },
   watch: {
     who: {
       handler: function (val) {
+        // 如果是自己发出的消息
         if (this.who === this.rongUserId) {
           this.cls = false
-          if (this.adminImg) {
-            this.userImgChat = this.adminImg
+          if (this.type === 'ImageMessage') {  // 图片消息去除背景和小三角
+            this.nobg = true
+            this.chatclass = ''
+          } else { // 否则加右侧小三角
+            // if (this.cls) {
+              // this.chatclass = 'left-angle'
+            // } else {
+            this.chatclass = 'right-angle'
+            // }
           }
+          if (this._.has(this.adminInfo, 'headPortraitUrl')) { // 有头像用头像
+            if (this.adminInfo.headPortraitUrl.length !== 0) {
+              this.userImgChat = process.env.IMG_URL + this.adminInfo.headPortraitUrl
+
+              this.errorimg = this.adminimgerror
+            }
+          }
+          this.errorimg = this.adminimgerror
         }
         if (this.who !== this.rongUserId) {
           this.cls = true
+          if (this.type === 'ImageMessage') {
+            this.nobg = true
+            this.chatclass = ''
+          } else {
+            this.chatclass = 'left-angle'
+          }
           if (this.currentChatImg) {
             this.userImgChat = this.currentChatImg
           }
+          this.errorimg = this.userimgerror
         }
       },
-      immediate: true
+      immediate: true,
+      deep: true
     }
   },
-  mounted () {
-    if (this.type === 'ImageMessage') {
-      this.nobg = true
-      this.chatclass = ''
-      // this.cls = '0000'
-    } else {
-      if (this.cls) {
-        this.chatclass = 'left-angle'
-      } else {
-        this.chatclass = 'right-angle'
-      }
-    }
-    this.imgExists()
+  created () {
   }
 
 }
@@ -162,6 +153,9 @@ export default {
   //   display: block;
   //   clear: both;
   // }
+  .avatar-wrap{
+    align-self: flex-start;
+  }
   .avatar{
     width: 46px;
     height: 46px;
@@ -181,11 +175,7 @@ export default {
     max-width: 60%;
     .message-wrap{
       background-color: $bagcolor;
-      border-radius: 5px;
-      padding:5px;
-      font-size: 14px;
       color: #041421;
-      line-height: 20px;
     }
     .left-angle{
       position: relative;
@@ -196,12 +186,20 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:45%;
+      top:12px;
       right: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;
       border-right:10px solid $bagcolor;
     }
+  }
+  .message-wrap{
+    align-self: flex-start;
+    margin-top: 8px;
+    border-radius: 2px;
+    padding:5px;
+    font-size: 14px;
+    line-height: 20px;
   }
   .right{
     margin-top:15px;
@@ -210,11 +208,7 @@ export default {
     $bagcolor:#1991fc;
     .message-wrap{
       background-color: $bagcolor;
-      border-radius: 5px;
-      padding:5px;
       color: #fff;
-      font-size: 14px;
-      line-height: 20px;
     }
 
     .right-angle{
@@ -226,7 +220,7 @@ export default {
       content: "";
       width:0;
       height:0;
-      top:45%;
+      top:12px;
       left: 100%;
       border-top:5px solid transparent;
       border-bottom:5px solid transparent;

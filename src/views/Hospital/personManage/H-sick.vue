@@ -7,8 +7,9 @@
         <!-- <button class="head-edit-button delete" @click="deleteSick">删除</button> -->
       </div>
     </div>
-    <div>
+    <div class="loading-min-height" v-loading="loading">
       <el-card>
+        <!-- 模糊搜索 -->
         <div class="card-head clear">
           <!-- <div class="card-head-left sick-type-btn">
             <button :class="{'sick-type-checked':checkblood}" @click="checkedblood">高血压</button>
@@ -31,11 +32,11 @@
         :data="sickList"
         style="width:100%"
         @selection-change="SickSelectionChange">
-          <el-table-column
+          <!-- <el-table-column
           type="selection"
           width="55"
           align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
           label="序号"
           type="index"
@@ -84,6 +85,7 @@
             </template>
           </el-table-column> -->
         </el-table>
+        <!-- 分页 -->
         <div class="page">
           <el-pagination
           @size-change="handleSizeChange"
@@ -98,7 +100,7 @@
       </el-card>
     </div>
     <div class="dialog">
-
+      <!-- 编辑患者弹窗 -->
       <el-dialog
         :visible.sync="modifySick"
         width="456px"
@@ -108,7 +110,7 @@
           <input type="text" v-model="editSickName">
         </div>
         <div class="input-wrap">
-          <span>联系电话:</span>
+          <span>患者电话:</span>
           <input type="text" v-model="editSickPhone">
         </div>
         <div class="input-wrap">
@@ -120,21 +122,23 @@
           <input type="text" v-model="editSickAddress">
         </div>
         <span slot="title" class="dialog-title">修改患者</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="modifySick = false">确 定</button>
-          <button class="cancel" @click="modifySick = false">取 消</button>
+        <span slot="footer">
+          <el-button type="primary" size="small" @click="modifySick = false">确 定</el-button>
+          <el-button type="primary" size="small" @click="modifySick = false">取 消</el-button>
         </span>
       </el-dialog>
+      <!-- 删除患者弹窗 -->
       <el-dialog
         :visible.sync="confirmDelete"
         width="456px"
         center>
         <span slot="title" class="dialog-title">确定删除该患者记录吗？</span>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmDeleteHandle">确 定</button>
-          <button class="cancel" @click="cancelDeleteHandle">取 消</button>
+        <span slot="footer">
+          <el-button  type="primary" size="small" @click="confirmDeleteHandle">确 定</el-button>
+          <el-button type="primary" size="small" @click="cancelDeleteHandle">取 消</el-button>
         </span>
       </el-dialog>
+      <!-- 添加患者二维码 -->
       <el-dialog
         :visible.sync="showAddSick"
         width="456px"
@@ -143,8 +147,10 @@
         <div class="add-sick-img">
           <img width="200px" :src="addSickImg" alt="二维码">
         </div>
-        <span slot="footer" class="dialog-footer">
-          <button  type="primary" @click="confirmAddSick">确 定</button>
+        <span slot="footer">
+          <div class="erocde-btn">
+            <el-button size="small" type="primary" @click="confirmAddSick">确 定</el-button>
+          </div>
           <!-- <button class="cancel" @click="showAddSick = false">取 消</button> -->
         </span>
       </el-dialog>
@@ -154,47 +160,71 @@
 
 <script>
 import {getSickListAPI} from '@/api/views/Hospital/BloodHeigh/H-personManage'
+import {mapActions} from 'vuex'
 export default {
   name: 'sick-manage',
   data () {
     return {
+      // 加载动画
+      loading: false,
       checkblood: true,
       // sicktype: 'bloodPressureType',
       sickList: [
       ],
+      // 删除患者列表
       readyDelete: [],
+      // 模糊搜索
       searchSickMsg: null,
+      // 分页
       currentPage: 1,
       totalpage: null,
       pageSize: 10,
-      loading: false,
+      // 编辑患者弹窗
       modifySick: false,
+
       editSickName: '',
       editSickPhone: '',
       editSickPerson: '',
       editSickAddress: '',
+      // 删除 患者 弹窗
       confirmDelete: false,
+      // 二维码弹窗
       showAddSick: false,
+      // 二维码
       addSickImg: ''
     }
   },
 
   methods: {
+    ...mapActions(['setFriendsListActon']),
+    /**
+     * @description 确认添加患者 更新聊天列表
+     */
     confirmAddSick () {
+      this.setFriendsListActon()
       this.showAddSick = false
     },
+    /**
+     * @description 选择高血压列表
+     */
     checkedblood () {
       // this.sicktype = 'bloodPressureType'
       this.checkblood = true
       this.currentPage = 1
       this.getSickList()
     },
+    /**
+     * @description 选择糖尿病列表
+     */
     checkedsuger () {
       // this.sicktype = 'diabetesType'
       this.checkblood = false
       this.currentPage = 1
       this.getSickList()
     },
+    /**
+     * @description 初始化患者列表 转换患者类型
+     */
     formatterSickList (list) {
       if (list.length === 0) {
         return list
@@ -209,17 +239,32 @@ export default {
               break
             }
             case 1: {
-              sickTypelist1.push('原发性高血压')
+              sickTypelist1.push('1级高血压')
               // item.sicktype = '原发性高血压'
               break
             }
             case 2: {
-              sickTypelist1.push('继发性高血压')
+              sickTypelist1.push('2级高血压')
               // item.sicktype = '继发性高血压'
               break
             }
             case 3: {
+              sickTypelist1.push('3级高血压')
+              // item.sicktype = '正常'
+              break
+            }
+            case 4: {
               sickTypelist1.push('正常')
+              // item.sicktype = '正常'
+              break
+            }
+            case 5: {
+              sickTypelist1.push('正常高值')
+              // item.sicktype = '正常'
+              break
+            }
+            case 6: {
+              sickTypelist1.push('低压')
               // item.sicktype = '正常'
               break
             }
@@ -267,19 +312,26 @@ export default {
             }
           }
           sickTypelist1 = this._.uniqWith(sickTypelist1, this._.isEqual)
-          sickTypelist2 = this._.uniqWith(sickTypelist2, this._.isEqual)
-          item.sicktype = '高血压：' + sickTypelist1.join('、') + '；糖尿病：' + sickTypelist2.join('、')
+          // sickTypelist2 = this._.uniqWith(sickTypelist2, this._.isEqual)
+          // item.sicktype = '高血压：' + sickTypelist1.join('、') + '；糖尿病：' + sickTypelist2.join('、')
+          item.sicktype = sickTypelist1.join('、')
 
           // }
         })
       }
       return list
     },
+    /**
+     * @param {array} selection 选择的列表
+     * @description 选择患者
+     */
     SickSelectionChange (selection) {
       this.readyDelete = selection
       console.log('deletearr', this.readyDelete)
     },
-    // 查询
+    /**
+     * @description 模糊查询
+     */
     selectName () {
       if (!this.searchSickMsg) {
         this.getSickList()
@@ -306,40 +358,60 @@ export default {
           console.log('sickList', this.sickList)
         })
       }
+      console.log('sickList', this.sickList)
       console.log(this.searchSickMsg)
     },
+    /**
+     * @param {number} val 每页条数
+     * @description 每页条数变化
+     */
     handleSizeChange (val) {
       this.pageSize = val
       this.getSickList()
       console.log(`每页 ${val} 条`)
     },
+    /**
+     * @param {number} val 页数
+     * @description 页数变化
+     */
     handleCurrentChange (val) {
       this.currentPage = val
       this.getSickList()
       console.log(`当前页: ${val}`)
     },
-    // 编辑患者 打开弹窗
+    /**
+     * @description 编辑患者弹窗
+     */
     editSick (Sick) {
       this.modifySick = true
       console.log(Sick)
     },
-    // 删除患者
+    /**
+     * @description 打开删除弹窗
+     */
     deleteSick () {
       if (this.readyDelete.length !== 0) {
         this.confirmDelete = true
       }
     },
-    // 确认删除
+    /**
+     * @description 确认删除患者
+     */
     confirmDeleteHandle () {
       this.sickList = this._.differenceWith(this.sickList, this.readyDelete, this._.isEqual)
       this.confirmDelete = false
     },
-    // 取消删除
+    /**
+     * @description 取消删除
+     */
     cancelDeleteHandle () {
       this.readyDelete = []
       this.$refs.sicklist.clearSelection()
       this.confirmDelete = false
     },
+    /**
+     * @description 添加患者二维码
+     */
     addSick () {
       this.showAddSick = true
       this.$axios({
@@ -350,10 +422,17 @@ export default {
         this.addSickImg = res.data.data
       })
     },
+    /**
+     * @description 获取患者列表
+     */
     getSickList () {
+      this.loading = true
       let param = {
         pageNum: this.currentPage,
         pageSize: this.pageSize
+      }
+      if (this.searchSickMsg) {
+        param.fields = this.searchSickMsg
       }
       this.$axios(getSickListAPI(param))
       .then(res => {
@@ -366,7 +445,12 @@ export default {
           })
         }
         this.sickList = this.formatterSickList(this.sickList)
+        this.loading = false
         console.log('sickList', this.sickList)
+      })
+      .catch(err => {
+        console.log('获取患者列表失败', err)
+        this.loading = false
       })
     }
 
@@ -525,21 +609,13 @@ input{
       // color:#041421;
       font-weight: bold;
     }
+    .erocde-btn{
+      button{
+          font-size: 16px;
+      }
+    }
     button{
-      width: 130px;
-        height: 36px;
-        line-height: 36px;
-        text-align: center;
-        font-size: 18px;
-        color:#fff;
-        opacity: 0.9;
-        background-color: #1991fc;
-        cursor: pointer;
-        border-radius: 2px;
-        border:1px solid #1991fc;
-        &:hover{
-          opacity: 1;
-        }
+      font-size: 14px;
     }
     .cancel{
       background-color: #fff;
@@ -556,5 +632,9 @@ input{
     margin-left: auto;
     margin-right: auto;
     text-align: center;
+  }
+  .loading-min-height{
+    min-height: 400px;
+    width: 100%;
   }
 </style>

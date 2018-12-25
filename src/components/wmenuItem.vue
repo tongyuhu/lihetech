@@ -15,7 +15,7 @@ export default {
       default: '子菜单',
       type: String
     },
-    id: {
+    id: {  // 锚点
       type: String
     },
     routerName: {
@@ -30,6 +30,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @description 选择子菜单进入对应router或锚点
+     */
     checkMenuItem () {
       if (this.routerName) {
         // this.$router.push({

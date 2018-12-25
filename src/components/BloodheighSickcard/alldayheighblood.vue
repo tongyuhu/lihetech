@@ -4,6 +4,7 @@
       <div class="card-header">
         <p class="title">ABPM统计表 动态分析报告</p>
       </div>
+      <!-- 24小时血压 -->
       <div class="table-box">
         <table>
           <tr>
@@ -196,17 +197,17 @@
           <!-- 变异系数 -->
           <tr>
             <th>变异系数</th>
-            <td>{{ABPM.day.sickRadioSystolic}}</td>
-            <td>{{ABPM.day.sickRadioDiastolic}}</td>
+            <td>{{ABPM.day.sickRadioSystolic?ABPM.day.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.day.sickRadioDiastolic?ABPM.day.sickRadioDiastolic.toFixed(2):''}}</td>
             <td></td>
-            <td>{{ABPM.night.sickRadioSystolic}}</td>
-            <td>{{ABPM.night.sickRadioDiastolic}}</td>
+            <td>{{ABPM.night.sickRadioSystolic?ABPM.night.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.night.sickRadioDiastolic?ABPM.night.sickRadioDiastolic.toFixed(2):''}}</td>
             <td></td>
-            <td>{{ABPM.moring.sickRadioSystolic}}</td>
-            <td>{{ABPM.moring.sickRadioDiastolic}}</td>
+            <td>{{ABPM.moring.sickRadioSystolic?ABPM.moring.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.moring.sickRadioDiastolic?ABPM.moring.sickRadioDiastolic.toFixed(2):""}}</td>
             <td></td>
-            <td>{{ABPM.oneday.sickRadioSystolic}}</td>
-            <td>{{ABPM.oneday.sickRadioDiastolic}}</td>
+            <td>{{ABPM.oneday.sickRadioSystolic?ABPM.oneday.sickRadioSystolic.toFixed(2):''}}</td>
+            <td>{{ABPM.oneday.sickRadioDiastolic?ABPM.oneday.sickRadioDiastolic.toFixed(2):""}}</td>
             <td></td>
           </tr>
           <!-- 动脉硬化指数 -->
@@ -220,10 +221,11 @@
           <!-- 盐敏感可能性 -->
           <tr>
             <th>盐敏感可能性</th>
-            <td colspan="12">盐敏感可能性中度</td>
+            <td colspan="12">{{salt}}</td>
           </tr>
         </table>
       </div>
+      <!-- 24小时均值 -->
       <div class="table-box">
         <table>
           <tr>
@@ -235,30 +237,46 @@
           <tr>
             <th>24小时</th>
             <td>{{ABPM.oneday.avgSystolic}}/{{ABPM.oneday.avgDiastolic}}</td>
-            <td>{{ABPM.oneday.bptype}}</td>
+            <td>{{bptype(ABPM.oneday.bpType)}}</td>
             <td>{{ABPM.oneday.referValue}}</td>
           </tr>
           <tr>
             <th>白天</th>
             <td>{{ABPM.day.avgSystolic}}/{{ABPM.day.avgDiastolic}}</td>
-            <td>{{ABPM.day.bptype}}</td>
+            <td>{{bptype(ABPM.day.bpType)}}</td>
             <td>{{ABPM.day.referValue}}</td>
           </tr>
           <tr>
             <th>夜间</th>
             <td>{{ABPM.night.avgSystolic}}/{{ABPM.night.avgDiastolic}}</td>
-            <td>{{ABPM.night.bptype}}</td>
+            <td>{{bptype(ABPM.night.bpType)}}</td>
             <td>{{ABPM.night.referValue}}</td>
           </tr>
           <tr>
             <th>清晨</th>
             <td>{{ABPM.moring.avgSystolic}}/{{ABPM.moring.avgDiastolic}}</td>
-            <td>{{ABPM.moring.bptype}}</td>
+            <td>{{bptype(ABPM.moring.bpType)}}</td>
             <td>{{ABPM.moring.referValue}}</td>
           </tr>
         </table>
       </div>
     </el-card>
+    <!-- 分析 -->
+    <div class="analysis-wrap">
+      <el-card :body-style="{ padding: '0px'}">
+        <div class="analysis">
+          <div class="summary">
+            <span class="summary-title">总的分析：</span>
+            <span>{{summary}}</span>
+          </div>
+          <div class="risk">
+            <span class="summary-title">心血管疾病评估(未来十年风险)：</span>
+            <span class="risk-text">{{risk}}</span>
+          </div>
+        </div>
+        <div></div>
+      </el-card>
+    </div>
   </div>
 </template>
 
@@ -277,6 +295,7 @@ export default {
   data () {
     return {
       ABPM: {
+        // 白天
         day: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -306,6 +325,7 @@ export default {
           bptype: '',
           referValue: ''
         },
+        // 晚上
         night: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -335,6 +355,7 @@ export default {
           bptype: '',
           referValue: ''
         },
+        // 清晨
         moring: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -364,6 +385,7 @@ export default {
           bptype: '',
           referValue: ''
         },
+        // 24小时
         oneday: {
           maxDiastolic: '',
           avgSystolic: '',
@@ -393,17 +415,51 @@ export default {
           bptype: '',
           referValue: ''
         }
-      }
+      },
+      // 总的分析
+      summary: null,
+      // 风险比率
+      risk: null,
+      // 盐敏感可能性
+      salt: ''
     }
   },
   methods: {
-
+    bptype (val) {
+      let type = ''
+      val = parseInt(val)
+      switch (val) {
+        case 1:
+          type = '正常血压'
+          break
+        case 2:
+          type = '正常高值'
+          break
+        case 3:
+          type = '轻度高血压'
+          break
+        case 4:
+          type = '中度高血压'
+          break
+        case 5:
+          type = '危险血压'
+          break
+        case 6:
+          type = '低血压'
+          break
+        default:
+          type = ''
+          break
+      }
+      return type
+    }
   },
   mounted () {
     let date = new Date()
-    date = daybefor(date, 1, true)
-    let start = date + ' 03:20:00'
-    let end = date + ' 24:00:00'
+    let yesterday = daybefor(date, 1, true)
+    let today = daybefor(date, 0, true)
+    let start = today + ' 06:20:00'
+    let end = yesterday + ' 23:00:00'
     let params = {
       'userId': this.sickID,
       // 'userId': 11,
@@ -412,6 +468,7 @@ export default {
       'getupTime': start,
       'sleepTime': end
     }
+    // 获取24小时动态报告
     this.$axios(alldayHeighBloodApi(params))
     .then(res => {
       let data = res.data.data
@@ -435,12 +492,27 @@ export default {
           this.$set(this.ABPM.oneday, key, data.oneday[key])
         }
       }
+      this.summary = res.data.data.summary
+      // this.risk = res.data.data.ICVDRisk
+      if (res.data.data.ICVDRisk === '年龄要大于35！') {
+        this.risk = '年龄要大于35！'
+      } else if (res.data.data.ICVDRisk === '请先完善个人档案！') {
+        this.risk = '请先完善个人档案！'
+      } else {
+        this.risk = res.data.data.ICVDRisk + '%' || ''
+      }
     })
   }
 }
 </script>
 
 <style scoped>
+  /* 卡片头部标题 */
+  .card-header{
+    margin: 0 20px 0 20px;
+    border-bottom:1px solid #ebeef5;
+    height: 28px;
+  }
   .title{
   /* margin-left:20px; */
   margin-top:24px;
@@ -448,17 +520,14 @@ export default {
   font-size:20px;
   color:#666
   }
-  .card-header{
-    margin: 0 20px 0 20px;
-    border-bottom:1px solid #ebeef5;
-    height: 28px;
-  }
+  /* 表格容器 上边距 */
   .table-box{
       margin:20px;
     /* padding:20px;
     overflow:hidden; */
     /* width: 100%； */
   }
+  /* 表格 */
   table{
     /* height: 200px; */
     border:1px solid #eaeaea;
@@ -482,5 +551,26 @@ export default {
     vertical-align: middle;
     color:#666;
     font-size:14px;
+  }
+  /* 分析容器 */
+  .analysis-wrap{
+    margin-top:8px;
+  }
+  .analysis{
+    padding:20px;
+  }
+  /* 总分析 */
+  .summary{
+    line-height: 1.5;
+  }
+  /* 评估容器 */
+  .risk{
+    line-height: 1.5;
+  }
+  .summary-title{
+    font-weight: bold;
+  }
+  .risk-text{
+    color: #e87070;
   }
 </style>

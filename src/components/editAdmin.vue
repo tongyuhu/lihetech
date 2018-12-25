@@ -19,7 +19,7 @@
                 </div>
                 <div class="img-wrap">
                   <div>
-                    <img :src="imgSrc ? imgSrc :'./static/admin.jpg'" >
+                    <img :src="imgSrc" :onerror="defaultimg">
                   </div>
                 </div>
               </a>
@@ -107,6 +107,7 @@
 <script>
 import {mapState, mapActions} from 'vuex'
 import {editAdminApi, uploadFileApi} from '@/api/components/editAdmin.js'
+import userimg from 'icon/defaultUser.png'
 export default {
   name: 'editAdmin',
   data () {
@@ -183,6 +184,7 @@ export default {
       }
     }
     return {
+      defaultimg: 'this.src="' + userimg + '"',
       form: {
         name: '',
         sex: '',
@@ -192,6 +194,7 @@ export default {
         type: [],
         order: [],
         introduction: ''
+
       },
       rule: {
         name: [
@@ -290,6 +293,7 @@ export default {
                 type: 'success'
               })
               this.updateAdminInfo()
+              this.$router.push({name: 'Home'})
             } else {
               this.$message({
                 showClose: true,

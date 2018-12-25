@@ -1,9 +1,28 @@
 <template>
   <div class="meeeage-content">
-    <span v-if="isTextMsg">{{textMsg}}</span>
-    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig()" alt="图片消息">
+    <!-- <span v-if="isTextMsg">{{textMsg}}</span> -->
+    <img class="img-chat" v-if="isImgMsg" :src="imgsrc" @click="showBig(imgsrc)" alt="无法获取图片">
+    <span v-if="isTextMsg" v-html="textMsg"></span>
+    <span>
+      <button :class="{'voice-msg':true}" v-if="isVoiceMsg" @click="playVoice">
+        <span :class="{'iconfont':true, 'icon-yuyin':true,'voice':playVoiceAnimation}"></span>
+        </button>
+      <span v-if="isVoiceMsg">{{voiceTime}}"</span>
+    </span>
+    <div v-if="isLocationMsg" class="location-img-wrap">
+      <!-- <img class="location-img" v-if="isLocationMsg" :src="locationMsg" @click="showBig(locationMsg)" alt="无法获取图片">
+      <span class="location-name">{{locationName}}</span> -->
+      <position
+      :position="locationMsg"
+      :tip="locationName"
+      :mapId='locationid'>
+      </position>
+    </div>
     <imgfloat
-    :imgsrc="imgsrc"
+    :imgsrc="bigImgsrc"
+    v-if="showBigImg"
+    @close="closeBigImg"
+    backgroundColor="rgba(65, 61, 61, 0.7)"
     ref="chatimg">
     </imgfloat>
     <!-- <div class="img-message-wrap" v-if="showBigImg" v-on:click.self.stop="closeBig()">
@@ -17,11 +36,13 @@
 
 <script>
 import imgfloat from '@/components/imgFloat'
+import position from '@/components/Chat/postion.vue'
 // import Bus from '@/bus.js'
 export default {
   name: 'chatcontent',
   components: {
-    imgfloat
+    imgfloat,
+    position
   },
   props: {
     message: {
@@ -35,71 +56,95 @@ export default {
   },
   data () {
     return {
-      textMsg: '',
-      isTextMsg: false,
-      isImgMsg: false,
-      imgsrc: '',
-      showBigImg: false
-      // slide1: [
-      //   {
-      //     src: 'https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg',
-      //     msrc: 'https://farm6.staticflickr.com/5591/15008867125_68a8ed88cc_b.jpg',
-      //     alt: 'picture1',
-      //     title: 'Image Caption 1',
-      //     w: 600,
-      //     h: 400
-      //   }
-      // ]
-      // isTextMsg:true,
-
+      isLocationMsg: false, // 是否是地理位置
+      isTextMsg: false,  // 是否是文字消息
+      isImgMsg: false,  // 是否是图片消息
+      isVoiceMsg: false, // 是否是语音消息
+      textMsg: '', // 文字消息
+      imgsrc: '',  // 图片消息图片src
+      voiceFile: '', // 语音文件
+      locationMsg: [], // 地理位置消息
+      showBigImg: false,  // 是否展示大图
+      locationName: '', // 地理位置名称
+      locationid: '',  // 位置id
+      bigImgsrc: '',  // 大图src
+      playVoiceAnimation: false, // 是否播放语音动画
+      voiceTime: '' // 语音时长
     }
   },
   watch: {
     message: {
-      handler: function (val) {
+      handler: function (val) {  // 信息处理
         switch (val.content.messageName) {
           case 'TextMessage':
             this.isTextMsg = true
           // if (this.this.message.content.content) {
-            this.textMsg = this.message.content.content
+            this.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(this.message.content.content + '')
           // }
             break
           case 'ImageMessage':
             this.isImgMsg = true
             if (this.message.content.content) {
-              this.imgsrc = 'image/jpg;base64,' + this.message.content.content
+              this.imgsrc = 'data:image/jpg;base64,' + this.message.content.content
             }
             if (this.message.content.imageUri) {
               this.imgsrc = this.message.content.imageUri
             }
             break
+          case 'VoiceMessage':
+            this.isVoiceMsg = true
+            this.voiceFile = this.message.content.content
+            let duration = this.voiceFile.length / 1024
+            this.voiceTime = parseInt(duration)
+            break
+          case 'LocationMessage':
+            this.isLocationMsg = true
+            this.locationMsg.push(this.message.content.longitude)
+            this.locationMsg.push(this.message.content.latitude)
+            this.locationName = this.message.content.poi
+            this.locationid = this.message.messageId
+            break
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   computed: {
 
   },
   methods: {
-    showBig () {
-      let vm = this
-      this.$nextTick(function () {
-        vm.$refs.chatimg.showBig()
-      })
+    /**
+     * @description 展示大图
+     */
+    showBig (src) {
+      // let vm = this
+      this.bigImgsrc = src
+      this.showBigImg = true
+      // this.$nextTick(function () {
+      //   vm.$refs.chatimg.showBig()
+      // })
       // Bus.$emit('showbigimg')
       // this.showBigImg = true
+    },
+    /**
+     * @description 关闭大图
+     */
+    closeBigImg () {
+      this.showBigImg = false
     },
     // closeBig () {
     //   this.showBigImg = false
     // },
+    /**
+     * @description 显示信息
+     */
     showmsg () {
       let vm = this
       switch (vm.message.content.messageName) {
         case 'TextMessage':
           vm.isTextMsg = true
-          // if (vm.vm.message.content.content) {
-          vm.textMsg = vm.message.content.content
+          vm.textMsg = RongIMLib.RongIMEmoji.emojiToHTML(vm.message.content.content + '')
           // }
           break
         case 'ImageMessage':
@@ -111,15 +156,47 @@ export default {
             vm.imgsrc = vm.message.content.imageUri
           }
           break
+        case 'VoiceMessage':
+          vm.isVoiceMsg = true
+          vm.voiceFile = vm.message.content.content
+          let duration = vm.voiceFile.length / 1024
+          this.voiceTime = parseInt(duration)
+          break
+        case 'LocationMessage':
+          vm.isLocationMsg = true
+          vm.locationMsg = [vm.message.content.latitude, vm.message.content.longitude]
+          // vm.locationMsg.push(vm.message.content.latitude)
+          // vm.locationMsg.push(vm.message.content.longitude)
+          vm.locationName = vm.message.content.poi
+          this.locationid = this.message.messageId
+          break
       }
       // if(message.messageType)
+    },
+    /**
+     * @description 播放音频
+     */
+    playVoice () {
+      let vm = this
+      let duration = vm.voiceFile.length / 1024
+      // this.voiceTime = parseInt(duration)
+      // 预加载
+      vm.playVoiceAnimation = true
+      RongIMLib.RongIMVoice.preLoaded(vm.voiceFile, function () {
+        // 播放声音
+        RongIMLib.RongIMVoice.play(vm.voiceFile, duration)
+      })
+      console.log('语音时长', duration)
+      setTimeout(function () {
+        vm.playVoiceAnimation = false
+      }, duration * 1000)
     }
   },
   mounted () {
-    let vm = this
-    vm.showmsg()
-    console.log('message', vm.message)
-    console.log('messagename', vm.message.content.messageName)
+    // let vm = this
+    // vm.showmsg()
+    // console.log('message', vm.message)
+    // console.log('messagename', vm.message.content.messageName)
   }
 }
 </script>
@@ -127,10 +204,13 @@ export default {
 <style lang="scss" scoped>
 .meeeage-content{
   min-width: 15px;
+  min-height:20px;
 }
 .img-chat{
+  display: block;
   max-width: 200px;
   cursor: pointer;
+  color: #666;
 }
 .center{
   margin: 0 auto;
@@ -154,5 +234,52 @@ export default {
     max-width: 80%;
     // width: 80%;
   }
+}
+.voice-msg{
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-size: 18px;
+  width: 50px;
+}
+.voice{
+  animation: playvoice 1.5s infinite;
+}
+@keyframes playvoice {
+  0%{
+    opacity: 0.5;
+    transform:scale(0.5);
+    font-size:12px;
+  }
+  50%{
+    opacity: 0.8;
+    transform:scale(0.8);
+    font-size:13px;
+  }
+  100%{
+    opacity: 1;
+    transform:scale(1.1);
+    font-size:14px;
+  }
+}
+.location-img-wrap{
+  position: relative;
+  display: inline-block;
+}
+.location-img{
+  max-width: 200px;
+  cursor: pointer;
+  color: #666;
+}
+.location-name{
+  position: absolute;
+  bottom:0;
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
 }
 </style>

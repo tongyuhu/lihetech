@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 心血管评估 -->
     <el-card :body-style="{ padding: '0px' }">
       <div class="card-header">
         <p class="title">心血管评估</p>
@@ -7,7 +8,7 @@
       <div class="table">
         <table>
           <tr>
-            <th width="150px">行为指数</th>
+            <th>名称</th>
             <th>
               图形
             </th>
@@ -18,30 +19,56 @@
               症状
             </th>
           </tr>
+          <!-- 系统波形 -->
           <tr>
             <td class="icon-normal">
-              {{sysTypeName}}</td>
-            <td>
-              <img :src="sysSimpleImage" alt="暂无波形图" height="200px">
+              <div>
+                <!-- 波形名称 -->
+                {{sysTypeName}}
+              </div>
             </td>
-            <td>
-              <img :src="sysBpImage" alt="暂无波形图" height="200px">
+            <td class="img">
+              <div>
+                <img v-if="sysSimpleImage" :src="sysSimpleImage" alt="波形图加载失败">
+                <span v-else>暂无波形图</span>
+              </div>
+            </td>
+            <td class="img">
+              <div>
+                <img v-if="sysBpImage" :src="sysBpImage" alt="波形图加载失败">
+                <span v-else>暂无波形图</span>
+              </div>
             </td>
             
             <td>
-              <p>{{sysImageAnalyze}}</p>
+              <div>
+                <p>{{sysImageAnalyze}}</p>
+              </div>
             </td>
           </tr>
+          <!-- 用户波形 -->
           <tr>
-            <td class="icon-self">{{userTypeName}}</td>
+            <td class="icon-self">
+              <div>
+                {{userTypeName}}
+              </div>
+            </td>
             <td class="img">
-              <img :src="userSimpleImage" alt="暂无波形图" height="200px">
+              <div>
+                <img v-if="userSimpleImage" :src="userSimpleImage" alt="暂无波形图">
+                <span v-else>暂无波形图</span>
+              </div>
+            </td>
+            <td class="img">
+              <div>
+                <img v-if="userBpImage" :src="userBpImage" alt="暂无波形图">
+                <span v-else>暂无波形图</span>
+              </div>
             </td>
             <td>
-              <img :src="userBpImage" alt="暂无波形图" height="200px">
-            </td>
-            <td>
-              <p>{{userImageAnalyze}}</p>
+              <div>
+                <p>{{userImageAnalyze}}</p>
+              </div>
             </td>
           </tr>
         </table>
@@ -94,12 +121,14 @@ export default {
       'truebuzheng': truebuzheng,
       'quexue': quexue,
       'truequexue': truequexue,
-      userTypeName: '',
-      userImageAnalyze: '',
-      userConditionPredict: '',
-      userSimpleImage: '',
-      userBpImage: '',
-      dangerRate: '',
+      // 用户
+      userTypeName: '', // 波形名称
+      userImageAnalyze: '', // 波形解析
+      userConditionPredict: '',  // 病情分析
+      userSimpleImage: '',  // 波形模型图
+      userBpImage: '', // 用户实际血压图形
+      dangerRate: '', // 10年心血管风险评估
+      // 系统分析
       sysSimpleImage: '',
       sysBpImage: '',
       sysConditionPredict: '',
@@ -146,6 +175,9 @@ export default {
       }
       return img
     },
+    /**
+     * @description 获取评估数据
+     */
     getAssessmentData () {
       let params = {
         'userId': this.sickID,
@@ -155,8 +187,8 @@ export default {
       .then(res => {
         if (res.data.data) {
           if (res.data.data.userDoubleArm) {
-            if (res.data.data.userDoubleArm.typeName) {
-              this.userTypeName = res.data.data.userDoubleArm.typeName || ''
+            if (res.data.data.userDoubleArm.armName) {
+              this.userTypeName = res.data.data.userDoubleArm.armName || ''
             }
             if (res.data.data.userDoubleArm.conditionPredict) {
               this.userImageAnalyze = res.data.data.userDoubleArm.conditionPredict || ''
@@ -188,8 +220,8 @@ export default {
             if (res.data.data.sysDoubleArm.imageAnalyze) {
               this.sysImageAnalyze = res.data.data.sysDoubleArm.imageAnalyze || ''
             }
-            if (res.data.data.sysDoubleArm.typeName) {
-              this.sysTypeName = res.data.data.sysDoubleArm.typeName || ''
+            if (res.data.data.sysDoubleArm.armName) {
+              this.sysTypeName = res.data.data.sysDoubleArm.armName || ''
             }
             if (res.data.data.sysDoubleArm.simpleImage) {
               this.sysSimpleImage = process.env.IMG_URL + res.data.data.sysDoubleArm.simpleImage || ''
@@ -209,6 +241,7 @@ export default {
 </script>
 
 <style scoped>
+  /* 卡片标题 */
   .title{
     /* margin-left:20px; */
     margin-top:24px;
@@ -221,7 +254,13 @@ export default {
     border-bottom:1px solid #ebeef5;
     height: 28px;
   }
-   table{
+  /* 表格样式 */
+  .table{
+    margin-top:20px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  table{
     /* height: 200px; */
     border:1px solid #eaeaea;
     background-color: #fff;
@@ -243,8 +282,13 @@ export default {
     text-align: center;
     vertical-align: middle;
   }
-  .red-text{
-    color:#e87070;
+  /* 设置表格最小宽高 */
+  td div{
+    min-width: 200px;
+    min-height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   table p{
     font-size: 14px;
@@ -253,11 +297,8 @@ export default {
     padding: 0;
     padding-bottom: 10px;
   }
-  .table{
-    margin-top:20px;
-    margin-left: 20px;
-    margin-right: 20px;
-  }
+  
+  /* 标准数据上标 */
   .icon-normal{
     position: relative;
   }
@@ -286,6 +327,7 @@ export default {
     color: #fff;
     padding:3px;
   }
+  /* 自身数据上标 */
   .icon-self{
     position: relative;
   }
@@ -314,16 +356,13 @@ export default {
     color: #fff;
     padding:5px;
   }
+  /* 分析报告容器 */
   .report-box{
     margin-left: 20px;
     margin-right: 20px;
     margin-top: 10px;
   }
-  .report-box p{
-    color: #666;
-    font-size: 14px;
-    line-height: 24px;
-  }
+  
   .report-box div:nth-child(2){
     margin-bottom: 24px;
   }
@@ -334,19 +373,30 @@ export default {
     margin-top:12px;
     padding: 10px;
   }
-  .red-text{
-    color: #e87070;
+  .report-box p{
+    color: #666;
+    font-size: 14px;
+    line-height: 24px;
   }
+  /* 评估文字颜色 */
+  .red-text{
+    color:#e87070;
+  }
+  /* 加粗文字 */
   .blod-text{
     font-weight: bold;
   }
+  /* 评估结果百分比文字 */
   .a-text{
     font-size: 24px;
   }
+  /* 图片大小限制 */
   .img{
     min-width: 80px;
   }
   .img img{
+    min-height: 80px;
     min-width: 50px;
+    max-height: 200px;
   }
 </style>

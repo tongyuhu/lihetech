@@ -16,16 +16,12 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/styles/ele-variables.scss'
 import Fbutton from './components/Fbutton.vue'
 import '@/assets/icon/iconfont.css'
+import {session} from '@/untils/untils'
 
-// import onlinestatic from './install/vueInstall'
-// import VuePreview from 'vue-preview'
-// Vue.use(onlinestatic)
-// import InfiniteLoading from 'vue-infinite-loading'
 Vue.prototype._ = _
 // Vue.use(VuePreview)
 Vue.config.productionTip = false
 Vue.use(ElementUI)
-
 Vue.component('f-button', Fbutton)
 Vue.prototype.$echarts = echarts
 Vue.prototype.$axios = axios
@@ -107,22 +103,20 @@ Vue.directive('drag', {
 //   return '关闭提示'
 // }
 
-// router.beforeEach((to, from, next) => {
-  // if (to.meta.requireAuth) {
-    // if (session('token')) {
-      // next()
-    // } else {
-      // window.location.href = '/BPWatch/admin/login/page'
-      // next({
-      //   path: '/login',
-      //   query: {redirect: to.fullPath}
-      // })
-    // }
-    // next()
-  // } else {
-    // next()
+router.beforeEach((to, from, next) => {
+  if (to.params !== {}) {
+    let router = {
+      name: to.name,
+      params: to.params
+    }
+      // session('router', '')
+    session('router', router)
+    // let s = session('router')
+    console.log('前往路由', to, 'session', session('router'))
+  }
   // }
-// })
+  next()
+})
 new Vue({
   router,
   store,

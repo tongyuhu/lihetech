@@ -6,6 +6,7 @@
         
         <div class="dropdown head-right ma" @click.self="show">
           <span @click.self="show" class="setting"><i class="el-icon-setting setting"></i>账户设置</span>
+          <!-- 遮罩 用来关闭下拉 -->
           <div class="shade" v-show="showshade" @click="isshowshade"></div>
           <div class="dropdown-content" :class="{show:isshow}">
             <button class="setting-btn" @click="lookMsg">我的二维码</button>
@@ -14,18 +15,17 @@
             <button class="setting-btn" @click="exit">退出</button>
           </div>
         </div>
-
-        
+        <!-- 姓名 -->
         <div class="head-right ma">
           <span class="head-right">{{ adminName }}</span>
         </div>
+        <!-- 头像 -->
         <div class="head-right">
-          <!-- <div class="admin-icon-wrap"> -->
-<!-- E:\LIHETECH.WEB\lihetech.dev\lihetech\static\admin.jpg -->
-            <img :src="adminIcon ? adminIcon :'./static/admin.jpg'" alt=""  class="admin-icon" width="34px" height="34px">
-          <!-- </div> -->
+            <img :src="adminHeadImg+''" :onerror="onerrorimg"  class="admin-icon" width="34px" height="34px">
+            <!-- <img :src="adminHeadImg" alt="" onerror="./../../../../static/user.png"  class="admin-icon
+            " width="34px" height="34px"> -->
         </div>
-  
+      <!-- 修改密码弹窗 -->
       <el-dialog
         title="修改密码"
         :visible.sync="changePasswordDialog"
@@ -35,19 +35,19 @@
         :model="changePasswordForm" 
         status-icon 
         :rules="changePasswordRules" 
+        :validateField="validateFieldForm('oldPassword')"
         ref="changpasswordRef" 
-        label-width="50px" 
+        label-width="90px" 
         :label-position="labelPosition"
         >
-          <el-form-item prop="oldPassword">
+          <!-- <el-form-item prop="oldPassword" label="原始密码">
             <el-input
               :autofocus="true"
               placeholder="原始密码"
               v-model="changePasswordForm.oldPassword">
-              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
-          </el-form-item>
-          <el-form-item prop="newPassword1">
+          </el-form-item> -->
+          <el-form-item prop="newPassword1" label="新密码">
             <el-input
               :autofocus="true"
               placeholder="请输入密码"
@@ -55,12 +55,11 @@
               <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
-          <el-form-item prop="newPassword2">
+          <el-form-item prop="newPassword2" label="确认密码">
             <el-input
               :autofocus="true"
               placeholder="请再次输入密码"
               v-model="changePasswordForm.newPassword2">
-              <!-- <template slot="prepend"><i class="el-icon-info"></i></template> -->
             </el-input>
           </el-form-item>
         </el-form>
@@ -75,8 +74,8 @@
 </template>
 
 <script>
-import adminicon from 'icon/admin.jpg'
 import {mapState} from 'vuex'
+import adminheadimg from 'icon/admin.jpg'
 import {editAdminApi} from '@/api/components/editAdmin.js'
 export default {
   name: 'H-Head',
@@ -111,7 +110,7 @@ export default {
       // adminRoot: '管理员',
       isshow: false,
       showshade: false,
-      adminIcon: adminicon,
+      adminIcon: null,
       labelPosition: 'center',
       changePasswordForm: {
         oldPassword: '',
@@ -122,6 +121,7 @@ export default {
       changePasswordRules: {
         oldPassword: [
             // { required: true, message: '请输入邮箱', trigger: 'blur' }
+            // { required: true, message: '请输入原始密码', trigger: 'blur', enum: [this.labelPosition] }
             { validator: checkOldPassword, trigger: 'blur' }
         ],
         newPassword1: [
@@ -134,11 +134,15 @@ export default {
           //  { required: true, message: '请输入电话', trigger: 'blur' },
           //  {min: 11, message: '请输入正确的电话', trigger: 'blur'}
         ]
-      }
+      },
+      adminHeadImg: '',
+      onerrorimg: 'this.src="' + adminheadimg + '"'
+      // onerrorimg: 'this.src="' + require('~icon/admin.jpg') + '"'
     }
   },
   computed: {
     ...mapState(['adminInfo']),
+    // 姓名
     adminName () {
       if (!this.$store.state.adminInfo.username) {
         if (!this.$store.state.adminInfo.name) {
@@ -148,6 +152,7 @@ export default {
         return this.$store.state.adminInfo.name || this.$store.state.adminInfo.username
       }
     },
+    // 职位
     adminRoot () {
       let adminRoot = ''
       switch (this.$store.state.adminInfo.adminType) {
@@ -170,14 +175,26 @@ export default {
     }
   },
   methods: {
+    validateFieldForm (val) {
+      console.log('密码修改', val)
+    },
+    /**
+     * @description 打开下拉项 和 遮罩层
+     */
     show () {
       this.isshow = !this.isshow
       this.showshade = true
     },
+    /**
+     * @description 隐藏遮罩层 和 下拉选项
+     */
     isshowshade () {
       this.isshow = false
       this.showshade = false
     },
+    /**
+     * @description 打开二维码页面
+     */
     lookMsg () {
       // this.$router.replace({
       //   name: 'accountSetting'
@@ -187,12 +204,18 @@ export default {
         name: 'accountSetting'
       })
     },
+    /**
+     * @description 前往编辑资料页面
+     */
     editDoc () {
       this.isshowshade()
       this.$router.push({
         name: 'editAdmin'
       })
     },
+    /**
+     * @description 打开修改密码弹窗
+     */
     changePasswordDialogHandle () {
       this.isshowshade()
       this.changePasswordDialog = true
@@ -201,6 +224,9 @@ export default {
       }, 50)
       // changpasswordRef
     },
+    /**
+     * @description 修改密码
+     */
     changePassword (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
@@ -223,13 +249,16 @@ export default {
               })
             }
           })
-          alert('submit!')
+          // alert('submit!')
         } else {
           console.log('error submit!!')
           return false
         }
       })
     },
+    /**
+     * @description 登出
+     */
     exit () {
       this.isshowshade()
       this.$axios({
@@ -247,13 +276,13 @@ export default {
       //     from: this.$router.currentRoute.path
       //   }
       // })
-      sessionStorage.clear()
+      // sessionStorage.clear()
     },
     adminAccount () {
     }
   },
-  mounted () {
-    console.log('headPortraitUrl', this.adminInfo.headPortraitUrl)
+  created () {
+    console.log('headPortraitUrl', this.adminImg, this.adminInfo.headPortraitUrl)
     if (this._.has(this.adminInfo, 'headPortraitUrl')) {
       if (this.adminInfo.headPortraitUrl.length !== 0) {
         this.adminIcon = process.env.IMG_URL + this.adminInfo.headPortraitUrl
@@ -261,6 +290,7 @@ export default {
     } else {
       this.adminIcon = null
     }
+    this.adminHeadImg = this.adminIcon
   }
 }
 </script>
@@ -276,57 +306,57 @@ export default {
     visibility:hidden;
     height:0
   }
-    .head{
-      height: 80px;
-      position:relative;
-      box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
-    .head-logo{
-      float: left;
-      width: 250px;
-      background-color: #1991fc;
-      height: 80px;
-      position:relative;
-    }
-    .head-logo-img{
-      display: block;
-      margin-left: 40px;
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    p{
-        margin: 0;
-        text-align: center;
-    }
-    .head-left{
-      float: left;
-      vertical-align: middle;
-      margin-left: 24px;
-      position: absolute;
-      top: 50%;
-      left: 250px;
-      transform: translateY(-50%);
-      font-size: 14px;
-    }
-    .head-right{
-      font-size: 14px;
-      float: right;
+  .head{
+    height: 80px;
+    position:relative;
+    box-shadow: 0 0 4px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  .head-logo{
+    float: left;
+    width: 250px;
+    background-color: #1991fc;
+    height: 80px;
+    position:relative;
+  }
+  .head-logo-img{
+    display: block;
+    margin-left: 40px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  p{
+      margin: 0;
       text-align: center;
-      color: #666;
-      vertical-align: middle;
-      line-height: 80px;
-      /* position: absolute;
-      top: 50%;
-      right: 250px;
-      transform: translateY(-50%); */
-    }
-    /* .admin-icon-wrap{
-      width: 34px;
-      height: 34px;
-    } */
-   .admin-icon{
+  }
+  .head-left{
+    float: left;
+    vertical-align: middle;
+    margin-left: 24px;
+    position: absolute;
+    top: 50%;
+    left: 250px;
+    transform: translateY(-50%);
+    font-size: 14px;
+  }
+  .head-right{
+    font-size: 14px;
+    float: right;
+    text-align: center;
+    color: #666;
+    vertical-align: middle;
+    line-height: 80px;
+    /* position: absolute;
+    top: 50%;
+    right: 250px;
+    transform: translateY(-50%); */
+  }
+  /* .admin-icon-wrap{
+    width: 34px;
+    height: 34px;
+  } */
+  .admin-icon{
       /* width: 34px; */
       /* height: 34px; */
       border-radius: 50%;
@@ -335,31 +365,36 @@ export default {
       display:inline;
       vertical-align:middle;
       margin-right: 5px;
-   }
-   /* .btn{
-     color: #fff;
-     display: block;
-     margin: 0;
-     margin-top:5px;
-     width: 80px;
-     text-align: center;
-   } */
-   .setting{
-     color: #666;
-   }
-   .el-dropdown-link{
-     cursor: pointer;
-   }
-   .el-dropdown-menu{
-     background-color: 
-       #1991fc;
-     /* color: #1991fc; */
-   }
-   .dropdown {
-      position: relative;
-      display: inline-block;
-      cursor: pointer;
-    }
+  }
+  /* .admin-icon ::after{
+    width: 34px;
+    height: 34px;
+    background: url('~icon/admin.jpg');
+  } */
+  /* .btn{
+    color: #fff;
+    display: block;
+    margin: 0;
+    margin-top:5px;
+    width: 80px;
+    text-align: center;
+  } */
+  .setting{
+    color: #666;
+  }
+  .el-dropdown-link{
+    cursor: pointer;
+  }
+  .el-dropdown-menu{
+    background-color: 
+      #1991fc;
+    /* color: #1991fc; */
+  }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
 .dropdown-content {
   display: none;
   position: absolute;
@@ -389,6 +424,7 @@ export default {
   left: 0;
   height: 100%;
   width: 100%;
+  content: '';
   /* background-color: black; */
   z-index: 998;
   cursor: default;

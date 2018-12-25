@@ -1,4 +1,10 @@
-import {dateFormat, daybefor} from './../../../untils/date'
+import {dateFormat, daybefor} from '@/untils/date'
+/**
+ *
+ * @param {obj} params
+ * @param {obj date date.label = 'oneweek/twoweek/onemonth/threemonth'} date
+ * @description 血压分布
+ */
 export const bloodCoverApi = (params, date) => {
   date.value = dateFormat(date.value, 0, 1)
   let req = {}
@@ -57,6 +63,12 @@ export const bloodCoverApi = (params, date) => {
   }
   return obj
 }
+/**
+ *
+ * @param {obj} params
+ * @param {obj}  date date.label = 'oneweek/twoweek/onemonth/threemonth'
+ * @description 血压直方图
+ */
 export const histogramApi = (params, date) => {
   date.value = dateFormat(date.value, 0, 1)
   let req = {}
@@ -115,6 +127,12 @@ export const histogramApi = (params, date) => {
   }
   return obj
 }
+/**
+ *
+ * @param {obj} params
+ * @param {obj date date.label = 'oneweek/twoweek/onemonth/threemonth'} date
+ * @description 血压与饮食
+ */
 export const bloodfoodApi = (params, date) => {
   let req = {}
   req = {
@@ -191,6 +209,12 @@ export const bloodfoodApi = (params, date) => {
   }
   return obj
 }
+/**
+ *
+ * @param {obj} params
+ * @param {obj date date.label = 'oneweek/twoweek/onemonth/threemonth'} date
+ * @description 血压与运动
+ */
 export const bloodsportApi = (params, date) => {
   let req = {}
   req = {

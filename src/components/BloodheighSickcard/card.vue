@@ -1,23 +1,27 @@
 <template>
   <div class="clear box" @click.prevent="cancelDelet">
-    <div class="left-arrow">
+    <div class="left-arrow" v-if="hasCard">
       <el-button @click="pre()" icon="el-icon-arrow-left" type="text" class="arrow"></el-button>
     </div>
-    <div class="right-arrow">
+    <div class="right-arrow" v-if="hasCard">
       <el-button @click="next()" icon="el-icon-arrow-right" type="text" class="arrow"></el-button>
     </div>
-    <i :class="{'new':isnew}"></i>
+    <i :class="{'new':isnew}" v-if="hasCard"></i>
     <div class="table-top">
-      <span class="table-top-span">病历卡  {{currentpage}}/{{cardtotalPage}}</span>
-      <span>{{createTime}}</span>
+      <span class="table-top-span">病历卡 <span v-if="hasCard">{{currentpage}}/{{cardtotalPage}}</span> </span>
+      <span v-if="hasCard">{{createTime}}</span>
     </div>
-    <div>
+    <div class="no-card" v-if="!hasCard">
+      暂无病历卡
+    </div>
+    <!-- 病历卡 -->
+    <div v-if="hasCard">
       <table>
         <tr>
           <td colspan="2" class="table-head side-left">用户自述</td>
           <td>
             {{readme}}
-            <el-button size="mini" type="text" class="table-btn" @click="play(readme)">
+            <el-button size="mini" type="text" class="table-btn" v-if="readme" @click="play(readme)">
               <i class="play"></i>播放
             </el-button>
             <audio :src="readmeUrl" id="audio">
@@ -50,15 +54,13 @@
           <td>
             <div class="use-medicine">
               <!-- {{medicine}} -->
-
-
               <div v-if="medicine.length !==0" class="use-medicine-item" v-for="(item,index) in medicine" :key="index">
                 <div>
                   <div>
                     <div>{{item.medicineName}}</div>
                     <div>
                       <span>{{item.everyDosage ?item.everyDosage+ item.unit+'/次':""}}</span>
-                      <span>{{ item.usageTimes ? item.usageTimes :''}}</span>
+                      <span>{{ item.usageTimes ? item.usageTimes +'次/天':''}}</span>
                     </div>
                   </div>
                 </div>
@@ -107,44 +109,49 @@
             </div>
           </td>
         </tr>
-        <tr v-show="false">
-          <!-- <td>3</td> -->
+        <!-- <tr v-if="false">
           <td class="table-head">运动</td>
           <td>
             {{movement}}
-            <!-- <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
+            <el-button type="text" size="mini" class="table-btn" @click="deleteSport()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
             <el-button type="text" size="mini" class="table-btn" @click="addSport()" v-if="currentpage === 1">
               <i class="add"></i>添加
-            </el-button> -->
+            </el-button>
           </td>
-        </tr>
-        <tr v-show="false">
-          <!-- <td>4</td> -->
+        </tr> -->
+        <!-- <tr v-if="false">
           <td class="table-head">饮食</td>
           <td>
             <span>
               {{diet}}
             </span>
-            <!-- <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
+            <el-button type="text" size="mini" class="table-btn" @click="deleteFood()" v-if="currentpage === 1">
               <i class="delete"></i>删除
             </el-button>
             <el-button type="text" size="mini" class="table-btn" @click="addFood()" v-if="currentpage === 1">
               <i class="add"></i>添加
-            </el-button> -->
+            </el-button>
           </td>
-        </tr>
+        </tr> -->
         <tr>
           <td colspan="2" class="table-head side-left">医生信息</td>
           <td>
-            <span>
-              李那那  上海张江高科诊所  糖尿病慢性病家庭医生
+            <span class="doctor-msg">
+              {{adminInfo.name}}
+            </span>
+            <span class="doctor-msg">
+              {{adminInfo.hospital.address}}
+            </span>
+            <span class="doctor-msg">
+              {{adminInfo.adminNote}}
             </span>
           </td>
         </tr>
       </table>
     </div>
+    <!-- 添加用药 -->
     <el-dialog
       :visible.sync="medicineData.add"
       width="750px"
@@ -157,6 +164,7 @@
         <el-button type="primary" @click="sedAddmedicine">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 添加运动 -->
     <el-dialog
     :visible.sync="sportData.add"
     width="578px"
@@ -168,6 +176,7 @@
         <el-button type="primary" @click="sedAddsport">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 添加饮食 -->
     <el-dialog
     :visible.sync="foodData.add"
     width="456px"
@@ -189,6 +198,7 @@ import medicine from './../medicine/medicine'
 import addMedicine from './../addMedicine'
 import addSport from './../addSport'
 import addFood from './../addFood'
+import {mapState} from 'vuex'
 // import index from 'vue'
 export default {
   components: {
@@ -198,9 +208,10 @@ export default {
     addFood
   },
   props: {
+    // 总页数
     totalPage: {
       // type: [Number, String],
-      default: 1
+      default: 0
     },
     sickData: {}
     // sickID: {
@@ -213,7 +224,9 @@ export default {
   data () {
     return {
       currentpage: 1,
+      // 最新icon
       isnew: true,
+      // 总页数
       cardtotalPage: this.totalPage,
       medicineData: {
         add: false,
@@ -231,18 +244,25 @@ export default {
         delete: false,
         data: []
 
-      }
+      },
+      // 有病历卡显示病历卡没有显示无
+      hasCard: true
       // totalPage: ''
     }
   },
   computed: {
+    ...mapState(['adminInfo']),
+    // 用户自述
     readme () {
       if (this.sickData) {
         if (this.sickData.readme) {
           return this.sickData.readme
         }
+      } else {
+        return ''
       }
     },
+    // 用户自述url
     readmeUrl () {
       if (this.sickData) {
         if (this.sickData.readmeUrl) {
@@ -250,6 +270,7 @@ export default {
         }
       }
     },
+    // 系统分析
     systemAnalysis () {
       if (this.sickData) {
         if (this.sickData.systemAnalysis) {
@@ -257,6 +278,7 @@ export default {
         }
       }
     },
+    // 医生诊断
     doctorDiagnos () {
       if (this.sickData) {
         if (this.sickData.doctorDiagnos) {
@@ -271,6 +293,7 @@ export default {
         }
       }
     },
+    // 用药
     medicine () {
       if (this.sickData) {
         if (this.sickData.medicine) {
@@ -311,10 +334,21 @@ export default {
     },
     totalPage (val) {
       this.cardtotalPage = val
-      if (val === 0) {
-        this.cardtotalPage = 1
-      }
+      // if (val === 0) {
+      //   this.cardtotalPage = 1
+      // }
       // return val
+    },
+    cardtotalPage: {
+      handler: function (val) {
+        console.log('ddd', val)
+        if (val > 0) {
+          this.hasCard = true
+        } else {
+          this.hasCard = false
+        }
+      },
+      immediate: true
     },
     sickData: {
       handler (curVal, oldVal) {
@@ -326,6 +360,9 @@ export default {
     }
   },
   methods: {
+    /**
+     * @description 翻页下一页
+     */
     next () {
       if (isNaN(this.currentpage)) {
         this.currentpage = parseInt(this.currentpage)
@@ -340,6 +377,9 @@ export default {
       this.currentpage ++
       this.$emit('preBtn', this.currentpage)
     },
+    /**
+     * @description 翻页上一页
+     */
     pre () {
       // console.log(this.currentpage)
       if (isNaN(this.currentpage)) {
@@ -355,6 +395,7 @@ export default {
 
       this.$emit('preBtn', this.currentpage)
     },
+    // 播放用户自述
     play (msg) {
       this.$nextTick(function () {
         // document.getElementById('audio').play()
@@ -367,6 +408,7 @@ export default {
     sendVoice () {
       console.log('发送语音')
     },
+    // 删除用药
     deleteMedicine () {
       this.medicineData.data.forEach((item, index) => {
         this.$set(item, 'showDelete', true)
@@ -376,6 +418,7 @@ export default {
       console.log('删除药')
       console.log(this.medicineData.data)
     },
+    // 取消删除
     cancelDelet () {
       this.medicineData.data.forEach((item, index) => {
         this.$set(item, 'showDelete', false)
@@ -385,6 +428,7 @@ export default {
     deleteMedicineHandle (medicine, index) {
       this.medicineData.data.splice(index, 1)
     },
+    // 添加用药
     addMedicineHandle (val) {
       console.log(val.list)
       this.medicineData.data.push(val.list)
@@ -434,9 +478,13 @@ export default {
     }
   },
   mounted () {
-    if (!this.cardtotalPage || this.cardtotalPage === 0) {
-      this.cardtotalPage = 1
-    }
+    // console.log('cardtotalPage', this.cardtotalPage)
+    // if (this.cardtotalPage > 0) {
+    //   // this.cardtotalPage = 1
+    //   this.hasCard = true
+    // } else {
+    //   this.hasCard = false
+    // }
   }
 }
 </script>
@@ -452,6 +500,13 @@ export default {
   display:block;
   visibility:hidden;
   clear:both;
+  }
+  .no-card{
+    min-height: 300px;
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 300px;
   }
   .box{
     position: relative;
@@ -620,7 +675,7 @@ export default {
     /* min-width: 80px; */
   }
   .use-medicine-item>div{
-     display: flex;
+    display: flex;
     justify-content: center;
     align-items: center;
   }
@@ -665,5 +720,9 @@ export default {
   .delete-medicine-btn i:after{
     transform:rotate(45deg);
     -webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-o-transform:rotate(45deg);-ms-transform:rotate(45deg);
+  }
+  .doctor-msg{
+    display: inline-block;
+    padding:0 10px;
   }
 </style>

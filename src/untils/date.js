@@ -29,9 +29,9 @@
 // }
 /**
  *
- * @param {*} source 原始时间
- * @param {*} monthbefor 几个月前
- * @param {*} ignoreMinute 忽略分钟
+ * @param {date} source 原始时间  'yyyy-MM-dd HH:mm:ss'
+ * @param {number} monthbefor 几个月前
+ * @param {boolean} ignoreMinute 忽略分钟
  */
 export const dateFormat = function (source, monthbefor, ignoreMinute) {
   let myDate
@@ -92,9 +92,10 @@ export const dateFormat = function (source, monthbefor, ignoreMinute) {
 }
 /**
  *
- * @param {原始时间} sourceDay
- * @param {多少天前} day
- * @param {是否忽略分钟} ignoreMinute
+ * @param {date}sourceDay 原始时间 sourceDay
+ * @param {number} day多少天前
+ * @param {boolean}是否忽略分钟 ignoreMinute
+ * @description 多少天以前
  */
 export const daybefor = function (sourceDay, day, ignoreMinute) {
   let myDate = dateFormat(sourceDay, 0, 1)
@@ -130,10 +131,112 @@ export const dateFromWeek = function (year, week, day) {
   // return date1.toLocaleDateString()
   return dateFormat(date1, 0, 1)
 }
-
+/**
+ *
+ * @param {Date} date
+ * @description 转换周几
+ */
 export const computeWeekday = function (date) {
   let day = dateFormat(date, 0, true)
   let weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
   let myday = new Date(Date.parse(day.replace(/-/g, '/')))
   return weekDays[myday.getDay()]
 }
+/**
+ *
+ * @param {Date} date
+ * @description 转换周几
+ */
+export const computeWeekMorNoon = function (date) {
+  let day = dateFormat(date, 0, false)
+  let time = parseInt(day.slice(11, 13))
+  let t = ''
+  if (time > 18 || time < 6) {
+    t = '晚上'
+  }
+  if (time >= 6 || time <= 18) {
+    t = '白天'
+  }
+  let weekDays = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
+  let myday = new Date(Date.parse(day.replace(/-/g, '/')))
+
+  return weekDays[myday.getDay()] + t
+}
+/**
+ *
+ * @param {Date} date
+ * @description 每月总天数
+ */
+export const computeMonthDays = function (date) {
+  let day = dateFormat(date, 0, true)
+  let year = day.slice(0, 4)
+  let month = day.slice(5, 6)
+  let myday = new Date(year, month, 0)
+  return myday.getDate()
+}
+/**
+ *
+ * @param {date} date 'yyyy-MM-dd HH:mm:ss'
+ */
+export const timeago = function (date) {
+      // source =new Date(source.toString().replace(/\-/g, '/'))
+  let time = new Date(date.toString().replace(/\-/g, '/'))
+  console.log(time, '现在时间')
+  let dateTimeStamp = time.getTime()
+  var minute = 1000 * 60      // 把分，时，天，周，半个月，一个月用毫秒表示
+  var hour = minute * 60
+  var day = hour * 24
+  var week = day * 7
+  var halfamonth = day * 15
+  var month = day * 30
+  var halfminute = 30 * 1000
+  var now = new Date().getTime()   // 获取当前时间毫秒
+//     console.log(now)
+  var diffValue = now - dateTimeStamp// 时间差
+
+  if (diffValue < 0) {
+    return
+  }
+  var minC = diffValue / halfminute  // 计算时间差的分，时，天，周，月
+  var hourC = diffValue / hour
+  var dayC = diffValue / day
+  var weekC = diffValue / week
+  var monthC = diffValue / month
+  var result = ''
+  if (monthC >= 1 && monthC <= 3) {
+    result = ' ' + parseInt(monthC) + '月前'
+  } else if (weekC >= 1 && weekC <= 3) {
+    result = ' ' + parseInt(weekC) + '周前'
+  } else if (dayC >= 1 && dayC <= 6) {
+    result = ' ' + parseInt(dayC) + '天前'
+  } else if (hourC >= 1 && hourC <= 23) {
+    result = ' ' + parseInt(hourC) + '小时前'
+  } else if (minC >= 2 && minC < 120) {
+    var min = parseInt(minC)
+    if (min % 2) {
+      result = ' ' + parseInt(minC / 2) + '分半钟前'
+
+//             result =" " + parseInt(minC/2) + "分钟前"
+    } else if (!(min % 2)) {
+      result = ' ' + parseInt(minC / 2) + '分钟前'
+//             result =" " + parseInt(minC/2) + "分半钟前"
+    }
+//         result =" " + parseInt(minC) + "分钟前"
+  } else if (diffValue >= halfminute && diffValue <= minute) {
+    result = '半分钟前'
+  } else if (diffValue >= 0 && diffValue <= halfminute) {
+    result = '刚刚'
+  } else {
+    var datetime = new Date()
+    datetime.setTime(dateTimeStamp)
+    var Nyear = datetime.getFullYear()
+    var Nmonth = datetime.getMonth() + 1 < 10 ? '0' + (datetime.getMonth() + 1) : datetime.getMonth() + 1
+    var Ndate = datetime.getDate() < 10 ? '0' + datetime.getDate() : datetime.getDate()
+    var Nhour = datetime.getHours() < 10 ? '0' + datetime.getHours() : datetime.getHours()
+    var Nminute = datetime.getMinutes() < 10 ? '0' + datetime.getMinutes() : datetime.getMinutes()
+    var Nsecond = datetime.getSeconds() < 10 ? '0' + datetime.getSeconds() : datetime.getSeconds()
+    result = Nyear + '-' + Nmonth + '-' + Ndate
+  }
+  return result
+}
+// timeago(1539591237005)

@@ -1,3 +1,10 @@
+/**
+ *
+ * @param {number} HospitalId
+ * @param {number} page
+ * @param {number} Size
+ * @description 患者最新问诊
+ */
 export const newsickaskDataApi = (HospitalId, page, Size) => {
   return {
     method: 'post',
@@ -11,6 +18,13 @@ export const newsickaskDataApi = (HospitalId, page, Size) => {
     timeout: 10000
   }
 }
+/**
+ *
+ * @param {number} adminHospitalId
+ * @param {number} pageNum
+ * @param {number} pageSize
+ * @description 严重患者
+ */
 export const badsickDataApi = (adminHospitalId, pageNum, pageSize) => {
   return {
     method: 'post',
@@ -24,6 +38,13 @@ export const badsickDataApi = (adminHospitalId, pageNum, pageSize) => {
     timeout: 10000
   }
 }
+/**
+ *
+ * @param {number} adminHospitalId
+ * @param {number} pageNum
+ * @param {number} pageSize
+ * @description 未遵医嘱患者
+ */
 export const noListenDoctorDataApi = (adminHospitalId, pageNum, pageSize) => {
   return {
 
@@ -38,15 +59,11 @@ export const noListenDoctorDataApi = (adminHospitalId, pageNum, pageSize) => {
     timeout: 10000
   }
 }
-export const unperfectMsgDataApi = {
-  method: 'post',
-  url: 'https://easy-mock.com/mock/5a5ffcab4a073a3a0e0e9eed/hospital/unperfectMsgData',
-  data: {
-    unperfectMsgData: '档案不完整患者问诊患者列表'
-  },
-  headers: { 'Content-type': 'application/x-www-form-urlencoded' },
-  timeout: 10000
-}
+/**
+ *
+ * @param {object} params
+ * @description 关注
+ */
 export const careApi = (params) => {
   return {
     method: 'post',
