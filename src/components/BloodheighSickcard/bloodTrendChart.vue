@@ -109,7 +109,7 @@
 
 <script>
 import echarts from 'echarts'
-import {dateFromWeek, dateFormat, computeWeekday, timeago} from '@/untils/date'
+import { dateFormat, computeWeekday, timeago } from '@/untils/date'
 // import {updatebloodTrendStateApi, updatebloodTrendTotalApi} from '@/api/components/BloodheighSickcard/bloodCover'
 import {bloodTrendChartApi} from '@/api/components/BloodheighSickcard/bloodTrendChart'
 export default {

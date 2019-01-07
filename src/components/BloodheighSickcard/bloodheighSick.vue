@@ -11,7 +11,7 @@
           <span>性别:{{sex ? sex :faceDATA.sex}}</span>
           <span>年龄:{{age ? age:faceDATA.age}}</span>
           <span>电话:{{mobile?mobile :faceDATA.mobile}}</span>
-          <span class="sick">确诊为:{{doctorDiagnos ? doctorDiagnos:'暂时没有确诊'}}</span>
+          <span class="sick">确诊为:{{confirmDisease ? confirmDisease:'暂时没有确诊'}}</span>
         </div>
       </div>
     </div>
@@ -617,10 +617,10 @@ export default {
       }
     },
     // 医生诊断
-    doctorDiagnos () {
+    confirmDisease () {
       if (this.cardData) {
-        if (this.cardData.doctorDiagnos) {
-          return this.cardData.doctorDiagnos
+        if (this.cardData.confirmDisease) {
+          return this.cardData.confirmDisease
         }
       }
     },
